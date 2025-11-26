@@ -42,7 +42,7 @@ final class TimetableCell: UITableViewCell {
     }
     
     // MARK: - Configure Cell
-    func configure(with timetable: FrameDTO, at indexPath: IndexPath) {
+    func configure(with timetable: FrameDto, at indexPath: IndexPath) {
             titleLabel.text = timetable.timetableName
             bookmarkImageView.image = timetable.isMain ? UIImage.appImage(asset: .bookmark) : UIImage()
             self.indexPath = indexPath // 셀의 indexPath 저장

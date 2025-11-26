@@ -11,6 +11,7 @@ public enum FontAsset {
     case pretendardRegular
     case pretendardMedium
     case pretendardBold
+    case pretendardSemiBold
 }
 
 extension UIFont {
@@ -23,6 +24,8 @@ extension UIFont {
             return UIFont(name: "Pretendard-Medium", size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)
         case .pretendardBold:
             return UIFont(name: "Pretendard-Bold", size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)
+        case .pretendardSemiBold:
+            return UIFont(name: "Pretendard-SemiBold", size: fontSize) ?? UIFont.systemFont(ofSize: fontSize)
         }
     }
 }

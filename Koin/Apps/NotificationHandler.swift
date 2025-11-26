@@ -14,20 +14,28 @@ final class NotificationHandler {
     private init() {}
     
     func handleIncomingURL(url: URL, rootViewController: UIViewController?) {
-            guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
-            
-            var parameters: [String: String] = [:]
-            components.queryItems?.forEach { queryItem in
-                parameters[queryItem.name] = queryItem.value
-            }
-
-            if let date = parameters["date"], let type = parameters["type"], let place = parameters["place"] {
-                handleDiningNavigation(date: date, type: type, place: place, rootViewController: rootViewController)
-                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.menuShare, category: .click, value: "코인으로 이동")
-            }
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
+        
+        var parameters: [String: String] = [:]
+        components.queryItems?.forEach { queryItem in
+            parameters[queryItem.name] = queryItem.value
         }
-    
+        
+        if let date = parameters["date"], let type = parameters["type"], let place = parameters["place"] {
+            handleDiningNavigation(date: date, type: type, place: place, rootViewController: rootViewController)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.menuShare, category: .click, value: "코인으로 이동")
+            return
+        }
+        
+        let pathComponents = url.pathComponents
+        if pathComponents.contains("clubs"),
+           let clubIdIndex = pathComponents.firstIndex(of: "clubs"),
+           clubIdIndex + 1 < pathComponents.count {
+            let clubId = pathComponents[clubIdIndex + 1]
+            handleClubNavigation(clubId: clubId, tab: parameters["tab"], eventId: parameters["eventId"], rootViewController: rootViewController)
+        }
+    }
     
     private func handleDiningNavigation(date: String, type: String, place: String, rootViewController: UIViewController?) {
         let diningService = DefaultDiningService()
@@ -65,6 +73,26 @@ final class NotificationHandler {
         }
     }
     
+    private func handleClubNavigation(clubId: String, tab: String?, eventId: String?, rootViewController: UIViewController?) {
+        var parameterString = "/clubs/\(clubId)"
+        
+        if let tab = tab {
+            parameterString += "?tab=\(tab)"
+            if let eventId = eventId {
+                parameterString += "&eventId=\(eventId)"
+            }
+        }
+        
+        let clubWebViewController = ClubWebViewController(parameter: parameterString)
+        
+        if let navigationController = rootViewController as? UINavigationController {
+            navigationController.pushViewController(clubWebViewController, animated: true)
+        } else {
+            let navigationController = UINavigationController(rootViewController: clubWebViewController)
+            rootViewController?.present(navigationController, animated: true, completion: nil)
+        }
+    }
+    
     func handleNotificationData(userInfo: [AnyHashable: Any], rootViewController: UINavigationController?) {
         guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String else {
             print("Invalid notification data")
@@ -77,6 +105,7 @@ final class NotificationHandler {
             navigateToScene(category: category, rootViewController: rootViewController)
         }
     }
+    
     private func handleKeywordNotification(userInfo: [AnyHashable: Any], rootViewController: UINavigationController?) {
         guard let schemeUri = userInfo["schemeUri"] as? String else {
             print("No schemeUri found")
@@ -109,6 +138,7 @@ final class NotificationHandler {
             )
         }
     }
+    
     func navigateToScene(category: String, rootViewController: UINavigationController?) {
         switch category {
         case "dining":
@@ -156,19 +186,21 @@ final class NotificationHandler {
         let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
         let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
         let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
+        
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase, searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase, getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: 0
         )
-        let shopViewController = ShopViewControllerA(viewModel: viewModel)
+        let shopViewController = ShopViewController(viewModel: viewModel)
         shopViewController.title = "주변상점"
         return shopViewController
     }

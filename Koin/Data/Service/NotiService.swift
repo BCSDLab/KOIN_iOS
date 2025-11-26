@@ -11,7 +11,7 @@ import Combine
 protocol NotiService {
     func changeNoti(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeRequest) -> AnyPublisher<Void, ErrorResponse>
     func changeNotiDetail(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeDetailRequest) -> AnyPublisher<Void, ErrorResponse>
-    func fetchNotiList() -> AnyPublisher<NotiAgreementDTO, ErrorResponse>
+    func fetchNotiList() -> AnyPublisher<NotiAgreementDto, ErrorResponse>
 }
 
 
@@ -68,9 +68,9 @@ final class DefaultNotiService: NotiService {
             .eraseToAnyPublisher()
     }
     
-    func fetchNotiList() -> AnyPublisher<NotiAgreementDTO, ErrorResponse> {
+    func fetchNotiList() -> AnyPublisher<NotiAgreementDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NotiAPI.fetchNotiList)
-            .catch { [weak self] error -> AnyPublisher<NotiAgreementDTO, ErrorResponse> in
+            .catch { [weak self] error -> AnyPublisher<NotiAgreementDto, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
                 if error.code == "401" {
                     return self.networkService.refreshToken()

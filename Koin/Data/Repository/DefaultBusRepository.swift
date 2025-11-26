@@ -15,23 +15,23 @@ final class DefaultBusRepository: BusRepository {
         self.service = service
     }
 
-    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDTO, Error> {
+    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, Error> {
         return service.searchBusInformation(requestModel: requestModel)
     }
     
-    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDTO, Error> {
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, Error> {
         return service.fetchShuttleRouteList()
     }
     
-    func fetchExpressBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDTO, Error> {
+    func fetchExpressBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, Error> {
         return service.fetchExpressTimetableList(requestModel: requestModel)
     }
     
-    func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDTO, Error> {
+    func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, Error> {
         return service.fetchCityTimetableList(requestModel: requestModel)
     }
     
-    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDTO, Error> {
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, Error> {
         return service.fetchEmergencyNotice()
     }
     

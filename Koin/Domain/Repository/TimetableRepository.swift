@@ -8,20 +8,20 @@
 import Combine
 
 protocol TimetableRepository {
-    func fetchDeptList() -> AnyPublisher<[DeptDTO], Error>
-    func fetchFrame(semester: String) -> AnyPublisher<[FrameDTO], ErrorResponse>
+    func fetchDeptList() -> AnyPublisher<[DeptDto], Error>
+    func fetchFrame(semester: String) -> AnyPublisher<[FrameDto], ErrorResponse>
     func deleteFrame(id: Int) -> AnyPublisher<Void, ErrorResponse>
-    func createFrame(semester: String) -> AnyPublisher<FrameDTO, ErrorResponse>
-    func modifyFrame(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse>
-    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDTO, ErrorResponse>
-    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse>
-    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDTO, ErrorResponse>
-    func fetchMySemester() -> AnyPublisher<MySemesterDTO, ErrorResponse>
+    func createFrame(semester: String) -> AnyPublisher<FrameDto, ErrorResponse>
+    func modifyFrame(frame: FrameDto) -> AnyPublisher<FrameDto, ErrorResponse>
+    func fetchLecture(frameId: Int) -> AnyPublisher<LectureDto, ErrorResponse>
+    func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDto, ErrorResponse>
+    func postLecture(request: LectureRequest) -> AnyPublisher<LectureDto, ErrorResponse>
+    func fetchMySemester() -> AnyPublisher<MySemesterDto, ErrorResponse>
     func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], Error>
-    func fetchSemester() -> AnyPublisher<[SemesterDTO], Error>
+    func fetchSemester() -> AnyPublisher<[SemesterDto], Error>
     func deleteLecture(frameId: Int, lectureId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteSemester(semester: String) -> AnyPublisher<Void, ErrorResponse>
     func deleteLecture(id: Int) -> AnyPublisher<Void, ErrorResponse>
-    func rollbackFrame(id: Int) -> AnyPublisher<LectureDTO, ErrorResponse>
-    func fetchAllFrames() -> AnyPublisher<SemestersDTO, ErrorResponse>
+    func rollbackFrame(id: Int) -> AnyPublisher<LectureDto, ErrorResponse>
+    func fetchAllFrames() -> AnyPublisher<SemestersDto, ErrorResponse>
 }

@@ -88,6 +88,7 @@ final class PostLostItemViewController: UIViewController {
             navigationItem.title = "분실물 신고"
         }
         addLostItemCollectionView.setType(type: viewModel.type)
+        configureTapGestureToDismissKeyboardDropdown()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -135,6 +136,13 @@ final class PostLostItemViewController: UIViewController {
         }.store(in: &subscriptions)
         
         addLostItemCollectionView.textViewFocusPublisher
+            .sink { [weak self] yOffset in
+                UIView.animate(withDuration: 0.3) {
+                    self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
+                }
+            }.store(in: &subscriptions)
+        
+        addLostItemCollectionView.textFieldFocusPublisher
             .sink { [weak self] yOffset in
                 UIView.animate(withDuration: 0.3) {
                     self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
@@ -217,6 +225,18 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true, completion: nil)
+    }
+}
+
+extension PostLostItemViewController {
+    
+    private func configureTapGestureToDismissKeyboardDropdown() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardDropdown))
+        view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func dismissKeyboardDropdown() {
+        addLostItemCollectionView.dismissKeyBoardDatePicker()
     }
 }
 

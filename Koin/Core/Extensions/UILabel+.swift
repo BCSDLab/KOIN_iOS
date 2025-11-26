@@ -12,8 +12,15 @@ extension UILabel {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineHeightMultiple = lineHeight
         
-        let attributedString = NSMutableAttributedString(string: text)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: attributedString.length))
+        let attributedString = NSMutableAttributedString(
+            string: text,
+            attributes: [
+                .font: self.font as Any,
+                .foregroundColor: self.textColor as Any,
+                .paragraphStyle: paragraphStyle
+            ]
+        )
+        
         self.attributedText = attributedString
     }
     
@@ -23,10 +30,14 @@ extension UILabel {
 
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = image
-        imageAttachment.bounds = CGRect(x: 0, y: 0, width: imageSize.width, height: imageSize.height)
+        
+        let fontCapHeight = font.capHeight
+        let imageYOffset = (fontCapHeight - imageSize.height) / 2
+        imageAttachment.bounds = CGRect(x: 0, y: imageYOffset, width: imageSize.width, height: imageSize.height)
+        
         attributedString.append(NSAttributedString(attachment: imageAttachment))
 
-        let textWithSpacing = NSAttributedString(string: " " + text, attributes: [.font: font, .foregroundColor: textColor, .baselineOffset: 4])
+        let textWithSpacing = NSAttributedString(string: " " + text, attributes: [.font: font, .foregroundColor: textColor])
         
         attributedString.append(textWithSpacing)
 

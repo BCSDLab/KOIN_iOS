@@ -12,13 +12,13 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     // MARK: - Input
     
     enum Input {
-        case reportReview(ReportReviewRequest)
+        case reportReview(ReportReviewRequest,[String])
     }
     
     // MARK: - Output
     
     enum Output {
-        case showToast(String, Bool)
+        case showToast(String)
         case sendReviewInfo(Int, Int)
     }
     
@@ -45,8 +45,8 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .reportReview(requestModel):
-                self?.reportReview(requestModel)
+            case let .reportReview(requestModel,selectedItems):
+                self?.reportReview(requestModel,selectedItems)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -56,18 +56,20 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
 
 extension ShopReviewReportViewModel {
    
-    private func reportReview(_ requestModel: ReportReviewRequest) {
+    private func reportReview(_ requestModel: ReportReviewRequest, _ selectedItems: [String]) {
         reportReviewReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showToast(error.message, false))
+                self?.outputSubject.send(.showToast(error.message))
             }
         } receiveValue: { [weak self] _ in
-            self?.outputSubject.send(.showToast("리뷰가 신고되었습니다.", true))
-            self?.outputSubject.send(.sendReviewInfo(self?.reviewId ?? 0, self?.shopId ?? 0))
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReportDone, category: .click, value: self?.shopName ?? "")
+            guard let self = self else { return }
+            self.outputSubject.send(.sendReviewInfo(self.reviewId, self.shopId))
+            let value = selectedItems.joined(separator: ",")
+            
+            self.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReport, category: .click, value: value)
         }.store(in: &subscriptions)
-
     }
+    
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }

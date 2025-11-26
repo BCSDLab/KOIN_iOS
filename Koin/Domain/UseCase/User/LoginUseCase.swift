@@ -8,7 +8,7 @@
 import Combine
 
 protocol LoginUseCase {
-    func execute(loginId: String, loginPw: String) -> AnyPublisher<TokenDTO, ErrorResponse>
+    func execute(loginId: String, loginPw: String) -> AnyPublisher<TokenDto, ErrorResponse>
 }
 
 final class DefaultLoginUseCase: LoginUseCase {
@@ -19,7 +19,7 @@ final class DefaultLoginUseCase: LoginUseCase {
         self.userRepository = userRepository
     }
     
-    func execute(loginId: String, loginPw: String) -> AnyPublisher<TokenDTO, ErrorResponse> {
+    func execute(loginId: String, loginPw: String) -> AnyPublisher<TokenDto, ErrorResponse> {
         return userRepository.login(requestModel: LoginRequest(loginId: loginId, loginPw: EncodingWorker().sha256(text: loginPw)))
     }
     

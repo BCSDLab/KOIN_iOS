@@ -10,7 +10,7 @@ import UIKit
 
 final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    private var popularNoticeList: [NoticeArticleDTO] = []
+    private var popularNoticeList: [NoticeArticleDto] = []
     private var keywordNoticePhrase: ((String, String), Int)?
     let pageDidChangedPublisher = PassthroughSubject<Int, Never>()
     let tapNoticeListPublisher = PassthroughSubject<(Int, String), Never>()
@@ -39,10 +39,13 @@ final class NoticeListCollectionView: UICollectionView, UICollectionViewDataSour
         isPagingEnabled = true
     }
     
-    func updateNoticeList(_ popularNoticeList: [NoticeArticleDTO], _ keywordNoticePhrase: ((String, String), Int)?) {
+    func updateNoticeList(_ popularNoticeList: [NoticeArticleDto], _ keywordNoticePhrase: ((String, String), Int)?) {
         self.popularNoticeList = popularNoticeList
         self.keywordNoticePhrase = keywordNoticePhrase
-        bannerCount = popularNoticeList.count
+        
+        let hasKeywordBanner = keywordNoticePhrase != nil ? 1 : 0
+        bannerCount = popularNoticeList.count + hasKeywordBanner
+        
         startAutoScroll()
         reloadData()
     }

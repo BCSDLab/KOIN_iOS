@@ -12,6 +12,7 @@ final class AddLostItemFooterView: UICollectionReusableView {
     
     static let identifier = "AddLostItemFooterView"
     let addItemButtonPublisher = PassthroughSubject<Void, Never>()
+    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
     
     private let addItemButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
@@ -25,6 +26,7 @@ final class AddLostItemFooterView: UICollectionReusableView {
         $0.configuration = configuration
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 8
+        $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
     }
     
     override init(frame: CGRect) {
@@ -41,6 +43,7 @@ final class AddLostItemFooterView: UICollectionReusableView {
 extension AddLostItemFooterView {
     @objc private func addItemButtonTapped() {
         addItemButtonPublisher.send()
+        shouldDismissDropDownPublisher.send()
     }
     
 }

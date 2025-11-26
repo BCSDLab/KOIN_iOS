@@ -8,7 +8,7 @@
 import Combine
 
 protocol ModifyFrameUseCase {
-    func execute(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse>
+    func execute(frame: FrameDto) -> AnyPublisher<FrameDto, ErrorResponse>
 }
 
 final class DefaultModifyFrameUseCase: ModifyFrameUseCase {
@@ -19,7 +19,7 @@ final class DefaultModifyFrameUseCase: ModifyFrameUseCase {
         self.timetableRepository = timetableRepository
     }
     
-    func execute(frame: FrameDTO) -> AnyPublisher<FrameDTO, ErrorResponse> {
+    func execute(frame: FrameDto) -> AnyPublisher<FrameDto, ErrorResponse> {
         return timetableRepository.modifyFrame(frame: frame)
     }
     

@@ -11,7 +11,7 @@ import UIKit
 final class NoticeAttachmentsTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
-    private var noticeAttachments: [NoticeAttachmentDTO] = []
+    private var noticeAttachments: [NoticeAttachmentDto] = []
     let tapDownloadButtonPublisher = PassthroughSubject<(String, String), Never>()
     let noticeAttachmentTableViewSize = PassthroughSubject<CGFloat, Never>()
     
@@ -34,7 +34,7 @@ final class NoticeAttachmentsTableView: UITableView {
         showsVerticalScrollIndicator = false
     }
     
-    func updateNoticeAttachments(attachments: [NoticeAttachmentDTO]) {
+    func updateNoticeAttachments(attachments: [NoticeAttachmentDto]) {
         self.noticeAttachments = attachments
         reloadData()
     }

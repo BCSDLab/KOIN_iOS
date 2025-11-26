@@ -27,7 +27,7 @@ final class BusSearchViewModel: ViewModelProtocol {
     
     enum Output {
         case updateBusArea(BusAreaButtonState, BusPlace?)
-        case updateEmergencyNotice(notice: BusNoticeDTO)
+        case updateEmergencyNotice(notice: BusNoticeDto)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()

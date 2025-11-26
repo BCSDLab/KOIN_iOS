@@ -121,10 +121,6 @@ final class DiningViewController: UIViewController {
         segmentDidChange(diningTypeSegmentControl)
     }
     
-    private let diningToShopAbTestButton = DiningToShopAbTestButton().then {
-        $0.isHidden = true
-    }
-    
     // MARK: - Initialization
     
     init(viewModel: DiningViewModel) {
@@ -151,14 +147,17 @@ final class DiningViewController: UIViewController {
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
-        
-        diningToShopAbTestButton.addTarget(self, action: #selector(didTapDiningToShop), for: .touchUpInside)
-        addDownSwipeToDiningToShopButton()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .fill)
+        diningListCollectionView.startToolTipImageViewAnimation()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        diningListCollectionView.stopToolTipImageViewAnimation()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -191,8 +190,8 @@ final class DiningViewController: UIViewController {
                 UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
             case .showLoginModal:
                 self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
-            case let .setAbTestResult(abTestResult):
-                self?.handleAbTestResult(abTestResult)
+            case .setAbTestResult(_):
+                break
             }
         }.store(in: &subscriptions)
         
@@ -243,103 +242,20 @@ final class DiningViewController: UIViewController {
             self?.navigateToLogin()
         }.store(in: &subscriptions)
         
-    }
-}
-
-// MARK: - Dining To Shop AB Test
-extension DiningViewController {
-    private func handleAbTestResult(_ abTestResult: AssignAbTestResponse) {
-        switch abTestResult.variableName {
-        case .variant:
-            diningToShopAbTestButton.isHidden = false
-            logAbTestResult(value: "design_B")
-        case .control:
-            diningToShopAbTestButton.isHidden = true
-            logAbTestResult(value: "design_A")
-        default:
-            break
+        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).sink { [weak self] _ in
+            self?.diningListCollectionView.startToolTipImageViewAnimation()
         }
-    }
-
-    private func logAbTestResult(value: String) {
-        let loginStatus = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginStatus, platform: "iOS")
+        .store(in: &subscriptions)
         
-        self.customSessionId = customSessionId
-        
-        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.AbTest.dining2shop1, .abTestDiningEntry, value, customSessionId))
-    }
-    
-    @objc private func didTapDiningToShop() {
-        guard !isHidingBySwipe, !diningToShopAbTestButton.isHidden else {
-            return
+        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification).sink { [weak self] _ in
+            self?.diningListCollectionView.stopToolTipImageViewAnimation()
         }
-
-        let loginStatus = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
-        let customSessionId = customSessionId ?? CustomSessionManager.current(eventName: "dining2shop")
-                                              ?? CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginStatus, platform: "iOS")
-        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.AbTest.diningToShop, .click, getCurrentDiningType(), customSessionId))
-        
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-            searchShopUseCase: searchShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            selectedId: 1
-        )
-
-        let shopViewController = ShopViewControllerA(viewModel: viewModel)
-        shopViewController.title = "주변상점"
-        navigationController?.pushViewController(shopViewController, animated: true)
-    }
-    
-    private func addDownSwipeToDiningToShopButton() {
-        let swipeDown = UISwipeGestureRecognizer(target: self, action: #selector(handleDiningToShopButtonSwipeDown(_:)))
-        swipeDown.direction = .down
-        swipeDown.cancelsTouchesInView = true
-        diningToShopAbTestButton.addGestureRecognizer(swipeDown)
-    }
-    
-    @objc private func handleDiningToShopButtonSwipeDown(_ gesture: UISwipeGestureRecognizer) {
-        guard gesture.state == .ended else {
-            return
-        }
-        isHidingBySwipe = true
-
-        let value = getCurrentDiningType()
-        let loginStatus = (UserDefaults.standard.object(forKey: "loginFlag") as? Int) ?? 0
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .thirtyMinutes, eventName: "dining2shop", loginStatus: loginStatus, platform: "iOS")
-        self.customSessionId = customSessionId
-
-        diningToShopAbTestButton.isHidden = true
-        
-        UIView.animate(withDuration: 0.2) { self.diningToShopAbTestButton.alpha = 0
-        }
-
-        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.AbTest.diningToShopClose, .swipe, value, customSessionId))
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { self.isHidingBySwipe = false
-        }
+        .store(in: &subscriptions)
     }
 }
 
 extension DiningViewController {
+    
     @objc private func refresh() {
         switch diningTypeSegmentControl.selectedSegmentIndex {
         case 0: inputSubject.send(.updateDisplayDateTime(nil, .breakfast))
@@ -444,7 +360,7 @@ extension DiningViewController {
 extension DiningViewController {
     
     private func setUpLayOuts() {
-        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView, diningToShopAbTestButton].forEach {
+        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView].forEach {
             view.addSubview($0)
         }
 
@@ -498,11 +414,6 @@ extension DiningViewController {
             $0.top.equalTo(tabBarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalToSuperview()
-        }
-        diningToShopAbTestButton.snp.makeConstraints() {
-            $0.horizontalEdges.equalToSuperview().inset(16)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-8)
-            $0.height.equalTo(46)
         }
     }
     
