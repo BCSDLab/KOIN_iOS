@@ -293,6 +293,8 @@
 		B68D2CE72EA505B000F3B479 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE62EA505B000F3B479 /* ToastMessageView.swift */; };
 		B68D2CE92EA505B800F3B479 /* ToastVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE82EA505B800F3B479 /* ToastVariant.swift */; };
 		B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */; };
+		B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D6292EEB01E600A19521 /* Debug.xcconfig */; };
+		B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */; };
 		B8B37205489AF6DFC894DDA4 /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7302ACF52B82A7E7B51ECA0E /* Pods_NotificationService.framework */; };
 		B92C6B8A0FA84DA73E157DE7 /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C4474681F96A1650D4E61884 /* Pods_koin.framework */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
@@ -1131,6 +1133,8 @@
 		B68D2CE62EA505B000F3B479 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
 		B68D2CE82EA505B800F3B479 /* ToastVariant.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastVariant.swift; sourceTree = "<group>"; };
 		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
+		B6A0D6292EEB01E600A19521 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		C4474681F96A1650D4E61884 /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D2009F752C17270F00211D1B /* CalendarDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDate.swift; sourceTree = "<group>"; };
 		D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnalyticsService.swift; sourceTree = "<group>"; };
@@ -2525,6 +2529,15 @@
 			path = Toast;
 			sourceTree = "<group>";
 		};
+		B6A0D6282EEB01DC00A19521 /* Config */ = {
+			isa = PBXGroup;
+			children = (
+				B6A0D6292EEB01E600A19521 /* Debug.xcconfig */,
+				B6A0D62B2EEB01F100A19521 /* Release.xcconfig */,
+			);
+			path = Config;
+			sourceTree = "<group>";
+		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
 			isa = PBXGroup;
 			children = (
@@ -3350,6 +3363,7 @@
 		D27DD07D2BA608310081FD36 /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				B6A0D6282EEB01DC00A19521 /* Config */,
 				B65422F52EA12BE700018F15 /* DesignSystem */,
 				8354BE482C7A0394009D4D7A /* CoreData */,
 				D27DD0832BA608310081FD36 /* Workers */,
@@ -4496,9 +4510,11 @@
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
 				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
 				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
+				B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */,
 				D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */,
 				D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */,
 				D261BBA92D7A88DA00A67F06 /* GoogleService-Info.plist in Resources */,
+				B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */,
 				D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -5476,6 +5492,7 @@
 		};
 		A001E2D62845091F00D6C310 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B6A0D6292EEB01E600A19521 /* Debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
@@ -5538,6 +5555,7 @@
 		};
 		A001E2D72845091F00D6C310 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

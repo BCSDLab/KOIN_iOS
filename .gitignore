@@ -121,3 +121,4 @@ project.xcworkspace/
 Info.plist
 GoogleService-Info.plist
 *.plist
+Config/*.xcconfig
