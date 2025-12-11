@@ -2529,13 +2529,13 @@
 			path = Toast;
 			sourceTree = "<group>";
 		};
-		B6A0D6282EEB01DC00A19521 /* Config */ = {
+		B6A0D6282EEB01DC00A19521 /* Configuration */ = {
 			isa = PBXGroup;
 			children = (
 				B6A0D6292EEB01E600A19521 /* Debug.xcconfig */,
 				B6A0D62B2EEB01F100A19521 /* Release.xcconfig */,
 			);
-			path = Config;
+			path = Configuration;
 			sourceTree = "<group>";
 		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
@@ -3363,7 +3363,7 @@
 		D27DD07D2BA608310081FD36 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				B6A0D6282EEB01DC00A19521 /* Config */,
+				B6A0D6282EEB01DC00A19521 /* Configuration */,
 				B65422F52EA12BE700018F15 /* DesignSystem */,
 				8354BE482C7A0394009D4D7A /* CoreData */,
 				D27DD0832BA608310081FD36 /* Workers */,
