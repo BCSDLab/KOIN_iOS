@@ -14,14 +14,14 @@ final class ShopViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: ShopViewModel
     private let inputSubject = PassthroughSubject<ShopViewModel.Input, Never>()
-    
     private var subscriptions = Set<AnyCancellable>()
-    
-    private let navigationControllerDelegate: UINavigationController?
-    
     private var didTapBack = false
     
-    // MARK: - UI Components    
+    // MARK: - UI Components
+    private let dummyNavigationBar = UIView().then {
+        $0.backgroundColor = .appColor(.newBackground)
+    }
+    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -190,9 +190,8 @@ final class ShopViewController: UIViewController {
     private let shopCollectionView = ShopInfoCollectionView()
     
     // MARK: - Initialization
-    init(viewModel: ShopViewModel, navigationControllerDelegate: UINavigationController? = nil) {
+    init(viewModel: ShopViewModel) {
         self.viewModel = viewModel
-        self.navigationControllerDelegate = navigationControllerDelegate
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -221,6 +220,12 @@ final class ShopViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
+        
+        guard let navigationController else { return }
+        let navigationBarHeight: CGFloat = UIApplication.topSafeAreaHeight() + navigationController.navigationBar.frame.height
+        dummyNavigationBar.snp.updateConstraints {
+            $0.height.equalTo(navigationBarHeight)
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -316,7 +321,7 @@ final class ShopViewController: UIViewController {
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, currentPage, previousPage, nil, nil, .shopClick))
 
             
-            self?.navigationControllerDelegate?.pushViewController(viewController, animated: true)
+            self?.navigationController?.pushViewController(viewController, animated: true)
         }
         .store(in: &subscriptions)
     }
@@ -341,7 +346,7 @@ extension ShopViewController {
                                             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                             selectedCategoryName: viewModel.selectedCategoryName)
         let viewController = ShopSearchViewController(viewModel: viewModel)
-        navigationControllerDelegate?.pushViewController(viewController, animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 
     @objc private func sortButtonTapped() {
@@ -434,7 +439,9 @@ extension ShopViewController {
 // MARK: - Configure View
 extension ShopViewController {
     private func setUpLayOuts() {
-        view.addSubview(scrollView)
+        [scrollView, dummyNavigationBar].forEach {
+            view.addSubview($0)
+        }
         scrollView.addSubview(contentView)
         [categoryCollectionView, searchBarButton, sortButton, openShopToggleButton, eventShopCollectionView, eventIndexLabel, shopCollectionView,emptyResultStackView].forEach {
             contentView.addSubview($0)
@@ -442,6 +449,11 @@ extension ShopViewController {
     }
     
     private func setUpConstraints() {
+        dummyNavigationBar.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(0)
+        }
+        
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }

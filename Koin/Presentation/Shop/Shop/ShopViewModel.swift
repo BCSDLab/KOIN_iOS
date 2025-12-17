@@ -63,7 +63,7 @@ final class ShopViewModel: ViewModelProtocol {
          fetchBeneficialShopUseCase: FetchBeneficialShopUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
-         selectedId: Int) {
+         selectedId: Int = 1) {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase

@@ -261,9 +261,26 @@ extension ServiceSelectViewController {
     }
     
     @objc func shopSelectButtonTapped() {
-        let orderTabBarViewController = OrderTabBarViewController(initialTabIndex: 1)
-        navigationController?.pushViewController(orderTabBarViewController, animated: true)
-        
+        let shopService = DefaultShopService()
+        let shopRepository = DefaultShopRepository(service: shopService)
+        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let viewModel = ShopViewModel(
+            fetchShopListUseCase: fetchShopListUseCase,
+            fetchEventListUseCase: fetchEventListUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase
+        )
+        let viewController = ShopViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "주변상점"))
     }
     
