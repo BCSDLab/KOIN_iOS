@@ -62,7 +62,7 @@ final class ShopSummaryDeliveryButton: UIButton {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
+    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int) {
         
         minimumOrderSubLabel.text = "\(minOrderAmount.formattedWithComma)원"
         
@@ -72,10 +72,6 @@ final class ShopSummaryDeliveryButton: UIButton {
         else {
             deliveryTipSubLabel.text = "\(minDeliveryTip.formattedWithComma) - \(maxDelieveryTip.formattedWithComma)원"
         }
-        
-        //if isFromOrder {
-        // setUpIsHidden()
-        //}
     }
 }
 

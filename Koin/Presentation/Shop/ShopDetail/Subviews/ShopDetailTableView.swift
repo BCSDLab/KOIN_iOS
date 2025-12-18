@@ -11,14 +11,13 @@ final class ShopDetailTableView: UITableView {
     
     enum HighlightableCell {
         case name
+        case description
         case deliveryTips
-        case notice
     }
     
     // MARK: - Properties
     private var shopDetail: OrderShopDetail? = nil
     private var shouldHighlight: HighlightableCell?
-    private var isFromOrder: Bool = false
     
     // MARK: - Initializer
     init() {
@@ -30,10 +29,9 @@ final class ShopDetailTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(shopDetail: OrderShopDetail, shouldHighlight: ShopDetailTableView.HighlightableCell, isFromOrder: Bool) {
+    func configure(shopDetail: OrderShopDetail, shouldHighlight: ShopDetailTableView.HighlightableCell) {
         self.shopDetail = shopDetail
         self.shouldHighlight = shouldHighlight
-        self.isFromOrder = isFromOrder
         reloadData()
     }
 }
@@ -45,17 +43,14 @@ extension ShopDetailTableView {
             switch shouldHighlight {
             case .name:
                 return IndexPath(row: 0, section: 0)
-            case .notice:
-                return IndexPath(row: 0, section: 2)
+            case .description:
+                return IndexPath(row: 0, section: 1)
             case .deliveryTips:
-                return IndexPath(row: 0, section: 3)
+                return IndexPath(row: 0, section: 2)
             default:
                 return IndexPath(row: 0, section: 0)
             }
         }()
-        guard indexPath.section < (isFromOrder ? 6 : 3) else {
-            return
-        }
         scrollToRow(at: indexPath, at: .top, animated: true)
     }
 }
@@ -63,7 +58,7 @@ extension ShopDetailTableView {
 extension ShopDetailTableView: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return isFromOrder ? 6 : 3
+        return 3
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 1
@@ -82,32 +77,12 @@ extension ShopDetailTableView: UITableViewDataSource {
         case 1:
             let cell = ShopDetailTableViewIntroductionCell()
             cell.configure(title: "가게 소개", introduction: shopDetail.introduction)
+            cell.backgroundColor = .appColor(shouldHighlight == .description ? .neutral100 : .neutral0)
             return cell
         case 2:
-            switch isFromOrder {
-            case true:
-                let cell = ShopDetailTableViewNoticeCell()
-                cell.configure(title: "가게 알림", notice: shopDetail.notice)
-                cell.backgroundColor = .appColor(shouldHighlight == .notice ? .neutral100 : .neutral0)
-                return cell
-            case false:
-                let cell = ShopDetailTableViewDeliveryTipsCell()
-                cell.configure(title: "주문금액별 총 배달팁", deliveryTips: shopDetail.deliveryTips)
-                cell.backgroundColor = .appColor(shouldHighlight == .deliveryTips ? .neutral100 : .neutral0)
-                return cell
-            }
-        case 3:
             let cell = ShopDetailTableViewDeliveryTipsCell()
             cell.configure(title: "주문금액별 총 배달팁", deliveryTips: shopDetail.deliveryTips)
             cell.backgroundColor = .appColor(shouldHighlight == .deliveryTips ? .neutral100 : .neutral0)
-            return cell
-        case 4:
-            let cell = ShopDetailTableViewOwnerInfoCell()
-            cell.configure(title: "사업자 정보", ownerInfo: shopDetail.ownerInfo)
-            return cell
-        case 5:
-            let cell = ShopDetailTableViewOriginsCell()
-            cell.configure(title: "원산지 표기", origins: shopDetail.origins)
             return cell
         default:
             return UITableViewCell()
@@ -122,9 +97,6 @@ extension ShopDetailTableView: UITableViewDelegate {
         case 0: return 48 + 154 + 6
         case 1: return 48 + 18 + 6
         case 2: return 48 + 18 + 6
-        case 3: return 48 + 18 + 6
-        case 4: return 48 + 124 + 6
-        case 5: return 48 + 18 + 6
         default: return 0
         }
     }

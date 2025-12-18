@@ -36,7 +36,6 @@ final class ShopDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureNavigationBar(style: .empty)
-        //configureRightBarButton()
         configureView()
         bind()
         inputSubject.send(.viewDidLoad)
@@ -53,72 +52,10 @@ final class ShopDetailViewController: UIViewController {
             switch output {
             case .update(let shopDetail):
                 self.shopDetailTableView.configure(shopDetail: shopDetail,
-                                                   shouldHighlight: self.shouldHighlight,
-                                                   isFromOrder: self.viewModel.isFromOrder)
+                                                   shouldHighlight: self.shouldHighlight)
             }
         }
         .store(in: &subscriptions)
-    }
-    
-}
-
-extension ShopDetailViewController {
-    
-    private func configureRightBarButton() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: .appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)),
-            style: .plain,
-            target: self,
-            action: #selector(didTapCart)
-        )
-    }
-    
-    @objc private func didTapCart() {
-        if UserDataManager.shared.userId.isEmpty {
-            let popupView = OrderLoginPopupView()
-
-            if let windowScene = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first(where: { $0.activationState == .foregroundActive }),
-               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
-
-                popupView.frame = window.bounds
-
-                popupView.loginButtonAction = {
-                    let loginViewController = LoginViewController(
-                        viewModel: LoginViewModel(
-                            loginUseCase: DefaultLoginUseCase(
-                                userRepository: DefaultUserRepository(service: DefaultUserService())
-                            ),
-                            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-                            )
-                        )
-                    )
-                    loginViewController.title = "로그인"
-                    self.navigationController?.pushViewController(loginViewController, animated: true)
-                }
-
-                window.addSubview(popupView)
-            }
-
-        } else {
-            let service = DefaultOrderService()
-            let repository = DefaultOrderShopRepository(service: service)
-            let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
-            let fetchCartDeliveryUseCase = DefaultFetchCartDeliveryUseCase(repository: repository)
-            let fetchCartTakeOutUseCase = DefaultFetchCartTakeOutUseCase(repository: repository)
-            let deleteCartMenuItemUseCase = DefaultDeleteCartMenuItemUseCase(repository: repository)
-            let resetCartUseCase = DefaultResetCartUseCase(repository: repository)
-            let viewModel = OrderCartViewModel(fetchCartUseCase: fetchCartUseCase,
-                                               fetchCartDeliveryUseCase: fetchCartDeliveryUseCase,
-                                               fetchCartTakeOutUseCase: fetchCartTakeOutUseCase,
-                                               deleteCartMenuItemUseCase: deleteCartMenuItemUseCase,
-                                               resetCartUseCase: resetCartUseCase)
-            let viewController = OrderCartViewController(viewModel: viewModel, backCategoryName: "")
-            viewController.title = "장바구니"
-            navigationController?.pushViewController(viewController, animated: true)
-        }
     }
 }
 

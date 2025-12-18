@@ -55,10 +55,6 @@ final class ShopSummaryViewController: UIViewController {
         $0.estimatedRowHeight = 112
     }
     
-    private let bottomSheet = ShopSummaryBottomSheet().then {
-        $0.isHidden = true
-    }
-    
     private let popUpView = ShopSummaryPopUpView().then {
         $0.isHidden = true
     }
@@ -85,8 +81,6 @@ final class ShopSummaryViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar(style: navigationBarStyle)
-        configureRightBarButton()
-        inputSubject.send(.viewWillAppear)
         menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewBack))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
@@ -117,41 +111,27 @@ extension ShopSummaryViewController {
         output.sink { [weak self] output in
             guard let self else { return }
             switch output {
-            case .updateInfoView(let orderShopSummary, let isFromOrder):
-                self.cachedImages = orderShopSummary.images
-                self.tableHeaderView.updateInfoView(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
-            case .updatePhonenumber(let phonenumber):
-                self.tableHeaderView.configure(phonenumber: phonenumber)
-            case .updateOrderAmountDeliveryTips(let minOrderAmount, let minDeliveryTip, let maxDeliveryTip):
-                self.tableHeaderView.configure(minOrderAmount: minOrderAmount, minDeliveryTip: minDeliveryTip, maxDelieveryTip: maxDeliveryTip, isFromOrder: self.viewModel.isFromOrder)
-            case .updateMenusGroups(let orderShopMenusGroups):
-                self.tableHeaderView.updateMenusGroups(orderShopMenusGroups: orderShopMenusGroups)
-                self.menuGroupNameCollectionViewSticky.configure(menuGroup: orderShopMenusGroups.menuGroups)
-                
-            case let .updateIsAvailables(delivery, takeOut, payBank, payCard):
-                self.tableHeaderView.updateIsAvailables(delivery: delivery, takeOut: takeOut, payBank: payBank, payCard: payCard)
-                
-            // 기본정보 - tableView
-            case .updateMenus(let orderShopMenus):
-                self.menuGroupTableView.configure(orderShopMenus)
-                
-            // 장바구니
-            case let .updateBottomSheet(cartSummary):
-                self.bottomSheet.isHidden = !cartSummary.isAvailable
-                self.bottomSheet.configure(cartSummary: cartSummary)
-                self.updateTableViewConstraint(shouldShowBottomSheet: cartSummary.isAvailable)
-                
-            case let .updateIsAddingMenuAvailable(isAddingMenuAvailable):
-                self.isAddingMenuAvailable = isAddingMenuAvailable
-                
-            case let .updateCartItemsCount(count):
-                self.bottomSheet.configure(count: count)
-                if count == 0 {
-                    self.isAddingMenuAvailable = true
-                }
-                
-            case .updateMenuDetail(let orderMenu):
-                print("상세 메뉴 : \(orderMenu)")
+            case let .update1(images, name, rating, reviewCount):
+                self.cachedImages = images
+                self.tableHeaderView.configure1(
+                    images: images,
+                    name: name,
+                    rating: rating,
+                    reviewCount: reviewCount
+                )
+                break
+            case let .update2(delivery, payBank, payCard, maxDeliveryTip, description, phonenumber):
+                self.tableHeaderView.configure2(
+                    delivery: delivery,
+                    payBank: payBank,
+                    payCard: payCard,
+                    maxDeliveryTip: maxDeliveryTip,
+                    description: description,
+                    phonenumber: phonenumber)
+            case let .update3(menusGroups, menus):
+                self.tableHeaderView.configure3(orderShopMenusGroups: menusGroups)
+                self.menuGroupNameCollectionViewSticky.configure(menuGroup: menusGroups.menuGroups)
+                self.menuGroupTableView.configure(menus)
             }
         }
         .store(in: &subscriptions)
@@ -186,26 +166,14 @@ extension ShopSummaryViewController {
         tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
             guard let self else { return }
             self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, self.viewModel.shopName))
-            if let orderableShopId = self.viewModel.orderableShopId {
-                let orderService = DefaultOrderService()
-                let orderRepository = DefaultOrderShopRepository(service: orderService)
-                let fetchOrderShopDetailUseCase = DefaultFetchOrderShopDetailUseCase(repository: orderRepository)
-                let viewModel = ShopDetailViewModel(fetchOrderShopDetailUseCase: fetchOrderShopDetailUseCase,
-                                                    orderableShopId: orderableShopId)
-                let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
-                viewController.title = "가게정보·원산지"
-                self.navigationController?.pushViewController(viewController, animated: true)
-            }
-            else if let shopId = self.viewModel.shopId {
-                let shopService = DefaultShopService()
-                let shopRepository = DefaultShopRepository(service: shopService)
-                let fetchOrderShopDetailFromShopUseCase = DefaultFetchOrderShopDetailFromShopUseCase(repository: shopRepository)
-                let viewModel = ShopDetailViewModel(fetchOrderShopDetailFromShopUseCase: fetchOrderShopDetailFromShopUseCase,
-                                                    shopId: shopId)
-                let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
-                viewController.title = "가게정보"
-                self.navigationController?.pushViewController(viewController, animated: true)
-            }
+            let shopService = DefaultShopService()
+            let shopRepository = DefaultShopRepository(service: shopService)
+            let fetchOrderShopDetailFromShopUseCase = DefaultFetchOrderShopDetailFromShopUseCase(repository: shopRepository)
+            let viewModel = ShopDetailViewModel(fetchOrderShopDetailFromShopUseCase: fetchOrderShopDetailFromShopUseCase,
+                                                shopId: self.viewModel.shopId)
+            let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
+            viewController.title = "가게정보"
+            self.navigationController?.pushViewController(viewController, animated: true)
         }
             .store(in: &subscriptions)
         
@@ -236,19 +204,6 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         // MARK: - tableView
-        menuGroupTableView.didTapCellPublisher
-            .sink { [weak self] menuId in
-                guard let self, self.viewModel.isFromOrder else { return }
-                if isAddingMenuAvailable {
-                    self.inputSubject.send(.fetchMenuDetail(orderableShopMenuId: menuId))
-                    navigateToMenuDetail(menuId: menuId)
-                }
-                else {
-                    showPopUpView(menuId: menuId)
-                }
-            }
-            .store(in: &subscriptions)
-        
         menuGroupTableView.shouldSetNavigationBarTransparentPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isTransparent in
@@ -296,7 +251,6 @@ extension ShopSummaryViewController {
         popUpView.rightButtonTappedPublisher
             .sink { [weak self] menuId in
                 self?.hidePopUpView()
-                self?.inputSubject.send(.resetCart)
                 self?.navigateToMenuDetail(menuId: menuId)
             }
             .store(in: &subscriptions)
@@ -321,67 +275,6 @@ extension ShopSummaryViewController {
             $0.bottom.equalToSuperview().offset(shouldShowBottomSheet ? (UIApplication.hasHomeButton() ? -72 : -106 ) : 0)
         }
     }
-
-    // MARK: - Navigation Right Bar Button
-    private func configureRightBarButton() {
-        if !viewModel.isFromOrder { return }
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: .appImage(asset: .shoppingCartWhite)?.resize(to: CGSize(width: 24, height: 24)),
-            style: .plain,
-            target: self,
-            action: #selector(didTapCart)
-        )
-    }
-    
-    // MARK: - @objc
-    @objc private func didTapCart() {
-        if UserDataManager.shared.userId.isEmpty {
-            let popupView = OrderLoginPopupView()
-
-            if let windowScene = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first(where: { $0.activationState == .foregroundActive }),
-               let window = windowScene.windows.first(where: { $0.isKeyWindow }) {
-
-                popupView.frame = window.bounds
-
-                popupView.loginButtonAction = {
-                    let loginViewController = LoginViewController(
-                        viewModel: LoginViewModel(
-                            loginUseCase: DefaultLoginUseCase(
-                                userRepository: DefaultUserRepository(service: DefaultUserService())
-                            ),
-                            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-                            )
-                        )
-                    )
-                    loginViewController.title = "로그인"
-                    self.navigationController?.pushViewController(loginViewController, animated: true)
-                }
-
-                window.addSubview(popupView)
-            }
-        } else {
-            let service = DefaultOrderService()
-            let repository = DefaultOrderShopRepository(service: service)
-            let fetchCartUseCase = DefaultFetchCartUseCase(repository: repository)
-            let fetchCartDeliveryUseCase = DefaultFetchCartDeliveryUseCase(repository: repository)
-            let fetchCartTakeOutUseCase = DefaultFetchCartTakeOutUseCase(repository: repository)
-            let deleteCartMenuItemUseCase = DefaultDeleteCartMenuItemUseCase(repository: repository)
-            let resetCartUseCase = DefaultResetCartUseCase(repository: repository)            
-            let viewModel = OrderCartViewModel(fetchCartUseCase: fetchCartUseCase,
-                                               fetchCartDeliveryUseCase: fetchCartDeliveryUseCase,
-                                               fetchCartTakeOutUseCase: fetchCartTakeOutUseCase,
-                                               deleteCartMenuItemUseCase: deleteCartMenuItemUseCase,
-                                               resetCartUseCase: resetCartUseCase)
-            let backCategoryName = self.backCategoryName ?? "알 수 없음" // FIXME: 
-            let viewController = OrderCartViewController(viewModel: viewModel, backCategoryName: backCategoryName)
-            viewController.title = "장바구니"
-            navigationController?.pushViewController(viewController, animated: true)
-        }
-    }
     
     // MARK: - show/hide popUpView
     private func showPopUpView(menuId: Int) {
@@ -402,9 +295,7 @@ extension ShopSummaryViewController {
     
     // MARK: - Navigation
     private func navigateToReviewListViewController() {
-        guard let shopId = viewModel.shopId else { return }
-        
-        let reviewListViewController = ReviewListViewController(shopId: shopId, shopName: viewModel.shopName)
+        let reviewListViewController = ReviewListViewController(shopId: viewModel.shopId, shopName: viewModel.shopName)
         reviewListViewController.title = "리뷰"
         inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, viewModel.shopName))
         navigationController?.pushViewController(reviewListViewController, animated: true)
@@ -434,11 +325,6 @@ extension ShopSummaryViewController {
             $0.bottom.equalToSuperview()
         }
         
-        bottomSheet.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(UIApplication.hasHomeButton() ? 72 : 106)
-        }
-        
         menuGroupNameCollectionViewSticky.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(navigationBarLikeView.snp.bottom)
@@ -456,15 +342,9 @@ extension ShopSummaryViewController {
     }
     
     private func setUpLayout() {
-        [menuGroupTableView, bottomSheet, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
+        [menuGroupTableView, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
             view.addSubview($0)
         }
-    }
-    
-    private func configurePopUpView() {
-        popUpView.configure(message: "장바구니에는 같은 가게 메뉴만\n담을 수 있어요. \n담았던 메뉴는 삭제할까요?",
-                            leftButtonText: "아니오",
-                            rightButtonText: "예")
     }
     
     private func setTableHeaderView() {
@@ -472,7 +352,6 @@ extension ShopSummaryViewController {
     }
     
     private func configureView(){
-        configurePopUpView()
         setTableHeaderView()
         setUpLayout()
         setUpConstraints()

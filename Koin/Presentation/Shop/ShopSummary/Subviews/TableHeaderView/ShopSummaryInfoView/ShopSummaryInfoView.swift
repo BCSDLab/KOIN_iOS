@@ -85,31 +85,34 @@ final class ShopSummaryInfoView: UIView {
     
     // MARK: - configure
     
-    func configure(phonenumber: String) {
-        phoneButton.configure(phonenumber: phonenumber)
+    func configure1(name: String, rating: Double, review: Int) {
+        shopTitleLabel.text = name
+        ratingLabel.text = String(rating)
+        setUpReviewButton(reviewCount: review)
+        setUpMoreInfoButton(isFromOrder: false)
     }
     
-    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
-        orderAmountDelieveryTipButton.configure(minOrderAmount: minOrderAmount,
-                                                minDeliveryTip: minDeliveryTip,
-                                                maxDelieveryTip: maxDelieveryTip,
-                                                isFromOrder: isFromOrder)
-        
-    }
-    
-    func configure(orderShopSummary: OrderShopSummary, isFromOrder: Bool) {
-        shopTitleLabel.text = orderShopSummary.name
-        ratingLabel.text = String(orderShopSummary.ratingAverage)
-        setUpReviewButton(reviewCount: orderShopSummary.reviewCount)
-        setUpMoreInfoButton(isFromOrder: isFromOrder)
-        introductionButton.configure(introduction: orderShopSummary.introduction)
-    }
-    
-    func configure(isDelieveryAvailable: Bool, isTakeoutAvailable: Bool = false, payCard: Bool, payBank: Bool) {
+    func configure2(
+        isDelieveryAvailable: Bool,
+        isTakeOutAvailable: Bool = false,
+        payCard: Bool,
+        payBank: Bool,
+        minOrderAmount: Int = 0,
+        minDeliveryTip: Int = 0,
+        maxDelieveryTip: Int,
+        phonenumber: String,
+        description: String
+    )
+    {
         isDeliveryAvailableLabel.isHidden = !isDelieveryAvailable ? true : false
-        isTakeoutAvailableLabel.isHidden = !isTakeoutAvailable ? true : false
+        isTakeoutAvailableLabel.isHidden = !isTakeOutAvailable ? true : false
         isPayCardAvailableLabel.isHidden = !payCard ? true : false
         isPayBankAvailableLabel.isHidden = !payBank ? true : false
+        orderAmountDelieveryTipButton.configure(minOrderAmount: minOrderAmount,
+                                                minDeliveryTip: minDeliveryTip,
+                                                maxDelieveryTip: maxDelieveryTip)
+        phoneButton.configure(phonenumber: phonenumber)
+        introductionButton.configure(introduction: description)
     }
     
     private func setAddTarget() {
@@ -209,7 +212,7 @@ extension ShopSummaryInfoView {
         navigateToShopInfoPublisher.send(.deliveryTips)
     }
     @objc private func introductionButtonTapped() {
-        navigateToShopInfoPublisher.send(.notice)
+        navigateToShopInfoPublisher.send(.description)
     }
     @objc private func phoneButtonTapped() {
         phoneButtonTappedPublisher.send()

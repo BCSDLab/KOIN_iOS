@@ -120,31 +120,42 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
 
 extension ShopSummaryTableViewTableHeaderView {
     
-    func updateInfoView(orderShopSummary: OrderShopSummary, isFromOrder: Bool) {
-        imagesCollectionView.configure(orderImage: orderShopSummary.images)
-        imagesPageControl.numberOfPages = orderShopSummary.images.count
-        if orderShopSummary.images.count <= 1 {
+    func configure1(
+        images: [OrderImage],
+        name: String,
+        rating: Double,
+        reviewCount: Int
+    ) {
+        imagesCollectionView.configure(orderImage: images)
+        imagesPageControl.numberOfPages = images.count
+        if images.count <= 1 {
             imagesPageControl.isHidden = true
         }
-        shopSummaryInfoView.configure(orderShopSummary: orderShopSummary, isFromOrder: isFromOrder)
+        shopSummaryInfoView.configure1(
+            name: name,
+            rating: rating,
+            review: reviewCount)
     }
     
-    func configure(phonenumber: String) {
-        shopSummaryInfoView.configure(phonenumber: phonenumber)
+    func configure2(
+        delivery: Bool,
+        payBank: Bool,
+        payCard: Bool,
+        maxDeliveryTip: Int,
+        description: String,
+        phonenumber: String,
+    ) {
+        shopSummaryInfoView.configure2(
+            isDelieveryAvailable: delivery,
+            payCard: payCard,
+            payBank: payBank,
+            maxDelieveryTip: maxDeliveryTip,
+            phonenumber: phonenumber,
+            description: description)
     }
     
-    func configure(minOrderAmount: Int, minDeliveryTip: Int, maxDelieveryTip: Int, isFromOrder: Bool) {
-        shopSummaryInfoView.configure(minOrderAmount: minOrderAmount,
-                                      minDeliveryTip: minDeliveryTip,
-                                      maxDelieveryTip: maxDelieveryTip,
-                                      isFromOrder: isFromOrder)
-    }
-    
-    func updateMenusGroups(orderShopMenusGroups: OrderShopMenusGroups) {
+    func configure3(orderShopMenusGroups: OrderShopMenusGroups) {
         menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
-    }
-    func updateIsAvailables(delivery: Bool, takeOut: Bool = false, payBank: Bool, payCard: Bool) {
-        shopSummaryInfoView.configure(isDelieveryAvailable: delivery, isTakeoutAvailable: takeOut,payCard: payCard, payBank: payBank)
     }
 }
 
