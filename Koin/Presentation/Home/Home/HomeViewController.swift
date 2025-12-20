@@ -18,7 +18,8 @@ final class HomeViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private var isSegmentedControlSetupDone = false
     private var scrollDirection: ScrollLog = .scrollToDown
-        
+    weak var coordinator: HomeCoordinator?
+    
     // MARK: - UI Components
     
     private let wrapperView = UIView()
