@@ -570,27 +570,7 @@ extension HomeViewController {
     }
     
     private func didTapCell(at id: Int) {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            selectedId: id
-        )
-        let viewController = ShopViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
+        coordinator?.navigateToShop(categoryId: id)
     }
     
     @objc private func refresh() {

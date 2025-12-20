@@ -25,4 +25,15 @@ final class HomeCoordinator: Coordinator {
         homeViewController.coordinator = self
         navigationController.setViewControllers([homeViewController], animated: false)
     }
+    
+    func navigateToShop(categoryId: Int) {
+        let shopCoordinator = ShopCoordinator(
+            navigationController: navigationController,
+            factory: DIContainer.shared
+            )
+        shopCoordinator.parentCoordinator = self
+        addChild(shopCoordinator)
+        
+        shopCoordinator.navigateToShop(categoryId: categoryId)
+    }
 }
