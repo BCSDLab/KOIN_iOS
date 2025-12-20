@@ -11,18 +11,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
     var urlParameters: [String: String]?
+    var appCoordinator: AppCoordinator?
     
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
+        let navigationController = CustomNavigationController()
         
-        let navigationController = CustomNavigationController(rootViewController: makeHomeViewController())
+        appCoordinator = AppCoordinator(navigationController: navigationController)
+        appCoordinator?.start()
+        
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
-        
+
         if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
                    let incomingURL = userActivity.webpageURL {
                     handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
@@ -72,35 +76,4 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             NotificationHandler.shared.handleNotificationData(userInfo: userInfo, rootViewController: rootViewController)
         }
     }
-}
-
-extension SceneDelegate {
-    private func makeHomeViewController() -> UIViewController {
-        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let dateProvider = DefaultDateProvider()
-        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-        
-        let homeViewModel = HomeViewModel(
-            fetchDiningListUseCase: fetchDiningListUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
-            dateProvider: dateProvider,
-            checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
-            assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())),
-            fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
-            checkLoginUseCase: checkLoginUseCase
-        )
-        let viewController = HomeViewController(viewModel: homeViewModel)
-        return viewController
-    }
-    
-    
 }
