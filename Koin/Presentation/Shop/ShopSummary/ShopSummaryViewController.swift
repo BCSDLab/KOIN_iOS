@@ -23,6 +23,8 @@ final class ShopSummaryViewController: UIViewController {
     private var didTapBack = false
     private let backCategoryName: String?
     
+    weak var coordinator: ShopCoordinator?
+    
     // MARK: - UI Components
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
     
@@ -159,21 +161,16 @@ extension ShopSummaryViewController {
         
         tableHeaderView.reviewButtonTappedPublisher
             .sink { [weak self] in
-                self?.navigateToReviewListViewController()
+                guard let self = self else { return }
+                self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, self.viewModel.shopName))
+                self.coordinator?.navigateToReviewList(shopId: self.viewModel.shopId, shopName: self.viewModel.shopName)
             }
             .store(in: &subscriptions)
         
         tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
             guard let self else { return }
             self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, self.viewModel.shopName))
-            let shopService = DefaultShopService()
-            let shopRepository = DefaultShopRepository(service: shopService)
-            let fetchOrderShopDetailFromShopUseCase = DefaultFetchOrderShopDetailFromShopUseCase(repository: shopRepository)
-            let viewModel = ShopDetailViewModel(fetchOrderShopDetailFromShopUseCase: fetchOrderShopDetailFromShopUseCase,
-                                                shopId: self.viewModel.shopId)
-            let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
-            viewController.title = "가게정보"
-            self.navigationController?.pushViewController(viewController, animated: true)
+            self.coordinator?.navigateToShopDetail(shopId: self.viewModel.shopId, shouldHighlight: shouldHighlight)
         }
             .store(in: &subscriptions)
         
@@ -293,13 +290,6 @@ extension ShopSummaryViewController {
         print("다음화면으로!")
     }
     
-    // MARK: - Navigation
-    private func navigateToReviewListViewController() {
-        let reviewListViewController = ReviewListViewController(shopId: viewModel.shopId, shopName: viewModel.shopName)
-        reviewListViewController.title = "리뷰"
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, viewModel.shopName))
-        navigationController?.pushViewController(reviewListViewController, animated: true)
-    }
 }
 
 extension ShopSummaryViewController {
