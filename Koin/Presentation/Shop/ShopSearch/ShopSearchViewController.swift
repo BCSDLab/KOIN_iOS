@@ -14,6 +14,7 @@ final class ShopSearchViewController: UIViewController {
     private let viewModel: ShopSearchViewModel
     private let inputSubject = PassthroughSubject<ShopSearchViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    weak var coordinator: ShopCoordinator?
     
     // MARK: - UI Components
     private let navigationBackgroundView = UIView().then {
@@ -156,23 +157,11 @@ extension ShopSearchViewController {
 extension ShopSearchViewController {
     
     private func navigateTo(shopId: Int, shopName: String) {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: shopRepository)
-        let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: shopRepository)
-        let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-                                             fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-                                             fetchShopDataUseCase: fetchShopDataUseCase,
-                                             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                                             getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                             shopId: shopId,
-                                             shopName: shopName)
-        let viewController = ShopSummaryViewController(viewModel: viewModel)
-        viewController.title = shopName
-        navigationController?.pushViewController(viewController, animated: true)
+        coordinator?.navigateToShopSummary(
+            shopId: shopId,
+            shopName: shopName,
+            categoryName: viewModel.selectedCategoryName
+        )
     }
 }
 
