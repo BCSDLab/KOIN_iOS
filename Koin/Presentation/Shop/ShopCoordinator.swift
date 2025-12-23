@@ -58,28 +58,41 @@ final class ShopCoordinator: Coordinator {
     
     func navigateToReviewList(shopId: Int, shopName: String) {
         let reviewListViewController = factory.makeReviewListViewController(shopId: shopId, shopName: shopName)
+        reviewListViewController.coordinator = self
         navigationController.pushViewController(reviewListViewController, animated: true)
     }
     
-    func navigateToShopReview(shopId: Int, shopName: String, reviewId: Int? = nil) {
+    func navigateToShopReview(shopId: Int, shopName: String, reviewId: Int? = nil, completion: ((Bool, Int?, WriteReviewRequest) -> Void)? = nil) {
         let shopReviewViewController = factory.makeShopReviewViewController(
             reviewId: reviewId,
             shopId: shopId,
             shopName: shopName
         )
         
+        shopReviewViewController.writeCompletePublisher
+            .sink { result in
+                completion?(result.0, result.1, result.2)
+            }
+            .store(in: &cancellables)
+        
         navigationController.pushViewController(shopReviewViewController, animated: true)
     }
     
-    func navigateToReviewReport(reviewId: Int, shopId: Int, shopName: String) {
+    func navigateToReviewReport(reviewId: Int, shopId: Int, shopName: String, completion: ((Int, Int) -> Void)? = nil) {
         let shopReviewReportViewController = factory.makeShopReviewReportViewController(
             reviewId: reviewId,
             shopId: shopId,
             shopName: shopName
         )
+        
+        shopReviewReportViewController.reviewInfoPublisher
+            .sink { result in
+                completion?(result.0, result.1)
+            }
+            .store(in: &cancellables)
+        
         navigationController.pushViewController(shopReviewReportViewController, animated: true)
     }
-    
     
     func showSortOptionSheet(currentType: ShopSortType, onSelect: @escaping (ShopSortType) -> Void) {
         let shopSortOptionSheetViewController = factory.makeShopSortOptionSheetViewController(
