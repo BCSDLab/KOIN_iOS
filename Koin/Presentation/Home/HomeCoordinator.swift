@@ -39,6 +39,7 @@ final class HomeCoordinator: Coordinator {
     
     func navigateToServiceSelect() {
         let serviceSelectViewController = factory.makeServiceSelectViewController()
+        serviceSelectViewController.coordinator = self
         navigationController.pushViewController(serviceSelectViewController, animated: true)
     }
     
