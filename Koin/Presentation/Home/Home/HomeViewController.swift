@@ -260,7 +260,7 @@ final class HomeViewController: UIViewController {
             let categoryName = self.viewModel.getCategoryName(for: shopName) ?? "알 수 없음"
                         
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, categoryName, "메인", nil, nil, .mainShopCategories))
-            self.didTapCell(at: shopName)
+            self.coordinator?.navigateToShop(categoryId: shopName)
         }.store(in: &subscriptions)
         
         noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
@@ -567,10 +567,6 @@ extension HomeViewController {
         else if result.variableName == .mainDiningNew {
             goDiningPageButton.isHidden = false
         }
-    }
-    
-    private func didTapCell(at id: Int) {
-        coordinator?.navigateToShop(categoryId: id)
     }
     
     @objc private func refresh() {
