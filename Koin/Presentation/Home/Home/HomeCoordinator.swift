@@ -36,4 +36,27 @@ final class HomeCoordinator: Coordinator {
         
         shopCoordinator.navigateToShop(categoryId: categoryId)
     }
+    
+    func navigateToServiceSelect() {
+        let serviceSelectViewController = factory.makeServiceSelectViewController()
+        navigationController.pushViewController(serviceSelectViewController, animated: true)
+    }
+    
+    func navigateToSetting() {
+        let settingViewController = factory.makeSettingsViewController()
+        navigationController.pushViewController(settingViewController, animated: true)
+    }
+    
+    func presentForceUpdate() {
+        let forceUpdateViewController = factory.makeForceUpdateViewController()
+        navigationController.present(forceUpdateViewController, animated: true, completion: nil)
+    }
+    
+    func showUpdateModal(onOpenStoreButtonTapped: @escaping () -> Void, onCancelButtonTapped: @escaping () -> Void) {
+        let updateViewController = factory.makeUpdateModelViewController(
+            onOpenStoreButtonTapped: onOpenStoreButtonTapped,
+            onCancelButtonTapped: onCancelButtonTapped
+        )
+        navigationController.present(updateViewController, animated: true, completion: nil)
+    }
 }
