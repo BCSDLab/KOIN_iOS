@@ -16,6 +16,7 @@ final class ServiceSelectViewController: UIViewController, UIGestureRecognizerDe
     private let viewModel: ServiceSelectViewModel
     private let inputSubject: PassthroughSubject<ServiceSelectViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    weak var coordinator: HomeCoordinator?
     
     // MARK: - UI Components
     
@@ -261,26 +262,7 @@ extension ServiceSelectViewController {
     }
     
     @objc func shopSelectButtonTapped() {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase
-        )
-        let viewController = ShopViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
+        coordinator?.navigateToShop(categoryId: 0)
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "주변상점"))
     }
     
