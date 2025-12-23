@@ -16,6 +16,8 @@ final class ReviewListViewController: UIViewController {
     private let viewModel: ReviewListViewModel
     private let inputSubject: PassthroughSubject<ReviewListViewModel.Input, Never> = .init()
     private var cancellables = Set<AnyCancellable>()
+    weak var coordinator: ShopCoordinator?
+    
     
     // MARK: - UI Components
     
@@ -65,79 +67,6 @@ final class ReviewListViewController: UIViewController {
     private let loadingIndicator = UIActivityIndicatorView(style: .medium).then {
         $0.hidesWhenStopped = true
     }
-    
-    // MARK: - Modal ViewControllers
-    
-    private lazy var reviewWriteLoginModalViewController = {
-        let onLoginButtonTapped: ()->Void = { [weak self] in
-            guard let self else { return }
-            self.inputSubject.send(.logEvent(
-                EventParameter.EventLabel.Business.loginPrompt,
-                .click,
-                "리뷰 작성 팝업"
-            ))
-            self.showLoginScreen()
-        }
-        let onCancelButtonTapped: ()->Void = { [weak self] in
-            guard let self else { return }
-            self.inputSubject.send(.logEvent(
-                EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel,
-                .click,
-                self.viewModel.getShopName()
-            ))
-        }
-        return ReviewLoginModalViewController(
-            message: "작성",
-            onLoginButtonTapped: onLoginButtonTapped,
-            onCancelButtonTapped: onCancelButtonTapped).then {
-            $0.modalPresentationStyle = .overFullScreen
-            $0.modalTransitionStyle = .crossDissolve
-        }
-    }()
-    
-    private lazy var reviewReportLoginModalViewController = {        
-        let onLoginButtonPublisher: ()->Void = { [weak self] in
-            guard let self else { return }
-            self.inputSubject.send(.logEvent(
-                EventParameter.EventLabel.Business.loginPrompt,
-                .click,
-                "리뷰 신고 팝업"
-            ))
-            self.showLoginScreen()
-        }
-        return ReviewLoginModalViewController(
-            message: "신고",
-            onLoginButtonTapped: onLoginButtonPublisher,
-            onCancelButtonTapped: nil
-        ).then {
-            $0.modalPresentationStyle = .overFullScreen
-            $0.modalTransitionStyle = .crossDissolve
-        }
-    }()
-    
-    private lazy var deleteReviewModalViewController = {
-        let onDeleteButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.logEvent(
-                EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
-                .click,
-                "O"
-            ))
-            self?.deleteReview()
-        }
-        let onCancelButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.logEvent(
-                EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
-                .click,
-                "X"
-            ))
-        }
-        return DeleteReviewModalViewController(
-            onDeleteButtonTapped: onDeleteButtonTapped,
-            onCancelButtonTapped: onCancelButtonTapped).then {
-                $0.modalPresentationStyle = .overFullScreen
-                $0.modalTransitionStyle = .crossDissolve
-            }
-    }()
     
     // MARK: - Initialize
     
@@ -201,10 +130,10 @@ final class ReviewListViewController: UIViewController {
                 
                 switch output {
                 case .showWriteReviewLoginModal:
-                    self.present(self.reviewWriteLoginModalViewController, animated: true)
+                    self.showReviewLoginModal(type: .write)
                     
                 case .showReportReviewLoginModal:
-                    self.present(self.reviewReportLoginModalViewController, animated: true)
+                    self.showReviewLoginModal(type: .report)
                     
                 case .showMyReviewFilterError:
                     self.nonReviewListView.isHidden = false
@@ -372,13 +301,11 @@ extension ReviewListViewController {
             self?.inputSubject.send(.changeFilter(sorter: selectedSortType, isMine: nil))
         }
         
-        let bottomSheet = SortTypeBottomSheetViewController(
+        coordinator?.showSortTypeBottomSheet(
             options: options,
             selectedIndex: selectedIndex,
-            onSelection: onSelection
+            onSelect: onSelection
         )
-        
-        present(bottomSheet, animated: false)
     }
     
     private func handleDeleteReview(_ parameter: (Int, Int)) {
@@ -388,7 +315,27 @@ extension ReviewListViewController {
             .click,
             viewModel.getShopName()
         ))
-        present(deleteReviewModalViewController, animated: true)
+        
+        let onDelete: () -> Void = { [weak self] in
+            guard let self else { return }
+            self.inputSubject.send(.logEvent(
+                EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
+                .click,
+                "O"
+            ))
+            self.deleteReview()
+        }
+        
+        let onCancel: () -> Void = { [weak self] in
+            guard let self else { return }
+            self.inputSubject.send(.logEvent(
+                EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
+                .click,
+                "X"
+            ))
+        }
+
+        coordinator?.showDeleteReviewModal(onDelete: onDelete, onCancel: onCancel)
     }
     
     private func showZoomedImage(_ imageUrls: [String], _ initialIndexpath: IndexPath) {
@@ -407,105 +354,62 @@ extension ReviewListViewController {
     }
     
     private func navigateToWriteReview() {
-        let viewController = makeShopReviewViewController(
-            reviewId: nil,
-            shopId: viewModel.getShopId(),
-            shopName: viewModel.getShopName()
-        )
-        viewController.title = "리뷰 작성하기"
-        
-        bindShopReviewViewController(viewController)
-        
         inputSubject.send(.logEvent(
             EventParameter.EventLabel.Business.shopDetailViewReviewWrite,
             .click,
             viewModel.getShopName()
         ))
         
-        navigationController?.pushViewController(viewController, animated: true)
+        coordinator?.navigateToShopReview(shopId: viewModel.getShopId(), shopName: viewModel.getShopName(), reviewId: nil, completion: { [weak self] isPost, reviewId, request in
+            if isPost {
+                self?.inputSubject.send(.changeFilter(sorter: .latest, isMine: nil))
+            } else if let reviewId = reviewId {
+                self?.reviewListCollectionView.modifySuccess(reviewId, request)
+            }
+        })
     }
     
     private func navigateToModifyReview(reviewId: Int, shopId: Int) {
-        let viewController = makeShopReviewViewController(reviewId: reviewId, shopId: shopId, shopName: viewModel.getShopName())
-        viewController.title = "리뷰 수정하기"
-        
-        bindShopReviewViewController(viewController)
-        
-        navigationController?.pushViewController(viewController, animated: true)
+        coordinator?.navigateToShopReview(shopId: shopId, shopName: viewModel.getShopName(), reviewId: reviewId, completion: { [weak self] isPost, reviewId, request in
+                if !isPost, let reviewId = reviewId {
+                    self?.reviewListCollectionView.modifySuccess(reviewId, request)
+                }
+            })
     }
     
     private func navigateToReportReview(reviewId: Int, shopId: Int) {
-        let viewController = makeShopReviewReportViewController(reviewId: reviewId, shopId: shopId, shopName: viewModel.getShopName())
+        coordinator?.navigateToReviewReport(reviewId: reviewId, shopId: shopId, shopName: viewModel.getShopName(), completion: { [weak self] reviewId, shopId in
+            self?.showToastMessage(message: "리뷰가 신고되었어요.", intent: .neutral)
+            self?.reviewListCollectionView.reportReview(reviewId, shopId: shopId)
+        })
+    }
+    
+    private func showReviewLoginModal(type: MessageType) {
+        let onLogin = { [weak self] in
+            guard let self else { return }
+            let label = (type == .write) ? "리뷰 작성 팝업" : "리뷰 신고 팝업"
+            self.inputSubject.send(.logEvent(
+                EventParameter.EventLabel.Business.loginPrompt,
+                .click,
+                label
+            ))
+            self.showLoginScreen()
+        }
         
-        bindShopReviewReportViewController(viewController)
+        let onCancel: (() -> Void)? = (type == .write) ? { [weak self] in
+            guard let self else { return }
+            self.inputSubject.send(.logEvent(
+                EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel,
+                .click,
+                self.viewModel.getShopName()
+            ))
+        } : nil
         
-        navigationController?.pushViewController(viewController, animated: true)
+        coordinator?.showLoginModal(type: type, onLogin: onLogin, onCancel: onCancel)
     }
     
     private func showLoginScreen() {
         navigateToLogin()
-    }
-}
-
-extension ReviewListViewController {
-    
-    private func makeShopReviewViewController(reviewId: Int?, shopId: Int, shopName: String) -> ShopReviewViewController {
-        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        
-        let viewModel = ShopReviewViewModel(
-            postReviewUseCase: DefaultPostReviewUseCase(shopRepository: shopRepository),
-            modifyReviewUseCase: DefaultModifyReviewUseCase(shopRepository: shopRepository),
-            fetchShopReviewUseCase: DefaultFetchShopReviewUseCase(shopRepository: shopRepository),
-            uploadFileUseCase: DefaultUploadFileUseCase(shopRepository: shopRepository),
-            fetchShopDataUseCase: DefaultFetchShopDataUseCase(shopRepository: shopRepository),
-            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-            ),
-            getUserScreenTimeUseCase: DefaultGetUserScreenTimeUseCase(),
-            reviewId: reviewId,
-            shopId: shopId,
-            shopName: shopName
-        )
-        
-        return ShopReviewViewController(viewModel: viewModel)
-    }
-    
-    private func makeShopReviewReportViewController(reviewId: Int, shopId: Int, shopName: String) -> ShopReviewReportViewController {
-        let viewModel = ShopReviewReportViewModel(
-            reportReviewReviewUseCase: DefaultReportReviewUseCase(
-                shopRepository: DefaultShopRepository(service: DefaultShopService())
-            ),
-            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-            ),
-            reviewId: reviewId,
-            shopId: shopId,
-            shopName: shopName
-        )
-        
-        return ShopReviewReportViewController(viewModel: viewModel)
-    }
-    
-    private func bindShopReviewViewController(_ viewController: ShopReviewViewController) {
-        viewController.writeCompletePublisher
-            .sink { [weak self] result in
-                let isPost = result.0
-                if isPost {
-                    self?.inputSubject.send(.changeFilter(sorter: .latest, isMine: nil))
-                } else if let reviewId = result.1 {
-                    self?.reviewListCollectionView.modifySuccess(reviewId, result.2)
-                }
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func bindShopReviewReportViewController(_ viewController: ShopReviewReportViewController) {
-        viewController.reviewInfoPublisher
-            .sink { [weak self] tuple in
-                self?.showToastMessage(message: "리뷰가 신고되었어요.", intent: .neutral)
-                self?.reviewListCollectionView.reportReview(tuple.0, shopId: tuple.1)
-            }
-            .store(in: &cancellables)
     }
 }
 
