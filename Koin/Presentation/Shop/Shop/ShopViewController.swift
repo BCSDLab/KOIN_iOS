@@ -245,6 +245,13 @@ final class ShopViewController: UIViewController {
         eventShopCollectionView.stopAutoScroll()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isMovingFromParent {
+            coordinator?.didFinish()
+        }
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self)
     }
