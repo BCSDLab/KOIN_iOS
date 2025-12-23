@@ -21,6 +21,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
     private let viewModel: ForceUpdateViewModel
     private let inputSubject: PassthroughSubject<ForceUpdateViewModel.Input, Never> = .init()
     var subscriptions: Set<AnyCancellable> = []
+    weak var coordinator: HomeCoordinator?
     
     // MARK: - UI Components
     private let logoAnimationView = LottieAnimationView().then {
@@ -85,25 +86,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         $0.setAttributedTitle(attributedTitle, for: .normal)
         $0.backgroundColor = .clear
     }
-    
-    private lazy var updateModalViewController = {
-        let onOpenStoreButtonTapped: ()->Void = { [weak self] in
-            self?.openStore()
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
-        }
-        let onCancelButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
-        }
-        let viewController = UpdateModelViewController(
-            onOpenStoreButtonTapped: onOpenStoreButtonTapped,
-            onCancelButtonTapped: onCancelButtonTapped)
-            .then {
-                $0.modalPresentationStyle = .overFullScreen
-                $0.modalTransitionStyle = .crossDissolve
-            }
-        return viewController
-    }()
-    
+        
     private func openStore() {
         if let url = URL(string: "https://itunes.apple.com/app/id1500848622"),
            UIApplication.shared.canOpenURL(url) {
@@ -195,7 +178,23 @@ extension ForceUpdateViewController {
     
     
     @objc private func errorCheckButtonTapped() {
-        present(updateModalViewController, animated: true, completion: nil)
+        let onOpenStoreButtonTapped: () -> Void = { [weak self] in
+            self?.openStore()
+            self?.inputSubject.send(.logEvent(
+                EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup,
+                .click,
+                "스토어로 가기"
+            ))
+        }
+        
+        let onCancelButtonTapped: () -> Void = { [weak self] in
+            self?.inputSubject.send(.logEvent(
+                EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup,
+                .click,
+                "확인"
+            ))
+        }
+        coordinator?.showUpdateModal(onOpenStoreButtonTapped: onOpenStoreButtonTapped, onCancelButtonTapped: onCancelButtonTapped)
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }
 }
