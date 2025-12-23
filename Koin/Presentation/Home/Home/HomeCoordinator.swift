@@ -49,6 +49,7 @@ final class HomeCoordinator: Coordinator {
     
     func presentForceUpdate() {
         let forceUpdateViewController = factory.makeForceUpdateViewController()
+        forceUpdateViewController.coordinator = self
         navigationController.present(forceUpdateViewController, animated: true, completion: nil)
     }
     
