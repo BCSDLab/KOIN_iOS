@@ -22,7 +22,7 @@ final class ShopCoordinator: Coordinator {
     }
     
     func start() {
-        navigateToShop(categoryId: 0)
+        navigateToShop(categoryId: 1)
     }
     
     func navigateToShop(categoryId: Int) {
