@@ -494,7 +494,6 @@
 		D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */; };
 		D249CD412C15CBAA000813F9 /* Date+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD402C15CBAA000813F9 /* Date+.swift */; };
 		D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D261BB972D79418600A67F06 /* UserDataManager.swift */; };
-		D261BBA92D7A88DA00A67F06 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D261BBA82D7A88DA00A67F06 /* GoogleService-Info.plist */; };
 		D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D261BBAA2D7B456A00A67F06 /* PrivacyInfo.xcprivacy */; };
 		D26A8B252C9B33ED003950E1 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26A8B242C9B33ED003950E1 /* SettingsViewModel.swift */; };
 		D26B2EC42CD65A2400BEE07C /* TimetableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D26B2EC32CD65A2400BEE07C /* TimetableViewModel.swift */; };
@@ -1128,6 +1127,7 @@
 		B61339702EAB374B000550A1 /* SortTypeBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortTypeBottomSheetViewController.swift; sourceTree = "<group>"; };
 		B61339732EAB394D000550A1 /* SortTypeBottomSheetCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SortTypeBottomSheetCell.swift; sourceTree = "<group>"; };
 		B61FAA162EA3A39D005BE539 /* Typography.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Typography.swift; sourceTree = "<group>"; };
+		B631BF512EFED59A00E71094 /* GoogleService-Info-Stage.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info-Stage.plist"; sourceTree = "<group>"; };
 		B68D2CE22EA505A300F3B479 /* ToastConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastConfig.swift; sourceTree = "<group>"; };
 		B68D2CE42EA505AA00F3B479 /* ToastIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastIntent.swift; sourceTree = "<group>"; };
 		B68D2CE62EA505B000F3B479 /* ToastMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToastMessageView.swift; sourceTree = "<group>"; };
@@ -2260,6 +2260,7 @@
 			children = (
 				D261BBAA2D7B456A00A67F06 /* PrivacyInfo.xcprivacy */,
 				D261BBA82D7A88DA00A67F06 /* GoogleService-Info.plist */,
+				B631BF512EFED59A00E71094 /* GoogleService-Info-Stage.plist */,
 				D27DCD682BA5BADC0081FD36 /* Info.plist */,
 				D2D380E02BA6AC50009AD5A9 /* koin.entitlements */,
 				D27DD0202BA608310081FD36 /* Koin */,
@@ -4391,6 +4392,7 @@
 			buildConfigurationList = A001E2D82845091F00D6C310 /* Build configuration list for PBXNativeTarget "koin" */;
 			buildPhases = (
 				3238294EE2EAF2D17CC694D2 /* [CP] Check Pods Manifest.lock */,
+				B631BF532EFED62100E71094 /* ShellScript */,
 				A001E2B02845091D00D6C310 /* Sources */,
 				A001E2B12845091D00D6C310 /* Frameworks */,
 				A001E2B22845091D00D6C310 /* Resources */,
@@ -4513,7 +4515,6 @@
 				B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */,
 				D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */,
 				D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */,
-				D261BBA92D7A88DA00A67F06 /* GoogleService-Info.plist in Resources */,
 				B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */,
 				D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */,
 			);
@@ -4582,6 +4583,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		B631BF532EFED62100E71094 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ \"${CONFIGURATION}\" == \"Release\" ]; then\n  cp \"${PROJECT_DIR}/GoogleService-Info.plist\" \\\n     \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nelse\n  cp \"${PROJECT_DIR}/GoogleService-Info-Stage.plist\" \\\n     \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 		ECF0D047C256EE161EB4E10F /* [CP] Embed Pods Frameworks */ = {
@@ -5619,7 +5638,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 418;
+				CURRENT_PROJECT_VERSION = 425;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -5639,7 +5658,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.3;
+				MARKETING_VERSION = 4.5.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin.stage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -5657,7 +5676,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 418;
+				CURRENT_PROJECT_VERSION = 425;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -5677,7 +5696,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.3;
+				MARKETING_VERSION = 4.5.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
