@@ -684,8 +684,6 @@
 		D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D80AD4E62E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D80E7FA62E1C06D4008D5C26 /* OrderShopDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */; };
-		D815DD992E082179004A72BE /* OrderFilterDataList.swift in Sources */ = {isa = PBXBuildFile; fileRef = D815DD982E082179004A72BE /* OrderFilterDataList.swift */; };
-		D82F225B2E12CBE000CD81C3 /* OrderShop.swift in Sources */ = {isa = PBXBuildFile; fileRef = D82F225A2E12CBE000CD81C3 /* OrderShop.swift */; };
 		D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */; };
 		D85939712DC0FF6F00CE4CB2 /* UITextField+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */; };
 		D85939732DC1037200CE4CB2 /* UIButton+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939722DC1037200CE4CB2 /* UIButton+.swift */; };
@@ -708,7 +706,6 @@
 		D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */; };
 		D8C24A012E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C24A002E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift */; };
 		D8F56E5C2E3B8A2400EDC22A /* ShopEventDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */; };
-		D8F56E5E2E3B8A8B00EDC22A /* OrderShopEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */; };
 		D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */; };
 		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
 		D8F5C5542E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
@@ -1449,9 +1446,7 @@
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
 		D80AD4E32E6C6BC30061334B /* waveLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = waveLogo.json; sourceTree = "<group>"; };
 		D80E7FA42E1C06D4008D5C26 /* OrderShopDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDTO.swift; sourceTree = "<group>"; };
-		D815DD982E082179004A72BE /* OrderFilterDataList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFilterDataList.swift; sourceTree = "<group>"; };
 		D82BD8FE2DC9DE60002014D7 /* RegisterCompletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCompletionViewController.swift; sourceTree = "<group>"; };
-		D82F225A2E12CBE000CD81C3 /* OrderShop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShop.swift; sourceTree = "<group>"; };
 		D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManager.swift; sourceTree = "<group>"; };
 		D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		D85939722DC1037200CE4CB2 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
@@ -1474,7 +1469,6 @@
 		D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeRequest.swift; sourceTree = "<group>"; };
 		D8C24A002E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopListRequest.swift; sourceTree = "<group>"; };
 		D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopEventDTO.swift; sourceTree = "<group>"; };
-		D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopEvent.swift; sourceTree = "<group>"; };
 		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
@@ -3974,10 +3968,7 @@
 		D815DD972E08216B004A72BE /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				D815DD982E082179004A72BE /* OrderFilterDataList.swift */,
-				D82F225A2E12CBE000CD81C3 /* OrderShop.swift */,
 				B438AEE32E756AB600E889C4 /* OrderImage.swift */,
-				D8F56E5D2E3B8A8B00EDC22A /* OrderShopEvent.swift */,
 				B4B3EB252E6E7CAD00F8A23A /* OrderShopMenus.swift */,
 				B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */,
 				B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */,
@@ -4296,7 +4287,6 @@
 				D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */,
 				D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */,
 				D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */,
-				D815DD992E082179004A72BE /* OrderFilterDataList.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
 				D20AB9542C553503006BC684 /* ChangeNotiUseCase.swift in Sources */,
@@ -4841,7 +4831,6 @@
 				83E771002D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift in Sources */,
 				D8B1A9EC2E321E7800943535 /* ShopSortType.swift in Sources */,
 				7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */,
-				D8F56E5E2E3B8A8B00EDC22A /* OrderShopEvent.swift in Sources */,
 				D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,
 				D29F21C52C4DE2DF00994554 /* UserAPI.swift in Sources */,
@@ -4904,7 +4893,6 @@
 				D208A7CB2CABB755007040E7 /* CoreService.swift in Sources */,
 				D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */,
 				83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */,
-				D82F225B2E12CBE000CD81C3 /* OrderShop.swift in Sources */,
 				D2D4627E2D64835B00C60864 /* CreateChatRoomUseCase.swift in Sources */,
 				D2D4626C2D63BAC600C60864 /* ChatAPI.swift in Sources */,
 				D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */,
