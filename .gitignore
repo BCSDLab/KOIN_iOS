@@ -119,3 +119,4 @@ xcuserdata/*
 Pods/
 project.xcworkspace/
 GoogleService-Info.plist
+GoogleService-Info-Stage.plist
