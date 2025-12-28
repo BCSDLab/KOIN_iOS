@@ -421,12 +421,9 @@
 		B47839052E70FAFE00D002E3 /* OrderShopSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */; };
 		B47839072E70FF2B00D002E3 /* OrderShopMenusGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */; };
 		B4B3EB262E6E7CAD00F8A23A /* OrderShopMenus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B3EB252E6E7CAD00F8A23A /* OrderShopMenus.swift */; };
-		B608F0D92EB5DB330006F355 /* OrderHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = B608F0D82EB5DB330006F355 /* OrderHistory.swift */; };
-		B608F0DF2EB5DB9B0006F355 /* OrderHistoryQueryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B608F0DE2EB5DB9B0006F355 /* OrderHistoryQueryDTO.swift */; };
 		B608F0E62EB5DC2D0006F355 /* OrderHistoryCustomSearchBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = B608F0E42EB5DC2C0006F355 /* OrderHistoryCustomSearchBar.swift */; };
 		B608F0E72EB5DC2D0006F355 /* FilteringButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B608F0E32EB5DC2C0006F355 /* FilteringButton.swift */; };
 		B608F0E82EB5DC2D0006F355 /* EmptyStateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B608F0E22EB5DC2C0006F355 /* EmptyStateView.swift */; };
-		B608F0EC2EB5DD520006F355 /* OrderHistoryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B608F0EB2EB5DD520006F355 /* OrderHistoryDTO.swift */; };
 		B60D25462ED72017000E57B7 /* RadioButtonState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60D25442ED72017000E57B7 /* RadioButtonState.swift */; };
 		B60D25472ED72017000E57B7 /* RadioButtonGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60D25432ED72017000E57B7 /* RadioButtonGroup.swift */; };
 		B60D25482ED72017000E57B7 /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B60D25412ED72017000E57B7 /* RadioButton.swift */; };
@@ -1190,12 +1187,9 @@
 		B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopSummary.swift; sourceTree = "<group>"; };
 		B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopMenusGroups.swift; sourceTree = "<group>"; };
 		B4B3EB252E6E7CAD00F8A23A /* OrderShopMenus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopMenus.swift; sourceTree = "<group>"; };
-		B608F0D82EB5DB330006F355 /* OrderHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistory.swift; sourceTree = "<group>"; };
-		B608F0DE2EB5DB9B0006F355 /* OrderHistoryQueryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryQueryDTO.swift; sourceTree = "<group>"; };
 		B608F0E22EB5DC2C0006F355 /* EmptyStateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyStateView.swift; sourceTree = "<group>"; };
 		B608F0E32EB5DC2C0006F355 /* FilteringButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilteringButton.swift; sourceTree = "<group>"; };
 		B608F0E42EB5DC2C0006F355 /* OrderHistoryCustomSearchBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryCustomSearchBar.swift; sourceTree = "<group>"; };
-		B608F0EB2EB5DD520006F355 /* OrderHistoryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderHistoryDTO.swift; sourceTree = "<group>"; };
 		B60D25412ED72017000E57B7 /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		B60D25422ED72017000E57B7 /* RadioButtonColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonColors.swift; sourceTree = "<group>"; };
 		B60D25432ED72017000E57B7 /* RadioButtonGroup.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonGroup.swift; sourceTree = "<group>"; };
@@ -3986,7 +3980,6 @@
 				B458C1312E78F50300AB5BF1 /* CartDTO.swift */,
 				3BB065642E9A9E9C00463919 /* OrderMenuDTO.swift */,
 				7CDAD1BF2EB3CCDD00C30D84 /* OrderShopDetailDTO.swift */,
-				B608F0EB2EB5DD520006F355 /* OrderHistoryDTO.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3994,7 +3987,6 @@
 		D815DD972E08216B004A72BE /* Order */ = {
 			isa = PBXGroup;
 			children = (
-				B608F0D82EB5DB330006F355 /* OrderHistory.swift */,
 				D815DD982E082179004A72BE /* OrderFilterDataList.swift */,
 				D82F225A2E12CBE000CD81C3 /* OrderShop.swift */,
 				B438AEE32E756AB600E889C4 /* OrderImage.swift */,
@@ -4018,7 +4010,6 @@
 			children = (
 				D8C24A002E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift */,
 				7CC6CCD32EAB7EEC004AD236 /* FetchCartRequest.swift */,
-				B608F0DE2EB5DB9B0006F355 /* OrderHistoryQueryDTO.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4449,7 +4440,6 @@
 				D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */,
 				B458C1342E78F54B00AB5BF1 /* Cart.swift in Sources */,
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView.swift in Sources */,
-				B608F0D92EB5DB330006F355 /* OrderHistory.swift in Sources */,
 				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
 				B438AEE22E75584200E889C4 /* OrderShopMenusGroupsDTO.swift in Sources */,
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
@@ -4823,7 +4813,6 @@
 				D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */,
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
 				D23582A12BC30B9300D615DD /* ZoomingView.swift in Sources */,
-				B608F0DF2EB5DB9B0006F355 /* OrderHistoryQueryDTO.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				3B2B134C2E9AA8A20051AF6A /* OrderMenu.swift in Sources */,
@@ -4865,7 +4854,6 @@
 				D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */,
 				837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */,
 				D208A7CF2CABB85B007040E7 /* DefaultCoreRepository.swift in Sources */,
-				B608F0EC2EB5DD520006F355 /* OrderHistoryDTO.swift in Sources */,
 				83DD0DB92C5378E600278ABD /* SearchBusInfoResult.swift in Sources */,
 				D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
