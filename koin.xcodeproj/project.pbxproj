@@ -55,8 +55,6 @@
 		7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */; };
 		7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */; };
 		7CA0D6252EC75FFA00E9A282 /* ZoomedImageViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6242EC75FFA00E9A282 /* ZoomedImageViewControllerB.swift */; };
-		7CC6CCD42EAB7EEC004AD236 /* FetchCartRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC6CCD32EAB7EEC004AD236 /* FetchCartRequest.swift */; };
-		7CDAD1C02EB3CCDD00C30D84 /* OrderShopDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDAD1BF2EB3CCDD00C30D84 /* OrderShopDetailDTO.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
 		7CED90C02EF2D1F900457128 /* DatePickerDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EEF2EF2D1F900457128 /* DatePickerDropdownView.swift */; };
@@ -704,7 +702,6 @@
 		D8B1A9EC2E321E7800943535 /* ShopSortType.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B1A9EB2E321E7800943535 /* ShopSortType.swift */; };
 		D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */; };
 		D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */; };
-		D8C24A012E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8C24A002E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift */; };
 		D8F56E5C2E3B8A2400EDC22A /* ShopEventDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */; };
 		D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */; };
 		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
@@ -802,8 +799,6 @@
 		7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionView.swift; sourceTree = "<group>"; };
 		7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CA0D6242EC75FFA00E9A282 /* ZoomedImageViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewControllerB.swift; sourceTree = "<group>"; };
-		7CC6CCD32EAB7EEC004AD236 /* FetchCartRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCartRequest.swift; sourceTree = "<group>"; };
-		7CDAD1BF2EB3CCDD00C30D84 /* OrderShopDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetailDTO.swift; sourceTree = "<group>"; };
 		7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EBE2EF2D1F900457128 /* ClubCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8EC02EF2D1F900457128 /* BannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionView.swift; sourceTree = "<group>"; };
@@ -1467,7 +1462,6 @@
 		D8B1A9EB2E321E7800943535 /* ShopSortType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSortType.swift; sourceTree = "<group>"; };
 		D8B4E0012DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeUsecase.swift; sourceTree = "<group>"; };
 		D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationCodeRequest.swift; sourceTree = "<group>"; };
-		D8C24A002E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopListRequest.swift; sourceTree = "<group>"; };
 		D8F56E5B2E3B8A2400EDC22A /* ShopEventDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopEventDTO.swift; sourceTree = "<group>"; };
 		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
@@ -3684,7 +3678,6 @@
 				83DD0D792C4F8E4300278ABD /* Bus */,
 				D29F21E02C4F302A00994554 /* Dining */,
 				D29F21DD2C4F2E2400994554 /* Shop */,
-				D8C249FF2E1A9AD8008D8ABA /* Order */,
 				D29F21E62C4F5E1F00994554 /* Timetable */,
 				D29F21DC2C4F2DFF00994554 /* User */,
 				D208A7A42CA111D5007040E7 /* AbTest */,
@@ -3960,7 +3953,6 @@
 				B458C11F2E785F1300AB5BF1 /* CartItemsCountDTO.swift */,
 				B458C1312E78F50300AB5BF1 /* CartDTO.swift */,
 				3BB065642E9A9E9C00463919 /* OrderMenuDTO.swift */,
-				7CDAD1BF2EB3CCDD00C30D84 /* OrderShopDetailDTO.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -3974,15 +3966,6 @@
 				B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */,
 				3B2B134B2E9AA8A20051AF6A /* OrderMenu.swift */,
 				7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */,
-			);
-			path = Order;
-			sourceTree = "<group>";
-		};
-		D8C249FF2E1A9AD8008D8ABA /* Order */ = {
-			isa = PBXGroup;
-			children = (
-				D8C24A002E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift */,
-				7CC6CCD32EAB7EEC004AD236 /* FetchCartRequest.swift */,
 			);
 			path = Order;
 			sourceTree = "<group>";
@@ -4306,7 +4289,6 @@
 				83DD0DB72C53777800278ABD /* SearchBusInfoUseCase.swift in Sources */,
 				D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */,
 				833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */,
-				7CDAD1C02EB3CCDD00C30D84 /* OrderShopDetailDTO.swift in Sources */,
 				D2FFA96E2D5F3EC200EF8E56 /* UIViewController+Navigate.swift in Sources */,
 				7CED922B2EF2D25900457128 /* DIContainer+Notice.swift in Sources */,
 				7CED922C2EF2D25900457128 /* DIContainer+Dining.swift in Sources */,
@@ -4343,7 +4325,6 @@
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
 				833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */,
 				834E1CDA2BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift in Sources */,
-				D8C24A012E1A9AE0008D8ABA /* FetchOrderShopListRequest.swift in Sources */,
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
 				D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
@@ -4400,7 +4381,6 @@
 				D29F21C32C4DE27C00994554 /* UserService.swift in Sources */,
 				D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */,
 				D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */,
-				7CC6CCD42EAB7EEC004AD236 /* FetchCartRequest.swift in Sources */,
 				83DD0DCA2C5651D900278ABD /* FetchExpressTimetableUseCase.swift in Sources */,
 				831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */,
 				D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */,
