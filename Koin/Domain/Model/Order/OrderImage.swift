@@ -11,10 +11,3 @@ struct OrderImage {
     let imageUrl: String?
     let isThumbnail: Bool
 }
-
-extension OrderImage {    
-    init(from dto: OrderImageDto) {
-        self.imageUrl = dto.imageUrl
-        self.isThumbnail = dto.isThumbnail
-    }
-}
