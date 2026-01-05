@@ -387,21 +387,17 @@ extension HomeViewController {
     
     private func showBanner(banner: BannerDto, abTestResult: AssignAbTestResponse) {
         if banner.count == 0 { return }
-        let viewController: UIViewController
-        if abTestResult.variableName == .bottomBanner {
-            bannerViewControllerA.setBanners(banners: banner.banners)
-            viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
-            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_A", category: "a/b test 로깅(메인 모달)"))
-            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
-        } else {
-            bannerViewControllerB.setBanners(banners: banner.banners)
-            viewController = bannerViewControllerB
-            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_B", category: "a/b test 로깅(메인 모달)"))
-            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
-        }
-        viewController.modalPresentationStyle = .overFullScreen
-        viewController.modalTransitionStyle = .crossDissolve
-        self.present(viewController, animated: true)
+        coordinator?.presentBannerViewControllerA(
+            viewModel: viewModel,
+            banners: banner.banners,
+            defaultHeight: 389,
+            modalPresentationStyle: .overFullScreen,
+            modalTransitionStyle: .crossDissolve,
+            onBannerTapped: { [weak self] banner
+                in self?.handleBannerTap(banner)
+            }
+        )
+        inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
     }
     
     private func checkAndShowBanner() {

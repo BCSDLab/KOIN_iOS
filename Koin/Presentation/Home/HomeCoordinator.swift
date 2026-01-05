@@ -55,4 +55,31 @@ final class HomeCoordinator: Coordinator {
         )
         navigationController.present(updateViewController, animated: true, completion: nil)
     }
+    
+    func presentBannerViewControllerA(
+        viewModel: HomeViewModel,
+        banners: [Banner],
+        defaultHeight: CGFloat,
+        cornerRadius: CGFloat = 16,
+        dimmedAlpha: CGFloat = 0.4,
+        isPannedable: Bool = false,
+        modalPresentationStyle: UIModalPresentationStyle = .overFullScreen,
+        modalTransitionStyle: UIModalTransitionStyle = .coverVertical,
+        onBannerTapped: @escaping (Banner)->Void
+    ) {
+        let bannerViewControllerA = factory.makeBannerViewControllerA(
+            viewModel: viewModel,
+            onBannerTapped: onBannerTapped
+        )
+        bannerViewControllerA.setBanners(banners: banners)
+        presentBottomSheetViewController(
+            contentViewController: bannerViewControllerA,
+            defaultHeight: defaultHeight,
+            cornerRadius: cornerRadius,
+            dimmedAlpha: dimmedAlpha,
+            isPannedable: isPannedable,
+            modalPresentationStyle: modalPresentationStyle,
+            modalTransitionStyle: modalTransitionStyle
+        )
+    }
 }
