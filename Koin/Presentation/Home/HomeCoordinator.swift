@@ -19,7 +19,7 @@ final class HomeCoordinator: Coordinator {
         self.navigationController = navigationController
         self.factory = factory
     }
-
+    
     func start() {
         let homeViewController = factory.makeHomeViewController()
         homeViewController.coordinator = self
@@ -42,12 +42,7 @@ final class HomeCoordinator: Coordinator {
         serviceSelectViewController.coordinator = self
         navigationController.pushViewController(serviceSelectViewController, animated: true)
     }
-    
-    func pushSettingViewController() {
-        let settingViewController = factory.makeSettingsViewController()
-        navigationController.pushViewController(settingViewController, animated: true)
-    }
-    
+        
     func presentForceUpdate() {
         let forceUpdateViewController = factory.makeForceUpdateViewController()
         forceUpdateViewController.coordinator = self

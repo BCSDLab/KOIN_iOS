@@ -11,7 +11,6 @@ protocol HomeFactory {
     func makeHomeViewController() -> HomeViewController
     func makeServiceSelectViewController() -> ServiceSelectViewController
     func makeForceUpdateViewController() -> ForceUpdateViewController
-    func makeSettingsViewController() -> SettingsViewController
     func makeUpdateModelViewController(
         onOpenStoreButtonTapped: @escaping ()->Void,
         onCancelButtonTapped: @escaping ()->Void
@@ -64,12 +63,6 @@ extension DIContainer: HomeFactory {
         let viewController = ForceUpdateViewController(viewModel: viewModel)
         viewController.modalPresentationStyle = .fullScreen
         return viewController
-    }
-    
-    func makeSettingsViewController() -> SettingsViewController {
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = SettingsViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-        return SettingsViewController(viewModel: viewModel)
     }
     
     func makeUpdateModelViewController(

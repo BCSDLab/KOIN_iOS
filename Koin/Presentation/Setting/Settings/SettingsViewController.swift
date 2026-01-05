@@ -121,7 +121,6 @@ final class SettingsViewController: UIViewController {
         configureNavigationBar(style: .empty)
     }
     
-    
     // MARK: - Bind
     
     private func bind() {

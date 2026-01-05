@@ -6,3 +6,5 @@
 //
 
 import Foundation
+
+        let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
