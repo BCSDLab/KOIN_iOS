@@ -75,7 +75,7 @@ protocol ShopFactory {
 
 extension DIContainer: ShopFactory {
     
-    func makeShopViewController(selectedId: Int) -> ShopViewController {
+    func makeShopViewController(selectedId: Int = 1) -> ShopViewController {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
@@ -194,7 +194,7 @@ extension DIContainer: ShopFactory {
     }
     
     func makeShopReviewViewController(
-        reviewId: Int?,
+        reviewId: Int? = nil,
         shopId: Int,
         shopName: String
     ) -> ShopReviewViewController {
@@ -272,7 +272,7 @@ extension DIContainer: ShopFactory {
     
     func makeSortTypeBottomSheetViewController(
         options: [String],
-        selectedIndex: Int,
+        selectedIndex: Int = 0,
         onSelection: @escaping ()->Void
     ) -> SortTypeBottomSheetViewController {
         let bottomSheetViewController = SortTypeBottomSheetViewController(
