@@ -23,6 +23,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     var isEdit: Bool { reviewId != nil}
     private let shopName: String
     private let shopId: Int
+    private let completion: (Bool, Int?, WriteReviewRequest) -> Void
     
     enum Input {
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
@@ -41,7 +42,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
         case reviewWriteSuccess(Bool, Int?, WriteReviewRequest)
     }
     
-    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, fetchShopDataUseCase: FetchShopDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, reviewId: Int? = nil, shopId: Int, shopName: String) {
+    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, fetchShopDataUseCase: FetchShopDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, reviewId: Int? = nil, shopId: Int, shopName: String, completion: @escaping (Bool, Int?, WriteReviewRequest) -> Void) {
         self.postReviewUseCase = postReviewUseCase
         self.modifyReviewUseCase = modifyReviewUseCase
         self.fetchShopReviewUseCase = fetchShopReviewUseCase
@@ -52,6 +53,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
         self.reviewId = reviewId
         self.shopId = shopId
         self.shopName = shopName
+        self.completion = completion
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -120,6 +122,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
         } receiveValue: { [weak self] response in
             self?.outputSubject.send(.showToast("리뷰가 작성되었습니다.", true))
             self?.outputSubject.send(.reviewWriteSuccess(true, self?.reviewId, requestModel))
+            self?.completion(true, self?.reviewId, requestModel)
         }.store(in: &subscriptions)
     }
     

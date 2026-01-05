@@ -2574,6 +2574,7 @@
 		7CED90662EF2D1F900457128 /* Shop */ = {
 			isa = PBXGroup;
 			children = (
+				3BE753922EF6CC6900E7E6F4 /* ShopCoordinator.swift */,
 				7CED8FB92EF2D1F900457128 /* Shop */,
 				7CED8FC02EF2D1F900457128 /* ShopSearch */,
 				7CED8FDB2EF2D1F900457128 /* ShopSummary */,
@@ -2581,7 +2582,6 @@
 				7CED90112EF2D1F900457128 /* ShopReviewList */,
 				7CED901E2EF2D1F900457128 /* ShopReview */,
 				7CED90232EF2D1F900457128 /* ShopReviewReport */,
-				3BE753922EF6CC6900E7E6F4 /* ShopCoordinator.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";

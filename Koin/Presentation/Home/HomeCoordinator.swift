@@ -5,7 +5,6 @@
 //  Created by 김성민 on 12/20/25.
 //
 
-import Foundation
 import UIKit
 
 final class HomeCoordinator: Coordinator {

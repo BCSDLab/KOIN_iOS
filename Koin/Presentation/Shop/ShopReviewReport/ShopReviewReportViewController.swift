@@ -16,7 +16,6 @@ final class ShopReviewReportViewController: UIViewController {
     private let viewModel: ShopReviewReportViewModel
     private let inputSubject: PassthroughSubject<ShopReviewReportViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    let reviewInfoPublisher = PassthroughSubject<(Int, Int), Never>()
     
     // MARK: - UI Components
     
@@ -143,7 +142,6 @@ final class ShopReviewReportViewController: UIViewController {
             case let .showToast(message):
                 self?.showToastMessage(message: message, intent: .neutral, bottomInset: 70)
             case let .sendReviewInfo(reviewId, shopId):
-                self?.reviewInfoPublisher.send((reviewId, shopId))
                 self?.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)

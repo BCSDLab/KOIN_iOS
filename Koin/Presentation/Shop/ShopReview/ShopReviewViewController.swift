@@ -30,10 +30,6 @@ final class ShopReviewViewController: UIViewController, UIGestureRecognizerDeleg
     
     private var tagHeightConstraint: Constraint?
     
-    // MARK: - Publisher
-    
-    let writeCompletePublisher = PassthroughSubject<(Bool, Int?, WriteReviewRequest), Never>()
-    
     // MARK: - UI Components
     
     private let scrollView = UIScrollView()
@@ -252,7 +248,6 @@ final class ShopReviewViewController: UIViewController, UIGestureRecognizerDeleg
             case let .updateShopName(shopName):
                 self?.shopNameLabel.text = shopName
             case let .reviewWriteSuccess(isPost, reviewId, reviewItem):
-                self?.writeCompletePublisher.send((isPost, reviewId, reviewItem))
                 self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, nil))
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteDone, .click, "", .leaveVC, nil))
             }

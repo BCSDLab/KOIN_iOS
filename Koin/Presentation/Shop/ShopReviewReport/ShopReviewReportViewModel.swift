@@ -31,15 +31,17 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     private let reviewId: Int
     private let shopId: Int
     private let shopName: String
+    private let completion: (Int, Int)->Void
     
     // MARK: - Initialization
     
-    init(reportReviewReviewUseCase: ReportReviewReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, reviewId: Int, shopId: Int, shopName: String) {
+    init(reportReviewReviewUseCase: ReportReviewReviewUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, reviewId: Int, shopId: Int, shopName: String, completion: @escaping (Int, Int)->Void) {
         self.reportReviewReviewUseCase = reportReviewReviewUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.reviewId = reviewId
         self.shopId = shopId
         self.shopName = shopName
+        self.completion = completion
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -65,7 +67,7 @@ extension ShopReviewReportViewModel {
             guard let self = self else { return }
             self.outputSubject.send(.sendReviewInfo(self.reviewId, self.shopId))
             let value = selectedItems.joined(separator: ",")
-            
+            self.completion(self.reviewId, self.shopId)
             self.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReport, category: .click, value: value)
         }.store(in: &subscriptions)
     }

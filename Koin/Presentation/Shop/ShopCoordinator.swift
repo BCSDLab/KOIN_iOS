@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import Combine
 
 final class ShopCoordinator: Coordinator {
     var navigationController: UINavigationController
@@ -14,7 +13,6 @@ final class ShopCoordinator: Coordinator {
     weak var parentCoordinator: Coordinator?
     
     private let factory: ShopFactory
-    private var cancellables = Set<AnyCancellable>()
     
     init(navigationController: UINavigationController, factory: ShopFactory) {
         self.navigationController = navigationController
@@ -62,35 +60,23 @@ final class ShopCoordinator: Coordinator {
         navigationController.pushViewController(reviewListViewController, animated: true)
     }
     
-    func pushShopReviewViewController(shopId: Int, shopName: String, reviewId: Int? = nil, completion: ((Bool, Int?, WriteReviewRequest) -> Void)? = nil) {
+    func pushShopReviewViewController(shopId: Int, shopName: String, reviewId: Int? = nil, completion: @escaping ((Bool, Int?, WriteReviewRequest) -> Void)) {
         let shopReviewViewController = factory.makeShopReviewViewController(
             reviewId: reviewId,
             shopId: shopId,
-            shopName: shopName
+            shopName: shopName,
+            completion: completion
         )
-        
-        shopReviewViewController.writeCompletePublisher
-            .sink { result in
-                completion?(result.0, result.1, result.2)
-            }
-            .store(in: &cancellables)
-        
         navigationController.pushViewController(shopReviewViewController, animated: true)
     }
     
-    func pushShopReviewReportViewController(reviewId: Int, shopId: Int, shopName: String, completion: ((Int, Int) -> Void)? = nil) {
+    func pushShopReviewReportViewController(reviewId: Int, shopId: Int, shopName: String, completion: @escaping (Int, Int) -> Void) {
         let shopReviewReportViewController = factory.makeShopReviewReportViewController(
             reviewId: reviewId,
             shopId: shopId,
-            shopName: shopName
+            shopName: shopName,
+            completion: completion
         )
-        
-        shopReviewReportViewController.reviewInfoPublisher
-            .sink { result in
-                completion?(result.0, result.1)
-            }
-            .store(in: &cancellables)
-        
         navigationController.pushViewController(shopReviewReportViewController, animated: true)
     }
     

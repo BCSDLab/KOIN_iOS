@@ -37,7 +37,8 @@ protocol ShopFactory {
     func makeShopReviewViewController(
         reviewId: Int?,
         shopId: Int,
-        shopName: String
+        shopName: String,
+        completion: @escaping (Bool, Int?, WriteReviewRequest) -> Void
     ) -> ShopReviewViewController
     
     func makeReviewListViewController(
@@ -48,7 +49,8 @@ protocol ShopFactory {
     func makeShopReviewReportViewController(
         reviewId: Int,
         shopId: Int,
-        shopName: String
+        shopName: String,
+        completion: @escaping (Int, Int) -> Void
     ) -> ShopReviewReportViewController
     
     func makeBackButtonPopUpViewController(onStop: @escaping () -> Void) -> BackButtonPopUpViewController
@@ -175,7 +177,8 @@ extension DIContainer: ShopFactory {
     func makeShopReviewReportViewController(
         reviewId: Int,
         shopId: Int,
-        shopName: String
+        shopName: String,
+        completion: @escaping (Int, Int) -> Void
     ) -> ShopReviewReportViewController {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
@@ -186,7 +189,8 @@ extension DIContainer: ShopFactory {
             logAnalyticsEventUseCase: logAnalyticsEventUseCae,
             reviewId: reviewId,
             shopId: shopId,
-            shopName: shopName
+            shopName: shopName,
+            completion: completion
         )
         return ShopReviewReportViewController(viewModel: viewModel)
     }
@@ -194,7 +198,8 @@ extension DIContainer: ShopFactory {
     func makeShopReviewViewController(
         reviewId: Int? = nil,
         shopId: Int,
-        shopName: String
+        shopName: String,
+        completion: @escaping (Bool, Int?, WriteReviewRequest) -> Void
     ) -> ShopReviewViewController {
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let postReviewUseCase = DefaultPostReviewUseCase(shopRepository: shopRepository)
@@ -214,7 +219,8 @@ extension DIContainer: ShopFactory {
             getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             reviewId: reviewId,
             shopId: shopId,
-            shopName: shopName
+            shopName: shopName,
+            completion: completion
         )
         return ShopReviewViewController(viewModel: viewModel)
     }
