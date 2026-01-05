@@ -42,9 +42,7 @@ protocol ShopFactory {
     
     func makeReviewListViewController(
         shopId: Int,
-        shopName: String,
-        onLoginButtonTapped: (()->Void)?,
-        onCancelButtonTapped: (()->Void)?
+        shopName: String
     ) -> ReviewListViewController
         
     func makeShopReviewReportViewController(
@@ -69,7 +67,7 @@ protocol ShopFactory {
     func makeSortTypeBottomSheetViewController(
         options: [String],
         selectedIndex: Int,
-        onSelection: @escaping ()->Void
+        onSelection: @escaping (Int)->Void
     ) -> SortTypeBottomSheetViewController
 }
 
@@ -231,30 +229,28 @@ extension DIContainer: ShopFactory {
     
     func makeReviewListViewController(
         shopId: Int,
-        shopName: String,
-        onLoginButtonTapped: (()->Void)? = nil,
-        onCancelButtonTapped: (()->Void)? = nil
+        shopName: String
     ) -> ReviewListViewController {
         let reviewListViewController = ReviewListViewController(
             shopId: shopId,
             shopName: shopName
         )
         reviewListViewController.title = "리뷰"
-        //reviewListViewController.onLoginButtonTapped = onLoginButtonTapped
-        //reviewListViewController.onCancelButtonTapped = onCancelButtonTapped
         return reviewListViewController
     }
     
     func makeReviewLoginModalViewController(
         messageType: String,
         onLoginButtonTapped: @escaping ()->Void,
-        onCancelButtonTapped: (()->Void)? = nil
+        onCancelButtonTapped: (()->Void)?
     ) -> ReviewLoginModalViewController {
-        let reviewWriteLoginModalViewController = ReviewLoginModalViewController(message: messageType)
+        let reviewWriteLoginModalViewController = ReviewLoginModalViewController(
+            message: messageType,
+            onLoginButtonTapped: onLoginButtonTapped,
+            onCancelButtonTapped: onCancelButtonTapped
+        )
         reviewWriteLoginModalViewController.modalPresentationStyle = .overFullScreen
         reviewWriteLoginModalViewController.modalTransitionStyle = .crossDissolve
-        //reviewWriteLoginModalViewController.onLoginButtonTapped = onLoginButtonTapped
-        //reviewWriteLoginModalViewController.onCancelButtonTapped = onCancelButtonTapped
         return reviewWriteLoginModalViewController
     }
     
@@ -262,24 +258,24 @@ extension DIContainer: ShopFactory {
         onDeleteButtonTapped: @escaping ()->Void,
         onCancelButtonTapped: @escaping ()->Void
     ) -> DeleteReviewModalViewController {
-        let deleteReviewModalViewController = DeleteReviewModalViewController()
+        let deleteReviewModalViewController = DeleteReviewModalViewController(
+            onDeleteButtonTapped: onDeleteButtonTapped,
+            onCancelButtonTapped: onCancelButtonTapped)
         deleteReviewModalViewController.modalPresentationStyle = .overFullScreen
         deleteReviewModalViewController.modalTransitionStyle = .crossDissolve
-        //deleteReviewModalViewController.onDeleteButtonTapped = onDeleteButtonTapped
-        //deleteReviewModalViewController.onCancelButtonTapped = onCancelButtonTapped
         return deleteReviewModalViewController
     }
     
     func makeSortTypeBottomSheetViewController(
         options: [String],
         selectedIndex: Int = 0,
-        onSelection: @escaping ()->Void
+        onSelection: @escaping (Int)->Void
     ) -> SortTypeBottomSheetViewController {
         let bottomSheetViewController = SortTypeBottomSheetViewController(
             options: options,
-            selectedIndex: selectedIndex
+            selectedIndex: selectedIndex,
+            onSelection: onSelection
         )
-        //bottomSheetViewController.onSelection = onSelection
         return bottomSheetViewController
     }
 }

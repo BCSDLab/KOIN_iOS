@@ -16,10 +16,9 @@ final class ReviewLoginModalViewController: UIViewController {
     private let message: String
     
     // MARK: - Publisher
-    
-    let loginButtonPublisher = PassthroughSubject<Void, Never>()
-    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
-    
+    private let onLoginButtonTapped: ()->Void
+    private let onCancelButtonTapped: (()->Void)?
+
     // MARK: - UI Components
 
     private lazy var messageLabel = UILabel().then {
@@ -64,8 +63,14 @@ final class ReviewLoginModalViewController: UIViewController {
     
     // MARK: - Initializer
     
-    init(message: String) {
+    init(
+        message: String,
+        onLoginButtonTapped: @escaping ()->Void,
+        onCancelButtonTapped: (()->Void)?
+    ) {
         self.message = message
+        self.onLoginButtonTapped = onLoginButtonTapped
+        self.onCancelButtonTapped = onCancelButtonTapped
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -125,12 +130,12 @@ final class ReviewLoginModalViewController: UIViewController {
     
     @objc private func closeButtonTapped() {
         dismiss(animated: true, completion: nil)
-        cancelButtonPublisher.send()
+        onCancelButtonTapped?()
     }
     
     @objc private func loginButtonTapped() {
         dismiss(animated: true, completion: nil)
-        loginButtonPublisher.send(())
+        onLoginButtonTapped()
     }
 }
 

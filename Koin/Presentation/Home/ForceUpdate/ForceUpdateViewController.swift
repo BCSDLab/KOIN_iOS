@@ -86,10 +86,31 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         $0.backgroundColor = .clear
     }
     
-    private let updateModalViewController = UpdateModelViewController().then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
+    private lazy var updateModalViewController = {
+        let onOpenStoreButtonTapped: ()->Void = { [weak self] in
+            self?.openStore()
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
+        }
+        let onCancelButtonTapped: ()->Void = { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
+        }
+        let viewController = UpdateModelViewController(
+            onOpenStoreButtonTapped: onOpenStoreButtonTapped,
+            onCancelButtonTapped: onCancelButtonTapped)
+            .then {
+                $0.modalPresentationStyle = .overFullScreen
+                $0.modalTransitionStyle = .crossDissolve
+            }
+        return viewController
+    }()
+    
+    private func openStore() {
+        if let url = URL(string: "https://itunes.apple.com/app/id1500848622"),
+           UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
     }
+
     
     // MARK: - Initialization
     init(viewModel: ForceUpdateViewModel) {
@@ -135,19 +156,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
             }
         }.store(in: &subscriptions)
         
-        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
-            self?.openStore()
-        }.store(in: &subscriptions)
-        
         setupCustomNotificationObservers()
-        
-        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
-        }.store(in: &subscriptions)
-        
-        updateModalViewController.cancelButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
-        }.store(in: &subscriptions)
     }
     
     private func setAddTarget() {
@@ -184,12 +193,6 @@ extension ForceUpdateViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateConfirm, .update, "업데이트하기"))
     }
     
-    private func openStore() {
-        if let url = URL(string: "https://itunes.apple.com/app/id1500848622"),
-           UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-    }
     
     @objc private func errorCheckButtonTapped() {
         present(updateModalViewController, animated: true, completion: nil)

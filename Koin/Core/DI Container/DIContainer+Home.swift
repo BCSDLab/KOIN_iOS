@@ -76,11 +76,12 @@ extension DIContainer: HomeFactory {
         onOpenStoreButtonTapped: @escaping ()->Void,
         onCancelButtonTapped: @escaping ()->Void
     ) -> UpdateModelViewController {
-        return UpdateModelViewController().then {
-            $0.modalPresentationStyle = .overFullScreen
-            $0.modalTransitionStyle = .crossDissolve
-            //$0.onOpenStoreButtonTapped = onOpenStoreButtonTapped
-            //$0.onCancelButtonTapped = onCancelButtonTapped
-        }
+        let viewController = UpdateModelViewController(
+            onOpenStoreButtonTapped: onOpenStoreButtonTapped,
+            onCancelButtonTapped: onCancelButtonTapped
+        )
+        viewController.modalPresentationStyle = .overFullScreen
+        viewController.modalTransitionStyle = .crossDissolve
+        return viewController
     }
 }

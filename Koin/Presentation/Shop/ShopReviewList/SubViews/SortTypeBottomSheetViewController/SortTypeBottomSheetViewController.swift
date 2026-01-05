@@ -16,11 +16,7 @@ final class SortTypeBottomSheetViewController: UIViewController {
     
     private let options: [String]
     private let selectedIndex: Int
-    private let selectionSubject = PassthroughSubject<Int, Never>()
-    
-    var selectionPublisher: AnyPublisher<Int, Never> {
-        selectionSubject.eraseToAnyPublisher()
-    }
+    private let onSelection: (Int)->Void
     
     // MARK: - Constants
     
@@ -78,9 +74,14 @@ final class SortTypeBottomSheetViewController: UIViewController {
     
     // MARK: - Initialize
     
-    init(options: [String], selectedIndex: Int = 0) {
+    init(
+        options: [String],
+        selectedIndex: Int = 0,
+        onSelection: @escaping (Int)->Void
+    ) {
         self.options = options
         self.selectedIndex = selectedIndex
+        self.onSelection = onSelection
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .overFullScreen
         modalTransitionStyle = .crossDissolve
@@ -276,7 +277,7 @@ extension SortTypeBottomSheetViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         
-        selectionSubject.send(indexPath.row)
+        onSelection(indexPath.row)
         hideBottomSheet()
     }
 }
