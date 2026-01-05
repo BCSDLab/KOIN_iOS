@@ -5,7 +5,7 @@
 //  Created by 홍기정 on 12/17/25.
 //
 
-import UIKit
+import Foundation
 
 final class DIContainer {
     static let shared = DIContainer()
