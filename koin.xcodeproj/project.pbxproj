@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
 		1CC17FC470AC3F8875739079 /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACCF37498622A4C659D7028 /* Pods_NotificationService.framework */; };
+		3B7FFFA32EF6AF57001D2865 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7FFFA22EF6AF57001D2865 /* AppCoordinator.swift */; };
+		3B7FFFA52EF6B04D001D2865 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7FFFA42EF6B04D001D2865 /* HomeCoordinator.swift */; };
+		3BE753932EF6CC6900E7E6F4 /* ShopCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE753922EF6CC6900E7E6F4 /* ShopCoordinator.swift */; };
 		4DD190890C4EF3B71D7B59BA /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A608E6D4EE675AF49F527F63 /* Pods_koin.framework */; };
 		7C17EEA82EBF4F25008BCA89 /* ShopSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */; };
 		7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */; };
@@ -351,7 +354,7 @@
 		837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA572BB8D6F7001FCBD4 /* UIViewcontroller.swift */; };
 		837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA5C2BB9830C001FCBD4 /* UILabel.swift */; };
 		8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */; };
-		838F114E2CA51C6C00BF3B25 /* (null) in Sources */ = {isa = PBXBuildFile; };
+		838F114E2CA51C6C00BF3B25 /* BuildFile in Sources */ = {isa = PBXBuildFile; };
 		838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */; };
 		839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D71182BEB1570001BC7F7 /* NotificationService.swift */; };
 		839D711D2BEB1570001BC7F7 /* NotificationService.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = 839D71162BEB1570001BC7F7 /* NotificationService.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -359,7 +362,7 @@
 		83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457C2C9B2EBB005868BD /* IndicatorView.swift */; };
 		83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BB83122CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift */; };
 		83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C509612BFA0CBB007379A0 /* ScrollLog.swift */; };
-		83D5E9C82CCB844D00C6D4CD /* (null) in Resources */ = {isa = PBXBuildFile; };
+		83D5E9C82CCB844D00C6D4CD /* BuildFile in Resources */ = {isa = PBXBuildFile; };
 		83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D732C4F6FD000278ABD /* BusType.swift */; };
 		83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D752C4F6FDE00278ABD /* BusPlace.swift */; };
 		83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D772C4F6FF000278ABD /* BusDirection.swift */; };
@@ -739,6 +742,9 @@
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		20D48B24D09807B68D621509 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
+		3B7FFFA22EF6AF57001D2865 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		3B7FFFA42EF6B04D001D2865 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		3BE753922EF6CC6900E7E6F4 /* ShopCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCoordinator.swift; sourceTree = "<group>"; };
 		596B4D4E06F306CE3B8CC69A /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
 		5AEF9E1E66B8687A4D0886BF /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearch.swift; sourceTree = "<group>"; };
@@ -1775,6 +1781,7 @@
 		7CED8EE32EF2D1F900457128 /* Home */ = {
 			isa = PBXGroup;
 			children = (
+				3B7FFFA42EF6B04D001D2865 /* HomeCoordinator.swift */,
 				7CED8EDB2EF2D1F900457128 /* Home */,
 				7CED8EDE2EF2D1F900457128 /* ServiceSelect */,
 				7CED8EE22EF2D1F900457128 /* ForceUpdate */,
@@ -2570,6 +2577,7 @@
 				7CED90112EF2D1F900457128 /* ShopReviewList */,
 				7CED901E2EF2D1F900457128 /* ShopReview */,
 				7CED90232EF2D1F900457128 /* ShopReviewReport */,
+				3BE753922EF6CC6900E7E6F4 /* ShopCoordinator.swift */,
 			);
 			path = Shop;
 			sourceTree = "<group>";
@@ -3431,6 +3439,7 @@
 				D27DD0872BA608310081FD36 /* AppDelegate.swift */,
 				D27DD0882BA608310081FD36 /* SceneDelegate.swift */,
 				D2FCBE802CFE96600097A388 /* NotificationHandler.swift */,
+				3B7FFFA22EF6AF57001D2865 /* AppCoordinator.swift */,
 			);
 			path = Apps;
 			sourceTree = "<group>";
@@ -4085,8 +4094,8 @@
 				B46B8D262E770A3100A8E797 /* Pretendard-Bold.otf in Resources */,
 				B46B8D272E770A3100A8E797 /* Pretendard-Medium.otf in Resources */,
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
-				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
-				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
+				83D5E9C82CCB844D00C6D4CD /* BuildFile in Resources */,
+				83D5E9C82CCB844D00C6D4CD /* BuildFile in Resources */,
 				B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */,
 				D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */,
 				D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */,
@@ -4186,13 +4195,9 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
-			inputPaths = (
-			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -4250,7 +4255,7 @@
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
 				D20AB9542C553503006BC684 /* ChangeNotiUseCase.swift in Sources */,
-				838F114E2CA51C6C00BF3B25 /* (null) in Sources */,
+				838F114E2CA51C6C00BF3B25 /* BuildFile in Sources */,
 				D27DD0CE2BA608310081FD36 /* ViewModelProtocol.swift in Sources */,
 				D2FB23622BFDAC240098BA2B /* ShopAPI.swift in Sources */,
 				D22C547D2C6A2BC9000826DA /* FetchMyReviewRequest.swift in Sources */,
@@ -4386,6 +4391,7 @@
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
+				3B7FFFA52EF6B04D001D2865 /* HomeCoordinator.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
 				D2C163D82E252DB500DC68A8 /* ChangePasswordUseCase.swift in Sources */,
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
@@ -4541,6 +4547,7 @@
 				7CED91582EF2D1F900457128 /* RegisterCompletionViewController.swift in Sources */,
 				7CED91592EF2D1F900457128 /* AddLostItemCollectionViewCell.swift in Sources */,
 				7CED915B2EF2D1F900457128 /* ShopInfoCollectionViewCell.swift in Sources */,
+				3B7FFFA32EF6AF57001D2865 /* AppCoordinator.swift in Sources */,
 				7CED915D2EF2D1F900457128 /* ShopSearchTableView.swift in Sources */,
 				7CED915E2EF2D1F900457128 /* SettingsViewModel.swift in Sources */,
 				7CED91602EF2D1F900457128 /* CategoryCollectionViewCell.swift in Sources */,
@@ -4752,6 +4759,7 @@
 				B68D2CE52EA505AA00F3B479 /* ToastIntent.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,
+				3BE753932EF6CC6900E7E6F4 /* ShopCoordinator.swift in Sources */,
 				D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
