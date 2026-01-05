@@ -216,7 +216,7 @@ final class ReviewListViewController: UIViewController {
         
         reviewListCollectionView.imageTapPublisher
             .sink { [weak self] (imageUrls, indexPath) in
-                self?.showZoomedImage(imageUrls, indexPath)
+                self?.coordinator?.presentZoomedImageViewControllerB(urls: imageUrls, initialIndexPath: indexPath)
             }
             .store(in: &cancellables)
     }
@@ -336,12 +336,6 @@ extension ReviewListViewController {
         }
 
         coordinator?.presentDeleteReviewModalViewController(onDelete: onDelete, onCancel: onCancel)
-    }
-    
-    private func showZoomedImage(_ imageUrls: [String], _ initialIndexpath: IndexPath) {
-        let zoomedImageViewController = ZoomedImageViewControllerB()
-        zoomedImageViewController.configure(urls: imageUrls, initialIndexPath: initialIndexpath)
-        present(zoomedImageViewController, animated: true)
     }
 }
 

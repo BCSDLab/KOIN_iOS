@@ -257,12 +257,13 @@ extension ShopSummaryViewController {
             .sink { [weak self] indexPath in
                 guard let self,
                       0 < self.cachedImages.count,
-                      self.cachedImages.first?.imageUrl != nil else { return }
-                
-                let zoomedViewController = ZoomedImageViewControllerB()
-                zoomedViewController.configure(urls: cachedImages.map { return $0.imageUrl ?? "" },
-                                               initialIndexPath: indexPath)
-                self.present(zoomedViewController, animated: true)
+                      self.cachedImages.first?.imageUrl != nil else {
+                    return
+                }
+                coordinator?.presentZoomedImageViewControllerB(
+                    urls: cachedImages.map { return $0.imageUrl ?? "" },
+                    initialIndexPath: indexPath
+                )
             }.store(in: &subscriptions)
     }
     
