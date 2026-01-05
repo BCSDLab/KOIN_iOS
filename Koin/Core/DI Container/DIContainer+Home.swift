@@ -15,6 +15,10 @@ protocol HomeFactory {
         onOpenStoreButtonTapped: @escaping ()->Void,
         onCancelButtonTapped: @escaping ()->Void
     ) -> UpdateModelViewController
+    func makeBannerViewControllerA(
+        viewModel: HomeViewModel,
+        onBannerTapped: @escaping (Banner)->Void
+    ) -> BannerViewControllerA
 }
 
 extension DIContainer: HomeFactory {
@@ -76,5 +80,16 @@ extension DIContainer: HomeFactory {
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         return viewController
+    }
+    
+    func makeBannerViewControllerA(
+        viewModel: HomeViewModel,
+        onBannerTapped: @escaping (Banner)->Void
+    ) -> BannerViewControllerA {
+        let bannerViewControllerA = BannerViewControllerA(
+            viewModel: viewModel,
+            onBannerTapped: onBannerTapped
+        )
+        return bannerViewControllerA
     }
 }

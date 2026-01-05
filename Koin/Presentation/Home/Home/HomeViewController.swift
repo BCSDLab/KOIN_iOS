@@ -121,11 +121,7 @@ final class HomeViewController: UIViewController {
     }
     
     private let menuBackgroundView = MenuBackgroundView(frame: .zero)
-    
-    private lazy var bannerViewControllerA = BannerViewControllerA(viewModel: viewModel)
-    
-    private lazy var bannerViewControllerB = BannerViewControllerB(viewModel: viewModel)
-    
+
     // MARK: - Initialization
     
     init(viewModel: HomeViewModel) {
@@ -303,14 +299,6 @@ final class HomeViewController: UIViewController {
             let viewController = BusTimetableViewController(viewModel: viewModel)
             viewController.title = "버스 시간표"
             self?.navigationController?.pushViewController(viewController, animated: true)
-        }.store(in: &subscriptions)
-        
-        bannerViewControllerA.bannerTapPublisher.sink { [weak self] banner in
-            self?.handleBannerTap(banner)
-        }.store(in: &subscriptions)
-        
-        bannerViewControllerB.bannerTapPublisher.sink { [weak self] banner in
-            self?.handleBannerTap(banner)
         }.store(in: &subscriptions)
     }
 }

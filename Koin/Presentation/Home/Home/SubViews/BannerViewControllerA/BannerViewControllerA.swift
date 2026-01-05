@@ -11,8 +11,9 @@ import UIKit
 final class BannerViewControllerA: UIViewController {
     
     // MARK: - properties
+    private let onBannerTapped: (Banner)->Void
+    
     private var subscriptions: Set<AnyCancellable> = []
-    let bannerTapPublisher = PassthroughSubject<Banner, Never>()
     private let viewModel: HomeViewModel
     private let whiteView = UIView().then {
         $0.backgroundColor = .white
@@ -37,8 +38,10 @@ final class BannerViewControllerA: UIViewController {
     
     private let countLabel = UILabel()
     
-    init(viewModel: HomeViewModel) {
+    
+    init(viewModel: HomeViewModel, onBannerTapped: @escaping (Banner)->Void) {
         self.viewModel = viewModel
+        self.onBannerTapped = onBannerTapped
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -66,7 +69,7 @@ final class BannerViewControllerA: UIViewController {
         }.store(in: &subscriptions)
         
         collectionView.tapPublisher.sink { [weak self] item in
-            self?.bannerTapPublisher.send(item)
+            self?.onBannerTapped(item)
         }.store(in: &subscriptions)
     }
     

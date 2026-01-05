@@ -182,7 +182,6 @@
 		7CED91682EF2D1F900457128 /* PolicyListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F1A2EF2D1F900457128 /* PolicyListCollectionViewCell.swift */; };
 		7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F5E2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift */; };
 		7CED916C2EF2D1F900457128 /* DeleteArticleModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6D2EF2D1F900457128 /* DeleteArticleModalViewController.swift */; };
-		7CED916D2EF2D1F900457128 /* BannerViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */; };
 		7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90932EF2D1F900457128 /* AddDirectFooterView.swift */; };
 		7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90122EF2D1F900457128 /* DashedBorderButton.swift */; };
 		7CED91722EF2D1F900457128 /* NoticeKeywordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F492EF2D1F900457128 /* NoticeKeywordCollectionView.swift */; };
@@ -815,7 +814,6 @@
 		7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImageView.swift; sourceTree = "<group>"; };
 		7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceModifyUserViewController.swift; sourceTree = "<group>"; };
 		7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerA.swift; sourceTree = "<group>"; };
-		7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerB.swift; sourceTree = "<group>"; };
 		7CED8ED72EF2D1F900457128 /* ClubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubView.swift; sourceTree = "<group>"; };
 		7CED8ED92EF2D1F900457128 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		7CED8EDA2EF2D1F900457128 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -1506,6 +1504,15 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
+		7C3707792F0BCD4B002A9B03 /* BannerViewControllerA */ = {
+			isa = PBXGroup;
+			children = (
+				7CED8EC22EF2D1F900457128 /* BannerCollectionView */,
+				7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */,
+			);
+			path = BannerViewControllerA;
+			sourceTree = "<group>";
+		};
 		7C4D5A102F01638800B40128 /* BusAreaSelected */ = {
 			isa = PBXGroup;
 			children = (
@@ -1744,7 +1751,7 @@
 			isa = PBXGroup;
 			children = (
 				7CED8EBF2EF2D1F900457128 /* ClubCollectionView */,
-				7CED8EC22EF2D1F900457128 /* BannerCollectionView */,
+				7C3707792F0BCD4B002A9B03 /* BannerViewControllerA */,
 				7CED8EC52EF2D1F900457128 /* ShopCollectionView */,
 				7CED8EC92EF2D1F900457128 /* NoticeListCollectionView */,
 				7CED8ECB2EF2D1F900457128 /* BusView */,
@@ -1752,8 +1759,6 @@
 				7CED8ED22EF2D1F900457128 /* LogoView.swift */,
 				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
 				7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */,
-				7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */,
-				7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */,
 				7CED8ED72EF2D1F900457128 /* ClubView.swift */,
 			);
 			path = SubViews;
@@ -4554,7 +4559,6 @@
 				7CED91682EF2D1F900457128 /* PolicyListCollectionViewCell.swift in Sources */,
 				7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */,
 				7CED916C2EF2D1F900457128 /* DeleteArticleModalViewController.swift in Sources */,
-				7CED916D2EF2D1F900457128 /* BannerViewControllerB.swift in Sources */,
 				7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */,
 				7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */,
 				7CED91722EF2D1F900457128 /* NoticeKeywordCollectionView.swift in Sources */,
