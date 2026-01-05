@@ -29,7 +29,7 @@ final class HomeCoordinator: Coordinator {
         let shopCoordinator = ShopCoordinator(
             navigationController: navigationController,
             factory: DIContainer.shared
-            )
+        )
         shopCoordinator.parentCoordinator = self
         addChild(shopCoordinator)
         

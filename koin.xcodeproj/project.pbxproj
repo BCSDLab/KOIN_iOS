@@ -18,6 +18,8 @@
 		7C17EEB02EBF708B008BCA89 /* ShopSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */; };
 		7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
+		7C3707762F0BBEDA002A9B03 /* Coordinator+ZoomedImageViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3707752F0BBEDA002A9B03 /* Coordinator+ZoomedImageViewControllerB.swift */; };
+		7C3707782F0BBF94002A9B03 /* Coordinator+BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3707772F0BBF94002A9B03 /* Coordinator+BottomSheetViewController.swift */; };
 		7C4D5A3C2F01638800B40128 /* BusSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A122F01638800B40128 /* BusSearchViewController.swift */; };
 		7C4D5A3D2F01638800B40128 /* BusSearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A1D2F01638800B40128 /* BusSearchResultViewModel.swift */; };
 		7C4D5A3E2F01638800B40128 /* OneBusTimetableTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A362F01638800B40128 /* OneBusTimetableTableViewFooter.swift */; };
@@ -754,6 +756,8 @@
 		7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchDto.swift; sourceTree = "<group>"; };
 		7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSearchShopUseCase.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
+		7C3707752F0BBEDA002A9B03 /* Coordinator+ZoomedImageViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Coordinator+ZoomedImageViewControllerB.swift"; sourceTree = "<group>"; };
+		7C3707772F0BBF94002A9B03 /* Coordinator+BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Coordinator+BottomSheetViewController.swift"; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
 		7C4D5A0F2F01638800B40128 /* BusAreaSelectedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1490,6 +1494,16 @@
 				A608E6D4EE675AF49F527F63 /* Pods_koin.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7C3707742F0BBEBC002A9B03 /* Coordinator */ = {
+			isa = PBXGroup;
+			children = (
+				7CED923A2EF2D26000457128 /* Coordinator.swift */,
+				7C3707752F0BBEDA002A9B03 /* Coordinator+ZoomedImageViewControllerB.swift */,
+				7C3707772F0BBF94002A9B03 /* Coordinator+BottomSheetViewController.swift */,
+			);
+			path = Coordinator;
 			sourceTree = "<group>";
 		};
 		7C4D5A102F01638800B40128 /* BusAreaSelected */ = {
@@ -3406,10 +3420,10 @@
 		D27DD0802BA608310081FD36 /* Protocol */ = {
 			isa = PBXGroup;
 			children = (
+				7C3707742F0BBEBC002A9B03 /* Coordinator */,
 				D27DD0812BA608310081FD36 /* ViewModelProtocol.swift */,
 				D27DD0822BA608310081FD36 /* CollectionViewDelegate.swift */,
 				D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */,
-				7CED923A2EF2D26000457128 /* Coordinator.swift */,
 			);
 			path = Protocol;
 			sourceTree = "<group>";
@@ -4596,6 +4610,7 @@
 				7C4D5A452F01638800B40128 /* BusSearchResultTableView.swift in Sources */,
 				7C4D5A462F01638800B40128 /* ManyBusTimetableCollectionView.swift in Sources */,
 				7C4D5A472F01638800B40128 /* BusSearchViewModel.swift in Sources */,
+				7C3707782F0BBF94002A9B03 /* Coordinator+BottomSheetViewController.swift in Sources */,
 				7C4D5A482F01638800B40128 /* BusTimetableDataViewModel.swift in Sources */,
 				7C4D5A492F01638800B40128 /* BusSearchDatePickerViewController.swift in Sources */,
 				7C4D5A4A2F01638800B40128 /* BusTimetableRouteCollectionView.swift in Sources */,
@@ -4613,6 +4628,7 @@
 				7C4D5A562F01638800B40128 /* BusTimetableRouteView.swift in Sources */,
 				7C4D5A572F01638800B40128 /* ShuttleTimetableTableView.swift in Sources */,
 				7C4D5A582F01638800B40128 /* BusSearchResultTableViewFooter.swift in Sources */,
+				7C3707762F0BBEDA002A9B03 /* Coordinator+ZoomedImageViewControllerB.swift in Sources */,
 				7C4D5A592F01638800B40128 /* BusTimetableViewController.swift in Sources */,
 				7C4D5A5A2F01638800B40128 /* BusAreaSelectdViewController.swift in Sources */,
 				7C4D5A5B2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift in Sources */,
