@@ -237,7 +237,7 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         logoView.lineButtonPublisher.sink { [weak self] in
-            self?.navigateToServiceSelectViewController()
+            self?.coordinator?.navigateToServiceSelect()
         }.store(in: &subscriptions)
         
         diningTooltipImageView.onImageTapped = { [weak self] in
@@ -605,11 +605,7 @@ extension HomeViewController {
         navigationController?.pushViewController(diningViewController, animated: true)
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.mainMenuMoveDetailView, .click, "\(menuLabel.text ?? "")", nil, nil, nil, nil))
     }
-    
-    private func navigateToServiceSelectViewController() {
-        coordinator?.navigateToServiceSelect()
-    }
-    
+        
     private func navigateToForceUpdate(version: String) {
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdatePageView, .pageView, version))
         coordinator?.presentForceUpdate()
