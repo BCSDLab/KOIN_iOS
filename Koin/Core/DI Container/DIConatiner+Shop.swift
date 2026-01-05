@@ -95,7 +95,9 @@ extension DIContainer: ShopFactory {
             getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: selectedId
         )
-        return ShopViewController(viewModel: viewModel)
+        let viewController = ShopViewController(viewModel: viewModel)
+        viewController.title = "주변상점"
+        return viewController
     }
     
     func makeShopSummaryViewController(
@@ -238,6 +240,8 @@ extension DIContainer: ShopFactory {
             shopName: shopName
         )
         reviewListViewController.title = "리뷰"
+        //reviewListViewController.onLoginButtonTapped = onLoginButtonTapped
+        //reviewListViewController.onCancelButtonTapped = onCancelButtonTapped
         return reviewListViewController
     }
     
