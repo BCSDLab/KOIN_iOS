@@ -18,10 +18,6 @@ final class ShopViewController: UIViewController {
     private var didTapBack = false
     
     // MARK: - UI Components
-    private let dummyNavigationBar = UIView().then {
-        $0.backgroundColor = .appColor(.newBackground)
-    }
-    
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     
@@ -214,18 +210,12 @@ final class ShopViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .transparentBlack)
+        configureNavigationBar(style: .order())
         self.didTapBack = false
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
-        
-        guard let navigationController else { return }
-        let navigationBarHeight: CGFloat = UIApplication.topSafeAreaHeight() + navigationController.navigationBar.frame.height
-        dummyNavigationBar.snp.updateConstraints {
-            $0.height.equalTo(navigationBarHeight)
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -439,7 +429,7 @@ extension ShopViewController {
 // MARK: - Configure View
 extension ShopViewController {
     private func setUpLayOuts() {
-        [scrollView, dummyNavigationBar].forEach {
+        [scrollView].forEach {
             view.addSubview($0)
         }
         scrollView.addSubview(contentView)
@@ -449,10 +439,6 @@ extension ShopViewController {
     }
     
     private func setUpConstraints() {
-        dummyNavigationBar.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(0)
-        }
         
         scrollView.snp.makeConstraints {
             $0.edges.equalToSuperview()
