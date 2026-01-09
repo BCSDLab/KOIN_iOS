@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ShopCoordinator: Coordinator {
+final class ShopCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     weak var parentCoordinator: Coordinator?
@@ -17,6 +17,8 @@ final class ShopCoordinator: Coordinator {
     init(navigationController: UINavigationController, factory: ShopFactory) {
         self.navigationController = navigationController
         self.factory = factory
+        super.init()
+        self.navigationController.delegate = self
     }
     
     func start() {
@@ -120,6 +122,25 @@ final class ShopCoordinator: Coordinator {
     }
     
     func didFinish() {
+        navigationController.delegate = nil
         parentCoordinator?.removeChild(self)
+    }
+}
+
+extension ShopCoordinator: UINavigationControllerDelegate {
+    func navigationController(_ navigationController: UINavigationController,
+                              didShow viewController: UIViewController,
+                              animated: Bool) {
+        guard let fromViewController = navigationController.transitionCoordinator?.viewController(forKey: .from) else { return }
+        
+        if navigationController.viewControllers.contains(fromViewController) {
+            return
+        }
+        
+        if fromViewController is ShopViewController {
+            didFinish()
+            print("ShopViewController 제거됨")
+        }
+
     }
 }
