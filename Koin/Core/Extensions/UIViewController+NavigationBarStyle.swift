@@ -57,20 +57,21 @@ extension UIViewController {
         
     func configureNavigationBar(style: NavigationBarStyle) {
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
+        appearance.configureWithTransparentBackground()
         appearance.backgroundColor = style.backgroundColor
         appearance.titleTextAttributes = [
             .foregroundColor: style.foregroundColor,
             .font: style.font
         ]
-        appearance.shadowColor = nil
         
         navigationItem.backButtonTitle = ""
         
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
+        navigationItem.standardAppearance = appearance
+        navigationItem.scrollEdgeAppearance = appearance
+        navigationItem.compactAppearance = appearance
         
         navigationController?.navigationBar.tintColor = style.tintColor
+        
+        
     }
 }
