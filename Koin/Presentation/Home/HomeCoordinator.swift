@@ -59,12 +59,12 @@ final class HomeCoordinator: Coordinator {
     func presentBannerViewControllerA(
         viewModel: HomeViewModel,
         banners: [Banner],
-        defaultHeight: CGFloat,
+        defaultHeight: CGFloat = 389,
         cornerRadius: CGFloat = 16,
         dimmedAlpha: CGFloat = 0.4,
         isPannedable: Bool = false,
         modalPresentationStyle: UIModalPresentationStyle = .overFullScreen,
-        modalTransitionStyle: UIModalTransitionStyle = .coverVertical,
+        modalTransitionStyle: UIModalTransitionStyle = .crossDissolve,
         onBannerTapped: @escaping (Banner)->Void
     ) {
         let bannerViewControllerA = factory.makeBannerViewControllerA(

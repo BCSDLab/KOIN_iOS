@@ -390,9 +390,6 @@ extension HomeViewController {
         coordinator?.presentBannerViewControllerA(
             viewModel: viewModel,
             banners: banner.banners,
-            defaultHeight: 389,
-            modalPresentationStyle: .overFullScreen,
-            modalTransitionStyle: .crossDissolve,
             onBannerTapped: { [weak self] banner
                 in self?.handleBannerTap(banner)
             }
