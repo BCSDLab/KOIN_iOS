@@ -13,7 +13,6 @@ extension UIViewController {
         case fill
         case empty
         case order(shouldHideTitle: Bool = false)
-        case transparentBlack
         case transparentWhite
         
         var backgroundColor: UIColor {
@@ -24,7 +23,7 @@ extension UIViewController {
                 return UIColor.appColor(.neutral0)
             case .order(let shouldHideTitle):
                 return (shouldHideTitle ? UIColor.clear : UIColor.appColor(.newBackground))
-            case .transparentBlack, .transparentWhite:
+            case .transparentWhite:
                 return UIColor.clear
             }
         }
@@ -33,7 +32,7 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty, .transparentBlack:
+            case .empty:
                 return UIColor.appColor(.neutral800)
             case .order(let shouldHideTitle):
                 return (shouldHideTitle ? UIColor.clear : UIColor.appColor(.neutral800))
@@ -48,7 +47,7 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty, .transparentBlack:
+            case .empty:
                 return UIColor.appColor(.neutral800)
             case .order(let shouldHideTitle):
                 return (shouldHideTitle ? UIColor.appColor(.neutral0) :  UIColor.appColor(.neutral800))
