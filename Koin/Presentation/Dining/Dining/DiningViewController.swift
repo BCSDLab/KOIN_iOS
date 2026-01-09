@@ -155,12 +155,6 @@ final class DiningViewController: UIViewController {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .fill)
         diningListCollectionView.startToolTipImageViewAnimation()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-            if let self, self.isOnScreen {
-                SwiftRater.check()
-            }
-        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -179,6 +173,12 @@ final class DiningViewController: UIViewController {
             }
         }
         viewDidAppeared = true
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+            if let self, self.isOnScreen {
+                SwiftRater.check()
+            }
+        }
     }
     
     // MARK: - Bind
