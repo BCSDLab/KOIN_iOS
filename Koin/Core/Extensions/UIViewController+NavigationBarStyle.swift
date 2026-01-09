@@ -12,8 +12,7 @@ extension UIViewController {
     enum NavigationBarStyle {
         case fill
         case empty
-        case order
-        case orderTransparent
+        case order(shouldHideTitle: Bool = false)
         case transparentBlack
         case transparentWhite
         
@@ -23,9 +22,9 @@ extension UIViewController {
                 return UIColor.appColor(.primary500)
             case .empty:
                 return UIColor.appColor(.neutral0)
-            case .order:
-                return UIColor.appColor(.newBackground)
-            case .orderTransparent, .transparentBlack, .transparentWhite:
+            case .order(let shouldHideTitle):
+                return (shouldHideTitle ? UIColor.clear : UIColor.appColor(.newBackground))
+            case .transparentBlack, .transparentWhite:
                 return UIColor.clear
             }
         }
@@ -34,10 +33,10 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty, .order, .transparentBlack:
+            case .empty, .transparentBlack:
                 return UIColor.appColor(.neutral800)
-            case .orderTransparent:
-                return UIColor.clear
+            case .order(let shouldHideTitle):
+                return (shouldHideTitle ? UIColor.clear : UIColor.appColor(.neutral800))
             }
         }
         
@@ -47,10 +46,12 @@ extension UIViewController {
         
         var tintColor: UIColor {
             switch self {
-            case .fill, .orderTransparent, .transparentWhite:
+            case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty, .order, .transparentBlack:
+            case .empty, .transparentBlack:
                 return UIColor.appColor(.neutral800)
+            case .order(let shouldHideTitle):
+                return (shouldHideTitle ? UIColor.appColor(.neutral0) :  UIColor.appColor(.neutral800))
             }
         }
     }
@@ -71,7 +72,5 @@ extension UIViewController {
         navigationItem.compactAppearance = appearance
         
         navigationController?.navigationBar.tintColor = style.tintColor
-        
-        
     }
 }
