@@ -48,6 +48,8 @@
 		7C4D5A5A2F01638800B40128 /* BusAreaSelectdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */; };
 		7C4D5A5B2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A2E2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift */; };
 		7C4D5A5D2F0163BA00B40128 /* DIContainer+Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */; };
+		7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */; };
+		7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
@@ -779,6 +781,8 @@
 		7C4D5A382F01638800B40128 /* BusTimetableDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableDataViewController.swift; sourceTree = "<group>"; };
 		7C4D5A392F01638800B40128 /* BusTimetableDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableDataViewModel.swift; sourceTree = "<group>"; };
 		7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Bus.swift"; sourceTree = "<group>"; };
+		7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoHeaderView.swift; sourceTree = "<group>"; };
+		7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoFooterView.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
@@ -2264,6 +2268,8 @@
 				7CED8FAD2EF2D1F900457128 /* ShopInfoColletionView.swift */,
 				7CED8FAE2EF2D1F900457128 /* ShopInfoCollectionViewCell.swift */,
 				7CED8FAF2EF2D1F900457128 /* ShopReadyView.swift */,
+				7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */,
+				7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */,
 			);
 			path = ShopInfoCollectionView;
 			sourceTree = "<group>";
@@ -4330,6 +4336,7 @@
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
 				D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */,
+				7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
@@ -4377,6 +4384,7 @@
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				D2D462602D63A81500C60864 /* ChatRoomDTO.swift in Sources */,
 				D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */,
+				7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
 				D85939732DC1037200CE4CB2 /* UIButton+.swift in Sources */,
 				D20AD7072E0367F10067760A /* ResetPasswordEmailRequest.swift in Sources */,
