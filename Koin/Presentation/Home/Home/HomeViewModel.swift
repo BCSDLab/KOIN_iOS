@@ -58,8 +58,9 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchHotClubsUseCase = DefaultFetchHotClubsUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let checkLoginUseCase: CheckLoginUseCase
     private var subscriptions: Set<AnyCancellable> = []
-    private (set) var moved = false
+    private(set) var moved = false
     private var shopCategories: [ShopCategory] = []
+    private(set) var isLoggedIn: Bool = false
     
     // MARK: - Initialization
     init(fetchDiningListUseCase: FetchDiningListUseCase,
@@ -242,6 +243,7 @@ extension HomeViewModel {
     private func checkLogin() {
         checkLoginUseCase.execute()
             .sink { isLoggedIn in
+                self.isLoggedIn = isLoggedIn
                 UserDefaults.standard.set(isLoggedIn ? 1 : 0, forKey: "loginFlag")
             }
             .store(in: &subscriptions)
