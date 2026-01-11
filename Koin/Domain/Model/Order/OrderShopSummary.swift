@@ -20,7 +20,24 @@ struct OrderShopSummary {
     let introduction: String?
 }
 
-extension OrderShopSummary {
+extension OrderShopSummary {    
+    init(from dto: OrderShopSummaryDto) {
+        self.shopId = dto.shopId
+        self.orderableShopId = dto.orderableShopId
+        self.name = dto.name
+        self.introduction = dto.introduction
+        self.isDeliveryAvailable = dto.isDeliveryAvailable
+        self.isTakeoutAvailable = dto.isTakeoutAvailable
+        self.payCard = dto.payCard
+        self.payBank = dto.payBank
+        self.minimumOrderAmount = dto.minimumOrderAmount
+        self.ratingAverage = dto.ratingAverage
+        self.reviewCount = dto.reviewCount
+        self.minimumDeliveryTip = dto.minimumDeliveryTip
+        self.maximumDeliveryTip = dto.maximumDeliveryTip
+        self.images = dto.images.map { OrderImage(from: $0) }
+    }
+    
     init(from dto: ShopSummaryDto, shopId: Int) {
         self.shopId = shopId
         self.orderableShopId = 0

@@ -171,7 +171,7 @@ Koin
 | <img src="https://avatars.githubusercontent.com/u/118811606?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/74389635?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/139556438?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/183201303?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/202774410?v=4" width="130"> |
 | :--: | :--: | :--: | :--: | :--: |
 | [나훈](https://github.com/KimNahun) | [민경](https://github.com/Ju-Min-Kyung) | [은지](https://github.com/oeunji) | [기정](https://github.com/hgjwilly-koreatech) | [성민](https://github.com/xp65241) |
-| 2024.3 ~ 2025.5 | 2024.4 ~ 2024.12 | 2025.3 ~ 2024.12 | 2025.9 ~ ing | 2025.9 ~ ing |
+| 2024.3 ~ 2025.5 | 2024.4 ~ 2024.12 | 2025.3 ~ ing | 2025.9 ~ ing | 2025.9 ~ ing |
    
 --- 
 

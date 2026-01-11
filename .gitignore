@@ -118,5 +118,6 @@ xcshareddata/xcschemes/*
 xcuserdata/*
 Pods/
 project.xcworkspace/
+Info.plist
 GoogleService-Info.plist
-GoogleService-Info-Stage.plist
+*.plist

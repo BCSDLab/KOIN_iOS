@@ -15,6 +15,11 @@ struct MenuGroup {
 }
 
 extension OrderShopMenusGroups {
+    init(from dto: OrderShopMenusGroupsDto) {
+        self.menuGroups = dto.menuGroups.map { menuGroupDto in
+            MenuGroup(from: menuGroupDto)
+        }
+    }
     init(from dto: ShopMenusCategoryDto) {
         self.menuGroups = dto.menuCategories.map { menuCategoryDto in
             return MenuGroup(from: menuCategoryDto)
@@ -23,6 +28,9 @@ extension OrderShopMenusGroups {
 }
 
 extension MenuGroup {
+    init(from dto: MenuGroupDto) {
+        self.name = dto.name
+    }
     init(from dto: ShopMenuCategoryDto) {
         self.name = dto.name
     }
