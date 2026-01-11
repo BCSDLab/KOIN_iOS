@@ -320,22 +320,17 @@ extension HomeViewController {
         if let version = banner.version {
             // 현재 앱 버전
             let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-            
             let isOld = isVersion(currentVersion, lowerThan: version)
-            
             if isOld {
                 showToast(message: "해당 기능을 사용하기 위해서는 업데이트가 꼭 필요해요")
-                  
                   DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                       if let appStoreURL = URL(string: "https://apps.apple.com/kr/app/%EC%BD%94%EC%9D%B8-koreatech-in-%ED%95%9C%EA%B8%B0%EB%8C%80-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0/id1500848622") {
                           UIApplication.shared.open(appStoreURL)
                       }
                   }
-                  
                   return
             }
         }
-        
         if let redirect = banner.redirectLink {
             if redirect == "shop" {
                 dismiss(animated: true)
@@ -347,7 +342,6 @@ extension HomeViewController {
                 let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
                 let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
                 let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-                let searchShopUseCase = DefaultSearchShopUseCase(shopRepository: shopRepository)
                 let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
                 let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
                 
@@ -381,6 +375,32 @@ extension HomeViewController {
                 let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: addNotificationKeywordUseCase, deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase, fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase, fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
                 let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
                 navigationController?.pushViewController(viewController, animated: true)
+            } else if redirect == "timetable" {
+                dismiss(animated: true)
+                let repository = DefaultBusRepository(service: DefaultBusService())
+                let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
+                let viewController = BusTimetableViewController(viewModel: viewModel)
+                viewController.title = "버스 시간표"
+                navigationController?.pushViewController(viewController, animated: true)
+            } else if redirect == "home" {
+                dismiss(animated: true)
+                return
+            } else if redirect == "login" {
+                dismiss(animated: true)
+                let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+                loginViewController.title = "로그인"
+                navigationController?.pushViewController(loginViewController, animated: true)
+            } else if redirect == "chat" {
+                dismiss(animated: true)
+                if !viewModel.isLoggedIn {
+                    showToast(message: "로그인이 필요한 기능입니다.")
+                    return
+                }
+                let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
+                navigationController?.pushViewController(viewController, animated: true)
+            } else if redirect == "club" {
+                dismiss(animated: true)
+                navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
             }
         }
     }
