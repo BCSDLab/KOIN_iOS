@@ -69,6 +69,7 @@ final class ShopCoordinator: NSObject, Coordinator {
             shopName: shopName,
             completion: completion
         )
+        shopReviewViewController.coordinator = self
         navigationController.pushViewController(shopReviewViewController, animated: true)
     }
     

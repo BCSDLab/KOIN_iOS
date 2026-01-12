@@ -14,7 +14,7 @@ import Then
 final class ShopReviewViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // MARK: - Properties
-    
+    var coordinator: ShopCoordinator?
     private let viewModel: ShopReviewViewModel
     private let inputSubject: PassthroughSubject<ShopReviewViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -410,16 +410,11 @@ extension ShopReviewViewController {
     
     private func presentExitConfirm() {
         guard presentedViewController == nil,
-              navigationController?.transitionCoordinator == nil else { return }
-        
-        let viewController = BackButtonPopUpViewController()
-        viewController.modalPresentationStyle = .overFullScreen
-        viewController.modalTransitionStyle = .crossDissolve
-        viewController.onStop = { [weak self, weak viewController] in
-            viewController?.dismiss(animated: false)
+              navigationController?.transitionCoordinator == nil else { fatalError() }
+        coordinator?.presentBackButtonPopUpViewController(onStop: { [weak self] in
+            self?.dismiss(animated: false)
             self?.navigationController?.popViewController(animated: true)
-        }
-        present(viewController, animated: false)
+        })
     }
     
     private func setNavigationItem() {
