@@ -335,30 +335,7 @@ extension HomeViewController {
         if let redirect = banner.redirectLink {
             if redirect == "shop" {
                 dismiss(animated: true)
-                let shopService = DefaultShopService()
-                let shopRepository = DefaultShopRepository(service: shopService)
-                
-                let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-                let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-                let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-                let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-                let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-                
-
-                let viewModel = ShopViewModel(
-                    fetchShopListUseCase: fetchShopListUseCase,
-                    fetchEventListUseCase: fetchEventListUseCase,
-                    fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-                    fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-                    fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-                    logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                    getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                    selectedId: 0
-                )
-                let shopViewController = ShopViewController(viewModel: viewModel)
-                navigationController?.pushViewController(shopViewController, animated: true)
+                coordinator?.pushShopViewController(categoryId: 1)
             } else if redirect == "dining" {
                 dismiss(animated: true)
                 navigatetoDining()
