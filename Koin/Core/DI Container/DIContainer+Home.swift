@@ -28,14 +28,14 @@ extension DIContainer: HomeFactory {
             shareService: KakaoShareService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
+        let getUserScreenTimeUseCase = resolve(type: GetUserScreenTimeUseCase.self)
         let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let dateProvider = DefaultDateProvider()
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
         let checkVersionUseCase = DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-        let assignAbTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService()))
+        let assignAbTestUseCase = resolve(type: AssignAbTestUseCase.self)
         let fetchKeywordNoticePhraseUseCase = DefaultFetchKeywordNoticePhraseUseCase()
         let homeViewModel = HomeViewModel(
             fetchDiningListUseCase: fetchDiningListUseCase,
@@ -54,15 +54,17 @@ extension DIContainer: HomeFactory {
     }
     
     func makeServiceSelectViewController() -> ServiceSelectViewController {
+        let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
         let viewModel = ServiceSelectViewModel(
             fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())),
-            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         return ServiceSelectViewController(viewModel: viewModel)
     }
     
     func makeForceUpdateViewController() -> ForceUpdateViewController {
+        let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
         let viewModel = ForceUpdateViewModel(
-            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())))
         let viewController = ForceUpdateViewController(viewModel: viewModel)
         viewController.modalPresentationStyle = .fullScreen

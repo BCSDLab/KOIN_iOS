@@ -83,8 +83,8 @@ extension DIContainer: ShopFactory {
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
         let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
+        let getUserScreenTimeUseCase = resolve(type: GetUserScreenTimeUseCase.self)
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
@@ -110,8 +110,8 @@ extension DIContainer: ShopFactory {
         let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
         let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
+        let getUserScreenTimeUseCase = resolve(type: GetUserScreenTimeUseCase.self)
         let viewModel = ShopSummaryViewModel(
             fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
             fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
@@ -131,7 +131,7 @@ extension DIContainer: ShopFactory {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchSearchShopUseCase = DefaultFetchSearchShopUseCase(repository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
         let viewModel = ShopSearchViewModel(
             fetchSearchShopUseCase: fetchSearchShopUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
@@ -183,10 +183,10 @@ extension DIContainer: ShopFactory {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let reportReviewReviewUseCase = DefaultReportReviewUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCae = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
         let viewModel = ShopReviewReportViewModel(
             reportReviewReviewUseCase: reportReviewReviewUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCae,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             reviewId: reviewId,
             shopId: shopId,
             shopName: shopName,
@@ -207,8 +207,8 @@ extension DIContainer: ShopFactory {
         let fetchShopReviewUseCase = DefaultFetchShopReviewUseCase(shopRepository: shopRepository)
         let uploadFileUseCase = DefaultUploadFileUseCase(shopRepository: shopRepository)
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
+        let getUserScreenTimeUseCase = resolve(type: GetUserScreenTimeUseCase.self)
         let viewModel = ShopReviewViewModel(
             postReviewUseCase: postReviewUseCase,
             modifyReviewUseCase: modifyReviewUseCase,
