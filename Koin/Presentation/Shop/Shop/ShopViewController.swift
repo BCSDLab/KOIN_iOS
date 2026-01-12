@@ -313,7 +313,7 @@ final class ShopViewController: UIViewController {
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, currentPage, previousPage, nil, nil, .shopClick))
 
-            self?.coordinator?.navigateToShopSummary(shopId: shopId, shopName: shopName, categoryName: previousPage)
+            self?.coordinator?.pushShopSummaryViewController(shopId: shopId, shopName: shopName, categoryName: previousPage)
         }
         .store(in: &subscriptions)
     }
@@ -330,13 +330,13 @@ final class ShopViewController: UIViewController {
 // MARK: - @objc
 extension ShopViewController {
     @objc private func searchBarButtonTapped() {
-        coordinator?.navigateToShopSearch(categoryName: viewModel.selectedCategoryName)
+        coordinator?.pushShopSearchViewController(categoryName: viewModel.selectedCategoryName)
     }
 
     @objc private func sortButtonTapped() {
         let categoryName = viewModel.selectedCategoryName
         
-        coordinator?.showSortOptionSheet(currentType: viewModel.currentSortType) { [weak self] sort in
+        coordinator?.presentShopSortOptionSheetViewController(currentType: viewModel.currentSortType) { [weak self] sort in
             guard let self else { return }
             
             self.inputSubject.send(.sortOptionDidChange(sort))

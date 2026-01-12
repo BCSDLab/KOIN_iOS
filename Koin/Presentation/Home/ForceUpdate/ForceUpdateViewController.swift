@@ -194,7 +194,7 @@ extension ForceUpdateViewController {
                 "확인"
             ))
         }
-        coordinator?.showUpdateModal(onOpenStoreButtonTapped: onOpenStoreButtonTapped, onCancelButtonTapped: onCancelButtonTapped)
+        coordinator?.presentUpdateViewController(onOpenStoreButtonTapped: onOpenStoreButtonTapped, onCancelButtonTapped: onCancelButtonTapped)
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }
 }

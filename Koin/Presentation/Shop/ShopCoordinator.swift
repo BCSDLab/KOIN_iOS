@@ -22,16 +22,16 @@ final class ShopCoordinator: Coordinator {
     }
     
     func start() {
-        navigateToShop(categoryId: 1)
+        pushShopViewController(categoryId: 1)
     }
     
-    func navigateToShop(categoryId: Int) {
+    func pushShopViewController(categoryId: Int) {
         let shopViewController = factory.makeShopViewController(selectedId: categoryId)
         shopViewController.coordinator = self
         navigationController.pushViewController(shopViewController, animated: true)
     }
     
-    func navigateToShopSummary(shopId: Int, shopName: String, categoryName: String?) {
+    func pushShopSummaryViewController(shopId: Int, shopName: String, categoryName: String?) {
         let shopSummaryViewController = factory.makeShopSummaryViewController(
             selectedCategoryName: categoryName,
             shopId: shopId,
@@ -42,13 +42,13 @@ final class ShopCoordinator: Coordinator {
         navigationController.pushViewController(shopSummaryViewController, animated: true)
     }
     
-    func navigateToShopSearch(categoryName: String) {
+    func pushShopSearchViewController(categoryName: String) {
         let shopSearchViewController = factory.makeShopSearchViewController(selectedCategoryName: categoryName)
         shopSearchViewController.coordinator = self
         navigationController.pushViewController(shopSearchViewController, animated: true)
     }
     
-    func navigateToShopDetail(shopId: Int, shouldHighlight: ShopDetailTableView.HighlightableCell) {
+    func pushShopDetailViewController(shopId: Int, shouldHighlight: ShopDetailTableView.HighlightableCell) {
         let shopDetailViewController = factory.makeShopDetailViewController(
             shopId: shopId,
             shouldHighlight: shouldHighlight
@@ -56,13 +56,13 @@ final class ShopCoordinator: Coordinator {
         navigationController.pushViewController(shopDetailViewController, animated: true)
     }
     
-    func navigateToReviewList(shopId: Int, shopName: String) {
+    func pushReviewListViewController(shopId: Int, shopName: String) {
         let reviewListViewController = factory.makeReviewListViewController(shopId: shopId, shopName: shopName)
         reviewListViewController.coordinator = self
         navigationController.pushViewController(reviewListViewController, animated: true)
     }
     
-    func navigateToShopReview(shopId: Int, shopName: String, reviewId: Int? = nil, completion: ((Bool, Int?, WriteReviewRequest) -> Void)? = nil) {
+    func pushShopReviewViewController(shopId: Int, shopName: String, reviewId: Int? = nil, completion: ((Bool, Int?, WriteReviewRequest) -> Void)? = nil) {
         let shopReviewViewController = factory.makeShopReviewViewController(
             reviewId: reviewId,
             shopId: shopId,
@@ -78,7 +78,7 @@ final class ShopCoordinator: Coordinator {
         navigationController.pushViewController(shopReviewViewController, animated: true)
     }
     
-    func navigateToReviewReport(reviewId: Int, shopId: Int, shopName: String, completion: ((Int, Int) -> Void)? = nil) {
+    func pushShopReviewReportViewController(reviewId: Int, shopId: Int, shopName: String, completion: ((Int, Int) -> Void)? = nil) {
         let shopReviewReportViewController = factory.makeShopReviewReportViewController(
             reviewId: reviewId,
             shopId: shopId,
@@ -94,7 +94,7 @@ final class ShopCoordinator: Coordinator {
         navigationController.pushViewController(shopReviewReportViewController, animated: true)
     }
     
-    func showSortOptionSheet(currentType: ShopSortType, onSelect: @escaping (ShopSortType) -> Void) {
+    func presentShopSortOptionSheetViewController(currentType: ShopSortType, onSelect: @escaping (ShopSortType) -> Void) {
         let shopSortOptionSheetViewController = factory.makeShopSortOptionSheetViewController(
             currentSortType: currentType,
             onOptionSelected: onSelect
@@ -102,7 +102,7 @@ final class ShopCoordinator: Coordinator {
         navigationController.present(shopSortOptionSheetViewController, animated: true)
     }
     
-    func showSortTypeBottomSheet(options: [String], selectedIndex: Int, onSelect: @escaping (Int) -> Void) {
+    func presentSortTypeBottomSheetViewController(options: [String], selectedIndex: Int, onSelect: @escaping (Int) -> Void) {
         let sortTypeBottomSheetViewController = factory.makeSortTypeBottomSheetViewController(
             options: options,
             selectedIndex: selectedIndex,
@@ -111,7 +111,7 @@ final class ShopCoordinator: Coordinator {
         navigationController.present(sortTypeBottomSheetViewController, animated: true)
     }
     
-    func showLoginModal(type: MessageType, onLogin: @escaping () -> Void, onCancel: (() -> Void)?) {
+    func presentReviewLoginModalViewController(type: MessageType, onLogin: @escaping () -> Void, onCancel: (() -> Void)?) {
         let reviewLoginModalViewController = factory.makeReviewLoginModalViewController(
             messageType: type.rawValue,
             onLoginButtonTapped: onLogin,
@@ -120,7 +120,7 @@ final class ShopCoordinator: Coordinator {
         navigationController.present(reviewLoginModalViewController, animated: true)
     }
     
-    func showDeleteReviewModal(onDelete: @escaping () -> Void, onCancel: @escaping () -> Void) {
+    func presentDeleteReviewModalViewController(onDelete: @escaping () -> Void, onCancel: @escaping () -> Void) {
         let deleteReviewModalViewController = factory.makeDeleteReviewModalViewController(
             onDeleteButtonTapped: onDelete,
             onCancelButtonTapped: onCancel
@@ -128,7 +128,7 @@ final class ShopCoordinator: Coordinator {
         navigationController.present(deleteReviewModalViewController, animated: true)
     }
     
-    func showBackButtonPopup(onStop: @escaping () -> Void) {
+    func presentBackButtonPopUpViewController(onStop: @escaping () -> Void) {
         let backButtonPopUpViewController = factory.makeBackButtonPopUpViewController(onStop: onStop)
         navigationController.present(backButtonPopUpViewController, animated: true)
     }

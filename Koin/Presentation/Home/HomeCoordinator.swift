@@ -26,7 +26,7 @@ final class HomeCoordinator: Coordinator {
         navigationController.setViewControllers([homeViewController], animated: false)
     }
     
-    func navigateToShop(categoryId: Int) {
+    func pushShopViewController(categoryId: Int) {
         let shopCoordinator = ShopCoordinator(
             navigationController: navigationController,
             factory: DIContainer.shared
@@ -34,16 +34,16 @@ final class HomeCoordinator: Coordinator {
         shopCoordinator.parentCoordinator = self
         addChild(shopCoordinator)
         
-        shopCoordinator.navigateToShop(categoryId: categoryId)
+        shopCoordinator.pushShopViewController(categoryId: categoryId)
     }
     
-    func navigateToServiceSelect() {
+    func pushServiceSelectViewController() {
         let serviceSelectViewController = factory.makeServiceSelectViewController()
         serviceSelectViewController.coordinator = self
         navigationController.pushViewController(serviceSelectViewController, animated: true)
     }
     
-    func navigateToSetting() {
+    func pushSettingViewController() {
         let settingViewController = factory.makeSettingsViewController()
         navigationController.pushViewController(settingViewController, animated: true)
     }
@@ -54,7 +54,7 @@ final class HomeCoordinator: Coordinator {
         navigationController.present(forceUpdateViewController, animated: true, completion: nil)
     }
     
-    func showUpdateModal(onOpenStoreButtonTapped: @escaping () -> Void, onCancelButtonTapped: @escaping () -> Void) {
+    func presentUpdateViewController(onOpenStoreButtonTapped: @escaping () -> Void, onCancelButtonTapped: @escaping () -> Void) {
         let updateViewController = factory.makeUpdateModelViewController(
             onOpenStoreButtonTapped: onOpenStoreButtonTapped,
             onCancelButtonTapped: onCancelButtonTapped

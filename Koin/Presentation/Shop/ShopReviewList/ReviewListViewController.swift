@@ -301,7 +301,7 @@ extension ReviewListViewController {
             self?.inputSubject.send(.changeFilter(sorter: selectedSortType, isMine: nil))
         }
         
-        coordinator?.showSortTypeBottomSheet(
+        coordinator?.presentSortTypeBottomSheetViewController(
             options: options,
             selectedIndex: selectedIndex,
             onSelect: onSelection
@@ -335,7 +335,7 @@ extension ReviewListViewController {
             ))
         }
 
-        coordinator?.showDeleteReviewModal(onDelete: onDelete, onCancel: onCancel)
+        coordinator?.presentDeleteReviewModalViewController(onDelete: onDelete, onCancel: onCancel)
     }
     
     private func showZoomedImage(_ imageUrls: [String], _ initialIndexpath: IndexPath) {
@@ -360,7 +360,7 @@ extension ReviewListViewController {
             viewModel.getShopName()
         ))
         
-        coordinator?.navigateToShopReview(shopId: viewModel.getShopId(), shopName: viewModel.getShopName(), reviewId: nil, completion: { [weak self] isPost, reviewId, request in
+        coordinator?.pushShopReviewViewController(shopId: viewModel.getShopId(), shopName: viewModel.getShopName(), reviewId: nil, completion: { [weak self] isPost, reviewId, request in
             if isPost {
                 self?.inputSubject.send(.changeFilter(sorter: .latest, isMine: nil))
             } else if let reviewId = reviewId {
@@ -370,7 +370,7 @@ extension ReviewListViewController {
     }
     
     private func navigateToModifyReview(reviewId: Int, shopId: Int) {
-        coordinator?.navigateToShopReview(shopId: shopId, shopName: viewModel.getShopName(), reviewId: reviewId, completion: { [weak self] isPost, reviewId, request in
+        coordinator?.pushShopReviewViewController(shopId: shopId, shopName: viewModel.getShopName(), reviewId: reviewId, completion: { [weak self] isPost, reviewId, request in
                 if !isPost, let reviewId = reviewId {
                     self?.reviewListCollectionView.modifySuccess(reviewId, request)
                 }
@@ -378,7 +378,7 @@ extension ReviewListViewController {
     }
     
     private func navigateToReportReview(reviewId: Int, shopId: Int) {
-        coordinator?.navigateToReviewReport(reviewId: reviewId, shopId: shopId, shopName: viewModel.getShopName(), completion: { [weak self] reviewId, shopId in
+        coordinator?.pushShopReviewReportViewController(reviewId: reviewId, shopId: shopId, shopName: viewModel.getShopName(), completion: { [weak self] reviewId, shopId in
             self?.showToastMessage(message: "리뷰가 신고되었어요.", intent: .neutral)
             self?.reviewListCollectionView.reportReview(reviewId, shopId: shopId)
         })
@@ -405,7 +405,7 @@ extension ReviewListViewController {
             ))
         } : nil
         
-        coordinator?.showLoginModal(type: type, onLogin: onLogin, onCancel: onCancel)
+        coordinator?.presentReviewLoginModalViewController(type: type, onLogin: onLogin, onCancel: onCancel)
     }
     
     private func showLoginScreen() {

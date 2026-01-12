@@ -157,7 +157,7 @@ extension ShopSearchViewController {
 extension ShopSearchViewController {
     
     private func navigateTo(shopId: Int, shopName: String) {
-        coordinator?.navigateToShopSummary(
+        coordinator?.pushShopSummaryViewController(
             shopId: shopId,
             shopName: shopName,
             categoryName: viewModel.selectedCategoryName

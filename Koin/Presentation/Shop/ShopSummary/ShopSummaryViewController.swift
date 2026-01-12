@@ -163,14 +163,14 @@ extension ShopSummaryViewController {
             .sink { [weak self] in
                 guard let self = self else { return }
                 self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, self.viewModel.shopName))
-                self.coordinator?.navigateToReviewList(shopId: self.viewModel.shopId, shopName: self.viewModel.shopName)
+                self.coordinator?.pushReviewListViewController(shopId: self.viewModel.shopId, shopName: self.viewModel.shopName)
             }
             .store(in: &subscriptions)
         
         tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
             guard let self else { return }
             self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, self.viewModel.shopName))
-            self.coordinator?.navigateToShopDetail(shopId: self.viewModel.shopId, shouldHighlight: shouldHighlight)
+            self.coordinator?.pushShopDetailViewController(shopId: self.viewModel.shopId, shouldHighlight: shouldHighlight)
         }
             .store(in: &subscriptions)
         

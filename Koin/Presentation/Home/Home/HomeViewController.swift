@@ -237,7 +237,7 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         logoView.lineButtonPublisher.sink { [weak self] in
-            self?.coordinator?.navigateToServiceSelect()
+            self?.coordinator?.pushServiceSelectViewController()
         }.store(in: &subscriptions)
         
         diningTooltipImageView.onImageTapped = { [weak self] in
@@ -260,7 +260,7 @@ final class HomeViewController: UIViewController {
             let categoryName = self.viewModel.getCategoryName(for: shopName) ?? "알 수 없음"
                         
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, categoryName, "메인", nil, nil, .mainShopCategories))
-            self.coordinator?.navigateToShop(categoryId: shopName)
+            self.coordinator?.pushShopViewController(categoryId: shopName)
         }.store(in: &subscriptions)
         
         noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in

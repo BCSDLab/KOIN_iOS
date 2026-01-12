@@ -262,7 +262,7 @@ extension ServiceSelectViewController {
     }
     
     @objc func shopSelectButtonTapped() {
-        coordinator?.navigateToShop(categoryId: 0)
+        coordinator?.pushShopViewController(categoryId: 0)
         inputSubject.send(.logEvent(EventParameter.EventLabel.Business.hamburger, .click, "주변상점"))
     }
     
