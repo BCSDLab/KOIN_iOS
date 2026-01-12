@@ -11,7 +11,7 @@ import SnapKit
 final class ShopSortOptionSheetViewController: UIViewController {
     
     // MARK: - Properties
-    var onOptionSelected: ((ShopSortType) -> Void)?
+    private let onOptionSelected: (ShopSortType) -> Void
     private var current: ShopSortType
     
     // MARK: UI Component
@@ -44,8 +44,9 @@ final class ShopSortOptionSheetViewController: UIViewController {
     }
         
     // MARK: Lifecycle
-    init(current: ShopSortType) {
+    init(current: ShopSortType, onOptionSelected: @escaping ((ShopSortType) -> Void)) {
         self.current = current
+        self.onOptionSelected = onOptionSelected
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -126,7 +127,7 @@ final class ShopSortOptionSheetViewController: UIViewController {
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
             self.dismiss(animated: true) {
-                self.onOptionSelected?(sort)
+                self.onOptionSelected(sort)
             }
         }
     }

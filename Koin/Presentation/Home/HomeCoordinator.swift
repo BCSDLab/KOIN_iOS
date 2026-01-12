@@ -56,6 +56,7 @@ final class HomeCoordinator: Coordinator {
     func presentForceUpdate() {
         let forceUpdateViewController = factory.makeForceUpdateViewController()
         forceUpdateViewController.coordinator = self
+        forceUpdateViewController.modalPresentationStyle = .fullScreen
         navigationController.present(forceUpdateViewController, animated: true, completion: nil)
     }
     
@@ -64,6 +65,8 @@ final class HomeCoordinator: Coordinator {
             onOpenStoreButtonTapped: onOpenStoreButtonTapped,
             onCancelButtonTapped: onCancelButtonTapped
         )
+        updateViewController.modalPresentationStyle = .overFullScreen
+        updateViewController.modalTransitionStyle = .crossDissolve
         navigationController.present(updateViewController, animated: true, completion: nil)
     }
     

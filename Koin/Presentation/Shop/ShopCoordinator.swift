@@ -87,6 +87,18 @@ final class ShopCoordinator: NSObject, Coordinator {
             currentSortType: currentType,
             onOptionSelected: onSelect
         )
+        shopSortOptionSheetViewController.modalPresentationStyle = .pageSheet
+        if let sheet = shopSortOptionSheetViewController.sheetPresentationController {
+            if #available(iOS 16.0, *) {
+                let detent = UISheetPresentationController.Detent.custom(identifier: .init("fixed233")) { _ in 233 }
+                sheet.detents = [detent]
+                sheet.selectedDetentIdentifier = detent.identifier
+            } else {
+                sheet.detents = [.medium()]
+            }
+            sheet.prefersGrabberVisible = true
+            sheet.preferredCornerRadius = 32
+        }
         navigationController.present(shopSortOptionSheetViewController, animated: true)
     }
     
@@ -96,6 +108,8 @@ final class ShopCoordinator: NSObject, Coordinator {
             selectedIndex: selectedIndex,
             onSelection: onSelect
         )
+        sortTypeBottomSheetViewController.modalPresentationStyle = .overFullScreen
+        sortTypeBottomSheetViewController.modalTransitionStyle = .crossDissolve
         navigationController.present(sortTypeBottomSheetViewController, animated: true)
     }
     
@@ -113,11 +127,15 @@ final class ShopCoordinator: NSObject, Coordinator {
             onDeleteButtonTapped: onDelete,
             onCancelButtonTapped: onCancel
         )
+        deleteReviewModalViewController.modalPresentationStyle = .overFullScreen
+        deleteReviewModalViewController.modalTransitionStyle = .crossDissolve
         navigationController.present(deleteReviewModalViewController, animated: true)
     }
     
     func presentBackButtonPopUpViewController(onStop: @escaping () -> Void) {
         let backButtonPopUpViewController = factory.makeBackButtonPopUpViewController(onStop: onStop)
+        backButtonPopUpViewController.modalPresentationStyle = .overFullScreen
+        backButtonPopUpViewController.modalTransitionStyle = .crossDissolve
         navigationController.present(backButtonPopUpViewController, animated: true)
     }
     

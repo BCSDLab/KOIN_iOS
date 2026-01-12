@@ -23,12 +23,16 @@ final class ShopDetailViewModel {
     private var subscriptions: Set<AnyCancellable> = []
     private let fetchOrderShopDetailFromShopUseCase: FetchOrderShopDetailFromShopUseCase
     private let shopId: Int
+    let shouldHighlight: ShopDetailTableView.HighlightableCell
     
     // MARK: - Initializer
     init(fetchOrderShopDetailFromShopUseCase: DefaultFetchOrderShopDetailFromShopUseCase,
-         shopId: Int) {
+         shopId: Int,
+         shouldHighlight: ShopDetailTableView.HighlightableCell
+    ) {
         self.fetchOrderShopDetailFromShopUseCase = fetchOrderShopDetailFromShopUseCase
         self.shopId = shopId
+        self.shouldHighlight = shouldHighlight
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {

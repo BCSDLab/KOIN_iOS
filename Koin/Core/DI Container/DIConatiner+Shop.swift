@@ -96,7 +96,6 @@ extension DIContainer: ShopFactory {
             selectedId: selectedId
         )
         let viewController = ShopViewController(viewModel: viewModel)
-        viewController.title = "주변상점"
         return viewController
     }
     
@@ -119,10 +118,10 @@ extension DIContainer: ShopFactory {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             shopId: shopId,
-            shopName: shopName)
-        let viewController = ShopSummaryViewController(
-            viewModel: viewModel,
-            backCategoryName: selectedCategoryName)
+            shopName: shopName,
+            backCategoryName: selectedCategoryName
+        )
+        let viewController = ShopSummaryViewController(viewModel: viewModel)
         viewController.title = shopName
         return viewController
     }
@@ -135,7 +134,8 @@ extension DIContainer: ShopFactory {
         let viewModel = ShopSearchViewModel(
             fetchSearchShopUseCase: fetchSearchShopUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            selectedCategoryName: selectedCategoryName)
+            selectedCategoryName: selectedCategoryName
+        )
         return ShopSearchViewController(viewModel: viewModel)
     }
     
@@ -143,20 +143,7 @@ extension DIContainer: ShopFactory {
         currentSortType: ShopSortType,
         onOptionSelected: @escaping ((ShopSortType) -> Void)
     ) -> ShopSortOptionSheetViewController {
-        let bottomSheetViewController = ShopSortOptionSheetViewController(current: currentSortType)
-        bottomSheetViewController.onOptionSelected = onOptionSelected
-        bottomSheetViewController.modalPresentationStyle = .pageSheet
-        if let sheet = bottomSheetViewController.sheetPresentationController {
-            if #available(iOS 16.0, *) {
-                let detent = UISheetPresentationController.Detent.custom(identifier: .init("fixed233")) { _ in 233 }
-                sheet.detents = [detent]
-                sheet.selectedDetentIdentifier = detent.identifier
-            } else {
-                sheet.detents = [.medium()]
-            }
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 32
-        }
+        let bottomSheetViewController = ShopSortOptionSheetViewController(current: currentSortType, onOptionSelected: onOptionSelected)
         return bottomSheetViewController
     }
     
@@ -168,9 +155,10 @@ extension DIContainer: ShopFactory {
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchOrderShopDetailFromShopUseCase = DefaultFetchOrderShopDetailFromShopUseCase(repository: shopRepository)
         let viewModel = ShopDetailViewModel(fetchOrderShopDetailFromShopUseCase: fetchOrderShopDetailFromShopUseCase,
-                                            shopId: shopId)
-        let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
-        viewController.title = "가게정보"
+                                            shopId: shopId,
+                                            shouldHighlight: shouldHighlight
+        )
+        let viewController = ShopDetailViewController(viewModel: viewModel)
         return viewController
     }
     
@@ -226,10 +214,7 @@ extension DIContainer: ShopFactory {
     }
     
     func makeBackButtonPopUpViewController(onStop: @escaping () -> Void) -> BackButtonPopUpViewController {
-        let viewController = BackButtonPopUpViewController()
-        viewController.modalPresentationStyle = .overFullScreen
-        viewController.modalTransitionStyle = .crossDissolve
-        viewController.onStop = onStop
+        let viewController = BackButtonPopUpViewController(onStop: onStop)
         return viewController
     }
     
@@ -241,7 +226,6 @@ extension DIContainer: ShopFactory {
             shopId: shopId,
             shopName: shopName
         )
-        reviewListViewController.title = "리뷰"
         return reviewListViewController
     }
     
@@ -255,8 +239,6 @@ extension DIContainer: ShopFactory {
             onLoginButtonTapped: onLoginButtonTapped,
             onCancelButtonTapped: onCancelButtonTapped
         )
-        reviewWriteLoginModalViewController.modalPresentationStyle = .overFullScreen
-        reviewWriteLoginModalViewController.modalTransitionStyle = .crossDissolve
         return reviewWriteLoginModalViewController
     }
     
@@ -266,9 +248,8 @@ extension DIContainer: ShopFactory {
     ) -> DeleteReviewModalViewController {
         let deleteReviewModalViewController = DeleteReviewModalViewController(
             onDeleteButtonTapped: onDeleteButtonTapped,
-            onCancelButtonTapped: onCancelButtonTapped)
-        deleteReviewModalViewController.modalPresentationStyle = .overFullScreen
-        deleteReviewModalViewController.modalTransitionStyle = .crossDissolve
+            onCancelButtonTapped: onCancelButtonTapped
+        )
         return deleteReviewModalViewController
     }
     

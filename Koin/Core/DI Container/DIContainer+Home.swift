@@ -58,6 +58,7 @@ extension DIContainer: HomeFactory {
         let viewModel = ServiceSelectViewModel(
             fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())),
             logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         return ServiceSelectViewController(viewModel: viewModel)
     }
     
@@ -65,9 +66,9 @@ extension DIContainer: HomeFactory {
         let logAnalyticsEventUseCase = resolve(type: LogAnalyticsEventUseCase.self)
         let viewModel = ForceUpdateViewModel(
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())))
+            checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+        )
         let viewController = ForceUpdateViewController(viewModel: viewModel)
-        viewController.modalPresentationStyle = .fullScreen
         return viewController
     }
     
@@ -79,8 +80,6 @@ extension DIContainer: HomeFactory {
             onOpenStoreButtonTapped: onOpenStoreButtonTapped,
             onCancelButtonTapped: onCancelButtonTapped
         )
-        viewController.modalPresentationStyle = .overFullScreen
-        viewController.modalTransitionStyle = .crossDissolve
         return viewController
     }
     

@@ -31,6 +31,7 @@ final class ShopSummaryViewModel {
     private(set) var shopId: Int
     private(set) var phonenumber: String = ""
     let shopName: String
+    let backCategoryName: String?
     private var cachedThumbnailImages: [OrderImage] = []
     
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
@@ -47,12 +48,14 @@ final class ShopSummaryViewModel {
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int,
-         shopName: String) {
+         shopName: String,
+         backCategoryName: String?) {
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
         self.fetchOrderShopMenusAndGroupsFromShopUseCase = fetchOrderShopMenusAndGroupsFromShopUseCase
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.shopId = shopId
         self.shopName = shopName
+        self.backCategoryName = backCategoryName
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }

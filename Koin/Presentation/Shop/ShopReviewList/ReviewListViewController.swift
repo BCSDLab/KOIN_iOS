@@ -89,6 +89,7 @@ final class ReviewListViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "리뷰"
         configureView()
         setAddTarget()
         setDelegate()

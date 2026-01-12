@@ -21,7 +21,6 @@ final class ShopSummaryViewController: UIViewController {
     private var cachedImages: [OrderImage] = []
     
     private var didTapBack = false
-    private let backCategoryName: String?
     
     weak var coordinator: ShopCoordinator?
     
@@ -62,9 +61,8 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopSummaryViewModel, backCategoryName: String? = nil) {
+    init(viewModel: ShopSummaryViewModel) {
         self.viewModel = viewModel
-        self.backCategoryName = backCategoryName
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -94,7 +92,7 @@ final class ShopSummaryViewController: UIViewController {
         super.viewWillDisappear(animated)
         guard !didTapBack, (self.isMovingFromParent || self.isBeingDismissed) else { return }
         let shopName = self.viewModel.shopName
-        let currentPage = self.backCategoryName
+        let currentPage = self.viewModel.backCategoryName
         let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
         let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
         

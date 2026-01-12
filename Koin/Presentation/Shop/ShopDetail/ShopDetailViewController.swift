@@ -12,7 +12,6 @@ final class ShopDetailViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: ShopDetailViewModel
-    private let shouldHighlight: ShopDetailTableView.HighlightableCell
     private var subscriptions: Set<AnyCancellable> = []
     private let inputSubject = PassthroughSubject<ShopDetailViewModel.Input, Never>()
     
@@ -23,9 +22,8 @@ final class ShopDetailViewController: UIViewController {
     }
     
     // MARK: - Initailizer
-    init(viewModel: ShopDetailViewModel, shouldHighlight: ShopDetailTableView.HighlightableCell) {
+    init(viewModel: ShopDetailViewModel) {
         self.viewModel = viewModel
-        self.shouldHighlight = shouldHighlight
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -39,6 +37,7 @@ final class ShopDetailViewController: UIViewController {
         configureView()
         bind()
         inputSubject.send(.viewDidLoad)
+        title = "가게정보"
     }
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
@@ -52,7 +51,7 @@ final class ShopDetailViewController: UIViewController {
             switch output {
             case .update(let shopDetail):
                 self.shopDetailTableView.configure(shopDetail: shopDetail,
-                                                   shouldHighlight: self.shouldHighlight)
+                                                   shouldHighlight: self.viewModel.shouldHighlight)
             }
         }
         .store(in: &subscriptions)

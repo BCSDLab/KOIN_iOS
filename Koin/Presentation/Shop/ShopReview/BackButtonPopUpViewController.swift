@@ -9,9 +9,10 @@ import UIKit
 import SnapKit
 
 final class BackButtonPopUpViewController: UIViewController {
-    var onStop: (() -> Void)?
     
+    var onStop: () -> Void
     
+    // MARK: - UI Components
     private let dimView = UIView().then {
         $0.backgroundColor = UIColor.black.withAlphaComponent(0.7)
     }
@@ -55,6 +56,16 @@ final class BackButtonPopUpViewController: UIViewController {
         $0.configuration = config
     }
     
+    // MARK: - Initializer
+    init(onStop: @escaping () -> Void) {
+        self.onStop = onStop
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -105,7 +116,7 @@ final class BackButtonPopUpViewController: UIViewController {
     
     
     @objc private func stopButtonTapped() {
-        dismiss(animated: false) { [weak self] in self?.onStop?() }
+        dismiss(animated: false) { [weak self] in self?.onStop() }
     }
     
     @objc private func keepButtonTapped() {
