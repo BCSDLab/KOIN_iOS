@@ -377,11 +377,12 @@ extension HomeViewController {
                 navigationController?.pushViewController(viewController, animated: true)
             } else if redirect == "timetable" {
                 dismiss(animated: true)
-                let repository = DefaultBusRepository(service: DefaultBusService())
-                let viewModel = BusTimetableViewModel(fetchExpressTimetableUseCase: DefaultFetchExpressTimetableUseCase(busRepository: repository), getExpressFiltersUseCase: DefaultGetExpressFilterUseCase(), getCityFiltersUseCase: DefaultGetCityFiltersUseCase(), fetchCityTimetableUseCase: DefaultFetchCityBusTimetableUseCase(busRepository: repository), getShuttleFilterUseCase: DefaultGetShuttleBusFilterUseCase(), fetchShuttleRoutesUseCase: DefaultFetchShuttleBusRoutesUseCase(busRepository: repository), fetchEmergencyNoticeUseCase: DefaultFetchEmergencyNoticeUseCase(repository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
-                let viewController = BusTimetableViewController(viewModel: viewModel)
-                viewController.title = "버스 시간표"
-                navigationController?.pushViewController(viewController, animated: true)
+                if viewModel.isLoggedIn {
+                    let viewController = TimetableViewController(viewModel: TimetableViewModel())
+                    navigationController?.pushViewController(viewController, animated: true)
+                } else {
+                    showToast(message: "로그인이 필요한 기능입니다.", success: true)
+                }
             } else if redirect == "home" {
                 dismiss(animated: true)
                 return
