@@ -6,13 +6,3 @@
 //
 
 import Foundation
-
-protocol LostItemFactory {
-    func makeRepostItemViewController()
-    func makePostLostItemViewController()
-}
-
-extension DIContainer: LostItemFactory {
-    func makeRepostItemViewController() {}
-    func makePostLostItemViewController() {}
-}

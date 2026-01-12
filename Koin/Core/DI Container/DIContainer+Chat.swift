@@ -6,7 +6,3 @@
 //
 
 import Foundation
-
-protocol ChatFactory {
-    func makeChat()
-}

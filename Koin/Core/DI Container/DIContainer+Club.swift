@@ -6,11 +6,3 @@
 //
 
 import Foundation
-
-protocol ClubFactory {
-    func makeClub()
-}
-
-extension DIContainer: ClubFactory {
-    func makeClub() {}
-}
