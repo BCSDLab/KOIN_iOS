@@ -7,6 +7,10 @@
 
 import UIKit
 
+enum HomeRoute {
+    case shop(categoryId: Int)
+}
+
 final class HomeCoordinator: Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
@@ -23,6 +27,13 @@ final class HomeCoordinator: Coordinator {
         let homeViewController = factory.makeHomeViewController()
         homeViewController.coordinator = self
         navigationController.setViewControllers([homeViewController], animated: false)
+    }
+    
+    func start(_ route: HomeRoute) {
+        switch route {
+        case .shop(let categoryId):
+            pushShopViewController(categoryId: categoryId)
+        }
     }
     
     func pushShopViewController(categoryId: Int) {

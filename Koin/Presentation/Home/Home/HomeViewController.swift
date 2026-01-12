@@ -256,7 +256,7 @@ final class HomeViewController: UIViewController {
             let categoryName = self.viewModel.getCategoryName(for: shopName) ?? "알 수 없음"
                         
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.mainShopCategories, .click, categoryName, "메인", nil, nil, .mainShopCategories))
-            self.coordinator?.pushShopViewController(categoryId: shopName)
+            self.coordinator?.start(.shop(categoryId: shopName))
         }.store(in: &subscriptions)
         
         noticeListCollectionView.tapNoticeListPublisher.sink { [weak self] noticeId, noticeTitle in
@@ -323,7 +323,7 @@ extension HomeViewController {
         if let redirect = banner.redirectLink {
             if redirect == "shop" {
                 dismiss(animated: true)
-                coordinator?.pushShopViewController(categoryId: 1)
+                coordinator?.start(.shop(categoryId: 1))
             } else if redirect == "dining" {
                 dismiss(animated: true)
                 navigatetoDining()
