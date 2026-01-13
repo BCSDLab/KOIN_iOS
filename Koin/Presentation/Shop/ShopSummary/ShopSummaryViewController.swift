@@ -15,12 +15,10 @@ final class ShopSummaryViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    private var isAddingMenuAvailable: Bool = true
     private var navigationBarStyle: NavigationBarStyle = .orderTransparent
     
     private var cachedImages: [OrderImage] = []
     
-    private var didTapBack = false
     private let backCategoryName: String?
     
     // MARK: - UI Components
@@ -90,7 +88,7 @@ final class ShopSummaryViewController: UIViewController {
     //FIXME: - API가 로딩되기전에 뒤로가기시 Value가 알 수 없음으로 찍힘
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard !didTapBack, (self.isMovingFromParent || self.isBeingDismissed) else { return }
+        guard self.isMovingFromParent || self.isBeingDismissed else { return }
         let shopName = self.viewModel.shopName
         let currentPage = self.backCategoryName
         let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false

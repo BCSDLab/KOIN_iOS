@@ -31,7 +31,7 @@ final class ShopSummaryViewModel {
     private(set) var shopId: Int
     private(set) var phonenumber: String = ""
     let shopName: String
-    private var cachedThumbnailImages: [OrderImage] = []
+    
     
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
     private let fetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMenusAndGroupsFromShopUseCase
@@ -88,7 +88,6 @@ extension ShopSummaryViewModel {
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopSummary in
                 guard let self else { return }
-                self.cachedThumbnailImages = shopSummary.images
                 self.outputSubject.send(.update1(
                     images: shopSummary.images,
                     name: shopSummary.name,
