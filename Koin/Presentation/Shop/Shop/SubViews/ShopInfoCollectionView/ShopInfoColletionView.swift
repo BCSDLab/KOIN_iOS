@@ -10,27 +10,25 @@ import UIKit
 
 final class ShopInfoCollectionView: UICollectionView {
     
-    weak var headerView: ShopInfoHeaderView?
-    weak var footerView: ShopInfoFooterView?
-
-    // MARK: - Properties
-    private var isEventShopEmpty: Bool = true
-    private var headerViewHeight: CGFloat {
-        switch isEventShopEmpty {
-        case true: return (8+40+12+71+24+34+24)
-        case false: return (8+40+12+71+24+34+24)+(100+16)
-        }
-    }
-    private var footerViewHeight: CGFloat {
-        switch shops.isEmpty {
-        case true: return 250
-        case false: return 0
-        }
+    private var headerView: ShopInfoHeaderView? {
+        let indexPath = IndexPath(item: 0, section: 0)
+        return supplementaryView(forElementKind: UICollectionView.elementKindSectionHeader, at: indexPath) as? ShopInfoHeaderView
     }
     
-    private var shops: [Shop] = []
+    // MARK: - HeaderViewState
+    private var selectedCategoryId: Int = 1
+    private var categoryData: ShopCategoryDto = ShopCategoryDto(totalCount: 0, shopCategories: [])
+    private var eventShops: [EventDto] = []
+    private var sortButtonTitle: String = "기본순"
+    private var isOpenShopToggleButtonSelected: Bool = false
+    
+    // MARK: - Properties
+    private var shops: [Shop] = [] {
+        didSet { shouldShowEmptyView = shops.isEmpty }
+    }
+    private var shouldShowEmptyView: Bool = false
     private var cancellables = Set<AnyCancellable>()
-    private var headerViewSubscriptions: Set<AnyCancellable> = []
+    private var headerViewSubscription = Set<AnyCancellable>()
     
     // HeaderView
     let searchBarButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -83,27 +81,27 @@ final class ShopInfoCollectionView: UICollectionView {
     // MARK: - Public
     func updateShop(_ shops: [Shop]) {
         self.shops = shops
-        footerView?.updateEmptyResultView(isEmpty: shops.isEmpty)
         self.reloadData()
     }
     
     // MARK: - Update HeaderView
     func updateFilteredCategory(_ id: Int) {
+        self.selectedCategoryId = id
         headerView?.updateFilteredCategory(id)
     }
     func putImage(data: ShopCategoryDto) {
+        self.categoryData = data
         headerView?.putImage(data: data)
     }
     func updateEventShops(_ eventShops: [EventDto]) {
-//        isEventShopEmpty = eventShops.isEmpty
+//        self.eventShops = eventShops
 //        headerView?.updateEventShops(eventShops)
-        isEventShopEmpty = true
-        headerView?.updateEventShops([])
     }
     func stopAutoScroll() {
         headerView?.stopAutoScroll()
     }
     func updateSortButtonTitle(_ newTitle: String) {
+        self.sortButtonTitle = newTitle
         headerView?.updateSortButtonTitle(newTitle)
     }
 }
@@ -129,14 +127,14 @@ extension ShopInfoCollectionView: UICollectionViewDataSource {
             guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ShopInfoHeaderView.identifier, for: indexPath) as? ShopInfoHeaderView else {
                 return UICollectionReusableView()
             }
-            self.headerView = headerView
+            updateHeaderView(headerView)
             bindHeaderView(headerView)
             return headerView
         case UICollectionView.elementKindSectionFooter:
             guard let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ShopInfoFooterView.identifier, for: indexPath) as? ShopInfoFooterView else {
                 return UICollectionReusableView()
             }
-            self.footerView = footerView
+            footerView.updateEmptyResultView(isEmpty: shops.isEmpty)
             return footerView
         default:
             return collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: "view", for: indexPath)
@@ -144,35 +142,48 @@ extension ShopInfoCollectionView: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let baseHeight: CGFloat = 8+40+12+71+24+34+24
+        let eventShopHeight: CGFloat = 100+16
+        let headerViewHeight: CGFloat = eventShops.isEmpty ? baseHeight : baseHeight+eventShopHeight
         return CGSize(width: frame.width, height: headerViewHeight)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        let footerViewHeight: CGFloat = shouldShowEmptyView ? 250 : .zero
         return CGSize(width: frame.width, height: footerViewHeight)
     }
     
+    private func updateHeaderView(_ headerView: ShopInfoHeaderView) {
+        headerView.updateFilteredCategory(selectedCategoryId)
+        headerView.putImage(data: categoryData)
+        headerView.updateEventShops(eventShops)
+        headerView.updateSortButtonTitle(sortButtonTitle)
+        headerView.updateOpenShopToggleButton(isOpenShopToggleButtonSelected)
+    }
+    
     private func bindHeaderView(_ headerView: ShopInfoHeaderView) {
-        headerViewSubscriptions.removeAll()
-        
+        headerViewSubscription.removeAll()
+
         headerView.searchBarButtonTappedPublisher.sink { [weak self] in
             self?.searchBarButtonTappedPublisher.send()
-        }.store(in: &headerViewSubscriptions)
+        }.store(in: &headerViewSubscription)
         
         headerView.sortButtonTappedPublisher.sink { [weak self] in
             self?.sortButtonTappedPublisher.send()
-        }.store(in: &headerViewSubscriptions)
+        }.store(in: &headerViewSubscription)
         
         headerView.openShopToggleButtonPublisher.sink { [weak self] isSelected in
+            self?.isOpenShopToggleButtonSelected = isSelected
             self?.openShopToggleButtonPublisher.send(isSelected)
-        }.store(in: &headerViewSubscriptions)
+        }.store(in: &headerViewSubscription)
         
         headerView.selectedCategoryPublisher.sink { [weak self] categoryId in
             self?.selectedCategoryPublisher.send(categoryId)
-        }.store(in: &headerViewSubscriptions)
+        }.store(in: &headerViewSubscription)
         
         headerView.eventShopCellTapPublisher.sink { [weak self] shopId, shopName in
             self?.eventShopCellTapPublisher.send((shopId, shopName))
-        }.store(in: &headerViewSubscriptions)
+        }.store(in: &headerViewSubscription)
     }
 }
 
@@ -180,6 +191,12 @@ extension ShopInfoCollectionView: UICollectionViewDataSource {
 extension ShopInfoCollectionView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         cellTapPublisher.send((shops[indexPath.row].id, shops[indexPath.row].name))
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplayingSupplementaryView view: UICollectionReusableView, forElementOfKind elementKind: String, at indexPath: IndexPath) {
+        if elementKind == UICollectionView.elementKindSectionHeader {
+            headerView?.stopAutoScroll()
+        }
     }
 }
 

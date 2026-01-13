@@ -221,6 +221,10 @@ final class ShopInfoHeaderView: UICollectionReusableView {
         config.attributedTitle = attribute
         self.sortButton.configuration = config
     }
+    
+    func updateOpenShopToggleButton(_ isSelected: Bool) {
+        openShopToggleButton.isSelected = isSelected
+    }
 }
 
 
