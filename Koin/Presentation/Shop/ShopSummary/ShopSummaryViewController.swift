@@ -15,11 +15,8 @@ final class ShopSummaryViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    private var navigationBarStyle: NavigationBarStyle = .orderTransparent
     
-    private var cachedImages: [OrderImage] = []
     
-    private let backCategoryName: String?
     
     // MARK: - UI Components
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
@@ -58,9 +55,8 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopSummaryViewModel, backCategoryName: String? = nil) {
+    init(viewModel: ShopSummaryViewModel) {
         self.viewModel = viewModel
-        self.backCategoryName = backCategoryName
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -90,7 +86,7 @@ final class ShopSummaryViewController: UIViewController {
         super.viewWillDisappear(animated)
         guard self.isMovingFromParent || self.isBeingDismissed else { return }
         let shopName = self.viewModel.shopName
-        let currentPage = self.backCategoryName
+        let currentPage = self.viewModel.backCategoryName
         let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
         let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
         
@@ -110,7 +106,7 @@ extension ShopSummaryViewController {
             guard let self else { return }
             switch output {
             case let .update1(images, name, rating, reviewCount):
-                self.cachedImages = images
+                self.viewModel.cachedImages = images
                 self.tableHeaderView.configure1(
                     images: images,
                     name: name,
@@ -257,11 +253,11 @@ extension ShopSummaryViewController {
         tableHeaderView.didTapThumbnailPublisher
             .sink { [weak self] indexPath in
                 guard let self,
-                      0 < self.cachedImages.count,
-                      self.cachedImages.first?.imageUrl != nil else { return }
+                      0 < self.viewModel.cachedImages.count,
+                      self.viewModel.cachedImages.first?.imageUrl != nil else { return }
                 
                 let zoomedViewController = ZoomedImageViewControllerB()
-                zoomedViewController.configure(urls: cachedImages.map { return $0.imageUrl ?? "" },
+                zoomedViewController.configure(urls: viewModel.cachedImages.map { return $0.imageUrl ?? "" },
                                                initialIndexPath: indexPath)
                 self.present(zoomedViewController, animated: true)
             }.store(in: &subscriptions)

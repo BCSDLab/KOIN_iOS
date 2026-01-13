@@ -30,7 +30,9 @@ final class ShopSummaryViewModel {
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var shopId: Int
     private(set) var phonenumber: String = ""
+    var cachedImages: [OrderImage] = []
     let shopName: String
+    let backCategoryName: String?
     
     
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
@@ -47,12 +49,14 @@ final class ShopSummaryViewModel {
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int,
-         shopName: String) {
+         shopName: String,
+         backCategoryName: String? = nil) {
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
         self.fetchOrderShopMenusAndGroupsFromShopUseCase = fetchOrderShopMenusAndGroupsFromShopUseCase
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.shopId = shopId
         self.shopName = shopName
+        self.backCategoryName = backCategoryName
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
