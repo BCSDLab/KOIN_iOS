@@ -69,7 +69,6 @@ final class ShopSummaryViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         configureNavigationBar()
-        menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewBack))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
@@ -108,6 +107,7 @@ final class ShopSummaryViewController: UIViewController {
             $0.frame = gradientView.bounds
         }
         gradientView.layer.addSublayer(gradient)
+        menuGroupTableView.configure(safeAreaHeight: gradientView.frame.height)
     }
 }
 

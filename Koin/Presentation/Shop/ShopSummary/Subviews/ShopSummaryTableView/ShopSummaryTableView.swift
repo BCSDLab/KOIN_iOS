@@ -19,7 +19,7 @@ final class ShopSummaryTableView: UITableView, UITableViewDelegate, UITableViewD
     private var isSoldOuts: [[Bool]] = []
     private var prices: [[[Price]]] = []
     
-    private var navigationBarHeight: CGFloat = 0
+    private var safeAreaHeight: CGFloat = 0
     
     let didTapCellPublisher = PassthroughSubject<Int, Never>()
     let updateNavigationBarPublisher = PassthroughSubject<(UIColor, CGFloat), Never>()
@@ -64,8 +64,8 @@ final class ShopSummaryTableView: UITableView, UITableViewDelegate, UITableViewD
         }
         reloadData()
     }
-    func configure(navigationBarHeight: CGFloat) {
-        self.navigationBarHeight = navigationBarHeight
+    func configure(safeAreaHeight: CGFloat) {
+        self.safeAreaHeight = safeAreaHeight
     }
 }
 
@@ -110,8 +110,8 @@ extension ShopSummaryTableView: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        let navigationBarOffset = frame.width/1.21 - (self.navigationBarHeight + UIApplication.topSafeAreaHeight())
-        let stickyOffset: CGFloat = (tableHeaderView?.frame.height ?? 0) - (self.navigationBarHeight + UIApplication.topSafeAreaHeight() + 66)
+        let navigationBarOffset = frame.width/1.21 - safeAreaHeight
+        let stickyOffset: CGFloat = (tableHeaderView?.frame.height ?? 0) - (safeAreaHeight + 66)
         let contentOffset = self.contentOffset.y
         
         var opacity = 1 - (navigationBarOffset - contentOffset)/100
