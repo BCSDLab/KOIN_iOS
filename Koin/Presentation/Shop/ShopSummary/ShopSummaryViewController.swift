@@ -16,6 +16,8 @@ final class ShopSummaryViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let gradientView = UIView()
+
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
     
     private let menuGroupNameCollectionViewSticky = ShopSummaryMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
@@ -86,6 +88,26 @@ final class ShopSummaryViewController: UIViewController {
         if currentPage != nil {
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, eventCategory, shopName, nil, currentPage, nil, .shopDetailViewBack))
         }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (viewModel.opacity == 1 ? .darkContent : .lightContent)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let gradient = CAGradientLayer().then {
+            $0.colors = [
+                UIColor.black.withAlphaComponent(0.2).cgColor,
+                UIColor.black.withAlphaComponent(0.03).cgColor,
+                UIColor.black.withAlphaComponent(0.0).cgColor
+            ]
+            $0.locations = [0.0, 0.8, 1.0]
+            $0.startPoint = CGPoint(x: 0.0, y: 0.0)
+            $0.endPoint = CGPoint(x: 0.0, y: 1.0)
+            $0.frame = gradientView.bounds
+        }
+        gradientView.layer.addSublayer(gradient)
     }
 }
 
@@ -247,6 +269,7 @@ extension ShopSummaryViewController {
     }
     
     private func configureNavigationBar() {
+        setNeedsStatusBarAppearanceUpdate()
         if let appearance = navigationController?.navigationBar.standardAppearance {
             appearance.backgroundColor = UIColor.appColor(.newBackground).withAlphaComponent(viewModel.opacity)
             appearance.titleTextAttributes.updateValue(viewModel.navigationBarItemColor.withAlphaComponent(viewModel.opacity), forKey: .foregroundColor)
@@ -309,6 +332,11 @@ extension ShopSummaryViewController {
 extension ShopSummaryViewController {
     // MARK: - ConfigureView
     private func setUpConstraints() {
+        gradientView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
         menuGroupTableView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
@@ -327,7 +355,7 @@ extension ShopSummaryViewController {
     }
     
     private func setUpLayout() {
-        [menuGroupTableView, menuGroupNameCollectionViewSticky, popUpView].forEach {
+        [menuGroupTableView, gradientView, menuGroupNameCollectionViewSticky, popUpView].forEach {
             view.addSubview($0)
         }
     }
