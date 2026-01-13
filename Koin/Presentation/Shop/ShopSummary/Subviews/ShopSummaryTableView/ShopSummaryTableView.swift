@@ -116,7 +116,8 @@ extension ShopSummaryTableView: UIScrollViewDelegate {
         
         var opacity = 1 - (navigationBarOffset - contentOffset)/100
         opacity = max(0, min(opacity, 1))
-        let color = UIColor(white: (1 - opacity), alpha: 1)
+        opacity = opacity * opacity
+        let color = UIColor(white: (1 - opacity*opacity), alpha: 1)
         let shouldShowSticky = stickyOffset <= contentOffset
         
         self.updateNavigationBarPublisher.send((color, CGFloat(opacity)))
