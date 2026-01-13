@@ -16,7 +16,7 @@ final class ShopSummaryViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     private var isAddingMenuAvailable: Bool = true
-    private var navigationBarStyle: NavigationBarStyle = .orderTransparent
+    private var navigationBarStyle: NavigationBarStyle = .order(shouldHideTitle: true)
     
     private var cachedImages: [OrderImage] = []
     
@@ -207,9 +207,10 @@ extension ShopSummaryViewController {
         menuGroupTableView.shouldSetNavigationBarTransparentPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] isTransparent in
-                self?.navigationBarStyle = isTransparent ? .order : .orderTransparent
+                guard let self else { return }
+                self.navigationBarStyle = isTransparent ? .order(shouldHideTitle: false) : .order(shouldHideTitle: true)
                 UIView.animate(withDuration: 0.25) {
-                    self?.configureNavigationBar(style: isTransparent ? .order : .orderTransparent)
+                    self.configureNavigationBar(style: self.navigationBarStyle)
                 }
             }
             .store(in: &subscriptions)

@@ -12,70 +12,64 @@ extension UIViewController {
     enum NavigationBarStyle {
         case fill
         case empty
-        case order
-        case orderTransparent
-        case transparentBlack
+        case order(shouldHideTitle: Bool = false)
         case transparentWhite
+        
+        var backgroundColor: UIColor {
+            switch self {
+            case .fill:
+                return UIColor.appColor(.primary500)
+            case .empty:
+                return UIColor.appColor(.neutral0)
+            case .order(let shouldHideTitle):
+                return (shouldHideTitle ? UIColor.clear : UIColor.appColor(.newBackground))
+            case .transparentWhite:
+                return UIColor.clear
+            }
+        }
+        
+        var foregroundColor: UIColor {
+            switch self {
+            case .fill, .transparentWhite:
+                return UIColor.appColor(.neutral0)
+            case .empty:
+                return UIColor.appColor(.neutral800)
+            case .order(let shouldHideTitle):
+                return (shouldHideTitle ? UIColor.clear : UIColor.appColor(.neutral800))
+            }
+        }
+        
+        var font: UIFont {
+            return UIFont.appFont(.pretendardMedium, size: 18)
+        }
+        
+        var tintColor: UIColor {
+            switch self {
+            case .fill, .transparentWhite:
+                return UIColor.appColor(.neutral0)
+            case .empty:
+                return UIColor.appColor(.neutral800)
+            case .order(let shouldHideTitle):
+                return (shouldHideTitle ? UIColor.appColor(.neutral0) :  UIColor.appColor(.neutral800))
+            }
+        }
     }
-    
+        
     func configureNavigationBar(style: NavigationBarStyle) {
         let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = style.backgroundColor
+        appearance.titleTextAttributes = [
+            .foregroundColor: style.foregroundColor,
+            .font: style.font
+        ]
         
-        switch style {
-        case .fill:
-            appearance.backgroundColor = UIColor.appColor(.primary500)
-            appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.appColor(.neutral0),
-                .font: UIFont.appFont(.pretendardMedium, size: 18)
-            ]
-            navigationItem.backButtonTitle = ""
-        case .empty:
-            appearance.backgroundColor = UIColor.appColor(.neutral0)
-            appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.appColor(.neutral800),
-                .font: UIFont.appFont(.pretendardMedium, size: 18)
-            ]
-            navigationItem.backButtonTitle = ""
-        case .order:
-            appearance.backgroundColor = UIColor.appColor(.newBackground)
-            appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.appColor(.neutral800),
-                .font: UIFont.appFont(.pretendardMedium, size: 18)
-            ]
-            navigationItem.backButtonTitle = ""
-        case .orderTransparent:
-            appearance.backgroundColor = UIColor.clear
-            appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.clear,
-                .font: UIFont.appFont(.pretendardSemiBold, size: 18)
-            ]
-            navigationItem.backButtonTitle = ""
-        case .transparentBlack:
-            appearance.backgroundColor = UIColor.clear
-            appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.appColor(.neutral800),
-                .font: UIFont.appFont(.pretendardSemiBold, size: 18)
-            ]
-            navigationItem.backButtonTitle = ""
-        case .transparentWhite:
-            appearance.backgroundColor = UIColor.clear
-            appearance.titleTextAttributes = [
-                .foregroundColor: UIColor.appColor(.neutral0),
-                .font: UIFont.appFont(.pretendardSemiBold, size: 18)
-            ]
-            navigationItem.backButtonTitle = ""
-        }
-        appearance.shadowColor = nil
-        navigationController?.navigationBar.standardAppearance = appearance
-        navigationController?.navigationBar.scrollEdgeAppearance = appearance
-        navigationController?.navigationBar.compactAppearance = appearance
+        navigationItem.backButtonTitle = ""
         
-        switch style {
-        case .fill, .orderTransparent, .transparentWhite:
-            navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral0)
-        case .empty, .order, .transparentBlack:
-            navigationController?.navigationBar.tintColor = UIColor.appColor(.neutral800)
-        }
+        navigationItem.standardAppearance = appearance
+        navigationItem.scrollEdgeAppearance = appearance
+        navigationItem.compactAppearance = appearance
+        
+        navigationController?.navigationBar.tintColor = style.tintColor
     }
 }
