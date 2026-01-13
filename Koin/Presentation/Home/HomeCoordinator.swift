@@ -11,7 +11,7 @@ enum HomeRoute {
     case shop(categoryId: Int)
 }
 
-final class HomeCoordinator: Coordinator {
+final class HomeCoordinator: NSObject ,Coordinator, UINavigationControllerDelegate {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     weak var parentCoordinator: Coordinator?
@@ -21,12 +21,14 @@ final class HomeCoordinator: Coordinator {
     init(navigationController: UINavigationController, factory: HomeFactory) {
         self.navigationController = navigationController
         self.factory = factory
+        super.init()
     }
     
     func start() {
         let homeViewController = factory.makeHomeViewController()
         homeViewController.coordinator = self
         navigationController.setViewControllers([homeViewController], animated: false)
+        navigationController.delegate = self
     }
     
     func start(_ route: HomeRoute) {

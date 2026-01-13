@@ -11,6 +11,7 @@ final class ShopCoordinator: NSObject, Coordinator {
     var navigationController: UINavigationController
     var childCoordinators: [Coordinator] = []
     weak var parentCoordinator: Coordinator?
+    private weak var rootViewController: UIViewController?
     
     private let factory: ShopFactory
     
@@ -28,6 +29,7 @@ final class ShopCoordinator: NSObject, Coordinator {
     func pushShopViewController(categoryId: Int) {
         let shopViewController = factory.makeShopViewController(selectedId: categoryId)
         shopViewController.coordinator = self
+        self.rootViewController = shopViewController
         navigationController.pushViewController(shopViewController, animated: true)
     }
     
@@ -141,7 +143,7 @@ final class ShopCoordinator: NSObject, Coordinator {
     }
     
     func didFinish() {
-        navigationController.delegate = nil
+        navigationController.delegate = parentCoordinator as? UINavigationControllerDelegate
         parentCoordinator?.removeChild(self)
     }
 }
@@ -156,7 +158,7 @@ extension ShopCoordinator: UINavigationControllerDelegate {
             return
         }
         
-        if fromViewController is ShopViewController {
+        if fromViewController === rootViewController {
             didFinish()
             print("ShopViewController 제거됨")
         }
