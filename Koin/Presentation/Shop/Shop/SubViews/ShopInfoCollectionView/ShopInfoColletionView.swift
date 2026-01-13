@@ -95,8 +95,10 @@ final class ShopInfoCollectionView: UICollectionView {
         headerView?.putImage(data: data)
     }
     func updateEventShops(_ eventShops: [EventDto]) {
-        isEventShopEmpty = eventShops.isEmpty
-        headerView?.updateEventShops(eventShops)
+//        isEventShopEmpty = eventShops.isEmpty
+//        headerView?.updateEventShops(eventShops)
+        isEventShopEmpty = true
+        headerView?.updateEventShops([])
     }
     func stopAutoScroll() {
         headerView?.stopAutoScroll()
