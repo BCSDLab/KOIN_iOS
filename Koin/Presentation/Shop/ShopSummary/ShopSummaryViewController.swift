@@ -15,16 +15,8 @@ final class ShopSummaryViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    
-    
-    
     // MARK: - UI Components
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
-    
-    private let navigationBarLikeView = UIView().then {
-        $0.backgroundColor = .appColor(.newBackground)
-        $0.layer.opacity = 0
-    }
     
     private let menuGroupNameCollectionViewSticky = ShopSummaryMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.minimumInteritemSpacing = 4
@@ -74,7 +66,7 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        configureNavigationBar(style: navigationBarStyle)
+        configureNavigationBar()
         menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewBack))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
@@ -169,7 +161,7 @@ extension ShopSummaryViewController {
             viewController.title = "가게정보"
             self.navigationController?.pushViewController(viewController, animated: true)
         }
-            .store(in: &subscriptions)
+        .store(in: &subscriptions)
         
         tableHeaderView.phoneButtonTappedPublisher.sink { [weak self] in
             self?.makePhonecall()
@@ -177,14 +169,14 @@ extension ShopSummaryViewController {
             guard let self else { return }
             self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, self.viewModel.shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
-            }
-            .store(in: &subscriptions)
+        }
+        .store(in: &subscriptions)
         
         // MARK: - GroupNameCollectionView
         menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
             self?.tableHeaderView.update(contentOffset: contentOffset)
-            }
-            .store(in: &subscriptions)
+        }
+        .store(in: &subscriptions)
         
         menuGroupNameCollectionViewSticky.didSelectCellPublisher
             .sink { [weak self] indexPath in
@@ -198,21 +190,12 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         // MARK: - tableView
-        menuGroupTableView.shouldSetNavigationBarTransparentPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isTransparent in
-                self?.navigationBarStyle = isTransparent ? .order : .orderTransparent
-                UIView.animate(withDuration: 0.25) {
-                    self?.configureNavigationBar(style: isTransparent ? .order : .orderTransparent)
-                }
-            }
-            .store(in: &subscriptions)
-        
-        menuGroupTableView.navigationBarOpacityPublisher
-            .sink { [weak self] opacity in
-                self?.navigationBarLikeView.layer.opacity = opacity
-            }
-            .store(in: &subscriptions)
+        menuGroupTableView.updateNavigationBarPublisher
+            .sink { [weak self] navigationBarItemColor, opacity in
+                self?.viewModel.navigationBarItemColor = navigationBarItemColor
+                self?.viewModel.opacity = opacity
+                self?.configureNavigationBar()
+            }.store(in: &subscriptions)
         
         menuGroupTableView.shouldShowStickyPublisher
             .sink { [weak self] shouldShowSticky in
@@ -262,6 +245,19 @@ extension ShopSummaryViewController {
                 self.present(zoomedViewController, animated: true)
             }.store(in: &subscriptions)
     }
+    
+    private func configureNavigationBar() {
+        if let appearance = navigationController?.navigationBar.standardAppearance {
+            appearance.backgroundColor = UIColor.appColor(.newBackground).withAlphaComponent(viewModel.opacity)
+            appearance.titleTextAttributes.updateValue(viewModel.navigationBarItemColor.withAlphaComponent(viewModel.opacity), forKey: .foregroundColor)
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+            navigationController?.navigationBar.compactAppearance = appearance
+            navigationController?.navigationBar.compactScrollEdgeAppearance = appearance
+            navigationController?.navigationBar.tintColor = viewModel.navigationBarItemColor
+        }
+    }
+    
     
     // MARK: - shouldShowBottomSheet
     private func updateTableViewConstraint(shouldShowBottomSheet: Bool) {
@@ -321,13 +317,8 @@ extension ShopSummaryViewController {
         
         menuGroupNameCollectionViewSticky.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(navigationBarLikeView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(66)
-        }
-        
-        navigationBarLikeView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(UIApplication.topSafeAreaHeight() + (navigationController?.navigationBar.frame.height ?? 0))
         }
         
         popUpView.snp.makeConstraints {
@@ -336,7 +327,7 @@ extension ShopSummaryViewController {
     }
     
     private func setUpLayout() {
-        [menuGroupTableView, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
+        [menuGroupTableView, menuGroupNameCollectionViewSticky, popUpView].forEach {
             view.addSubview($0)
         }
     }

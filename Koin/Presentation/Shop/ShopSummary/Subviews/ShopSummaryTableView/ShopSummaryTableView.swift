@@ -22,8 +22,7 @@ final class ShopSummaryTableView: UITableView, UITableViewDelegate, UITableViewD
     private var navigationBarHeight: CGFloat = 0
     
     let didTapCellPublisher = PassthroughSubject<Int, Never>()
-    let shouldSetNavigationBarTransparentPublisher = PassthroughSubject<Bool, Never>()
-    let navigationBarOpacityPublisher = PassthroughSubject<Float, Never>()
+    let updateNavigationBarPublisher = PassthroughSubject<(UIColor, CGFloat), Never>()
     let shouldShowStickyPublisher = PassthroughSubject<Bool, Never>()
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
     let didEndScrollPublisher = PassthroughSubject<Void, Never>()
@@ -111,16 +110,16 @@ extension ShopSummaryTableView: UIScrollViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         
-        let navigationBarOffset = UIScreen.main.bounds.width/1.21 - (self.navigationBarHeight + UIApplication.topSafeAreaHeight())
+        let navigationBarOffset = frame.width/1.21 - (self.navigationBarHeight + UIApplication.topSafeAreaHeight())
         let stickyOffset: CGFloat = (tableHeaderView?.frame.height ?? 0) - (self.navigationBarHeight + UIApplication.topSafeAreaHeight() + 66)
         let contentOffset = self.contentOffset.y
         
-        let opacity = 1 - (navigationBarOffset - contentOffset)/100
-        let shouldSetNavigationBarTransparent = navigationBarOffset < contentOffset
+        var opacity = 1 - (navigationBarOffset - contentOffset)/100
+        opacity = max(0, min(opacity, 1))
+        let color = UIColor(white: (1 - opacity), alpha: 1)
         let shouldShowSticky = stickyOffset <= contentOffset
         
-        self.shouldSetNavigationBarTransparentPublisher.send(shouldSetNavigationBarTransparent)
-        self.navigationBarOpacityPublisher.send(Float(opacity))
+        self.updateNavigationBarPublisher.send((color, CGFloat(opacity)))
         self.shouldShowStickyPublisher.send(shouldShowSticky)
         self.shouldSetContentInsetPublisher.send(shouldShowSticky)
     }
