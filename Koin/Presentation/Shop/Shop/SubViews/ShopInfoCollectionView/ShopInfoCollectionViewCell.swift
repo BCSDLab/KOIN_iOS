@@ -77,6 +77,11 @@ final class ShopInfoCollectionViewCell: UICollectionViewCell {
         ratingLabel.text = "\(info.averageRate)"
         reviewCountLabel.text = " ( 리뷰 \(info.reviewCount)개 )"
     }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        shopImageView.image = nil
+    }
 }
 
 // MARK: - UI Functions
