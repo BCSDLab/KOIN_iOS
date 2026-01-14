@@ -175,7 +175,7 @@ final class DiningViewController: UIViewController {
         viewDidAppeared = true
 
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
-            if let self, self.isOnScreen {
+            if let self, self.navigationController?.topViewController == self {
                 SwiftRater.check()
             }
         }
