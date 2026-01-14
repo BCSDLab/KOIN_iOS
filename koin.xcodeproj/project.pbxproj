@@ -50,6 +50,7 @@
 		7C4D5A5D2F0163BA00B40128 /* DIContainer+Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */; };
 		7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */; };
 		7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */; };
+		7C603D092F10E8D100AF2EF9 /* UIViewController+isOnScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C603D082F10E8D100AF2EF9 /* UIViewController+isOnScreen.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
@@ -783,6 +784,7 @@
 		7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Bus.swift"; sourceTree = "<group>"; };
 		7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoHeaderView.swift; sourceTree = "<group>"; };
 		7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoFooterView.swift; sourceTree = "<group>"; };
+		7C603D082F10E8D100AF2EF9 /* UIViewController+isOnScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+isOnScreen.swift"; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
@@ -3318,6 +3320,7 @@
 			isa = PBXGroup;
 			children = (
 				D2FFA96D2D5F3EB800EF8E56 /* UIViewController+Navigate.swift */,
+				7C603D082F10E8D100AF2EF9 /* UIViewController+isOnScreen.swift */,
 				D224216F2C8A3E5B00E8B480 /* UITableView+.swift */,
 				D27DD0722BA608310081FD36 /* UICollectionViewCell+.swift */,
 				83DD0DD12C568F6100278ABD /* UITableViewHeaderFooterView.swift */,
@@ -4837,6 +4840,7 @@
 				7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */,
 				7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */,
 				B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */,
+				7C603D092F10E8D100AF2EF9 /* UIViewController+isOnScreen.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
@@ -5127,7 +5131,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = koin/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "코인(stage)";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "이 앱은 복덕방 기능을 사용하기 위해 위치 정보가 필요합니다.";
@@ -5164,7 +5167,6 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = koin/Info.plist;
-				INFOPLIST_KEY_CFBundleDisplayName = "코인(stage)";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "이 앱은 복덕방 기능을 사용하기 위해 위치 정보가 필요합니다.";

@@ -156,6 +156,7 @@ PODS:
   - SocketRocket (0.7.1)
   - StompClientLib (1.4.1):
     - SocketRocket
+  - SwiftRater (2.2.2)
   - SwiftSoup (2.7.6)
   - SwiftStomp (1.2.1):
     - ReachabilitySwift (~> 5.2.1)
@@ -179,6 +180,7 @@ DEPENDENCIES:
   - RxSwift (~> 6.6)
   - SnapKit
   - StompClientLib
+  - SwiftRater
   - SwiftSoup
   - SwiftStomp
   - Then
@@ -215,6 +217,7 @@ SPEC REPOS:
     - SnapKit
     - SocketRocket
     - StompClientLib
+    - SwiftRater
     - SwiftSoup
     - SwiftStomp
     - Then
@@ -250,10 +253,11 @@ SPEC CHECKSUMS:
   SnapKit: d612e99e678a2d3b95bf60b0705ed0a35c03484a
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
   StompClientLib: ac40390e9660c574675f1c933bec81c8e2811a4f
+  SwiftRater: 891481e181a04d94be88867874fae3c9a08505b2
   SwiftSoup: 9ec2526c76ebc3fe5d3157c82b40b45a27eeb82d
   SwiftStomp: 13fed4c82f587fb4b59a98fba1b05f205a0f6158
   Then: 844265ae87834bbe1147d91d5d41a404da2ec27d
 
-PODFILE CHECKSUM: 584014f145a055e811d97598b766e4aeb59ad38d
+PODFILE CHECKSUM: 3e0309843e743000ed2563b447ec83d40a18034d
 
 COCOAPODS: 1.16.2

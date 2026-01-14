@@ -8,6 +8,7 @@ import Firebase
 import KakaoSDKCommon
 import UIKit
 import UserNotifications
+import SwiftRater
 
 
 @main
@@ -73,6 +74,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
            let rootViewController = window?.rootViewController as? UINavigationController {
             NotificationHandler.shared.handleNotificationData(userInfo: notification, rootViewController: rootViewController)
         }
+        
+        SwiftRater.daysUntilPrompt = 7
+        SwiftRater.significantUsesUntilPrompt = 10
+        //SwiftRater.debugMode = true
+        SwiftRater.appLaunched()
         
         return true
     }
