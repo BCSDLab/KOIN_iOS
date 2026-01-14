@@ -210,7 +210,7 @@ final class ShopViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .order())
+        configureNavigationBar(style: .order)
         self.didTapBack = false
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
@@ -303,8 +303,10 @@ final class ShopViewController: UIViewController {
                                                  logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                                                  getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                                                  shopId: shopId,
-                                                 shopName: shopName)
-            let viewController = ShopSummaryViewController(viewModel: viewModel, backCategoryName: previousPage)
+                                                 shopName: shopName,
+                                                 backCategoryName: previousPage
+            )
+            let viewController = ShopSummaryViewController(viewModel: viewModel)
             viewController.title = shopName
             let currentPage = shopName
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))

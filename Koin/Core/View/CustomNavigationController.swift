@@ -22,4 +22,8 @@ class CustomNavigationController: UINavigationController, UIGestureRecognizerDel
             interactivePopGestureRecognizer.isEnabled = false
         }
     }
+    
+    override var childForStatusBarStyle: UIViewController? {
+        return topViewController
+    }
 }

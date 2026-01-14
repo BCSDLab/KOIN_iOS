@@ -12,7 +12,7 @@ extension UIViewController {
     enum NavigationBarStyle {
         case fill
         case empty
-        case order(shouldHideTitle: Bool = false)
+        case order
         case transparentWhite
         
         var backgroundColor: UIColor {
@@ -21,8 +21,8 @@ extension UIViewController {
                 return UIColor.appColor(.primary500)
             case .empty:
                 return UIColor.appColor(.neutral0)
-            case .order(let shouldHideTitle):
-                return (shouldHideTitle ? UIColor.clear : UIColor.appColor(.newBackground))
+            case .order:
+                return UIColor.appColor(.newBackground)
             case .transparentWhite:
                 return UIColor.clear
             }
@@ -32,10 +32,8 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty:
+            case .empty, .order:
                 return UIColor.appColor(.neutral800)
-            case .order(let shouldHideTitle):
-                return (shouldHideTitle ? UIColor.clear : UIColor.appColor(.neutral800))
             }
         }
         
@@ -47,10 +45,8 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty:
+            case .empty, .order:
                 return UIColor.appColor(.neutral800)
-            case .order(let shouldHideTitle):
-                return (shouldHideTitle ? UIColor.appColor(.neutral0) :  UIColor.appColor(.neutral800))
             }
         }
     }

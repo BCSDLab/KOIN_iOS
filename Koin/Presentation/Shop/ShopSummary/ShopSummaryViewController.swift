@@ -15,21 +15,10 @@ final class ShopSummaryViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    private var isAddingMenuAvailable: Bool = true
-    private var navigationBarStyle: NavigationBarStyle = .order(shouldHideTitle: true)
-    
-    private var cachedImages: [OrderImage] = []
-    
-    private var didTapBack = false
-    private let backCategoryName: String?
-    
     // MARK: - UI Components
+    private let gradientView = UIView()
+
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
-    
-    private let navigationBarLikeView = UIView().then {
-        $0.backgroundColor = .appColor(.newBackground)
-        $0.layer.opacity = 0
-    }
     
     private let menuGroupNameCollectionViewSticky = ShopSummaryMenuGroupCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.minimumInteritemSpacing = 4
@@ -60,9 +49,8 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(viewModel: ShopSummaryViewModel, backCategoryName: String? = nil) {
+    init(viewModel: ShopSummaryViewModel) {
         self.viewModel = viewModel
-        self.backCategoryName = backCategoryName
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -80,8 +68,7 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        configureNavigationBar(style: navigationBarStyle)
-        menuGroupTableView.configure(navigationBarHeight: navigationController?.navigationBar.frame.height ?? 0)
+        configureNavigationBar()
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewBack))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
@@ -90,9 +77,9 @@ final class ShopSummaryViewController: UIViewController {
     //FIXME: - API가 로딩되기전에 뒤로가기시 Value가 알 수 없음으로 찍힘
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard !didTapBack, (self.isMovingFromParent || self.isBeingDismissed) else { return }
+        guard self.isMovingFromParent || self.isBeingDismissed else { return }
         let shopName = self.viewModel.shopName
-        let currentPage = self.backCategoryName
+        let currentPage = self.viewModel.backCategoryName
         let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
         let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
         
@@ -100,6 +87,27 @@ final class ShopSummaryViewController: UIViewController {
         if currentPage != nil {
             inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, eventCategory, shopName, nil, currentPage, nil, .shopDetailViewBack))
         }
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return (viewModel.opacity == 1 ? .darkContent : .lightContent)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        let gradient = CAGradientLayer().then {
+            $0.colors = [
+                UIColor.black.withAlphaComponent(0.2).cgColor,
+                UIColor.black.withAlphaComponent(0.03).cgColor,
+                UIColor.black.withAlphaComponent(0.0).cgColor
+            ]
+            $0.locations = [0.0, 0.8, 1.0]
+            $0.startPoint = CGPoint(x: 0.0, y: 0.0)
+            $0.endPoint = CGPoint(x: 0.0, y: 1.0)
+            $0.frame = gradientView.bounds
+        }
+        gradientView.layer.addSublayer(gradient)
+        menuGroupTableView.configure(safeAreaHeight: gradientView.frame.height)
     }
 }
 
@@ -112,7 +120,7 @@ extension ShopSummaryViewController {
             guard let self else { return }
             switch output {
             case let .update1(images, name, rating, reviewCount):
-                self.cachedImages = images
+                self.viewModel.cachedImages = images
                 self.tableHeaderView.configure1(
                     images: images,
                     name: name,
@@ -175,7 +183,7 @@ extension ShopSummaryViewController {
             viewController.title = "가게정보"
             self.navigationController?.pushViewController(viewController, animated: true)
         }
-            .store(in: &subscriptions)
+        .store(in: &subscriptions)
         
         tableHeaderView.phoneButtonTappedPublisher.sink { [weak self] in
             self?.makePhonecall()
@@ -183,14 +191,14 @@ extension ShopSummaryViewController {
             guard let self else { return }
             self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, self.viewModel.shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
-            }
-            .store(in: &subscriptions)
+        }
+        .store(in: &subscriptions)
         
         // MARK: - GroupNameCollectionView
         menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
             self?.tableHeaderView.update(contentOffset: contentOffset)
-            }
-            .store(in: &subscriptions)
+        }
+        .store(in: &subscriptions)
         
         menuGroupNameCollectionViewSticky.didSelectCellPublisher
             .sink { [weak self] indexPath in
@@ -204,22 +212,12 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         // MARK: - tableView
-        menuGroupTableView.shouldSetNavigationBarTransparentPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] isTransparent in
-                guard let self else { return }
-                self.navigationBarStyle = isTransparent ? .order(shouldHideTitle: false) : .order(shouldHideTitle: true)
-                UIView.animate(withDuration: 0.25) {
-                    self.configureNavigationBar(style: self.navigationBarStyle)
-                }
-            }
-            .store(in: &subscriptions)
-        
-        menuGroupTableView.navigationBarOpacityPublisher
-            .sink { [weak self] opacity in
-                self?.navigationBarLikeView.layer.opacity = opacity
-            }
-            .store(in: &subscriptions)
+        menuGroupTableView.updateNavigationBarPublisher
+            .sink { [weak self] navigationBarItemColor, opacity in
+                self?.viewModel.navigationBarItemColor = navigationBarItemColor
+                self?.viewModel.opacity = opacity
+                self?.configureNavigationBar()
+            }.store(in: &subscriptions)
         
         menuGroupTableView.shouldShowStickyPublisher
             .sink { [weak self] shouldShowSticky in
@@ -260,15 +258,29 @@ extension ShopSummaryViewController {
         tableHeaderView.didTapThumbnailPublisher
             .sink { [weak self] indexPath in
                 guard let self,
-                      0 < self.cachedImages.count,
-                      self.cachedImages.first?.imageUrl != nil else { return }
+                      0 < self.viewModel.cachedImages.count,
+                      self.viewModel.cachedImages.first?.imageUrl != nil else { return }
                 
                 let zoomedViewController = ZoomedImageViewControllerB()
-                zoomedViewController.configure(urls: cachedImages.map { return $0.imageUrl ?? "" },
+                zoomedViewController.configure(urls: viewModel.cachedImages.map { return $0.imageUrl ?? "" },
                                                initialIndexPath: indexPath)
                 self.present(zoomedViewController, animated: true)
             }.store(in: &subscriptions)
     }
+    
+    private func configureNavigationBar() {
+        setNeedsStatusBarAppearanceUpdate()
+        if let appearance = navigationController?.navigationBar.standardAppearance {
+            appearance.backgroundColor = UIColor.appColor(.newBackground).withAlphaComponent(viewModel.opacity)
+            appearance.titleTextAttributes.updateValue(viewModel.navigationBarItemColor.withAlphaComponent(viewModel.opacity), forKey: .foregroundColor)
+            navigationController?.navigationBar.standardAppearance = appearance
+            navigationController?.navigationBar.scrollEdgeAppearance = appearance
+            navigationController?.navigationBar.compactAppearance = appearance
+            navigationController?.navigationBar.compactScrollEdgeAppearance = appearance
+            navigationController?.navigationBar.tintColor = viewModel.navigationBarItemColor
+        }
+    }
+    
     
     // MARK: - shouldShowBottomSheet
     private func updateTableViewConstraint(shouldShowBottomSheet: Bool) {
@@ -320,6 +332,11 @@ extension ShopSummaryViewController {
 extension ShopSummaryViewController {
     // MARK: - ConfigureView
     private func setUpConstraints() {
+        gradientView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
         menuGroupTableView.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
@@ -328,13 +345,8 @@ extension ShopSummaryViewController {
         
         menuGroupNameCollectionViewSticky.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(navigationBarLikeView.snp.bottom)
+            $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.height.equalTo(66)
-        }
-        
-        navigationBarLikeView.snp.makeConstraints {
-            $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(UIApplication.topSafeAreaHeight() + (navigationController?.navigationBar.frame.height ?? 0))
         }
         
         popUpView.snp.makeConstraints {
@@ -343,7 +355,7 @@ extension ShopSummaryViewController {
     }
     
     private func setUpLayout() {
-        [menuGroupTableView, menuGroupNameCollectionViewSticky, navigationBarLikeView, popUpView].forEach {
+        [menuGroupTableView, gradientView, menuGroupNameCollectionViewSticky, popUpView].forEach {
             view.addSubview($0)
         }
     }

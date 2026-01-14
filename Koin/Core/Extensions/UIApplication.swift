@@ -37,14 +37,10 @@ extension UIApplication {
     }
     
     static func topSafeAreaHeight() -> CGFloat {
-        let window = UIApplication.shared
-                    .connectedScenes
-                    .compactMap { $0 as? UIWindowScene }
-                    .flatMap { $0.windows }
-                    .first { $0.isKeyWindow }
-                guard let safeAreaTop =  window?.safeAreaInsets.top else {
-                    return 0
-                }
-                return safeAreaTop
+        let height: CGFloat
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        let statusBarManager = windowScene?.statusBarManager
+        height = statusBarManager?.statusBarFrame.height ?? 0        
+        return height
     }
 }
