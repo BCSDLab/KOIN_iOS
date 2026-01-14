@@ -270,17 +270,15 @@ extension ShopSummaryViewController {
     
     private func configureNavigationBar() {
         setNeedsStatusBarAppearanceUpdate()
-        if let appearance = navigationController?.navigationBar.standardAppearance {
-            appearance.backgroundColor = UIColor.appColor(.newBackground).withAlphaComponent(viewModel.opacity)
-            appearance.titleTextAttributes.updateValue(viewModel.navigationBarItemColor.withAlphaComponent(viewModel.opacity), forKey: .foregroundColor)
-            navigationController?.navigationBar.standardAppearance = appearance
-            navigationController?.navigationBar.scrollEdgeAppearance = appearance
-            navigationController?.navigationBar.compactAppearance = appearance
-            navigationController?.navigationBar.compactScrollEdgeAppearance = appearance
-            navigationController?.navigationBar.tintColor = viewModel.navigationBarItemColor
-        }
+        let appearance = UINavigationBarAppearance()
+        appearance.configureWithTransparentBackground()
+        appearance.backgroundColor = UIColor.appColor(.newBackground).withAlphaComponent(viewModel.opacity)
+        appearance.titleTextAttributes.updateValue(viewModel.navigationBarItemColor.withAlphaComponent(viewModel.opacity), forKey: .foregroundColor)
+        navigationItem.standardAppearance = appearance
+        navigationItem.scrollEdgeAppearance = appearance
+        navigationItem.compactAppearance = appearance
+        navigationController?.navigationBar.tintColor = viewModel.navigationBarItemColor
     }
-    
     
     // MARK: - shouldShowBottomSheet
     private func updateTableViewConstraint(shouldShowBottomSheet: Bool) {
@@ -368,5 +366,6 @@ extension ShopSummaryViewController {
         setTableHeaderView()
         setUpLayout()
         setUpConstraints()
+        navigationItem.backButtonTitle = ""
     }
 }

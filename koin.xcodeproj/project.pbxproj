@@ -5127,6 +5127,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = koin/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "코인(stage)";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "이 앱은 복덕방 기능을 사용하기 위해 위치 정보가 필요합니다.";
@@ -5163,6 +5164,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = koin/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "코인(stage)";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "이 앱은 복덕방 기능을 사용하기 위해 위치 정보가 필요합니다.";
