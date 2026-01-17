@@ -73,7 +73,7 @@ final class LostItemListViewController: UIViewController {
     
     private func bind() {
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
-            
+            // 화면 전환
         }.store(in: &subscriptions)
     }
 }
@@ -101,7 +101,9 @@ extension LostItemListViewController {
     }
     
     @objc private func searchButtonTapped() {
-        
+        let viewModel = LostItemSearchViewModel()
+        let viewController = LostItemSearchViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
