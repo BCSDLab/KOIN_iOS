@@ -605,7 +605,8 @@ extension HomeViewController {
     
     // navigate 함수
     private func navigateTolostItemList() {
-        let viewController = LostItemListViewController()
+        let viewModel = LostItemListViewModel()
+        let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     

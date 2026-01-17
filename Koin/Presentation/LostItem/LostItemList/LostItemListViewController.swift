@@ -6,8 +6,13 @@
 //
 
 import UIKit
+import Combine
 
 final class LostItemListViewController: UIViewController {
+    
+    // MARK: - Properties
+    private let viewModel: LostItemListViewModel
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     private let filterButton = UIButton().then {
@@ -47,6 +52,13 @@ final class LostItemListViewController: UIViewController {
     }
     
     // MARK: - Initializer
+    init(viewModel: LostItemListViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -54,18 +66,40 @@ final class LostItemListViewController: UIViewController {
         configureNavigationBar(style: .empty)
         configureRightBarButton()
         configureView()
+        setAddTarget()
         title = "분실물"
+        bind()
+    }
+    
+    private func bind() {
+        lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
+            
+        }.store(in: &subscriptions)
     }
 }
 
 extension LostItemListViewController {
     
+    private func setAddTarget() {
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+    }
+    
     private func configureRightBarButton() {
-        //let searchButton = UIBarButtonItem(image: .appImage(asset: .search), style: <#T##UIBarButtonItem.Style#>, target: <#T##Any?#>, action: <#T##Selector?#>)
         let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
         navigationItem.rightBarButtonItem = rightBarButton
-        
     }
+    
+    @objc private func filterButtonTapped() {
+        let filterViewController = LostItemListFilterViewController(
+            filterState: self.viewModel.filterState,
+            onResetFilterButtonTapped: {},
+            onApplyFilterButtonTapped: {_ in}
+        )
+        let bottomSheetViewController = BottomSheetViewController(contentViewController: filterViewController, defaultHeight: 637, cornerRadius: 32)
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        navigationController?.present(bottomSheetViewController, animated: true)
+    }
+    
     @objc private func searchButtonTapped() {
         
     }

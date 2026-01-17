@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+final class LostItemListViewModel {
+    
+    // MARK: - Properties
+    var filterState = FetchLostItemRequest()
+}
