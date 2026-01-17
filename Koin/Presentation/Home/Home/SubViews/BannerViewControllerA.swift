@@ -132,7 +132,7 @@ extension BannerViewControllerA {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(closeButton.snp.bottom).offset(13)
             $0.horizontalEdges.equalToSuperview()
-            $0.bottom.equalToSuperview().offset(-48)
+            $0.height.equalTo(293)
         }
         countLabel.snp.makeConstraints {
             $0.top.equalTo(collectionView.snp.top).offset(8)
