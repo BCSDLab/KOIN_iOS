@@ -85,6 +85,8 @@ final class HomeViewController: UIViewController {
         $0.configuration = configuration
     }
     
+    private let lostItemListView = LostItemListView()
+    
     private let orderLabel = UILabel().then {
         $0.text = "주변 상점"
         $0.textColor = UIColor.appColor(.primary500)
@@ -310,6 +312,10 @@ final class HomeViewController: UIViewController {
         
         bannerViewControllerB.bannerTapPublisher.sink { [weak self] banner in
             self?.handleBannerTap(banner)
+        }.store(in: &subscriptions)
+        
+        lostItemListView.lostItemListTappedPublisher.sink { [weak self] in
+            self?.navigateTolostItemList()
         }.store(in: &subscriptions)
     }
 }
@@ -598,6 +604,11 @@ extension HomeViewController {
     }
     
     // navigate 함수
+    private func navigateTolostItemList() {
+        let viewController = LostItemListViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     private func navigateToNoticeList() {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
@@ -707,7 +718,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, orderLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, lostItemListView, orderLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -792,8 +803,13 @@ extension HomeViewController {
             make.horizontalEdges.equalTo(scrollView)
         }
         
+        lostItemListView.snp.makeConstraints {
+            $0.top.equalTo(clubView.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(scrollView)
+        }
+        
         orderLabel.snp.makeConstraints { make in
-            make.top.equalTo(clubView.snp.bottom).offset(30)
+            make.top.equalTo(lostItemListView.snp.bottom).offset(30)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)

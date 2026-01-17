@@ -94,6 +94,8 @@ final class ServiceSelectViewController: UIViewController {
                 self.pushLand()
             case .business:
                 self.presentBusiness()
+            case .lostItem:
+                self.pushLostItem()
             }
         }.store(in: &subscriptions)
     }
@@ -147,6 +149,11 @@ extension ServiceSelectViewController {
 }
 
 extension ServiceSelectViewController {
+    
+    private func pushLostItem() {
+        let viewController = LostItemListViewController()
+        navigationController?.pushViewController(viewController, animated: true)
+    }
     
     private func pushLogin() {
         let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
