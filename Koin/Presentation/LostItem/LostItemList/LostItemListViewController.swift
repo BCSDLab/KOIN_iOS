@@ -82,6 +82,7 @@ extension LostItemListViewController {
     
     private func setAddTarget() {
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
     }
     
     private func configureRightBarButton() {
@@ -98,6 +99,31 @@ extension LostItemListViewController {
         let bottomSheetViewController = BottomSheetViewController(contentViewController: filterViewController, defaultHeight: 637, cornerRadius: 32)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         navigationController?.present(bottomSheetViewController, animated: true)
+    }
+    
+    @objc private func writeButtonTapped() {
+        if viewModel.isLoggedIn {
+            let onFoundButtonTapped = { [weak self] in
+                self?.dismissView()
+                let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }
+            let onLostButtonTapped = { [weak self] in
+                self?.dismissView()
+                let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
+                self?.navigationController?.pushViewController(viewController, animated: true)
+            }
+            let postOptionViewController = LostItemPostOptionController(
+                onFoundButtonTapped: onFoundButtonTapped,
+                onLostButtonTapped: onLostButtonTapped
+            )
+            let bottomSheetViewController = BottomSheetViewController(contentViewController: postOptionViewController, defaultHeight: 225, cornerRadius: 32)
+            bottomSheetViewController.modalTransitionStyle = .crossDissolve
+            navigationController?.present(bottomSheetViewController, animated: true)
+        }
+        else {
+            
+        }
     }
     
     @objc private func searchButtonTapped() {

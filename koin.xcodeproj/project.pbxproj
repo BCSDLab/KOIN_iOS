@@ -25,6 +25,7 @@
 		7C372F0C2F1C231100149729 /* LostItemSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F0B2F1C231100149729 /* LostItemSearchViewModel.swift */; };
 		7C372F102F1C243F00149729 /* RecentSearchedLostItemTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F0F2F1C243F00149729 /* RecentSearchedLostItemTableView.swift */; };
 		7C372F122F1C244300149729 /* RecentSearchedLostItemTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F112F1C244300149729 /* RecentSearchedLostItemTableViewCell.swift */; };
+		7C372F142F1CC79C00149729 /* LostItemPostOptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F132F1CC79C00149729 /* LostItemPostOptionController.swift */; };
 		7C4D5A3C2F01638800B40128 /* BusSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A122F01638800B40128 /* BusSearchViewController.swift */; };
 		7C4D5A3D2F01638800B40128 /* BusSearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A1D2F01638800B40128 /* BusSearchResultViewModel.swift */; };
 		7C4D5A3E2F01638800B40128 /* OneBusTimetableTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A362F01638800B40128 /* OneBusTimetableTableViewFooter.swift */; };
@@ -780,6 +781,7 @@
 		7C372F0B2F1C231100149729 /* LostItemSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemSearchViewModel.swift; sourceTree = "<group>"; };
 		7C372F0F2F1C243F00149729 /* RecentSearchedLostItemTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchedLostItemTableView.swift; sourceTree = "<group>"; };
 		7C372F112F1C244300149729 /* RecentSearchedLostItemTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchedLostItemTableViewCell.swift; sourceTree = "<group>"; };
+		7C372F132F1CC79C00149729 /* LostItemPostOptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemPostOptionController.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
 		7C4D5A0F2F01638800B40128 /* BusAreaSelectedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1789,6 +1791,7 @@
 				7CA63A312F1B1AFA00226F86 /* LostItemListTableView */,
 				7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */,
 				7C372EDC2F1B8DC900149729 /* LostItemListFilterButton.swift */,
+				7C372F132F1CC79C00149729 /* LostItemPostOptionController.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -4747,6 +4750,7 @@
 				7CED91A32EF2D1F900457128 /* TimetableHeaderView.swift in Sources */,
 				7CED91A42EF2D1F900457128 /* ModifyFrameModalViewController.swift in Sources */,
 				7CED91A62EF2D1F900457128 /* PolicyContentCollectionView.swift in Sources */,
+				7C372F142F1CC79C00149729 /* LostItemPostOptionController.swift in Sources */,
 				7CED91A72EF2D1F900457128 /* ReportLostItemViewController.swift in Sources */,
 				7C4D5A3C2F01638800B40128 /* BusSearchViewController.swift in Sources */,
 				7C4D5A3D2F01638800B40128 /* BusSearchResultViewModel.swift in Sources */,

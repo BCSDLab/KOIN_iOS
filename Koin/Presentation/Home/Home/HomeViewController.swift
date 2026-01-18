@@ -182,6 +182,7 @@ final class HomeViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .mainShopCategories))
         inputSubject.send(.categorySelected(getDiningPlace()))
         navigationController?.setNavigationBarHidden(true, animated: animated)
+        lostItemListView.configure(lostItemStats: LostItemStats(foundCount: 0, notFoundCount: 123))
     }
     
     override func viewWillDisappear(_ animated: Bool) {

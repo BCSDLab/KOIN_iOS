@@ -11,4 +11,6 @@ final class LostItemListViewModel {
     
     // MARK: - Properties
     var filterState = FetchLostItemRequest()
+    
+    var isLoggedIn = true
 }
