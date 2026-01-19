@@ -80,6 +80,10 @@ final class LostItemDataViewController: UIViewController {
         lostItemDataTableView.listButtonTappedPublisher.sink { [weak self] in
             self?.popToLostItemListViewController()
         }.store(in: &subscription)
+        
+        lostItemDataTableView.deleteButtonTappedPublisher.sink { [weak self] in
+            self?.showDeleteModal()
+        }.store(in: &subscription)
     }
 }
 
@@ -105,6 +109,16 @@ extension LostItemDataViewController {
             let lostItemListViewController = LostItemListViewController(viewModel: viewModel)
             navigationController?.setViewControllers([homeViewController, lostItemListViewController], animated: true)
         }
+    }
+    
+    private func showDeleteModal() {
+        let onRightButtonTapped: ()->Void = { [weak self] in
+            // TODO: ViewModel 호출
+        }
+        let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
+        modalViewController.modalPresentationStyle = .overFullScreen
+        modalViewController.modalTransitionStyle = .crossDissolve
+        navigationController?.present(modalViewController, animated: true)
     }
 }
 
