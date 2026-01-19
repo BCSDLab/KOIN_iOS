@@ -97,7 +97,9 @@ final class LostItemSearchViewController: UIViewController {
         }.store(in: &subscriptions)
         
         searchedLostItemTableView.cellTappedPublisher.sink { [weak self] id in
-            // 화면 전환
+            let viewModel = LostItemDataViewModel()
+            let viewController = LostItemDataViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
     }
 }
