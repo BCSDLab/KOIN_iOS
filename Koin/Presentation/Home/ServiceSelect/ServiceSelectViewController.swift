@@ -151,7 +151,10 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func pushLostItem() {
-        let viewModel = LostItemListViewModel()
+        let userService = DefaultUserService()
+        let userRepository = DefaultUserRepository(service: userService)
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase)
         let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

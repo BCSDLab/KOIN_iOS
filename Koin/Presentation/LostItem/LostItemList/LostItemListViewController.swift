@@ -11,6 +11,7 @@ import Combine
 final class LostItemListViewController: UIViewController {
     
     // MARK: - Properties
+    private let inputSubject = PassthroughSubject<LostItemListViewModel.Input, Never>()
     private let viewModel: LostItemListViewModel
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -33,6 +34,7 @@ final class LostItemListViewController: UIViewController {
         $0.backgroundColor = .appColor(.info200)
     }
     private let lostItemListTableView = LostItemListTableView()
+    
     private let writeButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.image = .appImage(asset: .pencil)?.withTintColor(.appColor(.neutral600), renderingMode: .alwaysTemplate).resize(to: CGSize(width: 24, height: 24))
@@ -51,6 +53,11 @@ final class LostItemListViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
+    private let postLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+        $0.modalPresentationStyle = .overFullScreen
+        $0.modalTransitionStyle = .crossDissolve
+    }
+    
     // MARK: - Initializer
     init(viewModel: LostItemListViewModel) {
         self.viewModel = viewModel
@@ -63,7 +70,6 @@ final class LostItemListViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        configureNavigationBar(style: .empty)
         configureRightBarButton()
         configureView()
         setAddTarget()
@@ -71,12 +77,69 @@ final class LostItemListViewController: UIViewController {
         bind()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
+    }
+    
     private func bind() {
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+            guard let self else { return }
+            switch output {
+            case .presentPostType:
+                self.presentPostTypeModal()
+            case .showLogin:
+                self.showLogin()
+            }
+        }.store(in: &subscriptions)
+        
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
             let viewModel = LostItemDataViewModel()
             let viewController = LostItemDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+    }
+}
+
+extension LostItemListViewController {
+    
+    private func showLogin() {
+        let onRightButtonTapped = { [weak self] in
+            let userService = DefaultUserService()
+            let logAnalyticsService = GA4AnalyticsService()
+            let userRepository = DefaultUserRepository(service: userService)
+            let analyticsRepository = GA4AnalyticsRepository(service: logAnalyticsService)
+            let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
+            let loginViewModel = LoginViewModel(loginUseCase: loginUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+            let loginViewController = LoginViewController(viewModel: loginViewModel)
+            self?.navigationController?.pushViewController(loginViewController, animated: true)
+        }
+        let loginModalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 글을 작성해주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+            $0.modalPresentationStyle = .overFullScreen
+            $0.modalTransitionStyle = .crossDissolve
+        }
+        navigationController?.present(loginModalViewController, animated: true)
+    }
+    
+    private func presentPostTypeModal() {
+        let onFoundButtonTapped = { [weak self] in
+            self?.dismissView()
+            let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }
+        let onLostButtonTapped = { [weak self] in
+            self?.dismissView()
+            let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }
+        let postOptionViewController = LostItemPostOptionController(
+            onFoundButtonTapped: onFoundButtonTapped,
+            onLostButtonTapped: onLostButtonTapped
+        )
+        let bottomSheetViewController = BottomSheetViewController(contentViewController: postOptionViewController, defaultHeight: 225, cornerRadius: 32)
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        navigationController?.present(bottomSheetViewController, animated: true)
     }
 }
 
@@ -104,28 +167,7 @@ extension LostItemListViewController {
     }
     
     @objc private func writeButtonTapped() {
-        if viewModel.isLoggedIn {
-            let onFoundButtonTapped = { [weak self] in
-                self?.dismissView()
-                let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-                self?.navigationController?.pushViewController(viewController, animated: true)
-            }
-            let onLostButtonTapped = { [weak self] in
-                self?.dismissView()
-                let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-                self?.navigationController?.pushViewController(viewController, animated: true)
-            }
-            let postOptionViewController = LostItemPostOptionController(
-                onFoundButtonTapped: onFoundButtonTapped,
-                onLostButtonTapped: onLostButtonTapped
-            )
-            let bottomSheetViewController = BottomSheetViewController(contentViewController: postOptionViewController, defaultHeight: 225, cornerRadius: 32)
-            bottomSheetViewController.modalTransitionStyle = .crossDissolve
-            navigationController?.present(bottomSheetViewController, animated: true)
-        }
-        else {
-            
-        }
+        inputSubject.send(.checkLogin)
     }
     
     @objc private func searchButtonTapped() {
