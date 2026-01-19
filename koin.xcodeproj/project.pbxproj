@@ -36,6 +36,7 @@
 		7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F282F1D6A7F00149729 /* LostItemDataViewModel.swift */; };
 		7C372F322F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F302F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift */; };
 		7C372F332F1DB4C300149729 /* LostItemImagesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F2F2F1DB4C300149729 /* LostItemImagesCollectionView.swift */; };
+		7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */; };
 		7C4D5A3C2F01638800B40128 /* BusSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A122F01638800B40128 /* BusSearchViewController.swift */; };
 		7C4D5A3D2F01638800B40128 /* BusSearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A1D2F01638800B40128 /* BusSearchResultViewModel.swift */; };
 		7C4D5A3E2F01638800B40128 /* OneBusTimetableTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A362F01638800B40128 /* OneBusTimetableTableViewFooter.swift */; };
@@ -802,6 +803,7 @@
 		7C372F282F1D6A7F00149729 /* LostItemDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataViewModel.swift; sourceTree = "<group>"; };
 		7C372F2F2F1DB4C300149729 /* LostItemImagesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemImagesCollectionView.swift; sourceTree = "<group>"; };
 		7C372F302F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemImagesCollectionViewCell.swift; sourceTree = "<group>"; };
+		7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewControllerB.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
 		7C4D5A0F2F01638800B40128 /* BusAreaSelectedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -3834,6 +3836,7 @@
 			children = (
 				7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */,
 				835C991D2C7F1256002E02D3 /* ModalViewController.swift */,
+				7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */,
 				D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */,
 				D23582A02BC30B9300D615DD /* ZoomingView.swift */,
 				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
@@ -4930,6 +4933,7 @@
 				7CED92132EF2D1F900457128 /* SettingsViewController.swift in Sources */,
 				7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */,
 				7CED92152EF2D1F900457128 /* BannerCollectionView.swift in Sources */,
+				7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */,
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
 				7CED92182EF2D1F900457128 /* ClubWebViewController.swift in Sources */,
 				7C372EE62F1C0CC400149729 /* LostItemArticle.swift in Sources */,
