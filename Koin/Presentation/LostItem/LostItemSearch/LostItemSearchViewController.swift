@@ -97,7 +97,9 @@ final class LostItemSearchViewController: UIViewController {
         }.store(in: &subscriptions)
         
         searchedLostItemTableView.cellTappedPublisher.sink { [weak self] id in
-            let viewModel = LostItemDataViewModel()
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+            let viewModel = LostItemDataViewModel(checkLoginUseCase: checkLoginUseCase)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)

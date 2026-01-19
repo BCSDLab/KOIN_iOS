@@ -16,6 +16,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let changeStateButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -229,6 +230,7 @@ extension LostItemDataTableViewContentCell {
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
         changeStateButton.addTarget(self, action: #selector(changeStateButtonTapped), for: .touchUpInside)
+        chatButton.addTarget(self, action: #selector(chatButtonTapped), for: .touchUpInside)
     }
     
     private func bind() {
@@ -255,6 +257,9 @@ extension LostItemDataTableViewContentCell {
         if (changeStateButton.backgroundColor != UIColor.appColor(.primary500)) {
             changeStateButtonTappedPublisher.send()
         }
+    }
+    @objc private func chatButtonTapped() {
+        chatButtonTappedPublisher.send()
     }
 }
 
