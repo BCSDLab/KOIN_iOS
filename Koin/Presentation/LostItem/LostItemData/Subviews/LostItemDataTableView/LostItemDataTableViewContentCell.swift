@@ -15,6 +15,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let changeStateButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -78,10 +79,16 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
         $0.textColor = .appColor(.neutral500)
     }
     
-    private let changeStateSwitch = UISwitch().then {
-        $0.onTintColor = .appColor(.primary500)
-        $0.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-        $0.subviews.first?.subviews.last?.subviews.last?.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+    private let changeStateButton = UIButton().then {
+        $0.backgroundColor = .appColor(.neutral400)
+        $0.layer.cornerRadius = 11
+        $0.clipsToBounds = true
+    }
+    private let changeStateCircleView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral0)
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 1, blur: 4, spread: 0)
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
     }
     
     private let buttonsView = UIView()
@@ -145,6 +152,14 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func changeState() {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            self?.changeStateButton.backgroundColor = .appColor(.primary500)
+            self?.changeStateCircleView.transform = CGAffineTransform(translationX: 24, y: 0)
+            self?.changeStateCircleView.layer.shadowColor = UIColor.clear.cgColor
+        }
     }
     
     func configure(lostItemData: LostItemData?) {
@@ -213,6 +228,7 @@ extension LostItemDataTableViewContentCell {
         listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
+        changeStateButton.addTarget(self, action: #selector(changeStateButtonTapped), for: .touchUpInside)
     }
     
     private func bind() {
@@ -235,6 +251,11 @@ extension LostItemDataTableViewContentCell {
     @objc private func editButtonTapped() {
         editButtonTappedPublisher.send()
     }
+    @objc private func changeStateButtonTapped() {
+        if (changeStateButton.backgroundColor != UIColor.appColor(.primary500)) {
+            changeStateButtonTappedPublisher.send()
+        }
+    }
 }
 
 extension LostItemDataTableViewContentCell {
@@ -249,7 +270,7 @@ extension LostItemDataTableViewContentCell {
     }
     
     private func setUpLayouts() {
-        [changeStateLabel, changeStateSwitch].forEach {
+        [changeStateLabel, changeStateButton, changeStateCircleView].forEach {
             changeStateView.addSubview($0)
         }
         [listButton, editButton, deleteButton, chatButton, reportButton].forEach {
@@ -280,11 +301,18 @@ extension LostItemDataTableViewContentCell {
         changeStateLabel.snp.makeConstraints {
             $0.top.bottom.equalToSuperview()
             $0.height.equalTo(22)
-            $0.trailing.equalTo(changeStateSwitch.snp.leading).offset(-4)
+            $0.trailing.equalTo(changeStateButton.snp.leading).offset(-4)
         }
-        changeStateSwitch.snp.makeConstraints {
+        changeStateButton.snp.makeConstraints {
+            $0.height.equalTo(22)
             $0.centerY.equalToSuperview()
             $0.trailing.equalToSuperview()
+            $0.width.equalTo(46)
+        }
+        changeStateCircleView.snp.makeConstraints {
+            $0.width.height.equalTo(16)
+            $0.centerY.equalToSuperview()
+            $0.leading.equalTo(changeStateButton.snp.leading).offset(3)
         }
         
         [listButton, editButton, deleteButton, chatButton, reportButton].forEach {

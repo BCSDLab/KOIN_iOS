@@ -88,6 +88,10 @@ final class LostItemDataViewController: UIViewController {
         lostItemDataTableView.editButtonTappedPublisher.sink { [weak self] in
             self?.navigateToEdit()
         }.store(in: &subscription)
+        
+        lostItemDataTableView.changeStateButtonTappedPublisher.sink { [weak self] in
+            self?.showChangeStateModal()
+        }.store(in: &subscription)
     }
 }
 
@@ -118,6 +122,7 @@ extension LostItemDataViewController {
     private func showDeleteModal() {
         let onRightButtonTapped: ()->Void = { [weak self] in
             // TODO: ViewModel 호출
+            self?.navigationController?.popViewController(animated: true)
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
         modalViewController.modalPresentationStyle = .overFullScreen
@@ -136,6 +141,17 @@ extension LostItemDataViewController {
                                      ],
                                                             prevID: 0, nextID: 0, registeredAt: "2022-02-02", updatedAt: ""))
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func showChangeStateModal() {
+        let onRightButtonTapped: ()->Void = { [weak self] in
+            // TODO: ViewModal 호출
+            self?.lostItemDataTableView.changeState()
+        }
+        let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
+        modalViewController.modalTransitionStyle = .crossDissolve
+        modalViewController.modalPresentationStyle = .overFullScreen
+        navigationController?.present(modalViewController, animated: true)
     }
 }
 
