@@ -157,6 +157,15 @@ final class PostLostItemViewController: UIViewController {
     
 }
 
+extension PostLostItemViewController {
+    
+    func configure(lostItemData: LostItemData) {
+        addLostItemCollectionView.isEditingMode = true
+        addLostItemCollectionView.configure(article: lostItemData)
+        writeButton.setTitle("수정 완료", for: .normal)
+    }
+}
+
 extension PostLostItemViewController: UITextViewDelegate, PHPickerViewControllerDelegate {
     
     func collectAllCellData() -> [PostLostItemRequest] {

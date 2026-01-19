@@ -14,6 +14,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     let imageTapPublisher = PassthroughSubject<IndexPath, Never>()
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -211,6 +212,7 @@ extension LostItemDataTableViewContentCell {
     private func setAddTargets() {
         listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
     }
     
     private func bind() {
@@ -229,6 +231,9 @@ extension LostItemDataTableViewContentCell {
     }
     @objc private func deleteButtonTapped() {
         deleteButtonTappedPublisher.send()
+    }
+    @objc private func editButtonTapped() {
+        editButtonTappedPublisher.send()
     }
 }
 

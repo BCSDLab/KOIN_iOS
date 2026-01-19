@@ -84,6 +84,10 @@ final class LostItemDataViewController: UIViewController {
         lostItemDataTableView.deleteButtonTappedPublisher.sink { [weak self] in
             self?.showDeleteModal()
         }.store(in: &subscription)
+        
+        lostItemDataTableView.editButtonTappedPublisher.sink { [weak self] in
+            self?.navigateToEdit()
+        }.store(in: &subscription)
     }
 }
 
@@ -119,6 +123,19 @@ extension LostItemDataViewController {
         modalViewController.modalPresentationStyle = .overFullScreen
         modalViewController.modalTransitionStyle = .crossDissolve
         navigationController?.present(modalViewController, animated: true)
+    }
+    
+    private func navigateToEdit() {
+        let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
+        viewController.configure(lostItemData: LostItemData(id: 0, boardID: 0, type: "분실", category: "카드", foundPlace: "안경점", foundDate: "2022-02-02", content: "아이패드 9세대\n하늘색 케이스에 캐릭터가 붙어있고 에플팬스 1세대도 함께 잇습니다", author: "익명",
+                                                            isCouncil: false,
+                                                            isMine: true,
+                                                            isFound: false,
+                                     images: [
+                                         Image(id: 159, imageUrl: "https://stage-static.koreatech.in/upload/LOST_ITEMS/2026/1/18/18f40175-92c3-41ef-bb21-59b73303b333/tablet.png")
+                                     ],
+                                                            prevID: 0, nextID: 0, registeredAt: "2022-02-02", updatedAt: ""))
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
