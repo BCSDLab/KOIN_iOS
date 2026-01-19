@@ -18,9 +18,9 @@ class ModalViewControllerB: UIViewController {
     var containerHeight: CGFloat = 0
     var paddingBetweenLabels: CGFloat = 0
     var titleText: String = ""
-    var subTitleText: String = ""
+    var subTitleText: String?
     var titleColor: UIColor = .black
-    var subTitleColor: UIColor = .black
+    var subTitleColor: UIColor? = .black
     
     // MARK: - UI Components
     private let messageLabel = UILabel().then {
@@ -60,7 +60,7 @@ class ModalViewControllerB: UIViewController {
     
     private var contentViewInContainer: UIView?
     
-    init(onLeftButtonTapped: (()->Void)? = nil, onRightButtonTapped: @escaping ()->Void, width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat, title: String, subTitle: String, titleColor: UIColor, subTitleColor: UIColor, rightButtonText: String = "로그인하기") {
+    init(onLeftButtonTapped: (()->Void)? = nil, onRightButtonTapped: @escaping ()->Void, width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat, title: String, subTitle: String?, titleColor: UIColor, subTitleColor: UIColor?, rightButtonText: String = "로그인하기") {
         self.onLeftButtonTapped = onLeftButtonTapped
         self.onRightButtonTapped = onRightButtonTapped
         super.init(nibName: nil, bundle: nil)
@@ -72,6 +72,11 @@ class ModalViewControllerB: UIViewController {
         self.titleColor = titleColor
         self.subTitleColor = subTitleColor
         self.rightButton.setTitle(rightButtonText, for: .normal)
+    }
+    
+    convenience init(onLeftButtonTapped: (()->Void)? = nil, onRightButtonTapped: @escaping ()->Void, width: CGFloat, height: CGFloat, title: String, titleColor: UIColor, rightButtonText: String = "로그인하기") {
+        
+        self.init(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: width, height: height, paddingBetweenLabels: 0, title: title, subTitle: nil, titleColor: titleColor, subTitleColor: nil, rightButtonText: rightButtonText)
     }
     
     required init?(coder: NSCoder) {
@@ -132,15 +137,21 @@ class ModalViewControllerB: UIViewController {
     
     func updateSubMessageLabel(font: UIFont = .appFont(.pretendardRegular, size: 14), alignment: NSTextAlignment = .center, title: String? = nil) {
         if let title = title { subTitleText = title }
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 6
-        paragraphStyle.alignment = alignment
-        let attributedString = NSMutableAttributedString(string: subTitleText)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: subTitleText.count))
-        attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: subTitleText.count))
-        attributedString.addAttribute(.foregroundColor, value: subTitleColor, range: NSRange(location: 0, length: subTitleText.count))
         
-        subMessageLabel.attributedText = attributedString
+        if let subTitleText {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 6
+            paragraphStyle.alignment = alignment
+            let attributedString = NSMutableAttributedString(string: subTitleText)
+            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: subTitleText.count))
+            attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: subTitleText.count))
+            attributedString.addAttribute(.foregroundColor, value: subTitleColor, range: NSRange(location: 0, length: subTitleText.count))
+            
+            subMessageLabel.attributedText = attributedString
+        }
+        else {
+            updateMessageLabel(font: .appFont(.pretendardMedium, size: 16))
+        }
     }
     
     func setContentViewInContainer(view: UIView, frame: CGRect) {
