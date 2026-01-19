@@ -76,6 +76,35 @@ final class LostItemDataViewController: UIViewController {
                 initialIndexPath: indexPath)
             navigationController?.present(viewController, animated: true)
         }.store(in: &subscription)
+        
+        lostItemDataTableView.listButtonTappedPublisher.sink { [weak self] in
+            self?.popToLostItemListViewController()
+        }.store(in: &subscription)
+    }
+}
+
+extension LostItemDataViewController {
+    
+    private func popToLostItemListViewController() {
+        if let lostItemListViewController = navigationController?.viewControllers.first(where: {
+            $0 is LostItemListViewController
+        }) {
+            navigationController?.popToViewController(lostItemListViewController, animated: true)
+        }
+        
+        else {
+            guard let homeViewController = navigationController?.viewControllers.first(where: {
+                $0 is HomeViewController
+            }) else {
+                return
+            }
+            let userService = DefaultUserService()
+            let userRepository = DefaultUserRepository(service: userService)
+            let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+            let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase)
+            let lostItemListViewController = LostItemListViewController(viewModel: viewModel)
+            navigationController?.setViewControllers([homeViewController, lostItemListViewController], animated: true)
+        }
     }
 }
 

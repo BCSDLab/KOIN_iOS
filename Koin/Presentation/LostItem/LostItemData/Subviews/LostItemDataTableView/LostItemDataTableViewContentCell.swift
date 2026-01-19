@@ -12,6 +12,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     
     // MARK: - Properties
     let imageTapPublisher = PassthroughSubject<IndexPath, Never>()
+    let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -138,6 +139,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
         bind()
+        setAddTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -205,6 +207,10 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
 
 extension LostItemDataTableViewContentCell {
     
+    private func setAddTargets() {
+        listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
+    }
+    
     private func bind() {
         imageCollectionView.didScrollOutputSubject.sink { [weak self] page in
             guard let self else { return }
@@ -214,6 +220,10 @@ extension LostItemDataTableViewContentCell {
         imageCollectionView.didTapThumbnailPublisher.sink { [weak self] indexPath in
             self?.imageTapPublisher.send(indexPath)
         }.store(in: &subscriptions)
+    }
+    
+    @objc private func listButtonTapped() {
+        listButtonTappedPublisher.send()
     }
 }
 
