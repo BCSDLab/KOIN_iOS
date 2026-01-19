@@ -110,6 +110,10 @@ final class LostItemDataViewController: UIViewController {
         lostItemDataTableView.chatButtonTappedPublisher.sink { [weak self] in
             self?.inputSubject.send(.checkLogIn)
         }.store(in: &subscription)
+        
+        lostItemDataTableView.reportButtonTappedPublisher.sink { [weak self] in
+            self?.navigateToReport()
+        }.store(in: &subscription)
     }
 }
 
@@ -183,7 +187,7 @@ extension LostItemDataViewController {
         let onRightButtonTapped: ()->Void = { [weak self] in
             let repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
             let userRepository = DefaultUserRepository(service: DefaultUserService())
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: repository)
             let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
             let viewModel = LoginViewModel(loginUseCase: loginUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
             let viewController = LoginViewController(viewModel: viewModel)
@@ -193,6 +197,13 @@ extension LostItemDataViewController {
         modalViewController.modalTransitionStyle = .crossDissolve
         modalViewController.modalPresentationStyle = .overFullScreen
         navigationController?.present(modalViewController, animated: true)
+    }
+    
+    private func navigateToReport() {
+        let noticeId = 17972
+        let viewModel = ReportLostItemViewModel(noticeId: noticeId)
+        let viewController = ReportLostItemViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
