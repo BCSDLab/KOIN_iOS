@@ -20,7 +20,7 @@ final class LostItemDataTableViewRecentCell: UITableViewCell {
     }
     private let categoryLabel = paddingLabel(padding: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)).then {
         $0.backgroundColor = .appColor(.primary500)
-        $0.layer.cornerRadius = 11
+        $0.layer.cornerRadius = 19/2
         $0.clipsToBounds = true
         $0.textAlignment = .center
         $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
