@@ -15,10 +15,7 @@ final class LostItemDataViewController: UIViewController {
     private let viewModel: LostItemDataViewModel
     private let inputSubject = PassthroughSubject<LostItemDataViewModel.Input, Never>()
     private var subscription: Set<AnyCancellable> = []
-    private var images: [Image] = [
-        Image(id: 159, imageUrl: "https://stage-static.koreatech.in/upload/LOST_ITEMS/2026/1/18/18f40175-92c3-41ef-bb21-59b73303b333/tablet.png"),
-        Image(id: 159, imageUrl: "https://stage-static.koreatech.in/upload/LOST_ITEMS/2026/1/18/18f40175-92c3-41ef-bb21-59b73303b333/tablet.png")
-    ]
+    private var images: [Image] = []
     
     // MARK: - UI Components
     private let lostItemDataTableView = LostItemDataTableView()
@@ -43,23 +40,6 @@ final class LostItemDataViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
-        
-        lostItemDataTableView.configure(
-            lostItemData: LostItemData(id: 0, boardID: 0, type: "분실", category: "카드", foundPlace: "안경점", foundDate: "2022-02-02", content: "아이패드 9세대\n하늘색 케이스에 캐릭터가 붙어있고 에플팬스 1세대도 함께 잇습니다", author: "익명",
-                                       isCouncil: false,
-                                       isMine: false,
-                                       isFound: true,
-                images: [
-                    Image(id: 159, imageUrl: "https://stage-static.koreatech.in/upload/LOST_ITEMS/2026/1/18/18f40175-92c3-41ef-bb21-59b73303b333/tablet.png")
-                ],
-                                       prevID: 0, nextID: 0, registeredAt: "2022-02-02", updatedAt: ""),
-            lostItemArticle: [
-                LostItemArticle(id: 0, type: .found, category: "지갑", foundPlace: "동방", foundDate: "2022-02-02", content: nil, author: "ㅇㅇ", registeredAt: "2022-02-02", isReported: true, isFound: true),
-                LostItemArticle(id: 0, type: .found, category: "지갑", foundPlace: "동방", foundDate: "2022-02-02",
-                                content: "아이패드 9세대\n하늘색 케이스에 캐릭터가 붙어있고 에플팬스 1세대도 함께 잇습니다",
-            author: "ㅇㅇ", registeredAt: "2022-02-02", isReported: true, isFound: false)
-            ]
-        )
     }
     
     private func bind() {
@@ -154,14 +134,7 @@ extension LostItemDataViewController {
     
     private func navigateToEdit() {
         let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-        viewController.configure(lostItemData: LostItemData(id: 0, boardID: 0, type: "분실", category: "카드", foundPlace: "안경점", foundDate: "2022-02-02", content: "아이패드 9세대\n하늘색 케이스에 캐릭터가 붙어있고 에플팬스 1세대도 함께 잇습니다", author: "익명",
-                                                            isCouncil: true,
-                                                            isMine: false,
-                                                            isFound: false,
-                                     images: [
-                                         Image(id: 159, imageUrl: "https://stage-static.koreatech.in/upload/LOST_ITEMS/2026/1/18/18f40175-92c3-41ef-bb21-59b73303b333/tablet.png")
-                                     ],
-                                                            prevID: 0, nextID: 0, registeredAt: "2022-02-02", updatedAt: ""))
+        viewController.configure()
         navigationController?.pushViewController(viewController, animated: true)
     }
     

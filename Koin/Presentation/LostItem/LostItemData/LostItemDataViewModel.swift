@@ -46,7 +46,6 @@ extension LostItemDataViewModel {
         checkLoginUseCase.execute().sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] isLoggedIn in
-                print("checkLogin succeed")
                 guard let self else { return }
                 if isLoggedIn {
                     outputSubject.send(.navigateToChat)

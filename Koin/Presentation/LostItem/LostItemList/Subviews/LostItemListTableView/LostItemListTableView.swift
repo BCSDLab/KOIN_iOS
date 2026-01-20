@@ -11,14 +11,7 @@ import Combine
 final class LostItemListTableView: UITableView {
     
     // MARK: - Properties
-    private var lostItemArticle: [LostItemArticle] = [
-        LostItemArticle(id: 0, type: .found, category: "종류1", foundPlace: "장소", foundDate: "2020-20-20", content: "내용!", author: "작성자", registeredAt: "04.04 토", isReported: false, isFound: false),
-        LostItemArticle(id: 0, type: .found, category: "종류1", foundPlace: "장소", foundDate: "2020-20-20", content: "내용!", author: "작성자", registeredAt: "04.04 토", isReported: true, isFound: false),
-        LostItemArticle(id: 0, type: .found, category: "종류1", foundPlace: "장소", foundDate: "2020-20-20", content: "내용!", author: "작성자", registeredAt: "04.04 토", isReported: true, isFound: true),
-        LostItemArticle(id: 0, type: .found, category: "종류1종류2", foundPlace: "장류~~~~~~2종류3종류4소", foundDate: "2020-20-20", content: "내용!", author: "작성자", registeredAt: "04.04 토", isReported: false, isFound: false),
-        LostItemArticle(id: 0, type: .found, category: "종류1종류2종류3", foundPlace: "장소소1종류~~~~~~2종류3~~~~", foundDate: "2020-20-20", content: "내용!", author: "작성자", registeredAt: "04.04 토", isReported: false, isFound: false),
-        LostItemArticle(id: 0, type: .found, category: "종류", foundPlace: "장소1종류~~~~~~2종류3종류4", foundDate: "2020-20-20", content: "내용!", author: "작성자", registeredAt: "04.04 토", isReported: false, isFound: false)
-    ]
+    private var lostItemArticle: [LostItemArticle] = []
     let cellTappedPublisher = PassthroughSubject<Int, Never>()
     
     // MARK: - Initializer
