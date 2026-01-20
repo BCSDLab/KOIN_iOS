@@ -18,15 +18,16 @@ final class LostItemListFilterViewController: UIViewController {
     
     // MARK: - UI Components
     private let filterTitleLabel = UILabel().then {
-        $0.text = "필터"
-        $0.font = .appFont(.pretendardBold, size: 18)
-        $0.tintColor = .appColor(.primary500)
+        $0.attributedText = NSAttributedString(string: "필터", attributes: [
+            .font : UIFont.appFont(.pretendardBold, size: 18),
+            .foregroundColor : UIColor.appColor(.primary500)
+        ])
     }
     private let closeButton = UIButton().then {
         $0.setImage(.appImage(asset: .cancelNeutral500), for: .normal)
         $0.tintColor = .appColor(.neutral800)
     }
-    private let separatorView0 = UIView().then {
+    private let topSeparatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
     
@@ -87,6 +88,10 @@ final class LostItemListFilterViewController: UIViewController {
     private let categoryElectronicDeviceButton = LostItemListFilterButton(text: "전자제품", isSelected: false)
     private let categoryOtherButton = LostItemListFilterButton(text: "기타", isSelected: false)
     
+    private let separatorView3 = UIView().then {
+        $0.backgroundColor = .appColor(.neutral200)
+    }
+    
     private let stateTitleLabel = UILabel().then {
         $0.text = "물품 상태"
         $0.font = .appFont(.pretendardBold, size: 16)
@@ -126,7 +131,7 @@ final class LostItemListFilterViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
-    private let separatorView3 = UIView().then {
+    private let bottomSeparatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
     
@@ -265,12 +270,13 @@ extension LostItemListFilterViewController {
         [stateAllButton, stateNotFoundButton, stateFoundButton].forEach {
             stateButtonsStackView.addArrangedSubview($0)
         }
-        [filterTitleLabel, closeButton, separatorView0,
+        [filterTitleLabel, closeButton, topSeparatorView,
          authorFilterTitleLabel, authorButtonsStackView, separatorView1,
          typeFilterTitleLabel, typeButtonsStackView, separatorView2,
-         categoryFilterTitleLabel, categoryButtonsStackView1, categoryButtonsStackView2,
+         categoryFilterTitleLabel, categoryButtonsStackView1, categoryButtonsStackView2, separatorView3,
          stateTitleLabel, stateButtonsStackView,
-         resetFilterButton, applyFilterButton, separatorView3].forEach {
+         resetFilterButton, applyFilterButton,
+         bottomSeparatorView].forEach {
             view.addSubview($0)
         }
     }
@@ -298,13 +304,13 @@ extension LostItemListFilterViewController {
             $0.trailing.equalToSuperview().offset(-24)
         }
         
-        separatorView0.snp.makeConstraints {
+        topSeparatorView.snp.makeConstraints {
             $0.top.equalTo(filterTitleLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
         authorFilterTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(separatorView0.snp.bottom).offset(16)
+            $0.top.equalTo(topSeparatorView.snp.bottom).offset(16)
             $0.leading.equalToSuperview().offset(32)
         }
         authorButtonsStackView.snp.makeConstraints {
@@ -344,8 +350,13 @@ extension LostItemListFilterViewController {
             $0.top.equalTo(categoryButtonsStackView1.snp.bottom).offset(8)
             $0.leading.equalToSuperview().offset(32)
         }
-        stateTitleLabel.snp.makeConstraints {
+        separatorView3.snp.makeConstraints {
             $0.top.equalTo(categoryButtonsStackView2.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(1)
+        }
+        stateTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(separatorView3.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(32)
         }
         stateButtonsStackView.snp.makeConstraints {
@@ -364,7 +375,7 @@ extension LostItemListFilterViewController {
             $0.leading.equalTo(resetFilterButton.snp.trailing).offset(12)
             $0.trailing.equalToSuperview().offset(-32)
         }
-        separatorView3.snp.makeConstraints {
+        bottomSeparatorView.snp.makeConstraints {
             $0.top.equalTo(resetFilterButton.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)

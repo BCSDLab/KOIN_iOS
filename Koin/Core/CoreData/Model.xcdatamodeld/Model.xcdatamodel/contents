@@ -3,10 +3,6 @@
     <entity name="NoticeKeywordInformation" representedClassName="NoticeKeywordInformation" syncable="YES" codeGenerationType="class">
         <attribute name="name" optional="YES" attributeType="String"/>
     </entity>
-    <entity name="RecentSearchedLostItem" representedClassName=".RecentSearchedLostItem" syncable="YES">
-        <attribute name="date" attributeType="Date" usesScalarValueType="NO"/>
-        <attribute name="keyword" attributeType="String"/>
-    </entity>
     <entity name="RecentSearchedWordInfo" representedClassName="RecentSearchedWordInfo" syncable="YES" codeGenerationType="class">
         <attribute name="name" attributeType="String"/>
         <attribute name="searchedDate" attributeType="Date" usesScalarValueType="NO"/>
