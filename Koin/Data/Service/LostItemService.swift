@@ -14,10 +14,10 @@ protocol LostItemService {
 }
 
 final class DefaultLostItemService: LostItemService {
+    var ss: Set<AnyCancellable> = []
     func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemListDto, Error> {
         return request(.fetchLostItemList(requestModel))
     }
-    
     
     private func request<T: Decodable>(_ api: LostItemAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)

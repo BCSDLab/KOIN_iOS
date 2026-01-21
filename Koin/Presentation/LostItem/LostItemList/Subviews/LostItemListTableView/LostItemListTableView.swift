@@ -12,7 +12,9 @@ final class LostItemListTableView: UITableView {
     
     // MARK: - Properties
     private var lostItemListData: [LostItemListData] = []
+    private var isWaiting = true
     let cellTappedPublisher = PassthroughSubject<Int, Never>()
+    let loadMoreListPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
     init() {
@@ -26,10 +28,12 @@ final class LostItemListTableView: UITableView {
     }
     
     func update(_ lostItemListData: [LostItemListData]) {
+        isWaiting = false
         self.lostItemListData = lostItemListData
         reloadData()
     }
     func append(_ lostItemListData: [LostItemListData]) {
+        isWaiting = false
         lostItemListData.forEach {
             self.lostItemListData.append($0)
         }
@@ -58,6 +62,19 @@ extension LostItemListTableView: UITableViewDelegate {
             return
         }
         cellTappedPublisher.send(lostItemListData[indexPath.row].id)
+    }
+}
+
+extension LostItemListTableView: UIScrollViewDelegate {
+ 
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.height, !isWaiting {
+            isWaiting = true
+            loadMoreListPublisher.send()
+        }
     }
 }
 

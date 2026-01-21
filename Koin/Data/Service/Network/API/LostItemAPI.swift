@@ -43,8 +43,7 @@ extension LostItemAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchLostItemList: return nil
-        //case .fetchLandDetail(let request): return try? request.toDictionary()
+        case .fetchLostItemList(let request): return try? request.toDictionary()
         }
     }
     

@@ -12,12 +12,12 @@ final class LostItemListViewModel {
     
     enum Input {
         case checkLogin
-        case viewDidLoad
-        case loadMore
+        case loadList
+        case loadMoreList
     }
     enum Output {
-        case updateLostItemList([LostItemListData])
-        case appendLostItemList([LostItemListData])
+        case updateList([LostItemListData])
+        case appendList([LostItemListData])
         case presentPostType
         case showLogin
     }
@@ -41,11 +41,10 @@ final class LostItemListViewModel {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case .viewDidLoad:
-                self.filterState = FetchLostItemListRequest()
-                self.updateLostItemList()
-            case .loadMore:
-                return
+            case .loadList:
+                self.loadList()
+            case .loadMoreList:
+                self.loadMoreList()
             case .checkLogin:
                 self.checkLogin()
             
@@ -57,12 +56,26 @@ final class LostItemListViewModel {
 
 extension LostItemListViewModel {
     
-    private func updateLostItemList() {
+    private func loadList() {
         fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemList in
                 guard let self else { return }
-                self.outputSubject.send(.updateLostItemList(lostItemList.articles))
+                self.outputSubject.send(.updateList(lostItemList.articles))
+            }
+        ).store(in: &subscription)
+    }
+    
+    private func loadMoreList() {
+        filterState.page += 1
+        
+        fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] lostItemList in
+                guard let self, self.filterState.page == lostItemList.currentPage else {
+                    return
+                }
+                self.outputSubject.send(.appendList(lostItemList.articles))
             }
         ).store(in: &subscription)
     }
