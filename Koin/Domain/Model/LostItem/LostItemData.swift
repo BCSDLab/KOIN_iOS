@@ -9,11 +9,18 @@ import Foundation
 
 // MARK: - LostItemData
 struct LostItemData {
-    let id, boardID: Int
-    let type, category, foundPlace, foundDate: String
-    let content, author: String
-    let isCouncil, isMine, isFound: Bool
+    let id: Int
+    let boardID: Int
+    let type: LostItemType
+    let category: String
+    let foundPlace: String
+    let foundDate: String
+    let content: String?
+    let author: String
+    let isCouncil: Bool
+    let isMine: Bool
+    let isFound: Bool
     let images: [Image]
-    let prevID, nextID: Int
-    let registeredAt, updatedAt: String
+    let registeredAt: String
+    let updatedAt: String
 }

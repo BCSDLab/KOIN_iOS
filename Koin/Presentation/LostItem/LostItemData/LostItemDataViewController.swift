@@ -134,7 +134,7 @@ extension LostItemDataViewController {
     
     private func navigateToEdit() {
         let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-        viewController.configure()
+        //viewController.configure()
         navigationController?.pushViewController(viewController, animated: true)
     }
     

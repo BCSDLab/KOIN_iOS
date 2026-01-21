@@ -12,7 +12,7 @@ final class LostItemDataTableView: UITableView {
     
     // MARK: - Properties
     private var lostItemData: LostItemData?
-    private var lostItemArticle: [LostItemArticle] = []
+    private var lostItemListData: [LostItemListData] = []
     let imageTapPublisher = PassthroughSubject<IndexPath, Never>()
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -32,9 +32,9 @@ final class LostItemDataTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(lostItemData: LostItemData, lostItemArticle: [LostItemArticle]) {
+    func configure(lostItemData: LostItemData, lostItemListData: [LostItemListData]) {
         self.lostItemData = lostItemData
-        self.lostItemArticle = lostItemArticle
+        self.lostItemListData = lostItemListData
         reloadData()
     }
     
@@ -51,7 +51,7 @@ extension LostItemDataTableView: UITableViewDelegate {
         guard indexPath.section == 1 else {
             return
         }
-        cellTappedPublisher.send(lostItemArticle[indexPath.row].id)
+        cellTappedPublisher.send(lostItemListData[indexPath.row].id)
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -59,8 +59,7 @@ extension LostItemDataTableView: UITableViewDelegate {
         case 0:
             let headerView = LostItemDataTableViewContentHeaderView()
             guard let lostItemData else { return nil }
-            let lostItemArticle = LostItemArticle(id: lostItemData.id, type: LostItemType(rawValue: lostItemData.type) ?? .found, category: lostItemData.category, foundPlace: lostItemData.foundPlace, foundDate: lostItemData.foundDate, content: nil, author: lostItemData.author, registeredAt: lostItemData.registeredAt, isReported: false, isFound: lostItemData.isFound)
-            headerView.configure(lostItemArticle: lostItemArticle)
+            headerView.configure(lostItemData: lostItemData)
             return headerView
         case 1:
             let headerView = LostItemDataTableViewRecentHeaderView()
@@ -101,7 +100,7 @@ extension LostItemDataTableView: UITableViewDataSource {
         case 0:
             return 1
         case 1:
-            return lostItemArticle.count
+            return lostItemListData.count
         default:
             return 0
         }
@@ -138,7 +137,7 @@ extension LostItemDataTableView: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LostItemDataTableViewRecentCell.identifier, for: indexPath) as? LostItemDataTableViewRecentCell else {
                 return UITableViewCell()
             }
-            cell.configure(lostItemArticle: lostItemArticle[indexPath.row])
+            cell.configure(lostItemListData: lostItemListData[indexPath.row])
             return cell
         }
     }

@@ -1,5 +1,5 @@
 //
-//  LostItemArticle.swift
+//  LostItemListData.swift
 //  koin
 //
 //  Created by 홍기정 on 1/18/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct LostItemArticle {
+struct LostItemListData {
     let id: Int
     let type: LostItemType
     let category: String

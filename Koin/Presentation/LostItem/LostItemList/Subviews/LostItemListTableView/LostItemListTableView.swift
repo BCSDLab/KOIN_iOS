@@ -11,7 +11,7 @@ import Combine
 final class LostItemListTableView: UITableView {
     
     // MARK: - Properties
-    private var lostItemArticle: [LostItemArticle] = []
+    private var lostItemListData: [LostItemListData] = []
     let cellTappedPublisher = PassthroughSubject<Int, Never>()
     
     // MARK: - Initializer
@@ -25,22 +25,22 @@ final class LostItemListTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(lostItemArticle: [LostItemArticle]) {
-        self.lostItemArticle = lostItemArticle
+    func configure(lostItemListData: [LostItemListData]) {
+        self.lostItemListData = lostItemListData
         reloadData()
     }
 }
 
 extension LostItemListTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lostItemArticle.count
+        return lostItemListData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: LostItemListTableViewCell.identifier, for: indexPath) as? LostItemListTableViewCell else {
             return UITableViewCell()
         }
-        cell.configure(lostItemArticle: lostItemArticle[indexPath.row])
+        cell.configure(lostItemListData: lostItemListData[indexPath.row])
         return cell
     }
 }
@@ -48,10 +48,10 @@ extension LostItemListTableView: UITableViewDataSource {
 extension LostItemListTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if lostItemArticle[indexPath.row].isReported {
+        if lostItemListData[indexPath.row].isReported {
             return
         }
-        cellTappedPublisher.send(lostItemArticle[indexPath.row].id)
+        cellTappedPublisher.send(lostItemListData[indexPath.row].id)
     }
 }
 

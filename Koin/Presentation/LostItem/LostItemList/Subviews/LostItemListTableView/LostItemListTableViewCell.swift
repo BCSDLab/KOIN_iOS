@@ -77,8 +77,8 @@ final class LostItemListTableViewCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(lostItemArticle: LostItemArticle) {
-        if lostItemArticle.isReported {
+    func configure(lostItemListData: LostItemListData) {
+        if lostItemListData.isReported {
             titleStackView.isHidden = true
             contentLabel.isHidden = true
             blindStackView.isHidden = false
@@ -88,7 +88,7 @@ final class LostItemListTableViewCell: UITableViewCell {
             blindStackView.isHidden = true
         }
         
-        if lostItemArticle.isFound {
+        if lostItemListData.isFound {
             isFoundLabel.text = "찾음"
             isFoundLabel.textColor = .appColor(.neutral400)
             isFoundLabel.backgroundColor = .appColor(.neutral100)
@@ -98,13 +98,13 @@ final class LostItemListTableViewCell: UITableViewCell {
             isFoundLabel.backgroundColor = UIColor(hexCode: "FFA928")
         }
         
-        typeLabel.text = "\(lostItemArticle.type.description)물"
-        categoryLabel.text = lostItemArticle.category
-        foundPlaceLabel.text = lostItemArticle.foundPlace
-        foundDateLabel.text = lostItemArticle.foundDate
-        contentLabel.text = lostItemArticle.content
-        authorLabel.text = lostItemArticle.author
-        registeredDateLabel.text = lostItemArticle.registeredAt
+        typeLabel.text = "\(lostItemListData.type.description)물"
+        categoryLabel.text = lostItemListData.category
+        foundPlaceLabel.text = lostItemListData.foundPlace
+        foundDateLabel.text = lostItemListData.foundDate
+        contentLabel.text = lostItemListData.content
+        authorLabel.text = lostItemListData.author
+        registeredDateLabel.text = lostItemListData.registeredAt
     }
 }
 

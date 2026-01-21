@@ -8,6 +8,9 @@
 import Foundation
 
 struct LostItemList {
-    let articles: [LostItemArticle]
-    let totalCount, currentCount, totalPage, currentPage: Int
+    let articles: [LostItemListData]
+    let totalCount: Int
+    let currentCount: Int
+    let totalPage: Int
+    let currentPage: Int
 }

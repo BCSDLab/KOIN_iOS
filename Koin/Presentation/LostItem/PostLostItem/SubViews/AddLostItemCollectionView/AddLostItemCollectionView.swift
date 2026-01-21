@@ -60,7 +60,7 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
         }
         let foundDate = "\(year)년 \(month)월 \(day)일"
         self.articles = [PostLostItemRequest(
-            type: (article.type == "분실") ? .lost : .found,
+            type: article.type,
             category: article.category,
             location: article.foundPlace,
             foundDate: foundDate,

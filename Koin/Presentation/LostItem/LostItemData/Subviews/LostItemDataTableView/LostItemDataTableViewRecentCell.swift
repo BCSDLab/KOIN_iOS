@@ -55,13 +55,13 @@ final class LostItemDataTableViewRecentCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(lostItemArticle: LostItemArticle) {
-        typeLabel.text = "\(lostItemArticle.type.description)물"
-        categoryLabel.text = lostItemArticle.category
-        foundPlaceLabel.text = lostItemArticle.foundPlace
-        foundDateLabel.text = lostItemArticle.foundDate
+    func configure(lostItemListData: LostItemListData) {
+        typeLabel.text = "\(lostItemListData.type.description)물"
+        categoryLabel.text = lostItemListData.category
+        foundPlaceLabel.text = lostItemListData.foundPlace
+        foundDateLabel.text = lostItemListData.foundDate
         
-        if lostItemArticle.isFound {
+        if lostItemListData.isFound {
             isFoundLabel.text = "찾음"
             isFoundLabel.textColor = .appColor(.neutral400)
             isFoundLabel.backgroundColor = .appColor(.neutral100)
