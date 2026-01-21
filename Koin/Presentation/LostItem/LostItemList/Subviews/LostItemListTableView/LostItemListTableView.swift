@@ -35,9 +35,7 @@ final class LostItemListTableView: UITableView {
     }
     func append(_ lostItemListData: [LostItemListData]) {
         isWaiting = false
-        lostItemListData.forEach {
-            self.lostItemListData.append($0)
-        }
+        self.lostItemListData.append(contentsOf: lostItemListData)
         reloadData()
     }
     func reset() {

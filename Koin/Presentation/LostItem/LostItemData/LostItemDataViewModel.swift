@@ -11,11 +11,15 @@ import Combine
 final class LostItemDataViewModel {
     
     enum Input {
-        case viewDidLoad
+        case loadData
+        case loadList
+        case loadMoreList
         case checkLogIn
     }
     enum Output {
         case updateData(LostItemData)
+        case updateList([LostItemListData])
+        case appendList([LostItemListData])
         case navigateToChat
         case showLoginModal
     }
@@ -23,16 +27,20 @@ final class LostItemDataViewModel {
     // MARK: - Properties
     private let checkLoginUseCase: CheckLoginUseCase
     private let fetchLostItemDataUseCase: FetchLostItemDataUseCase
+    private let fetchLostItemListUseCase: FetchLostItemListUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let id: Int
+    private var filterState = FetchLostItemListRequest(limit: 5)
     
     // MARK: - Initializer
     init(checkLoginUseCase: CheckLoginUseCase,
          fetchLostItemDataUseCase: FetchLostItemDataUseCase,
+         fetchLostItemListUseCase: FetchLostItemListUseCase,
          id: Int) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemDataUseCase = fetchLostItemDataUseCase
+        self.fetchLostItemListUseCase = fetchLostItemListUseCase
         self.id = id
     }
     
@@ -40,9 +48,12 @@ final class LostItemDataViewModel {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case .viewDidLoad:
+            case .loadData:
                 self.loadData()
-                //self.loadList()
+            case .loadList:
+                self.loadList()
+            case .loadMoreList:
+                self.loadMoreList()
             case .checkLogIn:
                 self.checkLogin()
             }
@@ -62,6 +73,29 @@ extension LostItemDataViewModel {
             },
             receiveValue: { [weak self] lostItemData in
                 self?.outputSubject.send(.updateData(lostItemData))
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func loadList() {
+        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] lostItemList in
+                self?.outputSubject.send(.updateList(lostItemList.articles.filter { !$0.isReported }))
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func loadMoreList() {
+        filterState.page += 1
+        
+        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] lostItemList in
+                guard let self, self.filterState.page == lostItemList.currentPage else {
+                    return
+                }
+                self.outputSubject.send(.appendList(lostItemList.articles.filter { !$0.isReported }))
             }
         ).store(in: &subscriptions)
     }

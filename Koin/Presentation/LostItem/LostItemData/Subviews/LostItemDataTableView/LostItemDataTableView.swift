@@ -13,6 +13,7 @@ final class LostItemDataTableView: UITableView {
     // MARK: - Properties
     private var lostItemData: LostItemData?
     private var lostItemListData: [LostItemListData] = []
+    private var isWaiting = true
     let imageTapPublisher = PassthroughSubject<([Image], IndexPath), Never>()
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -21,6 +22,7 @@ final class LostItemDataTableView: UITableView {
     let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let changeStateButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let reportButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let loadMoreListPublisher = PassthroughSubject<Void, Never>()
     private var subscription: Set<AnyCancellable> = []
     
     private let contentCell = LostItemDataTableViewContentCell()
@@ -42,6 +44,13 @@ final class LostItemDataTableView: UITableView {
     
     func configure(lostItemListData: [LostItemListData]) {
         self.lostItemListData = lostItemListData
+        self.isWaiting = false
+        reloadData()
+    }
+    
+    func appendList(lostItemListData: [LostItemListData]) {
+        self.lostItemListData.append(contentsOf: lostItemListData)
+        self.isWaiting = false
         reloadData()
     }
     
@@ -151,6 +160,19 @@ extension LostItemDataTableView: UITableViewDataSource {
             }
             cell.configure(lostItemListData: lostItemListData[indexPath.row])
             return cell
+        }
+    }
+}
+
+extension LostItemDataTableView: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.height, !isWaiting {
+            isWaiting = true
+            loadMoreListPublisher.send()
         }
     }
 }

@@ -10,7 +10,7 @@ import Foundation
 struct FetchLostItemListRequest: Encodable {
     var type: LostItemType? = nil
     var page: Int = 1
-    let limit: Int = 10
+    var limit: Int = 10
     var category: LostItemCategory = .all
     var foundStatus: LostItemFoundStatus = .all
     let sort: LostItemSort = .latest

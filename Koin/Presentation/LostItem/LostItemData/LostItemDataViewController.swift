@@ -34,7 +34,8 @@ final class LostItemDataViewController: UIViewController {
         title = "분실물"
         configureView()
         bind()
-        inputSubject.send(.viewDidLoad)
+        inputSubject.send(.loadData)
+        inputSubject.send(.loadList)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,6 +49,10 @@ final class LostItemDataViewController: UIViewController {
             switch output {
             case .updateData(let lostItemData):
                 self.lostItemDataTableView.configure(lostItemData: lostItemData)
+            case .updateList(let lostItemListData):
+                self.lostItemDataTableView.configure(lostItemListData: lostItemListData)
+            case .appendList(let lostItemListData):
+                self.lostItemDataTableView.appendList(lostItemListData: lostItemListData)
             case .navigateToChat:
                 self.navigateToChat()
             case .showLoginModal:
@@ -62,9 +67,11 @@ final class LostItemDataViewController: UIViewController {
             let lostItemRepository = DefaultLostItemRepository(service: lostItemService)
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
+            let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemDataUseCase: fetchLostItemDataUseCase,
+                fetchLostItemListUseCase: fetchLostItemListUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
@@ -101,6 +108,10 @@ final class LostItemDataViewController: UIViewController {
         
         lostItemDataTableView.reportButtonTappedPublisher.sink { [weak self] in
             self?.navigateToReport()
+        }.store(in: &subscription)
+        
+        lostItemDataTableView.loadMoreListPublisher.sink { [weak self] in
+            self?.inputSubject.send(.loadMoreList)
         }.store(in: &subscription)
     }
 }
