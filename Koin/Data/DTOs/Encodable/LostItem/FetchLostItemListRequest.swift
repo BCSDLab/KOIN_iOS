@@ -1,5 +1,5 @@
 //
-//  LostItemFilter.swift
+//  FetchLostItemListRequest.swift
 //  koin
 //
 //  Created by 홍기정 on 1/17/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct FetchLostItemRequest: Encodable {
+struct FetchLostItemListRequest: Encodable {
     var type: LostItemType? = nil
     var page: Int = 1
     let limit: Int = 10
