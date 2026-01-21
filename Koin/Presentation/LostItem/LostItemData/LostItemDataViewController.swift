@@ -9,12 +9,17 @@ import Combine
 import Then
 import UIKit
 
+protocol LostItemDataViewControllerDelegate: AnyObject {
+    func updateState(foundDataId id: Int)
+}
+
 final class LostItemDataViewController: UIViewController {
 
     // MARK: - Properties
     private let viewModel: LostItemDataViewModel
     private let inputSubject = PassthroughSubject<LostItemDataViewModel.Input, Never>()
     private var subscription: Set<AnyCancellable> = []
+    weak var delegate: LostItemDataViewControllerDelegate?
     
     // MARK: - UI Components
     private let lostItemDataTableView = LostItemDataTableView()
@@ -168,6 +173,7 @@ extension LostItemDataViewController {
     private func showChangeStateModal(_ id: Int) {
         let onRightButtonTapped: ()->Void = { [weak self] in
             self?.inputSubject.send(.changeState(id))
+            self?.delegate?.updateState(foundDataId: id)
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
         modalViewController.modalTransitionStyle = .crossDissolve

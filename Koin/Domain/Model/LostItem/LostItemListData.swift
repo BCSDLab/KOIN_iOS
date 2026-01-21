@@ -16,6 +16,6 @@ struct LostItemListData {
     let content: String?
     let author: String
     let registeredAt: String
-    let isReported: Bool
-    let isFound: Bool
+    var isReported: Bool
+    var isFound: Bool
 }

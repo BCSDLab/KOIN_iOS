@@ -42,6 +42,13 @@ final class LostItemListTableView: UITableView {
         isWaiting = true
         lostItemListData = []
     }
+    
+    func updateState(foundDataId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData[index].isFound = true
+            reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
+    }
 }
 
 extension LostItemListTableView: UITableViewDataSource {

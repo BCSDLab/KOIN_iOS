@@ -135,6 +135,7 @@ final class LostItemListViewController: UIViewController {
                 changeLostItemStateUseCase: changeLostItemStateUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
+            viewController.delegate = self
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
@@ -183,6 +184,13 @@ extension LostItemListViewController {
         let bottomSheetViewController = BottomSheetViewController(contentViewController: postOptionViewController, defaultHeight: 225, cornerRadius: 32)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         navigationController?.present(bottomSheetViewController, animated: true)
+    }
+}
+
+extension LostItemListViewController: LostItemDataViewControllerDelegate {
+    
+    func updateState(foundDataId id: Int) {
+        lostItemListTableView.updateState(foundDataId: id)
     }
 }
 
