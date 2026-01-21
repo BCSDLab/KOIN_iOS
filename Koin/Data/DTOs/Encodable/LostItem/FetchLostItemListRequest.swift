@@ -16,6 +16,13 @@ struct FetchLostItemListRequest: Encodable {
     let sort: LostItemSort = .latest
     var author: LostItemAuthor = .all
     var title: String? = nil
+    
+    static func !=(lhs: FetchLostItemListRequest, rhs: FetchLostItemListRequest) -> Bool {
+        return lhs.type != rhs.type
+        || lhs.category != rhs.category
+        || lhs.foundStatus != rhs.foundStatus
+        || lhs.author != rhs.author
+    }
 }
 
 enum LostItemCategory: String, Encodable {

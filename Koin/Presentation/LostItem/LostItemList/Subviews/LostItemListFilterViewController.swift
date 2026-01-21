@@ -11,10 +11,10 @@ import Combine
 final class LostItemListFilterViewController: UIViewController {
     
     // MARK: - Properties
-    private let onResetFilterButtonTapped: ()->Void
     private let onApplyFilterButtonTapped: (FetchLostItemListRequest)->Void
     @Published private var filterState: FetchLostItemListRequest
     private var subscriptions: Set<AnyCancellable> = []
+    private let isLoggedIn: Bool
     
     // MARK: - UI Components
     private let filterTitleLabel = UILabel().then {
@@ -136,11 +136,11 @@ final class LostItemListFilterViewController: UIViewController {
     }
     
     // MARK: - Initiailizer
-    init(filterState: FetchLostItemListRequest,
-         onResetFilterButtonTapped: @escaping () -> Void,
+    init(isLoggedIn: Bool,
+         filterState: FetchLostItemListRequest,
          onApplyFilterButtonTapped: @escaping (FetchLostItemListRequest) -> Void) {
+        self.isLoggedIn = isLoggedIn
         self.filterState = filterState
-        self.onResetFilterButtonTapped = onResetFilterButtonTapped
         self.onApplyFilterButtonTapped = onApplyFilterButtonTapped
         super.init(nibName: nil, bundle: nil)
     }
@@ -206,7 +206,11 @@ extension LostItemListFilterViewController {
         filterState.author = .all
     }
     @objc private func authorMineButtonTapped() {
-        filterState.author = .my
+        if isLoggedIn {
+            filterState.author = .my
+        } else {
+            showToast(message: "로그인이 필요한 기능입니다.")
+        }
     }
     @objc private func typeAllButtonTapped() {
         filterState.type = nil

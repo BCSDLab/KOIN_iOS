@@ -15,12 +15,11 @@ final class LostItemListViewModel {
         case loadList
         case loadMoreList
         case updateTitle(title: String?)
+        case updateFilter(filter: FetchLostItemListRequest)
     }
     enum Output {
         case updateList([LostItemListData])
         case appendList([LostItemListData])
-        case presentPostType
-        case showLogin
         case resetList
     }
     
@@ -30,6 +29,8 @@ final class LostItemListViewModel {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscription: Set<AnyCancellable> = []
+    
+    private(set) var isLoggedIn: Bool = false
     var filterState = FetchLostItemListRequest()
     
     
@@ -51,6 +52,8 @@ final class LostItemListViewModel {
                 self.checkLogin()
             case .updateTitle(let title):
                 self.updateTitle(title)
+            case .updateFilter(let filter):
+                self.updateFilter(filter)
             }
         }.store(in: &subscription)
         return outputSubject.eraseToAnyPublisher()
@@ -86,12 +89,8 @@ extension LostItemListViewModel {
     private func checkLogin() {
         checkLoginUseCase.execute().sink(
             receiveCompletion: { _ in},
-            receiveValue: { [weak self] loggedIn in
-                if loggedIn {
-                    self?.outputSubject.send(.presentPostType)
-                } else {
-                    self?.outputSubject.send(.showLogin)
-                }
+            receiveValue: { [weak self] isLoggedIn in
+                self?.isLoggedIn = isLoggedIn
             }
         ).store(in: &subscription)
     }
@@ -108,6 +107,25 @@ extension LostItemListViewModel {
             filterState.title = nil
         }
         filterState.page = 1
+        
+        fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] lostItemList in
+                self?.outputSubject.send(.updateList(lostItemList.articles))
+            }
+        ).store(in: &subscription)
+    }
+    
+    private func updateFilter(_ filter: FetchLostItemListRequest) {
+        guard filterState != filter else {
+            return
+        }
+        outputSubject.send(.resetList)
+        
+        filterState.type = filter.type
+        filterState.category = filter.category
+        filterState.foundStatus = filter.foundStatus
+        filterState.author = filter.author
         
         fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },

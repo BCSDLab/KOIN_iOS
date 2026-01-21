@@ -99,6 +99,7 @@ final class LostItemListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+        inputSubject.send(.checkLogin)
     }
     
     private func bind() {
@@ -109,10 +110,6 @@ final class LostItemListViewController: UIViewController {
                 self.lostItemListTableView.update(lostItemListData)
             case .appendList(let lostItemListData):
                 self.lostItemListTableView.append(lostItemListData)
-            case .presentPostType:
-                self.presentPostTypeModal()
-            case .showLogin:
-                self.showLogin()
             case .resetList:
                 self.lostItemListTableView.reset()
             }
@@ -184,9 +181,12 @@ extension LostItemListViewController {
     
     @objc private func filterButtonTapped() {
         let filterViewController = LostItemListFilterViewController(
+            isLoggedIn: self.viewModel.isLoggedIn,
             filterState: self.viewModel.filterState,
-            onResetFilterButtonTapped: {},
-            onApplyFilterButtonTapped: {_ in}
+            onApplyFilterButtonTapped: { [weak self] filter in
+                self?.dismissView()
+                self?.inputSubject.send(.updateFilter(filter: filter))
+            }
         )
         let bottomSheetViewController = BottomSheetViewController(contentViewController: filterViewController, defaultHeight: UIApplication.hasHomeButton() ? 661 - 35 : 661, cornerRadius: 32)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
@@ -194,7 +194,11 @@ extension LostItemListViewController {
     }
     
     @objc private func writeButtonTapped() {
-        inputSubject.send(.checkLogin)
+        if viewModel.isLoggedIn {
+            self.presentPostTypeModal()
+        } else {
+            self.showLogin()
+        }
     }
     
     @objc private func searchButtonTapped() {
