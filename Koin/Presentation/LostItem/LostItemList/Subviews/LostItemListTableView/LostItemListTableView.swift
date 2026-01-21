@@ -39,6 +39,10 @@ final class LostItemListTableView: UITableView {
         }
         reloadData()
     }
+    func reset() {
+        isWaiting = true
+        lostItemListData = []
+    }
 }
 
 extension LostItemListTableView: UITableViewDataSource {

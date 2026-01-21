@@ -14,12 +14,14 @@ final class LostItemListViewModel {
         case checkLogin
         case loadList
         case loadMoreList
+        case updateTitle(title: String?)
     }
     enum Output {
         case updateList([LostItemListData])
         case appendList([LostItemListData])
         case presentPostType
         case showLogin
+        case resetList
     }
     
     // MARK: - Properties
@@ -47,7 +49,8 @@ final class LostItemListViewModel {
                 self.loadMoreList()
             case .checkLogin:
                 self.checkLogin()
-            
+            case .updateTitle(let title):
+                self.updateTitle(title)
             }
         }.store(in: &subscription)
         return outputSubject.eraseToAnyPublisher()
@@ -89,6 +92,27 @@ extension LostItemListViewModel {
                 } else {
                     self?.outputSubject.send(.showLogin)
                 }
+            }
+        ).store(in: &subscription)
+    }
+    
+    private func updateTitle(_ title: String?) {
+        guard filterState.title != title else {
+            return
+        }
+        outputSubject.send(.resetList)
+        
+        if let title, !title.trimmingCharacters(in: .whitespaces).isEmpty {
+            filterState.title = title
+        } else {
+            filterState.title = nil
+        }
+        filterState.page = 1
+        
+        fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] lostItemList in
+                self?.outputSubject.send(.updateList(lostItemList.articles))
             }
         ).store(in: &subscription)
     }

@@ -113,6 +113,8 @@ final class LostItemListViewController: UIViewController {
                 self.presentPostTypeModal()
             case .showLogin:
                 self.showLogin()
+            case .resetList:
+                self.lostItemListTableView.reset()
             }
         }.store(in: &subscriptions)
         
@@ -177,6 +179,7 @@ extension LostItemListViewController {
     private func setAddTarget() {
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
     
     @objc private func filterButtonTapped() {
@@ -192,6 +195,10 @@ extension LostItemListViewController {
     
     @objc private func writeButtonTapped() {
         inputSubject.send(.checkLogin)
+    }
+    
+    @objc private func searchButtonTapped() {
+        inputSubject.send(.updateTitle(title: searchTextField.text))
     }
 }
 
