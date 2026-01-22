@@ -133,8 +133,9 @@ extension LostItemDataViewController {
     }
     
     private func navigateToEdit() {
-        let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-        //viewController.configure()
+        let mockData = LostItemData(id: 0, boardID: 0, type: .lost, category: "카드", foundPlace: "학생 식단 퇴식구", foundDate: "2022-02-22", content: nil, author: "익명", isCouncil: false, isMine: true, isFound: false, images: [], registeredAt: "2022-02-22", updatedAt: "2022-02-22")
+        let viewModel = EditLostItemViewModel(lostItemData: mockData)
+        let viewController = EditLostItemViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     

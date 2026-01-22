@@ -208,7 +208,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType, isEditingMode: Bool) {
+    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
         self.type = type
         textFieldPlaceHolder = "\(type.description) 장소를 입력해주세요."
         textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
@@ -278,17 +278,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         
         let maxCharacters = 1000
         contentTextCountLabel.text = "\(contentTextView.text.count)/\(maxCharacters)"
-        
-        if isEditingMode {
-            itemCountLabel.snp.updateConstraints { make in
-                make.top.equalTo(separateView.snp.bottom).offset(0)
-                make.leading.equalTo(contentView.snp.leading).offset(24)
-                make.width.equalTo(70)
-                make.height.equalTo(0)
-            }
-            itemCountLabel.isHidden = true
-            deleteCellButton.isHidden = true
-        }
     }
 }
 

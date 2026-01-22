@@ -13,7 +13,7 @@ struct LostItemData {
     let boardID: Int
     let type: LostItemType
     let category: String
-    let foundPlace: String
+    let foundPlace: String?
     let foundDate: String
     let content: String?
     let author: String

@@ -23,7 +23,7 @@ final class LostItemListViewModel {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscription: Set<AnyCancellable> = []
-    var filterState = FetchLostItemRequest()
+    var filterState = FetchLostItemListRequest()
     
     
     // MARK: - Initializer

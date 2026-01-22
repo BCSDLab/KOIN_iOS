@@ -19,8 +19,6 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
     let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
     
-    
-    var isEditingMode: Bool = false
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
     
@@ -46,30 +44,6 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
         dataSource = self
         delegate = self
         articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
-    }
-    
-    func configure(article: LostItemData) {
-        let year = article.foundDate.components(separatedBy: "-")[0]
-        var month = article.foundDate.components(separatedBy: "-")[1]
-        var day = article.foundDate.components(separatedBy: "-")[2]
-        if month.hasPrefix("0") {
-            month = String(month.dropFirst())
-        }
-        if day.hasPrefix("0") {
-            day = String(day.dropFirst())
-        }
-        let foundDate = "\(year)년 \(month)월 \(day)일"
-        self.articles = [PostLostItemRequest(
-            type: article.type,
-            category: article.category,
-            location: article.foundPlace,
-            foundDate: foundDate,
-            content: article.content,
-            images: article.images.map { $0.imageUrl },
-            registeredAt: article.registeredAt,
-            updatedAt: article.updatedAt)]
-        self.isEditing = true
-        reloadData()
     }
 }
 
@@ -103,7 +77,7 @@ extension AddLostItemCollectionView {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1500
         let dummyCell = AddLostItemCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(index: 0, isSingle: true, model: PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""), type: type, isEditingMode: isEditingMode)
+        dummyCell.configure(index: 0, isSingle: true, model: PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""), type: type)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
@@ -116,14 +90,11 @@ extension AddLostItemCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        if isEditingMode {
-            return .zero
-        }
         return articles.count >= 10 ? .zero : CGSize(width: collectionView.bounds.width, height: 70)
     }
     func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
         
-        if kind == UICollectionView.elementKindSectionFooter && !isEditingMode {
+        if kind == UICollectionView.elementKindSectionFooter {
             guard let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AddLostItemFooterView.identifier, for: indexPath) as? AddLostItemFooterView else {
                 return UICollectionReusableView()
             }
@@ -151,7 +122,7 @@ extension AddLostItemCollectionView {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddLostItemCollectionViewCell.identifier, for: indexPath) as? AddLostItemCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type, isEditingMode: isEditingMode)
+        cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type)
         cell.setImage(url: articles[indexPath.row].images ?? [])
         cell.deleteButtonPublisher.sink { [weak self] _ in
             self?.articles.remove(at: indexPath.row)

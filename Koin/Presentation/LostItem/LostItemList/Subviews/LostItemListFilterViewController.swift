@@ -12,8 +12,8 @@ final class LostItemListFilterViewController: UIViewController {
     
     // MARK: - Properties
     private let onResetFilterButtonTapped: ()->Void
-    private let onApplyFilterButtonTapped: (FetchLostItemRequest)->Void
-    @Published private var filterState: FetchLostItemRequest
+    private let onApplyFilterButtonTapped: (FetchLostItemListRequest)->Void
+    @Published private var filterState: FetchLostItemListRequest
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
@@ -136,9 +136,9 @@ final class LostItemListFilterViewController: UIViewController {
     }
     
     // MARK: - Initiailizer
-    init(filterState: FetchLostItemRequest,
+    init(filterState: FetchLostItemListRequest,
          onResetFilterButtonTapped: @escaping () -> Void,
-         onApplyFilterButtonTapped: @escaping (FetchLostItemRequest) -> Void) {
+         onApplyFilterButtonTapped: @escaping (FetchLostItemListRequest) -> Void) {
         self.filterState = filterState
         self.onResetFilterButtonTapped = onResetFilterButtonTapped
         self.onApplyFilterButtonTapped = onApplyFilterButtonTapped
@@ -245,7 +245,7 @@ extension LostItemListFilterViewController {
         filterState.foundStatus = .found
     }
     @objc private func resetFilterButtonTapped() {
-        filterState = FetchLostItemRequest()
+        filterState = FetchLostItemListRequest()
     }
     @objc private func applyFilterButtonTapped() {
         onApplyFilterButtonTapped(filterState)
