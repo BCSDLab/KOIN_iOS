@@ -275,9 +275,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         if let dateValue = dateFormatter.date(from: model.foundDate) {
             dropdownView.dateValue = dateValue
         }
-        
-        let maxCharacters = 1000
-        contentTextCountLabel.text = "\(contentTextView.text.count)/\(maxCharacters)"
     }
 }
 
