@@ -14,6 +14,7 @@ enum LostItemAPI {
     case changeListItemState(Int)
     case deleteLostItem(Int)
     case updateLostItem((Int, UpdateLostItemRequest))
+    case fetchLostItemStats
 }
 
 extension LostItemAPI: Router, URLRequestConvertible {
@@ -28,6 +29,7 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .changeListItemState(let id): return "/articles/lost-item/\(id)/found"
         case .deleteLostItem(let id): return "/articles/lost-item/\(id)"
         case .updateLostItem((let id, _)): return "/articles/lost-item/\(id)"
+        case .fetchLostItemStats: return "/articles/lost-item/stats"
         }
     }
     
@@ -38,6 +40,7 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .changeListItemState: return .post
         case .deleteLostItem: return .delete
         case .updateLostItem: return .put
+        case .fetchLostItemStats: return .get
         }
     }
     
@@ -50,6 +53,8 @@ extension LostItemAPI: Router, URLRequestConvertible {
             } else {
                 return [:]
             }
+        case .fetchLostItemStats:
+            return [:]
         }
     }
     
@@ -60,6 +65,7 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .changeListItemState: return nil
         case .deleteLostItem: return nil
         case .updateLostItem((_, let request)): return try? request.toDictionary()
+        case .fetchLostItemStats: return nil
         }
     }
     
@@ -70,6 +76,7 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .changeListItemState: return URLEncoding.default
         case .deleteLostItem: return URLEncoding.default
         case .updateLostItem: return JSONEncoding.default
+        case .fetchLostItemStats: return nil
         }
     }
 }

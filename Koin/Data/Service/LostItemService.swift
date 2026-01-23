@@ -15,6 +15,7 @@ protocol LostItemService {
     func changeLostItemState(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, Error>
     func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemDataDto, ErrorResponse>
+    func fetchLostItemStats() -> AnyPublisher<LostItemStatsDto, Error>
 }
 
 final class DefaultLostItemService: LostItemService {
@@ -49,7 +50,6 @@ final class DefaultLostItemService: LostItemService {
     }
     
     func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemDataDto, ErrorResponse> {
-        print(requestModel)
         return networkService.requestWithResponse(api: LostItemAPI.updateLostItem((id, requestModel)))
             .catch { [weak self] error -> AnyPublisher<LostItemDataDto, ErrorResponse> in
                 guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
@@ -62,6 +62,10 @@ final class DefaultLostItemService: LostItemService {
                 }
             }
             .eraseToAnyPublisher()
+    }
+    
+    func fetchLostItemStats() -> AnyPublisher<LostItemStatsDto, Error> {
+        return request(LostItemAPI.fetchLostItemStats)
     }
     
     private func request<T: Decodable>(_ api: LostItemAPI) -> AnyPublisher<T, Error> {

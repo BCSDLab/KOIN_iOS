@@ -98,6 +98,7 @@ extension FoundIdViewController {
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let dateProvider = DefaultDateProvider()
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
         
         let homeViewModel = HomeViewModel(
             fetchDiningListUseCase: fetchDiningListUseCase,
@@ -109,7 +110,8 @@ extension FoundIdViewController {
             checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
             assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())),
             fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
-            checkLoginUseCase: checkLoginUseCase
+            checkLoginUseCase: checkLoginUseCase,
+            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase
         )
         let viewController = HomeViewController(viewModel: homeViewModel)
         return viewController

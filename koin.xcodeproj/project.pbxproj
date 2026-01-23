@@ -80,6 +80,8 @@
 		7C61D3512F22B344005FAC3A /* ExtendedTouchAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */; };
 		7C61D3532F22E686005FAC3A /* DeleteLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */; };
 		7C61D3552F22FC7B005FAC3A /* EditLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */; };
+		7C61D3572F23CD8B005FAC3A /* LostItemStatsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */; };
+		7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
@@ -862,6 +864,8 @@
 		7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedTouchAreaView.swift; sourceTree = "<group>"; };
 		7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLostItemUseCase.swift; sourceTree = "<group>"; };
 		7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemUseCase.swift; sourceTree = "<group>"; };
+		7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemStatsDto.swift; sourceTree = "<group>"; };
+		7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemStats.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
@@ -1821,6 +1825,7 @@
 				7C8ADD372F20C0B200F85BDE /* LostItemListDto.swift */,
 				7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */,
 				7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */,
+				7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -1833,6 +1838,7 @@
 				7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */,
 				7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */,
 				7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */,
+				7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -4554,6 +4560,7 @@
 				B46B8D3A2E771A1300A8E797 /* ShopMenusCategoryDTO.swift in Sources */,
 				D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
+				7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */,
 				7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */,
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
 				833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */,
@@ -4808,6 +4815,7 @@
 				7CED914F2EF2D1F900457128 /* AddClassHeaderView.swift in Sources */,
 				7CED91522EF2D1F900457128 /* ChangeMyProfileViewController.swift in Sources */,
 				7CED91532EF2D1F900457128 /* LoginViewController.swift in Sources */,
+				7C61D3572F23CD8B005FAC3A /* LostItemStatsDto.swift in Sources */,
 				7CED91552EF2D1F900457128 /* HotNoticeArticlesTableView.swift in Sources */,
 				7CED91562EF2D1F900457128 /* ScoreView.swift in Sources */,
 				7CED91572EF2D1F900457128 /* CenterFlowLayout.swift in Sources */,

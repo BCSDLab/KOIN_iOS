@@ -14,4 +14,5 @@ protocol LostItemRepository {
     func changeLostItemState(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, Error>
     func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemData, ErrorResponse>
+    func fetchLostItemStats() -> AnyPublisher<LostItemStats, Error>
 }
