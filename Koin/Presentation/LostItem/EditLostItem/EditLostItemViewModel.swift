@@ -13,7 +13,7 @@ final class EditLostItemViewModel: ViewModelProtocol {
     // MARK: - Input
     enum Input {
         case uploadFile([Data])
-        case editButtonTapped(([String], String, String, String?, String?))
+        case editButtonTapped(([String], String, String, String, String?))
     }
     
     // MARK: - Output
@@ -73,7 +73,7 @@ extension EditLostItemViewModel {
         _ imageUrls: [String],
         _ category: String,
         _ foundDate: String,
-        _ foundPlace: String?,
+        _ foundPlace: String,
         _ content: String?
     ) {
         

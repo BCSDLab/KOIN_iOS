@@ -9,7 +9,7 @@ import Foundation
 
 struct UpdateLostItemRequest: Encodable {
     let category: String
-    let foundPlace: String?
+    let foundPlace: String
     let foundDate: String
     let content: String?
     let newImages: [String]

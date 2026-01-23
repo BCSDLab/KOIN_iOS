@@ -195,12 +195,17 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
             }
         }
         
-        contentLabel.attributedText = NSAttributedString(string: "\(lostItemData.content)", attributes: [
-            .font : UIFont.appFont(.pretendardRegular, size: 14),
-            .foregroundColor : UIColor.appColor(.neutral800),
-            .paragraphStyle : NSMutableParagraphStyle().then { $0.lineSpacing = 1.6 }
-        ])
-        contentLabel.isHidden = lostItemData.content?.isEmpty ?? true
+        if let content = lostItemData.content,
+           !content.isEmpty {
+            contentLabel.attributedText = NSAttributedString(string: "\(content)", attributes: [
+                .font : UIFont.appFont(.pretendardRegular, size: 14),
+                .foregroundColor : UIColor.appColor(.neutral800),
+                .paragraphStyle : NSMutableParagraphStyle().then { $0.lineSpacing = 1.6 }
+            ])
+            contentLabel.isHidden = false
+        } else {
+            contentLabel.isHidden = true
+        }
         
         councilLabel.isHidden = !lostItemData.isCouncil
         

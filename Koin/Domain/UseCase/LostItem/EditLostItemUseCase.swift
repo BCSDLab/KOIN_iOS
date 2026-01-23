@@ -15,7 +15,7 @@ protocol UpdateLostItemUseCase {
         imageUrls: [String],
         category: String,
         foundDate: String,
-        foundPlace: String?,
+        foundPlace: String,
         content: String?
     ) -> AnyPublisher<LostItemData, ErrorResponse>
 }
@@ -34,8 +34,8 @@ final class DefaultUpdateLostItemUseCase: UpdateLostItemUseCase {
         imageUrls updatedUrls: [String],
         category: String,
         foundDate: String,
-        foundPlace: String?,
-        content rawContent: String?
+        foundPlace: String,
+        content: String?
     ) -> AnyPublisher<LostItemData, ErrorResponse> {
         
         let originalImageUrls = originalData.images.map { $0.imageUrl }
@@ -47,7 +47,6 @@ final class DefaultUpdateLostItemUseCase: UpdateLostItemUseCase {
         }.map {
             $0.id
         }
-        let content: String? = (rawContent?.isEmpty == true) ? nil : rawContent
         
         let requestModel = UpdateLostItemRequest(
             category: category,

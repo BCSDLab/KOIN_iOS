@@ -126,17 +126,27 @@ extension EditLostItemViewController {
     }
     
     @objc private func editButtonTapped() {
-        if categoryView.isValid && foundDateView.isValid && foundPlaceView.isValid {
+        if foundDateView.isValid && foundPlaceView.isValid {
             let imageUrls = imagesView.imageUploadCollectionView.imageUrls
-            guard let category = categoryView.selectedCategory else {
-                return
-            }
+            let category = categoryView.selectedCategory
             let foundDate = foundDateView.foundDate
-            let foundPlace = foundPlaceView.locationTextField.text
-            var content: String? = contentView.contentTextView.text
-            if content?.isEmpty == true {
+            
+            let foundPlace: String
+            if foundPlaceView.locationTextField.textColor == .appColor(.neutral800),
+               let rawFoundPlace = foundPlaceView.locationTextField.text {
+                foundPlace = rawFoundPlace
+            } else {
+                foundPlace = "장소 미상"
+            }
+            
+            let content: String?
+            if contentView.contentTextView.textColor == .appColor(.neutral800),
+               !contentView.contentTextView.text.trimmingCharacters(in: .whitespaces).isEmpty {
+                content = contentView.contentTextView.text
+            } else {
                 content = nil
             }
+            
             inputSubject.send(.editButtonTapped((imageUrls, category, foundDate, foundPlace, content)))
         }
     }
