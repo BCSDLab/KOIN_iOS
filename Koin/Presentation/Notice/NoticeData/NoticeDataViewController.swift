@@ -312,7 +312,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         
         deleteArticleModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, .click, "확인"))
-            self?.inputSubject.send(.deleteLostItem)
         }).store(in: &subscriptions)
         
         reportLostItemLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
@@ -350,10 +349,6 @@ extension NoticeDataViewController {
     @objc private func reportButtonTapped() {
         inputSubject.send(.checkLogin(.report))
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostReport, .click, "신고하기"))
-    }
-    
-    @objc private func deleteButtonTapped() {
-        inputSubject.send(.deleteLostItem)
     }
     
     private func updateLostItem(_ item: LostArticleDetailDto) {

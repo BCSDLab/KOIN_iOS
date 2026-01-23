@@ -13,6 +13,7 @@ protocol LostItemService {
     func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemListDto, Error>
     func fetchLostItemData(id: Int) -> AnyPublisher<LostItemDataDto, Error>
     func changeLostItemState(id: Int) -> AnyPublisher<Void, ErrorResponse>
+    func deleteLostItem(id: Int) -> AnyPublisher<Void, Error>
 }
 
 final class DefaultLostItemService: LostItemService {
@@ -42,6 +43,10 @@ final class DefaultLostItemService: LostItemService {
             .eraseToAnyPublisher()
     }
     
+    func deleteLostItem(id: Int) -> AnyPublisher<Void, Error> {
+        return request(.deleteLostItem(id))
+    }
+    
     private func request<T: Decodable>(_ api: LostItemAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .publishDecodable(type: T.self)
@@ -49,4 +54,30 @@ final class DefaultLostItemService: LostItemService {
             .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
+    
+    private func request(_ api: LostItemAPI) -> AnyPublisher<Void, Error> {
+        return AF.request(api)
+            .validate()
+            .publishData()
+            .value()
+            .map { _ in }
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
+    }
 }
+
+
+//private func sendDeviceToken() -> AnyPublisher<Void, ErrorResponse> {
+//        return networkService.request(api: NotiAPI.sendDeviceToken)
+//            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+//                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+//                if error.code == "401" {
+//                    return self.networkService.refreshToken()
+//                        .flatMap { _ in self.networkService.request(api: NotiAPI.sendDeviceToken) }
+//                        .eraseToAnyPublisher()
+//                } else {
+//                    return Fail(error: error).eraseToAnyPublisher()
+//                }
+//            }
+//            .eraseToAnyPublisher()
+//    }

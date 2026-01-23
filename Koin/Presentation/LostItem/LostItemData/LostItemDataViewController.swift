@@ -12,6 +12,7 @@ import UIKit
 protocol LostItemDataViewControllerDelegate: AnyObject {
     func updateState(foundDataId id: Int)
     func updateState(reportedDataId id: Int)
+    func updateState(deletedId id: Int)
 }
 
 final class LostItemDataViewController: UIViewController {
@@ -67,6 +68,10 @@ final class LostItemDataViewController: UIViewController {
                 self.showToast(message: message)
             case .changeState:
                 self.lostItemDataTableView.changeState()
+            case .deletedData(let id):
+                self.delegate?.updateState(deletedId: id)
+            case .popViewController:
+                self.navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscription)
         
@@ -79,11 +84,13 @@ final class LostItemDataViewController: UIViewController {
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
+            let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemDataUseCase: fetchLostItemDataUseCase,
                 fetchLostItemListUseCase: fetchLostItemListUseCase,
                 changeLostItemStateUseCase: changeLostItemStateUseCase,
+                deleteLostItemUseCase: deleteLostItemUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
@@ -155,8 +162,7 @@ extension LostItemDataViewController {
     
     private func showDeleteModal() {
         let onRightButtonTapped: ()->Void = { [weak self] in
-            // TODO: ViewModel 호출
-            self?.navigationController?.popViewController(animated: true)
+            self?.inputSubject.send(.deleteData)
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
         modalViewController.modalPresentationStyle = .overFullScreen

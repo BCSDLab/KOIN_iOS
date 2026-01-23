@@ -128,11 +128,13 @@ final class LostItemListViewController: UIViewController {
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
+            let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemDataUseCase: fetchLostItemDataUseCase,
                 fetchLostItemListUseCase: fetchLostItemListUseCase,
                 changeLostItemStateUseCase: changeLostItemStateUseCase,
+                deleteLostItemUseCase: deleteLostItemUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             viewController.delegate = self
@@ -195,6 +197,10 @@ extension LostItemListViewController: LostItemDataViewControllerDelegate {
     
     func updateState(reportedDataId id: Int) {
         lostItemListTableView.updateState(reportedDataId: id)
+    }
+    
+    func updateState(deletedId id: Int) {
+        lostItemListTableView.updateState(deletedId: id)
     }
 }
 

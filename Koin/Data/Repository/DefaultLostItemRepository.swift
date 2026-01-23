@@ -31,4 +31,8 @@ final class DefaultLostItemRepository: LostItemRepository {
     func changeLostItemState(id: Int) -> AnyPublisher<Void, ErrorResponse> {
         return service.changeLostItemState(id: id)
     }
+    
+    func deleteLostItem(id: Int) -> AnyPublisher<Void, Error> {
+        return service.deleteLostItem(id: id)
+    }
 }

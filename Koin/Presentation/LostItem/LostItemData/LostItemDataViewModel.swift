@@ -16,6 +16,7 @@ final class LostItemDataViewModel {
         case loadMoreList
         case checkLogIn
         case changeState(Int)
+        case deleteData
     }
     enum Output {
         case updateData(LostItemData)
@@ -25,6 +26,8 @@ final class LostItemDataViewModel {
         case showLoginModal
         case showToast(String)
         case changeState
+        case deletedData(Int)
+        case popViewController
     }
     
     // MARK: - Properties
@@ -32,9 +35,10 @@ final class LostItemDataViewModel {
     private let fetchLostItemDataUseCase: FetchLostItemDataUseCase
     private let fetchLostItemListUseCase: FetchLostItemListUseCase
     private let changeLostItemStateUseCase: ChangeLostItemStateUseCase
+    private let deleteLostItemUseCase: DeleteLostItemUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let id: Int
+    let id: Int
     private var filterState = FetchLostItemListRequest(limit: 5)
     
     // MARK: - Initializer
@@ -42,11 +46,13 @@ final class LostItemDataViewModel {
          fetchLostItemDataUseCase: FetchLostItemDataUseCase,
          fetchLostItemListUseCase: FetchLostItemListUseCase,
          changeLostItemStateUseCase: ChangeLostItemStateUseCase,
+         deleteLostItemUseCase: DeleteLostItemUseCase,
          id: Int) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemDataUseCase = fetchLostItemDataUseCase
         self.fetchLostItemListUseCase = fetchLostItemListUseCase
         self.changeLostItemStateUseCase = changeLostItemStateUseCase
+        self.deleteLostItemUseCase = deleteLostItemUseCase
         self.id = id
     }
     
@@ -64,6 +70,8 @@ final class LostItemDataViewModel {
                 self.checkLogin()
             case .changeState(let id):
                 self.changeState(id)
+            case .deleteData:
+                self.deleteData()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -131,6 +139,17 @@ extension LostItemDataViewModel {
             },
             receiveValue: { [weak self] in
                 self?.outputSubject.send(.changeState)
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func deleteData() {
+        deleteLostItemUseCase.execute(id: id).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] in
+                guard let self else { return }
+                outputSubject.send(.popViewController)
+                outputSubject.send(.deletedData(id))
             }
         ).store(in: &subscriptions)
     }

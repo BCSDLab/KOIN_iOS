@@ -56,6 +56,13 @@ final class LostItemListTableView: UITableView {
             reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
         }
     }
+    
+    func updateState(deletedId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData.remove(at: index)
+            reloadData()
+        }
+    }
 }
 
 extension LostItemListTableView: UITableViewDataSource {
