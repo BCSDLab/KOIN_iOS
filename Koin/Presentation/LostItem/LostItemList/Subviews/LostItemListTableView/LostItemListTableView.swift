@@ -94,8 +94,9 @@ extension LostItemListTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if lostItemListData[indexPath.row].isReported {
             showToastPublisher.send("신고된 게시글을 더 이상 볼 수 없습니다.")
+        } else {
+            cellTappedPublisher.send(lostItemListData[indexPath.row].id)
         }
-        cellTappedPublisher.send(lostItemListData[indexPath.row].id)
     }
 }
 
