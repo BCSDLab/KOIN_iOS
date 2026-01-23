@@ -42,13 +42,13 @@ final class LostItemDataViewController: UIViewController {
         title = "분실물"
         configureView()
         bind()
-        inputSubject.send(.loadData)
         inputSubject.send(.loadList)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+        inputSubject.send(.loadData)
     }
     
     private func bind() {
