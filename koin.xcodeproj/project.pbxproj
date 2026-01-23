@@ -78,6 +78,13 @@
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
+		7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD322F20BEC200F85BDE /* LostItemService.swift */; };
+		7C8ADD352F20BF4600F85BDE /* LostItemAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */; };
+		7C8ADD382F20C0B200F85BDE /* LostItemListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD372F20C0B200F85BDE /* LostItemListDto.swift */; };
+		7C8ADD3A2F20C10500F85BDE /* LostItemListDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */; };
+		7C8ADD3E2F20C2C400F85BDE /* LostItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD3D2F20C2C400F85BDE /* LostItemRepository.swift */; };
+		7C8ADD402F20C30700F85BDE /* DefaultLostItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD3F2F20C30700F85BDE /* DefaultLostItemRepository.swift */; };
+		7C8ADD452F20C3FB00F85BDE /* FetchLostItemListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
 		7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */; };
 		7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */; };
@@ -849,6 +856,13 @@
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
+		7C8ADD322F20BEC200F85BDE /* LostItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemService.swift; sourceTree = "<group>"; };
+		7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemAPI.swift; sourceTree = "<group>"; };
+		7C8ADD372F20C0B200F85BDE /* LostItemListDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListDto.swift; sourceTree = "<group>"; };
+		7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListDataDto.swift; sourceTree = "<group>"; };
+		7C8ADD3D2F20C2C400F85BDE /* LostItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemRepository.swift; sourceTree = "<group>"; };
+		7C8ADD3F2F20C30700F85BDE /* DefaultLostItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLostItemRepository.swift; sourceTree = "<group>"; };
+		7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemListUseCase.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
 		7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionView.swift; sourceTree = "<group>"; };
 		7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1791,6 +1805,23 @@
 				7C61D3362F21FADF005FAC3A /* EditLostItemViewController.swift */,
 			);
 			path = EditLostItem;
+            sourceTree = "<group>";
+        };
+		7C8ADD362F20C0A500F85BDE /* LostItem */ = {
+			isa = PBXGroup;
+			children = (
+				7C8ADD372F20C0B200F85BDE /* LostItemListDto.swift */,
+				7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */,
+			);
+			path = LostItem;
+			sourceTree = "<group>";
+		};
+		7C8ADD412F20C3CE00F85BDE /* LostItem */ = {
+			isa = PBXGroup;
+			children = (
+				7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */,
+			);
+			path = LostItem;
 			sourceTree = "<group>";
 		};
 		7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */ = {
@@ -3554,6 +3585,7 @@
 		D27DD0792BA608310081FD36 /* Decodable */ = {
 			isa = PBXGroup;
 			children = (
+				7C8ADD362F20C0A500F85BDE /* LostItem */,
 				D223D60E2D9BEC8100C29BE6 /* Core */,
 				D2D4625E2D63A78000C60864 /* Chat */,
 				833D9C202C6B4F4C00982145 /* NoticeList */,
@@ -3953,6 +3985,7 @@
 		D2FB23482BFD45180098BA2B /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				7C8ADD412F20C3CE00F85BDE /* LostItem */,
 				D2D462642D63B97600C60864 /* Chat */,
 				833D9C3F2C705F0E00982145 /* NoticeList */,
 				D208A7C72CABB467007040E7 /* Core */,
@@ -3990,6 +4023,7 @@
 			isa = PBXGroup;
 			children = (
 				D2FB23542BFD49520098BA2B /* ShopRepository.swift */,
+				7C8ADD3D2F20C2C400F85BDE /* LostItemRepository.swift */,
 				D2FB23682C0409370098BA2B /* AnalyticsRepository.swift */,
 				D249CD222C12DB73000813F9 /* DiningRepository.swift */,
 				D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */,
@@ -4009,6 +4043,7 @@
 			isa = PBXGroup;
 			children = (
 				D2FB23562BFD50120098BA2B /* DefaultShopRepository.swift */,
+				7C8ADD3F2F20C30700F85BDE /* DefaultLostItemRepository.swift */,
 				D249CD2B2C12E32F000813F9 /* DefaultDiningRepository.swift */,
 				D2D7C0DC2C282E2700C85A85 /* DefaultLandRepository.swift */,
 				D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */,
@@ -4076,6 +4111,7 @@
 				D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */,
 				D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */,
 				D2D4626B2D63BAC600C60864 /* ChatAPI.swift */,
+				7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -4105,6 +4141,7 @@
 				D2D7C0D82C282A7400C85A85 /* LandService.swift */,
 				83DD0D852C4FA84900278ABD /* BusService.swift */,
 				833D9C442C70672C00982145 /* NoticeListService.swift */,
+				7C8ADD322F20BEC200F85BDE /* LostItemService.swift */,
 				8354BE512C7A0566009D4D7A /* CoreDataService.swift */,
 				D208A7A72CA11221007040E7 /* AbTestService.swift */,
 				D208A7CA2CABB755007040E7 /* CoreService.swift */,
@@ -4485,6 +4522,7 @@
 				7CED92372EF2D25900457128 /* DIContainer+Facility.swift in Sources */,
 				7CED92382EF2D25900457128 /* DIContainer+Chat.swift in Sources */,
 				7CED92392EF2D25900457128 /* DIContainer+Setting.swift in Sources */,
+				7C8ADD352F20BF4600F85BDE /* LostItemAPI.swift in Sources */,
 				83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */,
 				D2B2193F2D66DDF900EAF5B1 /* ChatDateInfo.swift in Sources */,
 				D89F8FD92DF0A8A4000265DC /* DefaultTextField.swift in Sources */,
@@ -4690,6 +4728,7 @@
 				7CED90FF2EF2D1F900457128 /* PolicyViewController.swift in Sources */,
 				7CED91002EF2D1F900457128 /* ChangePasswordSuccessViewController.swift in Sources */,
 				7CED91012EF2D1F900457128 /* FindIdViewModel.swift in Sources */,
+				7C8ADD3A2F20C10500F85BDE /* LostItemListDataDto.swift in Sources */,
 				7CED91022EF2D1F900457128 /* ShopCollectionViewCell.swift in Sources */,
 				7CED91042EF2D1F900457128 /* TimetableCell.swift in Sources */,
 				7CED91052EF2D1F900457128 /* SelectTypeFormViewController.swift in Sources */,
@@ -4860,6 +4899,7 @@
 				7CED91AB2EF2D1F900457128 /* NoticeListViewModel.swift in Sources */,
 				7CED91AC2EF2D1F900457128 /* DiningToShopAbTestButton.swift in Sources */,
 				7CED91AE2EF2D1F900457128 /* ShopInfoColletionView.swift in Sources */,
+				7C8ADD402F20C30700F85BDE /* DefaultLostItemRepository.swift in Sources */,
 				7CED91B02EF2D1F900457128 /* RecommendedKeywordCollectionViewCell.swift in Sources */,
 				7CED91B12EF2D1F900457128 /* ShopDetailTableView.swift in Sources */,
 				7CED91B32EF2D1F900457128 /* ServiceSelectViewController.swift in Sources */,
@@ -4894,6 +4934,7 @@
 				7CED91E12EF2D1F900457128 /* ClubView.swift in Sources */,
 				7CED91E32EF2D1F900457128 /* AddClassCollectionViewCell.swift in Sources */,
 				7C61D3492F220EAC005FAC3A /* EditLostItemFoundDateView.swift in Sources */,
+				7C8ADD382F20C0B200F85BDE /* LostItemListDto.swift in Sources */,
 				7CED91E52EF2D1F900457128 /* ModifyUserModalViewController.swift in Sources */,
 				7CED91E62EF2D1F900457128 /* ShopSummaryInfoView.swift in Sources */,
 				7CED91E92EF2D1F900457128 /* ShopDetailTableViewDeliveryTipsCell.swift in Sources */,
@@ -4906,6 +4947,7 @@
 				7CED91F02EF2D1F900457128 /* DeleteFrameModalViewController.swift in Sources */,
 				7CED91F42EF2D1F900457128 /* NonReviewListView.swift in Sources */,
 				7CED91F52EF2D1F900457128 /* PolicyContentCollectionViewCell.swift in Sources */,
+				7C8ADD3E2F20C2C400F85BDE /* LostItemRepository.swift in Sources */,
 				7CED91F62EF2D1F900457128 /* LogoView.swift in Sources */,
 				7CED91F82EF2D1F900457128 /* TimetableViewModel.swift in Sources */,
 				7CED91F92EF2D1F900457128 /* LandOptionCollectionView.swift in Sources */,
@@ -5069,6 +5111,7 @@
 				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
 				7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */,
 				7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */,
+				7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */,
 				B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */,
@@ -5108,6 +5151,7 @@
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
 				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
+				7C8ADD452F20C3FB00F85BDE /* FetchLostItemListUseCase.swift in Sources */,
 				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,
 				B68D2CE72EA505B000F3B479 /* ToastMessageView.swift in Sources */,
 				D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */,

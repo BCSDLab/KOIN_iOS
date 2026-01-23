@@ -93,6 +93,7 @@ final class LostItemListViewController: UIViewController {
         setAddTarget()
         title = "분실물"
         bind()
+        inputSubject.send(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -104,6 +105,10 @@ final class LostItemListViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
             switch output {
+            case .updateLostItemList(let lostItemListData):
+                self.lostItemListTableView.update(lostItemListData)
+            case .appendLostItemList(let lostItemListData):
+                self.lostItemListTableView.append(lostItemListData)
             case .presentPostType:
                 self.presentPostTypeModal()
             case .showLogin:

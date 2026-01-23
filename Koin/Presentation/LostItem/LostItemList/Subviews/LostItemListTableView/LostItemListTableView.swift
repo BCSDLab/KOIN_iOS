@@ -25,8 +25,14 @@ final class LostItemListTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(lostItemListData: [LostItemListData]) {
+    func update(_ lostItemListData: [LostItemListData]) {
         self.lostItemListData = lostItemListData
+        reloadData()
+    }
+    func append(_ lostItemListData: [LostItemListData]) {
+        lostItemListData.forEach {
+            self.lostItemListData.append($0)
+        }
         reloadData()
     }
 }

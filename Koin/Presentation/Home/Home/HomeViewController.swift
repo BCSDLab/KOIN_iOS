@@ -606,10 +606,11 @@ extension HomeViewController {
     
     // navigate 함수
     private func navigateToLostItemList() {
-        let userService = DefaultUserService()
-        let userRepository = DefaultUserRepository(service: userService)
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase)
+        let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+        let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemItemUseCase: fetchLostItemItemUseCase)
         let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

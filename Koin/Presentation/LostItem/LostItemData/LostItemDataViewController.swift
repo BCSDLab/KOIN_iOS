@@ -112,10 +112,11 @@ extension LostItemDataViewController {
             }) else {
                 return
             }
-            let userService = DefaultUserService()
-            let userRepository = DefaultUserRepository(service: userService)
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-            let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase)
+            let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+            let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemItemUseCase: fetchLostItemItemUseCase)
             let lostItemListViewController = LostItemListViewController(viewModel: viewModel)
             navigationController?.setViewControllers([homeViewController, lostItemListViewController], animated: true)
         }
