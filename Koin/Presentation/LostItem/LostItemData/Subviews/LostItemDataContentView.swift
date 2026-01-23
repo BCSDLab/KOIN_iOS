@@ -1,5 +1,5 @@
 //
-//  LostItemDataTableViewContentCell.swift
+//  LostItemDataContentView.swift
 //  koin
 //
 //  Created by 홍기정 on 1/18/26.
@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class LostItemDataTableViewContentCell: UITableViewCell {
+final class LostItemDataContentView: UIView {
     
     // MARK: - Properties
     let imageTapPublisher = PassthroughSubject<([Image], IndexPath), Never>()
@@ -149,8 +149,8 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     }
     
     // MARK: - Initializer
-    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    init() {
+        super.init(frame: .zero)
         configureView()
         bind()
         setAddTargets()
@@ -237,7 +237,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     }
 }
 
-extension LostItemDataTableViewContentCell {
+extension LostItemDataContentView {
     
     private func setAddTargets() {
         listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
@@ -286,7 +286,7 @@ extension LostItemDataTableViewContentCell {
     }
 }
 
-extension LostItemDataTableViewContentCell {
+extension LostItemDataContentView {
     
     private func configureButtons() {
         [listButton, editButton, deleteButton, chatButton, reportButton].forEach {
@@ -311,7 +311,7 @@ extension LostItemDataTableViewContentCell {
             contentStackView.addArrangedSubview($0)
         }
         [contentStackView, separatorView].forEach {
-            contentView.addSubview($0)
+            addSubview($0)
         }
     }
     private func setUpConstraints() {
@@ -385,6 +385,5 @@ extension LostItemDataTableViewContentCell {
         configureButtons()
         setUpLayouts()
         setUpConstraints()
-        selectionStyle = .none
     }
 }

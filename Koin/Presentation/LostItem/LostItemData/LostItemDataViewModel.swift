@@ -45,6 +45,7 @@ final class LostItemDataViewModel {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     let id: Int
+    private(set) var lostItemData: LostItemData?
     private var filterState = FetchLostItemListRequest(limit: 5)
     
     // MARK: - Initializer

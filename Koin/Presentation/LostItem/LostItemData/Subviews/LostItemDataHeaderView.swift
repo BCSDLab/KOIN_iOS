@@ -1,5 +1,5 @@
 //
-//  LostItemDataTableViewContentHeaderView.swift
+//  LostItemDataHeaderView.swift
 //  koin
 //
 //  Created by 홍기정 on 1/18/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class LostItemDataTableViewContentHeaderView: UITableViewHeaderFooterView {
+final class LostItemDataHeaderView: UIView {
     
     // MARK: - UI Components
     private let typeLabel = UILabel()
@@ -51,8 +51,8 @@ final class LostItemDataTableViewContentHeaderView: UITableViewHeaderFooterView 
     }
     
     // MARK: - Initializer
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    init() {
+        super.init(frame: .zero)
         configureView()
     }
     required init?(coder: NSCoder) {
@@ -89,7 +89,7 @@ final class LostItemDataTableViewContentHeaderView: UITableViewHeaderFooterView 
     }
 }
 
-extension LostItemDataTableViewContentHeaderView {
+extension LostItemDataHeaderView {
     
     private func configureLabels() {
         // textColor
@@ -143,6 +143,7 @@ extension LostItemDataTableViewContentHeaderView {
             $0.height.equalTo(19)
         }
         separatorView.snp.makeConstraints {
+            $0.top.equalTo(authorStackView.snp.bottom).offset(12)
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(6)
         }

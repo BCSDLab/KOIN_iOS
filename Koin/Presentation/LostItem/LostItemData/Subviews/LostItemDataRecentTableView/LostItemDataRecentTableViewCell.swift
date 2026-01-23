@@ -1,5 +1,5 @@
 //
-//  LostItemDataTableViewRecentCell.swift
+//  LostItemDataRecentTableViewCell.swift
 //  koin
 //
 //  Created by 홍기정 on 1/18/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class LostItemDataTableViewRecentCell: UITableViewCell {
+final class LostItemDataRecentTableViewCell: UITableViewCell {
     
     // MARK: - UI Components
     private let typeLabel = UILabel()
@@ -72,7 +72,7 @@ final class LostItemDataTableViewRecentCell: UITableViewCell {
     }
 }
 
-extension LostItemDataTableViewRecentCell {
+extension LostItemDataRecentTableViewCell {
     
     private func configureLabels() {
         // textColor
