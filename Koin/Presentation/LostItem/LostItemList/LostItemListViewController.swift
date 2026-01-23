@@ -192,6 +192,10 @@ extension LostItemListViewController: LostItemDataViewControllerDelegate {
     func updateState(foundDataId id: Int) {
         lostItemListTableView.updateState(foundDataId: id)
     }
+    
+    func updateState(reportedDataId id: Int) {
+        lostItemListTableView.updateState(reportedDataId: id)
+    }
 }
 
 extension LostItemListViewController {

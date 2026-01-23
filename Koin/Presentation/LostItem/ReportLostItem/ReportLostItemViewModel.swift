@@ -29,7 +29,7 @@ final class ReportLostItemViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let defaultReportLostItemUseCase: DefaultReportLostItemUseCase = DefaultReportLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-    private let lostItemId: Int
+    let lostItemId: Int
     
     
     // MARK: - Initialization
@@ -59,7 +59,6 @@ extension ReportLostItemViewModel {
                 self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] response in
-            fetch = true
             self?.outputSubject.send(.showToast("게시글이 신고되었습니다.", true))
         }.store(in: &subscriptions)
     

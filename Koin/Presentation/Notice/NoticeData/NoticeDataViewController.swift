@@ -280,7 +280,9 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.showLoginModal(checkType)
             case let .navigateToScene(checkType, noticeId):
                 switch checkType {
-                case .report: self?.navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
+                case .report:
+                    break
+                    //self?.navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
                 case .chat: self?.inputSubject.send(.createChatRoom)
                 }
             case .popViewController:

@@ -49,6 +49,13 @@ final class LostItemListTableView: UITableView {
             reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
         }
     }
+    
+    func updateState(reportedDataId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData[index].isReported = true
+            reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
+    }
 }
 
 extension LostItemListTableView: UITableViewDataSource {

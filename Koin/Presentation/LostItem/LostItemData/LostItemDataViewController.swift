@@ -11,6 +11,7 @@ import UIKit
 
 protocol LostItemDataViewControllerDelegate: AnyObject {
     func updateState(foundDataId id: Int)
+    func updateState(reportedDataId id: Int)
 }
 
 final class LostItemDataViewController: UIViewController {
@@ -117,8 +118,8 @@ final class LostItemDataViewController: UIViewController {
             self?.inputSubject.send(.checkLogIn)
         }.store(in: &subscription)
         
-        lostItemDataTableView.reportButtonTappedPublisher.sink { [weak self] in
-            self?.navigateToReport()
+        lostItemDataTableView.reportButtonTappedPublisher.sink { [weak self] id in
+            self?.navigateToReport(id)
         }.store(in: &subscription)
         
         lostItemDataTableView.loadMoreListPublisher.sink { [weak self] in
@@ -204,10 +205,12 @@ extension LostItemDataViewController {
         navigationController?.present(modalViewController, animated: true)
     }
     
-    private func navigateToReport() {
-        let noticeId = 17972
-        let viewModel = ReportLostItemViewModel(noticeId: noticeId)
-        let viewController = ReportLostItemViewController(viewModel: viewModel)
+    private func navigateToReport(_ id: Int) {
+        let viewModel = ReportLostItemViewModel(noticeId: id)
+        let onSuccess: (Int)->Void = { [weak self] id in
+            self?.delegate?.updateState(reportedDataId: id)
+        }
+        let viewController = ReportLostItemViewController(viewModel: viewModel, onSuccess: onSuccess)
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

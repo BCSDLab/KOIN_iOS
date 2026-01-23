@@ -12,7 +12,7 @@ import UIKit
 final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Properties
-    
+    private let onSuccess: (Int)->Void
     private let viewModel: ReportLostItemViewModel
     private let inputSubject: PassthroughSubject<ReportLostItemViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -87,8 +87,9 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Initialization
     
-    init(viewModel: ReportLostItemViewModel) {
+    init(viewModel: ReportLostItemViewModel, onSuccess: @escaping (Int)->Void) {
         self.viewModel = viewModel
+        self.onSuccess = onSuccess
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -123,10 +124,14 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let self else { return }
             switch output {
             case .showToast(let message, let success):
-                self?.showToast(message: message)
-                if success { self?.navigationController?.popViewController(animated: true) }
+                self.showToast(message: message)
+                if success {
+                    self.onSuccess(viewModel.lostItemId)
+                    self.navigationController?.popViewController(animated: true)
+                }
             }
         }.store(in: &subscriptions)
         

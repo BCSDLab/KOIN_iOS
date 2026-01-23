@@ -21,7 +21,7 @@ final class LostItemDataTableView: UITableView {
     let cellTappedPublisher = PassthroughSubject<Int, Never>()
     let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let changeStateButtonTappedPublisher = PassthroughSubject<Int, Never>()
-    let reportButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let reportButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let loadMoreListPublisher = PassthroughSubject<Void, Never>()
     private var subscription: Set<AnyCancellable> = []
     
@@ -85,8 +85,8 @@ extension LostItemDataTableView {
         contentCell.chatButtonTappedPublisher.sink { [weak self] in
             self?.chatButtonTappedPublisher.send()
         }.store(in: &subscription)
-        contentCell.reportButtonTappedPublisher.sink { [weak self] in
-            self?.reportButtonTappedPublisher.send()
+        contentCell.reportButtonTappedPublisher.sink { [weak self] id in
+            self?.reportButtonTappedPublisher.send(id)
         }.store(in: &subscription)
     }
 }

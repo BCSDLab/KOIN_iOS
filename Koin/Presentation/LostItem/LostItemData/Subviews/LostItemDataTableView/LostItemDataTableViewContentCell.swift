@@ -17,7 +17,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let changeStateButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let reportButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let reportButtonTappedPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var id: Int?
     private var images: [Image] = []
@@ -272,7 +272,9 @@ extension LostItemDataTableViewContentCell {
         chatButtonTappedPublisher.send()
     }
     @objc private func reportButtonTapped() {
-        reportButtonTappedPublisher.send()
+        if let id {
+            reportButtonTappedPublisher.send(id)
+        }
     }
 }
 
