@@ -91,6 +91,7 @@ final class LostItemListViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         setAddTarget()
+        setDelegate()
         title = "분실물"
         bind()
         inputSubject.send(.loadList)
@@ -120,6 +121,8 @@ final class LostItemListViewController: UIViewController {
         }.store(in: &subscriptions)
         
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
+            self?.dismissKeyboard()
+            
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
             let chatRepository = DefaultChatRepository(service: DefaultChatService())
@@ -145,6 +148,14 @@ final class LostItemListViewController: UIViewController {
         lostItemListTableView.loadMoreListPublisher.sink { [weak self] in
             self?.inputSubject.send(.loadMoreList)
         }.store(in: &subscriptions)
+        
+        lostItemListTableView.dismissKeyBoardPublisher.sink { [weak self] in
+            self?.dismissKeyboard()
+        }.store(in: &subscriptions)
+    }
+    
+    private func setDelegate() {
+        searchTextField.delegate = self
     }
 }
 
@@ -218,6 +229,8 @@ extension LostItemListViewController {
     }
     
     @objc private func filterButtonTapped() {
+        dismissKeyboard()
+        
         let filterViewController = LostItemListFilterViewController(
             isLoggedIn: self.viewModel.isLoggedIn,
             filterState: self.viewModel.filterState,
@@ -240,6 +253,7 @@ extension LostItemListViewController {
     }
     
     @objc private func searchButtonTapped() {
+        dismissKeyboard()
         inputSubject.send(.updateTitle(title: searchTextField.text))
     }
 }
