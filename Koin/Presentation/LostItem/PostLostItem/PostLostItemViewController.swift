@@ -17,8 +17,6 @@ protocol PostLostItemViewControllerDelegate: AnyObject {
 final class PostLostItemViewController: UIViewController {
     
     // MARK: - Properties
-    
-    
     private let viewModel: PostLostItemViewModel
     private let inputSubject: PassthroughSubject<PostLostItemViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -26,22 +24,6 @@ final class PostLostItemViewController: UIViewController {
     
     
     // MARK: - UI Components
-    
-    private let scrollView = UIScrollView().then { _ in
-    }
-    
-    private let mainMessageLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    
-    private let messageImageView = UIImageView().then { _ in
-    }
-    
-    private let subMessageLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
-        $0.textColor = UIColor.appColor(.neutral500)
-    }
-    
     private let addLostItemCollectionView: AddLostItemCollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
@@ -61,6 +43,7 @@ final class PostLostItemViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
+    // MARK: - Initializer
     init(viewModel: PostLostItemViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -80,18 +63,8 @@ final class PostLostItemViewController: UIViewController {
         writeButton.throttle(interval: .seconds(3)) { [weak self] in
             self?.writeButtonTapped()
         }
-        switch viewModel.type {
-        case .found:
-            mainMessageLabel.text = "주인을 찾아요"
-            messageImageView.image = UIImage.appImage(asset: .findPerson)
-            subMessageLabel.text = "습득한 물건을 자세히 설명해주세요!"
-            navigationItem.title = "습득물 신고"
-        case .lost:
-            mainMessageLabel.text = "잃어버렸어요"
-            messageImageView.image = UIImage.appImage(asset: .lostItem)
-            subMessageLabel.text = "분실한 물건을 자세히 설명해주세요!"
-            navigationItem.title = "분실물 신고"
-        }
+        title = "\(viewModel.type.description)물 신고"
+        
         addLostItemCollectionView.setType(type: viewModel.type)
         configureTapGestureToDismissKeyboardDropdown()
     }
@@ -118,18 +91,6 @@ final class PostLostItemViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        // TODO: 수정
-        addLostItemCollectionView.snp.updateConstraints { make in
-            make.height.equalTo(addLostItemCollectionView.calculateDynamicHeight() + 300)
-        }
-        
-        addLostItemCollectionView.heightChangedPublisher.sink { [weak self] in
-            guard let self = self else { return }
-            self.addLostItemCollectionView.snp.updateConstraints { make in
-                make.height.equalTo(self.addLostItemCollectionView.calculateDynamicHeight() + 300)
-            }
-        }.store(in: &subscriptions)
-        
         addLostItemCollectionView.uploadImageButtonPublisher.sink { [weak self] index in
             self?.viewModel.selectedIndex = index
             self?.addImageButtonTapped()
@@ -142,14 +103,14 @@ final class PostLostItemViewController: UIViewController {
         addLostItemCollectionView.textViewFocusPublisher
             .sink { [weak self] yOffset in
                 UIView.animate(withDuration: 0.3) {
-                    self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
+//                    self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
                 }
             }.store(in: &subscriptions)
         
         addLostItemCollectionView.textFieldFocusPublisher
             .sink { [weak self] yOffset in
                 UIView.animate(withDuration: 0.3) {
-                    self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
+//                    self?.scrollView.setContentOffset(CGPoint(x: 0, y: yOffset - 300), animated: false)
                 }
             }.store(in: &subscriptions)
         
@@ -269,42 +230,16 @@ extension PostLostItemViewController {
 extension PostLostItemViewController {
     
     private func setUpLayOuts() {
-        [scrollView, writeButton, separateView].forEach {
+        [addLostItemCollectionView, separateView, writeButton].forEach {
             view.addSubview($0)
-        }
-        
-        [mainMessageLabel, messageImageView, subMessageLabel, addLostItemCollectionView].forEach {
-            scrollView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+        addLostItemCollectionView.snp.makeConstraints { make in
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(separateView.snp.top)
-        }
-        mainMessageLabel.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(9)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.height.equalTo(29)
-        }
-        messageImageView.snp.makeConstraints { make in
-            make.top.equalTo(mainMessageLabel.snp.top)
-            make.leading.equalTo(mainMessageLabel.snp.trailing).offset(8)
-            make.width.height.equalTo(24)
-        }
-        subMessageLabel.snp.makeConstraints { make in
-            make.top.equalTo(mainMessageLabel.snp.bottom)
-            make.leading.equalTo(mainMessageLabel.snp.leading)
-            make.height.equalTo(19)
-        }
-        addLostItemCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(subMessageLabel.snp.bottom).offset(12)
-            make.leading.trailing.equalToSuperview()
-            make.width.equalTo(view.snp.width)
-            make.height.equalTo(1)
-            make.bottom.equalTo(scrollView.snp.bottom)
         }
         separateView.snp.makeConstraints { make in
             make.bottom.equalTo(writeButton.snp.top).offset(-24)
