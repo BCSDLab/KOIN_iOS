@@ -91,6 +91,40 @@ extension LostItemDataTableView {
     }
 }
 
+extension LostItemDataTableView {
+    
+    func updateState(foundDataId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData[index].isFound = true
+            reloadData()
+        }
+    }
+    
+    func updateState(reportedDataId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData.remove(at: index)
+            reloadData()
+        }
+    }
+    
+    func updateState(deletedId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData.remove(at: index)
+            reloadData()
+        }
+    }
+    
+    func updateState(updatedId id: Int, lostItemData: LostItemData) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData[index].category = lostItemData.category
+            lostItemListData[index].foundPlace = lostItemData.foundPlace
+            lostItemListData[index].foundDate = lostItemData.foundDate
+            lostItemListData[index].content = lostItemData.content
+            reloadData()
+        }
+    }
+}
+
 extension LostItemDataTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

@@ -94,6 +94,7 @@ final class LostItemDataViewController: UIViewController {
                 deleteLostItemUseCase: deleteLostItemUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
+            viewController.delegate = self
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscription)
         
@@ -141,6 +142,29 @@ extension LostItemDataViewController: EditLostItemViewControllerDelegate {
     func updateData(lostItemData: LostItemData) {
         lostItemDataTableView.configure(lostItemData: lostItemData)
         delegate?.updateState(updatedId: viewModel.id, lostItemData: lostItemData)
+    }
+}
+
+extension LostItemDataViewController: LostItemDataViewControllerDelegate {
+    
+    func updateState(foundDataId id: Int) {
+        delegate?.updateState(foundDataId: id)
+        lostItemDataTableView.updateState(foundDataId: id)
+    }
+    
+    func updateState(reportedDataId id: Int) {
+        delegate?.updateState(reportedDataId: id)
+        lostItemDataTableView.updateState(reportedDataId: id)
+    }
+    
+    func updateState(deletedId id: Int) {
+        delegate?.updateState(deletedId: id)
+        lostItemDataTableView.updateState(deletedId: id)
+    }
+    
+    func updateState(updatedId id: Int, lostItemData: LostItemData) {
+        delegate?.updateState(updatedId: id, lostItemData: lostItemData)
+        lostItemDataTableView.updateState(updatedId: id, lostItemData: lostItemData)
     }
 }
 
