@@ -341,7 +341,7 @@ extension AddLostItemCollectionViewCell{
 }
 
 extension AddLostItemCollectionViewCell {
-
+    
     func setImage(url: [String]) {
         imageUploadCollectionView.updateImageUrls(url)
     }
@@ -351,16 +351,31 @@ extension AddLostItemCollectionViewCell {
             .compactMap { ($0 as? UIButton)?.isSelected == true ? ($0 as? UIButton)?.titleLabel?.text : nil }
             .first ?? "카드"
         
-        let location = locationTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false
-        ? locationTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines) : ""
+        let location: String
+        switch type {
+        case .found:
+            location = locationTextField.text ?? ""
+        case .lost:
+            if locationTextField.textColor == .appColor(.neutral800),
+               let rawLocation = locationTextField.text {
+                location = rawLocation
+            } else {
+                location = "장소 미상"
+            }
+        }
         
         let foundDate = dateButton.titleLabel?.text ?? ""
         let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
         
+        let content: String?
+        if contentTextView.textColor != .appColor(.neutral500),
+           let rawContent = contentTextView.text,
+           !rawContent.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            content = rawContent
+        } else {
+            content = nil
+        }
         
-        let content = (contentTextView.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty == false && contentTextView.text != textViewPlaceHolder)
-        ? contentTextView.text!.trimmingCharacters(in: .whitespacesAndNewlines)
-        : ""
         return PostLostItemRequest(
             category: category,
             location: location,
@@ -371,6 +386,7 @@ extension AddLostItemCollectionViewCell {
             updatedAt: "2025-01-10"
         )
     }
+    
     func convertToISODate(from koreanDate: String) -> String? {
         let inputFormatter = DateFormatter()
         inputFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
@@ -401,13 +417,12 @@ extension AddLostItemCollectionViewCell {
             isValid = false
         }
         
-        if self.type != .lost {
-            if locationTextField.textColor == UIColor.appColor(.neutral500) {
-                locationWarningLabel.isHidden = false
-                isValid = false
-            }
+        if type == .found,
+           locationTextField.textColor == UIColor.appColor(.neutral500) {
+            locationWarningLabel.isHidden = false
+            isValid = false
         }
-
+        
         return isValid
     }
 }
