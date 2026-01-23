@@ -63,6 +63,16 @@ final class LostItemListTableView: UITableView {
             reloadData()
         }
     }
+    
+    func updateState(lostItemData: LostItemData) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == lostItemData.id }) {
+            lostItemListData[index].category = lostItemData.category
+            lostItemListData[index].foundDate = lostItemData.foundDate
+            lostItemListData[index].foundPlace = lostItemData.foundPlace
+            lostItemListData[index].content = lostItemData.content
+            reloadData()
+        }
+    }
 }
 
 extension LostItemListTableView: UITableViewDataSource {

@@ -17,6 +17,7 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
     var isValid: Bool {
         dateWarningLabel.isHidden
     }
+    private(set) var foundDate: String
     
     // MARK: - UI Components
     private lazy var dateLabel = UILabel().then {
@@ -67,6 +68,7 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
     // MARK: - Initializer
     init(type: LostItemType, foundDate: String) {
         self.type = type
+        self.foundDate = foundDate
         
         super.init(frame: .zero)
         configureView()
@@ -144,6 +146,7 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
         dateButton.setTitle(formattedDate, for: .normal)
         dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         dateWarningLabel.isHidden = true
+        self.foundDate = formattedDate
     }
 }
 

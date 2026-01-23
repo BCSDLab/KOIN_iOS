@@ -14,6 +14,7 @@ protocol LostItemService {
     func fetchLostItemData(id: Int) -> AnyPublisher<LostItemDataDto, Error>
     func changeLostItemState(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, Error>
+    func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemDataDto, ErrorResponse>
 }
 
 final class DefaultLostItemService: LostItemService {
@@ -47,6 +48,22 @@ final class DefaultLostItemService: LostItemService {
         return request(.deleteLostItem(id))
     }
     
+    func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemDataDto, ErrorResponse> {
+        print(requestModel)
+        return networkService.requestWithResponse(api: LostItemAPI.updateLostItem((id, requestModel)))
+            .catch { [weak self] error -> AnyPublisher<LostItemDataDto, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: LostItemAPI.updateLostItem((id, requestModel))) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
     private func request<T: Decodable>(_ api: LostItemAPI) -> AnyPublisher<T, Error> {
         return AF.request(api)
             .publishDecodable(type: T.self)
@@ -65,19 +82,3 @@ final class DefaultLostItemService: LostItemService {
             .eraseToAnyPublisher()
     }
 }
-
-
-//private func sendDeviceToken() -> AnyPublisher<Void, ErrorResponse> {
-//        return networkService.request(api: NotiAPI.sendDeviceToken)
-//            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
-//                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
-//                if error.code == "401" {
-//                    return self.networkService.refreshToken()
-//                        .flatMap { _ in self.networkService.request(api: NotiAPI.sendDeviceToken) }
-//                        .eraseToAnyPublisher()
-//                } else {
-//                    return Fail(error: error).eraseToAnyPublisher()
-//                }
-//            }
-//            .eraseToAnyPublisher()
-//    }

@@ -10,10 +10,10 @@ import Foundation
 struct LostItemListData {
     let id: Int
     let type: LostItemType
-    let category: String
-    let foundPlace: String
-    let foundDate: String
-    let content: String?
+    var category: String
+    var foundPlace: String?
+    var foundDate: String
+    var content: String?
     let author: String
     let registeredAt: String
     var isReported: Bool

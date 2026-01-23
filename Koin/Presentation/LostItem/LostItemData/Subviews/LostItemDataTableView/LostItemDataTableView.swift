@@ -11,7 +11,7 @@ import Combine
 final class LostItemDataTableView: UITableView {
     
     // MARK: - Properties
-    private var lostItemData: LostItemData?
+    private(set) var lostItemData: LostItemData?
     private var lostItemListData: [LostItemListData] = []
     private var isWaiting = true
     let imageTapPublisher = PassthroughSubject<([Image], IndexPath), Never>()

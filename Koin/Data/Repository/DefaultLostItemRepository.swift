@@ -35,4 +35,10 @@ final class DefaultLostItemRepository: LostItemRepository {
     func deleteLostItem(id: Int) -> AnyPublisher<Void, Error> {
         return service.deleteLostItem(id: id)
     }
+    
+    func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemData, ErrorResponse> {
+        return service.updateLostItem(id: id, requestModel: requestModel)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
+    }
 }

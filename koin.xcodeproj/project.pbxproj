@@ -79,6 +79,7 @@
 		7C61D34D2F220EBA005FAC3A /* EditLostItemContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D34C2F220EBA005FAC3A /* EditLostItemContentView.swift */; };
 		7C61D3512F22B344005FAC3A /* ExtendedTouchAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */; };
 		7C61D3532F22E686005FAC3A /* DeleteLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */; };
+		7C61D3552F22FC7B005FAC3A /* EditLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
@@ -860,6 +861,7 @@
 		7C61D34C2F220EBA005FAC3A /* EditLostItemContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemContentView.swift; sourceTree = "<group>"; };
 		7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedTouchAreaView.swift; sourceTree = "<group>"; };
 		7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLostItemUseCase.swift; sourceTree = "<group>"; };
+		7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemUseCase.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
@@ -1830,6 +1832,7 @@
 				7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */,
 				7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */,
 				7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */,
+				7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -4644,6 +4647,7 @@
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
+				7C61D3552F22FC7B005FAC3A /* EditLostItemUseCase.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
 				D2C163D82E252DB500DC68A8 /* ChangePasswordUseCase.swift in Sources */,

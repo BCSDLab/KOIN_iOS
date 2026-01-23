@@ -13,6 +13,7 @@ enum LostItemAPI {
     case fetchLostItemData(Int)
     case changeListItemState(Int)
     case deleteLostItem(Int)
+    case updateLostItem((Int, UpdateLostItemRequest))
 }
 
 extension LostItemAPI: Router, URLRequestConvertible {
@@ -26,20 +27,23 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .fetchLostItemData(let id): return "/articles/lost-item/\(id)"
         case .changeListItemState(let id): return "/articles/lost-item/\(id)/found"
         case .deleteLostItem(let id): return "/articles/lost-item/\(id)"
+        case .updateLostItem((let id, _)): return "/articles/lost-item/\(id)"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchLostItemList, .fetchLostItemData: return .get
+        case .fetchLostItemList: return .get
+        case .fetchLostItemData: return .get
         case .changeListItemState: return .post
         case .deleteLostItem: return .delete
+        case .updateLostItem: return .put
         }
     }
     
     public var headers: [String: String] {
         switch self {
-        case .fetchLostItemList, .fetchLostItemData, .changeListItemState, .deleteLostItem:
+        case .fetchLostItemList, .fetchLostItemData, .changeListItemState, .deleteLostItem, .updateLostItem:
             if let token = KeychainWorker.shared.read(key: .access) {
                 let headers = ["Authorization": "Bearer \(token)"]
                 return headers
@@ -52,14 +56,20 @@ extension LostItemAPI: Router, URLRequestConvertible {
     public var parameters: Any? {
         switch self {
         case .fetchLostItemList(let request): return try? request.toDictionary()
-        case .fetchLostItemData, .changeListItemState, .deleteLostItem: return nil
+        case .fetchLostItemData: return nil
+        case .changeListItemState: return nil
+        case .deleteLostItem: return nil
+        case .updateLostItem((_, let request)): return try? request.toDictionary()
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
         case .fetchLostItemList: return URLEncoding.default
-        case .fetchLostItemData, .changeListItemState, .deleteLostItem: return URLEncoding.queryString
+        case .fetchLostItemData: return URLEncoding.default
+        case .changeListItemState: return URLEncoding.default
+        case .deleteLostItem: return URLEncoding.default
+        case .updateLostItem: return JSONEncoding.default
         }
     }
 }

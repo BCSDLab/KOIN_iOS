@@ -13,12 +13,14 @@ final class EditLostItemViewModel: ViewModelProtocol {
     // MARK: - Input
     enum Input {
         case uploadFile([Data])
+        case editButtonTapped(([String], String, String, String?, String?))
     }
     
     // MARK: - Output
     enum Output {
         case showToast(String)
         case addImageUrl(String)
+        case updateData(LostItemData)
     }
     
     // MARK: - Properties
@@ -28,10 +30,14 @@ final class EditLostItemViewModel: ViewModelProtocol {
     private(set) var lostItemData: LostItemData
     
     private let uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
+    private let updateLostItemUseCase: UpdateLostItemUseCase
     
 
     // MARK: - Initialization
-    init(lostItemData: LostItemData) {
+    init(updateLostItemUseCase: UpdateLostItemUseCase,
+         lostItemData: LostItemData
+    ) {
+        self.updateLostItemUseCase = updateLostItemUseCase
         self.lostItemData = lostItemData
     }
     
@@ -41,6 +47,8 @@ final class EditLostItemViewModel: ViewModelProtocol {
             switch input {
             case let .uploadFile(files):
                 self.uploadFiles(files: files)
+            case let .editButtonTapped((imageUrls, category, foundDate, foundPlace, content)):
+                self.editButtonTapped(imageUrls, category, foundDate, foundPlace, content)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -59,6 +67,33 @@ extension EditLostItemViewModel {
                 self?.outputSubject.send(.addImageUrl($0))
             }
         }.store(in: &subscriptions)
+    }
+    
+    private func editButtonTapped(
+        _ imageUrls: [String],
+        _ category: String,
+        _ foundDate: String,
+        _ foundPlace: String?,
+        _ content: String?
+    ) {
         
+        updateLostItemUseCase.execute(
+            id: lostItemData.id,
+            lostItemData: lostItemData,
+            imageUrls: imageUrls,
+            category: category,
+            foundDate: foundDate,
+            foundPlace: foundPlace,
+            content: content
+        ).sink(
+            receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print(failure)
+                }
+            },
+            receiveValue: { [weak self] lostItemData in
+                self?.outputSubject.send(.updateData(lostItemData))
+            }
+        ).store(in: &subscriptions)
     }
 }
