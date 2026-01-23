@@ -61,10 +61,6 @@ final class LostItemDataViewController: UIViewController {
                 self.lostItemDataTableView.configure(lostItemListData: lostItemListData)
             case .appendList(let lostItemListData):
                 self.lostItemDataTableView.appendList(lostItemListData: lostItemListData)
-            case .navigateToChat:
-                self.navigateToChat()
-            case .showLoginModal:
-                self.showLoginModal()
             case .showToast(let message):
                 self.showToast(message: message)
             case .changeState:
@@ -73,18 +69,27 @@ final class LostItemDataViewController: UIViewController {
                 self.delegate?.updateState(deletedId: id)
             case .popViewController:
                 self.navigationController?.popViewController(animated: true)
+            case .checkedLogin((let option, let isLoggedIn)):
+                switch option {
+                case .chat:
+                    if !isLoggedIn { showLoginToChatModal() }
+                case .report:
+                    isLoggedIn ? navigateToReport() : showLoginToReportModal()
+                }
+            case .navigateToChat(let createChatRoomResponse):
+                navigateToChat(createChatRoomResponse)
             }
         }.store(in: &subscription)
         
         lostItemDataTableView.cellTappedPublisher.sink { [weak self] id in
-            let userService = DefaultUserService()
-            let lostItemService = DefaultLostItemService()
-            let userRepository = DefaultUserRepository(service: userService)
-            let lostItemRepository = DefaultLostItemRepository(service: lostItemService)
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+            let chatRepository = DefaultChatRepository(service: DefaultChatService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
+            let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
             let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
@@ -92,6 +97,7 @@ final class LostItemDataViewController: UIViewController {
                 fetchLostItemListUseCase: fetchLostItemListUseCase,
                 changeLostItemStateUseCase: changeLostItemStateUseCase,
                 deleteLostItemUseCase: deleteLostItemUseCase,
+                createChatRoomUseCase: createChatRoomUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             viewController.delegate = self
@@ -124,11 +130,11 @@ final class LostItemDataViewController: UIViewController {
         }.store(in: &subscription)
         
         lostItemDataTableView.chatButtonTappedPublisher.sink { [weak self] in
-            self?.inputSubject.send(.checkLogIn)
+            self?.inputSubject.send(.checkLogIn(.chat))
         }.store(in: &subscription)
         
         lostItemDataTableView.reportButtonTappedPublisher.sink { [weak self] id in
-            self?.navigateToReport(id)
+            self?.inputSubject.send(.checkLogIn(.report))
         }.store(in: &subscription)
         
         lostItemDataTableView.loadMoreListPublisher.sink { [weak self] in
@@ -227,14 +233,17 @@ extension LostItemDataViewController {
         navigationController?.present(modalViewController, animated: true)
     }
     
-    private func navigateToChat() {
-        let articleId = 0, chatRoomId = 0, articleTitle = ""
-        let chatViewModel = ChatViewModel(articleId: articleId, chatRoomId: chatRoomId, articleTitle: articleTitle)
+    private func navigateToChat(_ createChatRoomResponse: CreateChatRoomResponse) {
+        let chatViewModel = ChatViewModel(
+            articleId: createChatRoomResponse.articleId,
+            chatRoomId: createChatRoomResponse.chatRoomId,
+            articleTitle: createChatRoomResponse.articleTitle
+        )
         let viewController = ChatViewController(viewModel: chatViewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func showLoginModal() {
+    private func showLoginToChatModal() {
         let onRightButtonTapped: ()->Void = { [weak self] in
             let repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
             let userRepository = DefaultUserRepository(service: DefaultUserService())
@@ -250,8 +259,24 @@ extension LostItemDataViewController {
         navigationController?.present(modalViewController, animated: true)
     }
     
-    private func navigateToReport(_ id: Int) {
-        let viewModel = ReportLostItemViewModel(noticeId: id)
+    private func showLoginToReportModal() {
+        let onRightButtonTapped: ()->Void = { [weak self] in
+            let repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: repository)
+            let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
+            let viewModel = LoginViewModel(loginUseCase: loginUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+            let viewController = LoginViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(viewController, animated: true)
+        }
+        let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 신고하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: .appColor(.neutral600), subTitleColor: .appColor(.gray))
+        modalViewController.modalTransitionStyle = .crossDissolve
+        modalViewController.modalPresentationStyle = .overFullScreen
+        navigationController?.present(modalViewController, animated: true)
+    }
+    
+    private func navigateToReport() {
+        let viewModel = ReportLostItemViewModel(noticeId: viewModel.id)
         let viewController = ReportLostItemViewController(viewModel: viewModel)
         viewController.delegate = self
         navigationController?.pushViewController(viewController, animated: true)

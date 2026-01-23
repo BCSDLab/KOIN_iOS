@@ -14,7 +14,7 @@ final class LostItemDataViewModel {
         case loadData
         case loadList
         case loadMoreList
-        case checkLogIn
+        case checkLogIn(CheckLoginOption)
         case changeState(Int)
         case deleteData
     }
@@ -22,12 +22,17 @@ final class LostItemDataViewModel {
         case updateData(LostItemData)
         case updateList([LostItemListData])
         case appendList([LostItemListData])
-        case navigateToChat
-        case showLoginModal
         case showToast(String)
         case changeState
         case deletedData(Int)
         case popViewController
+        case checkedLogin((CheckLoginOption, Bool))
+        case navigateToChat(CreateChatRoomResponse)
+    }
+    
+    enum CheckLoginOption {
+        case chat
+        case report
     }
     
     // MARK: - Properties
@@ -36,6 +41,7 @@ final class LostItemDataViewModel {
     private let fetchLostItemListUseCase: FetchLostItemListUseCase
     private let changeLostItemStateUseCase: ChangeLostItemStateUseCase
     private let deleteLostItemUseCase: DeleteLostItemUseCase
+    private let createChatRoomUseCase: CreateChatRoomUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     let id: Int
@@ -47,12 +53,14 @@ final class LostItemDataViewModel {
          fetchLostItemListUseCase: FetchLostItemListUseCase,
          changeLostItemStateUseCase: ChangeLostItemStateUseCase,
          deleteLostItemUseCase: DeleteLostItemUseCase,
+         createChatRoomUseCase: CreateChatRoomUseCase,
          id: Int) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemDataUseCase = fetchLostItemDataUseCase
         self.fetchLostItemListUseCase = fetchLostItemListUseCase
         self.changeLostItemStateUseCase = changeLostItemStateUseCase
         self.deleteLostItemUseCase = deleteLostItemUseCase
+        self.createChatRoomUseCase = createChatRoomUseCase
         self.id = id
     }
     
@@ -66,8 +74,8 @@ final class LostItemDataViewModel {
                 self.loadList()
             case .loadMoreList:
                 self.loadMoreList()
-            case .checkLogIn:
-                self.checkLogin()
+            case .checkLogIn(let option):
+                self.checkLogin(option)
             case .changeState(let id):
                 self.changeState(id)
             case .deleteData:
@@ -116,15 +124,16 @@ extension LostItemDataViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func checkLogin() {
+    private func checkLogin(_ option: CheckLoginOption) {
         checkLoginUseCase.execute().sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] isLoggedIn in
                 guard let self else { return }
-                if isLoggedIn {
-                    outputSubject.send(.navigateToChat)
-                } else {
-                    outputSubject.send(.showLoginModal)
+                switch option {
+                case .chat:
+                    isLoggedIn ? createChatRoom() : outputSubject.send(.checkedLogin((.chat, false)))
+                case .report:
+                    outputSubject.send(.checkedLogin((.report, isLoggedIn)))
                 }
             }
         ).store(in: &subscriptions)
@@ -150,6 +159,19 @@ extension LostItemDataViewModel {
                 guard let self else { return }
                 outputSubject.send(.popViewController)
                 outputSubject.send(.deletedData(id))
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func createChatRoom() {
+        createChatRoomUseCase.execute(articleId: id).sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let failure) = completion {
+                    self?.outputSubject.send(.showToast(failure.message))
+                }
+            },
+            receiveValue: { [weak self] createChatRoomResponse in
+                self?.outputSubject.send(.navigateToChat(createChatRoomResponse))
             }
         ).store(in: &subscriptions)
     }

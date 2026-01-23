@@ -120,21 +120,22 @@ final class LostItemListViewController: UIViewController {
         }.store(in: &subscriptions)
         
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
-            let userService = DefaultUserService()
-            let lostItemService = DefaultLostItemService()
-            let userRepository = DefaultUserRepository(service: userService)
-            let lostItemRepository = DefaultLostItemRepository(service: lostItemService)
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+            let chatRepository = DefaultChatRepository(service: DefaultChatService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
             let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
+            let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemDataUseCase: fetchLostItemDataUseCase,
                 fetchLostItemListUseCase: fetchLostItemListUseCase,
                 changeLostItemStateUseCase: changeLostItemStateUseCase,
                 deleteLostItemUseCase: deleteLostItemUseCase,
+                createChatRoomUseCase: createChatRoomUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             viewController.delegate = self
