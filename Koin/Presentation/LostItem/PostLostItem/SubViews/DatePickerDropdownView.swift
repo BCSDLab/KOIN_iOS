@@ -12,7 +12,8 @@ final class DatePickerDropdownView: UIView {
     
     let valueChangedPublisher = PassthroughSubject<Void, Never>()
     var dateValue: Date {
-        return datePicker.date
+        get { return datePicker.date }
+        set { datePicker.date = newValue }
     }
     
     private let datePicker = UIDatePicker().then {

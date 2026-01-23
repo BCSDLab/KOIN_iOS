@@ -268,6 +268,13 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
                 button.layer.borderColor = UIColor.appColor(.primary500).cgColor
             }
         }
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
+        dateFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
+        if let dateValue = dateFormatter.date(from: model.foundDate) {
+            dropdownView.dateValue = dateValue
+        }
     }
 }
 

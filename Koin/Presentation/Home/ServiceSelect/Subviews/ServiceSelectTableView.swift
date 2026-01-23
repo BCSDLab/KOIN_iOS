@@ -12,6 +12,7 @@ final class ServiceSelectTableView: UITableView {
     
     enum Service: String {
         case notice = "게시판"
+        case lostItem = "분실물"
         case busTimeTable = "버스 시간표"
         case busSearch = "교통편 조회하기"
         case shop = "주변 상점"
@@ -23,7 +24,7 @@ final class ServiceSelectTableView: UITableView {
     }
     
     // MARK: - Properties
-    private let services: [Service] = [.notice, .busTimeTable, .busSearch, .shop, .dining, .timetable, .facility, .land, .business]
+    private let services: [Service] = [.notice, .lostItem, .busTimeTable, .busSearch, .shop, .dining, .timetable, .facility, .land, .business]
     let serviceTappedPublisher = PassthroughSubject<Service, Never>()
     
     // MARK: - Initializer

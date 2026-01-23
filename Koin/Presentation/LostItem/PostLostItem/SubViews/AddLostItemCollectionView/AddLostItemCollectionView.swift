@@ -19,8 +19,6 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
     let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
     
-    
-    
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
     
@@ -45,7 +43,13 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
         register(AddLostItemFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: AddLostItemFooterView.identifier)
         dataSource = self
         delegate = self
-        articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
+        
+        let formattedDate: String = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy년 M월 d일"
+            return formatter.string(from: Date())
+        }()
+        articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
     }
 }
 
@@ -103,7 +107,12 @@ extension AddLostItemCollectionView {
             footerCancellables.removeAll()
             footerView.addItemButtonPublisher.sink { [weak self] in
                 guard let strongSelf = self else { return }
-                self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", images: [], registeredAt: "", updatedAt: ""))
+                let formattedDate: String = {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy년 M월 d일"
+                    return formatter.string(from: Date())
+                }()
+                self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
                 self?.reloadData()
                 self?.collectionViewLayout.invalidateLayout()
                 self?.heightChangedPublisher.send()
