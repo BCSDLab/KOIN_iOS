@@ -9,14 +9,18 @@ import Combine
 import Then
 import UIKit
 
+protocol ReportLostItemViewControllerDelegate: AnyObject {
+    func updateState(reportedDataId id: Int)
+}
+
 final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Properties
-    private let onSuccess: (Int)->Void
     private let viewModel: ReportLostItemViewModel
     private let inputSubject: PassthroughSubject<ReportLostItemViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private let textViewPlaceHolder = "신고 사유를 입력해주세요."
+    weak var delegate: ReportLostItemViewControllerDelegate?
     
     // MARK: - UI Components
     private let scrollView = UIScrollView().then { _ in
@@ -87,9 +91,8 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Initialization
     
-    init(viewModel: ReportLostItemViewModel, onSuccess: @escaping (Int)->Void) {
+    init(viewModel: ReportLostItemViewModel) {
         self.viewModel = viewModel
-        self.onSuccess = onSuccess
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -129,8 +132,10 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
             case .showToast(let message, let success):
                 self.showToast(message: message)
                 if success {
-                    self.onSuccess(viewModel.lostItemId)
-                    self.navigationController?.popViewController(animated: true)
+                    if let previousViewController = (delegate as? LostItemDataViewController)?.delegate as? UIViewController {
+                        navigationController?.popToViewController(previousViewController, animated: true)
+                    }
+                    delegate?.updateState(reportedDataId: viewModel.lostItemId)
                 }
             }
         }.store(in: &subscriptions)

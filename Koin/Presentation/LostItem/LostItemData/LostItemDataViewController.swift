@@ -145,7 +145,7 @@ extension LostItemDataViewController: EditLostItemViewControllerDelegate {
     }
 }
 
-extension LostItemDataViewController: LostItemDataViewControllerDelegate {
+extension LostItemDataViewController: LostItemDataViewControllerDelegate, ReportLostItemViewControllerDelegate {
     
     func updateState(foundDataId id: Int) {
         delegate?.updateState(foundDataId: id)
@@ -252,10 +252,8 @@ extension LostItemDataViewController {
     
     private func navigateToReport(_ id: Int) {
         let viewModel = ReportLostItemViewModel(noticeId: id)
-        let onSuccess: (Int)->Void = { [weak self] id in
-            self?.delegate?.updateState(reportedDataId: id)
-        }
-        let viewController = ReportLostItemViewController(viewModel: viewModel, onSuccess: onSuccess)
+        let viewController = ReportLostItemViewController(viewModel: viewModel)
+        viewController.delegate = self
         navigationController?.pushViewController(viewController, animated: true)
     }
 }
