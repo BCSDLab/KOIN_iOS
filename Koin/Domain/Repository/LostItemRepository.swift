@@ -10,4 +10,5 @@ import Combine
 
 protocol LostItemRepository {
     func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemList, Error>
+    func fetchLostItemData(id: Int) -> AnyPublisher<LostItemData, Error>
 }

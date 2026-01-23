@@ -115,10 +115,21 @@ final class LostItemListViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        lostItemListTableView.showToastPublisher.sink { [weak self] message in
+            self?.showToast(message: message)
+        }.store(in: &subscriptions)
+        
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
-            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let userService = DefaultUserService()
+            let lostItemService = DefaultLostItemService()
+            let userRepository = DefaultUserRepository(service: userService)
+            let lostItemRepository = DefaultLostItemRepository(service: lostItemService)
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-            let viewModel = LostItemDataViewModel(checkLoginUseCase: checkLoginUseCase)
+            let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
+            let viewModel = LostItemDataViewModel(
+                checkLoginUseCase: checkLoginUseCase,
+                fetchLostItemDataUseCase: fetchLostItemDataUseCase,
+                id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)

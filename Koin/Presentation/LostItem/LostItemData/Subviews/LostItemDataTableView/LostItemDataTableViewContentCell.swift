@@ -11,7 +11,7 @@ import Combine
 final class LostItemDataTableViewContentCell: UITableViewCell {
     
     // MARK: - Properties
-    let imageTapPublisher = PassthroughSubject<IndexPath, Never>()
+    let imageTapPublisher = PassthroughSubject<([Image], IndexPath), Never>()
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -19,6 +19,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let reportButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var images: [Image] = []
     
     // MARK: - UI Components
     private let contentStackView = UIStackView().then {
@@ -167,6 +168,8 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     func configure(lostItemData: LostItemData?) {
         guard let lostItemData else { return }
         
+        self.images = lostItemData.images
+        
         imageCollectionView.configure(orderImage: lostItemData.images.map {
             OrderImage(imageUrl: $0.imageUrl, isThumbnail: false)
         })
@@ -241,7 +244,8 @@ extension LostItemDataTableViewContentCell {
         }.store(in: &subscriptions)
         
         imageCollectionView.didTapThumbnailPublisher.sink { [weak self] indexPath in
-            self?.imageTapPublisher.send(indexPath)
+            guard let self else { return }
+            imageTapPublisher.send((images, indexPath))
         }.store(in: &subscriptions)
     }
     

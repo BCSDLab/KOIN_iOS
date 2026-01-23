@@ -21,4 +21,10 @@ final class DefaultLostItemRepository: LostItemRepository {
             .map { $0.toDomain() }
             .eraseToAnyPublisher()
     }
+    
+    func fetchLostItemData(id: Int) -> AnyPublisher<LostItemData, Error> {
+        return service.fetchLostItemData(id: id)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
+    }
 }

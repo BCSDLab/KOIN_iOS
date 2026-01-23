@@ -75,6 +75,8 @@
 		7C61D34B2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D34A2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift */; };
 		7C61D34D2F220EBA005FAC3A /* EditLostItemContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D34C2F220EBA005FAC3A /* EditLostItemContentView.swift */; };
 		7C61D3512F22B344005FAC3A /* ExtendedTouchAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */; };
+		7C61D3132F212DFA005FAC3A /* FetchLostItemDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */; };
+		7C61D3152F212FB3005FAC3A /* LostItemDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
@@ -853,6 +855,8 @@
 		7C61D34A2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemFoundPlaceView.swift; sourceTree = "<group>"; };
 		7C61D34C2F220EBA005FAC3A /* EditLostItemContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemContentView.swift; sourceTree = "<group>"; };
 		7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedTouchAreaView.swift; sourceTree = "<group>"; };
+		7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemDataUseCase.swift; sourceTree = "<group>"; };
+		7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataDto.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
@@ -1812,6 +1816,7 @@
 			children = (
 				7C8ADD372F20C0B200F85BDE /* LostItemListDto.swift */,
 				7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */,
+				7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -1820,6 +1825,7 @@
 			isa = PBXGroup;
 			children = (
 				7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */,
+				7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -4516,6 +4522,7 @@
 				7CED922F2EF2D25900457128 /* DIContainer+TimeTable.swift in Sources */,
 				7CED92302EF2D25900457128 /* DIContainer+Home.swift in Sources */,
 				7CED92322EF2D25900457128 /* DIConatiner+Shop.swift in Sources */,
+				7C61D3132F212DFA005FAC3A /* FetchLostItemDataUseCase.swift in Sources */,
 				7CED92332EF2D25900457128 /* DIContainer.swift in Sources */,
 				7CED92342EF2D25900457128 /* DIContainer+LostItem.swift in Sources */,
 				7CED92352EF2D25900457128 /* DIConatiner+Login.swift in Sources */,
@@ -4857,6 +4864,7 @@
 				7CED91A02EF2D1F900457128 /* StateButton.swift in Sources */,
 				7CED91A32EF2D1F900457128 /* TimetableHeaderView.swift in Sources */,
 				7CED91A42EF2D1F900457128 /* ModifyFrameModalViewController.swift in Sources */,
+				7C61D3152F212FB3005FAC3A /* LostItemDataDto.swift in Sources */,
 				7CED91A62EF2D1F900457128 /* PolicyContentCollectionView.swift in Sources */,
 				7C372F142F1CC79C00149729 /* LostItemPostOptionController.swift in Sources */,
 				7CED91A72EF2D1F900457128 /* ReportLostItemViewController.swift in Sources */,

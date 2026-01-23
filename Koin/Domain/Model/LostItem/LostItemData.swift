@@ -10,7 +10,6 @@ import Foundation
 // MARK: - LostItemData
 struct LostItemData {
     let id: Int
-    let boardID: Int
     let type: LostItemType
     let category: String
     let foundPlace: String?

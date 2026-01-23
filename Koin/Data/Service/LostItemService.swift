@@ -11,12 +11,18 @@ import Alamofire
 
 protocol LostItemService {
     func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemListDto, Error>
+    func fetchLostItemData(id: Int) -> AnyPublisher<LostItemDataDto, Error>
 }
 
 final class DefaultLostItemService: LostItemService {
-    var ss: Set<AnyCancellable> = []
+    
     func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemListDto, Error> {
         return request(.fetchLostItemList(requestModel))
+    }
+    
+    func fetchLostItemData(id: Int) -> AnyPublisher<LostItemDataDto, Error> {
+        print(id)
+        return request(.fetchLostItemData(id))
     }
     
     private func request<T: Decodable>(_ api: LostItemAPI) -> AnyPublisher<T, Error> {

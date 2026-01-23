@@ -13,7 +13,7 @@ final class LostItemDataTableView: UITableView {
     // MARK: - Properties
     private var lostItemData: LostItemData?
     private var lostItemListData: [LostItemListData] = []
-    let imageTapPublisher = PassthroughSubject<IndexPath, Never>()
+    let imageTapPublisher = PassthroughSubject<([Image], IndexPath), Never>()
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -35,8 +35,12 @@ final class LostItemDataTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(lostItemData: LostItemData, lostItemListData: [LostItemListData]) {
+    func configure(lostItemData: LostItemData) {
         self.lostItemData = lostItemData
+        reloadData()
+    }
+    
+    func configure(lostItemListData: [LostItemListData]) {
         self.lostItemListData = lostItemListData
         reloadData()
     }
@@ -51,8 +55,8 @@ final class LostItemDataTableView: UITableView {
 extension LostItemDataTableView {
     
     private func bind() {
-        contentCell.imageTapPublisher.sink { [weak self] indexPath in
-            self?.imageTapPublisher.send(indexPath)
+        contentCell.imageTapPublisher.sink { [weak self] (images, indexPath) in
+            self?.imageTapPublisher.send((images, indexPath))
         }.store(in: &subscription)
         contentCell.listButtonTappedPublisher.sink { [weak self] in
             self?.listButtonTappedPublisher.send()

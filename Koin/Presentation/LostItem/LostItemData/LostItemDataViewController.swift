@@ -15,7 +15,6 @@ final class LostItemDataViewController: UIViewController {
     private let viewModel: LostItemDataViewModel
     private let inputSubject = PassthroughSubject<LostItemDataViewModel.Input, Never>()
     private var subscription: Set<AnyCancellable> = []
-    private var images: [Image] = []
     
     // MARK: - UI Components
     private let lostItemDataTableView = LostItemDataTableView()
@@ -32,9 +31,10 @@ final class LostItemDataViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "분실물"
         configureView()
         bind()
-        title = "분실물"
+        inputSubject.send(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -46,6 +46,8 @@ final class LostItemDataViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
             switch output {
+            case .updateData(let lostItemData):
+                self.lostItemDataTableView.configure(lostItemData: lostItemData)
             case .navigateToChat:
                 self.navigateToChat()
             case .showLoginModal:
@@ -55,14 +57,20 @@ final class LostItemDataViewController: UIViewController {
         
         lostItemDataTableView.cellTappedPublisher.sink { [weak self] id in
             let userService = DefaultUserService()
+            let lostItemService = DefaultLostItemService()
             let userRepository = DefaultUserRepository(service: userService)
+            let lostItemRepository = DefaultLostItemRepository(service: lostItemService)
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-            let viewModel = LostItemDataViewModel(checkLoginUseCase: checkLoginUseCase)
+            let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
+            let viewModel = LostItemDataViewModel(
+                checkLoginUseCase: checkLoginUseCase,
+                fetchLostItemDataUseCase: fetchLostItemDataUseCase,
+                id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscription)
         
-        lostItemDataTableView.imageTapPublisher.sink { [weak self] indexPath in
+        lostItemDataTableView.imageTapPublisher.sink { [weak self] (images: [Image], indexPath: IndexPath) in
             guard let self else { return }
             let viewController = ZoomedImageViewControllerB()
             viewController.configure(
@@ -134,7 +142,7 @@ extension LostItemDataViewController {
     }
     
     private func navigateToEdit() {
-        let mockData = LostItemData(id: 0, boardID: 0, type: .lost, category: "카드", foundPlace: "학생 식단 퇴식구", foundDate: "2022-02-22", content: nil, author: "익명", isCouncil: false, isMine: true, isFound: false, images: [], registeredAt: "2022-02-22", updatedAt: "2022-02-22")
+        let mockData = LostItemData(id: 0, type: .lost, category: "카드", foundPlace: "학생 식단 퇴식구", foundDate: "2022-02-22", content: nil, author: "익명", isCouncil: false, isMine: true, isFound: false, images: [], registeredAt: "2022-02-22", updatedAt: "2022-02-22")
         let viewModel = EditLostItemViewModel(lostItemData: mockData)
         let viewController = EditLostItemViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
