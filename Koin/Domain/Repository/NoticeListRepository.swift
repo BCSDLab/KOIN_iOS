@@ -21,7 +21,7 @@ protocol NoticeListRepository {
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse>
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
-    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDto, ErrorResponse>
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse>
     func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDto, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>

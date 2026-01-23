@@ -28,7 +28,7 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         service.deleteLostItem(id: id)
     }
     
-    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostArticleDetailDto, ErrorResponse> {
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse> {
         service.postLostItem(request: request)
     }
     

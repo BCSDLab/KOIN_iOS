@@ -19,3 +19,19 @@ struct LostItemListData {
     var isReported: Bool
     var isFound: Bool
 }
+
+extension LostItemListData {
+    
+    init(from data: LostItemData) {
+        self.id = data.id
+        self.type = data.type
+        self.category = data.category
+        self.foundPlace = data.foundPlace
+        self.foundDate = data.foundDate
+        self.content = data.content
+        self.author = data.author
+        self.registeredAt = data.registeredAt
+        self.isReported = false
+        self.isFound = data.isFound
+    }
+}

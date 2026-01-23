@@ -13,4 +13,12 @@ extension UIViewController {
         loginViewController.title = "로그인"
         navigationController?.pushViewController(loginViewController, animated: true)
     }
+    
+    func replaceTopViewController(_ viewController: UIViewController, animated: Bool) {
+        if var viewControllers = navigationController?.viewControllers {
+            let _ = viewControllers.removeLast()
+            viewControllers.append(viewController)
+            navigationController?.setViewControllers(viewControllers, animated: animated)
+        }
+    }
 }

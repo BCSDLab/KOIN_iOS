@@ -182,14 +182,18 @@ extension LostItemListViewController {
     
     private func presentPostTypeModal() {
         let onFoundButtonTapped = { [weak self] in
-            self?.dismissView()
+            guard let self else { return }
+            dismissView()
             let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-            self?.navigationController?.pushViewController(viewController, animated: true)
+            viewController.delegate = self
+            navigationController?.pushViewController(viewController, animated: true)
         }
         let onLostButtonTapped = { [weak self] in
-            self?.dismissView()
+            guard let self else { return }
+            dismissView()
             let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
-            self?.navigationController?.pushViewController(viewController, animated: true)
+            viewController.delegate = self
+            navigationController?.pushViewController(viewController, animated: true)
         }
         let postOptionViewController = LostItemPostOptionController(
             onFoundButtonTapped: onFoundButtonTapped,
@@ -198,6 +202,13 @@ extension LostItemListViewController {
         let bottomSheetViewController = BottomSheetViewController(contentViewController: postOptionViewController, defaultHeight: 225, cornerRadius: 32)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         navigationController?.present(bottomSheetViewController, animated: true)
+    }
+}
+
+extension LostItemListViewController: PostLostItemViewControllerDelegate {
+    
+    func appendData(_ newData: LostItemData) {
+        lostItemListTableView.appendAtFirst(LostItemListData(from: newData))
     }
 }
 

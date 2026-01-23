@@ -9,6 +9,11 @@ import Combine
 import PhotosUI
 import UIKit
 
+protocol PostLostItemViewControllerDelegate: AnyObject {
+    
+    func appendData(_ lostItemData: LostItemData)
+}
+
 final class PostLostItemViewController: UIViewController {
     
     // MARK: - Properties
@@ -17,7 +22,7 @@ final class PostLostItemViewController: UIViewController {
     private let viewModel: PostLostItemViewModel
     private let inputSubject: PassthroughSubject<PostLostItemViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    weak var delegate: NoticeListViewController?
+    weak var delegate: PostLostItemViewControllerDelegate?
     
     
     // MARK: - UI Components
@@ -107,10 +112,9 @@ final class PostLostItemViewController: UIViewController {
                 self?.showToast(message: message, success: true)
             case let .addImageUrl(url, index):
                 self?.addLostItemCollectionView.addImageUrl(url: url, index: index)
-            case let .popViewController(id):
-                self?.navigationController?.popViewController(animated: false)
-                self?.delegate?.fetchLostItems()
-                self?.delegate?.navigateToNoticeData(noticeId: id, boardId: 14)
+            case let .navigateToLostItemData(lostItemData):
+                self?.delegate?.appendData(lostItemData)
+                self?.navigateToLostItemData(lostItemData.id)
             }
         }.store(in: &subscriptions)
         
@@ -154,7 +158,6 @@ final class PostLostItemViewController: UIViewController {
         }.store(in: &subscriptions)
 
     }
-    
 }
 
 extension PostLostItemViewController: UITextViewDelegate, PHPickerViewControllerDelegate {
@@ -225,6 +228,29 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = self
         present(picker, animated: true, completion: nil)
+    }
+    
+    private func navigateToLostItemData(_ id: Int) {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+        let chatRepository = DefaultChatRepository(service: DefaultChatService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
+        let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+        let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
+        let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
+        let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+        let viewModel = LostItemDataViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchLostItemDataUseCase: fetchLostItemDataUseCase,
+            fetchLostItemListUseCase: fetchLostItemListUseCase,
+            changeLostItemStateUseCase: changeLostItemStateUseCase,
+            deleteLostItemUseCase: deleteLostItemUseCase,
+            createChatRoomUseCase: createChatRoomUseCase,
+            id: id)
+        let viewController = LostItemDataViewController(viewModel: viewModel)
+        viewController.delegate = (delegate as? LostItemDataViewControllerDelegate)
+        replaceTopViewController(viewController, animated: true)
     }
 }
 
