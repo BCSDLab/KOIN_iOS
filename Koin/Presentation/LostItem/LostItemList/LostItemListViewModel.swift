@@ -96,6 +96,7 @@ extension LostItemListViewModel {
     }
     
     private func updateTitle(_ title: String?) {
+        
         guard filterState.title != title else {
             return
         }
@@ -117,6 +118,7 @@ extension LostItemListViewModel {
     }
     
     private func updateFilter(_ filter: FetchLostItemListRequest) {
+        
         guard filterState != filter else {
             return
         }
@@ -126,6 +128,7 @@ extension LostItemListViewModel {
         filterState.category = filter.category
         filterState.foundStatus = filter.foundStatus
         filterState.author = filter.author
+        filterState.page = 1
         
         fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },
