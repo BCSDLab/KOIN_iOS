@@ -164,6 +164,8 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
             self?.changeStateButton.backgroundColor = .appColor(.primary500)
             self?.changeStateCircleView.transform = CGAffineTransform(translationX: 24, y: 0)
             self?.changeStateCircleView.layer.shadowColor = UIColor.clear.cgColor
+            
+            self?.editButton.isHidden = true
         }
     }
     
@@ -211,7 +213,8 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
         
         changeStateView.isHidden = (lostItemData.isMine && !lostItemData.isFound) ? false : true
     
-        editButton.isHidden = lostItemData.isMine ? false : true
+        editButton.isHidden = (lostItemData.isMine && !lostItemData.isFound) ? false : true
+        
         deleteButton.isHidden = lostItemData.isMine ? false : true
         
         chatButton.isHidden = lostItemData.isMine
