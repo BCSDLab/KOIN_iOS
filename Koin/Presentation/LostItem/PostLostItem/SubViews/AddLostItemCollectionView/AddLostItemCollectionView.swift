@@ -12,7 +12,6 @@ final class AddLostItemCollectionView: UICollectionView {
     
     // MARK: - Properties
     private var footerCancellables = Set<AnyCancellable>()
-    let heightChangedPublisher = PassthroughSubject<Void, Never>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
     let dateButtonPublisher = PassthroughSubject<Void, Never>()
     let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
@@ -65,15 +64,24 @@ extension AddLostItemCollectionView {
         collectionViewLayout.invalidateLayout()
     }
     
-    func dismissKeyBoardDatePicker() {
-        self.endEditing(true) // 키보드 닫기
-        dismissDatePicker()
-    }
-    private func dismissDatePicker() {
+    func dismissDatePicker() {
         for row in 0..<numberOfItems(inSection: 0) {
             let indexPath = IndexPath(row: row, section: 0)
             (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
         }
+    }
+    
+    func firstResponder() -> UIView? {
+        var addLostItemCollectionViewCells: [AddLostItemCollectionViewCell] = []
+        
+        for row in 0..<numberOfItems(inSection: 0) {
+            let indexPath = IndexPath(row: row, section: 0)
+            if let cell = cellForItem(at: indexPath) as? AddLostItemCollectionViewCell {
+                addLostItemCollectionViewCells.append(cell)
+            }
+        }
+        
+        return addLostItemCollectionViewCells.first { $0.hasFirstResponder() }?.firstResponder()
     }
 }
 
@@ -92,8 +100,6 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         cell.deleteButtonPublisher.sink { [weak self] _ in
             self?.articles.remove(at: indexPath.row)
             self?.reloadData()
-            self?.collectionViewLayout.invalidateLayout()
-            self?.heightChangedPublisher.send()
         }.store(in: &cell.cancellables)
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
@@ -152,8 +158,6 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
                 }()
                 self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
                 self?.reloadData()
-                self?.collectionViewLayout.invalidateLayout()
-                self?.heightChangedPublisher.send()
                 switch strongSelf.type {
                 case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserAddItem, .click, "물품 추가"))
                 case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemAddItem, .click, "물품 추가"))

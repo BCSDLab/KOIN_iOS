@@ -280,15 +280,24 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
 
 extension AddLostItemCollectionViewCell {
     
-    private func shouldScrollTo(_ view: UIView) {
-        guard let collectionView = self.superview as? UICollectionView,
-              let rootView = collectionView.superview else { return }
-        
-        // 텍스트뷰의 절대적인 Y 좌표 계산
-        let absoluteFrame = view.convert(view.bounds, to: rootView)
-        
-        // 텍스트뷰의 Y 좌표값 전송
-        textFieldFocusPublisher.send(absoluteFrame.origin.y)
+    func hasFirstResponder() -> Bool {
+        var hasFirstResponder = false
+        [locationTextField, contentTextView].forEach {
+            if $0.isFirstResponder {
+                hasFirstResponder = true
+            }
+        }
+        return hasFirstResponder
+    }
+    
+    func firstResponder() -> UIView? {
+        var firstResponder: UIView?
+        [locationTextField, contentTextView].forEach {
+            if $0.isFirstResponder {
+                firstResponder = $0
+            }
+        }
+        return firstResponder
     }
 }
 
@@ -464,8 +473,6 @@ extension AddLostItemCollectionViewCell {
     }
     
     private func dropdownValueChanged() {
-        shouldScrollTo(dropdownView)
-        
         let formattedDate = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy년 M월 d일"
@@ -485,9 +492,6 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         // 열려있는 드롭다운  닫기
         shouldDismissDropDownPublisher.send()
         
-        // 스크롤
-        shouldScrollTo(textView)
-        
         // placeholder 비우기
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
@@ -505,9 +509,6 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         
         contentTextCountLabel.text = "\(textView.text.count)/\(maxCharacters)"
         contentPublisher.send(textView.text)
-        
-        // 스크롤
-        shouldScrollTo(textView)
     }
     
     // MARK: 내용 수정 완료
@@ -534,9 +535,6 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         // 열려있는 dropdown 닫기
         shouldDismissDropDownPublisher.send()
         
-        // 스크롤
-        shouldScrollTo(textField)
-        
         // placeholder 비우기
         if textField.textColor == UIColor.appColor(.neutral500) {
             textField.text = ""
@@ -546,9 +544,6 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
     // MARK: 장소 수정
     @objc private func locationTextFieldDidChange(_ textField: UITextField) {
-        // 스크롤
-        shouldScrollTo(textField)
-        
         if !(textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
             locationWarningLabel.isHidden = true
         }

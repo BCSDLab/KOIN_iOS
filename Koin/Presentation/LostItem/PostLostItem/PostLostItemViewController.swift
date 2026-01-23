@@ -54,12 +54,17 @@ final class PostLostItemViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         bind()
+        addObserver()
         writeButton.throttle(interval: .seconds(3)) { [weak self] in
             self?.writeButtonTapped()
         }
@@ -118,6 +123,52 @@ final class PostLostItemViewController: UIViewController {
             self?.inputSubject.send(.logEvent(value.0, value.1, value.2))
         }.store(in: &subscriptions)
 
+    }
+}
+
+extension PostLostItemViewController {
+    
+    private func addObserver() {
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyBoardWillShow(_:)),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyBoardWillHide(_:)),
+            name: UIResponder.keyboardWillHideNotification,
+            object: nil)
+    }
+    
+    @objc private func keyBoardWillShow(_ notification: NSNotification) {
+        guard let userInfo = notification.userInfo,
+              let keyBoardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        
+        let contentInset = UIEdgeInsets(
+            top: 0,
+            left: 0,
+            bottom: keyBoardSize.size.height - (view.frame.height - addLostItemCollectionView.frame.maxY),
+            right: 0
+        )
+        addLostItemCollectionView.contentInset = contentInset
+
+        guard let targetView = addLostItemCollectionView.firstResponder() else {
+            return
+        }
+        
+        var rect = targetView.convert(targetView.bounds, to: addLostItemCollectionView)
+        rect.size.height += 16
+        addLostItemCollectionView.scrollRectToVisible(rect, animated: true)
+    }
+    
+    @objc private func keyBoardWillHide(_ notification: NSNotification) {
+        let contentInset = UIEdgeInsets.zero
+        addLostItemCollectionView.contentInset = contentInset
     }
 }
 
@@ -223,7 +274,8 @@ extension PostLostItemViewController {
     }
     
     @objc private func dismissKeyboardDropdown() {
-        addLostItemCollectionView.dismissKeyBoardDatePicker()
+        addLostItemCollectionView.dismissDatePicker()
+        dismissKeyboard()
     }
 }
 
