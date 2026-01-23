@@ -1,5 +1,5 @@
 //
-//  PostLostItemViewModel.swift
+//  EditLostItemViewModel.swift
 //  koin
 //
 //  Created by 홍기정 on 1/22/26.

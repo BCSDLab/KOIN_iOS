@@ -37,7 +37,7 @@ final class EditLostItemViewController: UIViewController {
     
     private lazy var contentView = EditLostItemContentView(type: viewModel.lostItemData.type, content: viewModel.lostItemData.content)
     
-    private let bottomSeparateView = UIScrollView().then {
+    private let bottomSeparateView = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
     }
     

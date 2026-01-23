@@ -194,11 +194,10 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
             .foregroundColor : UIColor.appColor(.neutral800),
             .paragraphStyle : NSMutableParagraphStyle().then { $0.lineSpacing = 1.6 }
         ])
-        contentLabel.isHidden = lostItemData.content != nil
+        contentLabel.isHidden = lostItemData.content?.isEmpty ?? true
         
         councilLabel.isHidden = !lostItemData.isCouncil
         
-        changeStateView.isHidden = (lostItemData.isMine && !lostItemData.isFound) ? false : true
         changeStateView.isHidden = (lostItemData.isMine && !lostItemData.isFound) ? false : true
     
         editButton.isHidden = lostItemData.isMine ? false : true

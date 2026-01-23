@@ -1,5 +1,5 @@
 //
-//  LostItemListViewController.swift
+//  ModalViewControllerB.swift
 //  koin
 //
 //  Created by 홍기정 on 1/19/26.
@@ -110,7 +110,7 @@ class ModalViewControllerB: UIViewController {
         }
     }
     
-    func updaterightButton(buttonColor: UIColor = .appColor(.primary500), borderWidth: CGFloat, title: String) {
+    func updateRightButton(buttonColor: UIColor = .appColor(.primary500), borderWidth: CGFloat, title: String) {
         rightButton.backgroundColor = buttonColor
         rightButton.layer.borderWidth = borderWidth
         rightButton.setTitle(title, for: .normal)

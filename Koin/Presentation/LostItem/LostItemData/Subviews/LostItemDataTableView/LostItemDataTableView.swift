@@ -23,10 +23,13 @@ final class LostItemDataTableView: UITableView {
     let reportButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscription: Set<AnyCancellable> = []
     
+    private let contentCell = LostItemDataTableViewContentCell()
+    
     // MARK: - Initialzier
     init() {
         super.init(frame: .zero, style: .grouped)
         commonInit()
+        bind()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -42,6 +45,33 @@ final class LostItemDataTableView: UITableView {
         if let cell = cellForRow(at: IndexPath(row: 0, section: 0)) as? LostItemDataTableViewContentCell {
             cell.changeState()
         }
+    }
+}
+
+extension LostItemDataTableView {
+    
+    private func bind() {
+        contentCell.imageTapPublisher.sink { [weak self] indexPath in
+            self?.imageTapPublisher.send(indexPath)
+        }.store(in: &subscription)
+        contentCell.listButtonTappedPublisher.sink { [weak self] in
+            self?.listButtonTappedPublisher.send()
+        }.store(in: &subscription)
+        contentCell.deleteButtonTappedPublisher.sink { [weak self] in
+            self?.deleteButtonTappedPublisher.send()
+        }.store(in: &subscription)
+        contentCell.editButtonTappedPublisher.sink { [weak self] in
+            self?.editButtonTappedPublisher.send()
+        }.store(in: &subscription)
+        contentCell.changeStateButtonTappedPublisher.sink { [weak self] in
+            self?.changeStateButtonTappedPublisher.send()
+        }.store(in: &subscription)
+        contentCell.chatButtonTappedPublisher.sink { [weak self] in
+            self?.chatButtonTappedPublisher.send()
+        }.store(in: &subscription)
+        contentCell.reportButtonTappedPublisher.sink { [weak self] in
+            self?.reportButtonTappedPublisher.send()
+        }.store(in: &subscription)
     }
 }
 
@@ -108,30 +138,8 @@ extension LostItemDataTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            let cell = LostItemDataTableViewContentCell()
-            cell.configure(lostItemData: lostItemData)
-            cell.imageTapPublisher.sink { [weak self] indexPath in
-                self?.imageTapPublisher.send(indexPath)
-            }.store(in: &subscription)
-            cell.listButtonTappedPublisher.sink { [weak self] in
-                self?.listButtonTappedPublisher.send()
-            }.store(in: &subscription)
-            cell.deleteButtonTappedPublisher.sink { [weak self] in
-                self?.deleteButtonTappedPublisher.send()
-            }.store(in: &subscription)
-            cell.editButtonTappedPublisher.sink { [weak self] in
-                self?.editButtonTappedPublisher.send()
-            }.store(in: &subscription)
-            cell.changeStateButtonTappedPublisher.sink { [weak self] in
-                self?.changeStateButtonTappedPublisher.send()
-            }.store(in: &subscription)
-            cell.chatButtonTappedPublisher.sink { [weak self] in
-                self?.chatButtonTappedPublisher.send()
-            }.store(in: &subscription)
-            cell.reportButtonTappedPublisher.sink { [weak self] in
-                self?.reportButtonTappedPublisher.send()
-            }.store(in: &subscription)
-            return cell
+            contentCell.configure(lostItemData: lostItemData)
+            return contentCell
         }
         else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: LostItemDataTableViewRecentCell.identifier, for: indexPath) as? LostItemDataTableViewRecentCell else {

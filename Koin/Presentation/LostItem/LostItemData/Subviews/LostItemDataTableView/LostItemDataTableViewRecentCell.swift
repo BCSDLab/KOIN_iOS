@@ -16,7 +16,6 @@ final class LostItemDataTableViewRecentCell: UITableViewCell {
         $0.axis = .horizontal
         $0.spacing = 4
         $0.alignment = .center
-        $0.alignment = .fill
     }
     private let categoryLabel = paddingLabel(padding: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)).then {
         $0.backgroundColor = .appColor(.primary500)

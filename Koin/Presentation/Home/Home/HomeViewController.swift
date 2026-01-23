@@ -316,7 +316,7 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         lostItemListView.lostItemListTappedPublisher.sink { [weak self] in
-            self?.navigateTolostItemList()
+            self?.navigateToLostItemList()
         }.store(in: &subscriptions)
     }
 }
@@ -605,7 +605,7 @@ extension HomeViewController {
     }
     
     // navigate 함수
-    private func navigateTolostItemList() {
+    private func navigateToLostItemList() {
         let userService = DefaultUserService()
         let userRepository = DefaultUserRepository(service: userService)
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
