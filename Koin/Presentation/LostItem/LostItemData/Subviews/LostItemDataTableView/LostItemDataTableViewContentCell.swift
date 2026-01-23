@@ -15,10 +15,11 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let changeStateButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let changeStateButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let reportButtonTappedPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var id: Int?
     private var images: [Image] = []
     
     // MARK: - UI Components
@@ -92,6 +93,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
         $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 1, blur: 4, spread: 0)
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
+        $0.isUserInteractionEnabled = false
     }
     
     private let buttonsView = UIView()
@@ -169,6 +171,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
         guard let lostItemData else { return }
         
         self.images = lostItemData.images
+        self.id = lostItemData.id
         
         imageCollectionView.configure(orderImage: lostItemData.images.map {
             OrderImage(imageUrl: $0.imageUrl, isThumbnail: false)
@@ -259,9 +262,11 @@ extension LostItemDataTableViewContentCell {
         editButtonTappedPublisher.send()
     }
     @objc private func changeStateButtonTapped() {
-        if (changeStateButton.backgroundColor != UIColor.appColor(.primary500)) {
-            changeStateButtonTappedPublisher.send()
+        guard (changeStateButton.backgroundColor != UIColor.appColor(.primary500)),
+              let id else {
+            return
         }
+        changeStateButtonTappedPublisher.send(id)
     }
     @objc private func chatButtonTapped() {
         chatButtonTappedPublisher.send()

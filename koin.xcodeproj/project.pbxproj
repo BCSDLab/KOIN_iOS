@@ -77,6 +77,7 @@
 		7C61D3512F22B344005FAC3A /* ExtendedTouchAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */; };
 		7C61D3132F212DFA005FAC3A /* FetchLostItemDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */; };
 		7C61D3152F212FB3005FAC3A /* LostItemDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */; };
+		7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
@@ -857,6 +858,7 @@
 		7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedTouchAreaView.swift; sourceTree = "<group>"; };
 		7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemDataUseCase.swift; sourceTree = "<group>"; };
 		7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataDto.swift; sourceTree = "<group>"; };
+		7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLostItemStateUseCase.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
@@ -1826,6 +1828,7 @@
 			children = (
 				7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */,
 				7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */,
+				7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -4557,6 +4560,7 @@
 				7CA63A212F1AF73F00226F86 /* LostItemList.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
+				7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */,
 				D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,

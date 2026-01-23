@@ -27,4 +27,8 @@ final class DefaultLostItemRepository: LostItemRepository {
             .map { $0.toDomain() }
             .eraseToAnyPublisher()
     }
+    
+    func changeLostItemState(id: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.changeLostItemState(id: id)
+    }
 }

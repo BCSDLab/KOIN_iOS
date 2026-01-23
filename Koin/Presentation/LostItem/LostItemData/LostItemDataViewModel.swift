@@ -15,6 +15,7 @@ final class LostItemDataViewModel {
         case loadList
         case loadMoreList
         case checkLogIn
+        case changeState(Int)
     }
     enum Output {
         case updateData(LostItemData)
@@ -22,12 +23,15 @@ final class LostItemDataViewModel {
         case appendList([LostItemListData])
         case navigateToChat
         case showLoginModal
+        case showToast(String)
+        case changeState
     }
     
     // MARK: - Properties
     private let checkLoginUseCase: CheckLoginUseCase
     private let fetchLostItemDataUseCase: FetchLostItemDataUseCase
     private let fetchLostItemListUseCase: FetchLostItemListUseCase
+    private let changeLostItemStateUseCase: ChangeLostItemStateUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let id: Int
@@ -37,10 +41,12 @@ final class LostItemDataViewModel {
     init(checkLoginUseCase: CheckLoginUseCase,
          fetchLostItemDataUseCase: FetchLostItemDataUseCase,
          fetchLostItemListUseCase: FetchLostItemListUseCase,
+         changeLostItemStateUseCase: ChangeLostItemStateUseCase,
          id: Int) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemDataUseCase = fetchLostItemDataUseCase
         self.fetchLostItemListUseCase = fetchLostItemListUseCase
+        self.changeLostItemStateUseCase = changeLostItemStateUseCase
         self.id = id
     }
     
@@ -56,6 +62,8 @@ final class LostItemDataViewModel {
                 self.loadMoreList()
             case .checkLogIn:
                 self.checkLogin()
+            case .changeState(let id):
+                self.changeState(id)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -110,6 +118,19 @@ extension LostItemDataViewModel {
                 } else {
                     outputSubject.send(.showLoginModal)
                 }
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func changeState(_ id: Int) {
+        changeLostItemStateUseCase.execute(id: id).sink(
+            receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { [weak self] in
+                self?.outputSubject.send(.changeState)
             }
         ).store(in: &subscriptions)
     }

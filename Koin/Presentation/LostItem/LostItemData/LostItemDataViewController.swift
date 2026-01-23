@@ -57,6 +57,10 @@ final class LostItemDataViewController: UIViewController {
                 self.navigateToChat()
             case .showLoginModal:
                 self.showLoginModal()
+            case .showToast(let message):
+                self.showToast(message: message)
+            case .changeState:
+                self.lostItemDataTableView.changeState()
             }
         }.store(in: &subscription)
         
@@ -68,10 +72,12 @@ final class LostItemDataViewController: UIViewController {
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+            let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemDataUseCase: fetchLostItemDataUseCase,
                 fetchLostItemListUseCase: fetchLostItemListUseCase,
+                changeLostItemStateUseCase: changeLostItemStateUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)
@@ -98,8 +104,8 @@ final class LostItemDataViewController: UIViewController {
             self?.navigateToEdit()
         }.store(in: &subscription)
         
-        lostItemDataTableView.changeStateButtonTappedPublisher.sink { [weak self] in
-            self?.showChangeStateModal()
+        lostItemDataTableView.changeStateButtonTappedPublisher.sink { [weak self] id in
+            self?.showChangeStateModal(id)
         }.store(in: &subscription)
         
         lostItemDataTableView.chatButtonTappedPublisher.sink { [weak self] in
@@ -159,10 +165,9 @@ extension LostItemDataViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func showChangeStateModal() {
+    private func showChangeStateModal(_ id: Int) {
         let onRightButtonTapped: ()->Void = { [weak self] in
-            // TODO: ViewModal 호출
-            self?.lostItemDataTableView.changeState()
+            self?.inputSubject.send(.changeState(id))
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
         modalViewController.modalTransitionStyle = .crossDissolve

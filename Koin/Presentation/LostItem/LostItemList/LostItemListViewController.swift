@@ -127,10 +127,12 @@ final class LostItemListViewController: UIViewController {
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+            let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemDataUseCase: fetchLostItemDataUseCase,
                 fetchLostItemListUseCase: fetchLostItemListUseCase,
+                changeLostItemStateUseCase: changeLostItemStateUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(viewController, animated: true)

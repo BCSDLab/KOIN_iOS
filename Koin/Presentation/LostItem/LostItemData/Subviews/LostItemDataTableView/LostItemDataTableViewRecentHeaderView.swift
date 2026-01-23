@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class LostItemDataTableViewRecentHeaderView: UIView {
+final class LostItemDataTableViewRecentHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - UI Components
     private let titleLabel = UILabel().then {
@@ -17,8 +17,8 @@ final class LostItemDataTableViewRecentHeaderView: UIView {
     }
     
     // MARK: - Initializer
-    init() {
-        super.init(frame: .zero)
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         configureView()
     }
     required init?(coder: NSCoder) {

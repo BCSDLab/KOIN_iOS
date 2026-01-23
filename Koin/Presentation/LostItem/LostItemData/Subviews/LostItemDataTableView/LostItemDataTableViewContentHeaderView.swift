@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class LostItemDataTableViewContentHeaderView: UIView {
+final class LostItemDataTableViewContentHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - UI Components
     private let typeLabel = UILabel()
@@ -51,8 +51,8 @@ final class LostItemDataTableViewContentHeaderView: UIView {
     }
     
     // MARK: - Initializer
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override init(reuseIdentifier: String?) {
+        super.init(reuseIdentifier: reuseIdentifier)
         configureView()
     }
     required init?(coder: NSCoder) {
@@ -76,6 +76,15 @@ final class LostItemDataTableViewContentHeaderView: UIView {
             isFoundLabel.text = "찾는중"
             isFoundLabel.textColor = .appColor(.neutral0)
             isFoundLabel.backgroundColor = UIColor(hexCode: "FFA928")
+        }
+    }
+    
+    func changeState() {
+        UIView.animate(withDuration: 0.2) { [weak self] in
+            guard let self else { return }
+            isFoundLabel.text = "찾음"
+            isFoundLabel.textColor = .appColor(.neutral400)
+            isFoundLabel.backgroundColor = .appColor(.neutral100)
         }
     }
 }
