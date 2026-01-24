@@ -33,13 +33,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private func handleIncomingDeepLink(url: URL, navigationController: UINavigationController) {
             // URL 경로가 "/articles/lost-item"인 경우에 처리
             if url.path == "/articles/lost-item" {
-                let noticeRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
-                let viewController = NoticeListViewController(viewModel: NoticeListViewModel(
-                    fetchNoticeArticlesUseCase: DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository),
-                    fetchMyKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository),
-                    logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
-                    noticeListType: .lostItem
-                ))
+                let userRepository = DefaultUserRepository(service: DefaultUserService())
+                let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+                let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+                let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+                let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemListUseCase: fetchLostItemItemUseCase)
+                let viewController = LostItemListViewController(viewModel: viewModel)
                 navigationController.pushViewController(viewController, animated: false)
             }
             // 다른 딥링크 처리 로직을 추가할 수 있습니다.
@@ -51,9 +50,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
          // URL의 경로가 "/articles/lost-item"인지 확인
          if incomingURL.path == "/articles/lost-item" {
                 if let navigationController = window?.rootViewController as? UINavigationController {
-                    let noticeRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
-                    let viewController = NoticeListViewController(viewModel: NoticeListViewModel(fetchNoticeArticlesUseCase: DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository), fetchMyKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeListType: .lostItem))
-                
+                    let userRepository = DefaultUserRepository(service: DefaultUserService())
+                    let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+                    let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+                    let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+                    let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemListUseCase: fetchLostItemItemUseCase)
+                    let viewController = LostItemListViewController(viewModel: viewModel)
                     navigationController.pushViewController(viewController, animated: false)
                        }
                 // 네비게이션 컨트롤러를 통해 LostItemViewController로 이동
