@@ -78,7 +78,7 @@ final class EditLostItemImagesView: UIView {
             self?.pictureCountLabel.text = "\(urls.count)/10"
         }.store(in: &subscriptions)
         
-        imageUploadCollectionView.shouldDismissDropDownPublisher.sink { [weak self] in
+        imageUploadCollectionView.shouldDismissDropDownKeyBoardPublisher.sink { [weak self] in
             self?.dismissDropDownPublisher.send()
             self?.endEditing(true)
         }.store(in: &subscriptions)

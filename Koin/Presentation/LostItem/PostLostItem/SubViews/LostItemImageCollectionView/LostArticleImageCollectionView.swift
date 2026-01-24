@@ -10,7 +10,7 @@ import UIKit
 
 final class LostItemImageCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     
-    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
+    let shouldDismissDropDownKeyBoardPublisher = PassthroughSubject<Void, Never>()
     let imageCountPublisher = PassthroughSubject<[String], Never>()
     private(set) var imageUrls: [String] = [] {
         didSet {
@@ -59,8 +59,8 @@ extension LostItemImageCollectionView {
             self?.imageUrls.remove(at: indexPath.row)
             self?.reloadData()
         }.store(in: &cell.cancellables)
-        cell.shouldDismissDropDownPublisher.sink { [weak self] in
-            self?.shouldDismissDropDownPublisher.send()
+        cell.shouldDismissDropDownKeyBoardPublisher.sink { [weak self] in
+            self?.shouldDismissDropDownKeyBoardPublisher.send()
         }.store(in: &cell.cancellables)
         return cell
     }

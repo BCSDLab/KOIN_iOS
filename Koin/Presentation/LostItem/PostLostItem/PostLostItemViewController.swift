@@ -104,7 +104,10 @@ final class PostLostItemViewController: UIViewController {
         addLostItemCollectionView.logPublisher.sink { [weak self] value in
             self?.inputSubject.send(.logEvent(value.0, value.1, value.2))
         }.store(in: &subscriptions)
-
+        
+        addLostItemCollectionView.shouldDismissKeyBoardPublisher.sink { [weak self] in
+            self?.dismissKeyboard()
+        }.store(in: &subscriptions)
     }
 }
 

@@ -21,6 +21,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
     let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
+    let shouldDismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
     
     private var type: LostItemType = .lost
     private var textViewPlaceHolder = ""
@@ -187,8 +188,9 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             self?.pictureCountLabel.text = "\(urls.count)/10"
             self?.imageUrlsPublisher.send(urls)
             }.store(in: &cancellable)
-        imageUploadCollectionView.shouldDismissDropDownPublisher.sink { [weak self] in
+        imageUploadCollectionView.shouldDismissDropDownKeyBoardPublisher.sink { [weak self] in
             self?.shouldDismissDropDownPublisher.send()
+            self?.shouldDismissKeyBoardPublisher.send()
             }.store(in: &cancellable)
         dropdownView.valueChangedPublisher.sink { [weak self] in
             self?.dropdownValueChanged()
@@ -303,8 +305,8 @@ extension AddLostItemCollectionViewCell {
 extension AddLostItemCollectionViewCell{
     
     @objc private func addImageButtonTapped() {
-        // 열려있는 dropdown 닫기
         shouldDismissDropDownPublisher.send()
+        shouldDismissKeyBoardPublisher.send()
         
         addImageButtonPublisher.send()
         
@@ -320,15 +322,14 @@ extension AddLostItemCollectionViewCell{
     }
     
     @objc private func deleteCellButtonTapped() {
-        // 열려있는 dropdown 닫기
         shouldDismissDropDownPublisher.send()
-        
+        shouldDismissKeyBoardPublisher.send()
         deleteButtonPublisher.send()
     }
     
     @objc private func stackButtonTapped(_ sender: UIButton) {
-        // 열려있는 dropdown 닫기
         shouldDismissDropDownPublisher.send()
+        shouldDismissKeyBoardPublisher.send()
     
         categoryWarningLabel.isHidden = true
         categoryPublisher.send(sender.titleLabel?.text ?? "")
@@ -438,7 +439,12 @@ extension AddLostItemCollectionViewCell {
     
     // MARK: - dropdown 열기/닫기
     @objc private func dateButtonTapped(button: UIButton) {
-        dropdownView.isHidden ? presentDropdown() : dismissDropdown()
+        if dropdownView.isHidden {
+            presentDropdown()
+            shouldDismissKeyBoardPublisher.send()
+        } else {
+            dismissDropdown()
+        }
     }
     
     private func presentDropdown() {
