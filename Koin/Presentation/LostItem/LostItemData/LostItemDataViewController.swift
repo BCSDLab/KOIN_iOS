@@ -71,16 +71,14 @@ final class LostItemDataViewController: UIViewController {
                 self.lostItemDataTableView.appendList(lostItemListData: lostItemListData)
             case .showToast(let message):
                 self.showToast(message: message)
-<<<<<<< HEAD
             case .changeState(let id):
                 self.delegate?.updateState(foundDataId: id)
-                self.dataContentView.changeState()
-=======
-            case .changeState:
+                self.headerView.changeState()
                 self.buttonsView.changeState()
->>>>>>> bf2d56ff (fix: 분실물 상세 레이아웃 깨짐 수정)
+                self.lostItemDataTableView.updateState(foundDataId: id)
             case .deletedData(let id):
                 self.delegate?.updateState(deletedId: id)
+                self.lostItemDataTableView.updateState(deletedId: id)
             case .popViewController:
                 self.navigationController?.popViewController(animated: true)
             case .checkedLogin((let option, let isLoggedIn)):
@@ -240,13 +238,8 @@ extension LostItemDataViewController {
     
     private func showChangeStateModal() {
         let onRightButtonTapped: ()->Void = { [weak self] in
-<<<<<<< HEAD
-            self?.inputSubject.send(.changeState(id))
-=======
             guard let self else { return }
             inputSubject.send(.changeState(viewModel.id))
-            delegate?.updateState(foundDataId: viewModel.id)
->>>>>>> bf2d56ff (fix: 분실물 상세 레이아웃 깨짐 수정)
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
         modalViewController.modalTransitionStyle = .crossDissolve
