@@ -22,6 +22,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
     let shouldDismissDropDownPublisher = PassthroughSubject<IndexPath?, Never>()
     let shouldDismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
+    let focusDropdownPublisher = PassthroughSubject<UIView, Never>()
     
     private var type: LostItemType = .lost
     private var textViewPlaceHolder = ""
@@ -443,6 +444,7 @@ extension AddLostItemCollectionViewCell {
         if dropdownView.isHidden {
             presentDropdown()
             shouldDismissKeyBoardPublisher.send()
+            focusDropdownPublisher.send(dropdownView)
         } else {
             dismissDropdown()
         }

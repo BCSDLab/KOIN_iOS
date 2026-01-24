@@ -132,6 +132,13 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         cell.shouldDismissKeyBoardPublisher.sink { [weak self] in
             self?.shouldDismissKeyBoardPublisher.send()
         }.store(in: &cell.cancellables)
+        cell.focusDropdownPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] targetView in
+            var rect = targetView.convert(targetView.bounds, to: self)
+            rect.size.height += 15
+            self?.scrollRectToVisible(rect, animated: true)
+        }.store(in: &cell.cancellables)
         return cell
     }
     
