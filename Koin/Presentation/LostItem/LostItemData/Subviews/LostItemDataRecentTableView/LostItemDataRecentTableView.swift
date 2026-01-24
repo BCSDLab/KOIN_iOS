@@ -1,5 +1,5 @@
 //
-//  LostItemDataTableView.swift
+//  LostItemDataRecentTableView.swift
 //  koin
 //
 //  Created by 홍기정 on 1/18/26.
