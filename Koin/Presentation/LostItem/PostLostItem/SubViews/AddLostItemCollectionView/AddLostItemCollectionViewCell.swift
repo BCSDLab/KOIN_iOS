@@ -15,13 +15,11 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     private var cancellable = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
-    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let datePublisher = PassthroughSubject<String, Never>()
     let categoryPublisher = PassthroughSubject<String, Never>()
     let locationPublisher = PassthroughSubject<String, Never>()
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
-    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
     
     private var type: LostItemType = .lost

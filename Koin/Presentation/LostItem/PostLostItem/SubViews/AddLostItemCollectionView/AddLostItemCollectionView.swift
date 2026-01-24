@@ -13,9 +13,6 @@ final class AddLostItemCollectionView: UICollectionView {
     // MARK: - Properties
     private var footerCancellables = Set<AnyCancellable>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
-    let dateButtonPublisher = PassthroughSubject<Void, Never>()
-    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
-    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
     
     private var type: LostItemType = .lost
@@ -103,12 +100,6 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         }.store(in: &cell.cancellables)
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
-        }.store(in: &cell.cancellables)
-        cell.textFieldFocusPublisher.sink { [weak self] value in
-            self?.textFieldFocusPublisher.send(value)
-        }.store(in: &cell.cancellables)
-        cell.textViewFocusPublisher.sink { [weak self] value in
-            self?.textViewFocusPublisher.send(value)
         }.store(in: &cell.cancellables)
         cell.datePublisher.sink { [weak self] value in
             self?.articles[indexPath.row].foundDate = value
