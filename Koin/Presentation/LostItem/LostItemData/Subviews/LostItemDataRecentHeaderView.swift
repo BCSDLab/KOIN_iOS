@@ -1,5 +1,5 @@
 //
-//  LostItemDataTableViewRecentHeaderView.swift
+//  LostItemDataRecentHeaderView.swift
 //  koin
 //
 //  Created by 홍기정 on 1/18/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class LostItemDataTableViewRecentHeaderView: UITableViewHeaderFooterView {
+final class LostItemDataRecentHeaderView: UIView {
     
     // MARK: - UI Components
     private let titleLabel = UILabel().then {
@@ -17,8 +17,8 @@ final class LostItemDataTableViewRecentHeaderView: UITableViewHeaderFooterView {
     }
     
     // MARK: - Initializer
-    override init(reuseIdentifier: String?) {
-        super.init(reuseIdentifier: reuseIdentifier)
+    init() {
+        super.init(frame: .zero)
         configureView()
     }
     required init?(coder: NSCoder) {
@@ -26,7 +26,7 @@ final class LostItemDataTableViewRecentHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-extension LostItemDataTableViewRecentHeaderView {
+extension LostItemDataRecentHeaderView {
     
     private func configureView() {
         [titleLabel].forEach {
@@ -36,6 +36,6 @@ extension LostItemDataTableViewRecentHeaderView {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
         }
-        backgroundColor = .white
+        backgroundColor = .appColor(.neutral0)
     }
 }

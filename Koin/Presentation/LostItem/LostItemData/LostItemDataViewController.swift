@@ -25,7 +25,13 @@ final class LostItemDataViewController: UIViewController {
     weak var delegate: LostItemDataViewControllerDelegate?
     
     // MARK: - UI Components
-    private let lostItemDataTableView = LostItemDataTableView()
+    private let scrollView = UIScrollView()
+    private let scrollContentView = UIView()
+    private let headerView = LostItemDataHeaderView()
+    private let contentView = LostItemDataContentView()
+    private let buttonsView = LostItemDataButtonsView()
+    private let recentHeaderView = LostItemDataRecentHeaderView()
+    private let lostItemDataTableView = LostItemDataRecentTableView()
     
     // MARK: - Initializer
     init(viewModel: LostItemDataViewModel) {
@@ -56,7 +62,9 @@ final class LostItemDataViewController: UIViewController {
             guard let self else { return }
             switch output {
             case .updateData(let lostItemData):
-                self.lostItemDataTableView.configure(lostItemData: lostItemData)
+                self.headerView.configure(lostItemData: lostItemData)
+                self.contentView.configure(images: lostItemData.images, content: lostItemData.content, isCouncil: lostItemData.isCouncil)
+                self.buttonsView.configure(isMine: lostItemData.isMine, isCouncil: lostItemData.isCouncil, isFound: lostItemData.isFound)
             case .updateList(let lostItemListData):
                 self.lostItemDataTableView.configure(lostItemListData: lostItemListData)
             case .appendList(let lostItemListData):
@@ -64,10 +72,13 @@ final class LostItemDataViewController: UIViewController {
             case .showToast(let message):
                 self.showToast(message: message)
             case .changeState(let id):
-                self.lostItemDataTableView.changeState()
                 self.delegate?.updateState(foundDataId: id)
+                self.headerView.changeState()
+                self.buttonsView.changeState()
+                self.lostItemDataTableView.updateState(foundDataId: id)
             case .deletedData(let id):
                 self.delegate?.updateState(deletedId: id)
+                self.lostItemDataTableView.updateState(deletedId: id)
             case .popViewController:
                 self.navigationController?.popViewController(animated: true)
             case .checkedLogin((let option, let isLoggedIn)):
@@ -105,36 +116,36 @@ final class LostItemDataViewController: UIViewController {
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscription)
         
-        lostItemDataTableView.imageTapPublisher.sink { [weak self] (images: [Image], indexPath: IndexPath) in
+        contentView.imageTapPublisher.sink { [weak self] imageUrls, indexPath in
             guard let self else { return }
             let viewController = ZoomedImageViewControllerB()
             viewController.configure(
-                urls: images.map { return $0.imageUrl },
+                urls: imageUrls,
                 initialIndexPath: indexPath)
             navigationController?.present(viewController, animated: true)
         }.store(in: &subscription)
         
-        lostItemDataTableView.listButtonTappedPublisher.sink { [weak self] in
+        buttonsView.listButtonTappedPublisher.sink { [weak self] in
             self?.popToLostItemListViewController()
         }.store(in: &subscription)
         
-        lostItemDataTableView.deleteButtonTappedPublisher.sink { [weak self] in
+        buttonsView.deleteButtonTappedPublisher.sink { [weak self] in
             self?.showDeleteModal()
         }.store(in: &subscription)
         
-        lostItemDataTableView.editButtonTappedPublisher.sink { [weak self] in
+        buttonsView.editButtonTappedPublisher.sink { [weak self] in
             self?.navigateToEdit()
         }.store(in: &subscription)
         
-        lostItemDataTableView.changeStateButtonTappedPublisher.sink { [weak self] id in
-            self?.showChangeStateModal(id)
+        buttonsView.changeStateButtonTappedPublisher.sink { [weak self] in
+            self?.showChangeStateModal()
         }.store(in: &subscription)
         
-        lostItemDataTableView.chatButtonTappedPublisher.sink { [weak self] in
+        buttonsView.chatButtonTappedPublisher.sink { [weak self] in
             self?.inputSubject.send(.checkLogIn(.chat))
         }.store(in: &subscription)
         
-        lostItemDataTableView.reportButtonTappedPublisher.sink { [weak self] id in
+        buttonsView.reportButtonTappedPublisher.sink { [weak self] in
             self?.inputSubject.send(.checkLogIn(.report))
         }.store(in: &subscription)
         
@@ -147,7 +158,9 @@ final class LostItemDataViewController: UIViewController {
 extension LostItemDataViewController: EditLostItemViewControllerDelegate {
     
     func updateData(lostItemData: LostItemData) {
-        lostItemDataTableView.configure(lostItemData: lostItemData)
+        headerView.configure(lostItemData: lostItemData)
+        contentView.configure(images: lostItemData.images, content: lostItemData.content, isCouncil: lostItemData.isCouncil)
+        buttonsView.configure(isMine: lostItemData.isMine, isCouncil: lostItemData.isCouncil, isFound: lostItemData.isFound)
         delegate?.updateState(updatedId: viewModel.id, lostItemData: lostItemData)
     }
 }
@@ -214,7 +227,7 @@ extension LostItemDataViewController {
         let service = DefaultLostItemService()
         let repository = DefaultLostItemRepository(service: service)
         let updateLostItemUseCase = DefaultUpdateLostItemUseCase(repository: repository)
-        guard let lostItemData = lostItemDataTableView.lostItemData else {
+        guard let lostItemData = viewModel.lostItemData else {
             return
         }
         let viewModel = EditLostItemViewModel(updateLostItemUseCase: updateLostItemUseCase, lostItemData: lostItemData)
@@ -223,9 +236,10 @@ extension LostItemDataViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func showChangeStateModal(_ id: Int) {
+    private func showChangeStateModal() {
         let onRightButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.changeState(id))
+            guard let self else { return }
+            inputSubject.send(.changeState(viewModel.id))
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
         modalViewController.modalTransitionStyle = .crossDissolve
@@ -285,13 +299,54 @@ extension LostItemDataViewController {
 
 extension LostItemDataViewController {
     
-    private func configureView() {
-        [lostItemDataTableView].forEach {
+    private func setUpLayouts() {
+        [headerView, contentView, buttonsView, recentHeaderView, lostItemDataTableView].forEach {
+            scrollContentView.addSubview($0)
+        }
+        [scrollContentView].forEach {
+            scrollView.addSubview($0)
+        }
+        [scrollView].forEach {
             view.addSubview($0)
         }
-        lostItemDataTableView.snp.makeConstraints {
+    }
+    
+    private func setUpConstraints() {
+        scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.bottom.equalToSuperview()
         }
+        scrollContentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+        }
+        
+        headerView.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(scrollContentView)
+        }
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
+            $0.leading.trailing.equalTo(scrollContentView)
+        }
+        buttonsView.snp.makeConstraints {
+            $0.top.equalTo(contentView.snp.bottom)
+            $0.leading.trailing.equalTo(scrollContentView)
+        }
+        recentHeaderView.snp.makeConstraints {
+            $0.top.equalTo(buttonsView.snp.bottom)
+            $0.leading.trailing.equalTo(scrollContentView)
+            $0.height.equalTo(54)
+        }
+        lostItemDataTableView.snp.makeConstraints {
+            $0.top.equalTo(recentHeaderView.snp.bottom)
+            $0.leading.trailing.bottom.equalTo(scrollContentView)
+            $0.height.equalTo(lostItemDataTableView.rowHeight * 5)
+        }
+    }
+    
+    private func configureView() {
+        setUpLayouts()
+        setUpConstraints()
+        view.backgroundColor = .appColor(.neutral0)
     }
 }

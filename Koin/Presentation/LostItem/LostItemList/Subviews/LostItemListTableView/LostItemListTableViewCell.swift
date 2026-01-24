@@ -165,7 +165,7 @@ extension LostItemListTableViewCell {
             $0.top.equalTo(typeLabel.snp.bottom).offset(2)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.lessThanOrEqualTo(isFoundLabel.snp.leading).offset(-8)
-            $0.bottom.equalToSuperview().offset(-12)
+            $0.bottom.equalToSuperview().offset(-12).priority(999)
         }
         separatorView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()

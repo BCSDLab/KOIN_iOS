@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class LostItemDataViewModel {
+final class LostItemDataViewModel: ViewModelProtocol {
     
     enum Input {
         case loadData
@@ -45,6 +45,7 @@ final class LostItemDataViewModel {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     let id: Int
+    private(set) var lostItemData: LostItemData?
     private var filterState = FetchLostItemListRequest(limit: 5)
     
     // MARK: - Initializer
@@ -92,6 +93,7 @@ extension LostItemDataViewModel {
         fetchLostItemDataUseCase.execute(id: id).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemData in
+                self?.lostItemData = lostItemData
                 self?.outputSubject.send(.updateData(lostItemData))
             }
         ).store(in: &subscriptions)
