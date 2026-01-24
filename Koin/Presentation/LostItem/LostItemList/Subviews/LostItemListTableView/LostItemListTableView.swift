@@ -45,6 +45,11 @@ final class LostItemListTableView: UITableView {
         reloadData()
     }
     
+    func appendAtFirst(_ newData: LostItemListData) {
+        lostItemListData.insert(newData, at: 0)
+        reloadData()
+    }
+    
     func updateState(foundDataId id: Int) {
         if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
             lostItemListData[index].isFound = true

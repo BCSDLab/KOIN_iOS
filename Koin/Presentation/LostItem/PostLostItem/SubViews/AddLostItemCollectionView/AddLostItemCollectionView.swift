@@ -8,15 +8,12 @@
 import Combine
 import UIKit
 
-final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
+final class AddLostItemCollectionView: UICollectionView {
     
     // MARK: - Properties
     private var footerCancellables = Set<AnyCancellable>()
-    let heightChangedPublisher = PassthroughSubject<Void, Never>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
-    let dateButtonPublisher = PassthroughSubject<Void, Never>()
-    let textViewFocusPublisher = PassthroughSubject<CGFloat, Never>()
-    let textFieldFocusPublisher = PassthroughSubject<CGFloat, Never>()
+    let shouldDismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
     
     private var type: LostItemType = .lost
@@ -38,8 +35,8 @@ final class AddLostItemCollectionView: UICollectionView, UICollectionViewDataSou
         showsHorizontalScrollIndicator = false
         showsVerticalScrollIndicator = false
         contentInset = .zero
-        isScrollEnabled = false
         register(AddLostItemCollectionViewCell.self, forCellWithReuseIdentifier: AddLostItemCollectionViewCell.identifier)
+        register(AddLostItemHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: AddLostItemHeaderView.identifier)
         register(AddLostItemFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: AddLostItemFooterView.identifier)
         dataSource = self
         delegate = self
@@ -65,68 +62,33 @@ extension AddLostItemCollectionView {
         collectionViewLayout.invalidateLayout()
     }
     
-    func dismissKeyBoardDatePicker() {
-        self.endEditing(true) // 키보드 닫기
-        dismissDatePicker()
-    }
-    private func dismissDatePicker() {
+    func dismissDatePicker(_ currentIndexPath: IndexPath?) {
         for row in 0..<numberOfItems(inSection: 0) {
             let indexPath = IndexPath(row: row, section: 0)
-            (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
+            if indexPath != currentIndexPath {
+                (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
+            }
         }
+    }
+    
+    func firstResponder() -> UIView? {
+        var addLostItemCollectionViewCells: [AddLostItemCollectionViewCell] = []
+        
+        for row in 0..<numberOfItems(inSection: 0) {
+            let indexPath = IndexPath(row: row, section: 0)
+            if let cell = cellForItem(at: indexPath) as? AddLostItemCollectionViewCell {
+                addLostItemCollectionViewCells.append(cell)
+            }
+        }
+        
+        return addLostItemCollectionViewCells.first { $0.hasFirstResponder() }?.firstResponder()
     }
 }
 
-extension AddLostItemCollectionView {
-
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.frame.width
-        let estimatedHeight: CGFloat = 1500
-        let dummyCell = AddLostItemCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(index: 0, isSingle: true, model: PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""), type: type)
-        dummyCell.setNeedsLayout()
-        dummyCell.layoutIfNeeded()
-        let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
-        let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
-        return CGSize(width: width, height: estimatedSize.height)
-    }
+extension AddLostItemCollectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return articles.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
-        return articles.count >= 10 ? .zero : CGSize(width: collectionView.bounds.width, height: 70)
-    }
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        
-        if kind == UICollectionView.elementKindSectionFooter {
-            guard let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AddLostItemFooterView.identifier, for: indexPath) as? AddLostItemFooterView else {
-                return UICollectionReusableView()
-            }
-            footerCancellables.removeAll()
-            footerView.addItemButtonPublisher.sink { [weak self] in
-                guard let strongSelf = self else { return }
-                let formattedDate: String = {
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "yyyy년 M월 d일"
-                    return formatter.string(from: Date())
-                }()
-                self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
-                self?.reloadData()
-                self?.collectionViewLayout.invalidateLayout()
-                self?.heightChangedPublisher.send()
-                switch strongSelf.type {
-                case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserAddItem, .click, "물품 추가"))
-                case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemAddItem, .click, "물품 추가"))
-                }
-            }.store(in: &footerCancellables)
-            footerView.shouldDismissDropDownPublisher.sink { [weak self] in
-                self?.dismissDatePicker()
-            }.store(in: &footerCancellables)
-            return footerView
-        }
-        return UICollectionReusableView()
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -136,19 +98,13 @@ extension AddLostItemCollectionView {
         cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type)
         cell.setImage(url: articles[indexPath.row].images ?? [])
         cell.deleteButtonPublisher.sink { [weak self] _ in
-            self?.articles.remove(at: indexPath.row)
-            self?.reloadData()
-            self?.collectionViewLayout.invalidateLayout()
-            self?.heightChangedPublisher.send()
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                self?.articles.remove(at: indexPath.row)
+                self?.reloadData()
+            }
         }.store(in: &cell.cancellables)
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
-        }.store(in: &cell.cancellables)
-        cell.textFieldFocusPublisher.sink { [weak self] value in
-            self?.textFieldFocusPublisher.send(value)
-        }.store(in: &cell.cancellables)
-        cell.textViewFocusPublisher.sink { [weak self] value in
-            self?.textViewFocusPublisher.send(value)
         }.store(in: &cell.cancellables)
         cell.datePublisher.sink { [weak self] value in
             self?.articles[indexPath.row].foundDate = value
@@ -170,9 +126,79 @@ extension AddLostItemCollectionView {
         cell.imageUrlsPublisher.sink { [weak self] urls in
             self?.articles[indexPath.row].images = urls
         }.store(in: &cell.cancellables)
-        cell.shouldDismissDropDownPublisher.sink { [weak self] in
-            self?.dismissDatePicker()
+        cell.shouldDismissDropDownPublisher.sink { [weak self] indexPath in
+            self?.dismissDatePicker(indexPath)
+        }.store(in: &cell.cancellables)
+        cell.shouldDismissKeyBoardPublisher.sink { [weak self] in
+            self?.shouldDismissKeyBoardPublisher.send()
+        }.store(in: &cell.cancellables)
+        cell.focusDropdownPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] targetView in
+            var rect = targetView.convert(targetView.bounds, to: self)
+            rect.size.height += 15
+            self?.scrollRectToVisible(rect, animated: true)
         }.store(in: &cell.cancellables)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        
+        if kind == UICollectionView.elementKindSectionHeader {
+            guard let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AddLostItemHeaderView.identifier, for: indexPath) as? AddLostItemHeaderView else {
+                return UICollectionReusableView()
+            }
+            headerView.configure(type: type)
+            return headerView
+        } else if kind == UICollectionView.elementKindSectionFooter {
+            guard let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: AddLostItemFooterView.identifier, for: indexPath) as? AddLostItemFooterView else {
+                return UICollectionReusableView()
+            }
+            footerCancellables.removeAll()
+            footerView.addItemButtonPublisher.sink { [weak self] in
+                guard let strongSelf = self else { return }
+                let formattedDate: String = {
+                    let formatter = DateFormatter()
+                    formatter.dateFormat = "yyyy년 M월 d일"
+                    return formatter.string(from: Date())
+                }()
+                self?.dismissDatePicker(nil)
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                    self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
+                    self?.reloadData()
+                }
+                switch strongSelf.type {
+                case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserAddItem, .click, "물품 추가"))
+                case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemAddItem, .click, "물품 추가"))
+                }
+            }.store(in: &footerCancellables)
+            footerView.shouldDismissDropDownPublisher.sink { [weak self] in
+                self?.dismissDatePicker(nil)
+            }.store(in: &footerCancellables)
+            return footerView
+        }
+        return UICollectionReusableView()
+    }}
+    
+extension AddLostItemCollectionView: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let width = collectionView.frame.width
+        let estimatedHeight: CGFloat = 1500
+        let dummyCell = AddLostItemCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
+        dummyCell.configure(index: 0, isSingle: true, model: PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""), type: type)
+        dummyCell.setNeedsLayout()
+        dummyCell.layoutIfNeeded()
+        let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
+        let estimatedSize = dummyCell.systemLayoutSizeFitting(targetSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .fittingSizeLevel)
+        return CGSize(width: width, height: estimatedSize.height)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        return CGSize(width: collectionView.bounds.width, height: 72)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForFooterInSection section: Int) -> CGSize {
+        return articles.count >= 10 ? .zero : CGSize(width: collectionView.bounds.width, height: 70)
     }
 }

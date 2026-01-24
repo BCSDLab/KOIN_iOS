@@ -83,6 +83,7 @@
 		7C61D3572F23CD8B005FAC3A /* LostItemStatsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */; };
 		7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */; };
 		7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */; };
+		7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
@@ -401,7 +402,7 @@
 		835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */; };
 		835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */; };
 		835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */; };
-		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
+		8360D28E2BEAFC2D00909861 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication+.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA572BB8D6F7001FCBD4 /* UIViewcontroller.swift */; };
 		837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA5C2BB9830C001FCBD4 /* UILabel.swift */; };
@@ -868,6 +869,7 @@
 		7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemStatsDto.swift; sourceTree = "<group>"; };
 		7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemStats.swift; sourceTree = "<group>"; };
 		7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataButtonsView.swift; sourceTree = "<group>"; };
+		7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemHeaderView.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
@@ -1188,7 +1190,7 @@
 		835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedSearchWordRequest.swift; sourceTree = "<group>"; };
 		835DC2072C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		835DC2082C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		8360D28D2BEAFC2D00909861 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA572BB8D6F7001FCBD4 /* UIViewcontroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewcontroller.swift; sourceTree = "<group>"; };
 		837BFA5C2BB9830C001FCBD4 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
@@ -2063,6 +2065,7 @@
 			isa = PBXGroup;
 			children = (
 				7CED8EEB2EF2D1F900457128 /* AddLostItemCollectionView.swift */,
+				7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */,
 				7CED8EEC2EF2D1F900457128 /* AddLostItemCollectionViewCell.swift */,
 				7CED8EED2EF2D1F900457128 /* AddLostItemFooterView.swift */,
 			);
@@ -3579,7 +3582,7 @@
 				D2078BFD2BC4F9CB00A39861 /* String+.swift */,
 				D2078C042BC6792300A39861 /* UICollectionView+.swift */,
 				D2078C0F2BC7B56D00A39861 /* Int+.swift */,
-				8360D28D2BEAFC2D00909861 /* UIApplication.swift */,
+				8360D28D2BEAFC2D00909861 /* UIApplication+.swift */,
 				D249CD402C15CBAA000813F9 /* Date+.swift */,
 				D2A513422C5B43180064941A /* Bundle+APIKey.swift */,
 				D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */,
@@ -4585,6 +4588,7 @@
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
 				D2D7C0D92C282A7400C85A85 /* LandService.swift in Sources */,
 				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
+				7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */,
 				D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
@@ -5105,7 +5109,7 @@
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
 				B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */,
-				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
+				8360D28E2BEAFC2D00909861 /* UIApplication+.swift in Sources */,
 				D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,

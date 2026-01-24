@@ -23,7 +23,7 @@ final class PostLostItemViewModel: ViewModelProtocol {
     enum Output {
         case showToast(String)
         case addImageUrl(String, Int)
-        case popViewController(Int)
+        case navigateToLostItemData(LostItemData)
     }
     
     // MARK: - Properties
@@ -79,7 +79,7 @@ extension PostLostItemViewModel {
                   }
               } receiveValue: { [weak self] response in
                   self?.outputSubject.send(.showToast("게시글 작성이 완료되었습니다."))
-                  self?.outputSubject.send(.popViewController(response.id))
+                  self?.outputSubject.send(.navigateToLostItemData(response.toDomain()))
               }.store(in: &subscriptions)
     }
     

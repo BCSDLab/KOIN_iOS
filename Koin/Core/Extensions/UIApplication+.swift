@@ -43,4 +43,11 @@ extension UIApplication {
         height = statusBarManager?.statusBarFrame.height ?? 0        
         return height
     }
+    
+    static func bottomSafeAreaHeight() -> CGFloat {
+        let height: CGFloat
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        height = windowScene?.windows.first?.safeAreaInsets.bottom ?? 0
+        return height
+    }
 }

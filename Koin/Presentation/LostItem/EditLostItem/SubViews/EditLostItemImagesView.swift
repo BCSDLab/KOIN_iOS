@@ -39,6 +39,7 @@ final class EditLostItemImagesView: UIView {
         layout.scrollDirection = .horizontal
         let collectionView = LostItemImageCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.appColor(.neutral100)
+        collectionView.layer.cornerRadius = 8
         return collectionView
     }()
     private let addPictureButton = UIButton().then {
@@ -78,7 +79,7 @@ final class EditLostItemImagesView: UIView {
             self?.pictureCountLabel.text = "\(urls.count)/10"
         }.store(in: &subscriptions)
         
-        imageUploadCollectionView.shouldDismissDropDownPublisher.sink { [weak self] in
+        imageUploadCollectionView.shouldDismissDropDownKeyBoardPublisher.sink { [weak self] in
             self?.dismissDropDownPublisher.send()
             self?.endEditing(true)
         }.store(in: &subscriptions)
