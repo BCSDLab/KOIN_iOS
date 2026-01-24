@@ -149,6 +149,7 @@ final class HomeViewController: UIViewController {
         print(KeychainWorker.shared.read(key: .accessHistoryId))
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getNoticeBanner(Date()))
+        inputSubject.send(.getLostItemStat)
         configureView()
         configureSwipeGestures()
         configureTapGesture()
@@ -182,7 +183,6 @@ final class HomeViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .mainShopCategories))
         inputSubject.send(.categorySelected(getDiningPlace()))
         navigationController?.setNavigationBarHidden(true, animated: animated)
-        lostItemListView.configure(lostItemStats: LostItemStats(foundCount: 0, notFoundCount: 123))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -223,6 +223,8 @@ final class HomeViewController: UIViewController {
                 self?.clubView.setupHotClub(club: hotClub)
             case .setClubCategories(let response):
                 self?.clubView.setupClubCategories(categories: response.clubCategories)
+            case .updateLostItem(let lostLostStats):
+                self?.lostItemListView.configure(lostItemStats: lostLostStats)
             }
         }.store(in: &subscriptions)
         
@@ -606,10 +608,11 @@ extension HomeViewController {
     
     // navigate 함수
     private func navigateToLostItemList() {
-        let userService = DefaultUserService()
-        let userRepository = DefaultUserRepository(service: userService)
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase)
+        let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+        let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemItemUseCase: fetchLostItemItemUseCase)
         let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

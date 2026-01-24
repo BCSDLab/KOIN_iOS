@@ -16,6 +16,7 @@ final class HomeViewModel: ViewModelProtocol {
         case viewDidLoad
         case categorySelected(DiningPlace)
         case getDiningInfo
+        case getLostItemStat
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case logEventDirect(name: String, label: String, value: String, category: String)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
@@ -38,6 +39,7 @@ final class HomeViewModel: ViewModelProtocol {
         case updateBanner(BannerDto, AssignAbTestResponse)
         case setHotClub(HotClubDto)
         case setClubCategories(ClubCategoriesDto)
+        case updateLostItem(LostItemStats)
     }
     
     // MARK: - Properties
@@ -52,6 +54,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
     private let assignAbTestUseCase: AssignAbTestUseCase
     private let fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase
+    private let fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let fetchClubCategoriesUseCase = DefaultFetchClubCategoriesUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
@@ -72,7 +75,9 @@ final class HomeViewModel: ViewModelProtocol {
          checkVersionUseCase: CheckVersionUseCase,
          assignAbTestUseCase: AssignAbTestUseCase,
          fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase,
-         checkLoginUseCase: CheckLoginUseCase) {
+         checkLoginUseCase: CheckLoginUseCase,
+         fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
+    ) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
@@ -83,6 +88,7 @@ final class HomeViewModel: ViewModelProtocol {
         self.assignAbTestUseCase = assignAbTestUseCase
         self.fetchKeywordNoticePhraseUseCase = fetchKeywordNoticePhraseUseCase
         self.checkLoginUseCase = checkLoginUseCase
+        self.fetchLostItemStatsUseCase = fetchLostItemStatsUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -97,6 +103,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getDiningInformation(diningPlace: place)
             case .getDiningInfo:
                 self?.getDiningInformation()
+            case .getLostItemStat:
+                self?.getLostItemStat()
             case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
@@ -223,6 +231,15 @@ extension HomeViewModel {
             let result = response.filter { $0.place == diningPlace }.first
             self?.outputSubject.send(.updateDining(result, dateInfo.diningType, dateInfo.date.formatDateToYYMMDD() == Date().formatDateToYYMMDD()))
         }.store(in: &subscriptions)
+    }
+    
+    private func getLostItemStat() {
+        fetchLostItemStatsUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] lostItemStats in
+                self?.outputSubject.send(.updateLostItem(lostItemStats))
+            }
+        ).store(in: &subscriptions)
     }
     
     private func getShopCategory() {

@@ -11,14 +11,16 @@ import Combine
 final class LostItemDataTableViewContentCell: UITableViewCell {
     
     // MARK: - Properties
-    let imageTapPublisher = PassthroughSubject<IndexPath, Never>()
+    let imageTapPublisher = PassthroughSubject<([Image], IndexPath), Never>()
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let changeStateButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let changeStateButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let reportButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let reportButtonTappedPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var id: Int?
+    private var images: [Image] = []
     
     // MARK: - UI Components
     private let contentStackView = UIStackView().then {
@@ -91,6 +93,7 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
         $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 1, blur: 4, spread: 0)
         $0.layer.cornerRadius = 8
         $0.clipsToBounds = true
+        $0.isUserInteractionEnabled = false
     }
     
     private let buttonsView = UIView()
@@ -161,11 +164,16 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
             self?.changeStateButton.backgroundColor = .appColor(.primary500)
             self?.changeStateCircleView.transform = CGAffineTransform(translationX: 24, y: 0)
             self?.changeStateCircleView.layer.shadowColor = UIColor.clear.cgColor
+            
+            self?.editButton.isHidden = true
         }
     }
     
     func configure(lostItemData: LostItemData?) {
         guard let lostItemData else { return }
+        
+        self.images = lostItemData.images
+        self.id = lostItemData.id
         
         imageCollectionView.configure(orderImage: lostItemData.images.map {
             OrderImage(imageUrl: $0.imageUrl, isThumbnail: false)
@@ -189,18 +197,24 @@ final class LostItemDataTableViewContentCell: UITableViewCell {
             }
         }
         
-        contentLabel.attributedText = NSAttributedString(string: "\(lostItemData.content)", attributes: [
-            .font : UIFont.appFont(.pretendardRegular, size: 14),
-            .foregroundColor : UIColor.appColor(.neutral800),
-            .paragraphStyle : NSMutableParagraphStyle().then { $0.lineSpacing = 1.6 }
-        ])
-        contentLabel.isHidden = lostItemData.content?.isEmpty ?? true
+        if let content = lostItemData.content,
+           !content.isEmpty {
+            contentLabel.attributedText = NSAttributedString(string: "\(content)", attributes: [
+                .font : UIFont.appFont(.pretendardRegular, size: 14),
+                .foregroundColor : UIColor.appColor(.neutral800),
+                .paragraphStyle : NSMutableParagraphStyle().then { $0.lineSpacing = 1.6 }
+            ])
+            contentLabel.isHidden = false
+        } else {
+            contentLabel.isHidden = true
+        }
         
         councilLabel.isHidden = !lostItemData.isCouncil
         
         changeStateView.isHidden = (lostItemData.isMine && !lostItemData.isFound) ? false : true
     
-        editButton.isHidden = lostItemData.isMine ? false : true
+        editButton.isHidden = (lostItemData.isMine && !lostItemData.isFound) ? false : true
+        
         deleteButton.isHidden = lostItemData.isMine ? false : true
         
         chatButton.isHidden = lostItemData.isMine
@@ -241,7 +255,8 @@ extension LostItemDataTableViewContentCell {
         }.store(in: &subscriptions)
         
         imageCollectionView.didTapThumbnailPublisher.sink { [weak self] indexPath in
-            self?.imageTapPublisher.send(indexPath)
+            guard let self else { return }
+            imageTapPublisher.send((images, indexPath))
         }.store(in: &subscriptions)
     }
     
@@ -255,15 +270,19 @@ extension LostItemDataTableViewContentCell {
         editButtonTappedPublisher.send()
     }
     @objc private func changeStateButtonTapped() {
-        if (changeStateButton.backgroundColor != UIColor.appColor(.primary500)) {
-            changeStateButtonTappedPublisher.send()
+        guard (changeStateButton.backgroundColor != UIColor.appColor(.primary500)),
+              let id else {
+            return
         }
+        changeStateButtonTappedPublisher.send(id)
     }
     @objc private func chatButtonTapped() {
         chatButtonTappedPublisher.send()
     }
     @objc private func reportButtonTapped() {
-        reportButtonTappedPublisher.send()
+        if let id {
+            reportButtonTappedPublisher.send(id)
+        }
     }
 }
 

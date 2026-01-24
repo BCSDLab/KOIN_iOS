@@ -10,12 +10,19 @@ import Foundation
 struct FetchLostItemListRequest: Encodable {
     var type: LostItemType? = nil
     var page: Int = 1
-    let limit: Int = 10
+    var limit: Int = 10
     var category: LostItemCategory = .all
     var foundStatus: LostItemFoundStatus = .all
     let sort: LostItemSort = .latest
     var author: LostItemAuthor = .all
     var title: String? = nil
+    
+    static func !=(lhs: FetchLostItemListRequest, rhs: FetchLostItemListRequest) -> Bool {
+        return lhs.type != rhs.type
+        || lhs.category != rhs.category
+        || lhs.foundStatus != rhs.foundStatus
+        || lhs.author != rhs.author
+    }
 }
 
 enum LostItemCategory: String, Encodable {

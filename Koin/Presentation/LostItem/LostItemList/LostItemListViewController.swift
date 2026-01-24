@@ -91,33 +91,71 @@ final class LostItemListViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         setAddTarget()
+        setDelegate()
         title = "분실물"
         bind()
+        inputSubject.send(.loadList)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
+        inputSubject.send(.checkLogin)
     }
     
     private func bind() {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
             switch output {
-            case .presentPostType:
-                self.presentPostTypeModal()
-            case .showLogin:
-                self.showLogin()
+            case .updateList(let lostItemListData):
+                self.lostItemListTableView.update(lostItemListData)
+            case .appendList(let lostItemListData):
+                self.lostItemListTableView.append(lostItemListData)
+            case .resetList:
+                self.lostItemListTableView.reset()
             }
         }.store(in: &subscriptions)
         
+        lostItemListTableView.showToastPublisher.sink { [weak self] message in
+            self?.showToast(message: message)
+        }.store(in: &subscriptions)
+        
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
+            self?.dismissKeyboard()
+            
             let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+            let chatRepository = DefaultChatRepository(service: DefaultChatService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-            let viewModel = LostItemDataViewModel(checkLoginUseCase: checkLoginUseCase)
+            let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
+            let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+            let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
+            let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
+            let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+            let viewModel = LostItemDataViewModel(
+                checkLoginUseCase: checkLoginUseCase,
+                fetchLostItemDataUseCase: fetchLostItemDataUseCase,
+                fetchLostItemListUseCase: fetchLostItemListUseCase,
+                changeLostItemStateUseCase: changeLostItemStateUseCase,
+                deleteLostItemUseCase: deleteLostItemUseCase,
+                createChatRoomUseCase: createChatRoomUseCase,
+                id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
+            viewController.delegate = self
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
+        
+        lostItemListTableView.loadMoreListPublisher.sink { [weak self] in
+            self?.inputSubject.send(.loadMoreList)
+        }.store(in: &subscriptions)
+        
+        lostItemListTableView.dismissKeyBoardPublisher.sink { [weak self] in
+            self?.dismissKeyboard()
+        }.store(in: &subscriptions)
+    }
+    
+    private func setDelegate() {
+        searchTextField.delegate = self
     }
 }
 
@@ -163,18 +201,43 @@ extension LostItemListViewController {
     }
 }
 
+extension LostItemListViewController: LostItemDataViewControllerDelegate {
+    
+    func updateState(foundDataId id: Int) {
+        lostItemListTableView.updateState(foundDataId: id)
+    }
+    
+    func updateState(reportedDataId id: Int) {
+        lostItemListTableView.updateState(reportedDataId: id)
+    }
+    
+    func updateState(deletedId id: Int) {
+        lostItemListTableView.updateState(deletedId: id)
+    }
+    
+    func updateState(updatedId id: Int, lostItemData: LostItemData) {
+        lostItemListTableView.updateState(lostItemData: lostItemData)
+    }
+}
+
 extension LostItemListViewController {
     
     private func setAddTarget() {
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
     
     @objc private func filterButtonTapped() {
+        dismissKeyboard()
+        
         let filterViewController = LostItemListFilterViewController(
+            isLoggedIn: self.viewModel.isLoggedIn,
             filterState: self.viewModel.filterState,
-            onResetFilterButtonTapped: {},
-            onApplyFilterButtonTapped: {_ in}
+            onApplyFilterButtonTapped: { [weak self] filter in
+                self?.dismissView()
+                self?.inputSubject.send(.updateFilter(filter: filter))
+            }
         )
         let bottomSheetViewController = BottomSheetViewController(contentViewController: filterViewController, defaultHeight: UIApplication.hasHomeButton() ? 661 - 35 : 661, cornerRadius: 32)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
@@ -182,7 +245,16 @@ extension LostItemListViewController {
     }
     
     @objc private func writeButtonTapped() {
-        inputSubject.send(.checkLogin)
+        if viewModel.isLoggedIn {
+            self.presentPostTypeModal()
+        } else {
+            self.showLogin()
+        }
+    }
+    
+    @objc private func searchButtonTapped() {
+        dismissKeyboard()
+        inputSubject.send(.updateTitle(title: searchTextField.text))
     }
 }
 

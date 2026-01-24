@@ -12,7 +12,11 @@ final class LostItemListTableView: UITableView {
     
     // MARK: - Properties
     private var lostItemListData: [LostItemListData] = []
+    private var isWaiting = true
+    let showToastPublisher = PassthroughSubject<String, Never>()
     let cellTappedPublisher = PassthroughSubject<Int, Never>()
+    let loadMoreListPublisher = PassthroughSubject<Void, Never>()
+    let dismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
     init() {
@@ -25,9 +29,51 @@ final class LostItemListTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(lostItemListData: [LostItemListData]) {
+    func update(_ lostItemListData: [LostItemListData]) {
+        isWaiting = false
         self.lostItemListData = lostItemListData
         reloadData()
+    }
+    func append(_ lostItemListData: [LostItemListData]) {
+        isWaiting = false
+        self.lostItemListData.append(contentsOf: lostItemListData)
+        reloadData()
+    }
+    func reset() {
+        isWaiting = true
+        lostItemListData = []
+        reloadData()
+    }
+    
+    func updateState(foundDataId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData[index].isFound = true
+            reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
+    }
+    
+    func updateState(reportedDataId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData[index].isReported = true
+            reloadRows(at: [IndexPath(row: index, section: 0)], with: .automatic)
+        }
+    }
+    
+    func updateState(deletedId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData.remove(at: index)
+            reloadData()
+        }
+    }
+    
+    func updateState(lostItemData: LostItemData) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == lostItemData.id }) {
+            lostItemListData[index].category = lostItemData.category
+            lostItemListData[index].foundDate = lostItemData.foundDate
+            lostItemListData[index].foundPlace = lostItemData.foundPlace
+            lostItemListData[index].content = lostItemData.content
+            reloadData()
+        }
     }
 }
 
@@ -49,9 +95,25 @@ extension LostItemListTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if lostItemListData[indexPath.row].isReported {
-            return
+            showToastPublisher.send("신고된 게시글을 더 이상 볼 수 없습니다.")
+        } else {
+            cellTappedPublisher.send(lostItemListData[indexPath.row].id)
         }
-        cellTappedPublisher.send(lostItemListData[indexPath.row].id)
+    }
+}
+
+extension LostItemListTableView: UIScrollViewDelegate {
+ 
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        dismissKeyBoardPublisher.send()
+        
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.height, !isWaiting {
+            isWaiting = true
+            loadMoreListPublisher.send()
+        }
     }
 }
 

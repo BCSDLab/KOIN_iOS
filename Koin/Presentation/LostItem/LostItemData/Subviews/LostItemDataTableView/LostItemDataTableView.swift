@@ -11,16 +11,18 @@ import Combine
 final class LostItemDataTableView: UITableView {
     
     // MARK: - Properties
-    private var lostItemData: LostItemData?
+    private(set) var lostItemData: LostItemData?
     private var lostItemListData: [LostItemListData] = []
-    let imageTapPublisher = PassthroughSubject<IndexPath, Never>()
+    private var isWaiting = true
+    let imageTapPublisher = PassthroughSubject<([Image], IndexPath), Never>()
     let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let cellTappedPublisher = PassthroughSubject<Int, Never>()
     let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let changeStateButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let reportButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let changeStateButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let reportButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let loadMoreListPublisher = PassthroughSubject<Void, Never>()
     private var subscription: Set<AnyCancellable> = []
     
     private let contentCell = LostItemDataTableViewContentCell()
@@ -35,9 +37,20 @@ final class LostItemDataTableView: UITableView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(lostItemData: LostItemData, lostItemListData: [LostItemListData]) {
+    func configure(lostItemData: LostItemData) {
         self.lostItemData = lostItemData
+        reloadData()
+    }
+    
+    func configure(lostItemListData: [LostItemListData]) {
         self.lostItemListData = lostItemListData
+        self.isWaiting = false
+        reloadData()
+    }
+    
+    func appendList(lostItemListData: [LostItemListData]) {
+        self.lostItemListData.append(contentsOf: lostItemListData)
+        self.isWaiting = false
         reloadData()
     }
     
@@ -45,14 +58,17 @@ final class LostItemDataTableView: UITableView {
         if let cell = cellForRow(at: IndexPath(row: 0, section: 0)) as? LostItemDataTableViewContentCell {
             cell.changeState()
         }
+        if let headerView = headerView(forSection: 0) as? LostItemDataTableViewContentHeaderView {
+            headerView.changeState()
+        }
     }
 }
 
 extension LostItemDataTableView {
     
     private func bind() {
-        contentCell.imageTapPublisher.sink { [weak self] indexPath in
-            self?.imageTapPublisher.send(indexPath)
+        contentCell.imageTapPublisher.sink { [weak self] (images, indexPath) in
+            self?.imageTapPublisher.send((images, indexPath))
         }.store(in: &subscription)
         contentCell.listButtonTappedPublisher.sink { [weak self] in
             self?.listButtonTappedPublisher.send()
@@ -63,15 +79,49 @@ extension LostItemDataTableView {
         contentCell.editButtonTappedPublisher.sink { [weak self] in
             self?.editButtonTappedPublisher.send()
         }.store(in: &subscription)
-        contentCell.changeStateButtonTappedPublisher.sink { [weak self] in
-            self?.changeStateButtonTappedPublisher.send()
+        contentCell.changeStateButtonTappedPublisher.sink { [weak self] id in
+            self?.changeStateButtonTappedPublisher.send(id)
         }.store(in: &subscription)
         contentCell.chatButtonTappedPublisher.sink { [weak self] in
             self?.chatButtonTappedPublisher.send()
         }.store(in: &subscription)
-        contentCell.reportButtonTappedPublisher.sink { [weak self] in
-            self?.reportButtonTappedPublisher.send()
+        contentCell.reportButtonTappedPublisher.sink { [weak self] id in
+            self?.reportButtonTappedPublisher.send(id)
         }.store(in: &subscription)
+    }
+}
+
+extension LostItemDataTableView {
+    
+    func updateState(foundDataId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData[index].isFound = true
+            reloadData()
+        }
+    }
+    
+    func updateState(reportedDataId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData.remove(at: index)
+            reloadData()
+        }
+    }
+    
+    func updateState(deletedId id: Int) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData.remove(at: index)
+            reloadData()
+        }
+    }
+    
+    func updateState(updatedId id: Int, lostItemData: LostItemData) {
+        if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
+            lostItemListData[index].category = lostItemData.category
+            lostItemListData[index].foundPlace = lostItemData.foundPlace
+            lostItemListData[index].foundDate = lostItemData.foundDate
+            lostItemListData[index].content = lostItemData.content
+            reloadData()
+        }
     }
 }
 
@@ -147,6 +197,19 @@ extension LostItemDataTableView: UITableViewDataSource {
             }
             cell.configure(lostItemListData: lostItemListData[indexPath.row])
             return cell
+        }
+    }
+}
+
+extension LostItemDataTableView: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offsetY > contentHeight - scrollView.frame.height, !isWaiting {
+            isWaiting = true
+            loadMoreListPublisher.send()
         }
     }
 }

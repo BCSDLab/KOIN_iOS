@@ -9,12 +9,17 @@ import Combine
 import PhotosUI
 import UIKit
 
+protocol EditLostItemViewControllerDelegate: AnyObject {
+    func updateData(lostItemData: LostItemData)
+}
+
 final class EditLostItemViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: EditLostItemViewModel
     private let inputSubject = PassthroughSubject<EditLostItemViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    weak var delegate: EditLostItemViewControllerDelegate?
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
@@ -86,6 +91,9 @@ final class EditLostItemViewController: UIViewController {
                 imagesView.imageUploadCollectionView.addImageUrl(url)
             case .showToast(let message):
                 showToast(message: message)
+            case .updateData(let lostItemData):
+                delegate?.updateData(lostItemData: lostItemData)
+                navigationController?.popViewController(animated: true)
             }
         }.store(in: &subscriptions)
         
@@ -118,8 +126,28 @@ extension EditLostItemViewController {
     }
     
     @objc private func editButtonTapped() {
-        if categoryView.isValid && foundDateView.isValid && foundPlaceView.isValid {
-            // TODO: ViewModel 호출
+        if foundDateView.isValid && foundPlaceView.isValid {
+            let imageUrls = imagesView.imageUploadCollectionView.imageUrls
+            let category = categoryView.selectedCategory
+            let foundDate = foundDateView.foundDate
+            
+            let foundPlace: String
+            if foundPlaceView.locationTextField.textColor == .appColor(.neutral800),
+               let rawFoundPlace = foundPlaceView.locationTextField.text {
+                foundPlace = rawFoundPlace
+            } else {
+                foundPlace = "장소 미상"
+            }
+            
+            let content: String?
+            if contentView.contentTextView.textColor == .appColor(.neutral800),
+               !contentView.contentTextView.text.trimmingCharacters(in: .whitespaces).isEmpty {
+                content = contentView.contentTextView.text
+            } else {
+                content = nil
+            }
+            
+            inputSubject.send(.editButtonTapped((imageUrls, category, foundDate, foundPlace, content)))
         }
     }
 }

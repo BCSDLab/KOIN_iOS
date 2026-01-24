@@ -101,7 +101,14 @@ final class LostItemListTableViewCell: UITableViewCell {
         categoryLabel.text = lostItemListData.category
         foundPlaceLabel.text = lostItemListData.foundPlace
         foundDateLabel.text = lostItemListData.foundDate
-        contentLabel.text = lostItemListData.content
+        
+        if let content = lostItemListData.content, !content.isEmpty {
+            contentLabel.text = lostItemListData.content
+            contentLabel.isHidden = false
+        } else {
+            contentLabel.isHidden = true
+        }
+        
         authorLabel.text = lostItemListData.author
         registeredDateLabel.text = lostItemListData.registeredAt
     }

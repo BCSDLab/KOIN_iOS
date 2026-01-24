@@ -16,7 +16,6 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case downloadFile(String, String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
         case fetchLostItem(Int)
-        case deleteLostItem
         case checkAuth
         case checkLogin(CheckType)
         case createChatRoom
@@ -44,7 +43,6 @@ final class NoticeDataViewModel: ViewModelProtocol {
     private let downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchLostItemUseCase = DefaultFetchLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-    private let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
     private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: DefaultChatRepository(service: DefaultChatService()))
@@ -78,8 +76,6 @@ final class NoticeDataViewModel: ViewModelProtocol {
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case let .fetchLostItem(id):
                 self?.fetchLostItem(id: id)
-            case .deleteLostItem:
-                self?.deleteLostItem()
             case .checkAuth:
                 self?.checkAuth()
             case let .checkLogin(checkType):
@@ -126,17 +122,6 @@ extension NoticeDataViewModel {
         
     }
     
-    private func deleteLostItem() {
-        deleteLostItemUseCase.execute(id: noticeId).sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        }, receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showToast("글이 삭제되었습니다."))
-            self?.outputSubject.send(.popViewController)
-            fetch = true
-        }).store(in: &subscriptions)
-    }
     private func fetchLostItem(id: Int) {
         fetchLostItemUseCase.execute(id: id).sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
