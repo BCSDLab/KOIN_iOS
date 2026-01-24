@@ -82,6 +82,7 @@
 		7C61D3552F22FC7B005FAC3A /* EditLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */; };
 		7C61D3572F23CD8B005FAC3A /* LostItemStatsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */; };
 		7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */; };
+		7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
@@ -866,6 +867,7 @@
 		7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemUseCase.swift; sourceTree = "<group>"; };
 		7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemStatsDto.swift; sourceTree = "<group>"; };
 		7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemStats.swift; sourceTree = "<group>"; };
+		7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataButtonsView.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
@@ -1619,6 +1621,7 @@
 			children = (
 				7C372F1D2F1CD8FB00149729 /* LostItemDataHeaderView.swift */,
 				7C372F232F1CDB4400149729 /* LostItemDataContentView.swift */,
+				7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */,
 				7C372F1F2F1CD90B00149729 /* LostItemDataRecentHeaderView.swift */,
 				7C372F312F1DB4C300149729 /* LostItemImagesCollectionView */,
 				7C372F252F1CF81200149729 /* LostItemDataRecentTableView */,
@@ -4722,6 +4725,7 @@
 				7CED90D72EF2D1F900457128 /* RecommendedKeywordCollectionView.swift in Sources */,
 				7CED90D92EF2D1F900457128 /* DiningViewController.swift in Sources */,
 				7CED90DA2EF2D1F900457128 /* RecentSearchTableView.swift in Sources */,
+				7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */,
 				7CED90DB2EF2D1F900457128 /* ChatImageTableViewCell.swift in Sources */,
 				7CED90DC2EF2D1F900457128 /* ShopSummaryDeliveryButton.swift in Sources */,
 				7CED90DD2EF2D1F900457128 /* AddDirectCollectionViewCell.swift in Sources */,

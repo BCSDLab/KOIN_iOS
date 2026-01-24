@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class LostItemDataViewModel {
+final class LostItemDataViewModel: ViewModelProtocol {
     
     enum Input {
         case loadData
@@ -93,6 +93,7 @@ extension LostItemDataViewModel {
         fetchLostItemDataUseCase.execute(id: id).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemData in
+                self?.lostItemData = lostItemData
                 self?.outputSubject.send(.updateData(lostItemData))
             }
         ).store(in: &subscriptions)

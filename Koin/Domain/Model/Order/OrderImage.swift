@@ -8,6 +8,6 @@
 import Foundation
 
 struct OrderImage {
-    let imageUrl: String?
+    let imageUrl: String
     let isThumbnail: Bool
 }

@@ -26,9 +26,10 @@ final class LostItemDataViewController: UIViewController {
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
-    private let contentView = UIView()
-    private let dataHeaderView = LostItemDataHeaderView()
-    private let dataContentView = LostItemDataContentView()
+    private let scrollContentView = UIView()
+    private let headerView = LostItemDataHeaderView()
+    private let contentView = LostItemDataContentView()
+    private let buttonsView = LostItemDataButtonsView()
     private let recentHeaderView = LostItemDataRecentHeaderView()
     private let lostItemDataTableView = LostItemDataRecentTableView()
     
@@ -61,17 +62,23 @@ final class LostItemDataViewController: UIViewController {
             guard let self else { return }
             switch output {
             case .updateData(let lostItemData):
-                self.dataHeaderView.configure(lostItemData: lostItemData)
-                self.dataContentView.configure(lostItemData: lostItemData)
+                self.headerView.configure(lostItemData: lostItemData)
+                self.contentView.configure(images: lostItemData.images, content: lostItemData.content, isCouncil: lostItemData.isCouncil)
+                self.buttonsView.configure(isMine: lostItemData.isMine, isCouncil: lostItemData.isCouncil, isFound: lostItemData.isFound)
             case .updateList(let lostItemListData):
                 self.lostItemDataTableView.configure(lostItemListData: lostItemListData)
             case .appendList(let lostItemListData):
                 self.lostItemDataTableView.appendList(lostItemListData: lostItemListData)
             case .showToast(let message):
                 self.showToast(message: message)
+<<<<<<< HEAD
             case .changeState(let id):
                 self.delegate?.updateState(foundDataId: id)
                 self.dataContentView.changeState()
+=======
+            case .changeState:
+                self.buttonsView.changeState()
+>>>>>>> bf2d56ff (fix: 분실물 상세 레이아웃 깨짐 수정)
             case .deletedData(let id):
                 self.delegate?.updateState(deletedId: id)
             case .popViewController:
@@ -111,36 +118,36 @@ final class LostItemDataViewController: UIViewController {
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscription)
         
-        dataContentView.imageTapPublisher.sink { [weak self] (images: [Image], indexPath: IndexPath) in
+        contentView.imageTapPublisher.sink { [weak self] imageUrls, indexPath in
             guard let self else { return }
             let viewController = ZoomedImageViewControllerB()
             viewController.configure(
-                urls: images.map { return $0.imageUrl },
+                urls: imageUrls,
                 initialIndexPath: indexPath)
             navigationController?.present(viewController, animated: true)
         }.store(in: &subscription)
         
-        dataContentView.listButtonTappedPublisher.sink { [weak self] in
+        buttonsView.listButtonTappedPublisher.sink { [weak self] in
             self?.popToLostItemListViewController()
         }.store(in: &subscription)
         
-        dataContentView.deleteButtonTappedPublisher.sink { [weak self] in
+        buttonsView.deleteButtonTappedPublisher.sink { [weak self] in
             self?.showDeleteModal()
         }.store(in: &subscription)
         
-        dataContentView.editButtonTappedPublisher.sink { [weak self] in
+        buttonsView.editButtonTappedPublisher.sink { [weak self] in
             self?.navigateToEdit()
         }.store(in: &subscription)
         
-        dataContentView.changeStateButtonTappedPublisher.sink { [weak self] id in
-            self?.showChangeStateModal(id)
+        buttonsView.changeStateButtonTappedPublisher.sink { [weak self] in
+            self?.showChangeStateModal()
         }.store(in: &subscription)
         
-        dataContentView.chatButtonTappedPublisher.sink { [weak self] in
+        buttonsView.chatButtonTappedPublisher.sink { [weak self] in
             self?.inputSubject.send(.checkLogIn(.chat))
         }.store(in: &subscription)
         
-        dataContentView.reportButtonTappedPublisher.sink { [weak self] id in
+        buttonsView.reportButtonTappedPublisher.sink { [weak self] in
             self?.inputSubject.send(.checkLogIn(.report))
         }.store(in: &subscription)
         
@@ -153,7 +160,9 @@ final class LostItemDataViewController: UIViewController {
 extension LostItemDataViewController: EditLostItemViewControllerDelegate {
     
     func updateData(lostItemData: LostItemData) {
-        dataContentView.configure(lostItemData: lostItemData)
+        headerView.configure(lostItemData: lostItemData)
+        contentView.configure(images: lostItemData.images, content: lostItemData.content, isCouncil: lostItemData.isCouncil)
+        buttonsView.configure(isMine: lostItemData.isMine, isCouncil: lostItemData.isCouncil, isFound: lostItemData.isFound)
         delegate?.updateState(updatedId: viewModel.id, lostItemData: lostItemData)
     }
 }
@@ -229,9 +238,15 @@ extension LostItemDataViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func showChangeStateModal(_ id: Int) {
+    private func showChangeStateModal() {
         let onRightButtonTapped: ()->Void = { [weak self] in
+<<<<<<< HEAD
             self?.inputSubject.send(.changeState(id))
+=======
+            guard let self else { return }
+            inputSubject.send(.changeState(viewModel.id))
+            delegate?.updateState(foundDataId: viewModel.id)
+>>>>>>> bf2d56ff (fix: 분실물 상세 레이아웃 깨짐 수정)
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
         modalViewController.modalTransitionStyle = .crossDissolve
@@ -292,10 +307,10 @@ extension LostItemDataViewController {
 extension LostItemDataViewController {
     
     private func setUpLayouts() {
-        [dataHeaderView, dataContentView, recentHeaderView, lostItemDataTableView].forEach {
-            contentView.addSubview($0)
+        [headerView, contentView, buttonsView, recentHeaderView, lostItemDataTableView].forEach {
+            scrollContentView.addSubview($0)
         }
-        [contentView].forEach {
+        [scrollContentView].forEach {
             scrollView.addSubview($0)
         }
         [scrollView].forEach {
@@ -308,25 +323,30 @@ extension LostItemDataViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.bottom.equalToSuperview()
         }
-        contentView.snp.makeConstraints {
+        scrollContentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
             $0.width.equalTo(scrollView)
         }
-        dataHeaderView.snp.makeConstraints {
-            $0.top.leading.trailing.equalTo(contentView)
+        
+        headerView.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(scrollContentView)
         }
-        dataContentView.snp.makeConstraints {
-            $0.top.equalTo(dataHeaderView.snp.bottom)
-            $0.leading.trailing.equalTo(contentView)
+        contentView.snp.makeConstraints {
+            $0.top.equalTo(headerView.snp.bottom)
+            $0.leading.trailing.equalTo(scrollContentView)
+        }
+        buttonsView.snp.makeConstraints {
+            $0.top.equalTo(contentView.snp.bottom)
+            $0.leading.trailing.equalTo(scrollContentView)
         }
         recentHeaderView.snp.makeConstraints {
-            $0.top.equalTo(dataContentView.snp.bottom)
-            $0.leading.trailing.equalTo(contentView)
+            $0.top.equalTo(buttonsView.snp.bottom)
+            $0.leading.trailing.equalTo(scrollContentView)
             $0.height.equalTo(54)
         }
         lostItemDataTableView.snp.makeConstraints {
             $0.top.equalTo(recentHeaderView.snp.bottom)
-            $0.leading.trailing.bottom.equalTo(contentView)
+            $0.leading.trailing.bottom.equalTo(scrollContentView)
             $0.height.equalTo(lostItemDataTableView.rowHeight * 5)
         }
     }

@@ -11,26 +11,15 @@ import Combine
 final class LostItemDataContentView: UIView {
     
     // MARK: - Properties
-    let imageTapPublisher = PassthroughSubject<([Image], IndexPath), Never>()
-    let listButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let deleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let changeStateButtonTappedPublisher = PassthroughSubject<Int, Never>()
-    let chatButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let reportButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let imageTapPublisher = PassthroughSubject<([String], IndexPath), Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private var id: Int?
-    private var images: [Image] = []
     
     // MARK: - UI Components
     private let contentStackView = UIStackView().then {
         $0.axis = .vertical
-        $0.spacing = 16
-        $0.distribution = .fillProportionally
-        $0.alignment = .fill
+        $0.spacing = 8
+        $0.alignment = .center
     }
-    
-    private let imageWrapperView = UIView()
     
     private let imageCollectionView = ShopSummaryImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
@@ -46,12 +35,16 @@ final class LostItemDataContentView: UIView {
         $0.pageIndicatorTintColor = UIColor.appColor(.neutral300)
         $0.currentPageIndicatorTintColor = UIColor.appColor(.primary400)
         $0.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
-        $0.isHidden = true
+    }
+    
+    private let labelStackView = UIStackView().then {
+        $0.axis = .vertical
+        $0.spacing = 24
+        $0.alignment = .fill
     }
     
     private let contentLabel = UILabel().then {
         $0.numberOfLines = 0
-        $0.isHidden = true
         $0.font = .appFont(.pretendardRegular, size: 14)
         $0.textColor = .appColor(.neutral800)
     }
@@ -75,129 +68,25 @@ final class LostItemDataContentView: UIView {
         $0.isHidden = true
     }
     
-    private let changeStateView = UIView()
-    
-    private let changeStateLabel = UILabel().then {
-        $0.text = "물건을 찾았나요?"
-        $0.font = .appFont(.pretendardRegular, size: 12)
-        $0.textColor = .appColor(.neutral500)
-    }
-    
-    private let changeStateButton = UIButton().then {
-        $0.backgroundColor = .appColor(.neutral400)
-        $0.layer.cornerRadius = 11
-        $0.clipsToBounds = true
-    }
-    private let changeStateCircleView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral0)
-        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 1, blur: 4, spread: 0)
-        $0.layer.cornerRadius = 8
-        $0.clipsToBounds = true
-        $0.isUserInteractionEnabled = false
-    }
-    
-    private let buttonsView = UIView()
-    
-    private let listButton = DebouncedButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.attributedTitle = AttributedString("목록", attributes: AttributeContainer([
-            .font : UIFont.appFont(.pretendardMedium, size: 12),
-            .foregroundColor : UIColor.appColor(.neutral600)
-        ]))
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-        $0.configuration = configuration
-    }
-    
-    private let editButton = DebouncedButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.attributedTitle = AttributedString("수정", attributes: AttributeContainer([
-            .font : UIFont.appFont(.pretendardMedium, size: 12),
-            .foregroundColor : UIColor.appColor(.neutral600)
-        ]))
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-        $0.configuration = configuration
-    }
-    private let deleteButton = DebouncedButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.attributedTitle = AttributedString("삭제", attributes: AttributeContainer([
-            .font : UIFont.appFont(.pretendardMedium, size: 12),
-            .foregroundColor : UIColor.appColor(.neutral600)
-        ]))
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-        $0.configuration = configuration
-    }
-    private let chatButton = DebouncedButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.attributedTitle = AttributedString("쪽지 보내기", attributes: AttributeContainer([
-            .font : UIFont.appFont(.pretendardMedium, size: 12),
-            .foregroundColor : UIColor.appColor(.neutral600)
-        ]))
-        configuration.image = .appImage(asset: .chat)
-        configuration.imagePadding = 4
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
-        $0.configuration = configuration
-    }
-    private let reportButton = DebouncedButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = .appImage(asset: .siren)
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
-        $0.configuration = configuration
-    }
-    
-    private let separatorView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral100)
-    }
-    
     // MARK: - Initializer
     init() {
         super.init(frame: .zero)
         configureView()
         bind()
-        setAddTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func changeState() {
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            self?.changeStateButton.backgroundColor = .appColor(.primary500)
-            self?.changeStateCircleView.transform = CGAffineTransform(translationX: 24, y: 0)
-            self?.changeStateCircleView.layer.shadowColor = UIColor.clear.cgColor
-            
-            self?.editButton.isHidden = true
-        }
-    }
     
-    func configure(lostItemData: LostItemData?) {
-        guard let lostItemData else { return }
+    func configure(images: [Image], content: String?, isCouncil: Bool) {
+        imageCollectionView.configure(images: images)
+        imageCollectionView.isHidden = images.isEmpty
         
-        self.images = lostItemData.images
-        self.id = lostItemData.id
+        pageControl.numberOfPages = images.count
+        pageControl.isHidden = images.count < 2
         
-        imageCollectionView.configure(orderImage: lostItemData.images.map {
-            OrderImage(imageUrl: $0.imageUrl, isThumbnail: false)
-        })
-        imageCollectionView.isHidden = lostItemData.images.isEmpty
-        
-        pageControl.numberOfPages = lostItemData.images.count
-        pageControl.isHidden = lostItemData.images.isEmpty || (lostItemData.images.count == 1)
-        
-        if lostItemData.images.count == 1 {
-            imageCollectionView.snp.remakeConstraints {
-                $0.top.bottom.equalToSuperview()
-                $0.leading.trailing.equalToSuperview().inset(7.5)
-                $0.height.equalTo(278)
-            }
-        }
-        if 1 < lostItemData.images.count {
-            contentStackView.setCustomSpacing(8, after: imageWrapperView)
-            imageCollectionView.snp.updateConstraints {
-                $0.bottom.equalToSuperview().offset(-38)
-            }
-        }
-        
-        if let content = lostItemData.content,
+        if let content = content,
            !content.isEmpty {
             contentLabel.attributedText = NSAttributedString(string: "\(content)", attributes: [
                 .font : UIFont.appFont(.pretendardRegular, size: 14),
@@ -209,180 +98,67 @@ final class LostItemDataContentView: UIView {
             contentLabel.isHidden = true
         }
         
-        councilLabel.isHidden = !lostItemData.isCouncil
-        
-        changeStateView.isHidden = (lostItemData.isMine && !lostItemData.isFound) ? false : true
-    
-        editButton.isHidden = (lostItemData.isMine && !lostItemData.isFound) ? false : true
-        
-        deleteButton.isHidden = lostItemData.isMine ? false : true
-        
-        chatButton.isHidden = lostItemData.isMine
-        
-        reportButton.isHidden = (lostItemData.isMine || lostItemData.isCouncil)
-        
-        if lostItemData.isCouncil {
-            chatButton.snp.remakeConstraints {
-                $0.top.bottom.trailing.equalToSuperview()
-            }
-        }
+        councilLabel.isHidden = !isCouncil
         
         setNeedsLayout()
         layoutIfNeeded()
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        imageCollectionView.collectionViewLayout.invalidateLayout()
-    }
-}
-
-extension LostItemDataContentView {
-    
-    private func setAddTargets() {
-        listButton.addTarget(self, action: #selector(listButtonTapped), for: .touchUpInside)
-        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
-        editButton.addTarget(self, action: #selector(editButtonTapped), for: .touchUpInside)
-        changeStateButton.addTarget(self, action: #selector(changeStateButtonTapped), for: .touchUpInside)
-        chatButton.addTarget(self, action: #selector(chatButtonTapped), for: .touchUpInside)
-        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
-    }
-    
     private func bind() {
+        imageCollectionView.didTapThumbnailPublisher.sink { [weak self] indexPath in
+            guard let self else { return }
+            imageTapPublisher.send((imageCollectionView.orderImages.map { $0.imageUrl }, indexPath))
+        }.store(in: &subscriptions)
+        
         imageCollectionView.didScrollOutputSubject.sink { [weak self] page in
             guard let self else { return }
             pageControl.currentPage = page
         }.store(in: &subscriptions)
-        
-        imageCollectionView.didTapThumbnailPublisher.sink { [weak self] indexPath in
-            guard let self else { return }
-            imageTapPublisher.send((images, indexPath))
-        }.store(in: &subscriptions)
-    }
-    
-    @objc private func listButtonTapped() {
-        listButtonTappedPublisher.send()
-    }
-    @objc private func deleteButtonTapped() {
-        deleteButtonTappedPublisher.send()
-    }
-    @objc private func editButtonTapped() {
-        editButtonTappedPublisher.send()
-    }
-    @objc private func changeStateButtonTapped() {
-        guard (changeStateButton.backgroundColor != UIColor.appColor(.primary500)),
-              let id else {
-            return
-        }
-        changeStateButtonTappedPublisher.send(id)
-    }
-    @objc private func chatButtonTapped() {
-        chatButtonTappedPublisher.send()
-    }
-    @objc private func reportButtonTapped() {
-        if let id {
-            reportButtonTappedPublisher.send(id)
-        }
     }
 }
 
+
 extension LostItemDataContentView {
     
-    private func configureButtons() {
-        [listButton, editButton, deleteButton, chatButton, reportButton].forEach {
-            $0.layer.masksToBounds = true
-            $0.layer.cornerRadius = 4
-            $0.backgroundColor = .appColor(.neutral300)
-            $0.tintColor = .appColor(.neutral600)
-        }
-    }
-    
     private func setUpLayouts() {
-        [changeStateLabel, changeStateButton, changeStateCircleView].forEach {
-            changeStateView.addSubview($0)
+        [contentLabel, councilLabel].forEach {
+            labelStackView.addArrangedSubview($0)
         }
-        [listButton, editButton, deleteButton, chatButton, reportButton].forEach {
-            buttonsView.addSubview($0)
-        }
-        [imageCollectionView, pageControl].forEach {
-            imageWrapperView.addSubview($0)
-        }
-        [imageWrapperView, contentLabel, councilLabel, changeStateView, buttonsView].forEach {
+        [imageCollectionView, pageControl, labelStackView].forEach {
             contentStackView.addArrangedSubview($0)
         }
-        [contentStackView, separatorView].forEach {
+        [contentStackView].forEach {
             addSubview($0)
         }
     }
+    
     private func setUpConstraints() {
-        imageCollectionView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.leading.trailing.equalToSuperview().inset(7.5).priority(999)
-            $0.height.equalTo(278)
-            $0.bottom.equalToSuperview().offset(0)
-        }
-        pageControl.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.centerX.equalToSuperview()
-        }
-        
-        changeStateLabel.snp.makeConstraints {
-            $0.top.bottom.equalToSuperview()
-            $0.height.equalTo(22)
-            $0.trailing.equalTo(changeStateButton.snp.leading).offset(-4)
-        }
-        changeStateButton.snp.makeConstraints {
-            $0.height.equalTo(22)
-            $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview()
-            $0.width.equalTo(46)
-        }
-        changeStateCircleView.snp.makeConstraints {
-            $0.width.height.equalTo(16)
-            $0.centerY.equalToSuperview()
-            $0.leading.equalTo(changeStateButton.snp.leading).offset(3)
-        }
-        
-        [listButton, editButton, deleteButton, chatButton, reportButton].forEach {
-            $0.snp.makeConstraints {
-                $0.top.bottom.equalToSuperview()
-            }
-        }
-        listButton.snp.makeConstraints {
-            $0.leading.equalToSuperview()
-        }
-        deleteButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
-        }
-        editButton.snp.makeConstraints {
-            $0.trailing.equalTo(deleteButton.snp.leading).offset(-8)
-        }
-        reportButton.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
-        }
-        chatButton.snp.makeConstraints {
-            $0.trailing.equalTo(reportButton.snp.leading).offset(-8)
-        }
-        
         contentStackView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(24)
-            $0.leading.trailing.equalToSuperview().inset(24)
-            $0.bottom.equalTo(separatorView.snp.top).offset(-16).priority(999)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().offset(-16)
         }
+        
+        imageCollectionView.snp.makeConstraints {
+            $0.width.equalTo(UIScreen.main.bounds.width - 63)
+            $0.height.equalTo(278)
+        }
+        
+        pageControl.snp.makeConstraints {
+            $0.height.equalTo(30)
+        }
+        
+        contentLabel.snp.makeConstraints {
+            $0.width.equalTo(UIScreen.main.bounds.width - 48)
+        }
+        
         councilLabel.snp.makeConstraints {
+            $0.width.equalTo(UIScreen.main.bounds.width - 48)
             $0.height.equalTo(89)
-        }
-        buttonsView.snp.makeConstraints {
-            $0.height.equalTo(32)
-        }
-        separatorView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(6)
         }
     }
     
     private func configureView() {
-        configureButtons()
         setUpLayouts()
         setUpConstraints()
     }
