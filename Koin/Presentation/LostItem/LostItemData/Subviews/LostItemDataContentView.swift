@@ -86,7 +86,6 @@ final class LostItemDataContentView: UIView {
         pageControl.isHidden = images.count < 2
         
         if let content = content,
-
            !content.isEmpty {
             contentLabel.attributedText = NSAttributedString(string: "\(content)", attributes: [
                 .font : UIFont.appFont(.pretendardRegular, size: 14),
