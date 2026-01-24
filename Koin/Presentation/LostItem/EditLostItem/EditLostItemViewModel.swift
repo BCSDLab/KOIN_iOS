@@ -88,7 +88,7 @@ extension EditLostItemViewModel {
         ).sink(
             receiveCompletion: { completion in
                 if case .failure(let failure) = completion {
-                    print(failure)
+                    self.outputSubject.send(.showToast(failure.message))
                 }
             },
             receiveValue: { [weak self] lostItemData in

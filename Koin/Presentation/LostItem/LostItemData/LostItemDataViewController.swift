@@ -63,8 +63,9 @@ final class LostItemDataViewController: UIViewController {
                 self.lostItemDataTableView.appendList(lostItemListData: lostItemListData)
             case .showToast(let message):
                 self.showToast(message: message)
-            case .changeState:
+            case .changeState(let id):
                 self.lostItemDataTableView.changeState()
+                self.delegate?.updateState(foundDataId: id)
             case .deletedData(let id):
                 self.delegate?.updateState(deletedId: id)
             case .popViewController:
@@ -158,7 +159,7 @@ extension LostItemDataViewController: LostItemDataViewControllerDelegate, Report
         lostItemDataTableView.updateState(foundDataId: id)
     }
     
-    func updateState(reportedDataId id: Int) {
+    func updateState(reportedDataId id: Int) {        
         delegate?.updateState(reportedDataId: id)
         lostItemDataTableView.updateState(reportedDataId: id)
     }
@@ -193,7 +194,7 @@ extension LostItemDataViewController {
             let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
-            let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemItemUseCase: fetchLostItemItemUseCase)
+            let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemListUseCase: fetchLostItemItemUseCase)
             let lostItemListViewController = LostItemListViewController(viewModel: viewModel)
             navigationController?.setViewControllers([homeViewController, lostItemListViewController], animated: true)
         }
@@ -225,7 +226,6 @@ extension LostItemDataViewController {
     private func showChangeStateModal(_ id: Int) {
         let onRightButtonTapped: ()->Void = { [weak self] in
             self?.inputSubject.send(.changeState(id))
-            self?.delegate?.updateState(foundDataId: id)
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
         modalViewController.modalTransitionStyle = .crossDissolve

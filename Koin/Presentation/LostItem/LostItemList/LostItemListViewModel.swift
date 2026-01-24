@@ -25,7 +25,7 @@ final class LostItemListViewModel {
     
     // MARK: - Properties
     private let checkLoginUseCase: CheckLoginUseCase
-    private let fetchLostItemItemUseCase: FetchLostItemListUseCase
+    private let fetchLostItemListUseCase: FetchLostItemListUseCase
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscription: Set<AnyCancellable> = []
@@ -35,9 +35,9 @@ final class LostItemListViewModel {
     
     
     // MARK: - Initializer
-    init(checkLoginUseCase: CheckLoginUseCase, fetchLostItemItemUseCase: FetchLostItemListUseCase) {
+    init(checkLoginUseCase: CheckLoginUseCase, fetchLostItemListUseCase: FetchLostItemListUseCase) {
         self.checkLoginUseCase = checkLoginUseCase
-        self.fetchLostItemItemUseCase = fetchLostItemItemUseCase
+        self.fetchLostItemListUseCase = fetchLostItemListUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -63,7 +63,7 @@ final class LostItemListViewModel {
 extension LostItemListViewModel {
     
     private func loadList() {
-        fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
+        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemList in
                 guard let self else { return }
@@ -75,8 +75,12 @@ extension LostItemListViewModel {
     private func loadMoreList() {
         filterState.page += 1
         
-        fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
-            receiveCompletion: { _ in },
+        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(_) = completion {
+                    self?.filterState.page -= 1
+                }
+            },
             receiveValue: { [weak self] lostItemList in
                 guard let self, self.filterState.page == lostItemList.currentPage else {
                     return
@@ -109,7 +113,7 @@ extension LostItemListViewModel {
         }
         filterState.page = 1
         
-        fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
+        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemList in
                 self?.outputSubject.send(.updateList(lostItemList.articles))
@@ -130,7 +134,7 @@ extension LostItemListViewModel {
         filterState.author = filter.author
         filterState.page = 1
         
-        fetchLostItemItemUseCase.execute(requestModel: filterState).sink(
+        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemList in
                 self?.outputSubject.send(.updateList(lostItemList.articles))

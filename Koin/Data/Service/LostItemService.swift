@@ -46,7 +46,21 @@ final class DefaultLostItemService: LostItemService {
     }
     
     func deleteLostItem(id: Int) -> AnyPublisher<Void, Error> {
-        return request(.deleteLostItem(id))
+        return networkService.request(api: LostItemAPI.deleteLostItem(id))
+            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
+                guard let self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in
+                            self.networkService.request(api: LostItemAPI.deleteLostItem(id))
+                        }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
     }
     
     func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemDataDto, ErrorResponse> {

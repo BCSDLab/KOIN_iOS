@@ -42,6 +42,7 @@ final class LostItemListTableView: UITableView {
     func reset() {
         isWaiting = true
         lostItemListData = []
+        reloadData()
     }
     
     func updateState(foundDataId id: Int) {

@@ -23,7 +23,7 @@ final class LostItemDataViewModel {
         case updateList([LostItemListData])
         case appendList([LostItemListData])
         case showToast(String)
-        case changeState
+        case changeState(Int)
         case deletedData(Int)
         case popViewController
         case checkedLogin((CheckLoginOption, Bool))
@@ -90,11 +90,7 @@ extension LostItemDataViewModel {
     
     private func loadData() {
         fetchLostItemDataUseCase.execute(id: id).sink(
-            receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    print(failure)
-                }
-            },
+            receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemData in
                 self?.outputSubject.send(.updateData(lostItemData))
             }
@@ -147,7 +143,7 @@ extension LostItemDataViewModel {
                 }
             },
             receiveValue: { [weak self] in
-                self?.outputSubject.send(.changeState)
+                self?.outputSubject.send(.changeState(id))
             }
         ).store(in: &subscriptions)
     }
