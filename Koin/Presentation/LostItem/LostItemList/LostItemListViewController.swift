@@ -199,7 +199,11 @@ extension LostItemListViewController {
             onFoundButtonTapped: onFoundButtonTapped,
             onLostButtonTapped: onLostButtonTapped
         )
-        let bottomSheetViewController = BottomSheetViewController(contentViewController: postOptionViewController, defaultHeight: 225, cornerRadius: 32)
+        let bottomSheetViewController = BottomSheetViewController(
+            contentViewController: postOptionViewController,
+            defaultHeight: 191 + UIApplication.bottomSafeAreaHeight(),
+            cornerRadius: 32
+        )
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         navigationController?.present(bottomSheetViewController, animated: true)
     }
@@ -250,7 +254,10 @@ extension LostItemListViewController {
                 self?.inputSubject.send(.updateFilter(filter: filter))
             }
         )
-        let bottomSheetViewController = BottomSheetViewController(contentViewController: filterViewController, defaultHeight: UIApplication.hasHomeButton() ? 661 - 35 : 661, cornerRadius: 32)
+        let bottomSheetViewController = BottomSheetViewController(
+            contentViewController: filterViewController,
+            defaultHeight: 627 + UIApplication.bottomSafeAreaHeight(),
+            cornerRadius: 32)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         navigationController?.present(bottomSheetViewController, animated: true)
     }
