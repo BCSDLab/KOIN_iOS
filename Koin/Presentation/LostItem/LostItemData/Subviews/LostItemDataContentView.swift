@@ -77,8 +77,7 @@ final class LostItemDataContentView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+        
     func configure(images: [Image], content: String?, isCouncil: Bool) {
         imageCollectionView.configure(images: images)
         imageCollectionView.isHidden = images.isEmpty
@@ -87,6 +86,7 @@ final class LostItemDataContentView: UIView {
         pageControl.isHidden = images.count < 2
         
         if let content = content,
+
            !content.isEmpty {
             contentLabel.attributedText = NSAttributedString(string: "\(content)", attributes: [
                 .font : UIFont.appFont(.pretendardRegular, size: 14),
