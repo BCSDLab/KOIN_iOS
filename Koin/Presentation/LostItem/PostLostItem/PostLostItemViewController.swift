@@ -259,7 +259,7 @@ extension PostLostItemViewController {
     }
     
     @objc private func dismissKeyboardDropdown() {
-        addLostItemCollectionView.dismissDatePicker()
+        addLostItemCollectionView.dismissDatePicker(nil)
         dismissKeyboard()
     }
 }

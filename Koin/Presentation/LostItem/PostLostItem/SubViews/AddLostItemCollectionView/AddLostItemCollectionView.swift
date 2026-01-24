@@ -62,10 +62,12 @@ extension AddLostItemCollectionView {
         collectionViewLayout.invalidateLayout()
     }
     
-    func dismissDatePicker() {
+    func dismissDatePicker(_ currentIndexPath: IndexPath?) {
         for row in 0..<numberOfItems(inSection: 0) {
             let indexPath = IndexPath(row: row, section: 0)
-            (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
+            if indexPath != currentIndexPath {
+                (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
+            }
         }
     }
     
@@ -96,8 +98,10 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type)
         cell.setImage(url: articles[indexPath.row].images ?? [])
         cell.deleteButtonPublisher.sink { [weak self] _ in
-            self?.articles.remove(at: indexPath.row)
-            self?.reloadData()
+            DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                self?.articles.remove(at: indexPath.row)
+                self?.reloadData()
+            }
         }.store(in: &cell.cancellables)
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
@@ -122,8 +126,8 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         cell.imageUrlsPublisher.sink { [weak self] urls in
             self?.articles[indexPath.row].images = urls
         }.store(in: &cell.cancellables)
-        cell.shouldDismissDropDownPublisher.sink { [weak self] in
-            self?.dismissDatePicker()
+        cell.shouldDismissDropDownPublisher.sink { [weak self] indexPath in
+            self?.dismissDatePicker(indexPath)
         }.store(in: &cell.cancellables)
         cell.shouldDismissKeyBoardPublisher.sink { [weak self] in
             self?.shouldDismissKeyBoardPublisher.send()
@@ -151,15 +155,18 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
                     formatter.dateFormat = "yyyy년 M월 d일"
                     return formatter.string(from: Date())
                 }()
-                self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
-                self?.reloadData()
+                self?.dismissDatePicker(nil)
+                DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
+                    self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
+                    self?.reloadData()
+                }
                 switch strongSelf.type {
                 case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserAddItem, .click, "물품 추가"))
                 case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemAddItem, .click, "물품 추가"))
                 }
             }.store(in: &footerCancellables)
             footerView.shouldDismissDropDownPublisher.sink { [weak self] in
-                self?.dismissDatePicker()
+                self?.dismissDatePicker(nil)
             }.store(in: &footerCancellables)
             return footerView
         }

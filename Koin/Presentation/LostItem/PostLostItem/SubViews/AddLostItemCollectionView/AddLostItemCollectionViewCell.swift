@@ -20,7 +20,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     let locationPublisher = PassthroughSubject<String, Never>()
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
-    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
+    let shouldDismissDropDownPublisher = PassthroughSubject<IndexPath?, Never>()
     let shouldDismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
     
     private var type: LostItemType = .lost
@@ -189,7 +189,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             self?.imageUrlsPublisher.send(urls)
             }.store(in: &cancellable)
         imageUploadCollectionView.shouldDismissDropDownKeyBoardPublisher.sink { [weak self] in
-            self?.shouldDismissDropDownPublisher.send()
+            self?.shouldDismissDropDownPublisher.send(nil)
             self?.shouldDismissKeyBoardPublisher.send()
             }.store(in: &cancellable)
         dropdownView.valueChangedPublisher.sink { [weak self] in
@@ -305,7 +305,7 @@ extension AddLostItemCollectionViewCell {
 extension AddLostItemCollectionViewCell{
     
     @objc private func addImageButtonTapped() {
-        shouldDismissDropDownPublisher.send()
+        shouldDismissDropDownPublisher.send(nil)
         shouldDismissKeyBoardPublisher.send()
         
         addImageButtonPublisher.send()
@@ -322,13 +322,13 @@ extension AddLostItemCollectionViewCell{
     }
     
     @objc private func deleteCellButtonTapped() {
-        shouldDismissDropDownPublisher.send()
+        shouldDismissDropDownPublisher.send(nil)
         shouldDismissKeyBoardPublisher.send()
         deleteButtonPublisher.send()
     }
     
     @objc private func stackButtonTapped(_ sender: UIButton) {
-        shouldDismissDropDownPublisher.send()
+        shouldDismissDropDownPublisher.send(nil)
         shouldDismissKeyBoardPublisher.send()
     
         categoryWarningLabel.isHidden = true
@@ -448,14 +448,15 @@ extension AddLostItemCollectionViewCell {
     }
     
     private func presentDropdown() {
-        // 열려있는 키보드 닫기
-        self.endEditing(true)
         
-        // 열려있는 다른 dropdown 모두 닫기
-        //shouldDismissDropDownPublisher.send() // FIXME: 애니메이션과 충돌
+        guard let text = itemCountLabel.text,
+              let lastCharacter = text.last,
+              let row = Int(String(lastCharacter)) else {
+            return
+        }
+        let indexPath = IndexPath(row: row - 1, section: 0)
         
-        // 초기값 바로 적용하기
-        dropdownValueChanged()
+        shouldDismissDropDownPublisher.send(indexPath)
         
         dropdownView.isHidden = false
         UIView.animate(withDuration: 0.2) { [weak self] in
@@ -494,7 +495,7 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
     // MARK: 내용 수정 시작
     func textViewDidBeginEditing(_ textView: UITextView) {
         // 열려있는 드롭다운  닫기
-        shouldDismissDropDownPublisher.send()
+        shouldDismissDropDownPublisher.send(nil)
         
         // placeholder 비우기
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
@@ -537,7 +538,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     // MARK: 장소 수정 시작
     func textFieldDidBeginEditing(_ textField: UITextField) {
         // 열려있는 dropdown 닫기
-        shouldDismissDropDownPublisher.send()
+        shouldDismissDropDownPublisher.send(nil)
         
         // placeholder 비우기
         if textField.textColor == UIColor.appColor(.neutral500) {
