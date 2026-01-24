@@ -65,6 +65,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         layout.scrollDirection = .horizontal
         let collectionView = LostItemImageCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.appColor(.neutral100)
+        collectionView.layer.cornerRadius = 8
         return collectionView
     }()
     

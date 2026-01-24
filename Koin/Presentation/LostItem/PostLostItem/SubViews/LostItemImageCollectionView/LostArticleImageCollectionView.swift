@@ -68,8 +68,7 @@ extension LostItemImageCollectionView {
         return imageUrls.count
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = Int((collectionView.bounds.width - 38) / 3)
-        return CGSize(width: width, height: Int(collectionView.bounds.height) - 10)
+        return CGSize(width: 112, height: 99)
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 4

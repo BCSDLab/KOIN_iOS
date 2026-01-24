@@ -104,7 +104,6 @@ final class LostItemListTableViewCell: UITableViewCell {
         
         if let content = lostItemListData.content, !content.isEmpty {
             contentLabel.text = lostItemListData.content
-            contentLabel.isHidden = false
         } else {
             contentLabel.isHidden = true
         }

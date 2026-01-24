@@ -39,6 +39,7 @@ final class EditLostItemImagesView: UIView {
         layout.scrollDirection = .horizontal
         let collectionView = LostItemImageCollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.backgroundColor = UIColor.appColor(.neutral100)
+        collectionView.layer.cornerRadius = 8
         return collectionView
     }()
     private let addPictureButton = UIButton().then {
