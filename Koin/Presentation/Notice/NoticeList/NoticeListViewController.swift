@@ -115,7 +115,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
-                self?.writeButton.isHidden = self?.viewModel.noticeListType != .lostItem
             case let .updateUserKeywordList(noticeKeywordList, keywordIdx):
                 self?.updateUserKeywordList(keywords: noticeKeywordList, keywordIdx: keywordIdx)
             case let .isLogined(isLogined):
