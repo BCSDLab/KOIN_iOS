@@ -66,7 +66,7 @@ final class LostItemDataViewController: UIViewController {
             case .updateData(let lostItemData):
                 self.headerView.configure(lostItemData: lostItemData)
                 self.contentView.configure(images: lostItemData.images, content: lostItemData.content, organization: lostItemData.organization)
-                self.buttonsView.configure(isMine: lostItemData.isMine, isOrganization: (lostItemData.organization != nil), isFound: lostItemData.isFound)
+                self.buttonsView.configure(isMine: lostItemData.isMine, isOrganization: (lostItemData.organization != nil), isFound: lostItemData.isFound, type: lostItemData.type)
             case .updateList(let lostItemListData):
                 self.lostItemDataTableView.configure(lostItemListData: lostItemListData)
             case .appendList(let lostItemListData):
@@ -162,7 +162,7 @@ extension LostItemDataViewController: EditLostItemViewControllerDelegate {
     func updateData(lostItemData: LostItemData) {
         headerView.configure(lostItemData: lostItemData)
         contentView.configure(images: lostItemData.images, content: lostItemData.content, organization: lostItemData.organization)
-        buttonsView.configure(isMine: lostItemData.isMine, isOrganization: lostItemData.organization != nil, isFound: lostItemData.isFound)
+        buttonsView.configure(isMine: lostItemData.isMine, isOrganization: lostItemData.organization != nil, isFound: lostItemData.isFound, type: lostItemData.type)
         delegate?.updateState(updatedId: viewModel.id, lostItemData: lostItemData)
     }
 }

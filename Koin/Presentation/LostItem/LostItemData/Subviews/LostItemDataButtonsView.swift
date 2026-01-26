@@ -149,7 +149,9 @@ extension LostItemDataButtonsView {
         }
     }
     
-    func configure(isMine: Bool, isOrganization: Bool, isFound: Bool) {
+    func configure(isMine: Bool, isOrganization: Bool, isFound: Bool, type: LostItemType) {
+        
+        changeStateLabel.text = type == .lost ? "물건을 찾았나요?" : "주인을 찾았나요?"
         
         changeStateView.isHidden = !(isMine && !isFound)
     
