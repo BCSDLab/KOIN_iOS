@@ -57,7 +57,7 @@ struct LostArticleDetailDto: Decodable {
 }
 
 struct Image: Decodable {
-    let id: Int
+    let id: Int?
     let imageUrl: String
 
     enum CodingKeys: String, CodingKey {
