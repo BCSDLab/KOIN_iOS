@@ -149,7 +149,7 @@ extension LostItemDataButtonsView {
         }
     }
     
-    func configure(isMine: Bool, isCouncil: Bool, isFound: Bool) {
+    func configure(isMine: Bool, isOrganization: Bool, isFound: Bool) {
         
         changeStateView.isHidden = !(isMine && !isFound)
     
@@ -157,9 +157,9 @@ extension LostItemDataButtonsView {
         deleteButton.isHidden = !isMine
         
         chatButton.isHidden = isMine
-        reportButton.isHidden = isMine || isCouncil
+        reportButton.isHidden = isMine || isOrganization
         
-        if isCouncil {
+        if isOrganization {
             chatButton.snp.remakeConstraints {
                 $0.trailing.equalToSuperview()
             }

@@ -16,10 +16,9 @@ struct LostItemData {
     let foundDate: String
     let content: String?
     let author: String
-    let isCouncil: Bool
+    let organization: Organization?
     let isMine: Bool
     let isFound: Bool
     let images: [Image]
     let registeredAt: String
-    let updatedAt: String
 }

@@ -49,18 +49,10 @@ final class LostItemDataContentView: UIView {
         $0.textColor = .appColor(.neutral800)
     }
     
-    private let councilLabel = UILabel().then {
+    private let organizationLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 6
         $0.textColor = UIColor.appColor(.neutral500)
         $0.numberOfLines = 3
-        let text = "분실물 수령을 희망하시는 분은 재실 시간 내에\n학생회관 320호 총학생회 사무실로 방문해 주시기 바랍니다.\n재실 시간은 공지 사항을 참고해 주시기 바랍니다."
-        let attributedString = NSMutableAttributedString(string: text)
-        let range = (text as NSString).range(of: "학생회관 320호 총학생회 사무실")
-        attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral700), range: range)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
-        $0.attributedText = attributedString
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 12
         $0.layer.masksToBounds = true
@@ -78,7 +70,7 @@ final class LostItemDataContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
         
-    func configure(images: [Image], content: String?, isCouncil: Bool) {
+    func configure(images: [Image], content: String?, organization: Organization?) {
         imageCollectionView.configure(images: images)
         imageCollectionView.isHidden = images.isEmpty
         
@@ -97,7 +89,19 @@ final class LostItemDataContentView: UIView {
             contentLabel.isHidden = true
         }
         
-        councilLabel.isHidden = !isCouncil
+        if let organization {
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 6
+            let text = "분실물 수령을 희망하시는 분은 재실 시간 내에\n\(organization.location)해 주시기 바랍니다.\n재실 시간은 공지 사항을 참고해 주시기 바랍니다."
+            let attributedString = NSMutableAttributedString(string: text)
+            let range = (text as NSString).range(of: "organization.location")
+            attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral700), range: range)
+            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
+            organizationLabel.attributedText = attributedString
+            organizationLabel.isHidden = false
+        } else {
+            organizationLabel.isHidden = true
+        }
         
         setNeedsLayout()
         layoutIfNeeded()
@@ -120,7 +124,7 @@ final class LostItemDataContentView: UIView {
 extension LostItemDataContentView {
     
     private func setUpLayouts() {
-        [contentLabel, councilLabel].forEach {
+        [contentLabel, organizationLabel].forEach {
             labelStackView.addArrangedSubview($0)
         }
         [imageCollectionView, pageControl, labelStackView].forEach {
@@ -151,7 +155,7 @@ extension LostItemDataContentView {
             $0.width.equalTo(UIScreen.main.bounds.width - 48)
         }
         
-        councilLabel.snp.makeConstraints {
+        organizationLabel.snp.makeConstraints {
             $0.width.equalTo(UIScreen.main.bounds.width - 48)
             $0.height.equalTo(89)
         }

@@ -65,8 +65,8 @@ final class LostItemDataViewController: UIViewController {
             switch output {
             case .updateData(let lostItemData):
                 self.headerView.configure(lostItemData: lostItemData)
-                self.contentView.configure(images: lostItemData.images, content: lostItemData.content, isCouncil: lostItemData.isCouncil)
-                self.buttonsView.configure(isMine: lostItemData.isMine, isCouncil: lostItemData.isCouncil, isFound: lostItemData.isFound)
+                self.contentView.configure(images: lostItemData.images, content: lostItemData.content, organization: lostItemData.organization)
+                self.buttonsView.configure(isMine: lostItemData.isMine, isOrganization: (lostItemData.organization != nil), isFound: lostItemData.isFound)
             case .updateList(let lostItemListData):
                 self.lostItemDataTableView.configure(lostItemListData: lostItemListData)
             case .appendList(let lostItemListData):
@@ -161,8 +161,8 @@ extension LostItemDataViewController: EditLostItemViewControllerDelegate {
     
     func updateData(lostItemData: LostItemData) {
         headerView.configure(lostItemData: lostItemData)
-        contentView.configure(images: lostItemData.images, content: lostItemData.content, isCouncil: lostItemData.isCouncil)
-        buttonsView.configure(isMine: lostItemData.isMine, isCouncil: lostItemData.isCouncil, isFound: lostItemData.isFound)
+        contentView.configure(images: lostItemData.images, content: lostItemData.content, organization: lostItemData.organization)
+        buttonsView.configure(isMine: lostItemData.isMine, isOrganization: lostItemData.organization != nil, isFound: lostItemData.isFound)
         delegate?.updateState(updatedId: viewModel.id, lostItemData: lostItemData)
     }
 }
