@@ -10,7 +10,8 @@ import UIKit
 final class LostItemListFilterButton: UIButton {
     
     // MARK: - Properties
-    private let text: String
+    let text: String
+    
     // MARK: - Initializer
     init(text: String, isSelected: Bool) {
         self.text = text
