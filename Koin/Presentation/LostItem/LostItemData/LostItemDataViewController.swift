@@ -319,6 +319,7 @@ extension LostItemDataViewController {
         scrollContentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
             $0.width.equalTo(scrollView)
+            $0.height.greaterThanOrEqualTo(view.safeAreaLayoutGuide.snp.height)
         }
         
         headerView.snp.makeConstraints {
@@ -340,7 +341,7 @@ extension LostItemDataViewController {
         lostItemDataTableView.snp.makeConstraints {
             $0.top.equalTo(recentHeaderView.snp.bottom)
             $0.leading.trailing.bottom.equalTo(scrollContentView)
-            $0.height.equalTo(lostItemDataTableView.rowHeight * 5)
+            $0.height.greaterThanOrEqualTo(lostItemDataTableView.rowHeight * 4.6)
         }
     }
     
