@@ -25,6 +25,15 @@ final class EditLostItemFoundPlaceView: UIView {
         $0.textColor = .appColor(.neutral800)
         $0.text = (type == .lost ? "분실 장소" : "습득 장소")
     }
+    private let essentialLabel = UILabel().then {
+        $0.attributedText = NSAttributedString(
+            string: " *",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 11),
+                .foregroundColor : UIColor(hexCode: "C82A2A")
+            ]
+        )
+    }
     private lazy var locationWarningLabel = UILabel().then {
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage.appImage(asset: .warningOrange)
@@ -125,7 +134,7 @@ extension EditLostItemFoundPlaceView: UITextFieldDelegate {
 extension EditLostItemFoundPlaceView {
     
     private func setUpLayouts() {
-        [locationLabel, locationWarningLabel, locationTextField].forEach {
+        [locationLabel, locationWarningLabel, locationTextField, essentialLabel].forEach {
             addSubview($0)
         }
     }
@@ -143,6 +152,11 @@ extension EditLostItemFoundPlaceView {
             $0.top.equalTo(locationLabel.snp.bottom).offset(8)
             $0.leading.trailing.bottom.equalToSuperview()
             $0.height.equalTo(35)
+        }
+        essentialLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.height.equalTo(18)
+            $0.leading.equalTo(locationLabel.snp.trailing)
         }
     }
     
