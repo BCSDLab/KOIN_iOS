@@ -46,6 +46,10 @@ final class EditLostItemViewController: UIViewController {
         $0.backgroundColor = UIColor.appColor(.neutral100)
     }
     
+    private let editButtonBackgroundView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral0)
+    }
+    
     private let editButton = DebouncedButton().then {
         $0.setTitle("수정 완료", for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 14)
@@ -178,7 +182,7 @@ extension EditLostItemViewController {
         let contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: keyBoardSize.size.height - (view.frame.height - scrollView.frame.maxY),
+            bottom: keyBoardSize.size.height - (view.frame.height - scrollView.frame.maxY) + 78,
             right: 0
         )
         scrollView.contentInset = contentInset
@@ -187,6 +191,7 @@ extension EditLostItemViewController {
 
         guard let targetView = [foundPlaceView.locationTextField,
                                 contentView.contentTextView].first(where: { $0.isFirstResponder }) else {
+            print("no targetview that is firstResponder")
             return
         }
         
@@ -247,7 +252,7 @@ extension EditLostItemViewController {
         [scrollContentView].forEach {
             scrollView.addSubview($0)
         }
-        [bottomSeparateView, editButton, scrollView].forEach {
+        [editButtonBackgroundView, bottomSeparateView, editButton, scrollView].forEach {
             view.addSubview($0)
         }
     }
@@ -293,16 +298,21 @@ extension EditLostItemViewController {
             $0.bottom.equalToSuperview().offset(-16)
         }
         
+        editButtonBackgroundView.snp.makeConstraints {
+            $0.height.equalTo(78)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+        }
         bottomSeparateView.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(editButton.snp.top).offset(-24)
+            $0.bottom.equalTo(editButtonBackgroundView.snp.top)
         }
         editButton.snp.makeConstraints {
             $0.width.equalTo(160)
             $0.height.equalTo(38)
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+            $0.bottom.equalTo(editButtonBackgroundView.snp.bottom).offset(-16)
         }
     }
     
