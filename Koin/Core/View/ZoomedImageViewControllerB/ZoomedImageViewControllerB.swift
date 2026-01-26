@@ -23,6 +23,10 @@ final class ZoomedImageViewControllerB: UINavigationController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
+    }
+    
     // MARK: - Configure
     func configure(urls: [String], initialIndexPath: IndexPath) {
         rootViewController.configure(urls: urls, initialIndexPath: initialIndexPath)

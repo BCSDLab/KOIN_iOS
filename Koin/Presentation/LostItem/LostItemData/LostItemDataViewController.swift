@@ -25,7 +25,9 @@ final class LostItemDataViewController: UIViewController {
     weak var delegate: LostItemDataViewControllerDelegate?
     
     // MARK: - UI Components
-    private let scrollView = UIScrollView()
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
     private let scrollContentView = UIView()
     private let headerView = LostItemDataHeaderView()
     private let contentView = LostItemDataContentView()

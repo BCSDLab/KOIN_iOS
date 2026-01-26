@@ -17,6 +17,16 @@ final class ShopSummaryViewController: UIViewController {
     
     // MARK: - UI Components
     private let gradientView = UIView()
+    private let gradientLayer = CAGradientLayer().then {
+        $0.colors = [
+            UIColor.black.withAlphaComponent(0.4).cgColor,
+            UIColor.black.withAlphaComponent(0.03).cgColor,
+            UIColor.black.withAlphaComponent(0.0).cgColor
+        ]
+        $0.locations = [0.0, 0.9, 1.0]
+        $0.startPoint = CGPoint(x: 0.0, y: 0.0)
+        $0.endPoint = CGPoint(x: 0.0, y: 1.0)
+    }
 
     private let tableHeaderView = ShopSummaryTableViewTableHeaderView()
     
@@ -95,18 +105,7 @@ final class ShopSummaryViewController: UIViewController {
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        let gradient = CAGradientLayer().then {
-            $0.colors = [
-                UIColor.black.withAlphaComponent(0.2).cgColor,
-                UIColor.black.withAlphaComponent(0.03).cgColor,
-                UIColor.black.withAlphaComponent(0.0).cgColor
-            ]
-            $0.locations = [0.0, 0.8, 1.0]
-            $0.startPoint = CGPoint(x: 0.0, y: 0.0)
-            $0.endPoint = CGPoint(x: 0.0, y: 1.0)
-            $0.frame = gradientView.bounds
-        }
-        gradientView.layer.addSublayer(gradient)
+        gradientLayer.frame = gradientView.bounds
         menuGroupTableView.configure(safeAreaHeight: gradientView.frame.height)
     }
 }
@@ -262,7 +261,7 @@ extension ShopSummaryViewController {
                       self.viewModel.cachedImages.first?.imageUrl != nil else { return }
                 
                 let zoomedViewController = ZoomedImageViewControllerB()
-                zoomedViewController.configure(urls: viewModel.cachedImages.map { return $0.imageUrl ?? "" },
+                zoomedViewController.configure(urls: viewModel.cachedImages.map { return $0.imageUrl },
                                                initialIndexPath: indexPath)
                 self.present(zoomedViewController, animated: true)
             }.store(in: &subscriptions)
@@ -356,6 +355,8 @@ extension ShopSummaryViewController {
         [menuGroupTableView, gradientView, menuGroupNameCollectionViewSticky, popUpView].forEach {
             view.addSubview($0)
         }
+        
+        gradientView.layer.addSublayer(gradientLayer)
     }
     
     private func setTableHeaderView() {
