@@ -35,6 +35,10 @@ final class PostLostItemViewController: UIViewController {
         $0.backgroundColor = UIColor.appColor(.neutral100)
     }
     
+    private let buttonView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral0)
+    }
+    
     private let writeButton = DebouncedButton().then {
         $0.setTitle("작성 완료", for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 14)
@@ -137,7 +141,7 @@ extension PostLostItemViewController {
         let contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: keyBoardSize.size.height - (view.frame.height - addLostItemCollectionView.frame.maxY),
+            bottom: keyBoardSize.size.height - (view.frame.height - addLostItemCollectionView.frame.maxY) + 78,
             right: 0
         )
         addLostItemCollectionView.contentInset = contentInset
@@ -267,7 +271,7 @@ extension PostLostItemViewController {
 extension PostLostItemViewController {
     
     private func setUpLayOuts() {
-        [addLostItemCollectionView, separateView, writeButton].forEach {
+        [addLostItemCollectionView, buttonView, separateView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -278,16 +282,21 @@ extension PostLostItemViewController {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(separateView.snp.top)
         }
-        separateView.snp.makeConstraints { make in
-            make.bottom.equalTo(writeButton.snp.top).offset(-24)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(1)
+        buttonView.snp.makeConstraints {
+            $0.height.equalTo(78)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+        }
+        separateView.snp.makeConstraints {
+            $0.bottom.equalTo(buttonView.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
         }
         writeButton.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
+            make.centerX.equalTo(buttonView)
             make.width.equalTo(160)
             make.height.equalTo(38)
-            make.bottom.equalTo(view.snp.bottom).offset(-50)
+            make.bottom.equalTo(buttonView.snp.bottom).offset(-16)
         }
     }
     
