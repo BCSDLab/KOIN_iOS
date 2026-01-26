@@ -64,6 +64,7 @@ final class EditLostItemImagesView: UIView {
         self.type = type
         self.images = images
         imageUploadCollectionView.updateImageUrls(images.map { $0.imageUrl })
+        addPictureButton.isEnabled = images.count < 10
         super.init(frame: .zero)
         configureView()
         bind()
