@@ -602,7 +602,9 @@ extension HomeViewController {
     }
     
     @objc private func refresh() {
+        lostItemListView.timer?.invalidate()
         inputSubject.send(.categorySelected(getDiningPlace()))
+        inputSubject.send(.getLostItemStat)
         refreshControl.endRefreshing()
     }
     
