@@ -1,5 +1,5 @@
 //
-//  UpdateModelViewController.swift
+//  UpdateModalViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 10/1/24.
@@ -9,7 +9,7 @@ import Combine
 import UIKit
 import SnapKit
 
-final class UpdateModelViewController: UIViewController {
+final class UpdateModalViewController: UIViewController {
     
     // MARK: - Properties
     let openStoreButtonPublisher = PassthroughSubject<Void, Never>()
@@ -74,7 +74,7 @@ final class UpdateModelViewController: UIViewController {
 }
 
 // MARK: - @objc
-extension UpdateModelViewController {
+extension UpdateModalViewController {
     @objc private func closeButtonTapped() {
         dismiss(animated: true, completion: nil)
         cancelButtonPublisher.send()
@@ -87,7 +87,7 @@ extension UpdateModelViewController {
 }
 
 // MARK: - UI Function
-extension UpdateModelViewController {
+extension UpdateModalViewController {
     private func setUpLayOuts() {
         [containerView].forEach {
             view.addSubview($0)
