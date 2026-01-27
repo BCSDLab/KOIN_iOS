@@ -7,15 +7,25 @@
 
 import Combine
 import UIKit
+import Lottie
 
-final class ForceModifyUserViewController: UIViewController {
+final class ForceModifyUserViewController: UIViewController, LottieAnimationManageable {
+    
+    // MARK: - LottieAnimationManageable Protocol
+    var lottieAnimationView: LottieAnimationView {
+        return logoAnimationView
+    }
     
     // MARK: - Properties
-    private var subscriptions: Set<AnyCancellable> = []
+    var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
-    private let imageView = UIImageView().then {
-        $0.image = UIImage(named: "newLogo")
+    private let logoAnimationView = LottieAnimationView().then {
+        $0.animation = LottieAnimation.named("waveLogo")
+        $0.loopMode = .loop
+        $0.animationSpeed = 1.0
+        $0.contentMode = .scaleAspectFit
+        $0.backgroundColor = .clear
     }
     
     private let messageLabel = UILabel().then {
@@ -30,13 +40,20 @@ final class ForceModifyUserViewController: UIViewController {
         $0.setTitle("정보 입력하러 가기", for: .normal)
     }
     
-    // MARK: - Life Cycle
+    // MARK: - deinit
+    deinit {
+        clearLottieAnimation()
+    }
+
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         bind()
         navigateButton.addTarget(self, action: #selector(navigateButtonTapped), for: .touchUpInside)
+        setupLottieObservers()
+        startLottieAnimation()
     }
     
     
@@ -91,21 +108,21 @@ extension ForceModifyUserViewController {
 extension ForceModifyUserViewController {
     
     private func setupLayOuts() {
-        [imageView, messageLabel, subMessageLabel, navigateButton].forEach {
+        [logoAnimationView, messageLabel, subMessageLabel, navigateButton].forEach {
             view.addSubview($0)
         }
         
     }
     
     private func setupConstraints() {
-        imageView.snp.makeConstraints {
+        logoAnimationView.snp.makeConstraints {
             $0.centerY.equalToSuperview().offset(-50)
             $0.centerX.equalToSuperview()
-            $0.width.equalTo(221)
-            $0.height.equalTo(118)
+            $0.width.equalTo(240)
+            $0.height.equalTo(140)
         }
         messageLabel.snp.makeConstraints {
-            $0.top.equalTo(imageView.snp.bottom).offset(27)
+            $0.top.equalTo(logoAnimationView.snp.bottom).offset(27)
             $0.centerX.equalToSuperview()
         }
         subMessageLabel.snp.makeConstraints {
