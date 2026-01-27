@@ -114,6 +114,11 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         setupLottieObservers()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        startLottieAnimation()
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.navigationBar.isHidden = true
