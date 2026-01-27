@@ -12,6 +12,9 @@ final class LostItemListView: UIView {
     
     // MARK: - Properties
     let lostItemListTappedPublisher = PassthroughSubject<Void, Never>()
+    var timer: Timer?
+    private var foundCountTitle: String = ""
+    private var notFoundCountTitle: String = ""
     
     // MARK: - UI Components
     private let nameLabel = UILabel().then {
@@ -42,20 +45,47 @@ final class LostItemListView: UIView {
     }
     
     func configure(lostItemStats: LostItemStats) {
-        let title: String
+        foundCountTitle = "지금까지 \(lostItemStats.foundCount)명이 분실물을 찾았어요."
+        notFoundCountTitle = "\(lostItemStats.notFoundCount)개의 분실물이 주인을 찾고있어요."
+        descriptionButton.setAttributedTitle(NSAttributedString(
+            string: notFoundCountTitle,
+            attributes: [
+                .font : UIFont.appFont(.pretendardMedium, size: 14),
+                .foregroundColor : UIColor.appColor(.neutral800)
+            ]), for: .normal
+        )
+        
         if 50 <= lostItemStats.foundCount {
-            title = "지금까지 \(lostItemStats.foundCount)명이 분실물을 찾았어요."
-        } else {
-            title = "\(lostItemStats.notFoundCount)개의 분실물이 주인을 찾고있어요."
+            setTimer()
         }
-        descriptionButton.setAttributedTitle(NSAttributedString(string: title, attributes: [
-            .font: UIFont.appFont(.pretendardMedium, size: 14),
-            .foregroundColor: UIColor.appColor(.neutral800)
-        ]), for: .normal)
     }
 }
 
 extension LostItemListView {
+    
+    private func setTimer() {
+        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+            guard let self else { return }
+            
+            let transition = CATransition().then {
+                $0.duration = 0.4
+                $0.timingFunction = CAMediaTimingFunction(name: .easeInEaseOut)
+                $0.type = .push
+                $0.subtype = .fromTop
+            }
+            descriptionButton.titleLabel?.layer.add(transition, forKey: "newTitle")
+            
+            let newTitle = descriptionButton.titleLabel?.text == notFoundCountTitle ? foundCountTitle : notFoundCountTitle
+            
+            descriptionButton.setAttributedTitle(NSAttributedString(
+                string: newTitle,
+                attributes: [
+                    .font : UIFont.appFont(.pretendardMedium, size: 14),
+                    .foregroundColor : UIColor.appColor(.neutral800)
+                ]), for: .normal
+            )
+        }
+    }
     
     private func setAddTargets() {
         [chevronButton, descriptionButton].forEach {
