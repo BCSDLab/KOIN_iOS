@@ -182,11 +182,15 @@ extension EditLostItemViewController {
         let contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: keyBoardSize.size.height - (view.frame.height - scrollView.frame.maxY) + 78,
+            bottom: keyBoardSize.size.height - (view.frame.height - scrollView.frame.maxY) + 70,
             right: 0
         )
         scrollView.contentInset = contentInset
         scrollView.scrollIndicatorInsets = contentInset
+        
+        bottomSeparateView.snp.updateConstraints {
+            $0.bottom.equalTo(editButtonBackgroundView.snp.top).offset(0)
+        }
         
 
         guard let targetView = [foundPlaceView.locationTextField,
@@ -204,6 +208,10 @@ extension EditLostItemViewController {
         let contentInset = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
         scrollView.scrollIndicatorInsets = contentInset
+        
+        bottomSeparateView.snp.updateConstraints {
+            $0.bottom.equalTo(editButtonBackgroundView.snp.top).offset(-8)
+        }
     }
 }
 
@@ -299,14 +307,14 @@ extension EditLostItemViewController {
         }
         
         editButtonBackgroundView.snp.makeConstraints {
-            $0.height.equalTo(78)
+            $0.height.equalTo(70)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
         }
         bottomSeparateView.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(editButtonBackgroundView.snp.top)
+            $0.bottom.equalTo(editButtonBackgroundView.snp.top).offset(-8)
         }
         editButton.snp.makeConstraints {
             $0.width.equalTo(160)
