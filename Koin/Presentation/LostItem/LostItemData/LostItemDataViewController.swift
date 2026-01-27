@@ -27,13 +27,16 @@ final class LostItemDataViewController: UIViewController {
     // MARK: - UI Components
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
+        $0.contentInsetAdjustmentBehavior = .never
     }
     private let scrollContentView = UIView()
     private let headerView = LostItemDataHeaderView()
     private let contentView = LostItemDataContentView()
     private let buttonsView = LostItemDataButtonsView()
     private let recentHeaderView = LostItemDataRecentHeaderView()
-    private let lostItemDataTableView = LostItemDataRecentTableView()
+    private let lostItemDataTableView = LostItemDataRecentTableView().then {
+        $0.contentInsetAdjustmentBehavior = .never
+    }
     
     // MARK: - Initializer
     init(viewModel: LostItemDataViewModel) {
@@ -321,7 +324,7 @@ extension LostItemDataViewController {
         scrollContentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
             $0.width.equalTo(scrollView)
-            $0.height.greaterThanOrEqualTo(view.safeAreaLayoutGuide.snp.height)
+            $0.height.greaterThanOrEqualTo(scrollView.snp.height)
         }
         
         headerView.snp.makeConstraints {
