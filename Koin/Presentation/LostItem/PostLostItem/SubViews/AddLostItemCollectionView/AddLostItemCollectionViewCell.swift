@@ -457,15 +457,10 @@ extension AddLostItemCollectionViewCell {
         }
         
         if type == .found {
-            if locationTextField.textColor == UIColor.appColor(.neutral500) {
+            if locationTextField.textColor == UIColor.appColor(.neutral500)
+            || locationTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty == true {
                 locationWarningLabel.isHidden = false
                 isValid = false
-            }
-            else {
-                if locationTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty == true {
-                    locationWarningLabel.isHidden = false
-                    isValid = false
-                }
             }
         }
         
