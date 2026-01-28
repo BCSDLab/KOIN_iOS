@@ -192,10 +192,8 @@ extension EditLostItemViewController {
             $0.bottom.equalTo(editButtonBackgroundView.snp.top).offset(0)
         }
         
-
         guard let targetView = [foundPlaceView.locationTextField,
                                 contentView.contentTextView].first(where: { $0.isFirstResponder }) else {
-            print("no targetview that is firstResponder")
             return
         }
         
