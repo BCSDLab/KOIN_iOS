@@ -25,7 +25,6 @@ final class ChatViewModel: ViewModelProtocol {
     enum Output {
         case showChatHistory([ChatMessage])
         case showToast(String, Bool)
-        case addImageUrl(String)
     }
     
     // MARK: - Properties
@@ -80,7 +79,9 @@ extension ChatViewModel {
                 self?.outputSubject.send(.showToast(error.message, false))
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.addImageUrl(response.fileUrls.first ?? ""))
+            if let imageUrl = response.fileUrls.first {
+                self?.sendMessage(message: imageUrl, isImage: true)
+            }
         }.store(in: &subscriptions)
         
     }

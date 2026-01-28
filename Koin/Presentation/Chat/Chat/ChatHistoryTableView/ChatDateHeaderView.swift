@@ -37,7 +37,6 @@ final class ChatDateHeaderView: UITableViewHeaderFooterView {
 extension ChatDateHeaderView {
     func configure(date: ChatDateInfo) {
         dateLabel.text = "\(date.year)년 \(date.month)월 \(date.day)일"
-        print(date)
     }
 }
 

@@ -69,8 +69,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-        WebSocketManager.shared.disconnect()
-        print("disconnect")
     }
     
     // MARK: - Life Cycle
@@ -110,7 +108,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
             case .showToast(let message, let success):
                 self?.showToast(message: message)
                 if success { self?.navigationController?.popViewController(animated: true) }
-            case .addImageUrl(let imageUrl):  WebSocketManager.shared.sendMessage(roomId: strongSelf.viewModel.chatRoomId, articleId: strongSelf.viewModel.articleId, message: imageUrl, isImage: true)
             }
         }.store(in: &subscriptions)
         blockModalViewController.rightButtonPublisher.sink { [weak self] _ in
