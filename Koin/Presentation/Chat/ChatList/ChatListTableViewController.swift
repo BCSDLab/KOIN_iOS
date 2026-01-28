@@ -29,16 +29,12 @@ final class ChatListTableViewController: UITableViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-         NotificationCenter.default.removeObserver(self)
-     }
     // MARK: - Life Cycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         bind()
-        NotificationCenter.default.addObserver(self, selector: #selector(handleReceivedMessage(_:)), name: .chatMessageReceived, object: nil)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ChatCell")
     }
     
@@ -48,26 +44,27 @@ final class ChatListTableViewController: UITableViewController {
         configureNavigationBar(style: .empty)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        inputSubject.send(.viewWillDisappear)
+    }
+    
     // MARK: - Bind
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            guard let strongSelf = self else { return }
+            guard let self else { return }
             switch output {
             case .showChatRoom:
-                self?.tableView.reloadData()
+                self.tableView.reloadData()
             }
         }.store(in: &subscriptions)
     }
 }
 
 extension ChatListTableViewController {
-    
-    @objc private func handleReceivedMessage(_ notification: Notification) {
-                inputSubject.send(.fetchChatRooms)
-        }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat = viewModel.chatList[indexPath.row]
