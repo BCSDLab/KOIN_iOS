@@ -115,14 +115,23 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
             present(blockCheckModalViewController, animated: true)
         }.store(in: &subscriptions)
         
-        blockCheckModalViewController.buttonPublihser.sink { [weak self] _ in
-            self?.inputSubject.send(.blockUser)
+        blockCheckModalViewController.buttonPublihser.sink { [weak self] in
+            guard let self else { return }
+            print("buttonPublihser tapped")
+            let onRightButtonTapped: ()->Void = { [weak self] in
+                self?.inputSubject.send(.blockUser)
+            }
+            let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 179, paddingBetweenLabels: 8, title: "이 사용자를 차단하시겠습니까?", subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray), rightButtonText: "차단하기")
+            modalViewController.modalTransitionStyle = .crossDissolve
+            modalViewController.modalPresentationStyle = .overFullScreen
+            dismiss(animated: true) { [weak self] in
+                self?.present(modalViewController, animated: true)
+            }
         }.store(in: &subscriptions)
         
-        chatHistoryTableView.imageTapPublisher.sink { [weak self] image in
-            let imageWidth: CGFloat = UIScreen.main.bounds.width
-            let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageWidth)
-            zoomedImageViewController.setImage(image)
+        chatHistoryTableView.imageTapPublisher.sink { [weak self] imageUrl in
+            let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
+            zoomedImageViewController.configure(urls: [imageUrl], initialIndexPath: IndexPath(row: 0, section: 0))
             self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &subscriptions)
     }

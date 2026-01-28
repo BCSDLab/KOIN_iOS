@@ -36,6 +36,7 @@ final class ChatListTableViewController: UITableViewController {
         configureView()
         bind()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ChatCell")
+        tableView.separatorStyle = .none
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -102,6 +103,7 @@ extension ChatListTableViewController {
         let titleLabel = UILabel().then {
             $0.font = UIFont.appFont(.pretendardMedium, size: 16)
             $0.textColor = UIColor.appColor(.neutral800)
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         let contentLabel = UILabel().then {
             $0.font = UIFont.appFont(.pretendardRegular, size: 12)

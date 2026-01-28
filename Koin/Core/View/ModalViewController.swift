@@ -49,7 +49,7 @@ class ModalViewController: UIViewController {
     private let containerView: UIView = {
         let view = UIView()
         view.backgroundColor = .white
-        view.layer.cornerRadius = 4
+        view.layer.cornerRadius = 8
         view.layer.masksToBounds = true
         return view
     }()
