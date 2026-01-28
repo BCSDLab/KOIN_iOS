@@ -28,7 +28,6 @@ final class ChatViewModel: ViewModelProtocol {
     }
     
     // MARK: - Properties
-    private var timer: Timer?
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var pollingSubscriptions: AnyCancellable?
@@ -61,7 +60,9 @@ final class ChatViewModel: ViewModelProtocol {
             case .uploadFile(let files):
                 self?.uploadFiles(files: files)
             case .viewWillDisappear:
-                self?.timer?.invalidate()
+                guard let self else { return }
+                pollingSubscriptions?.cancel()
+                pollingSubscriptions = nil
             case .sendMessage(let message, let isImage):
                 self?.sendMessage(message: message, isImage: isImage)
             }
@@ -97,31 +98,23 @@ extension ChatViewModel {
     }
     
     private func fetchChatDetail() {
-        pollingSubscriptions = fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId).sink(
-            receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                }
-            },
-            receiveValue: { [weak self] response in
+        pollingSubscriptions?.cancel()
+        pollingSubscriptions = Timer.publish(every: 10, on: .main, in: .common)
+            .autoconnect()
+            .prepend(Date())
+            .flatMap { [weak self] _ -> AnyPublisher<[ChatMessage], Never> in
+                guard let self else { return Empty().eraseToAnyPublisher() }
+                return fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId)
+                    .catch { error -> AnyPublisher<[ChatMessage], Never> in
+                        Log.make().error("\(error)")
+                        return Empty().eraseToAnyPublisher()
+                    }
+                    .eraseToAnyPublisher()
+            }
+            .sink { [weak self] response in
+                print(response)
                 self?.outputSubject.send(.showChatHistory(response))
             }
-        )
-        
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
-            guard let self else { return }
-            pollingSubscriptions = fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId).sink(
-                receiveCompletion: { completion in
-                    if case let .failure(error) = completion {
-                        Log.make().error("\(error)")
-                    }
-                },
-                receiveValue: { [weak self] response in
-                    self?.outputSubject.send(.showChatHistory(response))
-                }
-            )
-        }
     }
     
     private func sendMessage(message: String, isImage: Bool) {

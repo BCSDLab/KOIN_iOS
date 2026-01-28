@@ -25,7 +25,6 @@ final class ChatListTableViewModel: ViewModelProtocol {
     }
     
     // MARK: - Properties
-    private var timer: Timer?
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var pollingSubscriptions: AnyCancellable?
@@ -49,7 +48,9 @@ final class ChatListTableViewModel: ViewModelProtocol {
             case .fetchChatRooms:
                 self?.fetchChatRooms()
             case .viewWillDisappear:
-                self?.timer?.invalidate()
+                guard let self else { return }
+                pollingSubscriptions?.cancel()
+                pollingSubscriptions = nil
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
@@ -62,31 +63,21 @@ final class ChatListTableViewModel: ViewModelProtocol {
 extension ChatListTableViewModel {
 
     private func fetchChatRooms() {
-        pollingSubscriptions = fetchChatRoomUseCase.execute().sink(
-            receiveCompletion: { completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                }
-            },
-            receiveValue: { [weak self] response in
+        pollingSubscriptions?.cancel()
+        pollingSubscriptions = Timer.publish(every: 10, on: .main, in: .common)
+            .autoconnect()
+            .prepend(Date())
+            .flatMap { [weak self] _ -> AnyPublisher<[ChatRoomItem], Never> in
+                guard let self else { return Empty().eraseToAnyPublisher() }
+                return fetchChatRoomUseCase.execute()
+                    .catch { error -> AnyPublisher<[ChatRoomItem], Never> in
+                        Log.make().error("\(error)")
+                        return Empty().eraseToAnyPublisher()
+                    }.eraseToAnyPublisher()
+            }
+            .sink { [weak self] response in
                 self?.chatList = response
             }
-        )
-        
-        timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
-            guard let self else { return }
-            pollingSubscriptions = fetchChatRoomUseCase.execute().sink(
-                receiveCompletion: { completion in
-                    if case let .failure(error) = completion {
-                        Log.make().error("\(error)")
-                    }
-                },
-                receiveValue: { [weak self] response in
-                    self?.chatList = response
-                }
-            )
-        }
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
