@@ -135,7 +135,7 @@ extension ChatViewController{
     
     @objc private func sendButtonTapped() {
         if textView.text.isEmpty { return }
-        WebSocketManager.shared.sendMessage(roomId: viewModel.chatRoomId, articleId: viewModel.articleId, message: textView.text, isImage: false)
+        inputSubject.send(.sendMessage(textView.text, false))
         textView.text = ""
         textViewHeightConstraint.constant = 40
         UIView.animate(withDuration: 0.1) {

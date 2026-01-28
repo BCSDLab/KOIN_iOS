@@ -17,6 +17,7 @@ final class ChatViewModel: ViewModelProtocol {
         case fetchChatDetail
         case blockUser
         case viewWillDisappear
+        case sendMessage(String, Bool)
     }
     
     // MARK: - Output
@@ -35,6 +36,7 @@ final class ChatViewModel: ViewModelProtocol {
     private let chatRepository = DefaultChatRepository(service: DefaultChatService())
     private lazy var fetchChatDetailUseCase = DefaultFetchChatDetailUseCase(chatRepository: chatRepository)
     private lazy var blockUserUserCase = DefaultBlockUserUseCase(chatRepository: chatRepository)
+    private lazy var postChatDetailUseCase = DefaultPostChatDetailUseCase(chatRepository: chatRepository)
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
     let articleId: Int
@@ -61,6 +63,8 @@ final class ChatViewModel: ViewModelProtocol {
                 self?.uploadFiles(files: files)
             case .viewWillDisappear:
                 self?.timer?.invalidate()
+            case .sendMessage(let message, let isImage):
+                self?.sendMessage(message: message, isImage: isImage)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -117,6 +121,20 @@ extension ChatViewModel {
                 }
             )
         }
+    }
+    
+    private func sendMessage(message: String, isImage: Bool) {
+        postChatDetailUseCase.execute(roomId: chatRoomId, articleId: articleId, message: message, isImage: isImage).sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .failure(let error):
+                    Log.make().error("\(error)")
+                case .finished:
+                    self?.fetchChatDetail()
+                }
+            },
+            receiveValue: { _ in }
+        ).store(in: &subscriptions)
     }
     
 }
