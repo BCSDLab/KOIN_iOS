@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol PostChatDetailUseCase {
-    func execute(roomId: Int, articleId: Int, message: String, isImage: Bool) -> AnyPublisher<ChatDetailDto, ErrorResponse>
+    func execute(articleId: Int, chatRoomId: Int, message: String, isImage: Bool) -> AnyPublisher<ChatDetailDto, ErrorResponse>
 }
 
 final class DefaultPostChatDetailUseCase: PostChatDetailUseCase {
@@ -20,8 +20,8 @@ final class DefaultPostChatDetailUseCase: PostChatDetailUseCase {
         self.chatRepository = chatRepository
     }
     
-    func execute(roomId: Int, articleId: Int, message: String, isImage: Bool) -> AnyPublisher<ChatDetailDto, ErrorResponse> {
+    func execute(articleId: Int, chatRoomId: Int, message: String, isImage: Bool) -> AnyPublisher<ChatDetailDto, ErrorResponse> {
         let request = PostChatDetailRequest(userNickname: UserDataManager.shared.nickname, content: message, isImage: isImage)
-        return chatRepository.postChatDetail(roomId: roomId, articleId: articleId, request: request)
+        return chatRepository.postChatDetail(articleId: articleId, chatRoomId: chatRoomId, request: request)
     }
 }

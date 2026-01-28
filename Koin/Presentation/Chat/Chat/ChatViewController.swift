@@ -19,7 +19,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     private var textViewHeightConstraint: NSLayoutConstraint!
     
     // MARK: - UI Components
-    private let bottomBackgrounView = UIView().then {
+    private let bottomBackgroundView = UIView().then {
         $0.backgroundColor = .appColor(.neutral100)
     }
     private let messageInputView = UIView().then {
@@ -111,7 +111,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         
         blockCheckModalViewController.buttonPublihser.sink { [weak self] in
             guard let self else { return }
-            print("buttonPublihser tapped")
             let onRightButtonTapped: ()->Void = { [weak self] in
                 self?.inputSubject.send(.blockUser)
             }
@@ -248,7 +247,7 @@ extension ChatViewController{
 extension ChatViewController {
     
     private func setUpLayOuts() {
-        [bottomBackgrounView, chatHistoryTableView, messageInputView].forEach {
+        [bottomBackgroundView, chatHistoryTableView, messageInputView].forEach {
             view.addSubview($0)
         }
         [leftButton, textView, sendButton].forEach {
@@ -283,7 +282,7 @@ extension ChatViewController {
             make.bottom.equalTo(messageInputView).offset(-8)
             textViewHeightConstraint = make.height.equalTo(36).priority(.high).constraint.layoutConstraints.first
         }
-        bottomBackgrounView.snp.makeConstraints {
+        bottomBackgroundView.snp.makeConstraints {
             $0.leading.trailing.bottom.equalToSuperview()
             $0.top.equalTo(messageInputView.snp.bottom)
         }

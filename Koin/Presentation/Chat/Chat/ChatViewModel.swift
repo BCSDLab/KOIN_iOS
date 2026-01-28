@@ -118,7 +118,7 @@ extension ChatViewModel {
     }
     
     private func sendMessage(message: String, isImage: Bool) {
-        postChatDetailUseCase.execute(roomId: chatRoomId, articleId: articleId, message: message, isImage: isImage).sink(
+        postChatDetailUseCase.execute(articleId: articleId, chatRoomId: chatRoomId, message: message, isImage: isImage).sink(
             receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .failure(let error):

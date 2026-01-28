@@ -12,7 +12,7 @@ final class ChatDateHeaderView: UITableViewHeaderFooterView {
     // MARK: - UI Components
     
     private let dateLabel = UILabel().then {
-        $0.layer.cornerRadius = 27/2
+        $0.layer.cornerRadius = 27.0/2
         $0.layer.masksToBounds = true
         $0.font = UIFont.appFont(.pretendardMedium, size: 12)
         $0.backgroundColor = UIColor.appColor(.neutral200)

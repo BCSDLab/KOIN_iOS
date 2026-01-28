@@ -53,6 +53,11 @@ final class ChatImageTableViewCell: UITableViewCell {
         guard let imageUrl else { return }
         imageTapPublisher.send(imageUrl)
     }
+    
+    override func prepareForReuse() {
+        textImageView.image = nil
+        cancellables.removeAll()
+    }
 }
 
 extension ChatImageTableViewCell {
