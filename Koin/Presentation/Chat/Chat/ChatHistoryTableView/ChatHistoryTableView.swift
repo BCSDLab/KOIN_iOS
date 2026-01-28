@@ -97,6 +97,7 @@ extension ChatHistoryTableView: UITableViewDataSource {
         let lastRow = chatSections[lastSection].messages.count - 1
         let lastIndexPath = IndexPath(row: lastRow, section: lastSection)
         
+        layoutIfNeeded()
         DispatchQueue.main.async {
             self.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
         }
