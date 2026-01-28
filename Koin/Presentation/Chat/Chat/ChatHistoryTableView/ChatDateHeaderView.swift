@@ -12,7 +12,7 @@ final class ChatDateHeaderView: UITableViewHeaderFooterView {
     // MARK: - UI Components
     
     private let dateLabel = UILabel().then {
-        $0.layer.cornerRadius = 16
+        $0.layer.cornerRadius = 27.0/2
         $0.layer.masksToBounds = true
         $0.font = UIFont.appFont(.pretendardMedium, size: 12)
         $0.backgroundColor = UIColor.appColor(.neutral200)
@@ -37,7 +37,6 @@ final class ChatDateHeaderView: UITableViewHeaderFooterView {
 extension ChatDateHeaderView {
     func configure(date: ChatDateInfo) {
         dateLabel.text = "\(date.year)년 \(date.month)월 \(date.day)일"
-        print(date)
     }
 }
 

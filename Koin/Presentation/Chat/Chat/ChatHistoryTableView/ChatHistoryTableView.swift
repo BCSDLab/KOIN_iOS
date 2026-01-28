@@ -12,7 +12,7 @@ final class ChatHistoryTableView: UITableView {
     
     // MARK: - Properties
     private var chatSections: [(date: ChatDateInfo, messages: [ChatMessage])] = []
-    let imageTapPublisher = PassthroughSubject<UIImage, Never>()
+    let imageTapPublisher = PassthroughSubject<String, Never>()
 
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style = .grouped) {
@@ -97,6 +97,7 @@ extension ChatHistoryTableView: UITableViewDataSource {
         let lastRow = chatSections[lastSection].messages.count - 1
         let lastIndexPath = IndexPath(row: lastRow, section: lastSection)
         
+        layoutIfNeeded()
         DispatchQueue.main.async {
             self.scrollToRow(at: lastIndexPath, at: .bottom, animated: animated)
         }
@@ -118,8 +119,8 @@ extension ChatHistoryTableView: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.configure(message: message)
-            cell.imageTapPublisher.sink { [weak self] image in
-                self?.imageTapPublisher.send(image)
+            cell.imageTapPublisher.sink { [weak self] imageUrl in
+                self?.imageTapPublisher.send(imageUrl)
             }.store(in: &cell.cancellables)
             return cell
         } else {
