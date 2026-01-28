@@ -79,8 +79,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         super.viewDidLoad()
         configureView()
         bind()
-        inputSubject.send(.connectChat)
-        inputSubject.send(.fetchChatDetail)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
@@ -88,12 +86,17 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
         sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         textView.delegate = self
-        NotificationCenter.default.addObserver(self, selector: #selector(handleReceivedMessage(_:)), name: .chatMessageReceived, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        inputSubject.send(.fetchChatDetail)
         configureNavigationBar(style: .empty)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        inputSubject.send(.viewWillDisappear)
     }
     
     // MARK: - Bind
@@ -129,27 +132,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
 }
 
 extension ChatViewController{
-    @objc private func handleReceivedMessage(_ notification: Notification) {
-        if let userInfo = notification.userInfo as? [String: Any] {
-            guard let senderNickname = userInfo["user_nickname"] as? String,
-                  let content = userInfo["content"] as? String,
-                  let timestamp = userInfo["timestamp"] as? String,
-                  let isImage = userInfo["is_image"] as? Bool,
-                  let senderId = userInfo["user_id"] as? Int else {
-                return
-            }
-            let isMine = (senderId == UserDataManager.shared.id)
-            let newMessage = ChatMessage(
-                senderNickname: senderNickname,
-                content: content,
-                timestamp: timestamp,
-                isImage: isImage,
-                isMine: isMine, chatDateInfo: timestamp.toChatDateInfo()
-            )
-            chatHistoryTableView.appendNewMessage(newMessage)
-        }
-    }
-
     
     @objc private func sendButtonTapped() {
         if textView.text.isEmpty { return }

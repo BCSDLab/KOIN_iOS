@@ -16,7 +16,7 @@ final class ChatViewModel: ViewModelProtocol {
         case uploadFile([Data])
         case fetchChatDetail
         case blockUser
-        case connectChat
+        case viewWillDisappear
     }
     
     // MARK: - Output
@@ -28,9 +28,10 @@ final class ChatViewModel: ViewModelProtocol {
     }
     
     // MARK: - Properties
-    
+    private var timer: Timer?
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var pollingSubscriptions: AnyCancellable?
     private let chatRepository = DefaultChatRepository(service: DefaultChatService())
     private lazy var fetchChatDetailUseCase = DefaultFetchChatDetailUseCase(chatRepository: chatRepository)
     private lazy var blockUserUserCase = DefaultBlockUserUseCase(chatRepository: chatRepository)
@@ -58,8 +59,8 @@ final class ChatViewModel: ViewModelProtocol {
                 self?.blockUser()
             case .uploadFile(let files):
                 self?.uploadFiles(files: files)
-            case .connectChat:
-                self?.connectChat()
+            case .viewWillDisappear:
+                self?.timer?.invalidate()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -69,10 +70,6 @@ final class ChatViewModel: ViewModelProtocol {
 
 extension ChatViewModel {
     
-    private func connectChat() {
-        WebSocketManager.shared.connect()
-        WebSocketManager.shared.subscribeToChat(roomId: chatRoomId, articleId: articleId)
-    }
     private func uploadFiles(files: [Data]) {
         uploadFileUseCase.execute(files: files).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -93,14 +90,33 @@ extension ChatViewModel {
             self?.outputSubject.send(.showToast("사용자가 차단되었습니다.", true))
         }.store(in: &subscriptions)
     }
+    
     private func fetchChatDetail() {
-        fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        pollingSubscriptions = fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId).sink(
+            receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            },
+            receiveValue: { [weak self] response in
+                self?.outputSubject.send(.showChatHistory(response))
             }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showChatHistory(response))
-        }.store(in: &subscriptions)
+        )
+        
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { [weak self] _ in
+            guard let self else { return }
+            pollingSubscriptions = fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId).sink(
+                receiveCompletion: { completion in
+                    if case let .failure(error) = completion {
+                        Log.make().error("\(error)")
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    self?.outputSubject.send(.showChatHistory(response))
+                }
+            )
+        }
     }
     
 }
