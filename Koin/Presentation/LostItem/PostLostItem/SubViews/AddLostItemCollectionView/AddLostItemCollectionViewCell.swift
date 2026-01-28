@@ -88,6 +88,15 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     private let categoryLabel = UILabel().then {
         $0.text = "품목"
     }
+    private let categoryEssentialLabel = UILabel().then {
+        $0.attributedText = NSAttributedString(
+            string: " *",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 11),
+                .foregroundColor : UIColor(hexCode: "C82A2A")
+            ]
+        )
+    }
     
     private let categoryWarningLabel = UILabel().then {
         $0.isHidden = true
@@ -104,6 +113,15 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     private let dateLabel = UILabel().then { _ in
+    }
+    private let dateEssentialLabel = UILabel().then {
+        $0.attributedText = NSAttributedString(
+            string: " *",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 11),
+                .foregroundColor : UIColor(hexCode: "C82A2A")
+            ]
+        )
     }
     
     private let dateWarningLabel = UILabel().then {
@@ -135,6 +153,15 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     private let locationLabel = UILabel().then { _ in
+    }
+    private let locationEssentialLabel = UILabel().then {
+        $0.attributedText = NSAttributedString(
+            string: " *",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 11),
+                .foregroundColor : UIColor(hexCode: "C82A2A")
+            ]
+        )
     }
     
     private let locationWarningLabel = UILabel().then {
@@ -277,6 +304,8 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         if let dateValue = dateFormatter.date(from: model.foundDate) {
             dropdownView.dateValue = dateValue
         }
+        
+        locationEssentialLabel.isHidden = self.type == .lost
     }
 }
 
@@ -427,10 +456,12 @@ extension AddLostItemCollectionViewCell {
             isValid = false
         }
         
-        if type == .found,
-           locationTextField.textColor == UIColor.appColor(.neutral500) {
-            locationWarningLabel.isHidden = false
-            isValid = false
+        if type == .found {
+            if locationTextField.textColor == UIColor.appColor(.neutral500)
+            || locationTextField.text?.trimmingCharacters(in: .whitespaces).isEmpty == true {
+                locationWarningLabel.isHidden = false
+                isValid = false
+            }
         }
         
         return isValid
@@ -578,7 +609,8 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
 extension AddLostItemCollectionViewCell {
     
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView,  dropdownView, dateButton].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView,  dropdownView, dateButton, categoryEssentialLabel, dateEssentialLabel, locationEssentialLabel
+        ].forEach {
             contentView.addSubview($0)
         }
         dateButton.addSubview(chevronImage)
@@ -708,6 +740,21 @@ extension AddLostItemCollectionViewCell {
             make.trailing.equalTo(dateButton.snp.trailing)
             make.height.greaterThanOrEqualTo(59)
             make.bottom.equalTo(contentView.snp.bottom).offset(-10)
+        }
+        categoryEssentialLabel.snp.makeConstraints {
+            $0.top.equalTo(categoryLabel)
+            $0.leading.equalTo(categoryLabel.snp.trailing)
+            $0.height.equalTo(18)
+        }
+        dateEssentialLabel.snp.makeConstraints {
+            $0.top.equalTo(dateLabel)
+            $0.leading.equalTo(dateLabel.snp.trailing)
+            $0.height.equalTo(18)
+        }
+        locationEssentialLabel.snp.makeConstraints {
+            $0.top.equalTo(locationLabel)
+            $0.leading.equalTo(locationLabel.snp.trailing)
+            $0.height.equalTo(18)
         }
     }
     

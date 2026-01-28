@@ -16,6 +16,17 @@ final class ZoomedImageRootViewController: UIViewController {
     
     // MARK: - UI Components
     private let zoomedImageCollectionView = ZoomedImageCollectionView()
+    private let gradientView = UIView()
+    private let gradientLayer = CAGradientLayer().then {
+        $0.colors = [
+            UIColor.black.withAlphaComponent(0.4).cgColor,
+            UIColor.black.withAlphaComponent(0.03).cgColor,
+            UIColor.black.withAlphaComponent(0.0).cgColor
+        ]
+        $0.locations = [0.0, 0.9, 1.0]
+        $0.startPoint = CGPoint(x: 0.0, y: 0.0)
+        $0.endPoint = CGPoint(x: 0.0, y: 1.0)
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -28,6 +39,11 @@ final class ZoomedImageRootViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .transparentWhite)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradientLayer.frame = gradientView.bounds
     }
     
     // MARK: - Configure
@@ -92,11 +108,17 @@ extension ZoomedImageRootViewController {
 extension ZoomedImageRootViewController {
     
     private func configureView() {
-        [zoomedImageCollectionView].forEach {
+        [zoomedImageCollectionView, gradientView].forEach {
             view.addSubview($0)
         }
         zoomedImageCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        gradientView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
+        gradientView.layer.addSublayer(gradientLayer)
     }
 }

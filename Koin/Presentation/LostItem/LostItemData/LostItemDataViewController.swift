@@ -25,13 +25,18 @@ final class LostItemDataViewController: UIViewController {
     weak var delegate: LostItemDataViewControllerDelegate?
     
     // MARK: - UI Components
-    private let scrollView = UIScrollView()
+    private let scrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+        $0.contentInsetAdjustmentBehavior = .never
+    }
     private let scrollContentView = UIView()
     private let headerView = LostItemDataHeaderView()
     private let contentView = LostItemDataContentView()
     private let buttonsView = LostItemDataButtonsView()
     private let recentHeaderView = LostItemDataRecentHeaderView()
-    private let lostItemDataTableView = LostItemDataRecentTableView()
+    private let lostItemDataTableView = LostItemDataRecentTableView().then {
+        $0.contentInsetAdjustmentBehavior = .never
+    }
     
     // MARK: - Initializer
     init(viewModel: LostItemDataViewModel) {
@@ -63,8 +68,8 @@ final class LostItemDataViewController: UIViewController {
             switch output {
             case .updateData(let lostItemData):
                 self.headerView.configure(lostItemData: lostItemData)
-                self.contentView.configure(images: lostItemData.images, content: lostItemData.content, isCouncil: lostItemData.isCouncil)
-                self.buttonsView.configure(isMine: lostItemData.isMine, isCouncil: lostItemData.isCouncil, isFound: lostItemData.isFound)
+                self.contentView.configure(images: lostItemData.images, content: lostItemData.content, organization: lostItemData.organization)
+                self.buttonsView.configure(isMine: lostItemData.isMine, isOrganization: (lostItemData.organization != nil), isFound: lostItemData.isFound, type: lostItemData.type)
             case .updateList(let lostItemListData):
                 self.lostItemDataTableView.configure(lostItemListData: lostItemListData)
             case .appendList(let lostItemListData):
@@ -159,8 +164,8 @@ extension LostItemDataViewController: EditLostItemViewControllerDelegate {
     
     func updateData(lostItemData: LostItemData) {
         headerView.configure(lostItemData: lostItemData)
-        contentView.configure(images: lostItemData.images, content: lostItemData.content, isCouncil: lostItemData.isCouncil)
-        buttonsView.configure(isMine: lostItemData.isMine, isCouncil: lostItemData.isCouncil, isFound: lostItemData.isFound)
+        contentView.configure(images: lostItemData.images, content: lostItemData.content, organization: lostItemData.organization)
+        buttonsView.configure(isMine: lostItemData.isMine, isOrganization: lostItemData.organization != nil, isFound: lostItemData.isFound, type: lostItemData.type)
         delegate?.updateState(updatedId: viewModel.id, lostItemData: lostItemData)
     }
 }
@@ -319,6 +324,7 @@ extension LostItemDataViewController {
         scrollContentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView)
             $0.width.equalTo(scrollView)
+            $0.height.greaterThanOrEqualTo(scrollView.snp.height)
         }
         
         headerView.snp.makeConstraints {
@@ -340,7 +346,7 @@ extension LostItemDataViewController {
         lostItemDataTableView.snp.makeConstraints {
             $0.top.equalTo(recentHeaderView.snp.bottom)
             $0.leading.trailing.bottom.equalTo(scrollContentView)
-            $0.height.equalTo(lostItemDataTableView.rowHeight * 5)
+            $0.height.greaterThanOrEqualTo(lostItemDataTableView.rowHeight * 4.6)
         }
     }
     

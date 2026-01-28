@@ -46,7 +46,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     let id: Int
     private(set) var lostItemData: LostItemData?
-    private var filterState = FetchLostItemListRequest(limit: 5)
+    private var filterState = FetchLostItemListRequest()
     
     // MARK: - Initializer
     init(checkLoginUseCase: CheckLoginUseCase,
@@ -91,7 +91,11 @@ extension LostItemDataViewModel {
     
     private func loadData() {
         fetchLostItemDataUseCase.execute(id: id).sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print(failure)
+                }
+            },
             receiveValue: { [weak self] lostItemData in
                 self?.lostItemData = lostItemData
                 self?.outputSubject.send(.updateData(lostItemData))
@@ -100,6 +104,8 @@ extension LostItemDataViewModel {
     }
     
     private func loadList() {
+        filterState.limit = 15
+        
         fetchLostItemListUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemList in
@@ -110,6 +116,7 @@ extension LostItemDataViewModel {
     
     private func loadMoreList() {
         filterState.page += 1
+        filterState.limit = 5
         
         fetchLostItemListUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },

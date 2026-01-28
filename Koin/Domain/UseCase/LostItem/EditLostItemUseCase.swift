@@ -45,7 +45,7 @@ final class DefaultUpdateLostItemUseCase: UpdateLostItemUseCase {
         let deleteImageIds: [Int] = originalData.images.filter {
             !updatedUrls.contains($0.imageUrl)
         }.map {
-            $0.id
+            $0.id ?? 0
         }
         
         let requestModel = UpdateLostItemRequest(

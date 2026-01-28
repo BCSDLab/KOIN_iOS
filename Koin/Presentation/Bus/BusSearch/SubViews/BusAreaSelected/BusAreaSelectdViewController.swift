@@ -149,6 +149,7 @@ extension BusAreaSelectedViewController {
         busRouteDescriptionlabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(23)
             $0.leading.equalToSuperview().offset(32)
+            $0.height.equalTo(29)
         }
         busAreaCollectionView.snp.makeConstraints {
             $0.top.equalTo(separateView.snp.bottom)

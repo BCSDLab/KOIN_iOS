@@ -35,6 +35,10 @@ final class PostLostItemViewController: UIViewController {
         $0.backgroundColor = UIColor.appColor(.neutral100)
     }
     
+    private let writeButtonBackgroundView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral0)
+    }
+    
     private let writeButton = DebouncedButton().then {
         $0.setTitle("작성 완료", for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 14)
@@ -137,10 +141,14 @@ extension PostLostItemViewController {
         let contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
-            bottom: keyBoardSize.size.height - (view.frame.height - addLostItemCollectionView.frame.maxY),
+            bottom: keyBoardSize.size.height - (view.frame.height - addLostItemCollectionView.frame.maxY) + 70,
             right: 0
         )
         addLostItemCollectionView.contentInset = contentInset
+        
+        separateView.snp.updateConstraints {
+            $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(0)
+        }
 
         guard let targetView = addLostItemCollectionView.firstResponder() else {
             return
@@ -154,6 +162,10 @@ extension PostLostItemViewController {
     @objc private func keyBoardWillHide(_ notification: NSNotification) {
         let contentInset = UIEdgeInsets.zero
         addLostItemCollectionView.contentInset = contentInset
+        
+        separateView.snp.updateConstraints {
+            $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(-8)
+        }
     }
 }
 
@@ -267,7 +279,7 @@ extension PostLostItemViewController {
 extension PostLostItemViewController {
     
     private func setUpLayOuts() {
-        [addLostItemCollectionView, separateView, writeButton].forEach {
+        [addLostItemCollectionView, writeButtonBackgroundView, separateView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -278,16 +290,21 @@ extension PostLostItemViewController {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalTo(separateView.snp.top)
         }
-        separateView.snp.makeConstraints { make in
-            make.bottom.equalTo(writeButton.snp.top).offset(-24)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(1)
+        writeButtonBackgroundView.snp.makeConstraints {
+            $0.height.equalTo(70)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+        }
+        separateView.snp.makeConstraints {
+            $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(-8)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(1)
         }
         writeButton.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
+            make.centerX.equalTo(writeButtonBackgroundView)
             make.width.equalTo(160)
             make.height.equalTo(38)
-            make.bottom.equalTo(view.snp.bottom).offset(-50)
+            make.bottom.equalTo(writeButtonBackgroundView.snp.bottom).offset(-16)
         }
     }
     

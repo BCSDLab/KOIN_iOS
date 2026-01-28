@@ -25,7 +25,7 @@ extension LostItemAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .fetchLostItemList: return "/articles/lost-item/v2"
-        case .fetchLostItemData(let id): return "/articles/lost-item/\(id)"
+        case .fetchLostItemData(let id): return "/articles/lost-item/v2/\(id)"
         case .changeListItemState(let id): return "/articles/lost-item/\(id)/found"
         case .deleteLostItem(let id): return "/articles/lost-item/\(id)"
         case .updateLostItem((let id, _)): return "/articles/lost-item/\(id)"
@@ -71,7 +71,7 @@ extension LostItemAPI: Router, URLRequestConvertible {
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchLostItemList: return URLEncoding.default
+        case .fetchLostItemList: return URLEncoding(arrayEncoding: .noBrackets)
         case .fetchLostItemData: return URLEncoding.default
         case .changeListItemState: return URLEncoding.default
         case .deleteLostItem: return URLEncoding.default

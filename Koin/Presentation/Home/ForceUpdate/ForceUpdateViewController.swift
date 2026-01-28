@@ -86,7 +86,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         $0.backgroundColor = .clear
     }
     
-    private let updateModalViewController = UpdateModelViewController().then {
+    private let updateModalViewController = UpdateModalViewController().then {
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
     }
@@ -112,6 +112,11 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         bind()
         setAddTarget()
         setupLottieObservers()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        startLottieAnimation()
     }
     
     override func viewDidAppear(_ animated: Bool) {

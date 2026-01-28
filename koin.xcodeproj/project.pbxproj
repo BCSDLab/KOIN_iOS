@@ -269,7 +269,7 @@
 		7CED91972EF2D1F900457128 /* FetchTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F462EF2D1F900457128 /* FetchTypeModalViewController.swift */; };
 		7CED91982EF2D1F900457128 /* PolicyListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F1B2EF2D1F900457128 /* PolicyListTableView.swift */; };
 		7CED91992EF2D1F900457128 /* ShopSummaryPhoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FC62EF2D1F900457128 /* ShopSummaryPhoneButton.swift */; };
-		7CED919B2EF2D1F900457128 /* UpdateModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE12EF2D1F900457128 /* UpdateModelViewController.swift */; };
+		7CED919B2EF2D1F900457128 /* UpdateModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE12EF2D1F900457128 /* UpdateModalViewController.swift */; };
 		7CED919E2EF2D1F900457128 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F122EF2D1F900457128 /* ChangePasswordViewController.swift */; };
 		7CED919F2EF2D1F900457128 /* RecentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F542EF2D1F900457128 /* RecentSearchTableViewCell.swift */; };
 		7CED91A02EF2D1F900457128 /* StateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F332EF2D1F900457128 /* StateButton.swift */; };
@@ -922,7 +922,7 @@
 		7CED8EDD2EF2D1F900457128 /* ServiceSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectViewController.swift; sourceTree = "<group>"; };
 		7CED8EDF2EF2D1F900457128 /* ForceUpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateViewModel.swift; sourceTree = "<group>"; };
 		7CED8EE02EF2D1F900457128 /* ForceUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateViewController.swift; sourceTree = "<group>"; };
-		7CED8EE12EF2D1F900457128 /* UpdateModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateModelViewController.swift; sourceTree = "<group>"; };
+		7CED8EE12EF2D1F900457128 /* UpdateModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateModalViewController.swift; sourceTree = "<group>"; };
 		7CED8EE52EF2D1F900457128 /* ReportLostItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemViewModel.swift; sourceTree = "<group>"; };
 		7CED8EE62EF2D1F900457128 /* ReportLostItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemViewController.swift; sourceTree = "<group>"; };
 		7CED8EE82EF2D1F900457128 /* LostArticleImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleImageCollectionView.swift; sourceTree = "<group>"; };
@@ -2028,7 +2028,7 @@
 			children = (
 				7CED8EDF2EF2D1F900457128 /* ForceUpdateViewModel.swift */,
 				7CED8EE02EF2D1F900457128 /* ForceUpdateViewController.swift */,
-				7CED8EE12EF2D1F900457128 /* UpdateModelViewController.swift */,
+				7CED8EE12EF2D1F900457128 /* UpdateModalViewController.swift */,
 			);
 			path = ForceUpdate;
 			sourceTree = "<group>";
@@ -4883,7 +4883,7 @@
 				7CED91972EF2D1F900457128 /* FetchTypeModalViewController.swift in Sources */,
 				7CED91982EF2D1F900457128 /* PolicyListTableView.swift in Sources */,
 				7CED91992EF2D1F900457128 /* ShopSummaryPhoneButton.swift in Sources */,
-				7CED919B2EF2D1F900457128 /* UpdateModelViewController.swift in Sources */,
+				7CED919B2EF2D1F900457128 /* UpdateModalViewController.swift in Sources */,
 				7CED919E2EF2D1F900457128 /* ChangePasswordViewController.swift in Sources */,
 				7CED919F2EF2D1F900457128 /* RecentSearchTableViewCell.swift in Sources */,
 				7CED91A02EF2D1F900457128 /* StateButton.swift in Sources */,
@@ -5434,7 +5434,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 426;
+				CURRENT_PROJECT_VERSION = 433;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -5453,7 +5453,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.5;
+				MARKETING_VERSION = 4.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin.stage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -5470,7 +5470,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 426;
+				CURRENT_PROJECT_VERSION = 433;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -5489,7 +5489,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.5;
+				MARKETING_VERSION = 4.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;

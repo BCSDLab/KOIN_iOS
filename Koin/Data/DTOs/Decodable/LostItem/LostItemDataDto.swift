@@ -12,19 +12,19 @@ struct LostItemDataDto: Decodable {
     let boardId: Int
     let type: LostItemType
     let category: String
-    let foundPlace: String
+    let foundPlace: String?
     let foundDate: String
     let content: String?
     let author: String
-    let isCouncil: Bool
+    let organization: Organization?
     let isMine: Bool
     let isFound: Bool
     let images: [Image]
-    let prevID: Int?
-    let nextID: Int?
+    let prevId: Int?
+    let nextId: Int?
     let registeredAt: String
     let updatedAt: String
-    
+
     enum CodingKeys: String, CodingKey {
         case id
         case boardId = "board_id"
@@ -34,21 +34,32 @@ struct LostItemDataDto: Decodable {
         case foundDate = "found_date"
         case content
         case author
-        case isCouncil = "is_council"
+        case organization
         case isMine = "is_mine"
         case isFound = "is_found"
         case images
-        case prevID = "prev_id"
-        case nextID = "next_id"
+        case prevId = "prev_id"
+        case nextId = "next_id"
         case registeredAt = "registered_at"
         case updatedAt = "updated_at"
     }
 }
 
+struct Organization: Decodable {
+    let name: String
+    let location: String
+    
+    enum CodingKeys: String, CodingKey {
+        case name
+        case location
+    }
+}
+
+
 extension LostItemDataDto {
     
     func toDomain() -> LostItemData {
-        LostItemData(
+        return LostItemData(
             id: self.id,
             type: self.type,
             category: self.category,
@@ -56,12 +67,11 @@ extension LostItemDataDto {
             foundDate: self.foundDate,
             content: self.content,
             author: self.author,
-            isCouncil: self.isCouncil,
+            organization: self.organization,
             isMine: self.isMine,
             isFound: self.isFound,
             images: self.images,
-            registeredAt: self.registeredAt,
-            updatedAt: self.updatedAt
+            registeredAt: self.registeredAt
         )
     }
 }

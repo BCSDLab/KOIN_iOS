@@ -11,7 +11,7 @@ struct FetchLostItemListRequest: Encodable {
     var type: LostItemType? = nil
     var page: Int = 1
     var limit: Int = 10
-    var category: LostItemCategory = .all
+    var category: Set<LostItemCategory> = [.all]
     var foundStatus: LostItemFoundStatus = .all
     let sort: LostItemSort = .latest
     var author: LostItemAuthor = .all
@@ -32,6 +32,29 @@ enum LostItemCategory: String, Encodable {
     case wallet = "WALLET"
     case electronics = "ELECTRONICS"
     case etc = "ETC"
+    
+    var description: String {
+        switch self {
+        case .all: return "전체"
+        case .card: return "카드"
+        case .wallet: return "지갑"
+        case .id: return "신분증"
+        case .electronics: return "전자제품"
+        case .etc: return "기타"
+        }
+    }
+    
+    init?(description: String) {
+        switch description {
+        case "전체": self = .all
+        case "카드": self = .card
+        case "지갑": self = .wallet
+        case "신분증": self = .id
+        case "전자제품": self = .electronics
+        case "기타": self = .etc
+        default: return nil
+        }
+    }
 }
 
 enum LostItemFoundStatus: String, Encodable {

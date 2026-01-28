@@ -213,7 +213,7 @@ extension BusSearchViewController {
         }
 
         busAreaViewController.configure(busAreaLists: busAreaList, buttonState: buttonState)
-        let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 361, cornerRadius: 32, isPannedable: false)
+        let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 312.5 + UIApplication.bottomSafeAreaHeight(), cornerRadius: 32, isPannedable: false)
         bottomSheet.modalPresentationStyle = .overFullScreen
         bottomSheet.modalTransitionStyle = .crossDissolve
         present(bottomSheet, animated: true)
@@ -340,7 +340,7 @@ extension BusSearchViewController {
         }
         busInfoSearchButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(24)
-            $0.bottom.equalToSuperview().inset(59)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-25)
             $0.height.equalTo(48)
         }
         busNoticeWrappedView.snp.makeConstraints {

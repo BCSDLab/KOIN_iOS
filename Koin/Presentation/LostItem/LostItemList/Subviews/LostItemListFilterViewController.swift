@@ -76,17 +76,17 @@ final class LostItemListFilterViewController: UIViewController {
         $0.spacing = 12
         $0.distribution = .fillProportionally
     }
-    private let categoryAllButton = LostItemListFilterButton(text: "전체", isSelected: true)
-    private let categoryCardButton = LostItemListFilterButton(text: "카드", isSelected: false)
-    private let categoryWalletButton = LostItemListFilterButton(text: "지갑", isSelected: false)
+    private let categoryAllButton = LostItemListFilterButton(text: LostItemCategory.all.description, isSelected: true)
+    private let categoryCardButton = LostItemListFilterButton(text: LostItemCategory.card.description, isSelected: false)
+    private let categoryWalletButton = LostItemListFilterButton(text: LostItemCategory.wallet.description, isSelected: false)
     private let categoryButtonsStackView2 = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 12
         $0.distribution = .fillProportionally
     }
-    private let categoryIdCardButton = LostItemListFilterButton(text: "신분증", isSelected: false)
-    private let categoryElectronicDeviceButton = LostItemListFilterButton(text: "전자제품", isSelected: false)
-    private let categoryOtherButton = LostItemListFilterButton(text: "기타", isSelected: false)
+    private let categoryIdCardButton = LostItemListFilterButton(text: LostItemCategory.id.description, isSelected: false)
+    private let categoryElectronicDeviceButton = LostItemListFilterButton(text: LostItemCategory.electronics.description, isSelected: false)
+    private let categoryOtherButton = LostItemListFilterButton(text: LostItemCategory.etc.description, isSelected: false)
     
     private let separatorView3 = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
@@ -164,12 +164,14 @@ final class LostItemListFilterViewController: UIViewController {
             typeAllButton.isSelected = (state.type == nil)
             typeFoundButton.isSelected = (state.type == .found)
             typeLostButton.isSelected = (state.type == .lost)
-            categoryAllButton.isSelected = (state.category == .all)
-            categoryCardButton.isSelected = (state.category == .card)
-            categoryWalletButton.isSelected = (state.category == .wallet)
-            categoryIdCardButton.isSelected = (state.category == .id)
-            categoryElectronicDeviceButton.isSelected = (state.category == .electronics)
-            categoryOtherButton.isSelected = (state.category == .etc)
+            
+            categoryAllButton.isSelected = state.category.contains(.all)
+            categoryCardButton.isSelected = state.category.contains(.card)
+            categoryWalletButton.isSelected = state.category.contains(.wallet)
+            categoryIdCardButton.isSelected = state.category.contains(.id)
+            categoryElectronicDeviceButton.isSelected = state.category.contains(.electronics)
+            categoryOtherButton.isSelected = state.category.contains(.etc)
+            
             stateAllButton.isSelected = (state.foundStatus == .all)
             stateNotFoundButton.isSelected = (state.foundStatus == .notFound)
             stateFoundButton.isSelected = (state.foundStatus == .found)
@@ -186,12 +188,12 @@ extension LostItemListFilterViewController {
         typeAllButton.addTarget(self, action: #selector(typeAllButtonTapped), for: .touchUpInside)
         typeFoundButton.addTarget(self, action: #selector(typeFoundButtonTapped), for: .touchUpInside)
         typeLostButton.addTarget(self, action: #selector(typeLostButtonTapped), for: .touchUpInside)
-        categoryAllButton.addTarget(self, action: #selector(categoryAllButtonTapped), for: .touchUpInside)
-        categoryCardButton.addTarget(self, action: #selector(categoryCardButtonTapped), for: .touchUpInside)
-        categoryWalletButton.addTarget(self, action: #selector(categoryWalletButtonTapped), for: .touchUpInside)
-        categoryIdCardButton.addTarget(self, action: #selector(categoryIdCardButtonTapped), for: .touchUpInside)
-        categoryElectronicDeviceButton.addTarget(self, action: #selector(categoryElectronicDeviceButtonTapped), for: .touchUpInside)
-        categoryOtherButton.addTarget(self, action: #selector(categoryOtherButtonTapped), for: .touchUpInside)
+        categoryAllButton.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+        categoryCardButton.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+        categoryWalletButton.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+        categoryIdCardButton.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+        categoryElectronicDeviceButton.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
+        categoryOtherButton.addTarget(self, action: #selector(categoryButtonTapped(_:)), for: .touchUpInside)
         stateAllButton.addTarget(self, action: #selector(stateAllButtonTapped), for: .touchUpInside)
         stateNotFoundButton.addTarget(self, action: #selector(stateNotFoundButtonTapped), for: .touchUpInside)
         stateFoundButton.addTarget(self, action: #selector(stateFoundButtonTapped), for: .touchUpInside)
@@ -221,24 +223,25 @@ extension LostItemListFilterViewController {
     @objc private func typeLostButtonTapped() {
         filterState.type = .lost
     }
-    @objc private func categoryAllButtonTapped() {
-        filterState.category = .all
+    
+    @objc private func categoryButtonTapped(_ sender: LostItemListFilterButton) {
+        if sender.text == LostItemCategory.all.description {
+            filterState.category.removeAll()
+            filterState.category.insert(.all)
+            return
+        }
+        filterState.category.remove(.all)
+        
+        if let category = LostItemCategory(description: sender.text) {
+            
+            if filterState.category.contains(category) {
+                filterState.category.remove(category)
+            } else {
+                filterState.category.insert(category)
+            }
+        }
     }
-    @objc private func categoryCardButtonTapped() {
-        filterState.category = .card
-    }
-    @objc private func categoryWalletButtonTapped() {
-        filterState.category = .wallet
-    }
-    @objc private func categoryIdCardButtonTapped() {
-        filterState.category = .id
-    }
-    @objc private func categoryElectronicDeviceButtonTapped() {
-        filterState.category = .electronics
-    }
-    @objc private func categoryOtherButtonTapped() {
-        filterState.category = .etc
-    }
+    
     @objc private func stateAllButtonTapped() {
         filterState.foundStatus = .all
     }

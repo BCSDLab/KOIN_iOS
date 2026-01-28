@@ -25,6 +25,15 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
         $0.textColor = .appColor(.neutral800)
         $0.text = "\(type.description) 일자"
     }
+    private let essentialLabel = UILabel().then {
+        $0.attributedText = NSAttributedString(
+            string: " *",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 11),
+                .foregroundColor : UIColor(hexCode: "C82A2A")
+            ]
+        )
+    }
     private lazy var dateWarningLabel = UILabel().then {
         let imageAttachment = NSTextAttachment()
         imageAttachment.image = UIImage.appImage(asset: .warningOrange)
@@ -153,7 +162,7 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
 extension EditLostItemFoundDateView {
     
     private func setUpLayouts() {
-        [dateLabel, dateWarningLabel, dateButton, chevronImage, dropdownView].forEach {
+        [dateLabel, dateWarningLabel, dateButton, chevronImage, dropdownView, essentialLabel].forEach {
             addSubview($0)
         }
     }
@@ -161,6 +170,11 @@ extension EditLostItemFoundDateView {
         dateLabel.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
             $0.height.equalTo(22)
+        }
+        essentialLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.height.equalTo(18)
+            $0.leading.equalTo(dateLabel.snp.trailing)
         }
         dateWarningLabel.snp.makeConstraints {
             $0.top.trailing.equalToSuperview()

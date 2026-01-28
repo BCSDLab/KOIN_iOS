@@ -32,7 +32,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     private func handleIncomingDeepLink(url: URL, navigationController: UINavigationController) {
             // URL 경로가 "/articles/lost-item"인 경우에 처리
-            if url.path == "/articles/lost-item" {
+            if url.path == "/articles/lost-item" || url.path == "/lost-item" {
                 let userRepository = DefaultUserRepository(service: DefaultUserService())
                 let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
                 let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
@@ -48,7 +48,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                let incomingURL = userActivity.webpageURL else { return }
          
          // URL의 경로가 "/articles/lost-item"인지 확인
-         if incomingURL.path == "/articles/lost-item" {
+         if incomingURL.path == "/articles/lost-item" || incomingURL.path == "/lost-item" {
                 if let navigationController = window?.rootViewController as? UINavigationController {
                     let userRepository = DefaultUserRepository(service: DefaultUserService())
                     let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())

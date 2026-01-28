@@ -24,6 +24,25 @@ final class AddLostItemHeaderView: UICollectionReusableView {
         $0.textColor = UIColor.appColor(.neutral500)
     }
     
+    private let essentialLabel = UILabel().then {
+        $0.attributedText = NSAttributedString(
+            string: "*",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 11),
+                .foregroundColor : UIColor(hexCode: "C82A2A")
+            ]
+        )
+    }
+    private let essentialDescriptionLabel = UILabel().then {
+        $0.attributedText = NSAttributedString(
+            string: " 표시는 필수 입력항목입니다.",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 11),
+                .foregroundColor : UIColor.appColor(.neutral800)
+            ]
+        )
+    }
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -51,7 +70,7 @@ extension AddLostItemHeaderView {
     
     
     private func setUpLayouts() {
-        [mainMessageLabel, messageImageView, subMessageLabel, ].forEach {
+        [mainMessageLabel, messageImageView, subMessageLabel, essentialDescriptionLabel, essentialLabel].forEach {
             addSubview($0)
         }
     }
@@ -71,6 +90,19 @@ extension AddLostItemHeaderView {
             $0.top.equalTo(mainMessageLabel.snp.bottom)
             $0.leading.equalTo(mainMessageLabel.snp.leading)
             $0.height.equalTo(19)
+        }
+        
+        essentialDescriptionLabel.snp.makeConstraints {
+            $0.height.equalTo(19)
+            $0.top.equalTo(mainMessageLabel.snp.bottom)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.bottom.equalToSuperview().offset(-12)
+        }
+        essentialLabel.snp.makeConstraints {
+            $0.height.equalTo(19)
+            $0.top.equalTo(mainMessageLabel.snp.bottom)
+            $0.trailing.equalTo(essentialDescriptionLabel.snp.leading)
+            $0.bottom.equalToSuperview().offset(-12)
         }
     }
     

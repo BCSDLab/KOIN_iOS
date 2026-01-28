@@ -21,6 +21,15 @@ final class EditLostItemCategoryView: UIView {
         $0.textColor = .appColor(.neutral800)
         $0.text = "품목"
     }
+    private let essentialLabel = UILabel().then {
+        $0.attributedText = NSAttributedString(
+            string: " *",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 11),
+                .foregroundColor : UIColor(hexCode: "C82A2A")
+            ]
+        )
+    }
     private let categoryMessageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.gray)
@@ -86,7 +95,7 @@ extension EditLostItemCategoryView {
         [cardButton, idButton, walletButton, electronicsButton, ectButton].forEach {
             categoryStackView.addArrangedSubview($0)
         }
-        [categoryLabel, categoryMessageLabel, categoryStackView].forEach {
+        [categoryLabel, categoryMessageLabel, categoryStackView, essentialLabel].forEach {
             addSubview($0)
         }
     }
@@ -94,6 +103,11 @@ extension EditLostItemCategoryView {
         categoryLabel.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
             $0.height.equalTo(22)
+        }
+        essentialLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.height.equalTo(18)
+            $0.leading.equalTo(categoryLabel.snp.trailing)
         }
         categoryMessageLabel.snp.makeConstraints {
             $0.top.equalTo(categoryLabel.snp.bottom)
