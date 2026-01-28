@@ -36,7 +36,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         $0.backgroundColor = .appColor(.neutral0)
         $0.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         $0.layer.cornerRadius = 12
-        $0.text = "메세지 보내기"
+        $0.text = "메시지 보내기"
         $0.textColor = .appColor(.neutral500)
     }
     
