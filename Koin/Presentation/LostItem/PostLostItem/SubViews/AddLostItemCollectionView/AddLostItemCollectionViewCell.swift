@@ -612,8 +612,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
 extension AddLostItemCollectionViewCell {
     
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView,  dropdownView, dateButton, categoryEssentialLabel, dateEssentialLabel, locationEssentialLabel
-        ].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView, categoryEssentialLabel, dateEssentialLabel, locationEssentialLabel, dropdownView, dateButton].forEach {
             contentView.addSubview($0)
         }
         dateButton.addSubview(chevronImage)
