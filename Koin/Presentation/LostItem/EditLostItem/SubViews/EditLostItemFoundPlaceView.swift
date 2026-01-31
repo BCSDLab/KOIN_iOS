@@ -75,6 +75,10 @@ final class EditLostItemFoundPlaceView: UIView {
             locationTextField.textColor = .appColor(.neutral500)
         }
         
+        if type == .lost {
+            essentialLabel.isHidden = true
+        }
+        
         configureView()
         setAddTargets()
         setDelegate()
