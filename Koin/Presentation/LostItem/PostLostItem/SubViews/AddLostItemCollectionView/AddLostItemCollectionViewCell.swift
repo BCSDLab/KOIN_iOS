@@ -224,6 +224,9 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         dropdownView.valueChangedPublisher.sink { [weak self] in
             self?.dropdownValueChanged()
             }.store(in: &cancellable)
+        dropdownView.dismissDropdownPublisher.sink { [weak self] in
+            self?.shouldDismissDropDownPublisher.send(nil)
+        }.store(in: &cancellable)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
