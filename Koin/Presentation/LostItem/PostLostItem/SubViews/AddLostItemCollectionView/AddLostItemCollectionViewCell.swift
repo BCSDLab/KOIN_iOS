@@ -224,6 +224,9 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         dropdownView.valueChangedPublisher.sink { [weak self] in
             self?.dropdownValueChanged()
             }.store(in: &cancellable)
+        dropdownView.dismissDropdownPublisher.sink { [weak self] in
+            self?.shouldDismissDropDownPublisher.send(nil)
+        }.store(in: &cancellable)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -609,8 +612,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
 extension AddLostItemCollectionViewCell {
     
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView,  dropdownView, dateButton, categoryEssentialLabel, dateEssentialLabel, locationEssentialLabel
-        ].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView, categoryEssentialLabel, dateEssentialLabel, locationEssentialLabel, dropdownView, dateButton].forEach {
             contentView.addSubview($0)
         }
         dateButton.addSubview(chevronImage)

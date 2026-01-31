@@ -187,6 +187,8 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
         return allCellData
     }
     private func writeButtonTapped() {
+        dismissKeyboardDropdown()
+        
         var isAllValid = true
         for index in 0..<addLostItemCollectionView.numberOfItems(inSection: 0) {
             let indexPath = IndexPath(item: index, section: 0)

@@ -18,6 +18,7 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
         dateWarningLabel.isHidden
     }
     private(set) var foundDate: String
+    let focusDropdownPublisher = PassthroughSubject<UIView, Never>()
     
     // MARK: - UI Components
     private lazy var dateLabel = UILabel().then {
@@ -106,6 +107,9 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
         dropdownView.valueChangedPublisher.sink { [weak self] in
             self?.dropdownValueChanged()
         }.store(in: &subscriptions)
+        dropdownView.dismissDropdownPublisher.sink { [weak self] in
+            self?.dismissDropdown()
+        }.store(in: &subscriptions)
     }
     
     private func setAddTargets() {
@@ -116,6 +120,7 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
         if dropdownView.isHidden {
             presentDropdown()
             endEditing(true)
+            focusDropdownPublisher.send(dropdownView)
         } else {
             dismissDropdown()
         }
@@ -134,7 +139,7 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
     }
     
     @objc func dismissDropdown() {
-        UIView.animate(withDuration: 0.1) { [weak self] in
+        UIView.animate(withDuration: 0.2) { [weak self] in
             guard let self else { return }
             dropdownView.alpha = 0
             dropdownView.transform = CGAffineTransform(translationX: 0, y: -20)

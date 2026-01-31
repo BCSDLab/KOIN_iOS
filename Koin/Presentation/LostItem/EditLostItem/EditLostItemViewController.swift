@@ -87,6 +87,11 @@ final class EditLostItemViewController: UIViewController {
         configureNavigationBar(style: .empty)
     }
     
+    override func hideKeyboardWhenTappedAround() {
+        super.hideKeyboardWhenTappedAround()
+        foundDateView.dismissDropdown()
+    }
+    
     private func bind() {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
@@ -120,6 +125,13 @@ final class EditLostItemViewController: UIViewController {
         contentView.shouldDismissDropDownPublisher.sink { [weak self] in
             self?.foundDateView.dismissDropdown()
         }.store(in: &subscriptions)
+        
+        foundDateView.focusDropdownPublisher.sink { [weak self] targetView in
+            guard let self else { return }
+            var rect = targetView.convert(targetView.bounds, to: scrollView)
+            rect.size.height += 15
+            scrollView.scrollRectToVisible(rect, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 
@@ -130,6 +142,9 @@ extension EditLostItemViewController {
     }
     
     @objc private func editButtonTapped() {
+        dismissKeyboard()
+        foundDateView.dismissDropdown()
+        
         if foundDateView.isValid && foundPlaceView.isValid {
             let imageUrls = imagesView.imageUploadCollectionView.imageUrls
             let category = categoryView.selectedCategory
