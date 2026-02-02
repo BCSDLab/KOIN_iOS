@@ -326,7 +326,9 @@ final class HomeViewController: UIViewController {
 
 extension HomeViewController {
     private func handleBannerTap(_ banner: Banner) {
+        dismiss(animated: true)
         inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal", value: banner.title, category: "click"))
+        
         if let version = banner.version {
             // 현재 앱 버전
             let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
@@ -341,9 +343,9 @@ extension HomeViewController {
                   return
             }
         }
+        
         if let redirect = banner.redirectLink {
             if redirect == "shop" {
-                dismiss(animated: true)
                 let shopService = DefaultShopService()
                 let shopRepository = DefaultShopRepository(service: shopService)
                 
@@ -369,10 +371,8 @@ extension HomeViewController {
                 let shopViewController = ShopViewController(viewModel: viewModel)
                 navigationController?.pushViewController(shopViewController, animated: true)
             } else if redirect == "dining" {
-                dismiss(animated: true)
                 navigatetoDining()
             } else if redirect == "keyword" {
-                dismiss(animated: true)
                 let noticeListService = DefaultNoticeService()
                 let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
                 let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
@@ -386,7 +386,6 @@ extension HomeViewController {
                 let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
                 navigationController?.pushViewController(viewController, animated: true)
             } else if redirect == "timetable" {
-                dismiss(animated: true)
                 if viewModel.isLoggedIn {
                     let viewController = TimetableViewController(viewModel: TimetableViewModel())
                     navigationController?.pushViewController(viewController, animated: true)
@@ -394,15 +393,12 @@ extension HomeViewController {
                     showToast(message: "로그인이 필요한 기능입니다.", success: true)
                 }
             } else if redirect == "home" {
-                dismiss(animated: true)
                 return
             } else if redirect == "login" {
-                dismiss(animated: true)
                 let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
                 loginViewController.title = "로그인"
                 navigationController?.pushViewController(loginViewController, animated: true)
             } else if redirect == "chat" {
-                dismiss(animated: true)
                 if !viewModel.isLoggedIn {
                     showToast(message: "로그인이 필요한 기능입니다.")
                     return
@@ -410,8 +406,20 @@ extension HomeViewController {
                 let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
                 navigationController?.pushViewController(viewController, animated: true)
             } else if redirect == "club" {
-                dismiss(animated: true)
                 navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
+            } else if redirect == "lostitem" {
+                let userRepository = DefaultUserRepository(service: DefaultUserService())
+                let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+                let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+                let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let viewModel = LostItemListViewModel(
+                    checkLoginUseCase: checkLoginUseCase,
+                    fetchLostItemListUseCase: fetchLostItemItemUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase
+                )
+                let viewController = LostItemListViewController(viewModel: viewModel)
+                navigationController?.pushViewController(viewController, animated: true)
             }
         }
     }
