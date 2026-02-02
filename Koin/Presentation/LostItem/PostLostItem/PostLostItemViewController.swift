@@ -251,6 +251,7 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
         let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
         let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
         let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = LostItemDataViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchLostItemDataUseCase: fetchLostItemDataUseCase,
@@ -258,6 +259,7 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
             changeLostItemStateUseCase: changeLostItemStateUseCase,
             deleteLostItemUseCase: deleteLostItemUseCase,
             createChatRoomUseCase: createChatRoomUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             id: id)
         let viewController = LostItemDataViewController(viewModel: viewModel)
         viewController.delegate = (delegate as? LostItemDataViewControllerDelegate)

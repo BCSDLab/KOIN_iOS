@@ -151,11 +151,17 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func pushLostItem() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "분실물"))
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
-        let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemListUseCase: fetchLostItemItemUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LostItemListViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchLostItemListUseCase: fetchLostItemItemUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

@@ -17,6 +17,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
         case checkLogIn(CheckLoginOption)
         case changeState(Int)
         case deleteData
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateData(LostItemData)
@@ -42,6 +43,8 @@ final class LostItemDataViewModel: ViewModelProtocol {
     private let changeLostItemStateUseCase: ChangeLostItemStateUseCase
     private let deleteLostItemUseCase: DeleteLostItemUseCase
     private let createChatRoomUseCase: CreateChatRoomUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    var type: LostItemType?
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     let id: Int
@@ -55,6 +58,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
          changeLostItemStateUseCase: ChangeLostItemStateUseCase,
          deleteLostItemUseCase: DeleteLostItemUseCase,
          createChatRoomUseCase: CreateChatRoomUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          id: Int) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemDataUseCase = fetchLostItemDataUseCase
@@ -62,6 +66,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
         self.changeLostItemStateUseCase = changeLostItemStateUseCase
         self.deleteLostItemUseCase = deleteLostItemUseCase
         self.createChatRoomUseCase = createChatRoomUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.id = id
     }
     
@@ -81,6 +86,8 @@ final class LostItemDataViewModel: ViewModelProtocol {
                 self.changeState(id)
             case .deleteData:
                 self.deleteData()
+            case let .logEvent(label, category, value):
+                self.logEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -88,6 +95,10 @@ final class LostItemDataViewModel: ViewModelProtocol {
 }
 
 extension LostItemDataViewModel {
+    
+    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
     
     private func loadData() {
         fetchLostItemDataUseCase.execute(id: id).sink(
@@ -98,6 +109,7 @@ extension LostItemDataViewModel {
             },
             receiveValue: { [weak self] lostItemData in
                 self?.lostItemData = lostItemData
+                self?.type = lostItemData.type
                 self?.outputSubject.send(.updateData(lostItemData))
             }
         ).store(in: &subscriptions)

@@ -123,6 +123,8 @@ final class LostItemListViewController: UIViewController {
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
             self?.dismissKeyboard()
             
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemPostEntry, .click, "분실물"))
+            
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
             let chatRepository = DefaultChatRepository(service: DefaultChatService())
@@ -132,6 +134,7 @@ final class LostItemListViewController: UIViewController {
             let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
             let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
             let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemDataUseCase: fetchLostItemDataUseCase,
@@ -139,6 +142,7 @@ final class LostItemListViewController: UIViewController {
                 changeLostItemStateUseCase: changeLostItemStateUseCase,
                 deleteLostItemUseCase: deleteLostItemUseCase,
                 createChatRoomUseCase: createChatRoomUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                 id: id)
             let viewController = LostItemDataViewController(viewModel: viewModel)
             viewController.delegate = self
@@ -162,7 +166,12 @@ final class LostItemListViewController: UIViewController {
 extension LostItemListViewController {
     
     private func showLogin() {
-        let onRightButtonTapped = { [weak self] in
+        let onLeftButtonTapped: ()->Void = { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemWriteLoginRequest, .click, "닫기"))
+        }
+        let onRightButtonTapped: ()->Void = { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemWriteLoginRequest, .click, "로그인하기"))
+            
             let userService = DefaultUserService()
             let logAnalyticsService = GA4AnalyticsService()
             let userRepository = DefaultUserRepository(service: userService)
@@ -173,7 +182,7 @@ extension LostItemListViewController {
             let loginViewController = LoginViewController(viewModel: loginViewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
-        let loginModalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 글을 작성해주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
+        let loginModalViewController = ModalViewControllerB(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 글을 작성해주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
             $0.modalPresentationStyle = .overFullScreen
             $0.modalTransitionStyle = .crossDissolve
         }
@@ -184,6 +193,7 @@ extension LostItemListViewController {
         let onFoundButtonTapped = { [weak self] in
             guard let self else { return }
             dismissView()
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserWrite, .click, "주인을 찾아요"))
             let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
             viewController.delegate = self
             navigationController?.pushViewController(viewController, animated: true)
@@ -191,6 +201,7 @@ extension LostItemListViewController {
         let onLostButtonTapped = { [weak self] in
             guard let self else { return }
             dismissView()
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserWrite, .click, "잃어버렸어요"))
             let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
             viewController.delegate = self
             navigationController?.pushViewController(viewController, animated: true)
@@ -246,12 +257,15 @@ extension LostItemListViewController {
     @objc private func filterButtonTapped() {
         dismissKeyboard()
         
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemFilter, .click, "분실물"))
+        
         let filterViewController = LostItemListFilterViewController(
             isLoggedIn: self.viewModel.isLoggedIn,
             filterState: self.viewModel.filterState,
             onApplyFilterButtonTapped: { [weak self] filter in
                 self?.dismissView()
                 self?.inputSubject.send(.updateFilter(filter: filter))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemFilterApply, .click, "분실물"))
             }
         )
         let bottomSheetViewController = BottomSheetViewController(
@@ -263,11 +277,8 @@ extension LostItemListViewController {
     }
     
     @objc private func writeButtonTapped() {
-        if viewModel.isLoggedIn {
-            self.presentPostTypeModal()
-        } else {
-            self.showLogin()
-        }
+        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemWrite, .click, "글쓰기"))
+        viewModel.isLoggedIn ? presentPostTypeModal() : showLogin()
     }
     
     @objc private func searchButtonTapped() {
