@@ -158,7 +158,6 @@ final class HomeViewController: UIViewController {
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
         checkAndShowBanner()
-        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
         scrollView.delegate = self
     }
     
