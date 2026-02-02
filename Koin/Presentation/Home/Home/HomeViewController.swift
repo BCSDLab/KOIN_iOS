@@ -158,9 +158,6 @@ final class HomeViewController: UIViewController {
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
         checkAndShowBanner()
-        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
-        inputSubject.send(.getAbTestResult("c_main_dining_v1"))
-        inputSubject.send(.getClubAbTest("a_main_club_ui"))
         scrollView.delegate = self
     }
     
@@ -213,12 +210,10 @@ final class HomeViewController: UIViewController {
                 self?.updateHotArticles(articles: hotNoticeArticlesInfo, phrases: keywordNoticePhrases)
             case let .showForceUpdate(version):
                 self?.navigateToForceUpdate(version: version)
-            case let .setAbTestResult(abTestResult):
-                self?.setAbTestResult(result: abTestResult)
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
-            case .updateBanner(let banner, let abTestResult):
-                self?.showBanner(banner: banner, abTestResult: abTestResult)
+            case .updateBanner(let banner):
+                self?.showBanner(banner: banner)
             case .setHotClub(let hotClub):
                 self?.clubView.setupHotClub(club: hotClub)
             case .setClubCategories(let response):
@@ -437,20 +432,12 @@ extension HomeViewController {
         return false
     }
     
-    private func showBanner(banner: BannerDto, abTestResult: AssignAbTestResponse) {
+    private func showBanner(banner: BannerDto) {
         if banner.count == 0 { return }
-        let viewController: UIViewController
-        if abTestResult.variableName == .bottomBanner {
-            bannerViewControllerA.setBanners(banners: banner.banners)
-            viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
-            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_A", category: "a/b test 로깅(메인 모달)"))
-            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
-        } else {
-            bannerViewControllerB.setBanners(banners: banner.banners)
-            viewController = bannerViewControllerB
-            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_B", category: "a/b test 로깅(메인 모달)"))
-            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
-        }
+        
+        bannerViewControllerA.setBanners(banners: banner.banners)
+        let viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
+        inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         self.present(viewController, animated: true)
@@ -463,7 +450,7 @@ extension HomeViewController {
                 return
             }
         }
-        inputSubject.send(.getBannerAbTest("a_main_banner_ui"))
+        inputSubject.send(.fetchBanner)
     }
     
     @objc private func tapBusQrCode() {
@@ -575,15 +562,6 @@ extension HomeViewController {
     
     private func putImage(data: ShopCategoryDto) {
         categoryCollectionView.updateCategories(data.shopCategories)
-    }
-    
-    private func setAbTestResult(result: AssignAbTestResponse) {
-        if result.variableName == .mainDiningOriginal {
-            goDiningPageButton.isHidden = true
-        }
-        else if result.variableName == .mainDiningNew {
-            goDiningPageButton.isHidden = false
-        }
     }
     
     private func didTapCell(at id: Int) {
