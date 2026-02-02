@@ -159,7 +159,6 @@ final class HomeViewController: UIViewController {
         checkAndShowTooltip()
         checkAndShowBanner()
         inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
-        inputSubject.send(.getClubAbTest("a_main_club_ui"))
         scrollView.delegate = self
     }
     

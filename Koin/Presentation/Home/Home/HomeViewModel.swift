@@ -22,7 +22,6 @@ final class HomeViewModel: ViewModelProtocol {
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
         case getBannerAbTest(String)
-        case getClubAbTest(String)
         case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     
@@ -98,6 +97,7 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getShopCategory()
                 self?.checkVersion()
                 self?.fetchUserData()
+                self?.fetchHotClub()
             case let .categorySelected(place):
                 self?.getDiningInformation(diningPlace: place)
             case .getDiningInfo:
@@ -114,8 +114,6 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getBannerAbTest(request: request)
             case let .logEventDirect(name, label, value, category):
                 self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
-            case .getClubAbTest(let request):
-                self?.getClubAbTest(request: request)
             case let .logSessionEvent(label, category, value, sessionId):
                 self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             }
@@ -147,28 +145,13 @@ extension HomeViewModel {
     }
     
     private func fetchClubCategories() {
+        print(#function)
         fetchClubCategoriesUseCase.execute().sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         }, receiveValue: { [weak self] categories in
             self?.outputSubject.send(.setClubCategories(categories))
-        }).store(in: &subscriptions)
-    }
-    private func getClubAbTest(request: String) {
-        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: request))
-            .sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        }, receiveValue: { [weak self] abTestResult in
-            print(abTestResult)
-            if abTestResult.variableName == .hot {
-                self?.fetchHotClub()
-                self?.logAnalyticsEventUseCase.logEvent(name: "AB_TEST", label: "CAMPUS_club_1", value: "design_B", category: "a/b test 로깅(메인화면 동아리 진입)")
-            } else {
-                self?.fetchClubCategories()
-                self?.logAnalyticsEventUseCase.logEvent(name: "AB_TEST", label: "CAMPUS_club_1", value: "design_A", category: "a/b test 로깅(메인화면 동아리 진입)")            }
         }).store(in: &subscriptions)
     }
     private func getBannerAbTest(request: String) {
