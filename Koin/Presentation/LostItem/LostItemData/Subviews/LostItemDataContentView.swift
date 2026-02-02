@@ -56,7 +56,6 @@ final class LostItemDataContentView: UIView {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 12
         $0.layer.masksToBounds = true
-        $0.textAlignment = .center
         $0.isHidden = true
     }
     
@@ -92,12 +91,13 @@ final class LostItemDataContentView: UIView {
         if let organization {
             let paragraphStyle = NSMutableParagraphStyle()
             paragraphStyle.lineSpacing = 6
-            let text = "분실물 수령을 희망하시는 분은 재실 시간 내에\n\(organization.location)해 주시기 바랍니다.\n재실 시간은 공지 사항을 참고해 주시기 바랍니다."
+            let text = "분실물 수령을 희망하시는 분은 재실 시간 내에\n\(organization.location)로 방문해 주시기 바랍니다.\n재실 시간은 공지 사항을 참고해 주시기 바랍니다."
             let attributedString = NSMutableAttributedString(string: text)
             let range = (text as NSString).range(of: "\(organization.location)")
             attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral700), range: range)
             attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
             organizationLabel.attributedText = attributedString
+            organizationLabel.textAlignment = .center
             organizationLabel.isHidden = false
         } else {
             organizationLabel.isHidden = true

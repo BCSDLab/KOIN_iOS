@@ -158,16 +158,8 @@ extension LostItemDataButtonsView {
         editButton.isHidden = !isMine || isFound
         deleteButton.isHidden = !isMine
         
-        chatButton.isHidden = isMine
-        reportButton.isHidden = isMine || isOrganization
-        
-        if isOrganization {
-            chatButton.snp.remakeConstraints {
-                $0.trailing.equalToSuperview()
-            }
-            setNeedsLayout()
-            layoutIfNeeded()
-        }
+        chatButton.isHidden = isMine || isOrganization
+        reportButton.isHidden = isMine
     }
 }
 
