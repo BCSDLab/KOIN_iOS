@@ -37,7 +37,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
                 let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
                 let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
-                let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemListUseCase: fetchLostItemItemUseCase)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let viewModel = LostItemListViewModel(
+                    checkLoginUseCase: checkLoginUseCase,
+                    fetchLostItemListUseCase: fetchLostItemItemUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase
+                )
                 let viewController = LostItemListViewController(viewModel: viewModel)
                 navigationController.pushViewController(viewController, animated: false)
             }
@@ -54,7 +59,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
                     let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
                     let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
-                    let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemListUseCase: fetchLostItemItemUseCase)
+                    let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                    let viewModel = LostItemListViewModel(
+                        checkLoginUseCase: checkLoginUseCase,
+                        fetchLostItemListUseCase: fetchLostItemItemUseCase,
+                        logAnalyticsEventUseCase: logAnalyticsEventUseCase
+                    )
                     let viewController = LostItemListViewController(viewModel: viewModel)
                     navigationController.pushViewController(viewController, animated: false)
                        }

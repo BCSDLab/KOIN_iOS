@@ -16,6 +16,7 @@ final class LostItemListViewModel {
         case loadMoreList
         case updateTitle(title: String?)
         case updateFilter(filter: FetchLostItemListRequest)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateList([LostItemListData])
@@ -26,6 +27,7 @@ final class LostItemListViewModel {
     // MARK: - Properties
     private let checkLoginUseCase: CheckLoginUseCase
     private let fetchLostItemListUseCase: FetchLostItemListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscription: Set<AnyCancellable> = []
@@ -35,9 +37,12 @@ final class LostItemListViewModel {
     
     
     // MARK: - Initializer
-    init(checkLoginUseCase: CheckLoginUseCase, fetchLostItemListUseCase: FetchLostItemListUseCase) {
+    init(checkLoginUseCase: CheckLoginUseCase,
+         fetchLostItemListUseCase: FetchLostItemListUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemListUseCase = fetchLostItemListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -54,6 +59,8 @@ final class LostItemListViewModel {
                 self.updateTitle(title)
             case .updateFilter(let filter):
                 self.updateFilter(filter)
+            case let .logEvent(label, category, value):
+                self.logEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscription)
         return outputSubject.eraseToAnyPublisher()
@@ -61,6 +68,10 @@ final class LostItemListViewModel {
 }
 
 extension LostItemListViewModel {
+    
+    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
     
     private func loadList() {
         fetchLostItemListUseCase.execute(requestModel: filterState).sink(

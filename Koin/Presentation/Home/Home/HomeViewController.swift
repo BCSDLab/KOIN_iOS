@@ -318,6 +318,7 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         lostItemListView.lostItemListTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemEntry, .click, "분실물"))
             self?.navigateToLostItemList()
         }.store(in: &subscriptions)
     }
@@ -614,7 +615,12 @@ extension HomeViewController {
         let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
-        let viewModel = LostItemListViewModel(checkLoginUseCase: checkLoginUseCase, fetchLostItemListUseCase: fetchLostItemItemUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LostItemListViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchLostItemListUseCase: fetchLostItemItemUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
