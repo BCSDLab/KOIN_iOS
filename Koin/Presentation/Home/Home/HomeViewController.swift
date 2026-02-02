@@ -211,8 +211,6 @@ final class HomeViewController: UIViewController {
                 self?.updateHotArticles(articles: hotNoticeArticlesInfo, phrases: keywordNoticePhrases)
             case let .showForceUpdate(version):
                 self?.navigateToForceUpdate(version: version)
-            case let .setAbTestResult(abTestResult):
-                self?.setAbTestResult(result: abTestResult)
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .updateBanner(let banner):
@@ -565,15 +563,6 @@ extension HomeViewController {
     
     private func putImage(data: ShopCategoryDto) {
         categoryCollectionView.updateCategories(data.shopCategories)
-    }
-    
-    private func setAbTestResult(result: AssignAbTestResponse) {
-        if result.variableName == .mainDiningOriginal {
-            goDiningPageButton.isHidden = true
-        }
-        else if result.variableName == .mainDiningNew {
-            goDiningPageButton.isHidden = false
-        }
     }
     
     private func didTapCell(at id: Int) {

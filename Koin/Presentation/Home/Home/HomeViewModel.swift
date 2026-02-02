@@ -32,7 +32,6 @@ final class HomeViewModel: ViewModelProtocol {
         case updateNoticeBanners([NoticeArticleDto], ((String, String), Int)?)
         case putImage(ShopCategoryDto)
         case showForceUpdate(String)
-        case setAbTestResult(AssignAbTestResponse)
         case showForceModal
         case updateBanner(BannerDto)
         case setHotClub(HotClubDto)
