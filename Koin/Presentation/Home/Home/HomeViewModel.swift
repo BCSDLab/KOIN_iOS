@@ -49,7 +49,6 @@ final class HomeViewModel: ViewModelProtocol {
     private let checkVersionUseCase: CheckVersionUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
-    private let assignAbTestUseCase: AssignAbTestUseCase
     private let fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase
     private let fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
@@ -70,7 +69,6 @@ final class HomeViewModel: ViewModelProtocol {
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
          dateProvider: DateProvider,
          checkVersionUseCase: CheckVersionUseCase,
-         assignAbTestUseCase: AssignAbTestUseCase,
          fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase,
          checkLoginUseCase: CheckLoginUseCase,
          fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
@@ -82,7 +80,6 @@ final class HomeViewModel: ViewModelProtocol {
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.dateProvider = dateProvider
         self.checkVersionUseCase = checkVersionUseCase
-        self.assignAbTestUseCase = assignAbTestUseCase
         self.fetchKeywordNoticePhraseUseCase = fetchKeywordNoticePhraseUseCase
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemStatsUseCase = fetchLostItemStatsUseCase

@@ -92,7 +92,6 @@ extension ChangePasswordSuccessViewController {
             fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
             dateProvider: dateProvider,
             checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
-            assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())),
             fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
             checkLoginUseCase: checkLoginUseCase,
             fetchLostItemStatsUseCase: fetchLostItemStatsUseCase
