@@ -270,7 +270,6 @@ extension LostItemDataViewController {
     
     private func navigateToChat(_ createChatRoomResponse: CreateChatRoomResponse) {
         guard let type = viewModel.type else { return }
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemMessageSend, .click, "\(type.description)물 쪽지 보내기"))
         
         let chatViewModel = ChatViewModel(
             articleId: createChatRoomResponse.articleId,
