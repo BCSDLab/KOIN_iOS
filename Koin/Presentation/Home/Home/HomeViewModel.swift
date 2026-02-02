@@ -21,7 +21,6 @@ final class HomeViewModel: ViewModelProtocol {
         case logEventDirect(name: String, label: String, value: String, category: String)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
-        case getAbTestResult(String)
         case getBannerAbTest(String)
         case getClubAbTest(String)
         case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
@@ -111,9 +110,6 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getNoticeBanner(date):
                 self?.getNoticeBanners(date: date)
-            case let .getAbTestResult(abTestTitle):
-                break
-                // self?.getAbTestResult(abTestTitle: abTestTitle)
             case .getBannerAbTest(let request):
                 self?.getBannerAbTest(request: request)
             case let .logEventDirect(name, label, value, category):
@@ -301,26 +297,6 @@ extension HomeViewModel {
                 self?.outputSubject.send(.updateNoticeBanners(articles, phrase))
             }
         }.store(in: &subscriptions)
-    }
-    
-    
-    private func getAbTestResult(abTestTitle: String) {
-        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: abTestTitle))
-            .throttle(for: .milliseconds(500), scheduler: RunLoop.main, latest: true)
-            .sink(receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                    if abTestTitle == "c_keyword_ banner_v1" {
-                        self?.getNoticeBanners(date: nil)
-                    }
-                }
-            }, receiveValue: { [weak self] abTestResult in
-                print(abTestResult)
-                self?.outputSubject.send(.setAbTestResult(abTestResult))
-                if abTestTitle == "c_main_dining_v1" {
-                    self?.getAbTestResult(abTestTitle: "c_keyword_ banner_v1")
-                }
-            }).store(in: &subscriptions)
     }
   
     private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
