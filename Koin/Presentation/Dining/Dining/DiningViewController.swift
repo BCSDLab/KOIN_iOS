@@ -142,7 +142,6 @@ final class DiningViewController: UIViewController {
         configureSwipeGestures()
         configureView()
         navigationItem.title = "식단"
-        inputSubject.send(.getAbTestResult)
         inputSubject.send(.determineInitDate)
         diningTypeSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
@@ -198,8 +197,6 @@ final class DiningViewController: UIViewController {
                 UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
             case .showLoginModal:
                 self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
-            case .setAbTestResult(_):
-                break
             }
         }.store(in: &subscriptions)
         
