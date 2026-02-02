@@ -141,7 +141,6 @@ extension HomeViewModel {
     }
     
     private func fetchClubCategories() {
-        print(#function)
         fetchClubCategoriesUseCase.execute().sink(receiveCompletion: { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
