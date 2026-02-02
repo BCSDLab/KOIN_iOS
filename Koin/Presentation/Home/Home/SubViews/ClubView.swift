@@ -40,11 +40,8 @@ final class ClubView: UIView {
         $0.text = "바로가기"
     }
     
-    private let hotClubChevronImageView = UIImageView().then {
-        $0.image = .appImage(asset: .arrowRight)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
-        
-    }
-    ///
+    private let hotClubChevronImageView = UIImageView(image: .appImage(asset: .chevronRightHome)?.withTintColor(.appColor(.neutral800)))
+    
     private let clubListButton = UIButton().then {
         $0.isHidden = true
     }
@@ -61,10 +58,7 @@ final class ClubView: UIView {
         $0.text = "바로가기"
     }
     
-    private let clubListChevronImageView = UIImageView().then {
-        $0.image = .appImage(asset: .arrowRight)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
-
-    }
+    private let clubListChevronImageView = UIImageView(image: .appImage(asset: .chevronRightHome)?.withTintColor(.appColor(.neutral800)))
 
     // MARK: Init
     
@@ -178,10 +172,9 @@ extension ClubView {
         }
         hotClubChevronImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(27)
-            $0.size.equalTo(15)
+            $0.trailing.equalToSuperview().inset(17)
         }
-        //
+        
         clubListImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalTo(clubListLabel.snp.leading).offset(-4)
@@ -199,8 +192,7 @@ extension ClubView {
         }
         clubListChevronImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(27)
-            $0.size.equalTo(15)
+            $0.trailing.equalToSuperview().inset(17)
         }
     }
     private func setUpComponents() {

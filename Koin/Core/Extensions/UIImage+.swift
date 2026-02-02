@@ -79,6 +79,7 @@ enum ImageAsset: String {
     case nonMenuWeekendImage
     case newChevronRight
     case chevronRight
+    case chevronRightHome
     case chevronUp
     case visibility
     case visibilityNon

@@ -78,7 +78,7 @@ extension BusView {
         }
         
         [busSearchImageView, busTimetableImageView].forEach {
-            $0.image = .appImage(asset: .arrowRight)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
+            $0.image = .appImage(asset: .chevronRightHome)?.withTintColor(.appColor(.neutral800))
         }
     }
     
@@ -128,15 +128,11 @@ extension BusView {
             $0.height.equalTo(19)
         }
         busTimetableImageView.snp.makeConstraints {
-            $0.width.equalTo(15)
-            $0.height.equalTo(15)
-            $0.trailing.equalToSuperview().inset(27)
+            $0.trailing.equalToSuperview().inset(17)
             $0.centerY.equalToSuperview()
         }
         busSearchImageView.snp.makeConstraints {
-            $0.width.equalTo(15)
-            $0.height.equalTo(15)
-            $0.trailing.equalToSuperview().inset(27)
+            $0.trailing.equalToSuperview().inset(17)
             $0.centerY.equalToSuperview()
         }
     }

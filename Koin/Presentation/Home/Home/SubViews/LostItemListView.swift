@@ -34,10 +34,7 @@ final class LostItemListView: UIView {
         $0.textColor = .appColor(.neutral800)
     }
     
-    private let chevronImageView = UIImageView(image: .appImage(asset: .chevronRightBlue)?.withTintColor(UIColor(hexCode: "1C1B1F"))
-    )
-    
-    
+    private let chevronImageView = UIImageView(image: .appImage(asset: .chevronRightHome)?.withTintColor(.appColor(.neutral800)))
     
     // MARK: - Initializer
     init() {
