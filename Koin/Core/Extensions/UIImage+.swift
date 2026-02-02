@@ -13,13 +13,8 @@ enum ImageAsset: String {
     case addGray
     case addPhotoAlternate
     case addThin
-    case arrow
     case arrowBack
-    case arrowBackWhite
     case arrowDown
-    case arrowLeft
-    case arrowRight
-    case arrowUp
     case arrowUpLeft
     case basicPicture
     case bcsdSymbolLogo
@@ -48,7 +43,6 @@ enum ImageAsset: String {
     case checkGreenCircle
     case chevronDown
     case chevronRight
-    case chevronRightBlue
     case chevronRightHome
     case chevronUp
     case circle
