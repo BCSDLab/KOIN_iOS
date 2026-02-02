@@ -21,7 +21,7 @@ final class HomeViewModel: ViewModelProtocol {
         case logEventDirect(name: String, label: String, value: String, category: String)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
-        case getBannerAbTest(String)
+        case fetchBanner
         case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     
@@ -34,7 +34,7 @@ final class HomeViewModel: ViewModelProtocol {
         case showForceUpdate(String)
         case setAbTestResult(AssignAbTestResponse)
         case showForceModal
-        case updateBanner(BannerDto, AssignAbTestResponse)
+        case updateBanner(BannerDto)
         case setHotClub(HotClubDto)
         case setClubCategories(ClubCategoriesDto)
         case updateLostItem(LostItemStats)
@@ -110,8 +110,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getNoticeBanner(date):
                 self?.getNoticeBanners(date: date)
-            case .getBannerAbTest(let request):
-                self?.getBannerAbTest(request: request)
+            case .fetchBanner:
+                self?.fetchBanner()
             case let .logEventDirect(name, label, value, category):
                 self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
             case let .logSessionEvent(label, category, value, sessionId):
@@ -125,13 +125,13 @@ final class HomeViewModel: ViewModelProtocol {
 
 extension HomeViewModel {
     
-    private func fetchBanner(abTestResult: AssignAbTestResponse) {
+    private func fetchBanner() {
         fetchBannerUseCase.execute().sink { completion in
             if case let .failure(error) = completion {
                 Log.make().error("\(error)")
             }
         } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateBanner(response, abTestResult))
+            self?.outputSubject.send(.updateBanner(response))
         }.store(in: &subscriptions)
     }
     private func fetchHotClub() {
@@ -152,16 +152,6 @@ extension HomeViewModel {
             }
         }, receiveValue: { [weak self] categories in
             self?.outputSubject.send(.setClubCategories(categories))
-        }).store(in: &subscriptions)
-    }
-    private func getBannerAbTest(request: String) {
-        assignAbTestUseCase.execute(requestModel: AssignAbTestRequest(title: request))
-            .sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        }, receiveValue: { [weak self] abTestResult in
-            self?.fetchBanner(abTestResult: abTestResult)
         }).store(in: &subscriptions)
     }
                 
