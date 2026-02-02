@@ -154,6 +154,10 @@ enum EventParameter {
             case notificationDinnerSoldOut = "notification_dinner_sold_out"
             
             // lostitem
+            case itemWrite = "item_write"
+            case findUserCategory = "find_user_category"
+            case findUserAddItem = "find_user_add_item"
+            case findUserWriteConfirm = "find_user_write_confirm"
             case findUserDelete = "find_user_delete"
             case findUserDeleteConfirm = "find_user_delete_confirm"
             case lostItemEntry = "lost_item_entry"
@@ -164,7 +168,7 @@ enum EventParameter {
             case lostItemWriteLoginRequest = "lost_item_write_login_request"
             case lostItemStateChange = "lost_item_state_change"
             case lostItemFound = "lost_item_found"
-            case itemWrite = "item_write"
+            
             case lostItemWrite = "lost_item_write"
             case findUserWrite = "find_user_write"
             case lostItemCategory = "lost_item_category"
@@ -175,9 +179,6 @@ enum EventParameter {
             case itemPostReportConfirm = "item_post_report_confirm"
             case messageListSelect = "message_list_select"
             case itemPostType = "item_post_type"
-            case findUserCategory = "find_user_category"
-            case findUserAddItem = "find_user_add_item"
-            case findUserWriteConfirm = "find_user_write_confirm"
             
             case loginPrompt = "login_prompt"
 
