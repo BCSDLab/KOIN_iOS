@@ -1,5 +1,5 @@
 //
-//  BannerViewControllerA.swift
+//  BannerViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 4/1/25.
@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class BannerViewControllerA: UIViewController {
+final class BannerViewController: UIViewController {
     
     // MARK: - properties
     private var subscriptions: Set<AnyCancellable> = []
@@ -89,7 +89,7 @@ final class BannerViewControllerA: UIViewController {
     }
 }
 
-extension BannerViewControllerA {
+extension BannerViewController {
     @objc private func noShowButtonTapped() {
         viewModel.logAnalyticsEventUseCase.logEvent(name: "CAMPUS", label: "main_modal_hide_7d", value: collectionView.showingBanner, category: "click")
         UserDefaults.standard.set(Date(), forKey: "noShowBanner")
@@ -101,7 +101,7 @@ extension BannerViewControllerA {
     }
 }
 
-extension BannerViewControllerA {
+extension BannerViewController {
     
     private func setUpLayOuts() {
        

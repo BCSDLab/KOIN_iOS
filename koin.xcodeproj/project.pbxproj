@@ -235,7 +235,6 @@
 		7CED91682EF2D1F900457128 /* PolicyListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F1A2EF2D1F900457128 /* PolicyListCollectionViewCell.swift */; };
 		7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F5E2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift */; };
 		7CED916C2EF2D1F900457128 /* DeleteArticleModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6D2EF2D1F900457128 /* DeleteArticleModalViewController.swift */; };
-		7CED916D2EF2D1F900457128 /* BannerViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */; };
 		7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90932EF2D1F900457128 /* AddDirectFooterView.swift */; };
 		7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90122EF2D1F900457128 /* DashedBorderButton.swift */; };
 		7CED91722EF2D1F900457128 /* NoticeKeywordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F492EF2D1F900457128 /* NoticeKeywordCollectionView.swift */; };
@@ -259,7 +258,7 @@
 		7CED918A2EF2D1F900457128 /* NoticeDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6F2EF2D1F900457128 /* NoticeDataViewController.swift */; };
 		7CED918B2EF2D1F900457128 /* LostArticleImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE82EF2D1F900457128 /* LostArticleImageCollectionView.swift */; };
 		7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90002EF2D1F900457128 /* ScoreChartCollectionViewCell.swift */; };
-		7CED918E2EF2D1F900457128 /* BannerViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */; };
+		7CED918E2EF2D1F900457128 /* BannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED52EF2D1F900457128 /* BannerViewController.swift */; };
 		7CED918F2EF2D1F900457128 /* BackButtonPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED901D2EF2D1F900457128 /* BackButtonPopUpViewController.swift */; };
 		7CED91902EF2D1F900457128 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F342EF2D1F900457128 /* StateView.swift */; };
 		7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3D2EF2D1F900457128 /* TabBarCollectionView.swift */; };
@@ -917,8 +916,7 @@
 		7CED8ED22EF2D1F900457128 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImageView.swift; sourceTree = "<group>"; };
 		7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceModifyUserViewController.swift; sourceTree = "<group>"; };
-		7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerA.swift; sourceTree = "<group>"; };
-		7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerB.swift; sourceTree = "<group>"; };
+		7CED8ED52EF2D1F900457128 /* BannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewController.swift; sourceTree = "<group>"; };
 		7CED8ED72EF2D1F900457128 /* ClubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubView.swift; sourceTree = "<group>"; };
 		7CED8ED92EF2D1F900457128 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		7CED8EDA2EF2D1F900457128 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -2007,8 +2005,7 @@
 				7CED8ED22EF2D1F900457128 /* LogoView.swift */,
 				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
 				7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */,
-				7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */,
-				7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */,
+				7CED8ED52EF2D1F900457128 /* BannerViewController.swift */,
 				7CED8ED72EF2D1F900457128 /* ClubView.swift */,
 				7CA63A2D2F1B119200226F86 /* LostItemListView.swift */,
 			);
@@ -4857,7 +4854,6 @@
 				7CED91682EF2D1F900457128 /* PolicyListCollectionViewCell.swift in Sources */,
 				7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */,
 				7CED916C2EF2D1F900457128 /* DeleteArticleModalViewController.swift in Sources */,
-				7CED916D2EF2D1F900457128 /* BannerViewControllerB.swift in Sources */,
 				7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */,
 				7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */,
 				7CED91722EF2D1F900457128 /* NoticeKeywordCollectionView.swift in Sources */,
@@ -4885,7 +4881,7 @@
 				7C61D3412F22022A005FAC3A /* EditLostItemButton.swift in Sources */,
 				7CED918B2EF2D1F900457128 /* LostArticleImageCollectionView.swift in Sources */,
 				7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */,
-				7CED918E2EF2D1F900457128 /* BannerViewControllerA.swift in Sources */,
+				7CED918E2EF2D1F900457128 /* BannerViewController.swift in Sources */,
 				7CED918F2EF2D1F900457128 /* BackButtonPopUpViewController.swift in Sources */,
 				7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */,
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,

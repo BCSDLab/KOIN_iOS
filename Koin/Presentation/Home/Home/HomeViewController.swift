@@ -123,9 +123,7 @@ final class HomeViewController: UIViewController {
     
     private let menuBackgroundView = MenuBackgroundView(frame: .zero)
     
-    private lazy var bannerViewControllerA = BannerViewControllerA(viewModel: viewModel)
-    
-    private lazy var bannerViewControllerB = BannerViewControllerB(viewModel: viewModel)
+    private lazy var bannerViewController = BannerViewController(viewModel: viewModel)
     
     // MARK: - Initialization
     
@@ -304,11 +302,7 @@ final class HomeViewController: UIViewController {
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
-        bannerViewControllerA.bannerTapPublisher.sink { [weak self] banner in
-            self?.handleBannerTap(banner)
-        }.store(in: &subscriptions)
-        
-        bannerViewControllerB.bannerTapPublisher.sink { [weak self] banner in
+        bannerViewController.bannerTapPublisher.sink { [weak self] banner in
             self?.handleBannerTap(banner)
         }.store(in: &subscriptions)
         
@@ -435,8 +429,8 @@ extension HomeViewController {
     private func showBanner(banner: BannerDto) {
         if banner.count == 0 { return }
         
-        bannerViewControllerA.setBanners(banners: banner.banners)
-        let viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
+        bannerViewController.setBanners(banners: banner.banners)
+        let viewController = BottomSheetViewController(contentViewController: bannerViewController, defaultHeight: 389)
         inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
