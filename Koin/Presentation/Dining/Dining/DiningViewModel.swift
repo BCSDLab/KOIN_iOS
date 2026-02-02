@@ -35,7 +35,6 @@ final class DiningViewModel: ViewModelProtocol {
     private let changeNotiUseCase: ChangeNotiUseCase
     private let changeNotiDetailUseCase: ChangeNotiDetailUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
-    private let assignAbTestUseCase: AssignAbTestUseCase
     private let dateProvider: DateProvider
     private var subscriptions: Set<AnyCancellable> = []
     private var sharedDiningItem: CurrentDiningTime?
@@ -53,7 +52,6 @@ final class DiningViewModel: ViewModelProtocol {
          changeNotiUseCase: ChangeNotiUseCase,
          fetchNotiListUsecase: FetchNotiListUseCase,
          changeNotiDetailUseCase: ChangeNotiDetailUseCase,
-         assignAbTestUseCase: AssignAbTestUseCase,
          sharedDiningItem: CurrentDiningTime? = nil) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
@@ -63,7 +61,6 @@ final class DiningViewModel: ViewModelProtocol {
         self.changeNotiUseCase = changeNotiUseCase
         self.fetchNotiListUseCase = fetchNotiListUsecase
         self.changeNotiDetailUseCase = changeNotiDetailUseCase
-        self.assignAbTestUseCase = assignAbTestUseCase
         self.sharedDiningItem = sharedDiningItem
     }
     
