@@ -4277,6 +4277,7 @@
 			mainGroup = A001E2AB2845091D00D6C310;
 			packageReferences = (
 				7CB0618D2F320F3A00E83CA9 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
+				7CB061902F320F7E00E83CA9 /* XCRemoteSwiftPackageReference "GoogleUtilities" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A001E2B52845091D00D6C310 /* Products */;
@@ -5522,6 +5523,14 @@
 			requirement = {
 				kind = upToNextMajorVersion;
 				minimumVersion = 3.23.1;
+			};
+		};
+		7CB061902F320F7E00E83CA9 /* XCRemoteSwiftPackageReference "GoogleUtilities" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleUtilities.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.0;
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
