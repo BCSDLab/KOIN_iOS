@@ -121,6 +121,8 @@
 		7CB061AD2F321C7800E83CA9 /* KakaoSDKShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061AC2F321C7800E83CA9 /* KakaoSDKShare */; };
 		7CB061AF2F321C7800E83CA9 /* KakaoSDKTemplate in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061AE2F321C7800E83CA9 /* KakaoSDKTemplate */; };
 		7CB061B22F321CB100E83CA9 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061B12F321CB100E83CA9 /* SwiftSoup */; };
+		7CB061B52F321D1B00E83CA9 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061B42F321D1B00E83CA9 /* RxSwift */; };
+		7CB061B72F321DEC00E83CA9 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061B62F321DEC00E83CA9 /* RxCocoa */; };
 		7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
@@ -1574,9 +1576,11 @@
 				7CB061AF2F321C7800E83CA9 /* KakaoSDKTemplate in Frameworks */,
 				7CB061AA2F321C4900E83CA9 /* Kingfisher in Frameworks */,
 				7CB061B22F321CB100E83CA9 /* SwiftSoup in Frameworks */,
+				7CB061B52F321D1B00E83CA9 /* RxSwift in Frameworks */,
 				7CB061992F32186800E83CA9 /* SnapKit in Frameworks */,
 				7CB061A42F321BEB00E83CA9 /* Then in Frameworks */,
 				7CB061962F32183700E83CA9 /* DropDown in Frameworks */,
+				7CB061B72F321DEC00E83CA9 /* RxCocoa in Frameworks */,
 				7CB061AD2F321C7800E83CA9 /* KakaoSDKShare in Frameworks */,
 				7CB0619C2F321A5300E83CA9 /* FirebaseAnalytics in Frameworks */,
 				7CB061932F32100900E83CA9 /* Alamofire in Frameworks */,
@@ -4319,6 +4323,7 @@
 				7CB061A82F321C4900E83CA9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 				7CB061AB2F321C7800E83CA9 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
 				7CB061B02F321CB100E83CA9 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A001E2B52845091D00D6C310 /* Products */;
@@ -5646,6 +5651,14 @@
 				minimumVersion = 2.11.3;
 			};
 		};
+		7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.10.1;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -5713,6 +5726,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7CB061B02F321CB100E83CA9 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
 			productName = SwiftSoup;
+		};
+		7CB061B42F321D1B00E83CA9 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		7CB061B62F321DEC00E83CA9 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
 		};
 /* End XCSwiftPackageProductDependency section */
 
