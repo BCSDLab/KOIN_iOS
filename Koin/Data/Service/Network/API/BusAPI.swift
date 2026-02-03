@@ -5,6 +5,7 @@
 //  Created by JOOMINKYUNG on 7/23/24.
 //
 
+import Foundation
 import Alamofire
 
 enum BusAPI {

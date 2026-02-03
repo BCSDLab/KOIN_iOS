@@ -5,7 +5,7 @@
 //  Created by 김나훈 on 7/20/24.
 //
 
-import Foundation
+import UIKit
 import KakaoSDKShare
 import KakaoSDKTemplate
 import KakaoSDKCommon
