@@ -117,6 +117,7 @@
 		7CB061A12F321B9300E83CA9 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061A02F321B9300E83CA9 /* FirebaseMessaging */; };
 		7CB061A42F321BEB00E83CA9 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061A32F321BEB00E83CA9 /* Then */; };
 		7CB061A72F321C3100E83CA9 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061A62F321C3100E83CA9 /* Cosmos */; };
+		7CB061AA2F321C4900E83CA9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061A92F321C4900E83CA9 /* Kingfisher */; };
 		7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
@@ -1567,6 +1568,7 @@
 				7CB0619E2F321A5300E83CA9 /* FirebaseMessaging in Frameworks */,
 				7CB0618F2F320F3A00E83CA9 /* NMapsMap in Frameworks */,
 				7CB061A72F321C3100E83CA9 /* Cosmos in Frameworks */,
+				7CB061AA2F321C4900E83CA9 /* Kingfisher in Frameworks */,
 				7CB061992F32186800E83CA9 /* SnapKit in Frameworks */,
 				7CB061A42F321BEB00E83CA9 /* Then in Frameworks */,
 				7CB061962F32183700E83CA9 /* DropDown in Frameworks */,
@@ -4308,6 +4310,7 @@
 				7CB0619A2F321A5300E83CA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				7CB061A22F321BEB00E83CA9 /* XCRemoteSwiftPackageReference "Then" */,
 				7CB061A52F321C3100E83CA9 /* XCRemoteSwiftPackageReference "Cosmos" */,
+				7CB061A82F321C4900E83CA9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A001E2B52845091D00D6C310 /* Products */;
@@ -5611,6 +5614,14 @@
 				minimumVersion = 25.0.1;
 			};
 		};
+		7CB061A82F321C4900E83CA9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.6.2;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -5658,6 +5669,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7CB061A52F321C3100E83CA9 /* XCRemoteSwiftPackageReference "Cosmos" */;
 			productName = Cosmos;
+		};
+		7CB061A92F321C4900E83CA9 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061A82F321C4900E83CA9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
 		};
 /* End XCSwiftPackageProductDependency section */
 
