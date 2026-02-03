@@ -5,6 +5,7 @@
 //  Created by JOOMINKYUNG on 8/17/24.
 //
 
+import Foundation
 import Alamofire
 
 enum NoticeListAPI {

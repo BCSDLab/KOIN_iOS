@@ -5,7 +5,7 @@
 //  Created by 김나훈 on 4/9/24.
 //
 
-import Foundation
+import UIKit
 import Kingfisher
 import SwiftSoup
 

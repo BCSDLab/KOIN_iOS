@@ -5,7 +5,7 @@
 //  Created by 김성민 on 9/19/25.
 //
 
-import Foundation
+import UIKit
 import SnapKit
 
 final class EmptyStateView: UIView {

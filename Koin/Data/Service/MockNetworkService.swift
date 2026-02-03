@@ -5,6 +5,7 @@
 //  Created by JOOMINKYUNG on 12/8/24.
 //
 
+import Foundation
 import Alamofire
 import Combine
 
