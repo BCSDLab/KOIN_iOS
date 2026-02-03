@@ -93,7 +93,9 @@ final class HomeViewController: UIViewController {
         $0.font = UIFont.appFont(.pretendardBold, size: 15)
     }
     
-    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in})
+    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in}).then {
+        $0.isScrollEnabled = false
+    }
     
     private let menuLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.primary500)
