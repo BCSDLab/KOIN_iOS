@@ -367,11 +367,7 @@ public final class DropDown: UIView {
 
   /// Correctly specify Bundle for Swift Packages
   fileprivate static var bundle: Bundle {
-    #if SWIFT_PACKAGE
-    return Bundle.module
-    #else
     return Bundle(for: DropDownCell.self)
-    #endif
   }
 	
 	//MARK: Content
