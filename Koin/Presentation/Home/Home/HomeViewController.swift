@@ -432,7 +432,7 @@ extension HomeViewController {
         if banner.count == 0 { return }
         
         bannerViewController.setBanners(banners: banner.banners)
-        let viewController = BottomSheetViewController(contentViewController: bannerViewController, defaultHeight: 389)
+        let viewController = BottomSheetViewController(contentViewController: bannerViewController, defaultHeight: 341 + UIApplication.bottomSafeAreaHeight())
         inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
