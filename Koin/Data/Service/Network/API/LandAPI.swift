@@ -5,6 +5,7 @@
 //  Created by 김나훈 on 6/23/24.
 //
 
+import Foundation
 import Alamofire
 
 enum LandAPI {

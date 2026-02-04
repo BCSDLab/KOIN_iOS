@@ -12,4 +12,5 @@ protocol ChatRepository {
     func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDto], ErrorResponse>
     func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse>
     func createChatRoom(articleId: Int) -> AnyPublisher<CreateChatRoomResponse, ErrorResponse>
+    func postChatDetail(articleId: Int, chatRoomId: Int, request: PostChatDetailRequest) -> AnyPublisher<ChatDetailDto, ErrorResponse>
 }

@@ -115,7 +115,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
-                self?.writeButton.isHidden = self?.viewModel.noticeListType != .lostItem
             case let .updateUserKeywordList(noticeKeywordList, keywordIdx):
                 self?.updateUserKeywordList(keywords: noticeKeywordList, keywordIdx: keywordIdx)
             case let .isLogined(isLogined):
@@ -173,14 +172,12 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         
         writeTypeModalViewController.findButtonPublisher.sink { [weak self] in
             let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-            viewController.delegate = self
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserWrite, .click, "주인을 찾아요"))
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
         writeTypeModalViewController.lostButtonPublisher.sink { [weak self] in
             let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
-            viewController.delegate = self
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemWrite, .click, "잃어버렸어요"))
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)

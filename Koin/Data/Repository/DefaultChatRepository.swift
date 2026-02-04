@@ -30,4 +30,8 @@ final class DefaultChatRepository: ChatRepository {
     func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDto], ErrorResponse> {
         service.fetchChatDetail(articleId: articleId, chatRoomId: chatRoomId)
     }
+    
+    func postChatDetail(articleId: Int, chatRoomId: Int, request: PostChatDetailRequest) -> AnyPublisher<ChatDetailDto, ErrorResponse> {
+        service.postChatDetail(articleId: articleId, chatRoomId: chatRoomId, request: request)
+    }
 }

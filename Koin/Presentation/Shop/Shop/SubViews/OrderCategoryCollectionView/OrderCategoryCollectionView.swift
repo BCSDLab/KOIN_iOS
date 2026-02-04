@@ -13,7 +13,6 @@ final class OrderCategoryCollectionView: UICollectionView {
     // MARK: - Combine & Data
     private var subscriptions = Set<AnyCancellable>()
     private var shopCategories: [ShopCategory] = []
-    let cellTapPublisher = PassthroughSubject<Int, Never>()
     let selectedCategoryPublisher = PassthroughSubject<Int, Never>()
     private var selectedId = 1
 

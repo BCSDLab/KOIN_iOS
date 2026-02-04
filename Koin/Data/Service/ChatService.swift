@@ -13,6 +13,7 @@ protocol ChatService {
     func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[ChatDetailDto], ErrorResponse>
     func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse>
     func createChatRoom(articleId: Int) -> AnyPublisher<CreateChatRoomResponse, ErrorResponse>
+    func postChatDetail(articleId: Int, chatRoomId: Int, request: PostChatDetailRequest) -> AnyPublisher<ChatDetailDto, ErrorResponse>
 }
 
 final class DefaultChatService: ChatService {
@@ -70,6 +71,21 @@ final class DefaultChatService: ChatService {
                 if error.code == "401" {
                     return self.networkService.refreshToken()
                         .flatMap { _ in self.networkService.requestWithResponse(api: ChatAPI.fetchChatRoom) }
+                        .eraseToAnyPublisher()
+                } else {
+                    return Fail(error: error).eraseToAnyPublisher()
+                }
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func postChatDetail(articleId: Int, chatRoomId: Int, request: PostChatDetailRequest) -> AnyPublisher<ChatDetailDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: ChatAPI.postChatDetail(articleId, chatRoomId, request))
+            .catch { [weak self] error -> AnyPublisher<ChatDetailDto, ErrorResponse> in
+                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
+                if error.code == "401" {
+                    return self.networkService.refreshToken()
+                        .flatMap { _ in self.networkService.requestWithResponse(api: ChatAPI.postChatDetail(articleId, chatRoomId, request)) }
                         .eraseToAnyPublisher()
                 } else {
                     return Fail(error: error).eraseToAnyPublisher()

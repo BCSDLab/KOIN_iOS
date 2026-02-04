@@ -10,10 +10,11 @@ import UIKit
 final class ZoomedImageViewControllerB: UINavigationController {
     
     // MARK: - Properties
-    let rootViewController = ZoomedImageRootViewController()
+    let rootViewController: ZoomedImageRootViewController
     
     // MARK: - Initializer
-    init() {
+    init(shouldShowTitle: Bool = true) {
+        rootViewController = ZoomedImageRootViewController(shouldShowTitle: shouldShowTitle)
         super.init(rootViewController: rootViewController)
         
         modalPresentationStyle = .overCurrentContext
@@ -21,6 +22,10 @@ final class ZoomedImageViewControllerB: UINavigationController {
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .lightContent
     }
     
     // MARK: - Configure

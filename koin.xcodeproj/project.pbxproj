@@ -8,13 +8,26 @@
 
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
-		1CC17FC470AC3F8875739079 /* Pods_NotificationService.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AACCF37498622A4C659D7028 /* Pods_NotificationService.framework */; };
-		4DD190890C4EF3B71D7B59BA /* Pods_koin.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A608E6D4EE675AF49F527F63 /* Pods_koin.framework */; };
 		7C17EEA82EBF4F25008BCA89 /* ShopSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */; };
 		7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */; };
 		7C17EEB02EBF708B008BCA89 /* ShopSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */; };
 		7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
+		7C372ED92F1B7F3900149729 /* FetchLostItemListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372ED82F1B7F3900149729 /* FetchLostItemListRequest.swift */; };
+		7C372EDD2F1B8DC900149729 /* LostItemListFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372EDC2F1B8DC900149729 /* LostItemListFilterButton.swift */; };
+		7C372EE62F1C0CC400149729 /* LostItemListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372EE52F1C0CC400149729 /* LostItemListData.swift */; };
+		7C372F142F1CC79C00149729 /* LostItemPostOptionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F132F1CC79C00149729 /* LostItemPostOptionController.swift */; };
+		7C372F172F1CD81800149729 /* LostItemDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F162F1CD81800149729 /* LostItemDataViewController.swift */; };
+		7C372F1A2F1CD8D600149729 /* LostItemDataRecentTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F192F1CD8D600149729 /* LostItemDataRecentTableView.swift */; };
+		7C372F1E2F1CD8FB00149729 /* LostItemDataHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F1D2F1CD8FB00149729 /* LostItemDataHeaderView.swift */; };
+		7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F1F2F1CD90B00149729 /* LostItemDataRecentHeaderView.swift */; };
+		7C372F222F1CD91200149729 /* LostItemDataRecentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F212F1CD91200149729 /* LostItemDataRecentTableViewCell.swift */; };
+		7C372F242F1CDB4400149729 /* LostItemDataContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F232F1CDB4400149729 /* LostItemDataContentView.swift */; };
+		7C372F272F1D644A00149729 /* LostItemData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F262F1D644A00149729 /* LostItemData.swift */; };
+		7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F282F1D6A7F00149729 /* LostItemDataViewModel.swift */; };
+		7C372F322F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F302F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift */; };
+		7C372F332F1DB4C300149729 /* LostItemImagesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F2F2F1DB4C300149729 /* LostItemImagesCollectionView.swift */; };
+		7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */; };
 		7C4D5A3C2F01638800B40128 /* BusSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A122F01638800B40128 /* BusSearchViewController.swift */; };
 		7C4D5A3D2F01638800B40128 /* BusSearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A1D2F01638800B40128 /* BusSearchResultViewModel.swift */; };
 		7C4D5A3E2F01638800B40128 /* OneBusTimetableTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A362F01638800B40128 /* OneBusTimetableTableViewFooter.swift */; };
@@ -48,12 +61,80 @@
 		7C4D5A5A2F01638800B40128 /* BusAreaSelectdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */; };
 		7C4D5A5B2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A2E2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift */; };
 		7C4D5A5D2F0163BA00B40128 /* DIContainer+Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */; };
+		7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */; };
+		7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */; };
+		7C61D3132F212DFA005FAC3A /* FetchLostItemDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */; };
+		7C61D3152F212FB3005FAC3A /* LostItemDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */; };
+		7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */; };
+		7C61D3392F21FADF005FAC3A /* EditLostItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3352F21FADF005FAC3A /* EditLostItemViewModel.swift */; };
+		7C61D33E2F21FADF005FAC3A /* EditLostItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3362F21FADF005FAC3A /* EditLostItemViewController.swift */; };
+		7C61D3412F22022A005FAC3A /* EditLostItemButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3402F22022A005FAC3A /* EditLostItemButton.swift */; };
+		7C61D3432F220E8C005FAC3A /* EditLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3422F220E8C005FAC3A /* EditLostItemHeaderView.swift */; };
+		7C61D3452F220E98005FAC3A /* EditLostItemImagesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3442F220E98005FAC3A /* EditLostItemImagesView.swift */; };
+		7C61D3472F220EA2005FAC3A /* EditLostItemCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3462F220EA2005FAC3A /* EditLostItemCategoryView.swift */; };
+		7C61D3492F220EAC005FAC3A /* EditLostItemFoundDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3482F220EAC005FAC3A /* EditLostItemFoundDateView.swift */; };
+		7C61D34B2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D34A2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift */; };
+		7C61D34D2F220EBA005FAC3A /* EditLostItemContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D34C2F220EBA005FAC3A /* EditLostItemContentView.swift */; };
+		7C61D3512F22B344005FAC3A /* ExtendedTouchAreaView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */; };
+		7C61D3532F22E686005FAC3A /* DeleteLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */; };
+		7C61D3552F22FC7B005FAC3A /* EditLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */; };
+		7C61D3572F23CD8B005FAC3A /* LostItemStatsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */; };
+		7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */; };
+		7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */; };
+		7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
+		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
+		7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD322F20BEC200F85BDE /* LostItemService.swift */; };
+		7C8ADD352F20BF4600F85BDE /* LostItemAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */; };
+		7C8ADD382F20C0B200F85BDE /* LostItemListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD372F20C0B200F85BDE /* LostItemListDto.swift */; };
+		7C8ADD3A2F20C10500F85BDE /* LostItemListDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */; };
+		7C8ADD3E2F20C2C400F85BDE /* LostItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD3D2F20C2C400F85BDE /* LostItemRepository.swift */; };
+		7C8ADD402F20C30700F85BDE /* DefaultLostItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD3F2F20C30700F85BDE /* DefaultLostItemRepository.swift */; };
+		7C8ADD452F20C3FB00F85BDE /* FetchLostItemListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
 		7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */; };
 		7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */; };
 		7CA0D6252EC75FFA00E9A282 /* ZoomedImageViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6242EC75FFA00E9A282 /* ZoomedImageViewControllerB.swift */; };
+		7CA639FE2F1AA5C400226F86 /* ServiceSelectTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA639FD2F1AA5C400226F86 /* ServiceSelectTableView.swift */; };
+		7CA63A002F1AA5CC00226F86 /* ServiceSelectTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA639FF2F1AA5CC00226F86 /* ServiceSelectTableViewCell.swift */; };
+		7CA63A022F1AA67300226F86 /* ServiceSelectTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A012F1AA67300226F86 /* ServiceSelectTableViewHeaderView.swift */; };
+		7CA63A042F1AA68100226F86 /* ServiceSelectTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A032F1AA68100226F86 /* ServiceSelectTableHeaderView.swift */; };
+		7CA63A212F1AF73F00226F86 /* LostItemList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A202F1AF73F00226F86 /* LostItemList.swift */; };
+		7CA63A252F1AF7F900226F86 /* LostItemListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A242F1AF7F900226F86 /* LostItemListViewController.swift */; };
+		7CA63A272F1AF80000226F86 /* LostItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A262F1AF80000226F86 /* LostItemListViewModel.swift */; };
+		7CA63A2A2F1AF80B00226F86 /* LostItemListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A292F1AF80B00226F86 /* LostItemListTableView.swift */; };
+		7CA63A2C2F1AF80F00226F86 /* LostItemListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A2B2F1AF80F00226F86 /* LostItemListTableViewCell.swift */; };
+		7CA63A2E2F1B119200226F86 /* LostItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A2D2F1B119200226F86 /* LostItemListView.swift */; };
+		7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */; };
+		7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */; };
+		7CB0618F2F320F3A00E83CA9 /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB0618E2F320F3A00E83CA9 /* NMapsMap */; };
+		7CB061932F32100900E83CA9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061922F32100900E83CA9 /* Alamofire */; };
+		7CB061992F32186800E83CA9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061982F32186800E83CA9 /* SnapKit */; };
+		7CB0619C2F321A5300E83CA9 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB0619B2F321A5300E83CA9 /* FirebaseAnalytics */; };
+		7CB0619E2F321A5300E83CA9 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB0619D2F321A5300E83CA9 /* FirebaseMessaging */; };
+		7CB061A12F321B9300E83CA9 /* FirebaseMessaging in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061A02F321B9300E83CA9 /* FirebaseMessaging */; };
+		7CB061A42F321BEB00E83CA9 /* Then in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061A32F321BEB00E83CA9 /* Then */; };
+		7CB061A72F321C3100E83CA9 /* Cosmos in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061A62F321C3100E83CA9 /* Cosmos */; };
+		7CB061AA2F321C4900E83CA9 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061A92F321C4900E83CA9 /* Kingfisher */; };
+		7CB061AD2F321C7800E83CA9 /* KakaoSDKShare in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061AC2F321C7800E83CA9 /* KakaoSDKShare */; };
+		7CB061AF2F321C7800E83CA9 /* KakaoSDKTemplate in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061AE2F321C7800E83CA9 /* KakaoSDKTemplate */; };
+		7CB061B22F321CB100E83CA9 /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061B12F321CB100E83CA9 /* SwiftSoup */; };
+		7CB061B52F321D1B00E83CA9 /* RxSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061B42F321D1B00E83CA9 /* RxSwift */; };
+		7CB061B72F321DEC00E83CA9 /* RxCocoa in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061B62F321DEC00E83CA9 /* RxCocoa */; };
+		7CB061BA2F32223E00E83CA9 /* Lottie in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061B92F32223E00E83CA9 /* Lottie */; };
+		7CB061BD2F32230B00E83CA9 /* SwiftRater in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061BC2F32230B00E83CA9 /* SwiftRater */; };
+		7CB061CB2F32312E00E83CA9 /* DPDKeyboardListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061BF2F32312E00E83CA9 /* DPDKeyboardListener.swift */; };
+		7CB061CC2F32312E00E83CA9 /* DropDown+Appearance.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061C52F32312E00E83CA9 /* DropDown+Appearance.swift */; };
+		7CB061CD2F32312E00E83CA9 /* DropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061C62F32312E00E83CA9 /* DropDownCell.swift */; };
+		7CB061CE2F32312E00E83CA9 /* DPDConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061BE2F32312E00E83CA9 /* DPDConstants.swift */; };
+		7CB061CF2F32312E00E83CA9 /* DropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061C42F32312E00E83CA9 /* DropDown.swift */; };
+		7CB061D02F32312E00E83CA9 /* DPDUIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061C02F32312E00E83CA9 /* DPDUIView+Extension.swift */; };
+		7CB061D22F32312E00E83CA9 /* DropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7CB061C22F32312E00E83CA9 /* DropDownCell.xib */; };
+		7CB061F52F3242C200E83CA9 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061F32F3242C200E83CA9 /* UIColor+Hex.swift */; };
+		7CB061F62F3242C200E83CA9 /* ColorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061F22F3242C200E83CA9 /* ColorSystem.swift */; };
+		7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */; };
+		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
 		7CED90C02EF2D1F900457128 /* DatePickerDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EEF2EF2D1F900457128 /* DatePickerDropdownView.swift */; };
@@ -177,7 +258,6 @@
 		7CED91682EF2D1F900457128 /* PolicyListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F1A2EF2D1F900457128 /* PolicyListCollectionViewCell.swift */; };
 		7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F5E2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift */; };
 		7CED916C2EF2D1F900457128 /* DeleteArticleModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6D2EF2D1F900457128 /* DeleteArticleModalViewController.swift */; };
-		7CED916D2EF2D1F900457128 /* BannerViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */; };
 		7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90932EF2D1F900457128 /* AddDirectFooterView.swift */; };
 		7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90122EF2D1F900457128 /* DashedBorderButton.swift */; };
 		7CED91722EF2D1F900457128 /* NoticeKeywordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F492EF2D1F900457128 /* NoticeKeywordCollectionView.swift */; };
@@ -201,7 +281,7 @@
 		7CED918A2EF2D1F900457128 /* NoticeDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6F2EF2D1F900457128 /* NoticeDataViewController.swift */; };
 		7CED918B2EF2D1F900457128 /* LostArticleImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE82EF2D1F900457128 /* LostArticleImageCollectionView.swift */; };
 		7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90002EF2D1F900457128 /* ScoreChartCollectionViewCell.swift */; };
-		7CED918E2EF2D1F900457128 /* BannerViewControllerA.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */; };
+		7CED918E2EF2D1F900457128 /* BannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED52EF2D1F900457128 /* BannerViewController.swift */; };
 		7CED918F2EF2D1F900457128 /* BackButtonPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED901D2EF2D1F900457128 /* BackButtonPopUpViewController.swift */; };
 		7CED91902EF2D1F900457128 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F342EF2D1F900457128 /* StateView.swift */; };
 		7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3D2EF2D1F900457128 /* TabBarCollectionView.swift */; };
@@ -213,7 +293,7 @@
 		7CED91972EF2D1F900457128 /* FetchTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F462EF2D1F900457128 /* FetchTypeModalViewController.swift */; };
 		7CED91982EF2D1F900457128 /* PolicyListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F1B2EF2D1F900457128 /* PolicyListTableView.swift */; };
 		7CED91992EF2D1F900457128 /* ShopSummaryPhoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FC62EF2D1F900457128 /* ShopSummaryPhoneButton.swift */; };
-		7CED919B2EF2D1F900457128 /* UpdateModelViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE12EF2D1F900457128 /* UpdateModelViewController.swift */; };
+		7CED919B2EF2D1F900457128 /* UpdateModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE12EF2D1F900457128 /* UpdateModalViewController.swift */; };
 		7CED919E2EF2D1F900457128 /* ChangePasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F122EF2D1F900457128 /* ChangePasswordViewController.swift */; };
 		7CED919F2EF2D1F900457128 /* RecentSearchTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F542EF2D1F900457128 /* RecentSearchTableViewCell.swift */; };
 		7CED91A02EF2D1F900457128 /* StateButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F332EF2D1F900457128 /* StateButton.swift */; };
@@ -346,7 +426,7 @@
 		835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */; };
 		835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */; };
 		835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */; };
-		8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication.swift */; };
+		8360D28E2BEAFC2D00909861 /* UIApplication+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8360D28D2BEAFC2D00909861 /* UIApplication+.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		837BFA582BB8D6F7001FCBD4 /* UIViewcontroller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA572BB8D6F7001FCBD4 /* UIViewcontroller.swift */; };
 		837BFA5D2BB9830C001FCBD4 /* UILabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 837BFA5C2BB9830C001FCBD4 /* UILabel.swift */; };
@@ -600,7 +680,6 @@
 		D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */; };
 		D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */; };
 		D2B7EBD02D37E3CE00EE46B0 /* FetchLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */; };
-		D2B7EBD22D37E3D700EE46B0 /* DeleteLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD12D37E3D700EE46B0 /* DeleteLostItemUseCase.swift */; };
 		D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */; };
 		D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */; };
 		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
@@ -738,14 +817,26 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
-		20D48B24D09807B68D621509 /* Pods-NotificationService.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.debug.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.debug.xcconfig"; sourceTree = "<group>"; };
-		596B4D4E06F306CE3B8CC69A /* Pods-koin.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.debug.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.debug.xcconfig"; sourceTree = "<group>"; };
-		5AEF9E1E66B8687A4D0886BF /* Pods-NotificationService.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-NotificationService.release.xcconfig"; path = "Target Support Files/Pods-NotificationService/Pods-NotificationService.release.xcconfig"; sourceTree = "<group>"; };
 		7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearch.swift; sourceTree = "<group>"; };
 		7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopSearchRequest.swift; sourceTree = "<group>"; };
 		7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchDto.swift; sourceTree = "<group>"; };
 		7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSearchShopUseCase.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
+		7C372ED82F1B7F3900149729 /* FetchLostItemListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemListRequest.swift; sourceTree = "<group>"; };
+		7C372EDC2F1B8DC900149729 /* LostItemListFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListFilterButton.swift; sourceTree = "<group>"; };
+		7C372EE52F1C0CC400149729 /* LostItemListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListData.swift; sourceTree = "<group>"; };
+		7C372F132F1CC79C00149729 /* LostItemPostOptionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemPostOptionController.swift; sourceTree = "<group>"; };
+		7C372F162F1CD81800149729 /* LostItemDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataViewController.swift; sourceTree = "<group>"; };
+		7C372F192F1CD8D600149729 /* LostItemDataRecentTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataRecentTableView.swift; sourceTree = "<group>"; };
+		7C372F1D2F1CD8FB00149729 /* LostItemDataHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataHeaderView.swift; sourceTree = "<group>"; };
+		7C372F1F2F1CD90B00149729 /* LostItemDataRecentHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataRecentHeaderView.swift; sourceTree = "<group>"; };
+		7C372F212F1CD91200149729 /* LostItemDataRecentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataRecentTableViewCell.swift; sourceTree = "<group>"; };
+		7C372F232F1CDB4400149729 /* LostItemDataContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataContentView.swift; sourceTree = "<group>"; };
+		7C372F262F1D644A00149729 /* LostItemData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemData.swift; sourceTree = "<group>"; };
+		7C372F282F1D6A7F00149729 /* LostItemDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataViewModel.swift; sourceTree = "<group>"; };
+		7C372F2F2F1DB4C300149729 /* LostItemImagesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemImagesCollectionView.swift; sourceTree = "<group>"; };
+		7C372F302F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemImagesCollectionViewCell.swift; sourceTree = "<group>"; };
+		7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewControllerB.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
 		7C4D5A0F2F01638800B40128 /* BusAreaSelectedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -779,12 +870,64 @@
 		7C4D5A382F01638800B40128 /* BusTimetableDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableDataViewController.swift; sourceTree = "<group>"; };
 		7C4D5A392F01638800B40128 /* BusTimetableDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableDataViewModel.swift; sourceTree = "<group>"; };
 		7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Bus.swift"; sourceTree = "<group>"; };
+		7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoHeaderView.swift; sourceTree = "<group>"; };
+		7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoFooterView.swift; sourceTree = "<group>"; };
+		7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemDataUseCase.swift; sourceTree = "<group>"; };
+		7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataDto.swift; sourceTree = "<group>"; };
+		7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLostItemStateUseCase.swift; sourceTree = "<group>"; };
+		7C61D3352F21FADF005FAC3A /* EditLostItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemViewModel.swift; sourceTree = "<group>"; };
+		7C61D3362F21FADF005FAC3A /* EditLostItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemViewController.swift; sourceTree = "<group>"; };
+		7C61D3402F22022A005FAC3A /* EditLostItemButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemButton.swift; sourceTree = "<group>"; };
+		7C61D3422F220E8C005FAC3A /* EditLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemHeaderView.swift; sourceTree = "<group>"; };
+		7C61D3442F220E98005FAC3A /* EditLostItemImagesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemImagesView.swift; sourceTree = "<group>"; };
+		7C61D3462F220EA2005FAC3A /* EditLostItemCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemCategoryView.swift; sourceTree = "<group>"; };
+		7C61D3482F220EAC005FAC3A /* EditLostItemFoundDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemFoundDateView.swift; sourceTree = "<group>"; };
+		7C61D34A2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemFoundPlaceView.swift; sourceTree = "<group>"; };
+		7C61D34C2F220EBA005FAC3A /* EditLostItemContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemContentView.swift; sourceTree = "<group>"; };
+		7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtendedTouchAreaView.swift; sourceTree = "<group>"; };
+		7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLostItemUseCase.swift; sourceTree = "<group>"; };
+		7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditLostItemUseCase.swift; sourceTree = "<group>"; };
+		7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemStatsDto.swift; sourceTree = "<group>"; };
+		7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemStats.swift; sourceTree = "<group>"; };
+		7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataButtonsView.swift; sourceTree = "<group>"; };
+		7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemHeaderView.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
+		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
+		7C8ADD322F20BEC200F85BDE /* LostItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemService.swift; sourceTree = "<group>"; };
+		7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemAPI.swift; sourceTree = "<group>"; };
+		7C8ADD372F20C0B200F85BDE /* LostItemListDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListDto.swift; sourceTree = "<group>"; };
+		7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListDataDto.swift; sourceTree = "<group>"; };
+		7C8ADD3D2F20C2C400F85BDE /* LostItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemRepository.swift; sourceTree = "<group>"; };
+		7C8ADD3F2F20C30700F85BDE /* DefaultLostItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLostItemRepository.swift; sourceTree = "<group>"; };
+		7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemListUseCase.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
 		7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionView.swift; sourceTree = "<group>"; };
 		7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CA0D6242EC75FFA00E9A282 /* ZoomedImageViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewControllerB.swift; sourceTree = "<group>"; };
+		7CA639FD2F1AA5C400226F86 /* ServiceSelectTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectTableView.swift; sourceTree = "<group>"; };
+		7CA639FF2F1AA5CC00226F86 /* ServiceSelectTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectTableViewCell.swift; sourceTree = "<group>"; };
+		7CA63A012F1AA67300226F86 /* ServiceSelectTableViewHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectTableViewHeaderView.swift; sourceTree = "<group>"; };
+		7CA63A032F1AA68100226F86 /* ServiceSelectTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectTableHeaderView.swift; sourceTree = "<group>"; };
+		7CA63A202F1AF73F00226F86 /* LostItemList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemList.swift; sourceTree = "<group>"; };
+		7CA63A242F1AF7F900226F86 /* LostItemListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListViewController.swift; sourceTree = "<group>"; };
+		7CA63A262F1AF80000226F86 /* LostItemListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListViewModel.swift; sourceTree = "<group>"; };
+		7CA63A292F1AF80B00226F86 /* LostItemListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListTableView.swift; sourceTree = "<group>"; };
+		7CA63A2B2F1AF80F00226F86 /* LostItemListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListTableViewCell.swift; sourceTree = "<group>"; };
+		7CA63A2D2F1B119200226F86 /* LostItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListView.swift; sourceTree = "<group>"; };
+		7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemStats.swift; sourceTree = "<group>"; };
+		7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListFilterViewController.swift; sourceTree = "<group>"; };
+		7CB061BE2F32312E00E83CA9 /* DPDConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPDConstants.swift; sourceTree = "<group>"; };
+		7CB061BF2F32312E00E83CA9 /* DPDKeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPDKeyboardListener.swift; sourceTree = "<group>"; };
+		7CB061C02F32312E00E83CA9 /* DPDUIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DPDUIView+Extension.swift"; sourceTree = "<group>"; };
+		7CB061C22F32312E00E83CA9 /* DropDownCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DropDownCell.xib; sourceTree = "<group>"; };
+		7CB061C42F32312E00E83CA9 /* DropDown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDown.swift; sourceTree = "<group>"; };
+		7CB061C52F32312E00E83CA9 /* DropDown+Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DropDown+Appearance.swift"; sourceTree = "<group>"; };
+		7CB061C62F32312E00E83CA9 /* DropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownCell.swift; sourceTree = "<group>"; };
+		7CB061F22F3242C200E83CA9 /* ColorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSystem.swift; sourceTree = "<group>"; };
+		7CB061F32F3242C200E83CA9 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
+		7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailUseCase.swift; sourceTree = "<group>"; };
+		7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailRequest.swift; sourceTree = "<group>"; };
 		7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EBE2EF2D1F900457128 /* ClubCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8EC02EF2D1F900457128 /* BannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionView.swift; sourceTree = "<group>"; };
@@ -802,8 +945,7 @@
 		7CED8ED22EF2D1F900457128 /* LogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogoView.swift; sourceTree = "<group>"; };
 		7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImageView.swift; sourceTree = "<group>"; };
 		7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceModifyUserViewController.swift; sourceTree = "<group>"; };
-		7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerA.swift; sourceTree = "<group>"; };
-		7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewControllerB.swift; sourceTree = "<group>"; };
+		7CED8ED52EF2D1F900457128 /* BannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewController.swift; sourceTree = "<group>"; };
 		7CED8ED72EF2D1F900457128 /* ClubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubView.swift; sourceTree = "<group>"; };
 		7CED8ED92EF2D1F900457128 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		7CED8EDA2EF2D1F900457128 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
@@ -811,7 +953,7 @@
 		7CED8EDD2EF2D1F900457128 /* ServiceSelectViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectViewController.swift; sourceTree = "<group>"; };
 		7CED8EDF2EF2D1F900457128 /* ForceUpdateViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateViewModel.swift; sourceTree = "<group>"; };
 		7CED8EE02EF2D1F900457128 /* ForceUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateViewController.swift; sourceTree = "<group>"; };
-		7CED8EE12EF2D1F900457128 /* UpdateModelViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateModelViewController.swift; sourceTree = "<group>"; };
+		7CED8EE12EF2D1F900457128 /* UpdateModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateModalViewController.swift; sourceTree = "<group>"; };
 		7CED8EE52EF2D1F900457128 /* ReportLostItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemViewModel.swift; sourceTree = "<group>"; };
 		7CED8EE62EF2D1F900457128 /* ReportLostItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemViewController.swift; sourceTree = "<group>"; };
 		7CED8EE82EF2D1F900457128 /* LostArticleImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleImageCollectionView.swift; sourceTree = "<group>"; };
@@ -1079,14 +1221,12 @@
 		835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedSearchWordRequest.swift; sourceTree = "<group>"; };
 		835DC2072C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		835DC2082C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		8360D28D2BEAFC2D00909861 /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		8360D28D2BEAFC2D00909861 /* UIApplication+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIApplication+.swift"; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		837BFA572BB8D6F7001FCBD4 /* UIViewcontroller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIViewcontroller.swift; sourceTree = "<group>"; };
 		837BFA5C2BB9830C001FCBD4 /* UILabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILabel.swift; sourceTree = "<group>"; };
 		8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusCourseDTO.swift; sourceTree = "<group>"; };
 		838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoticeKeywordType.swift; sourceTree = "<group>"; };
-		839423D62CA302E4001E690F /* NoticeKeywordInformation+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NoticeKeywordInformation+CoreDataClass.swift"; path = "/Users/joominkyung/Documents/KOIN-iOS/Koin/Domain/Model/NoticeList/NoticeKeywordInformation+CoreDataClass.swift"; sourceTree = "<absolute>"; };
-		839423D72CA302E4001E690F /* NoticeKeywordInformation+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NoticeKeywordInformation+CoreDataProperties.swift"; path = "/Users/joominkyung/Documents/KOIN-iOS/Koin/Domain/Model/NoticeList/NoticeKeywordInformation+CoreDataProperties.swift"; sourceTree = "<absolute>"; };
 		839D71162BEB1570001BC7F7 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		839D71182BEB1570001BC7F7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		839D711A2BEB1570001BC7F7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -1134,8 +1274,6 @@
 		A001E2CE2845091F00D6C310 /* koinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A001E2D22845091F00D6C310 /* koinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITests.swift; sourceTree = "<group>"; };
 		A001E2D42845091F00D6C310 /* koinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		A608E6D4EE675AF49F527F63 /* Pods_koin.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_koin.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		AACCF37498622A4C659D7028 /* Pods_NotificationService.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_NotificationService.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B438AEE32E756AB600E889C4 /* OrderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderImage.swift; sourceTree = "<group>"; };
 		B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDTO.swift; sourceTree = "<group>"; };
 		B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopSummaryFromShopUseCase.swift; sourceTree = "<group>"; };
@@ -1187,8 +1325,6 @@
 		D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreAPI.swift; sourceTree = "<group>"; };
 		D208A7CE2CABB85B007040E7 /* DefaultCoreRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCoreRepository.swift; sourceTree = "<group>"; };
 		D208A7D22CAD7436007040E7 /* DefaultAbTestRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultAbTestRepository.swift; sourceTree = "<group>"; };
-		D208A7D72CAE7811007040E7 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
-		D208A7D92CAE781D007040E7 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
 		D20AB93A2C51DCFC006BC684 /* FetchUserDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchUserDataUseCase.swift; sourceTree = "<group>"; };
 		D20AB9402C550746006BC684 /* RevokeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RevokeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9422C550751006BC684 /* ModifyUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUseCase.swift; sourceTree = "<group>"; };
@@ -1224,10 +1360,6 @@
 		D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailRequest.swift; sourceTree = "<group>"; };
 		D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailUseCase.swift; sourceTree = "<group>"; };
-		D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormViewController.swift; sourceTree = "<group>"; };
-		D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationFormViewController.swift; sourceTree = "<group>"; };
-		D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SelectTypeFormViewController.swift; sourceTree = "<group>"; };
-		D20CFC092DA8032D00ADEF3B /* EnterFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormViewController.swift; sourceTree = "<group>"; };
 		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
 		D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrameUseCase.swift; sourceTree = "<group>"; };
@@ -1350,7 +1482,6 @@
 		D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemRequest.swift; sourceTree = "<group>"; };
 		D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemUseCase.swift; sourceTree = "<group>"; };
-		D2B7EBD12D37E3D700EE46B0 /* DeleteLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTypeResponse.swift; sourceTree = "<group>"; };
 		D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAuthUseCase.swift; sourceTree = "<group>"; };
 		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
@@ -1420,7 +1551,6 @@
 		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
 		D80AD4E32E6C6BC30061334B /* waveLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = waveLogo.json; sourceTree = "<group>"; };
-		D82BD8FE2DC9DE60002014D7 /* RegisterCompletionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCompletionViewController.swift; sourceTree = "<group>"; };
 		D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManager.swift; sourceTree = "<group>"; };
 		D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextField+.swift"; sourceTree = "<group>"; };
 		D85939722DC1037200CE4CB2 /* UIButton+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+.swift"; sourceTree = "<group>"; };
@@ -1444,7 +1574,6 @@
 		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
-		FE7142E864737C3223C6B955 /* Pods-koin.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-koin.release.xcconfig"; path = "Target Support Files/Pods-koin/Pods-koin.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1452,7 +1581,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				1CC17FC470AC3F8875739079 /* Pods_NotificationService.framework in Frameworks */,
+				7CB061A12F321B9300E83CA9 /* FirebaseMessaging in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1460,7 +1589,21 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4DD190890C4EF3B71D7B59BA /* Pods_koin.framework in Frameworks */,
+				7CB0619E2F321A5300E83CA9 /* FirebaseMessaging in Frameworks */,
+				7CB0618F2F320F3A00E83CA9 /* NMapsMap in Frameworks */,
+				7CB061A72F321C3100E83CA9 /* Cosmos in Frameworks */,
+				7CB061AF2F321C7800E83CA9 /* KakaoSDKTemplate in Frameworks */,
+				7CB061AA2F321C4900E83CA9 /* Kingfisher in Frameworks */,
+				7CB061BD2F32230B00E83CA9 /* SwiftRater in Frameworks */,
+				7CB061BA2F32223E00E83CA9 /* Lottie in Frameworks */,
+				7CB061B22F321CB100E83CA9 /* SwiftSoup in Frameworks */,
+				7CB061B52F321D1B00E83CA9 /* RxSwift in Frameworks */,
+				7CB061992F32186800E83CA9 /* SnapKit in Frameworks */,
+				7CB061A42F321BEB00E83CA9 /* Then in Frameworks */,
+				7CB061B72F321DEC00E83CA9 /* RxCocoa in Frameworks */,
+				7CB061AD2F321C7800E83CA9 /* KakaoSDKShare in Frameworks */,
+				7CB0619C2F321A5300E83CA9 /* FirebaseAnalytics in Frameworks */,
+				7CB061932F32100900E83CA9 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1481,13 +1624,55 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		11F274A02CF66D9943CC1614 /* Frameworks */ = {
+		7C372ED72F1B7F3100149729 /* LostItem */ = {
 			isa = PBXGroup;
 			children = (
-				AACCF37498622A4C659D7028 /* Pods_NotificationService.framework */,
-				A608E6D4EE675AF49F527F63 /* Pods_koin.framework */,
+				7C372ED82F1B7F3900149729 /* FetchLostItemListRequest.swift */,
+				7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */,
+				D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */,
 			);
-			name = Frameworks;
+			path = LostItem;
+			sourceTree = "<group>";
+		};
+		7C372F152F1CD80A00149729 /* LostItemData */ = {
+			isa = PBXGroup;
+			children = (
+				7C372F182F1CD8C700149729 /* Subviews */,
+				7C372F162F1CD81800149729 /* LostItemDataViewController.swift */,
+				7C372F282F1D6A7F00149729 /* LostItemDataViewModel.swift */,
+			);
+			path = LostItemData;
+			sourceTree = "<group>";
+		};
+		7C372F182F1CD8C700149729 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C372F1D2F1CD8FB00149729 /* LostItemDataHeaderView.swift */,
+				7C372F232F1CDB4400149729 /* LostItemDataContentView.swift */,
+				7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */,
+				7C372F1F2F1CD90B00149729 /* LostItemDataRecentHeaderView.swift */,
+				7C372F312F1DB4C300149729 /* LostItemImagesCollectionView */,
+				7C372F252F1CF81200149729 /* LostItemDataRecentTableView */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C372F252F1CF81200149729 /* LostItemDataRecentTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7C372F192F1CD8D600149729 /* LostItemDataRecentTableView.swift */,
+				7C372F212F1CD91200149729 /* LostItemDataRecentTableViewCell.swift */,
+			);
+			path = LostItemDataRecentTableView;
+			sourceTree = "<group>";
+		};
+		7C372F312F1DB4C300149729 /* LostItemImagesCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				7C372F2F2F1DB4C300149729 /* LostItemImagesCollectionView.swift */,
+				7C372F302F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift */,
+			);
+			path = LostItemImagesCollectionView;
 			sourceTree = "<group>";
 		};
 		7C4D5A102F01638800B40128 /* BusAreaSelected */ = {
@@ -1641,6 +1826,54 @@
 			path = Bus;
 			sourceTree = "<group>";
 		};
+		7C61D3342F21FADF005FAC3A /* SubViews */ = {
+			isa = PBXGroup;
+			children = (
+				7C61D3402F22022A005FAC3A /* EditLostItemButton.swift */,
+				7C61D3422F220E8C005FAC3A /* EditLostItemHeaderView.swift */,
+				7C61D3442F220E98005FAC3A /* EditLostItemImagesView.swift */,
+				7C61D3462F220EA2005FAC3A /* EditLostItemCategoryView.swift */,
+				7C61D3482F220EAC005FAC3A /* EditLostItemFoundDateView.swift */,
+				7C61D34A2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift */,
+				7C61D34C2F220EBA005FAC3A /* EditLostItemContentView.swift */,
+			);
+			path = SubViews;
+			sourceTree = "<group>";
+		};
+		7C61D3372F21FADF005FAC3A /* EditLostItem */ = {
+			isa = PBXGroup;
+			children = (
+				7C61D3342F21FADF005FAC3A /* SubViews */,
+				7C61D3352F21FADF005FAC3A /* EditLostItemViewModel.swift */,
+				7C61D3362F21FADF005FAC3A /* EditLostItemViewController.swift */,
+			);
+			path = EditLostItem;
+			sourceTree = "<group>";
+		};
+		7C8ADD362F20C0A500F85BDE /* LostItem */ = {
+			isa = PBXGroup;
+			children = (
+				7C8ADD372F20C0B200F85BDE /* LostItemListDto.swift */,
+				7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */,
+				7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */,
+				7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */,
+			);
+			path = LostItem;
+			sourceTree = "<group>";
+		};
+		7C8ADD412F20C3CE00F85BDE /* LostItem */ = {
+			isa = PBXGroup;
+			children = (
+				7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */,
+				7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */,
+				7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */,
+				7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */,
+				7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */,
+				7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */,
+			);
+			path = LostItem;
+			sourceTree = "<group>";
+		};
 		7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */ = {
 			isa = PBXGroup;
 			children = (
@@ -1658,6 +1891,128 @@
 				7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CA639FC2F1AA5BA00226F86 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CA639FD2F1AA5C400226F86 /* ServiceSelectTableView.swift */,
+				7CA63A032F1AA68100226F86 /* ServiceSelectTableHeaderView.swift */,
+				7CA63A012F1AA67300226F86 /* ServiceSelectTableViewHeaderView.swift */,
+				7CA639FF2F1AA5CC00226F86 /* ServiceSelectTableViewCell.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CA63A1F2F1AF73500226F86 /* LostItem */ = {
+			isa = PBXGroup;
+			children = (
+				7CA63A202F1AF73F00226F86 /* LostItemList.swift */,
+				7C372EE52F1C0CC400149729 /* LostItemListData.swift */,
+				7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */,
+				7C372F262F1D644A00149729 /* LostItemData.swift */,
+			);
+			path = LostItem;
+			sourceTree = "<group>";
+		};
+		7CA63A232F1AF7ED00226F86 /* LostItemList */ = {
+			isa = PBXGroup;
+			children = (
+				7CA63A282F1AF80300226F86 /* Subviews */,
+				7CA63A242F1AF7F900226F86 /* LostItemListViewController.swift */,
+				7CA63A262F1AF80000226F86 /* LostItemListViewModel.swift */,
+			);
+			path = LostItemList;
+			sourceTree = "<group>";
+		};
+		7CA63A282F1AF80300226F86 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CA63A312F1B1AFA00226F86 /* LostItemListTableView */,
+				7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */,
+				7C372EDC2F1B8DC900149729 /* LostItemListFilterButton.swift */,
+				7C372F132F1CC79C00149729 /* LostItemPostOptionController.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CA63A312F1B1AFA00226F86 /* LostItemListTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7CA63A292F1AF80B00226F86 /* LostItemListTableView.swift */,
+				7CA63A2B2F1AF80F00226F86 /* LostItemListTableViewCell.swift */,
+			);
+			path = LostItemListTableView;
+			sourceTree = "<group>";
+		};
+		7CB0619F2F321B9300E83CA9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		7CB061C12F32312E00E83CA9 /* helpers */ = {
+			isa = PBXGroup;
+			children = (
+				7CB061BE2F32312E00E83CA9 /* DPDConstants.swift */,
+				7CB061BF2F32312E00E83CA9 /* DPDKeyboardListener.swift */,
+				7CB061C02F32312E00E83CA9 /* DPDUIView+Extension.swift */,
+			);
+			path = helpers;
+			sourceTree = "<group>";
+		};
+		7CB061C32F32312E00E83CA9 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				7CB061C22F32312E00E83CA9 /* DropDownCell.xib */,
+			);
+			path = resources;
+			sourceTree = "<group>";
+		};
+		7CB061C72F32312E00E83CA9 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				7CB061C42F32312E00E83CA9 /* DropDown.swift */,
+				7CB061C52F32312E00E83CA9 /* DropDown+Appearance.swift */,
+				7CB061C62F32312E00E83CA9 /* DropDownCell.swift */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		7CB061CA2F32312E00E83CA9 /* DropDown */ = {
+			isa = PBXGroup;
+			children = (
+				7CB061C12F32312E00E83CA9 /* helpers */,
+				7CB061C32F32312E00E83CA9 /* resources */,
+				7CB061C72F32312E00E83CA9 /* src */,
+			);
+			path = DropDown;
+			sourceTree = "<group>";
+		};
+		7CB061D32F3234B000E83CA9 /* ThridParty */ = {
+			isa = PBXGroup;
+			children = (
+				7CB061CA2F32312E00E83CA9 /* DropDown */,
+			);
+			path = ThridParty;
+			sourceTree = "<group>";
+		};
+		7CB061F42F3242C200E83CA9 /* Color */ = {
+			isa = PBXGroup;
+			children = (
+				7CB061F22F3242C200E83CA9 /* ColorSystem.swift */,
+				7CB061F32F3242C200E83CA9 /* UIColor+Hex.swift */,
+			);
+			path = Color;
+			sourceTree = "<group>";
+		};
+		7CCB1E4C2F29DB2500472669 /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */,
+			);
+			path = Chat;
 			sourceTree = "<group>";
 		};
 		7CED8EBF2EF2D1F900457128 /* ClubCollectionView */ = {
@@ -1736,9 +2091,9 @@
 				7CED8ED22EF2D1F900457128 /* LogoView.swift */,
 				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
 				7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */,
-				7CED8ED52EF2D1F900457128 /* BannerViewControllerA.swift */,
-				7CED8ED62EF2D1F900457128 /* BannerViewControllerB.swift */,
+				7CED8ED52EF2D1F900457128 /* BannerViewController.swift */,
 				7CED8ED72EF2D1F900457128 /* ClubView.swift */,
+				7CA63A2D2F1B119200226F86 /* LostItemListView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -1756,6 +2111,7 @@
 		7CED8EDE2EF2D1F900457128 /* ServiceSelect */ = {
 			isa = PBXGroup;
 			children = (
+				7CA639FC2F1AA5BA00226F86 /* Subviews */,
 				7CED8EDC2EF2D1F900457128 /* ServiceSelectViewModel.swift */,
 				7CED8EDD2EF2D1F900457128 /* ServiceSelectViewController.swift */,
 			);
@@ -1767,7 +2123,7 @@
 			children = (
 				7CED8EDF2EF2D1F900457128 /* ForceUpdateViewModel.swift */,
 				7CED8EE02EF2D1F900457128 /* ForceUpdateViewController.swift */,
-				7CED8EE12EF2D1F900457128 /* UpdateModelViewController.swift */,
+				7CED8EE12EF2D1F900457128 /* UpdateModalViewController.swift */,
 			);
 			path = ForceUpdate;
 			sourceTree = "<group>";
@@ -1804,6 +2160,7 @@
 			isa = PBXGroup;
 			children = (
 				7CED8EEB2EF2D1F900457128 /* AddLostItemCollectionView.swift */,
+				7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */,
 				7CED8EEC2EF2D1F900457128 /* AddLostItemCollectionViewCell.swift */,
 				7CED8EED2EF2D1F900457128 /* AddLostItemFooterView.swift */,
 			);
@@ -1833,8 +2190,11 @@
 		7CED8EF42EF2D1F900457128 /* LostItem */ = {
 			isa = PBXGroup;
 			children = (
+				7CA63A232F1AF7ED00226F86 /* LostItemList */,
+				7C372F152F1CD80A00149729 /* LostItemData */,
 				7CED8EE72EF2D1F900457128 /* ReportLostItem */,
 				7CED8EF32EF2D1F900457128 /* PostLostItem */,
+				7C61D3372F21FADF005FAC3A /* EditLostItem */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -2220,9 +2580,9 @@
 		7CED8F6E2EF2D1F900457128 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				7CED8F6C2EF2D1F900457128 /* ImageScrollCollectionView */,
 				7CED8F662EF2D1F900457128 /* HotNoticeArticlesTableView */,
 				7CED8F692EF2D1F900457128 /* NoticeAttachmentsTableView */,
-				7CED8F6C2EF2D1F900457128 /* ImageScrollCollectionView */,
 				7CED8F6D2EF2D1F900457128 /* DeleteArticleModalViewController.swift */,
 			);
 			path = SubViews;
@@ -2264,6 +2624,8 @@
 				7CED8FAD2EF2D1F900457128 /* ShopInfoColletionView.swift */,
 				7CED8FAE2EF2D1F900457128 /* ShopInfoCollectionViewCell.swift */,
 				7CED8FAF2EF2D1F900457128 /* ShopReadyView.swift */,
+				7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */,
+				7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */,
 			);
 			path = ShopInfoCollectionView;
 			sourceTree = "<group>";
@@ -2871,7 +3233,6 @@
 		833D9C102C6B269000982145 /* NoticeList */ = {
 			isa = PBXGroup;
 			children = (
-				839423DA2CA302FA001E690F /* NoticeKeywordInformation */,
 				835DC2092C84F5FD00488506 /* RecentSearchedWordInfo */,
 				833D9C112C6B26A900982145 /* NoticeListType.swift */,
 				833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */,
@@ -2902,7 +3263,6 @@
 				833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */,
 				833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */,
 				835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */,
-				D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */,
 				D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */,
 			);
 			path = NoticeList;
@@ -2926,7 +3286,6 @@
 				83BB83122CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift */,
 				D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */,
 				D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */,
-				D2B7EBD12D37E3D700EE46B0 /* DeleteLostItemUseCase.swift */,
 				D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */,
 			);
 			path = NoticeList;
@@ -2948,15 +3307,6 @@
 			);
 			name = RecentSearchedWordInfo;
 			path = ../../../..;
-			sourceTree = "<group>";
-		};
-		839423DA2CA302FA001E690F /* NoticeKeywordInformation */ = {
-			isa = PBXGroup;
-			children = (
-				839423D62CA302E4001E690F /* NoticeKeywordInformation+CoreDataClass.swift */,
-				839423D72CA302E4001E690F /* NoticeKeywordInformation+CoreDataProperties.swift */,
-			);
-			path = NoticeKeywordInformation;
 			sourceTree = "<group>";
 		};
 		839D71172BEB1570001BC7F7 /* NotificationService */ = {
@@ -3014,10 +3364,8 @@
 				D27DD0202BA608310081FD36 /* Koin */,
 				A001E2D12845091F00D6C310 /* koinUITests */,
 				839D71172BEB1570001BC7F7 /* NotificationService */,
+				7CB0619F2F321B9300E83CA9 /* Frameworks */,
 				A001E2B52845091D00D6C310 /* Products */,
-				F03EA30E3DEB1860A8D41CB5 /* Pods */,
-				D2F4FD542CBE0726008C91D8 /* Recovered References */,
-				11F274A02CF66D9943CC1614 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -3085,6 +3433,7 @@
 		B65422F52EA12BE700018F15 /* DesignSystem */ = {
 			isa = PBXGroup;
 			children = (
+				7CB061F42F3242C200E83CA9 /* Color */,
 				B68D2CE12EA5059600F3B479 /* Toast */,
 				B61FAA152EA3A394005BE539 /* Font */,
 				B60D25452ED72017000E57B7 /* RadioButton */,
@@ -3327,7 +3676,7 @@
 				D2078BFD2BC4F9CB00A39861 /* String+.swift */,
 				D2078C042BC6792300A39861 /* UICollectionView+.swift */,
 				D2078C0F2BC7B56D00A39861 /* Int+.swift */,
-				8360D28D2BEAFC2D00909861 /* UIApplication.swift */,
+				8360D28D2BEAFC2D00909861 /* UIApplication+.swift */,
 				D249CD402C15CBAA000813F9 /* Date+.swift */,
 				D2A513422C5B43180064941A /* Bundle+APIKey.swift */,
 				D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */,
@@ -3354,6 +3703,7 @@
 		D27DD0792BA608310081FD36 /* Decodable */ = {
 			isa = PBXGroup;
 			children = (
+				7C8ADD362F20C0A500F85BDE /* LostItem */,
 				D223D60E2D9BEC8100C29BE6 /* Core */,
 				D2D4625E2D63A78000C60864 /* Chat */,
 				833D9C202C6B4F4C00982145 /* NoticeList */,
@@ -3383,6 +3733,7 @@
 				D2D380E42BA6EAE7009AD5A9 /* View */,
 				D27DD07E2BA608310081FD36 /* Logger */,
 				D27DD0802BA608310081FD36 /* Protocol */,
+				7CB061D32F3234B000E83CA9 /* ThridParty */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -3631,6 +3982,7 @@
 			children = (
 				7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */,
 				835C991D2C7F1256002E02D3 /* ModalViewController.swift */,
+				7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */,
 				D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */,
 				D23582A02BC30B9300D615DD /* ZoomingView.swift */,
 				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
@@ -3642,6 +3994,7 @@
 				D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */,
 				D89F8FDA2DF12847000265DC /* StatefulButton.swift */,
 				D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */,
+				7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */,
 				B608F0E52EB5DC2C0006F355 /* OrderHistoryUIComponents */,
 			);
 			path = View;
@@ -3650,6 +4003,8 @@
 		D2D380F72BA72F6A009AD5A9 /* Encodable */ = {
 			isa = PBXGroup;
 			children = (
+				7CCB1E4C2F29DB2500472669 /* Chat */,
+				7C372ED72F1B7F3100149729 /* LostItem */,
 				833D9C3A2C705E3F00982145 /* NoticeList */,
 				D20AB95B2C553ADF006BC684 /* Noti */,
 				D29F21F42C4FD2A000994554 /* Land */,
@@ -3689,6 +4044,7 @@
 				D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */,
 				D2D462792D63D4D400C60864 /* BlockUserUseCase.swift */,
 				D2D4627D2D64835A00C60864 /* CreateChatRoomUseCase.swift */,
+				7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -3710,20 +4066,6 @@
 				D2D7C0D62C28299200C85A85 /* FetchLandDetailUseCase.swift */,
 			);
 			path = Land;
-			sourceTree = "<group>";
-		};
-		D2F4FD542CBE0726008C91D8 /* Recovered References */ = {
-			isa = PBXGroup;
-			children = (
-				D208A7D92CAE781D007040E7 /* ShopCollectionViewCell.swift */,
-				D208A7D72CAE7811007040E7 /* ShopCollectionView.swift */,
-				D20CFC052DA800CE00ADEF3B /* CertificationFormViewController.swift */,
-				D82BD8FE2DC9DE60002014D7 /* RegisterCompletionViewController.swift */,
-				D20CFC092DA8032D00ADEF3B /* EnterFormViewController.swift */,
-				D20CFC032DA7FF3400ADEF3B /* AgreementFormViewController.swift */,
-				D20CFC072DA8031F00ADEF3B /* SelectTypeFormViewController.swift */,
-			);
-			name = "Recovered References";
 			sourceTree = "<group>";
 		};
 		D2FB23462BFD45010098BA2B /* Domain */ = {
@@ -3750,6 +4092,7 @@
 		D2FB23482BFD45180098BA2B /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				7C8ADD412F20C3CE00F85BDE /* LostItem */,
 				D2D462642D63B97600C60864 /* Chat */,
 				833D9C3F2C705F0E00982145 /* NoticeList */,
 				D208A7C72CABB467007040E7 /* Core */,
@@ -3769,6 +4112,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7CA63A1F2F1AF73500226F86 /* LostItem */,
 				D815DD972E08216B004A72BE /* Order */,
 				D2D4626F2D63C58900C60864 /* Chat */,
 				D215726D2CEE28C30061E725 /* Timetable */,
@@ -3786,6 +4130,7 @@
 			isa = PBXGroup;
 			children = (
 				D2FB23542BFD49520098BA2B /* ShopRepository.swift */,
+				7C8ADD3D2F20C2C400F85BDE /* LostItemRepository.swift */,
 				D2FB23682C0409370098BA2B /* AnalyticsRepository.swift */,
 				D249CD222C12DB73000813F9 /* DiningRepository.swift */,
 				D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */,
@@ -3805,6 +4150,7 @@
 			isa = PBXGroup;
 			children = (
 				D2FB23562BFD50120098BA2B /* DefaultShopRepository.swift */,
+				7C8ADD3F2F20C30700F85BDE /* DefaultLostItemRepository.swift */,
 				D249CD2B2C12E32F000813F9 /* DefaultDiningRepository.swift */,
 				D2D7C0DC2C282E2700C85A85 /* DefaultLandRepository.swift */,
 				D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */,
@@ -3872,6 +4218,7 @@
 				D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */,
 				D208A7CC2CABB7A3007040E7 /* CoreAPI.swift */,
 				D2D4626B2D63BAC600C60864 /* ChatAPI.swift */,
+				7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -3901,6 +4248,7 @@
 				D2D7C0D82C282A7400C85A85 /* LandService.swift */,
 				83DD0D852C4FA84900278ABD /* BusService.swift */,
 				833D9C442C70672C00982145 /* NoticeListService.swift */,
+				7C8ADD322F20BEC200F85BDE /* LostItemService.swift */,
 				8354BE512C7A0566009D4D7A /* CoreDataService.swift */,
 				D208A7A72CA11221007040E7 /* AbTestService.swift */,
 				D208A7CA2CABB755007040E7 /* CoreService.swift */,
@@ -3930,17 +4278,6 @@
 			path = Order;
 			sourceTree = "<group>";
 		};
-		F03EA30E3DEB1860A8D41CB5 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				20D48B24D09807B68D621509 /* Pods-NotificationService.debug.xcconfig */,
-				5AEF9E1E66B8687A4D0886BF /* Pods-NotificationService.release.xcconfig */,
-				596B4D4E06F306CE3B8CC69A /* Pods-koin.debug.xcconfig */,
-				FE7142E864737C3223C6B955 /* Pods-koin.release.xcconfig */,
-			);
-			path = Pods;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -3948,7 +4285,6 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 839D711E2BEB1570001BC7F7 /* Build configuration list for PBXNativeTarget "NotificationService" */;
 			buildPhases = (
-				6688605FA39E236F903D122B /* [CP] Check Pods Manifest.lock */,
 				839D71122BEB1570001BC7F7 /* Sources */,
 				839D71132BEB1570001BC7F7 /* Frameworks */,
 				839D71142BEB1570001BC7F7 /* Resources */,
@@ -3966,13 +4302,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = A001E2D82845091F00D6C310 /* Build configuration list for PBXNativeTarget "koin" */;
 			buildPhases = (
-				0DEB4FAD617ECBEA703B047A /* [CP] Check Pods Manifest.lock */,
 				B631BF532EFED62100E71094 /* ShellScript */,
 				A001E2B02845091D00D6C310 /* Sources */,
 				A001E2B12845091D00D6C310 /* Frameworks */,
 				A001E2B22845091D00D6C310 /* Resources */,
 				8360D27A2BEAA3AD00909861 /* Embed Foundation Extensions */,
-				E45A65E60B1C4B1636805884 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -4054,6 +4388,21 @@
 				ko,
 			);
 			mainGroup = A001E2AB2845091D00D6C310;
+			packageReferences = (
+				7CB0618D2F320F3A00E83CA9 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */,
+				7CB061902F320F7E00E83CA9 /* XCRemoteSwiftPackageReference "GoogleUtilities" */,
+				7CB061912F32100900E83CA9 /* XCRemoteSwiftPackageReference "Alamofire" */,
+				7CB061972F32186800E83CA9 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				7CB0619A2F321A5300E83CA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				7CB061A22F321BEB00E83CA9 /* XCRemoteSwiftPackageReference "Then" */,
+				7CB061A52F321C3100E83CA9 /* XCRemoteSwiftPackageReference "Cosmos" */,
+				7CB061A82F321C4900E83CA9 /* XCRemoteSwiftPackageReference "Kingfisher" */,
+				7CB061AB2F321C7800E83CA9 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */,
+				7CB061B02F321CB100E83CA9 /* XCRemoteSwiftPackageReference "SwiftSoup" */,
+				7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */,
+				7CB061B82F32223E00E83CA9 /* XCRemoteSwiftPackageReference "lottie-spm" */,
+				7CB061BB2F32230B00E83CA9 /* XCRemoteSwiftPackageReference "SwiftRater" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A001E2B52845091D00D6C310 /* Products */;
 			projectDirPath = "";
@@ -4083,6 +4432,7 @@
 				832FCC932CD667AC0044AF23 /* diningShare.gif in Resources */,
 				B46B8D252E770A3100A8E797 /* Pretendard-Regular.otf in Resources */,
 				B46B8D262E770A3100A8E797 /* Pretendard-Bold.otf in Resources */,
+				7CB061D22F32312E00E83CA9 /* DropDownCell.xib in Resources */,
 				B46B8D272E770A3100A8E797 /* Pretendard-Medium.otf in Resources */,
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
 				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
@@ -4116,50 +4466,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0DEB4FAD617ECBEA703B047A /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-koin-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		6688605FA39E236F903D122B /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-NotificationService-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
 		B631BF532EFED62100E71094 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -4175,28 +4481,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"${CONFIGURATION}\" == \"Release\" ]; then\n  cp \"${PROJECT_DIR}/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nelse\n  cp \"${PROJECT_DIR}/GoogleService-Info-Stage.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nfi";
-			showEnvVarsInLog = 0;
-		};
-		E45A65E60B1C4B1636805884 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-koin/Pods-koin-frameworks.sh\"\n";
+			shellScript = "if [ \"${CONFIGURATION}\" == \"Release\" ]; then\n  cp \"${PROJECT_DIR}/GoogleService-Info.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nelse\n  cp \"${PROJECT_DIR}/GoogleService-Info-Stage.plist\" \"${BUILT_PRODUCTS_DIR}/${PRODUCT_NAME}.app/GoogleService-Info.plist\"\nfi\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -4265,6 +4550,7 @@
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
 				83DD0DB72C53777800278ABD /* SearchBusInfoUseCase.swift in Sources */,
 				D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */,
+				7C61D3392F21FADF005FAC3A /* EditLostItemViewModel.swift in Sources */,
 				833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */,
 				D2FFA96E2D5F3EC200EF8E56 /* UIViewController+Navigate.swift in Sources */,
 				7CED922B2EF2D25900457128 /* DIContainer+Notice.swift in Sources */,
@@ -4274,12 +4560,14 @@
 				7CED922F2EF2D25900457128 /* DIContainer+TimeTable.swift in Sources */,
 				7CED92302EF2D25900457128 /* DIContainer+Home.swift in Sources */,
 				7CED92322EF2D25900457128 /* DIConatiner+Shop.swift in Sources */,
+				7C61D3132F212DFA005FAC3A /* FetchLostItemDataUseCase.swift in Sources */,
 				7CED92332EF2D25900457128 /* DIContainer.swift in Sources */,
 				7CED92342EF2D25900457128 /* DIContainer+LostItem.swift in Sources */,
 				7CED92352EF2D25900457128 /* DIConatiner+Login.swift in Sources */,
 				7CED92372EF2D25900457128 /* DIContainer+Facility.swift in Sources */,
 				7CED92382EF2D25900457128 /* DIContainer+Chat.swift in Sources */,
 				7CED92392EF2D25900457128 /* DIContainer+Setting.swift in Sources */,
+				7C8ADD352F20BF4600F85BDE /* LostItemAPI.swift in Sources */,
 				83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */,
 				D2B2193F2D66DDF900EAF5B1 /* ChatDateInfo.swift in Sources */,
 				D89F8FD92DF0A8A4000265DC /* DefaultTextField.swift in Sources */,
@@ -4298,14 +4586,17 @@
 				B46B8D3A2E771A1300A8E797 /* ShopMenusCategoryDTO.swift in Sources */,
 				D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
+				7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */,
 				7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */,
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
 				833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */,
 				834E1CDA2BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift in Sources */,
 				D27DD0C52BA608310081FD36 /* UIFont+.swift in Sources */,
 				D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */,
+				7CA63A212F1AF73F00226F86 /* LostItemList.swift in Sources */,
 				83DD0DCE2C5687A900278ABD /* UITableViewCell+.swift in Sources */,
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
+				7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */,
 				D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,
@@ -4317,6 +4608,7 @@
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
 				D2D7C0D92C282A7400C85A85 /* LandService.swift in Sources */,
 				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
+				7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */,
 				D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
@@ -4330,6 +4622,7 @@
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
 				D2078C052BC6792300A39861 /* UICollectionView+.swift in Sources */,
 				D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */,
+				7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
@@ -4342,6 +4635,7 @@
 				B60D25472ED72017000E57B7 /* RadioButtonGroup.swift in Sources */,
 				B60D25482ED72017000E57B7 /* RadioButton.swift in Sources */,
 				B60D25492ED72017000E57B7 /* RadioButtonColors.swift in Sources */,
+				7C372F1A2F1CD8D600149729 /* LostItemDataRecentTableView.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
@@ -4360,6 +4654,7 @@
 				D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */,
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				D27DD0C42BA608310081FD36 /* UICollectionViewCell+.swift in Sources */,
+				7C372F272F1D644A00149729 /* LostItemData.swift in Sources */,
 				D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */,
 				83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */,
 				D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */,
@@ -4377,6 +4672,7 @@
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				D2D462602D63A81500C60864 /* ChatRoomDTO.swift in Sources */,
 				D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */,
+				7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
 				D85939732DC1037200CE4CB2 /* UIButton+.swift in Sources */,
 				D20AD7072E0367F10067760A /* ResetPasswordEmailRequest.swift in Sources */,
@@ -4385,6 +4681,7 @@
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
+				7C61D3552F22FC7B005FAC3A /* EditLostItemUseCase.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
 				D2C163D82E252DB500DC68A8 /* ChangePasswordUseCase.swift in Sources */,
@@ -4400,6 +4697,7 @@
 				833D9C282C6B58ED00982145 /* NoticeKeywordDTO.swift in Sources */,
 				83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */,
 				B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */,
+				7C61D3532F22E686005FAC3A /* DeleteLostItemUseCase.swift in Sources */,
 				8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
 				835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */,
@@ -4410,7 +4708,9 @@
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				D249CD412C15CBAA000813F9 /* Date+.swift in Sources */,
 				D22C54902C6ADE1A000826DA /* UITextFiled+Publisher.swift in Sources */,
+				7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */,
 				D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDTO.swift in Sources */,
+				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
 				83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */,
@@ -4421,6 +4721,7 @@
 				D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */,
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
 				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
+				7C372F1E2F1CD8FB00149729 /* LostItemDataHeaderView.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer.swift in Sources */,
 				835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */,
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
@@ -4447,7 +4748,9 @@
 				7CED90D52EF2D1F900457128 /* SelectDeptModalViewController.swift in Sources */,
 				7CED90D72EF2D1F900457128 /* RecommendedKeywordCollectionView.swift in Sources */,
 				7CED90D92EF2D1F900457128 /* DiningViewController.swift in Sources */,
+				7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */,
 				7CED90DA2EF2D1F900457128 /* RecentSearchTableView.swift in Sources */,
+				7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */,
 				7CED90DB2EF2D1F900457128 /* ChatImageTableViewCell.swift in Sources */,
 				7CED90DC2EF2D1F900457128 /* ShopSummaryDeliveryButton.swift in Sources */,
 				7CED90DD2EF2D1F900457128 /* AddDirectCollectionViewCell.swift in Sources */,
@@ -4477,8 +4780,10 @@
 				7CED90FF2EF2D1F900457128 /* PolicyViewController.swift in Sources */,
 				7CED91002EF2D1F900457128 /* ChangePasswordSuccessViewController.swift in Sources */,
 				7CED91012EF2D1F900457128 /* FindIdViewModel.swift in Sources */,
+				7C8ADD3A2F20C10500F85BDE /* LostItemListDataDto.swift in Sources */,
 				7CED91022EF2D1F900457128 /* ShopCollectionViewCell.swift in Sources */,
 				7CED91042EF2D1F900457128 /* TimetableCell.swift in Sources */,
+				7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */,
 				7CED91052EF2D1F900457128 /* SelectTypeFormViewController.swift in Sources */,
 				7CED91072EF2D1F900457128 /* AddDirectHeaderView.swift in Sources */,
 				7CED91082EF2D1F900457128 /* BlockCheckModalViewController.swift in Sources */,
@@ -4488,6 +4793,7 @@
 				7CED910C2EF2D1F900457128 /* LandImageCollectionView.swift in Sources */,
 				7CED910D2EF2D1F900457128 /* RecommendedSearchCollectionView.swift in Sources */,
 				7CED910E2EF2D1F900457128 /* ShopSearchViewController.swift in Sources */,
+				7CA63A2E2F1B119200226F86 /* LostItemListView.swift in Sources */,
 				7CED910F2EF2D1F900457128 /* ShopCollectionView.swift in Sources */,
 				7CED91122EF2D1F900457128 /* LectureView.swift in Sources */,
 				7CED91142EF2D1F900457128 /* ChatViewController.swift in Sources */,
@@ -4501,6 +4807,7 @@
 				7CED911F2EF2D1F900457128 /* DiningCollectionViewCellB.swift in Sources */,
 				7CED91202EF2D1F900457128 /* TagCollectionView.swift in Sources */,
 				7CED91212EF2D1F900457128 /* CancelableImageView.swift in Sources */,
+				7CA63A022F1AA67300226F86 /* ServiceSelectTableViewHeaderView.swift in Sources */,
 				7CED91252EF2D1F900457128 /* EventShopCollectionView.swift in Sources */,
 				7CED91262EF2D1F900457128 /* NoticeSearchViewModel.swift in Sources */,
 				7CED91282EF2D1F900457128 /* ClubCollectionViewCell.swift in Sources */,
@@ -4511,6 +4818,8 @@
 				7CED912D2EF2D1F900457128 /* ShopSearchTableViewMenuNameCell.swift in Sources */,
 				7CED912E2EF2D1F900457128 /* NoticeListTableView.swift in Sources */,
 				7CED912F2EF2D1F900457128 /* FindPasswordChangeViewController.swift in Sources */,
+				7C372F322F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift in Sources */,
+				7C372F332F1DB4C300149729 /* LostItemImagesCollectionView.swift in Sources */,
 				7CED91302EF2D1F900457128 /* NoticeListSearchTableViewFooter.swift in Sources */,
 				7CED91312EF2D1F900457128 /* ShopSummaryTableViewTableHeaderView.swift in Sources */,
 				7CED91322EF2D1F900457128 /* FrameListViewController.swift in Sources */,
@@ -4519,6 +4828,7 @@
 				7CED91362EF2D1F900457128 /* DiningNoticeViewModel.swift in Sources */,
 				7CED91372EF2D1F900457128 /* ReviewListHeaderView.swift in Sources */,
 				7CED91382EF2D1F900457128 /* ShopReviewViewModel.swift in Sources */,
+				7C61D3432F220E8C005FAC3A /* EditLostItemHeaderView.swift in Sources */,
 				7CED91392EF2D1F900457128 /* DiningNotiContentViewController.swift in Sources */,
 				7CED913A2EF2D1F900457128 /* CalendarCollectionViewCell.swift in Sources */,
 				7CED913B2EF2D1F900457128 /* AddLostItemFooterView.swift in Sources */,
@@ -4535,6 +4845,7 @@
 				7CED914F2EF2D1F900457128 /* AddClassHeaderView.swift in Sources */,
 				7CED91522EF2D1F900457128 /* ChangeMyProfileViewController.swift in Sources */,
 				7CED91532EF2D1F900457128 /* LoginViewController.swift in Sources */,
+				7C61D3572F23CD8B005FAC3A /* LostItemStatsDto.swift in Sources */,
 				7CED91552EF2D1F900457128 /* HotNoticeArticlesTableView.swift in Sources */,
 				7CED91562EF2D1F900457128 /* ScoreView.swift in Sources */,
 				7CED91572EF2D1F900457128 /* CenterFlowLayout.swift in Sources */,
@@ -4552,10 +4863,10 @@
 				7CED91682EF2D1F900457128 /* PolicyListCollectionViewCell.swift in Sources */,
 				7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */,
 				7CED916C2EF2D1F900457128 /* DeleteArticleModalViewController.swift in Sources */,
-				7CED916D2EF2D1F900457128 /* BannerViewControllerB.swift in Sources */,
 				7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */,
 				7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */,
 				7CED91722EF2D1F900457128 /* NoticeKeywordCollectionView.swift in Sources */,
+				7CA63A2C2F1AF80F00226F86 /* LostItemListTableViewCell.swift in Sources */,
 				7CED91732EF2D1F900457128 /* LandOptionView.swift in Sources */,
 				7CED91742EF2D1F900457128 /* MenuView.swift in Sources */,
 				7CED91752EF2D1F900457128 /* ShopReviewReportViewController.swift in Sources */,
@@ -4563,6 +4874,7 @@
 				7CED91782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */,
 				7CED917B2EF2D1F900457128 /* WriteTypeModalViewController.swift in Sources */,
+				7C61D34B2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift in Sources */,
 				7CED917D2EF2D1F900457128 /* ReviewImageUploadCollectionView.swift in Sources */,
 				7CED917F2EF2D1F900457128 /* NoticeListViewController.swift in Sources */,
 				7CED91802EF2D1F900457128 /* ReviewLoginModalViewController.swift in Sources */,
@@ -4573,28 +4885,40 @@
 				7CED91872EF2D1F900457128 /* ReviewListViewController.swift in Sources */,
 				7CED91882EF2D1F900457128 /* ReviewListCollectionViewCell.swift in Sources */,
 				7CED91892EF2D1F900457128 /* ShopSummaryPriceTableView.swift in Sources */,
+				7C372F172F1CD81800149729 /* LostItemDataViewController.swift in Sources */,
 				7CED918A2EF2D1F900457128 /* NoticeDataViewController.swift in Sources */,
+				7C61D3412F22022A005FAC3A /* EditLostItemButton.swift in Sources */,
 				7CED918B2EF2D1F900457128 /* LostArticleImageCollectionView.swift in Sources */,
 				7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */,
-				7CED918E2EF2D1F900457128 /* BannerViewControllerA.swift in Sources */,
+				7CED918E2EF2D1F900457128 /* BannerViewController.swift in Sources */,
 				7CED918F2EF2D1F900457128 /* BackButtonPopUpViewController.swift in Sources */,
+				7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */,
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,
 				7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */,
 				7CED91922EF2D1F900457128 /* ShopSummaryViewController.swift in Sources */,
 				7CED91932EF2D1F900457128 /* ReviewListCollectionView.swift in Sources */,
 				7CED91942EF2D1F900457128 /* DiningNoticeViewController.swift in Sources */,
 				7CED91952EF2D1F900457128 /* NoticeListCollectionViewCell.swift in Sources */,
+				7C61D3512F22B344005FAC3A /* ExtendedTouchAreaView.swift in Sources */,
 				7CED91962EF2D1F900457128 /* ScoreChartCollectionView.swift in Sources */,
 				7CED91972EF2D1F900457128 /* FetchTypeModalViewController.swift in Sources */,
 				7CED91982EF2D1F900457128 /* PolicyListTableView.swift in Sources */,
 				7CED91992EF2D1F900457128 /* ShopSummaryPhoneButton.swift in Sources */,
-				7CED919B2EF2D1F900457128 /* UpdateModelViewController.swift in Sources */,
+				7CED919B2EF2D1F900457128 /* UpdateModalViewController.swift in Sources */,
 				7CED919E2EF2D1F900457128 /* ChangePasswordViewController.swift in Sources */,
 				7CED919F2EF2D1F900457128 /* RecentSearchTableViewCell.swift in Sources */,
 				7CED91A02EF2D1F900457128 /* StateButton.swift in Sources */,
 				7CED91A32EF2D1F900457128 /* TimetableHeaderView.swift in Sources */,
 				7CED91A42EF2D1F900457128 /* ModifyFrameModalViewController.swift in Sources */,
+				7C61D3152F212FB3005FAC3A /* LostItemDataDto.swift in Sources */,
+				7CB061CB2F32312E00E83CA9 /* DPDKeyboardListener.swift in Sources */,
+				7CB061CC2F32312E00E83CA9 /* DropDown+Appearance.swift in Sources */,
+				7CB061CD2F32312E00E83CA9 /* DropDownCell.swift in Sources */,
+				7CB061CE2F32312E00E83CA9 /* DPDConstants.swift in Sources */,
+				7CB061CF2F32312E00E83CA9 /* DropDown.swift in Sources */,
+				7CB061D02F32312E00E83CA9 /* DPDUIView+Extension.swift in Sources */,
 				7CED91A62EF2D1F900457128 /* PolicyContentCollectionView.swift in Sources */,
+				7C372F142F1CC79C00149729 /* LostItemPostOptionController.swift in Sources */,
 				7CED91A72EF2D1F900457128 /* ReportLostItemViewController.swift in Sources */,
 				7C4D5A3C2F01638800B40128 /* BusSearchViewController.swift in Sources */,
 				7C4D5A3D2F01638800B40128 /* BusSearchResultViewModel.swift in Sources */,
@@ -4611,8 +4935,10 @@
 				7C4D5A482F01638800B40128 /* BusTimetableDataViewModel.swift in Sources */,
 				7C4D5A492F01638800B40128 /* BusSearchDatePickerViewController.swift in Sources */,
 				7C4D5A4A2F01638800B40128 /* BusTimetableRouteCollectionView.swift in Sources */,
+				7C61D34D2F220EBA005FAC3A /* EditLostItemContentView.swift in Sources */,
 				7C4D5A4B2F01638800B40128 /* BusTimetableViewModel.swift in Sources */,
 				7C4D5A4C2F01638800B40128 /* BusAreaSelectedCollectionView.swift in Sources */,
+				7CA63A252F1AF7F900226F86 /* LostItemListViewController.swift in Sources */,
 				7C4D5A4D2F01638800B40128 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
 				7C4D5A4E2F01638800B40128 /* ManyBusTimetableTableViewCell.swift in Sources */,
 				7C4D5A4F2F01638800B40128 /* BusTimetableTableViewFooterView.swift in Sources */,
@@ -4633,12 +4959,14 @@
 				7CED91AB2EF2D1F900457128 /* NoticeListViewModel.swift in Sources */,
 				7CED91AC2EF2D1F900457128 /* DiningToShopAbTestButton.swift in Sources */,
 				7CED91AE2EF2D1F900457128 /* ShopInfoColletionView.swift in Sources */,
+				7C8ADD402F20C30700F85BDE /* DefaultLostItemRepository.swift in Sources */,
 				7CED91B02EF2D1F900457128 /* RecommendedKeywordCollectionViewCell.swift in Sources */,
 				7CED91B12EF2D1F900457128 /* ShopDetailTableView.swift in Sources */,
 				7CED91B32EF2D1F900457128 /* ServiceSelectViewController.swift in Sources */,
 				7CED91B42EF2D1F900457128 /* CalendarCollectionView.swift in Sources */,
 				7CED91B52EF2D1F900457128 /* NoticeAttachmentsTableView.swift in Sources */,
 				7CED91B62EF2D1F900457128 /* TimetableViewController.swift in Sources */,
+				7C372ED92F1B7F3900149729 /* FetchLostItemListRequest.swift in Sources */,
 				7CED91B92EF2D1F900457128 /* KeywordNotiCollectionViewCell.swift in Sources */,
 				7CED91BA2EF2D1F900457128 /* CertificationView.swift in Sources */,
 				7CED91BB2EF2D1F900457128 /* EnterFormViewController.swift in Sources */,
@@ -4657,6 +4985,7 @@
 				7CED91D52EF2D1F900457128 /* ImageDropDownCell.swift in Sources */,
 				7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */,
 				7CED91D82EF2D1F900457128 /* ClassComponentView.swift in Sources */,
+				7C372F222F1CD91200149729 /* LostItemDataRecentTableViewCell.swift in Sources */,
 				7CED91D92EF2D1F900457128 /* ImageScrollCollectionView.swift in Sources */,
 				7CED91DC2EF2D1F900457128 /* HomeViewController.swift in Sources */,
 				7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */,
@@ -4664,16 +4993,21 @@
 				7CED91DF2EF2D1F900457128 /* NotiViewController.swift in Sources */,
 				7CED91E12EF2D1F900457128 /* ClubView.swift in Sources */,
 				7CED91E32EF2D1F900457128 /* AddClassCollectionViewCell.swift in Sources */,
+				7C61D3492F220EAC005FAC3A /* EditLostItemFoundDateView.swift in Sources */,
+				7C8ADD382F20C0B200F85BDE /* LostItemListDto.swift in Sources */,
 				7CED91E52EF2D1F900457128 /* ModifyUserModalViewController.swift in Sources */,
 				7CED91E62EF2D1F900457128 /* ShopSummaryInfoView.swift in Sources */,
 				7CED91E92EF2D1F900457128 /* ShopDetailTableViewDeliveryTipsCell.swift in Sources */,
 				7CED91EA2EF2D1F900457128 /* TimetableCollectionView.swift in Sources */,
 				7CED91EB2EF2D1F900457128 /* ServiceSelectViewModel.swift in Sources */,
 				7CED91EC2EF2D1F900457128 /* NoticeListTableViewCell.swift in Sources */,
+				7CA63A042F1AA68100226F86 /* ServiceSelectTableHeaderView.swift in Sources */,
 				7CED91EF2EF2D1F900457128 /* PostLostItemViewController.swift in Sources */,
+				7CA639FE2F1AA5C400226F86 /* ServiceSelectTableView.swift in Sources */,
 				7CED91F02EF2D1F900457128 /* DeleteFrameModalViewController.swift in Sources */,
 				7CED91F42EF2D1F900457128 /* NonReviewListView.swift in Sources */,
 				7CED91F52EF2D1F900457128 /* PolicyContentCollectionViewCell.swift in Sources */,
+				7C8ADD3E2F20C2C400F85BDE /* LostItemRepository.swift in Sources */,
 				7CED91F62EF2D1F900457128 /* LogoView.swift in Sources */,
 				7CED91F82EF2D1F900457128 /* TimetableViewModel.swift in Sources */,
 				7CED91F92EF2D1F900457128 /* LandOptionCollectionView.swift in Sources */,
@@ -4698,8 +5032,10 @@
 				7CED92132EF2D1F900457128 /* SettingsViewController.swift in Sources */,
 				7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */,
 				7CED92152EF2D1F900457128 /* BannerCollectionView.swift in Sources */,
+				7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */,
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
 				7CED92182EF2D1F900457128 /* ClubWebViewController.swift in Sources */,
+				7C372EE62F1C0CC400149729 /* LostItemListData.swift in Sources */,
 				7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */,
 				7CED921A2EF2D1F900457128 /* ShopViewController.swift in Sources */,
 				D86E2E152E7D860E006D63AF /* ShuttleBusTimetable.swift in Sources */,
@@ -4720,6 +5056,7 @@
 				D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
 				D2D462712D63C5ED00C60864 /* ChatRoomItem.swift in Sources */,
+				7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */,
 				D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */,
 				8354BE3D2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift in Sources */,
@@ -4730,10 +5067,12 @@
 				D29F21D92C4E1AB800994554 /* CheckDuplicatedNicknameUseCase.swift in Sources */,
 				D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */,
 				D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */,
+				7C61D3452F220E98005FAC3A /* EditLostItemImagesView.swift in Sources */,
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
 				D23582A12BC30B9300D615DD /* ZoomingView.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
+				7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */,
 				7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */,
 				D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */,
 				D2B7EBD02D37E3CE00EE46B0 /* FetchLostItemUseCase.swift in Sources */,
@@ -4780,6 +5119,9 @@
 				83E771002D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift in Sources */,
 				D8B1A9EC2E321E7800943535 /* ShopSortType.swift in Sources */,
 				7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */,
+				7CA63A002F1AA5CC00226F86 /* ServiceSelectTableViewCell.swift in Sources */,
+				7CB061F52F3242C200E83CA9 /* UIColor+Hex.swift in Sources */,
+				7CB061F62F3242C200E83CA9 /* ColorSystem.swift in Sources */,
 				D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,
 				D29F21C52C4DE2DF00994554 /* UserAPI.swift in Sources */,
@@ -4796,11 +5138,12 @@
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
 				B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */,
-				8360D28E2BEAFC2D00909861 /* UIApplication.swift in Sources */,
+				8360D28E2BEAFC2D00909861 /* UIApplication+.swift in Sources */,
 				D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
+				7C372F242F1CDB4400149729 /* LostItemDataContentView.swift in Sources */,
 				D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */,
 				D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift in Sources */,
@@ -4812,8 +5155,8 @@
 				D891F25F2E45DC9D006D1F41 /* TrackPaddedSlider.swift in Sources */,
 				D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */,
 				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
-				D2B7EBD22D37E3D700EE46B0 /* DeleteLostItemUseCase.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
+				7CA63A2A2F1AF80B00226F86 /* LostItemListTableView.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */,
@@ -4825,14 +5168,17 @@
 				7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */,
 				D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */,
 				D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */,
+				7C61D3472F220EA2005FAC3A /* EditLostItemCategoryView.swift in Sources */,
 				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
 				7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */,
 				7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */,
+				7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */,
 				B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
 				D29F21F82C5085B900994554 /* RefreshTokenRequest.swift in Sources */,
+				7CA63A272F1AF80000226F86 /* LostItemListViewModel.swift in Sources */,
 				D2FB23712C0412C70098BA2B /* EventParameter.swift in Sources */,
 				D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */,
 				D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */,
@@ -4858,6 +5204,7 @@
 				D85939712DC0FF6F00CE4CB2 /* UITextField+.swift in Sources */,
 				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
 				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
+				7C372EDD2F1B8DC900149729 /* LostItemListFilterButton.swift in Sources */,
 				833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */,
 				D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */,
 				D2078BFE2BC4F9CB00A39861 /* String+.swift in Sources */,
@@ -4865,6 +5212,7 @@
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
 				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
+				7C8ADD452F20C3FB00F85BDE /* FetchLostItemListUseCase.swift in Sources */,
 				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,
 				B68D2CE72EA505B000F3B479 /* ToastMessageView.swift in Sources */,
 				D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */,
@@ -4880,6 +5228,7 @@
 				D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,
 				D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */,
+				7C61D33E2F21FADF005FAC3A /* EditLostItemViewController.swift in Sources */,
 				D20AD7052E0367E00067760A /* ResetPasswordSmsRequest.swift in Sources */,
 				831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */,
 				D249CD2C2C12E32F000813F9 /* DefaultDiningRepository.swift in Sources */,
@@ -4923,7 +5272,6 @@
 /* Begin XCBuildConfiguration section */
 		839D711F2BEB1570001BC7F7 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 20D48B24D09807B68D621509 /* Pods-NotificationService.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -4956,7 +5304,6 @@
 		};
 		839D71202BEB1570001BC7F7 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 5AEF9E1E66B8687A4D0886BF /* Pods-NotificationService.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -5108,13 +5455,12 @@
 		};
 		A001E2D92845091F00D6C310 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 596B4D4E06F306CE3B8CC69A /* Pods-koin.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 426;
+				CURRENT_PROJECT_VERSION = 433;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -5128,12 +5474,12 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.5;
+				MARKETING_VERSION = 4.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin.stage;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -5144,13 +5490,12 @@
 		};
 		A001E2DA2845091F00D6C310 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = FE7142E864737C3223C6B955 /* Pods-koin.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_ENTITLEMENTS = koin/koin.entitlements;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 426;
+				CURRENT_PROJECT_VERSION = 433;
 				DEVELOPMENT_TEAM = K626UYGR25;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
@@ -5164,12 +5509,12 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = UIInterfaceOrientationPortrait;
 				INFOPLIST_KEY_UIUserInterfaceStyle = Light;
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 4.5.5;
+				MARKETING_VERSION = 4.6.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koin;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -5303,6 +5648,196 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7CB0618D2F320F3A00E83CA9 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/navermaps/SPM-NMapsMap";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.23.1;
+			};
+		};
+		7CB061902F320F7E00E83CA9 /* XCRemoteSwiftPackageReference "GoogleUtilities" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleUtilities.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.1.0;
+			};
+		};
+		7CB061912F32100900E83CA9 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Alamofire/Alamofire";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.11.1;
+			};
+		};
+		7CB061972F32186800E83CA9 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SnapKit/SnapKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.7.1;
+			};
+		};
+		7CB0619A2F321A5300E83CA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.8.0;
+			};
+		};
+		7CB061A22F321BEB00E83CA9 /* XCRemoteSwiftPackageReference "Then" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/devxoul/Then";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.0.0;
+			};
+		};
+		7CB061A52F321C3100E83CA9 /* XCRemoteSwiftPackageReference "Cosmos" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/evgenyneu/Cosmos.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 25.0.1;
+			};
+		};
+		7CB061A82F321C4900E83CA9 /* XCRemoteSwiftPackageReference "Kingfisher" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/onevcat/Kingfisher.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.6.2;
+			};
+		};
+		7CB061AB2F321C7800E83CA9 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kakao/kakao-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.27.2;
+			};
+		};
+		7CB061B02F321CB100E83CA9 /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.11.3;
+			};
+		};
+		7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ReactiveX/RxSwift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 6.10.1;
+			};
+		};
+		7CB061B82F32223E00E83CA9 /* XCRemoteSwiftPackageReference "lottie-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/airbnb/lottie-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.6.0;
+			};
+		};
+		7CB061BB2F32230B00E83CA9 /* XCRemoteSwiftPackageReference "SwiftRater" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/takecian/SwiftRater.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.2.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7CB0618E2F320F3A00E83CA9 /* NMapsMap */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB0618D2F320F3A00E83CA9 /* XCRemoteSwiftPackageReference "SPM-NMapsMap" */;
+			productName = NMapsMap;
+		};
+		7CB061922F32100900E83CA9 /* Alamofire */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061912F32100900E83CA9 /* XCRemoteSwiftPackageReference "Alamofire" */;
+			productName = Alamofire;
+		};
+		7CB061982F32186800E83CA9 /* SnapKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061972F32186800E83CA9 /* XCRemoteSwiftPackageReference "SnapKit" */;
+			productName = SnapKit;
+		};
+		7CB0619B2F321A5300E83CA9 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB0619A2F321A5300E83CA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		7CB0619D2F321A5300E83CA9 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB0619A2F321A5300E83CA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		7CB061A02F321B9300E83CA9 /* FirebaseMessaging */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB0619A2F321A5300E83CA9 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseMessaging;
+		};
+		7CB061A32F321BEB00E83CA9 /* Then */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061A22F321BEB00E83CA9 /* XCRemoteSwiftPackageReference "Then" */;
+			productName = Then;
+		};
+		7CB061A62F321C3100E83CA9 /* Cosmos */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061A52F321C3100E83CA9 /* XCRemoteSwiftPackageReference "Cosmos" */;
+			productName = Cosmos;
+		};
+		7CB061A92F321C4900E83CA9 /* Kingfisher */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061A82F321C4900E83CA9 /* XCRemoteSwiftPackageReference "Kingfisher" */;
+			productName = Kingfisher;
+		};
+		7CB061AC2F321C7800E83CA9 /* KakaoSDKShare */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061AB2F321C7800E83CA9 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKShare;
+		};
+		7CB061AE2F321C7800E83CA9 /* KakaoSDKTemplate */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061AB2F321C7800E83CA9 /* XCRemoteSwiftPackageReference "kakao-ios-sdk" */;
+			productName = KakaoSDKTemplate;
+		};
+		7CB061B12F321CB100E83CA9 /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061B02F321CB100E83CA9 /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
+		7CB061B42F321D1B00E83CA9 /* RxSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxSwift;
+		};
+		7CB061B62F321DEC00E83CA9 /* RxCocoa */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */;
+			productName = RxCocoa;
+		};
+		7CB061B92F32223E00E83CA9 /* Lottie */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061B82F32223E00E83CA9 /* XCRemoteSwiftPackageReference "lottie-spm" */;
+			productName = Lottie;
+		};
+		7CB061BC2F32230B00E83CA9 /* SwiftRater */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CB061BB2F32230B00E83CA9 /* XCRemoteSwiftPackageReference "SwiftRater" */;
+			productName = SwiftRater;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		8354BE452C79FCA0009D4D7A /* Model.xcdatamodeld */ = {

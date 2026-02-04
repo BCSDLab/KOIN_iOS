@@ -11,7 +11,7 @@ import Combine
 final class ShopSummaryImagesCollectionView: UICollectionView {
     
     // MARK: - Properties
-    private var orderImages: [OrderImage] = []
+    private(set) var orderImages: [OrderImage] = []
     let didScrollOutputSubject = PassthroughSubject<Int, Never>()
     let didTapThumbnailPublisher = PassthroughSubject<IndexPath, Never>()
     
@@ -26,6 +26,11 @@ final class ShopSummaryImagesCollectionView: UICollectionView {
     
     func configure(orderImage: [OrderImage]){
         self.orderImages = orderImage
+        self.reloadData()
+    }
+    
+    func configure(images: [Image]) {
+        self.orderImages = images.map { OrderImage(imageUrl: $0.imageUrl, isThumbnail: false) }
         self.reloadData()
     }
 }

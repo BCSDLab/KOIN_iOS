@@ -5,6 +5,7 @@
 //  Created by 김나훈 on 9/23/24.
 //
 
+import Foundation
 import Alamofire
 
 enum AbTestAPI {

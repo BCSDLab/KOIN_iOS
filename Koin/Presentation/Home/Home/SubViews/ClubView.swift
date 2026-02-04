@@ -22,11 +22,6 @@ final class ClubView: UIView {
         $0.text = "동아리"
     }
     
-    private let chevronButton = UIButton().then {
-        $0.setImage(UIImage(named: "chevronRightBlue"), for: .normal)
-        $0.isHidden = true
-    }
-    
     private let clubCollctionView = ClubCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in}).then {
         $0.isHidden = true
     }
@@ -45,11 +40,8 @@ final class ClubView: UIView {
         $0.text = "바로가기"
     }
     
-    private let hotClubChevronImageView = UIImageView().then {
-        $0.image = .appImage(asset: .arrowRight)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
-        
-    }
-    ///
+    private let hotClubChevronImageView = UIImageView(image: .appImage(asset: .chevronRightHome)?.withTintColor(.appColor(.neutral800)))
+    
     private let clubListButton = UIButton().then {
         $0.isHidden = true
     }
@@ -66,10 +58,7 @@ final class ClubView: UIView {
         $0.text = "바로가기"
     }
     
-    private let clubListChevronImageView = UIImageView().then {
-        $0.image = .appImage(asset: .arrowRight)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
-
-    }
+    private let clubListChevronImageView = UIImageView(image: .appImage(asset: .chevronRightHome)?.withTintColor(.appColor(.neutral800)))
 
     // MARK: Init
     
@@ -77,7 +66,6 @@ final class ClubView: UIView {
         super.init(frame: frame)
         configureView()
         bind()
-        chevronButton.addTarget(self, action: #selector(chevronButtonTapped), for: .touchUpInside)
         hotClubButton.addTarget(self, action: #selector(hotClubButtonTapped), for: .touchUpInside)
         clubListButton.addTarget(self, action: #selector(clubListButtonTapped), for: .touchUpInside)
     }
@@ -107,7 +95,6 @@ final class ClubView: UIView {
         hotClubImageView.loadImageWithSpinner(from: club.imageUrl)
         hotClubImageView.isHidden = false
         hotClubId = club.clubId
-        chevronButton.isHidden = false
         hotClubButton.isHidden = false
         clubListButton.isHidden = false
         hotClubButton.snp.remakeConstraints {
@@ -122,9 +109,6 @@ final class ClubView: UIView {
 }
 
 extension ClubView {
-    @objc func chevronButtonTapped() {
-        clubListButtonPublisher.send()
-    }
     @objc func hotClubButtonTapped() {
         hotClubButtonPublisher.send(hotClubId)
     }
@@ -137,7 +121,7 @@ extension ClubView {
 
 extension ClubView {
     private func setUpLayOuts() {
-        [nameLabel, chevronButton, clubCollctionView, hotClubButton, clubListButton].forEach {
+        [nameLabel, clubCollctionView, hotClubButton, clubListButton].forEach {
             self.addSubview($0)
         }
         [hotClubImageView, hotClubLabel, hotClubSubLabel, hotClubChevronImageView].forEach {
@@ -152,11 +136,6 @@ extension ClubView {
         nameLabel.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.equalToSuperview().offset(20)
-        }
-        chevronButton.snp.makeConstraints {
-            $0.centerY.equalTo(nameLabel)
-            $0.trailing.equalToSuperview().offset(-24)
-            $0.size.equalTo(29)
         }
         clubCollctionView.snp.makeConstraints {
             $0.top.equalTo(nameLabel.snp.bottom).offset(16)
@@ -193,10 +172,9 @@ extension ClubView {
         }
         hotClubChevronImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(27)
-            $0.size.equalTo(15)
+            $0.trailing.equalToSuperview().inset(17)
         }
-        //
+        
         clubListImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.trailing.equalTo(clubListLabel.snp.leading).offset(-4)
@@ -214,8 +192,7 @@ extension ClubView {
         }
         clubListChevronImageView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
-            $0.trailing.equalToSuperview().inset(27)
-            $0.size.equalTo(15)
+            $0.trailing.equalToSuperview().inset(17)
         }
     }
     private func setUpComponents() {

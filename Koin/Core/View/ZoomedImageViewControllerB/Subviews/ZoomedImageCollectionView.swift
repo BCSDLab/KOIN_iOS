@@ -15,7 +15,6 @@ final class ZoomedImageCollectionView: UICollectionView {
     private var initialIndexPath: IndexPath = IndexPath(row: 0, section: 0)
     let updateTitlePublisher = PassthroughSubject<String, Never>()
     let hideNavigationBarPublisher = PassthroughSubject<Bool, Never>()
-    private var subscriptions: Set<AnyCancellable> = []
     private var isInitialized = false
     
     // MARK: - Initializer
@@ -61,9 +60,6 @@ extension ZoomedImageCollectionView: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.configure(url: urls[indexPath.row])
-        cell.hideNavigationBarPublisher.sink { [weak self] isHidden in
-            self?.hideNavigationBarPublisher.send(isHidden)
-            }.store(in: &subscriptions)
         return cell
     }
 }

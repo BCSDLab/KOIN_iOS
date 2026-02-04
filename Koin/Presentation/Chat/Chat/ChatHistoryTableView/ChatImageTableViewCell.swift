@@ -9,14 +9,19 @@ import Combine
 import UIKit
 
 final class ChatImageTableViewCell: UITableViewCell {
+    
+    // MARK: - Properties
+    private var imageUrl: String?
+    
     // MARK: - UI Components
-    let imageTapPublisher = PassthroughSubject<UIImage, Never>()
+    let imageTapPublisher = PassthroughSubject<String, Never>()
     var cancellables = Set<AnyCancellable>()
     
     private let textImageView = UIImageView().then {
         $0.isUserInteractionEnabled = true
         $0.clipsToBounds = true
         $0.layer.cornerRadius = 12
+        $0.contentMode = .scaleAspectFill
     }
     
     private let timestampLabel = UILabel().then {
@@ -39,13 +44,19 @@ final class ChatImageTableViewCell: UITableViewCell {
     }
     
     func configure(message: ChatMessage) {
+        imageUrl = message.content
         textImageView.loadImageWithSpinner(from: message.content)
         timestampLabel.text = String(format: "%02d:%02d", message.chatDateInfo.hour, message.chatDateInfo.minute)
         setUpConstraints(message: message)
     }
     @objc private func imageTapped() {
-        guard let image = textImageView.image else { return }
-        imageTapPublisher.send(image)
+        guard let imageUrl else { return }
+        imageTapPublisher.send(imageUrl)
+    }
+    
+    override func prepareForReuse() {
+        textImageView.image = nil
+        cancellables.removeAll()
     }
 }
 

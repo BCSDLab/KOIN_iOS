@@ -85,13 +85,17 @@ final class HomeViewController: UIViewController {
         $0.configuration = configuration
     }
     
+    private let lostItemListView = LostItemListView()
+    
     private let orderLabel = UILabel().then {
         $0.text = "주변 상점"
         $0.textColor = UIColor.appColor(.primary500)
         $0.font = UIFont.appFont(.pretendardBold, size: 15)
     }
     
-    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in})
+    private let categoryCollectionView = CategoryCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then{ _ in}).then {
+        $0.isScrollEnabled = false
+    }
     
     private let menuLabel = UILabel().then {
         $0.textColor = UIColor.appColor(.primary500)
@@ -121,9 +125,7 @@ final class HomeViewController: UIViewController {
     
     private let menuBackgroundView = MenuBackgroundView(frame: .zero)
     
-    private lazy var bannerViewControllerA = BannerViewControllerA(viewModel: viewModel)
-    
-    private lazy var bannerViewControllerB = BannerViewControllerB(viewModel: viewModel)
+    private lazy var bannerViewController = BannerViewController(viewModel: viewModel)
     
     // MARK: - Initialization
     
@@ -147,6 +149,7 @@ final class HomeViewController: UIViewController {
         print(KeychainWorker.shared.read(key: .accessHistoryId))
         inputSubject.send(.viewDidLoad)
         inputSubject.send(.getNoticeBanner(Date()))
+        inputSubject.send(.getLostItemStat)
         configureView()
         configureSwipeGestures()
         configureTapGesture()
@@ -155,9 +158,6 @@ final class HomeViewController: UIViewController {
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
         checkAndShowBanner()
-        inputSubject.send(.logEvent(EventParameter.EventLabel.AbTest.businessBenefit, .abTestBenefit, "혜택X", nil, nil, nil, nil))
-        inputSubject.send(.getAbTestResult("c_main_dining_v1"))
-        inputSubject.send(.getClubAbTest("a_main_club_ui"))
         scrollView.delegate = self
     }
     
@@ -210,16 +210,16 @@ final class HomeViewController: UIViewController {
                 self?.updateHotArticles(articles: hotNoticeArticlesInfo, phrases: keywordNoticePhrases)
             case let .showForceUpdate(version):
                 self?.navigateToForceUpdate(version: version)
-            case let .setAbTestResult(abTestResult):
-                self?.setAbTestResult(result: abTestResult)
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
-            case .updateBanner(let banner, let abTestResult):
-                self?.showBanner(banner: banner, abTestResult: abTestResult)
+            case .updateBanner(let banner):
+                self?.showBanner(banner: banner)
             case .setHotClub(let hotClub):
                 self?.clubView.setupHotClub(club: hotClub)
             case .setClubCategories(let response):
                 self?.clubView.setupClubCategories(categories: response.clubCategories)
+            case .updateLostItem(let lostLostStats):
+                self?.lostItemListView.configure(lostItemStats: lostLostStats)
             }
         }.store(in: &subscriptions)
         
@@ -304,19 +304,22 @@ final class HomeViewController: UIViewController {
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
         
-        bannerViewControllerA.bannerTapPublisher.sink { [weak self] banner in
+        bannerViewController.bannerTapPublisher.sink { [weak self] banner in
             self?.handleBannerTap(banner)
         }.store(in: &subscriptions)
         
-        bannerViewControllerB.bannerTapPublisher.sink { [weak self] banner in
-            self?.handleBannerTap(banner)
+        lostItemListView.lostItemListTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemEntry, .click, "분실물"))
+            self?.navigateToLostItemList()
         }.store(in: &subscriptions)
     }
 }
 
 extension HomeViewController {
     private func handleBannerTap(_ banner: Banner) {
+        dismiss(animated: true)
         inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal", value: banner.title, category: "click"))
+        
         if let version = banner.version {
             // 현재 앱 버전
             let currentVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
@@ -331,9 +334,9 @@ extension HomeViewController {
                   return
             }
         }
+        
         if let redirect = banner.redirectLink {
             if redirect == "shop" {
-                dismiss(animated: true)
                 let shopService = DefaultShopService()
                 let shopRepository = DefaultShopRepository(service: shopService)
                 
@@ -359,10 +362,8 @@ extension HomeViewController {
                 let shopViewController = ShopViewController(viewModel: viewModel)
                 navigationController?.pushViewController(shopViewController, animated: true)
             } else if redirect == "dining" {
-                dismiss(animated: true)
                 navigatetoDining()
             } else if redirect == "keyword" {
-                dismiss(animated: true)
                 let noticeListService = DefaultNoticeService()
                 let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
                 let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
@@ -376,7 +377,6 @@ extension HomeViewController {
                 let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
                 navigationController?.pushViewController(viewController, animated: true)
             } else if redirect == "timetable" {
-                dismiss(animated: true)
                 if viewModel.isLoggedIn {
                     let viewController = TimetableViewController(viewModel: TimetableViewModel())
                     navigationController?.pushViewController(viewController, animated: true)
@@ -384,15 +384,12 @@ extension HomeViewController {
                     showToast(message: "로그인이 필요한 기능입니다.", success: true)
                 }
             } else if redirect == "home" {
-                dismiss(animated: true)
                 return
             } else if redirect == "login" {
-                dismiss(animated: true)
                 let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
                 loginViewController.title = "로그인"
                 navigationController?.pushViewController(loginViewController, animated: true)
             } else if redirect == "chat" {
-                dismiss(animated: true)
                 if !viewModel.isLoggedIn {
                     showToast(message: "로그인이 필요한 기능입니다.")
                     return
@@ -400,8 +397,20 @@ extension HomeViewController {
                 let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
                 navigationController?.pushViewController(viewController, animated: true)
             } else if redirect == "club" {
-                dismiss(animated: true)
                 navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
+            } else if redirect == "lostitem" {
+                let userRepository = DefaultUserRepository(service: DefaultUserService())
+                let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+                let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+                let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                let viewModel = LostItemListViewModel(
+                    checkLoginUseCase: checkLoginUseCase,
+                    fetchLostItemListUseCase: fetchLostItemItemUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase
+                )
+                let viewController = LostItemListViewController(viewModel: viewModel)
+                navigationController?.pushViewController(viewController, animated: true)
             }
         }
     }
@@ -419,20 +428,12 @@ extension HomeViewController {
         return false
     }
     
-    private func showBanner(banner: BannerDto, abTestResult: AssignAbTestResponse) {
+    private func showBanner(banner: BannerDto) {
         if banner.count == 0 { return }
-        let viewController: UIViewController
-        if abTestResult.variableName == .bottomBanner {
-            bannerViewControllerA.setBanners(banners: banner.banners)
-            viewController = BottomSheetViewController(contentViewController: bannerViewControllerA, defaultHeight: 389)
-            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_A", category: "a/b test 로깅(메인 모달)"))
-            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
-        } else {
-            bannerViewControllerB.setBanners(banners: banner.banners)
-            viewController = bannerViewControllerB
-            inputSubject.send(.logEventDirect(name: "AB_TEST", label: "CAMPUS_modal_1", value: "design_B", category: "a/b test 로깅(메인 모달)"))
-            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
-        }
+        
+        bannerViewController.setBanners(banners: banner.banners)
+        let viewController = BottomSheetViewController(contentViewController: bannerViewController, defaultHeight: 341 + UIApplication.bottomSafeAreaHeight())
+        inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_modal_entry", value: banner.banners.first?.title ?? "", category: "entry"))
         viewController.modalPresentationStyle = .overFullScreen
         viewController.modalTransitionStyle = .crossDissolve
         self.present(viewController, animated: true)
@@ -445,7 +446,7 @@ extension HomeViewController {
                 return
             }
         }
-        inputSubject.send(.getBannerAbTest("a_main_banner_ui"))
+        inputSubject.send(.fetchBanner)
     }
     
     @objc private func tapBusQrCode() {
@@ -559,15 +560,6 @@ extension HomeViewController {
         categoryCollectionView.updateCategories(data.shopCategories)
     }
     
-    private func setAbTestResult(result: AssignAbTestResponse) {
-        if result.variableName == .mainDiningOriginal {
-            goDiningPageButton.isHidden = true
-        }
-        else if result.variableName == .mainDiningNew {
-            goDiningPageButton.isHidden = false
-        }
-    }
-    
     private func didTapCell(at id: Int) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
@@ -593,11 +585,28 @@ extension HomeViewController {
     }
     
     @objc private func refresh() {
+        lostItemListView.timer?.invalidate()
         inputSubject.send(.categorySelected(getDiningPlace()))
+        inputSubject.send(.getLostItemStat)
         refreshControl.endRefreshing()
     }
     
     // navigate 함수
+    private func navigateToLostItemList() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LostItemListViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchLostItemListUseCase: fetchLostItemItemUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let viewController = LostItemListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
     private func navigateToNoticeList() {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
@@ -622,7 +631,7 @@ extension HomeViewController {
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, assignAbTestUseCase: DefaultAssignAbTestUseCase(abTestRepository: DefaultAbTestRepository(service: DefaultAbTestService())))
+        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
         let diningViewController = DiningViewController(viewModel: viewModel)
         diningViewController.title = "식단"
         navigationController?.pushViewController(diningViewController, animated: true)
@@ -707,7 +716,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, orderLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, lostItemListView, orderLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -792,8 +801,13 @@ extension HomeViewController {
             make.horizontalEdges.equalTo(scrollView)
         }
         
+        lostItemListView.snp.makeConstraints {
+            $0.top.equalTo(clubView.snp.bottom).offset(30)
+            $0.leading.trailing.equalTo(scrollView)
+        }
+        
         orderLabel.snp.makeConstraints { make in
-            make.top.equalTo(clubView.snp.bottom).offset(30)
+            make.top.equalTo(lostItemListView.snp.bottom).offset(30)
             make.height.equalTo(22)
             make.leading.equalTo(scrollView.snp.leading).offset(20)
             make.trailing.equalTo(scrollView.snp.trailing)

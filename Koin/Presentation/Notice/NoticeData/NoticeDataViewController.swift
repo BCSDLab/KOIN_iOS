@@ -280,7 +280,9 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.showLoginModal(checkType)
             case let .navigateToScene(checkType, noticeId):
                 switch checkType {
-                case .report: self?.navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
+                case .report:
+                    break
+                    //self?.navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
                 case .chat: self?.inputSubject.send(.createChatRoom)
                 }
             case .popViewController:
@@ -310,7 +312,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         
         deleteArticleModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, .click, "확인"))
-            self?.inputSubject.send(.deleteLostItem)
         }).store(in: &subscriptions)
         
         reportLostItemLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
@@ -348,10 +349,6 @@ extension NoticeDataViewController {
     @objc private func reportButtonTapped() {
         inputSubject.send(.checkLogin(.report))
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostReport, .click, "신고하기"))
-    }
-    
-    @objc private func deleteButtonTapped() {
-        inputSubject.send(.deleteLostItem)
     }
     
     private func updateLostItem(_ item: LostArticleDetailDto) {

@@ -10,9 +10,6 @@ import Combine
 
 final class ZoomedImageCollectionViewCell: UICollectionViewCell {
     
-    // MARK: - Properties
-    let hideNavigationBarPublisher = PassthroughSubject<Bool, Never>()
-    
     // MARK: - UI Components
     let scrollView = UIScrollView().then {
         $0.minimumZoomScale = 1.0
@@ -56,15 +53,10 @@ extension ZoomedImageCollectionViewCell: UIScrollViewDelegate {
         return imageView
     }
     
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        hideNavigationBarPublisher.send(true)
-    }
-    
     func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
         UIView.animate(withDuration: 0.3) { [weak self] in
             self?.scrollView.zoomScale = 1.0
         }
-        hideNavigationBarPublisher.send(false)
     }
 }
 

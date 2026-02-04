@@ -5,7 +5,6 @@
 //  Created by 김나훈 on 8/12/24.
 //
 
-import DropDown
 import Then
 import UIKit
 

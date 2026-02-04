@@ -9,14 +9,18 @@ import Combine
 import Then
 import UIKit
 
+protocol ReportLostItemViewControllerDelegate: AnyObject {
+    func updateState(reportedDataId id: Int)
+}
+
 final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     
     // MARK: - Properties
-    
     private let viewModel: ReportLostItemViewModel
     private let inputSubject: PassthroughSubject<ReportLostItemViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private let textViewPlaceHolder = "신고 사유를 입력해주세요."
+    weak var delegate: ReportLostItemViewControllerDelegate?
     
     // MARK: - UI Components
     private let scrollView = UIScrollView().then { _ in
@@ -123,10 +127,16 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let self else { return }
             switch output {
             case .showToast(let message, let success):
-                self?.showToast(message: message)
-                if success { self?.navigationController?.popViewController(animated: true) }
+                self.showToast(message: message)
+                if success {
+                    if let previousViewController = (delegate as? LostItemDataViewController)?.delegate as? UIViewController {
+                        navigationController?.popToViewController(previousViewController, animated: true)
+                    }
+                    delegate?.updateState(reportedDataId: viewModel.lostItemId)
+                }
             }
         }.store(in: &subscriptions)
         

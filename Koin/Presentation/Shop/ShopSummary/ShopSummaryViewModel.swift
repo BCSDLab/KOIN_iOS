@@ -7,6 +7,7 @@
 
 import Combine
 import Foundation
+import UIKit.UIColor
 
 final class ShopSummaryViewModel {
     
@@ -30,9 +31,12 @@ final class ShopSummaryViewModel {
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var shopId: Int
     private(set) var phonenumber: String = ""
+    var cachedImages: [OrderImage] = []
     let shopName: String
-    private var cachedThumbnailImages: [OrderImage] = []
-    
+    let backCategoryName: String?
+    var opacity: CGFloat = 0
+    var navigationBarItemColor: UIColor = .white
+
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
     private let fetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMenusAndGroupsFromShopUseCase
     private let fetchShopDataUseCase: FetchShopDataUseCase
@@ -47,12 +51,14 @@ final class ShopSummaryViewModel {
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int,
-         shopName: String) {
+         shopName: String,
+         backCategoryName: String? = nil) {
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
         self.fetchOrderShopMenusAndGroupsFromShopUseCase = fetchOrderShopMenusAndGroupsFromShopUseCase
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.shopId = shopId
         self.shopName = shopName
+        self.backCategoryName = backCategoryName
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
@@ -88,7 +94,6 @@ extension ShopSummaryViewModel {
             .sink(receiveCompletion: { _ in },
                   receiveValue: { [weak self] shopSummary in
                 guard let self else { return }
-                self.cachedThumbnailImages = shopSummary.images
                 self.outputSubject.send(.update1(
                     images: shopSummary.images,
                     name: shopSummary.name,

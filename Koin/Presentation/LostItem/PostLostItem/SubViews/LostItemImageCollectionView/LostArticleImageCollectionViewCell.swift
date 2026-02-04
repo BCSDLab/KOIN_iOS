@@ -11,13 +11,15 @@ import UIKit
 final class LostItemImageCollectionViewCell: UICollectionViewCell {
     
     // MARK: - Properties
-    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
+    let shouldDismissDropDownKeyBoardPublisher = PassthroughSubject<Void, Never>()
     let cancelButtonPublisher = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
     
-    private let imageView = UIImageView().then { _ in
+    private let imageView = UIImageView().then {
+        $0.contentMode = .scaleAspectFill
+        $0.clipsToBounds = true
     }
 
     private let cancelButton =  UIButton().then {
@@ -45,8 +47,25 @@ final class LostItemImageCollectionViewCell: UICollectionViewCell {
     }
     
     @objc private func cancelButtonTapped() {
-        shouldDismissDropDownPublisher.send()
+        shouldDismissDropDownKeyBoardPublisher.send()
         cancelButtonPublisher.send(())
+    }
+    
+    // MARK: - cell의 bounds 밖에있는 deleteButton이 눌리도록 함
+    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        if super.point(inside: point, with: event) {
+            return true
+        }
+        
+        for subview in subviews {
+            let pointInSubview = subview.convert(point, from: self)
+            if !subview.isHidden
+                && subview.isUserInteractionEnabled
+                && subview.point(inside: pointInSubview, with: event) {
+                return true
+            }
+        }
+        return false
     }
 }
 
@@ -59,13 +78,11 @@ extension LostItemImageCollectionViewCell {
     
     private func setUpConstraints() {
         imageView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(contentView.snp.leading)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-8)
+            make.edges.equalToSuperview()
         }
         cancelButton.snp.makeConstraints { make in
-            make.top.equalTo(contentView.snp.top)
-            make.trailing.equalTo(contentView.snp.trailing)
+            make.centerY.equalTo(contentView.snp.top)
+            make.centerX.equalTo(contentView.snp.trailing)
             make.width.equalTo(16)
             make.height.equalTo(16)
         }

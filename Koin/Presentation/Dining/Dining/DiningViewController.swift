@@ -7,6 +7,7 @@
 
 import Combine
 import UIKit
+import SwiftRater
 
 final class DiningViewController: UIViewController {
     
@@ -141,12 +142,12 @@ final class DiningViewController: UIViewController {
         configureSwipeGestures()
         configureView()
         navigationItem.title = "식단"
-        inputSubject.send(.getAbTestResult)
         inputSubject.send(.determineInitDate)
         diningTypeSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         diningListCollectionView.refreshControl = refreshControl
         navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.appImage(asset: .coopInfo), style: .plain, target: self, action: #selector(navigationButtonTapped))
+        SwiftRater.incrementSignificantUsageCount()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -171,6 +172,12 @@ final class DiningViewController: UIViewController {
             }
         }
         viewDidAppeared = true
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 5) { [weak self] in
+            if let self, self.navigationController?.topViewController == self {
+                SwiftRater.check()
+            }
+        }
     }
     
     // MARK: - Bind
@@ -190,8 +197,6 @@ final class DiningViewController: UIViewController {
                 UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
             case .showLoginModal:
                 self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
-            case .setAbTestResult(_):
-                break
             }
         }.store(in: &subscriptions)
         

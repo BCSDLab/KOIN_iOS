@@ -44,6 +44,7 @@ extension AddLostItemFooterView {
     @objc private func addItemButtonTapped() {
         addItemButtonPublisher.send()
         shouldDismissDropDownPublisher.send()
+        self.endEditing(true)
     }
     
 }

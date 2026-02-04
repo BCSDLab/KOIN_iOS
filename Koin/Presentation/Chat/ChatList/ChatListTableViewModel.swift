@@ -14,6 +14,7 @@ final class ChatListTableViewModel: ViewModelProtocol {
     
     enum Input {
         case fetchChatRooms
+        case viewWillDisappear
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
@@ -24,9 +25,9 @@ final class ChatListTableViewModel: ViewModelProtocol {
     }
     
     // MARK: - Properties
-    
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var pollingSubscriptions: AnyCancellable?
     private(set) var chatList: [ChatRoomItem] = [] {
         didSet {
             outputSubject.send(.showChatRoom)
@@ -46,6 +47,10 @@ final class ChatListTableViewModel: ViewModelProtocol {
             switch input {
             case .fetchChatRooms:
                 self?.fetchChatRooms()
+            case .viewWillDisappear:
+                guard let self else { return }
+                pollingSubscriptions?.cancel()
+                pollingSubscriptions = nil
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
@@ -58,15 +63,23 @@ final class ChatListTableViewModel: ViewModelProtocol {
 extension ChatListTableViewModel {
 
     private func fetchChatRooms() {
-        fetchChatRoomUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        pollingSubscriptions?.cancel()
+        pollingSubscriptions = Timer.publish(every: 10, on: .main, in: .common)
+            .autoconnect()
+            .prepend(Date())
+            .flatMap { [weak self] _ -> AnyPublisher<[ChatRoomItem], Never> in
+                guard let self else { return Empty().eraseToAnyPublisher() }
+                return fetchChatRoomUseCase.execute()
+                    .catch { error -> AnyPublisher<[ChatRoomItem], Never> in
+                        Log.make().error("\(error)")
+                        return Empty().eraseToAnyPublisher()
+                    }.eraseToAnyPublisher()
             }
-        } receiveValue: { [weak self] response in
-            self?.chatList = response
-        }.store(in: &subscriptions)
-
+            .sink { [weak self] response in
+                self?.chatList = response
+            }
     }
+    
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }

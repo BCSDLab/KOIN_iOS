@@ -19,10 +19,11 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     private var textViewHeightConstraint: NSLayoutConstraint!
     
     // MARK: - UI Components
+    private let bottomBackgroundView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral100)
+    }
     private let messageInputView = UIView().then {
-        $0.backgroundColor = UIColor.systemGray6 // ✅ 회색 배경 설정
-        $0.layer.cornerRadius = 16
-        $0.layer.masksToBounds = true
+        $0.backgroundColor = .appColor(.neutral100)
     }
     
     private let leftButton = UIButton().then {
@@ -32,18 +33,15 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     private let textView = UITextView().then {
         $0.isScrollEnabled = false
         $0.font = UIFont.systemFont(ofSize: 16)
-        $0.backgroundColor = .clear // ✅ 배경 투명
+        $0.backgroundColor = .appColor(.neutral0)
         $0.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        $0.layer.cornerRadius = 8
+        $0.layer.cornerRadius = 12
+        $0.text = "메시지 보내기"
+        $0.textColor = .appColor(.neutral500)
     }
     
     private let sendButton = UIButton().then {
         $0.setImage(UIImage.appImage(asset: .send), for: .normal)
-    }
-    
-    private let blockModalViewController = ModalViewController(width: 301, height: 179, paddingBetweenLabels: 12, title: "이 사용자를 차단하시겠습니까?", subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray), rightButtonText: "차단하기").then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
     }
     
     private let blockCheckModalViewController = BlockCheckModalViewController().then {
@@ -51,7 +49,8 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         $0.modalTransitionStyle = .crossDissolve
     }
     
-    private let chatHistoryTableView = ChatHistoryTableView().then { _ in
+    private let chatHistoryTableView = ChatHistoryTableView().then {
+        $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
     }
     
     init(viewModel: ChatViewModel) {
@@ -69,8 +68,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     
     deinit {
         NotificationCenter.default.removeObserver(self)
-        WebSocketManager.shared.disconnect()
-        print("disconnect")
     }
     
     // MARK: - Life Cycle
@@ -79,21 +76,23 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         super.viewDidLoad()
         configureView()
         bind()
-        inputSubject.send(.connectChat)
-        inputSubject.send(.fetchChatDetail)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         view.addGestureRecognizer(tapGesture)
         leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
         sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         textView.delegate = self
-        NotificationCenter.default.addObserver(self, selector: #selector(handleReceivedMessage(_:)), name: .chatMessageReceived, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
+        inputSubject.send(.fetchChatDetail)
         configureNavigationBar(style: .empty)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(true)
+        inputSubject.send(.viewWillDisappear)
     }
     
     // MARK: - Bind
@@ -101,67 +100,52 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            guard let strongSelf = self else { return }
+            guard let self else { return }
             switch output {
-            case .showChatHistory(let chatHistory): self?.chatHistoryTableView.setChatHistory(item: chatHistory)
+            case .showChatHistory(let chatHistory): chatHistoryTableView.setChatHistory(item: chatHistory)
             case .showToast(let message, let success):
-                self?.showToast(message: message)
-                if success { self?.navigationController?.popViewController(animated: true) }
-            case .addImageUrl(let imageUrl):  WebSocketManager.shared.sendMessage(roomId: strongSelf.viewModel.chatRoomId, articleId: strongSelf.viewModel.articleId, message: imageUrl, isImage: true)
+                showToast(message: message)
+                if success { navigationController?.popViewController(animated: true) }
             }
         }.store(in: &subscriptions)
-        blockModalViewController.rightButtonPublisher.sink { [weak self] _ in
-            guard let self = self else { return }
-            present(blockCheckModalViewController, animated: true)
+        
+        blockCheckModalViewController.buttonPublihser.sink { [weak self] in
+            guard let self else { return }
+            let onRightButtonTapped: ()->Void = { [weak self] in
+                self?.inputSubject.send(.blockUser)
+            }
+            let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 179, paddingBetweenLabels: 8, title: "이 사용자를 차단하시겠습니까?", subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray), rightButtonText: "차단하기")
+            modalViewController.modalTransitionStyle = .crossDissolve
+            modalViewController.modalPresentationStyle = .overFullScreen
+            dismiss(animated: true) { [weak self] in
+                self?.present(modalViewController, animated: true)
+            }
         }.store(in: &subscriptions)
         
-        blockCheckModalViewController.buttonPublihser.sink { [weak self] _ in
-            self?.inputSubject.send(.blockUser)
-        }.store(in: &subscriptions)
-        
-        chatHistoryTableView.imageTapPublisher.sink { [weak self] image in
-            let imageWidth: CGFloat = UIScreen.main.bounds.width
-            let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageWidth)
-            zoomedImageViewController.setImage(image)
+        chatHistoryTableView.imageTapPublisher.sink { [weak self] imageUrl in
+            self?.dismissKeyboard()
+            
+            let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
+            zoomedImageViewController.configure(urls: [imageUrl], initialIndexPath: IndexPath(row: 0, section: 0))
             self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &subscriptions)
     }
 }
 
 extension ChatViewController{
-    @objc private func handleReceivedMessage(_ notification: Notification) {
-        if let userInfo = notification.userInfo as? [String: Any] {
-            guard let senderNickname = userInfo["user_nickname"] as? String,
-                  let content = userInfo["content"] as? String,
-                  let timestamp = userInfo["timestamp"] as? String,
-                  let isImage = userInfo["is_image"] as? Bool,
-                  let senderId = userInfo["user_id"] as? Int else {
-                return
-            }
-            let isMine = (senderId == UserDataManager.shared.id)
-            let newMessage = ChatMessage(
-                senderNickname: senderNickname,
-                content: content,
-                timestamp: timestamp,
-                isImage: isImage,
-                isMine: isMine, chatDateInfo: timestamp.toChatDateInfo()
-            )
-            chatHistoryTableView.appendNewMessage(newMessage)
-        }
-    }
-
     
     @objc private func sendButtonTapped() {
-        if textView.text.isEmpty { return }
-        WebSocketManager.shared.sendMessage(roomId: viewModel.chatRoomId, articleId: viewModel.articleId, message: textView.text, isImage: false)
+        if textView.text.isEmpty || textView.textColor == .appColor(.neutral500) { return }
+        inputSubject.send(.sendMessage(textView.text, false))
         textView.text = ""
-        textViewHeightConstraint.constant = 40
+        textViewHeightConstraint.constant = 36
         UIView.animate(withDuration: 0.1) {
             self.view.layoutIfNeeded()
         }
     }
     
     @objc private func leftButtonTapped() {
+        dismissKeyboard()
         presentImagePicker()
     }
 
@@ -194,16 +178,19 @@ extension ChatViewController{
     }
     
     @objc private func rightButtonTapped() {
+        dismissKeyboard()
+        
         present(blockCheckModalViewController, animated: true)
     }
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let keyboardHeight = keyboardFrame.height
-        adjustInputViewPosition(up: true, height: keyboardHeight)
+        
+        UIView.animate(withDuration: 0.3) { [weak self] in
+            self?.chatHistoryTableView.contentOffset.y += (keyboardHeight - UIApplication.bottomSafeAreaHeight())
+        }
     }
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        adjustInputViewPosition(up: false, height: 0)
-    }
+    
     private func adjustInputViewPosition(up: Bool, height: CGFloat) {
         messageInputBottomConstraint.constant = up ? -height : 0
         UIView.animate(withDuration: 0.3) {
@@ -213,12 +200,20 @@ extension ChatViewController{
     @objc internal override func dismissKeyboard() {
         textView.resignFirstResponder()
     }
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == .appColor(.neutral500) {
+            textView.text = ""
+            textView.textColor = .appColor(.neutral800)
+        }
+    }
+    
     func textViewDidChange(_ textView: UITextView) {
         let size = CGSize(width: textView.frame.width, height: .infinity)
         let estimatedSize = textView.sizeThatFits(size)
         
         let maxHeight: CGFloat = 120
-        let minHeight: CGFloat = 40
+        let minHeight: CGFloat = 36
         if estimatedSize.height >= maxHeight {
             textViewHeightConstraint.constant = maxHeight
             textView.isScrollEnabled = true
@@ -232,12 +227,27 @@ extension ChatViewController{
             self.view.layoutIfNeeded()
         }
     }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text == "" {
+            textView.text = "메시지 보내기"
+            textView.textColor = .appColor(.neutral500)
+        }
+    }
+    
+    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
+        if textView.text == "" {
+            textView.text = "메시지 보내기"
+            textView.textColor = .appColor(.neutral500)
+        }
+        return true
+    }
 }
 
 extension ChatViewController {
     
     private func setUpLayOuts() {
-        [chatHistoryTableView, messageInputView].forEach {
+        [bottomBackgroundView, chatHistoryTableView, messageInputView].forEach {
             view.addSubview($0)
         }
         [leftButton, textView, sendButton].forEach {
@@ -248,21 +258,21 @@ extension ChatViewController {
     private func setUpConstraints() {
         chatHistoryTableView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(messageInputView.snp.top).offset(-16)
+            make.bottom.equalTo(messageInputView.snp.top)
         }
         messageInputView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview().inset(8)
+            make.leading.trailing.equalToSuperview()
             make.height.greaterThanOrEqualTo(50)
-            messageInputBottomConstraint = make.bottom.equalTo(view.safeAreaLayoutGuide).constraint.layoutConstraints.first
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
         }
         leftButton.snp.makeConstraints { make in
-            make.leading.equalTo(messageInputView).offset(8)
-            make.centerY.equalTo(messageInputView)
+            make.leading.equalToSuperview().offset(24)
+            make.bottom.equalTo(messageInputView.snp.bottom).offset(-8)
             make.size.equalTo(32)
         }
         sendButton.snp.makeConstraints { make in
-            make.trailing.equalTo(messageInputView).offset(-8)
-            make.centerY.equalTo(messageInputView)
+            make.trailing.equalToSuperview().offset(-24)
+            make.bottom.equalTo(messageInputView.snp.bottom).offset(-8)
             make.size.equalTo(32)
         }
         textView.snp.makeConstraints { make in
@@ -270,7 +280,11 @@ extension ChatViewController {
             make.trailing.equalTo(sendButton.snp.leading).offset(-8)
             make.top.equalTo(messageInputView).offset(8)
             make.bottom.equalTo(messageInputView).offset(-8)
-            textViewHeightConstraint = make.height.equalTo(40).priority(.high).constraint.layoutConstraints.first
+            textViewHeightConstraint = make.height.equalTo(36).priority(.high).constraint.layoutConstraints.first
+        }
+        bottomBackgroundView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.top.equalTo(messageInputView.snp.bottom)
         }
     }
     private func configureView() {

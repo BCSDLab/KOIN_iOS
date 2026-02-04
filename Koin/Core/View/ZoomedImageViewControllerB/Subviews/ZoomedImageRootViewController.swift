@@ -13,9 +13,30 @@ final class ZoomedImageRootViewController: UIViewController {
     // MARK: - Properties
     private var subscriptions: Set<AnyCancellable> = []
     private var initialTouchPoint = CGPoint(x: 0, y: 0)
+    private let shouldShowTitle: Bool
     
     // MARK: - UI Components
     private let zoomedImageCollectionView = ZoomedImageCollectionView()
+    private let gradientView = UIView()
+    private let gradientLayer = CAGradientLayer().then {
+        $0.colors = [
+            UIColor.black.withAlphaComponent(0.4).cgColor,
+            UIColor.black.withAlphaComponent(0.03).cgColor,
+            UIColor.black.withAlphaComponent(0.0).cgColor
+        ]
+        $0.locations = [0.0, 0.9, 1.0]
+        $0.startPoint = CGPoint(x: 0.0, y: 0.0)
+        $0.endPoint = CGPoint(x: 0.0, y: 1.0)
+    }
+    
+    // MARK: - Initializer
+    init(shouldShowTitle: Bool = true) {
+        self.shouldShowTitle = shouldShowTitle
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -30,16 +51,26 @@ final class ZoomedImageRootViewController: UIViewController {
         configureNavigationBar(style: .transparentWhite)
     }
     
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        gradientLayer.frame = gradientView.bounds
+    }
+    
     // MARK: - Configure
     func configure(urls: [String], initialIndexPath: IndexPath) {
         zoomedImageCollectionView.configure(urls: urls, initialIndexPath: initialIndexPath)
-        title = "\(initialIndexPath.row+1)/\(urls.count)"
+        if shouldShowTitle {
+            title = "\(initialIndexPath.row+1)/\(urls.count)"
+        }
     }
     
     // MARK: - Bind
     private func bind() {
         zoomedImageCollectionView.updateTitlePublisher.sink { [weak self] title in
-            self?.title = title
+            if let self,
+               self.shouldShowTitle {
+                self.title = title
+            }
         }.store(in: &subscriptions)
         
         zoomedImageCollectionView.hideNavigationBarPublisher.sink { [weak self] isHidden in
@@ -92,11 +123,17 @@ extension ZoomedImageRootViewController {
 extension ZoomedImageRootViewController {
     
     private func configureView() {
-        [zoomedImageCollectionView].forEach {
+        [zoomedImageCollectionView, gradientView].forEach {
             view.addSubview($0)
         }
         zoomedImageCollectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        gradientView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        
+        gradientView.layer.addSublayer(gradientLayer)
     }
 }

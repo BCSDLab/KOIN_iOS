@@ -126,6 +126,7 @@ enum EventParameter {
             case departureTimeSettingDone = "departure_time_setting_done"
             case searchResultBusType = "search_result_bus_type"
             
+            // Notice
             case noticeTab = "notice_tab"
             case noticePage = "notice_page"
             case inventory = "inventory"
@@ -146,17 +147,27 @@ enum EventParameter {
             case popularNoticeBanner = "popular_notice_banner"
             case toManageKeyword = "to_manage_keyword"
             
+            // Noti
             case notificationSoldOut = "notification_sold_out"
             case notificationBreakfastSoldOut = "notification_breakfast_sold_out"
             case notificationLunchSoldOut = "notification_lunch_sold_out"
             case notificationDinnerSoldOut = "notification_dinner_sold_out"
             
+            // lostitem
             case itemWrite = "item_write"
             case findUserCategory = "find_user_category"
             case findUserAddItem = "find_user_add_item"
             case findUserWriteConfirm = "find_user_write_confirm"
             case findUserDelete = "find_user_delete"
             case findUserDeleteConfirm = "find_user_delete_confirm"
+            case lostItemEntry = "lost_item_entry"
+            case lostItemFilter = "lost_item_filter"
+            case lostItemFilterApply = "lost_item_filter_apply"
+            case lostItemPostEntry = "lost_item_post_entry"
+            case lostItemMessageLoginRequest = "lost_item_message_login_request"
+            case lostItemWriteLoginRequest = "lost_item_write_login_request"
+            case lostItemStateChange = "lost_item_state_change"
+            case lostItemFound = "lost_item_found"
             
             case lostItemWrite = "lost_item_write"
             case findUserWrite = "find_user_write"
