@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
+		7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C16AA362F3E0DBE0071ABE6 /* Interceptor.swift */; };
 		7C17EEA82EBF4F25008BCA89 /* ShopSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */; };
 		7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */; };
 		7C17EEB02EBF708B008BCA89 /* ShopSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */; };
@@ -817,6 +818,7 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
+		7C16AA362F3E0DBE0071ABE6 /* Interceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interceptor.swift; sourceTree = "<group>"; };
 		7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearch.swift; sourceTree = "<group>"; };
 		7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopSearchRequest.swift; sourceTree = "<group>"; };
 		7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchDto.swift; sourceTree = "<group>"; };
@@ -4208,6 +4210,7 @@
 			children = (
 				D20AB9462C552E68006BC684 /* NetworkService.swift */,
 				83E770F72D05864800EB3F84 /* MockNetworkService.swift */,
+				7C16AA362F3E0DBE0071ABE6 /* Interceptor.swift */,
 				D2FB235D2BFDAB980098BA2B /* API */,
 				D2FB235F2BFDABBB0098BA2B /* Router.swift */,
 			);
@@ -4606,6 +4609,7 @@
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
 				7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */,
 				D2FCBE812CFE96600097A388 /* NotificationHandler.swift in Sources */,
+				7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,
 				D27DD0C92BA608310081FD36 /* UIColor+.swift in Sources */,

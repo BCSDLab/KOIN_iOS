@@ -11,8 +11,10 @@ import Combine
 
 final class NetworkService {
     
+    private let interceptor = Interceptor()
+    
     func request(api: URLRequestConvertible) -> AnyPublisher<Void, Error> {
-        return AF.request(api)
+        return AF.request(api, interceptor: interceptor)
             .validate()
             .publishData()
             .value()
@@ -22,7 +24,7 @@ final class NetworkService {
     }
     
     func request(api: URLRequestConvertible) -> AnyPublisher<Void, ErrorResponse> {
-        return AF.request(api)
+        return AF.request(api, interceptor: interceptor)
             .validate()
             .publishData()
             .tryMap { response in
@@ -50,7 +52,7 @@ final class NetworkService {
     }
     
     func requestWithResponse<T: Decodable>(api: URLRequestConvertible) -> AnyPublisher<T, Error> {
-        return AF.request(api)
+        return AF.request(api, interceptor: interceptor)
             .publishDecodable(type: T.self)
             .value()
             .mapError { $0 as Error }
@@ -58,7 +60,7 @@ final class NetworkService {
     }
     
     func requestWithResponse<T: Decodable>(api: URLRequestConvertible) -> AnyPublisher<T, ErrorResponse> {
-        return AF.request(api)
+        return AF.request(api, interceptor: interceptor)
             .validate()
             .publishData()
             .tryMap { response in
@@ -85,28 +87,6 @@ final class NetworkService {
             }
             .mapError { error -> ErrorResponse in
                 self.handleError(error)
-            }
-            .eraseToAnyPublisher()
-    }
-    
-    func handleError(_ error: Error) -> ErrorResponse {
-        if let errorResponse = error as? ErrorResponse {
-            return errorResponse
-        }
-        return ErrorResponse(code: "", message: "알 수 없는 에러")
-    }
-    
-    func refreshToken() -> AnyPublisher<Void, ErrorResponse> {
-        return (requestWithResponse(api: UserAPI.refreshToken(RefreshTokenRequest(refreshToken: KeychainWorker.shared.read(key: .refresh) ?? ""))) as AnyPublisher<TokenDto, ErrorResponse>)
-            .map { (tokenDto: TokenDto) -> Void in
-                KeychainWorker.shared.create(key: .access, token: tokenDto.token)
-                KeychainWorker.shared.create(key: .refresh, token: tokenDto.refreshToken)
-                return ()
-            }
-            .catch { error -> AnyPublisher<Void, ErrorResponse> in
-                KeychainWorker.shared.delete(key: .access)
-                KeychainWorker.shared.delete(key: .refresh)
-                return Fail(error: ErrorResponse(code: "401", message: "로그인이 필요한 기능이에요.")).eraseToAnyPublisher()
             }
             .eraseToAnyPublisher()
     }
@@ -169,5 +149,15 @@ final class NetworkService {
             }
             .eraseToAnyPublisher()
         
+    }
+}
+
+extension NetworkService {
+    
+    private func handleError(_ error: Error) -> ErrorResponse {
+        if let errorResponse = error as? ErrorResponse {
+            return errorResponse
+        }
+        return ErrorResponse(code: "", message: "알 수 없는 에러")
     }
 }

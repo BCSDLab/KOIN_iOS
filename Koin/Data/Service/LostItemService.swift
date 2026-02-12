@@ -32,50 +32,14 @@ final class DefaultLostItemService: LostItemService {
     
     func changeLostItemState(id: Int) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: LostItemAPI.changeListItemState(id))
-            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
-                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
-                if error.code == "401" {
-                    return self.networkService.refreshToken()
-                        .flatMap { _ in self.networkService.request(api: LostItemAPI.changeListItemState(id)) }
-                        .eraseToAnyPublisher()
-                } else {
-                    return Fail(error: error).eraseToAnyPublisher()
-                }
-            }
-            .eraseToAnyPublisher()
     }
     
     func deleteLostItem(id: Int) -> AnyPublisher<Void, Error> {
         return networkService.request(api: LostItemAPI.deleteLostItem(id))
-            .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
-                guard let self else { return Fail(error: error).eraseToAnyPublisher() }
-                if error.code == "401" {
-                    return self.networkService.refreshToken()
-                        .flatMap { _ in
-                            self.networkService.request(api: LostItemAPI.deleteLostItem(id))
-                        }
-                        .eraseToAnyPublisher()
-                } else {
-                    return Fail(error: error).eraseToAnyPublisher()
-                }
-            }
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
     }
     
     func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemDataDto, ErrorResponse> {
         return networkService.requestWithResponse(api: LostItemAPI.updateLostItem((id, requestModel)))
-            .catch { [weak self] error -> AnyPublisher<LostItemDataDto, ErrorResponse> in
-                guard let self = self else { return Fail(error: error).eraseToAnyPublisher() }
-                if error.code == "401" {
-                    return self.networkService.refreshToken()
-                        .flatMap { _ in self.networkService.requestWithResponse(api: LostItemAPI.updateLostItem((id, requestModel))) }
-                        .eraseToAnyPublisher()
-                } else {
-                    return Fail(error: error).eraseToAnyPublisher()
-                }
-            }
-            .eraseToAnyPublisher()
     }
     
     func fetchLostItemStats() -> AnyPublisher<LostItemStatsDto, Error> {

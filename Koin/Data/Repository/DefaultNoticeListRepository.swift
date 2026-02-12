@@ -16,7 +16,7 @@ final class DefaultNoticeListRepository: NoticeListRepository {
     }
     
     func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, Error> {
-        service.fetchLostItemArticles(requestModel: requestModel, retry: false)
+        service.fetchLostItemArticles(requestModel: requestModel)
     }
     
     
@@ -33,7 +33,7 @@ final class DefaultNoticeListRepository: NoticeListRepository {
     }
     
     func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDto, ErrorResponse> {
-        service.fetchLostItem(id: id, retry: false)
+        service.fetchLostItem(id: id)
     }
     
     

@@ -61,7 +61,7 @@ final class DefaultShopRepository: ShopRepository {
     }
     
     func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDto, ErrorResponse> {
-        return service.fetchReviewList(requestModel: requestModel, retry: false)
+        return service.fetchReviewList(requestModel: requestModel)
     }
     
     func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDto, ErrorResponse> {

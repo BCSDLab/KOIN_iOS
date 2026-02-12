@@ -9,14 +9,14 @@ import Alamofire
 import Combine
 
 protocol AbTestService {
-    func assignAbTest(requestModel: AssignAbTestRequest, retry: Bool) -> AnyPublisher<AssignAbTestResponse, ErrorResponse>
+    func assignAbTest(requestModel: AssignAbTestRequest) -> AnyPublisher<AssignAbTestResponse, ErrorResponse>
 }
 
 final class DefaultAbTestService: AbTestService {
     
     private let networkService = NetworkService()
     
-    func assignAbTest(requestModel: AssignAbTestRequest, retry: Bool = false) -> AnyPublisher<AssignAbTestResponse, ErrorResponse> {
+    func assignAbTest(requestModel: AssignAbTestRequest) -> AnyPublisher<AssignAbTestResponse, ErrorResponse> {
         if KeychainWorker.shared.read(key: .accessHistoryId) == nil {
             return self.assignAbTestToken()
                 .flatMap { _ in
@@ -32,19 +32,6 @@ final class DefaultAbTestService: AbTestService {
                 KeychainWorker.shared.create(key: .accessHistoryId, token: String(response.accessHistoryId))
                 KeychainWorker.shared.create(key: .variableName, token: response.variableName.rawValue)
             })
-            .catch { error -> AnyPublisher<AssignAbTestResponse, ErrorResponse> in
-                
-                if error.code == "401" && !retry {
-                    return self.networkService.refreshToken()
-                        .flatMap { _ in self.assignAbTest(requestModel: requestModel) } // 재시도
-                        .catch { refreshError -> AnyPublisher<AssignAbTestResponse, ErrorResponse> in
-                            return self.assignAbTest(requestModel: requestModel, retry: true)
-                        }
-                        .eraseToAnyPublisher()
-                } else {
-                    return Fail(error: error).eraseToAnyPublisher()
-                }
-            }
             .eraseToAnyPublisher()
     }
     
