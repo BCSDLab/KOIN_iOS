@@ -14,6 +14,17 @@ final class Interceptor: RequestInterceptor {
     private let retryLimit = 1
     private var subscriptions: Set<AnyCancellable> = []
     
+    func adapt(_ urlRequest: URLRequest,
+               for session: Session,
+               completion: @escaping (Result<URLRequest, any Error>) -> Void) {
+        
+        var urlRequest = urlRequest
+        if let token = KeychainWorker.shared.read(key: .access) {
+            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        completion(.success(urlRequest))
+    }
+    
     func retry(_ request: Request,
                for session: Session,
                dueTo error: any Error,

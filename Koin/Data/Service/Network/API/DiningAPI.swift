@@ -38,16 +38,7 @@ extension DiningAPI: Router, URLRequestConvertible {
     }
     
     public var headers: [String: String] {
-        switch self {
-        case .fetchCoopShopList: return [:]
-        case .diningLike, .fetchDiningList: 
-            if let token = KeychainWorker.shared.read(key: .access) {
-                let headers = ["Authorization": "Bearer \(token)"]
-                return headers
-            } else {
-                return [:]
-            }
-        }
+        return [:]
     }
     
     public var parameters: Any? {
