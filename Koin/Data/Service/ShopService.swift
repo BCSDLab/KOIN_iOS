@@ -42,20 +42,19 @@ final class DefaultShopService: ShopService {
     private let networkService = NetworkService()
     
     func fetchShopMenusCategory(shopId: Int) -> AnyPublisher<ShopMenusCategoryDto, Error> {
-        request(.fetchShopMenusCategoryList(shopId: shopId))
+        return networkService.requestWithResponse(api: ShopAPI.fetchShopMenusCategoryList(shopId: shopId))
     }
     
     func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDto, Error> {
-        request(.fetchShopSummary(id))
-        
+        return networkService.requestWithResponse(api: ShopAPI.fetchShopSummary(id))
     }
     
     func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, Error> {
-        request(.fetchShopBenefits)
+        return networkService.requestWithResponse(api: ShopAPI.fetchShopBenefits)
     }
     
     func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, Error> {
-        request(.fetchBeneficialShops(id))
+        return networkService.requestWithResponse(api: ShopAPI.fetchBeneficialShops(id))
     }
     
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
@@ -182,35 +181,35 @@ final class DefaultShopService: ShopService {
     }
     
     func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, Error> {
-        return request(.fetchShopList(requestModel))
+        return networkService.requestWithResponse(api: ShopAPI.fetchShopList(requestModel))
     }
     
     func fetchEventList() -> AnyPublisher<EventsDto, Error> {
-        return request(.fetchEventList)
+        return networkService.requestWithResponse(api: ShopAPI.fetchEventList)
     }
     
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, Error> {
-        return request(.fetchShopCategoryList)
+        return networkService.requestWithResponse(api: ShopAPI.fetchShopCategoryList)
     }
     
     func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, Error> {
-        return request(.fetchShopData(requestModel))
+        return networkService.requestWithResponse(api: ShopAPI.fetchShopData(requestModel))
     }
     
     func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDto, Error> {
-        return request(.fetchShopMenuList(requestModel))
+        return networkService.requestWithResponse(api: ShopAPI.fetchShopMenuList(requestModel))
     }
     
     func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDto, Error> {
-        return request(.fetchShopEventList(requestModel))
+        return networkService.requestWithResponse(api: ShopAPI.fetchShopEventList(requestModel))
     }
     
     func searchRelatedShops(text: String) -> AnyPublisher<RelatedKeywordsDto, Error> {
-        return request(.searchShop(text))
+        return networkService.requestWithResponse(api: ShopAPI.searchShop(text))
     }
     
     func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearchDto, Error> {
-        return request(.fetchSearchShop(requestModel))
+        return networkService.requestWithResponse(api: ShopAPI.fetchSearchShop(requestModel))
     }
     
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse> {
@@ -225,14 +224,6 @@ final class DefaultShopService: ShopService {
                     return Fail(error: error).eraseToAnyPublisher()
                 }
             }
-            .eraseToAnyPublisher()
-    }
-    
-    private func request<T: Decodable>(_ api: ShopAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
 }

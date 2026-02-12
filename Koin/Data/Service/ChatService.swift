@@ -17,6 +17,9 @@ protocol ChatService {
 }
 
 final class DefaultChatService: ChatService {
+    
+    private let networkService = NetworkService()
+    
     func createChatRoom(articleId: Int) -> AnyPublisher<CreateChatRoomResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: ChatAPI.createChatRoom(articleId))
             .catch { [weak self] error -> AnyPublisher<CreateChatRoomResponse, ErrorResponse> in
@@ -31,8 +34,6 @@ final class DefaultChatService: ChatService {
             }
             .eraseToAnyPublisher()
     }
-    
-    private let networkService = NetworkService()
     
     func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: ChatAPI.blockUser(articleId, chatRoomId))
@@ -91,15 +92,6 @@ final class DefaultChatService: ChatService {
                     return Fail(error: error).eraseToAnyPublisher()
                 }
             }
-            .eraseToAnyPublisher()
-    }
-    
-    
-    private func request<T: Decodable>(_ api: LandAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
 }

@@ -23,11 +23,11 @@ final class DefaultLostItemService: LostItemService {
     private let networkService = NetworkService()
     
     func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemListDto, Error> {
-        return request(.fetchLostItemList(requestModel))
+        return networkService.requestWithResponse(api: LostItemAPI.fetchLostItemList(requestModel))
     }
     
     func fetchLostItemData(id: Int) -> AnyPublisher<LostItemDataDto, Error> {
-        return request(.fetchLostItemData(id))
+        return networkService.requestWithResponse(api: LostItemAPI.fetchLostItemData(id))
     }
     
     func changeLostItemState(id: Int) -> AnyPublisher<Void, ErrorResponse> {
@@ -79,24 +79,6 @@ final class DefaultLostItemService: LostItemService {
     }
     
     func fetchLostItemStats() -> AnyPublisher<LostItemStatsDto, Error> {
-        return request(LostItemAPI.fetchLostItemStats)
-    }
-    
-    private func request<T: Decodable>(_ api: LostItemAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
-    }
-    
-    private func request(_ api: LostItemAPI) -> AnyPublisher<Void, Error> {
-        return AF.request(api)
-            .validate()
-            .publishData()
-            .value()
-            .map { _ in }
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
+        return networkService.requestWithResponse(api: LostItemAPI.fetchLostItemStats)
     }
 }

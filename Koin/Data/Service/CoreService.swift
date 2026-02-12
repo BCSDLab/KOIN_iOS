@@ -16,25 +16,22 @@ protocol CoreService {
 }
 
 final class DefaultCoreService: CoreService {
+    
+    private let networkService = NetworkService()
+    
     func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error> {
-        return request(.checkVersion)
+        return networkService.requestWithResponse(api: CoreAPI.checkVersion)
     }
+    
     func fetchBanner() -> AnyPublisher<BannerDto, Error> {
-        return request(.fetchBanner)
+        return networkService.requestWithResponse(api: CoreAPI.fetchBanner)
     }
+    
     func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error> {
-        return request(.fetchClubCategories)
+        return networkService.requestWithResponse(api: CoreAPI.fetchClubCategories)
     }
     
     func fetchHotClubs() -> AnyPublisher<HotClubDto, Error> {
-        return request(.fetchHotClubs)
-    }
-
-    private func request<T: Decodable>(_ api: CoreAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
+        return networkService.requestWithResponse(api: CoreAPI.fetchHotClubs)
     }
 }

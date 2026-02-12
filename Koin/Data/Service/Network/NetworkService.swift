@@ -9,7 +9,18 @@ import Foundation
 import Alamofire
 import Combine
 
-class NetworkService {
+final class NetworkService {
+    
+    func request(api: URLRequestConvertible) -> AnyPublisher<Void, Error> {
+        return AF.request(api)
+            .validate()
+            .publishData()
+            .value()
+            .map { _ in }
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
+    }
+    
     func request(api: URLRequestConvertible) -> AnyPublisher<Void, ErrorResponse> {
         return AF.request(api)
             .validate()
@@ -35,6 +46,14 @@ class NetworkService {
             .mapError { error -> ErrorResponse in
                 self.handleError(error)
             }
+            .eraseToAnyPublisher()
+    }
+    
+    func requestWithResponse<T: Decodable>(api: URLRequestConvertible) -> AnyPublisher<T, Error> {
+        return AF.request(api)
+            .publishDecodable(type: T.self)
+            .value()
+            .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
     
@@ -78,7 +97,7 @@ class NetworkService {
     }
     
     func refreshToken() -> AnyPublisher<Void, ErrorResponse> {
-        return requestWithResponse(api: UserAPI.refreshToken(RefreshTokenRequest(refreshToken: KeychainWorker.shared.read(key: .refresh) ?? "")))
+        return (requestWithResponse(api: UserAPI.refreshToken(RefreshTokenRequest(refreshToken: KeychainWorker.shared.read(key: .refresh) ?? ""))) as AnyPublisher<TokenDto, ErrorResponse>)
             .map { (tokenDto: TokenDto) -> Void in
                 KeychainWorker.shared.create(key: .access, token: tokenDto.token)
                 KeychainWorker.shared.create(key: .refresh, token: tokenDto.refreshToken)

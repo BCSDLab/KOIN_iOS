@@ -19,37 +19,29 @@ protocol BusService {
 
 final class DefaultBusService: BusService {
     
-    let mockNetworkService = MockNetworkService()
+    private let networkService = NetworkService()
     
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, Error> {
-        return request(.fetchBusTimetableList(requestModel))
+        return networkService.requestWithResponse(api: BusAPI.fetchBusTimetableList(requestModel))
     }
     
     func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, Error> {
-        return request(.searchBusInformation(requestModel))
+        return networkService.requestWithResponse(api: BusAPI.searchBusInformation(requestModel))
     }
     
     func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, Error> {
-        return request(.fetchShuttleBusTimetableRoute)
+        return networkService.requestWithResponse(api: BusAPI.fetchShuttleBusTimetableRoute)
     }
     
     func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, Error> {
-        return request(.fetchCityBusTimetableList(requestModel))
+        return networkService.requestWithResponse(api: BusAPI.fetchCityBusTimetableList(requestModel))
     }
     
     func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, Error> {
-        return request(.fetchEmergencyNotice)
+        return networkService.requestWithResponse(api: BusAPI.fetchEmergencyNotice)
     }
     
     func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error> {
-        return request(.fetchShuttleBusTimetableList(id))
-    }
-
-    private func request<T: Decodable>(_ api: BusAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
+        return networkService.requestWithResponse(api: BusAPI.fetchShuttleBusTimetableList(id))
     }
 }

@@ -35,6 +35,9 @@ protocol UserService {
 }
 
 final class DefaultUserService: UserService {
+    
+    private let networkService = NetworkService()
+    
     func changePassword(requestModel: ChangePasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: UserAPI.changePassword(requestModel))
             .catch { [weak self] error -> AnyPublisher<Void, ErrorResponse> in
@@ -49,9 +52,6 @@ final class DefaultUserService: UserService {
             }
             .eraseToAnyPublisher()
     }
-    
-    
-    private let networkService = NetworkService()
     
     func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: UserAPI.resetPasswordSms(requestModel))

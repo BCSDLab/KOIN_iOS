@@ -38,7 +38,7 @@ final class DefaultDiningService: DiningService {
     
     
     func fetchCoopShopList() -> AnyPublisher<CoopShopDto, Error> {
-        return request(.fetchCoopShopList)
+        return networkService.requestWithResponse(api: DiningAPI.fetchCoopShopList)
     }
     
     func diningLike(requestModel: DiningLikeRequest, isLiked: Bool) -> AnyPublisher<Void, ErrorResponse> {
@@ -53,14 +53,6 @@ final class DefaultDiningService: DiningService {
                     return Fail(error: error).eraseToAnyPublisher()
                 }
             }
-            .eraseToAnyPublisher()
-    }
-    
-    private func request<T: Decodable>(_ api: DiningAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
 }

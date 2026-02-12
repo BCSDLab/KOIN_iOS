@@ -31,8 +31,8 @@ protocol NoticeListService {
 
 final class DefaultNoticeService: NoticeListService {
         
-    let networkService = NetworkService()
-    let coreDataService = CoreDataService.shared
+    private let networkService = NetworkService()
+    private let coreDataService = CoreDataService.shared
     
     func fetchLostItemArticles(requestModel: FetchLostItemsRequest, retry: Bool) -> AnyPublisher<NoticeListDto, Error> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemArticles(requestModel))
@@ -51,7 +51,6 @@ final class DefaultNoticeService: NoticeListService {
             }
             .eraseToAnyPublisher()
     }
-    
     
     func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: NoticeListAPI.reportLostItem(id, request))
@@ -84,8 +83,9 @@ final class DefaultNoticeService: NoticeListService {
     }
     
     func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error> {
-        return request(.fetchLostItemList(requestModel))
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemList(requestModel))
     }
+    
     func fetchLostItem(id: Int, retry: Bool = false) -> AnyPublisher<LostArticleDetailDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItem(id))
             .catch { [weak self] error -> AnyPublisher<LostArticleDetailDto, ErrorResponse> in
@@ -120,19 +120,19 @@ final class DefaultNoticeService: NoticeListService {
     }
     
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error> {
-        return request(.fetchNoticeArticles(requestModel))
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchNoticeArticles(requestModel))
     }
     
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, Error> {
-        return request(.searchNoticeArticle(requestModel))
+        return networkService.requestWithResponse(api: NoticeListAPI.searchNoticeArticle(requestModel))
     }
     
     func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, Error> {
-        return request(.fetchNoticeData(requestModel))
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchNoticeData(requestModel))
     }
     
     func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDto], Error> {
-        return request(.fetchHotNoticeArticles)
+        return networkService.requestWithResponse(api: NoticeListAPI.fetchHotNoticeArticles)
     }
     
     func createNotificationKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<NoticeKeywordDto, ErrorResponse> {
@@ -204,10 +204,10 @@ final class DefaultNoticeService: NoticeListService {
     func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, Error> {
         if let count = count {
             let requestModel = FetchRecommendedSearchWordRequest(count: count)
-            return request(.fetchRecommendedSearchWord(requestModel)).eraseToAnyPublisher()
+            return networkService.requestWithResponse(api: NoticeListAPI.fetchRecommendedSearchWord(requestModel)).eraseToAnyPublisher()
         }
         else {
-            return request(.fetchRecommendedKeyword).eraseToAnyPublisher()
+            return networkService.requestWithResponse(api: NoticeListAPI.fetchRecommendedKeyword).eraseToAnyPublisher()
         }
     }
     
@@ -271,13 +271,5 @@ final class DefaultNoticeService: NoticeListService {
         keyword.name = requestModel.keyword
         self.coreDataService.insert(insertedObject: keyword)
         return Fail(error: ErrorResponse(code: "", message: "로그인에 실패하여 코어데이터에 키워드 저장")).eraseToAnyPublisher()
-    }
-
-    private func request<T: Decodable>(_ api: NoticeListAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
     }
 }

@@ -1624,6 +1624,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7C16AA352F3DE8F50071ABE6 /* CoreData */ = {
+			isa = PBXGroup;
+			children = (
+				8354BE512C7A0566009D4D7A /* CoreDataService.swift */,
+			);
+			path = CoreData;
+			sourceTree = "<group>";
+		};
 		7C372ED72F1B7F3100149729 /* LostItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -4198,6 +4206,8 @@
 		D2FB23582BFD72C60098BA2B /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				D20AB9462C552E68006BC684 /* NetworkService.swift */,
+				83E770F72D05864800EB3F84 /* MockNetworkService.swift */,
 				D2FB235D2BFDAB980098BA2B /* API */,
 				D2FB235F2BFDABBB0098BA2B /* Router.swift */,
 			);
@@ -4236,8 +4246,6 @@
 			isa = PBXGroup;
 			children = (
 				D2D462692D63BA5200C60864 /* ChatService.swift */,
-				83E770F72D05864800EB3F84 /* MockNetworkService.swift */,
-				D20AB9462C552E68006BC684 /* NetworkService.swift */,
 				D20AB9572C553621006BC684 /* NotiService.swift */,
 				D2FB236D2C0410510098BA2B /* LogAnalyticsService.swift */,
 				D29F21C22C4DE27C00994554 /* UserService.swift */,
@@ -4249,10 +4257,10 @@
 				83DD0D852C4FA84900278ABD /* BusService.swift */,
 				833D9C442C70672C00982145 /* NoticeListService.swift */,
 				7C8ADD322F20BEC200F85BDE /* LostItemService.swift */,
-				8354BE512C7A0566009D4D7A /* CoreDataService.swift */,
 				D208A7A72CA11221007040E7 /* AbTestService.swift */,
 				D208A7CA2CABB755007040E7 /* CoreService.swift */,
 				D2FB23582BFD72C60098BA2B /* Network */,
+				7C16AA352F3DE8F50071ABE6 /* CoreData */,
 			);
 			path = Service;
 			sourceTree = "<group>";

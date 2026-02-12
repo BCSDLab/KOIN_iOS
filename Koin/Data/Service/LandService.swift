@@ -15,19 +15,13 @@ protocol LandService {
 
 final class DefaultLandService: LandService {
     
+    private let networkService = NetworkService()
+    
     func fetchLandList() -> AnyPublisher<LandDto, Error> {
-        return request(.fetchLandList)
+        return networkService.requestWithResponse(api: LandAPI.fetchLandList)
     }
     
     func fetchLandDetail(requestModel: FetchLandDetailRequest) -> AnyPublisher<LandDetailDto, Error> {
-        return request(.fetchLandDetail(requestModel))
-    }
-
-    private func request<T: Decodable>(_ api: LandAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
+        return networkService.requestWithResponse(api: LandAPI.fetchLandDetail(requestModel))
     }
 }

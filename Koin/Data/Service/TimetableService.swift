@@ -122,14 +122,14 @@ final class DefaultTimetableService: TimetableService {
     }
     
     func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], Error> {
-        request(.fetchLectureList(semester: semester))
+        return networkService.requestWithResponse(api: TimetableAPI.fetchLectureList(semester: semester))
     }
     
     func fetchSemester() -> AnyPublisher<[SemesterDto], Error> {
-        request(.fetchSemester)
+        return networkService.requestWithResponse(api: TimetableAPI.fetchSemester)
     }
     func fetchDeptList() -> AnyPublisher<[DeptDto], Error> {
-        return request(.fetchDeptList)
+        return networkService.requestWithResponse(api: TimetableAPI.fetchDeptList)
     }
     
     func fetchLecture(frameId: Int) -> AnyPublisher<LectureDto, ErrorResponse> {
@@ -234,15 +234,6 @@ final class DefaultTimetableService: TimetableService {
                     return Fail(error: error).eraseToAnyPublisher()
                 }
             }
-            .eraseToAnyPublisher()
-    }
-    
-   
-    private func request<T: Decodable>(_ api: TimetableAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
             .eraseToAnyPublisher()
     }
 }
