@@ -14,15 +14,38 @@ final class Interceptor: RequestInterceptor {
     private let retryLimit = 1
     private var subscriptions: Set<AnyCancellable> = []
     
+    private let lock = NSLock()
+    @Published private var isRefreshing = false
+    
     func adapt(_ urlRequest: URLRequest,
                for session: Session,
                completion: @escaping (Result<URLRequest, any Error>) -> Void) {
         
-        var urlRequest = urlRequest
-        if let token = KeychainWorker.shared.read(key: .access) {
-            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        lock.lock()
+        defer {
+            lock.unlock()
         }
-        completion(.success(urlRequest))
+        
+        switch isRefreshing {
+        case true:
+            $isRefreshing
+                .filter { $0 == false }
+                .first()
+                .sink { _ in
+                    var urlRequest = urlRequest
+                    if let token = KeychainWorker.shared.read(key: .access) {
+                        urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+                    }
+                    completion(.success(urlRequest))
+                }
+                .store(in: &subscriptions)
+        case false:
+            var urlRequest = urlRequest
+            if let token = KeychainWorker.shared.read(key: .access) {
+                urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+            }
+            completion(.success(urlRequest))
+        }
     }
     
     func retry(_ request: Request,
@@ -30,7 +53,7 @@ final class Interceptor: RequestInterceptor {
                dueTo error: any Error,
                completion: @escaping @Sendable (RetryResult) -> Void) {
 
-        guard let responseCode = error.asAFError?.responseCode,
+        guard let responseCode = request.response?.statusCode,
               responseCode == 401,
               request.retryCount < retryLimit,
               let _ = KeychainWorker.shared.read(key: .refresh) else {
@@ -38,9 +61,32 @@ final class Interceptor: RequestInterceptor {
             return
         }
         
-        refreshToken().sink( receiveValue: { isRefreshed in
-            completion(isRefreshed ? .retry : .doNotRetryWithError(error))
-        }).store(in: &subscriptions)
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        
+        switch isRefreshing {
+        case true:
+            $isRefreshing
+                .filter { $0 == false }
+                .first()
+                .sink { _ in
+                    completion(.retry)
+                }
+                .store(in: &subscriptions)
+        case false:
+            isRefreshing = true
+            refreshToken().sink( receiveValue: { [weak self] isRefreshed in
+                guard let self else { return }
+                
+                lock.lock()
+                isRefreshing = false
+                lock.unlock()
+                
+                completion(isRefreshed ? .retry : .doNotRetryWithError(error))
+            }).store(in: &subscriptions)
+        }
     }
 }
 
