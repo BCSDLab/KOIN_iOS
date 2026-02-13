@@ -19,7 +19,9 @@ final class NetworkService {
             .publishData()
             .value()
             .map { _ in }
-            .mapError { $0 as Error }
+            .mapError { error -> Error in
+                self.handleError(error)
+            }
             .eraseToAnyPublisher()
     }
     
@@ -53,9 +55,12 @@ final class NetworkService {
     
     func requestWithResponse<T: Decodable>(api: URLRequestConvertible) -> AnyPublisher<T, Error> {
         return AF.request(api, interceptor: interceptor)
+            .validate()
             .publishDecodable(type: T.self)
             .value()
-            .mapError { $0 as Error }
+            .mapError { error -> Error in
+                self.handleError(error)
+            }
             .eraseToAnyPublisher()
     }
     
@@ -156,8 +161,20 @@ extension NetworkService {
     
     private func handleError(_ error: Error) -> ErrorResponse {
         if let errorResponse = error as? ErrorResponse {
+            if let code = Int(errorResponse.code),
+               500..<600 ~= code {
+                NotificationCenter.default.post(name: NSNotification.Name("ServerError"), object: nil)
+            }
             return errorResponse
         }
         return ErrorResponse(code: "", message: "알 수 없는 에러")
+    }
+    
+    private func handleError(_ error: AFError) -> Error {
+        if let code = error.responseCode,
+           500..<600 ~= code {
+            NotificationCenter.default.post(name: NSNotification.Name("ServerError"), object: nil)
+        }
+        return error as Error
     }
 }

@@ -12,6 +12,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     var urlParameters: [String: String]?
     
+    override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(presentErrorViewController), name: NSNotification.Name("ServerError"), object: nil)
+    }
+    
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
@@ -115,5 +120,18 @@ extension SceneDelegate {
         return viewController
     }
     
-    
+    @objc private func presentErrorViewController() {
+        
+        if let navigationController = window?.rootViewController as? UINavigationController {
+            
+            let homeViewController = makeHomeViewController()
+            let completion: ()->Void = {
+                navigationController.setViewControllers([homeViewController], animated: false)
+            }
+            let errorViewController = ErrorViewController(completion: completion).then {
+                $0.modalPresentationStyle = .fullScreen
+            }
+            navigationController.present(errorViewController, animated: true)
+        }
+    }
 }
