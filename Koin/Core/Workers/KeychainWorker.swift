@@ -19,58 +19,89 @@ final class KeychainWorker {
     }
     static let shared = KeychainWorker()
     
-    private init() { }
+    private init() {}
+    private var keychains: [TokenType: String?] = [:]
+    private let lock = NSLock()
     
     func create(key: TokenType, token: String) {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: keyType(key: key),
             kSecValueData: token.data(using: .utf8, allowLossyConversion: false) as Any
         ]
         SecItemDelete(query)
+        keychains.removeValue(forKey: key)
         
         let status = SecItemAdd(query, nil)
-        if status != errSecSuccess {
-            print("Failed to save token, status code: \(status)")
+        if status == errSecSuccess {
+            keychains.updateValue(token, forKey: key)
+        } else {
+            print("Failed to save \(key) token,", SecCopyErrorMessageString(status, nil) ?? "")
         }
     }
     
     func read(key: TokenType) -> String? {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        
+        if let token: String? = keychains[key] {
+            return token
+        }
+        
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: keyType(key: key),
             kSecReturnData: kCFBooleanTrue as Any,
             kSecMatchLimit: kSecMatchLimitOne
         ]
-        
         var dataTypeRef: AnyObject?
         let status = SecItemCopyMatching(query, &dataTypeRef)
         
-        if status == errSecSuccess {
-            if let retrievedData: Data = dataTypeRef as? Data {
-                let value = String(data: retrievedData, encoding: String.Encoding.utf8)
-                return value
-            } else { return nil }
+        if status == errSecSuccess,
+           let retrievedData: Data = dataTypeRef as? Data,
+           let value = String(data: retrievedData, encoding: String.Encoding.utf8) {
+            keychains.updateValue(value, forKey: key)
+            return value
+        } else if status == errSecItemNotFound {
+            keychains.updateValue(nil, forKey: key)
+            return nil
         } else {
-            print("failed to loading, status code = \(status)")
+            print("Failed to load \(key) token,", SecCopyErrorMessageString(status, nil) ?? "")
             return nil
         }
     }
     
     func delete(key: TokenType) {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        
+        keychains.removeValue(forKey: key)
+        
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: keyType(key: key)
         ]
         let status = SecItemDelete(query)
-          if status == errSecSuccess {
-              print("Item successfully deleted")
-          } else if status == errSecItemNotFound {
-              print("Item not found")
-          } else {
-              print("Error deleting the item, status code: \(status)")
-          }
+        if status == errSecSuccess {
+            return
+        } else if status == errSecItemNotFound {
+            print("\(key) token not found")
+        } else {
+            print("Error deleting \(key) token", SecCopyErrorMessageString(status, nil) ?? "")
+        }
     }
+}
+
+extension KeychainWorker {
     
     private func keyType(key: TokenType) -> String {
         let keyType: String
@@ -85,5 +116,4 @@ final class KeychainWorker {
         }
         return keyType
     }
-    
 }
