@@ -10,7 +10,7 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    private var isPresentingPresentErrorViewController = false
+    private var isPresentingErrorViewController = false
     
     override init() {
         super.init()
@@ -126,16 +126,16 @@ extension SceneDelegate {
     
     @objc private func presentErrorViewController() {
         
-        guard isPresentingPresentErrorViewController == false else {
+        guard isPresentingErrorViewController == false else {
             return
         }
-        isPresentingPresentErrorViewController = true
+        isPresentingErrorViewController = true
         
         if let navigationController = window?.rootViewController as? UINavigationController {
             
             let homeViewController = makeHomeViewController()
             let completion: ()->Void = { [weak self] in
-                self?.isPresentingPresentErrorViewController = false
+                self?.isPresentingErrorViewController = false
                 navigationController.setViewControllers([homeViewController], animated: false)
             }
             let errorViewController = ErrorViewController(completion: completion).then {
