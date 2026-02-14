@@ -102,23 +102,32 @@ final class NetworkService {
                 .eraseToAnyPublisher()
         }
         
-        return Future<FileUploadResponse, ErrorResponse> { promise in
-            api.asMultipartRequest(data: files, withName: "files", fileName: "file", mimeType: "image/png")
-                .responseDecodable(of: FileUploadResponse.self) { response in
-                    switch response.result {
-                    case .success(let fileUploadResponse):
-                        promise(.success(fileUploadResponse))
-                    case .failure:
-                        if let data = response.data {
-                            let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data)
-                            promise(.failure(errorResponse ?? ErrorResponse(code: "unknown", message: "An unknown error occurred")))
-                        } else {
-                            promise(.failure(ErrorResponse(code: "unknown", message: "An unknown error occurred")))
-                        }
-                    }
+        return AF.upload(multipartFormData: api.asMultipartFormData(data: files),
+                         to: api.baseURL + api.path,
+                         method: api.method,
+                         headers: Alamofire.HTTPHeaders(api.headers),
+                         interceptor: interceptor)
+            .publishData()
+            .tryMap { response in
+                guard let httpResponse = response.response else {
+                    throw ErrorResponse(code: "", message: "서버 응답 오류")
                 }
-        }
-        .eraseToAnyPublisher()
+                if 200..<300 ~= httpResponse.statusCode,
+                   let data = response.data,
+                   let decodedResponse = try? JSONDecoder().decode(FileUploadResponse.self, from: data) {
+                    return decodedResponse
+                }
+                if let data = response.data,
+                   let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
+                    throw errorResponse
+                } else {
+                    throw ErrorResponse(code: "", message: "ErrorResponse 디코딩 실패")
+                }
+            }
+            .mapError { error -> ErrorResponse in
+                self.handleError(error)
+            }
+            .eraseToAnyPublisher()
     }
     
     func downloadFiles(api: URLRequest, fileName: String) -> AnyPublisher<URL?, ErrorResponse> {
@@ -129,7 +138,7 @@ final class NetworkService {
             return (fileUrl, [.removePreviousFile, .createIntermediateDirectories])
         }
         
-        return AF.download(api, to: destination)
+        return AF.download(api, interceptor: interceptor, to: destination)
             .validate()
             .publishData()
             .tryMap { response in
