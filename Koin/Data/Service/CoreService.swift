@@ -9,29 +9,29 @@ import Alamofire
 import Combine
 
 protocol CoreService {
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error>
-    func fetchBanner() -> AnyPublisher<BannerDto, Error>
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error>
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error>
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse>
+    func fetchBanner() -> AnyPublisher<BannerDto, ErrorResponse>
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse>
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse>
 }
 
 final class DefaultCoreService: CoreService {
     
     private let networkService = NetworkService()
     
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error> {
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: CoreAPI.checkVersion)
     }
     
-    func fetchBanner() -> AnyPublisher<BannerDto, Error> {
+    func fetchBanner() -> AnyPublisher<BannerDto, ErrorResponse> {
         return networkService.requestWithResponse(api: CoreAPI.fetchBanner)
     }
     
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error> {
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse> {
         return networkService.requestWithResponse(api: CoreAPI.fetchClubCategories)
     }
     
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error> {
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse> {
         return networkService.requestWithResponse(api: CoreAPI.fetchHotClubs)
     }
 }

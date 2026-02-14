@@ -10,7 +10,7 @@ import Alamofire
 import Combine
 
 class MockNetworkService {
-    func request<T: Decodable>(api: URLRequest) -> AnyPublisher<T, Error> {
+    func request<T: Decodable>(api: URLRequest) -> AnyPublisher<T, ErrorResponse> {
         
         return AF.request(api)
             .validate()
@@ -36,8 +36,10 @@ class MockNetworkService {
                 return try JSONDecoder().decode(T.self, from: data)
             }
             .mapError { error in
-                
-                return error
+                if let errorResponse = error as? ErrorResponse {
+                    return errorResponse
+                }
+                return ErrorResponse(code: "", message: "")
             }
             .eraseToAnyPublisher()
     }

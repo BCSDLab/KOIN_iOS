@@ -10,7 +10,7 @@ import Combine
 
 protocol DiningService {
     func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDto], ErrorResponse>
-    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, Error>
+    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, ErrorResponse>
     func diningLike(requestModel: DiningLikeRequest, isLiked: Bool) -> AnyPublisher<Void, ErrorResponse>
 }
 
@@ -23,7 +23,7 @@ final class DefaultDiningService: DiningService {
     }
     
     
-    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, Error> {
+    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, ErrorResponse> {
         return networkService.requestWithResponse(api: DiningAPI.fetchCoopShopList)
     }
     

@@ -9,39 +9,39 @@ import Alamofire
 import Combine
 
 protocol BusService {
-    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, Error>
-    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, Error>
-    func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, Error>
-    func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, Error>
-    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, Error>
-    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error>
+    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, ErrorResponse>
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, ErrorResponse>
+    func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, ErrorResponse>
+    func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, ErrorResponse>
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, ErrorResponse>
+    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, ErrorResponse>
 }
 
 final class DefaultBusService: BusService {
     
     private let networkService = NetworkService()
     
-    func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, Error> {
+    func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, ErrorResponse> {
         return networkService.requestWithResponse(api: BusAPI.fetchBusTimetableList(requestModel))
     }
     
-    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, Error> {
+    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, ErrorResponse> {
         return networkService.requestWithResponse(api: BusAPI.searchBusInformation(requestModel))
     }
     
-    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, Error> {
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, ErrorResponse> {
         return networkService.requestWithResponse(api: BusAPI.fetchShuttleBusTimetableRoute)
     }
     
-    func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, Error> {
+    func fetchCityTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, ErrorResponse> {
         return networkService.requestWithResponse(api: BusAPI.fetchCityBusTimetableList(requestModel))
     }
     
-    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, Error> {
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, ErrorResponse> {
         return networkService.requestWithResponse(api: BusAPI.fetchEmergencyNotice)
     }
     
-    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, Error> {
+    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetableDto, ErrorResponse> {
         return networkService.requestWithResponse(api: BusAPI.fetchShuttleBusTimetableList(id))
     }
 }

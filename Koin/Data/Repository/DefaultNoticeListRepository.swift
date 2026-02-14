@@ -15,7 +15,7 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         self.service = service
     }
     
-    func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, Error> {
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         service.fetchLostItemArticles(requestModel: requestModel)
     }
     
@@ -37,23 +37,23 @@ final class DefaultNoticeListRepository: NoticeListRepository {
     }
     
     
-    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error> {
+    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         return service.fetchNoticeArticles(requestModel: requestModel)
     }
     
-    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error> {
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         return service.fetchLostItemList(requestModel: requestModel)
     }
     
-    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, Error> {
+    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         return service.searchNoticeArticle(requestModel: requestModel)
     }
     
-    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, Error> {
+    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, ErrorResponse> {
         return service.fetchNoticeData(requestModel: requestModel)
     }
     
-    func fetchHotNoticeArticle() -> AnyPublisher<[NoticeArticleDto], Error> {
+    func fetchHotNoticeArticle() -> AnyPublisher<[NoticeArticleDto], ErrorResponse> {
         return service.fetchHotNoticeArticles()
     }
     
@@ -69,7 +69,7 @@ final class DefaultNoticeListRepository: NoticeListRepository {
         return service.fetchMyNotificationKeyword()
     }
     
-    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, Error> {
+    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, ErrorResponse> {
         return service.fetchRecommendedKeyword(count: count)
     }
     

@@ -9,7 +9,7 @@ import Alamofire
 import Combine
 
 protocol TimetableService {
-    func fetchDeptList() -> AnyPublisher<[DeptDto], Error>
+    func fetchDeptList() -> AnyPublisher<[DeptDto], ErrorResponse>
     func fetchFrame(semester: String) -> AnyPublisher<[FrameDto], ErrorResponse>
     func deleteFrame(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func createFrame(semester: String) -> AnyPublisher<FrameDto, ErrorResponse>
@@ -18,8 +18,8 @@ protocol TimetableService {
     func modifyLecture(request: LectureRequest) -> AnyPublisher<LectureDto, ErrorResponse>
     func postLecture(request: LectureRequest) -> AnyPublisher<LectureDto, ErrorResponse>
     func fetchMySemester() -> AnyPublisher<MySemesterDto, ErrorResponse>
-    func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], Error>
-    func fetchSemester() -> AnyPublisher<[SemesterDto], Error>
+    func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], ErrorResponse>
+    func fetchSemester() -> AnyPublisher<[SemesterDto], ErrorResponse>
     func deleteLecture(frameId: Int, lectureId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteSemester(semester: String) -> AnyPublisher<Void, ErrorResponse>
     func _deleteLecture(id: Int) -> AnyPublisher<Void, ErrorResponse>
@@ -55,14 +55,14 @@ final class DefaultTimetableService: TimetableService {
         return networkService.requestWithResponse(api: TimetableAPI.fetchMySemester)
     }
     
-    func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], Error> {
+    func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], ErrorResponse> {
         return networkService.requestWithResponse(api: TimetableAPI.fetchLectureList(semester: semester))
     }
     
-    func fetchSemester() -> AnyPublisher<[SemesterDto], Error> {
+    func fetchSemester() -> AnyPublisher<[SemesterDto], ErrorResponse> {
         return networkService.requestWithResponse(api: TimetableAPI.fetchSemester)
     }
-    func fetchDeptList() -> AnyPublisher<[DeptDto], Error> {
+    func fetchDeptList() -> AnyPublisher<[DeptDto], ErrorResponse> {
         return networkService.requestWithResponse(api: TimetableAPI.fetchDeptList)
     }
     

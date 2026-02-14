@@ -10,20 +10,20 @@ import Alamofire
 import Combine
 
 protocol NoticeListService {
-    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error>
-    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, Error>
-    func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, Error>
-    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, Error>
-    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDto], Error>
+    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, ErrorResponse>
+    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, ErrorResponse>
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, ErrorResponse>
+    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, ErrorResponse>
+    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDto], ErrorResponse>
     func createNotificationKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<NoticeKeywordDto, ErrorResponse>
     func deleteNotificationKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<Void, ErrorResponse>
     func fetchMyNotificationKeyword() -> AnyPublisher<NoticeKeywordsFetchResult, ErrorResponse>
-    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, Error>
+    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, ErrorResponse>
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse>
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
     func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse>
-    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error>
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, ErrorResponse>
     func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDto, ErrorResponse>
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
@@ -34,7 +34,7 @@ final class DefaultNoticeService: NoticeListService {
     private let networkService = NetworkService()
     private let coreDataService = CoreDataService.shared
     
-    func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, Error> {
+    func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemArticles(requestModel))
     }
     
@@ -46,7 +46,7 @@ final class DefaultNoticeService: NoticeListService {
         return networkService.requestWithResponse(api: NoticeListAPI.postLostItem(request))
     }
     
-    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error> {
+    func fetchLostItemList(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchLostItemList(requestModel))
     }
     
@@ -58,19 +58,19 @@ final class DefaultNoticeService: NoticeListService {
         return networkService.request(api: NoticeListAPI.deleteLostItem(id))
     }
     
-    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, Error> {
+    func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchNoticeArticles(requestModel))
     }
     
-    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, Error> {
+    func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.searchNoticeArticle(requestModel))
     }
     
-    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, Error> {
+    func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchNoticeData(requestModel))
     }
     
-    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDto], Error> {
+    func fetchHotNoticeArticles() -> AnyPublisher<[NoticeArticleDto], ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchHotNoticeArticles)
     }
     
@@ -107,7 +107,7 @@ final class DefaultNoticeService: NoticeListService {
             .eraseToAnyPublisher()
     }
     
-    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, Error> {
+    func fetchRecommendedKeyword(count: Int?) -> AnyPublisher<NoticeRecommendedKeywordDto, ErrorResponse> {
         if let count = count {
             let requestModel = FetchRecommendedSearchWordRequest(count: count)
             return networkService.requestWithResponse(api: NoticeListAPI.fetchRecommendedSearchWord(requestModel)).eraseToAnyPublisher()

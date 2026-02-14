@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchBeneficialShopUseCase {
-    func execute(id: Int) -> AnyPublisher<[Shop], Error>
+    func execute(id: Int) -> AnyPublisher<[Shop], ErrorResponse>
 }
 
 final class DefaultFetchBeneficialShopUseCase: FetchBeneficialShopUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchBeneficialShopUseCase: FetchBeneficialShopUseCase {
         self.shopRepository = shopRepository
     }
 
-    func execute(id: Int) -> AnyPublisher<[Shop], Error> {
+    func execute(id: Int) -> AnyPublisher<[Shop], ErrorResponse> {
         return shopRepository.fetchBeneficialShops(id: id)
             .map { $0.toDomain() }  
             .eraseToAnyPublisher()

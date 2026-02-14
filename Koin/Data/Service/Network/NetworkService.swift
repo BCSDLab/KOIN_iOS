@@ -13,18 +13,6 @@ final class NetworkService {
     
     private let interceptor = Interceptor()
     
-    func request(api: URLRequestConvertible) -> AnyPublisher<Void, Error> {
-        return AF.request(api, interceptor: interceptor)
-            .validate()
-            .publishData()
-            .value()
-            .map { _ in }
-            .mapError { error -> Error in
-                self.handleError(error)
-            }
-            .eraseToAnyPublisher()
-    }
-    
     func request(api: URLRequestConvertible) -> AnyPublisher<Void, ErrorResponse> {
         return AF.request(api, interceptor: interceptor)
             .publishData()
@@ -42,17 +30,6 @@ final class NetworkService {
                 throw ErrorResponse(statusCode: httpResponse.statusCode, code: "", message: "ErrorResponse 디코딩 실패")
             }
             .mapError { error -> ErrorResponse in
-                self.handleError(error)
-            }
-            .eraseToAnyPublisher()
-    }
-    
-    func requestWithResponse<T: Decodable>(api: URLRequestConvertible) -> AnyPublisher<T, Error> {
-        return AF.request(api, interceptor: interceptor)
-            .validate()
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { error -> Error in
                 self.handleError(error)
             }
             .eraseToAnyPublisher()
@@ -154,20 +131,14 @@ extension NetworkService {
     
     private func handleError(_ error: Error) -> ErrorResponse {
         if let errorResponse = error as? ErrorResponse {
-           if let statusCode = errorResponse.statusCode,
-              500..<600 ~= statusCode {
-               NotificationCenter.default.post(name: NSNotification.Name("ServerError"), object: nil)
-           }
+            
+            if let statusCode = errorResponse.statusCode,
+               500..<600 ~= statusCode {
+                NotificationCenter.default.post(name: NSNotification.Name("ServerError"), object: nil)
+            }
             return errorResponse
         }
+        
         return ErrorResponse(code: "", message: "알 수 없는 에러")
-    }
-    
-    private func handleError(_ error: AFError) -> Error {
-        if let code = error.responseCode,
-           500..<600 ~= code {
-            NotificationCenter.default.post(name: NSNotification.Name("ServerError"), object: nil)
-        }
-        return error as Error
     }
 }

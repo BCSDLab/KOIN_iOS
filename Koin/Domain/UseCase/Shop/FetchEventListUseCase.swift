@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchEventListUseCase {
-    func execute() -> AnyPublisher<EventsDto, Error>
+    func execute() -> AnyPublisher<EventsDto, ErrorResponse>
 }
 
 final class DefaultFetchEventListUseCase: FetchEventListUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchEventListUseCase: FetchEventListUseCase {
       self.shopRepository = shopRepository
     }
     
-    func execute() -> AnyPublisher<EventsDto, Error> {
+    func execute() -> AnyPublisher<EventsDto, ErrorResponse> {
         return shopRepository.fetchEventList()
     }
 }
