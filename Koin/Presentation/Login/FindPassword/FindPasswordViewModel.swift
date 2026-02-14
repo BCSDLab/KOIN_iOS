@@ -85,14 +85,15 @@ extension FindPasswordViewModel {
     }
     
     func checkVerificationCode() {
-        checkVerificationCodeUseCase.execute(phoneNumber: inputData, verificationCode: certNumber).sink { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                self?.checkMessagePublisher.send((error.message, false))
+        checkVerificationCodeUseCase.execute(phoneNumber: inputData, verificationCode: certNumber).sink(
+            receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.checkMessagePublisher.send((error.message, false))
+                }
+            }, receiveValue: { [weak self] response in
+                self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
             }
-        } receiveValue: { [weak self] response in
-            self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     func findPasswordSms() {
@@ -104,7 +105,7 @@ extension FindPasswordViewModel {
             self?.changeSuccessPublisher.send()
         }.store(in: &subscriptions)
     }
-    ///
+
     func sendVerificationEmail() {
         sendVerificationEmailUseCase.execute(requestModel: .init(email: inputData)).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -114,16 +115,19 @@ extension FindPasswordViewModel {
             self?.sendMessagePublisher.send(("인증번호가 발송되었습니다.", true))
         }.store(in: &subscriptions)
     }
+    
     func checkVerificationEmail() {
-        checkVerificationEmailUseCase.execute(requestModel: .init(email: inputData, verificationCode: certNumber)).sink { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                self?.checkMessagePublisher.send((error.message, false))
+        checkVerificationEmailUseCase.execute(requestModel: .init(email: inputData, verificationCode: certNumber)).sink(
+            receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.checkMessagePublisher.send((error.message, false))
+                }
+            }, receiveValue: { [weak self] response in
+                self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
             }
-        } receiveValue: { [weak self] response in
-            self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
+    
     func findPasswordEmail() {
         findPasswordEmailUseCase.execute(requestModel: .init(loginId: id, email: inputData, newPassword: password)).sink { [weak self] completion in
             if case let .failure(error) = completion {

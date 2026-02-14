@@ -43,15 +43,14 @@ final class ForceUpdateViewModel: ViewModelProtocol {
 
 extension ForceUpdateViewModel {
     private func checkVersion() {
-        checkVersionUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        checkVersionUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                self?.outputSubject.send(.isLowVersion(response.0))
             }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.isLowVersion(response.0))
-        }.store(in: &subscriptions)
-
+        ).store(in: &subscriptions)
     }
+
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)

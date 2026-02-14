@@ -136,9 +136,12 @@ extension NetworkService {
                500..<600 ~= statusCode {
                 NotificationCenter.default.post(name: NSNotification.Name("ServerError"), object: nil)
             }
+            
+            Log.make().error("\(errorResponse)")
             return errorResponse
         }
         
+        Log.make().error("\(error)")
         return ErrorResponse(code: "", message: "알 수 없는 에러")
     }
 }
