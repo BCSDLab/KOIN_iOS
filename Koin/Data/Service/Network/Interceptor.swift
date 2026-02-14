@@ -1,5 +1,5 @@
 //
-//  Retrier.swift
+//  Interceptor.swift
 //  koin
 //
 //  Created by 홍기정 on 2/12/26.

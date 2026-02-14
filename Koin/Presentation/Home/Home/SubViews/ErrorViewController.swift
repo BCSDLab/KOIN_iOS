@@ -17,7 +17,7 @@ final class ErrorViewController: UIViewController {
     
     private let wrapperView = UIView()
     
-    private let waringImageView = UIImageView().then {
+    private let warningImageView = UIImageView().then {
         let configuration = UIImage.SymbolConfiguration.init(pointSize: 60, weight: .light)
         $0.image = UIImage(systemName: "exclamationmark.triangle", withConfiguration: configuration)
         $0.tintColor = .appColor(.neutral500)
@@ -83,7 +83,7 @@ extension ErrorViewController {
 extension ErrorViewController {
     
     private func setUpLayouts() {
-        [waringImageView, titleLabel, subTitleLabel].forEach {
+        [warningImageView, titleLabel, subTitleLabel].forEach {
             wrapperView.addSubview($0)
         }
         
@@ -106,13 +106,13 @@ extension ErrorViewController {
             $0.center.equalTo(wrapperViewLayoutGuide)
         }
         
-        waringImageView.snp.makeConstraints {
+        warningImageView.snp.makeConstraints {
             $0.top.equalTo(wrapperView)
             $0.centerX.equalTo(wrapperView)
         }
         
         titleLabel.snp.makeConstraints {
-            $0.top.equalTo(waringImageView.snp.bottom).offset(20)
+            $0.top.equalTo(warningImageView.snp.bottom).offset(20)
             $0.centerX.equalTo(wrapperView)
         }
         
