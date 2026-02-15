@@ -135,8 +135,10 @@ extension SceneDelegate {
             
             let homeViewController = makeHomeViewController()
             let completion: ()->Void = { [weak self] in
-                self?.isPresentingErrorViewController = false
                 navigationController.setViewControllers([homeViewController], animated: false)
+                navigationController.dismiss(animated: true) {
+                    self?.isPresentingErrorViewController = false
+                }
             }
             let errorViewController = ErrorViewController(completion: completion).then {
                 $0.modalPresentationStyle = .fullScreen

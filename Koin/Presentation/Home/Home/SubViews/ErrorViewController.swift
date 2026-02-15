@@ -76,7 +76,6 @@ extension ErrorViewController {
     
     @objc private func navigateButtonTapped() {
         completion()
-        dismissView()
     }
 }
 

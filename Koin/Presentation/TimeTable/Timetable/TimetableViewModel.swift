@@ -283,7 +283,9 @@ extension TimetableViewModel {
             receiveCompletion: { _ in },
             receiveValue: { [weak self] _ in
                 self?.lectureData.removeAll {
-                    $0.classTime == lecture.classTime && $0.name == lecture.name && $0.professor == $0.professor
+                    $0.classTime == lecture.classTime &&
+                    $0.name == lecture.name &&
+                    $0.professor == lecture.professor
                 }
             }
         ).store(in: &subscriptions)

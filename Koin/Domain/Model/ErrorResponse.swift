@@ -40,5 +40,5 @@ extension ErrorResponse {
     static let invalidApi = ErrorResponse(statusCode: nil, code: "INVALID_API", message: "API가 유효하지 않습니다.")
     static let fileManagerFailedDirectory = ErrorResponse(statusCode: nil, code: "FILEMANAGER_FAILED_DIRECTORY", message: "파일 저장 위치 찾기 실패")
     static let deleteKeywordError = ErrorResponse(statusCode: nil, code: "DELETE_KEYWORD_ERROR", message: "로그인에 실패하여 코어데이터에서 키워드 삭제")
-    static let createKeywordError = ErrorResponse(statusCode: nil, code: "CREATE_KEYWORD_ERROR", message: "로그인에 실패하여 코어데이터에서 키워드 삭제")
+    static let createKeywordError = ErrorResponse(statusCode: nil, code: "CREATE_KEYWORD_ERROR", message: "로그인에 실패하여 코어데이터에서 키워드 저장")
 }
