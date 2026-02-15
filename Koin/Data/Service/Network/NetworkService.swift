@@ -18,16 +18,18 @@ final class NetworkService {
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
-                    throw ErrorResponse(code: "NETWORK_ERROR", message: "서버 응답 오류")
+                    throw ErrorResponse.networkError
                 }
                 if 200..<300 ~= httpResponse.statusCode {
                     return ()
                 }
-                if let data = response.data,
-                   let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
-                    throw errorResponse.statusCode(httpResponse.statusCode)
+                if let data = response.data {
+                    if let errorResponse = try? JSONDecoder().decode(ErrorResponseDto.self, from: data) {
+                        throw errorResponse.toDomain(withStatusCode: httpResponse.statusCode)
+                    }
+                    throw ErrorResponse.decodingError(httpResponse.statusCode)
                 }
-                throw ErrorResponse(statusCode: httpResponse.statusCode, code: "", message: "ErrorResponse 디코딩 실패")
+                throw ErrorResponse.emptyDataError(httpResponse.statusCode)
             }
             .mapError { error -> ErrorResponse in
                 self.handleError(error)
@@ -40,20 +42,24 @@ final class NetworkService {
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
-                    throw ErrorResponse(code: "NETWORK_ERROR", message: "서버 응답 오류")
+                    throw ErrorResponse.networkError
                 }
                 if 200..<300 ~= httpResponse.statusCode {
-                    if let data = response.data,
-                       let decodedResponse = try? JSONDecoder().decode(T.self, from: data) {
-                        return decodedResponse
+                    if let data = response.data {
+                        if let decodedResponse = try? JSONDecoder().decode(T.self, from: data) {
+                            return decodedResponse
+                        }
+                        throw ErrorResponse.decodingError(httpResponse.statusCode)
                     }
-                    throw ErrorResponse(statusCode: httpResponse.statusCode, code: "PARSING_ERROR", message: "응답 본문 디코딩 실패")
+                    throw ErrorResponse.emptyDataError(httpResponse.statusCode)
                 }
-                if let data = response.data,
-                   let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
-                    throw errorResponse.statusCode(httpResponse.statusCode)
+                if let data = response.data {
+                    if let errorResponse = try? JSONDecoder().decode(ErrorResponseDto.self, from: data) {
+                        throw errorResponse.toDomain(withStatusCode: httpResponse.statusCode)
+                    }
+                    throw ErrorResponse.decodingError(httpResponse.statusCode)
                 }
-                throw ErrorResponse(statusCode: httpResponse.statusCode, code: "PARSING_ERROR", message: "ErrorResponse 디코딩 실패")
+                throw ErrorResponse.emptyDataError(httpResponse.statusCode)
             }
             .mapError { error -> ErrorResponse in
                 self.handleError(error)
@@ -63,7 +69,7 @@ final class NetworkService {
     
     func uploadFiles(api: ShopAPI) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
         guard case ShopAPI.uploadFiles(let files) = api else {
-            return Fail(error: ErrorResponse(code: "invalid_api", message: "Invalid API case for file upload"))
+            return Fail(error: ErrorResponse.invalidApi)
                 .eraseToAnyPublisher()
         }
         
@@ -75,20 +81,24 @@ final class NetworkService {
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
-                    throw ErrorResponse(code: "NETWORK_ERROR", message: "서버 응답 오류")
+                    throw ErrorResponse.networkError
                 }
                 if 200..<300 ~= httpResponse.statusCode {
-                    if let data = response.data,
-                       let decodedResponse = try? JSONDecoder().decode(FileUploadResponse.self, from: data) {
-                        return decodedResponse
+                    if let data = response.data {
+                        if let decodedResponse = try? JSONDecoder().decode(FileUploadResponse.self, from: data) {
+                            return decodedResponse
+                        }
+                        throw ErrorResponse.decodingError(httpResponse.statusCode)
                     }
-                    throw ErrorResponse(statusCode: httpResponse.statusCode, code: "PARSING_ERROR", message: "응답 본문 디코딩 실패")
+                    throw ErrorResponse.emptyDataError(httpResponse.statusCode)
                 }
-                if let data = response.data,
-                   let errorResponse = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
-                    throw errorResponse.statusCode(httpResponse.statusCode)
+                if let data = response.data {
+                    if let errorResponse = try? JSONDecoder().decode(ErrorResponseDto.self, from: data) {
+                        throw errorResponse.toDomain(withStatusCode: httpResponse.statusCode)
+                    }
+                    throw ErrorResponse.decodingError(httpResponse.statusCode)
                 }
-                throw ErrorResponse(statusCode: httpResponse.statusCode, code: "PARSING_ERROR", message: "ErrorResponse 디코딩 실패")
+                throw ErrorResponse.emptyDataError(httpResponse.statusCode)
             }
             .mapError { error -> ErrorResponse in
                 self.handleError(error)
@@ -98,7 +108,7 @@ final class NetworkService {
     
     func downloadFiles(api: URLRequest, fileName: String) -> AnyPublisher<URL?, ErrorResponse> {
         let fileManager = FileManager.default
-        guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return Fail(error: ErrorResponse(code: "FILEMANAGER_FAILED", message: "파일 저장 위치 찾기 실패")).eraseToAnyPublisher() }
+        guard let documentsDirectory = fileManager.urls(for: .documentDirectory, in: .userDomainMask).first else { return Fail(error: ErrorResponse.fileManagerFailedDirectory).eraseToAnyPublisher() }
         let fileUrl = documentsDirectory.appendingPathComponent(fileName)
         let destination: DownloadRequest.Destination = { _, _ in
             return (fileUrl, [.removePreviousFile, .createIntermediateDirectories])
@@ -108,16 +118,18 @@ final class NetworkService {
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
-                    throw ErrorResponse(code: "NETWORK_ERROR", message: "서버 응답 오류")
+                    throw ErrorResponse.networkError
                 }
                 if 200..<300 ~= httpResponse.statusCode {
                     return documentsDirectory
                 }
-                if let data = response.value,
-                   let errorRespose = try? JSONDecoder().decode(ErrorResponse.self, from: data) {
-                    throw errorRespose.statusCode(httpResponse.statusCode)
+                if let data = response.value {
+                    if let errorRespose = try? JSONDecoder().decode(ErrorResponseDto.self, from: data) {
+                        throw errorRespose.toDomain(withStatusCode: httpResponse.statusCode)
+                    }
+                    throw ErrorResponse.decodingError(httpResponse.statusCode)
                 }
-                throw ErrorResponse(statusCode: httpResponse.statusCode, code: "DOWNLOAD_FAILED", message: "다운로드 실패")
+                throw ErrorResponse.emptyDataError(httpResponse.statusCode)
             }
             .mapError { error -> ErrorResponse in
                 self.handleError(error)
@@ -142,6 +154,6 @@ extension NetworkService {
         }
         
         Log.make().error("\(error)")
-        return ErrorResponse(code: "", message: "알 수 없는 에러")
+        return ErrorResponse.typeCastingError
     }
 }

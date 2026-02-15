@@ -26,7 +26,7 @@ final class DefaultNotiService: NotiService {
     func changeNoti(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeRequest) -> AnyPublisher<Void, ErrorResponse> {
         return sendDeviceToken() // 1. 먼저 sendDeviceToken()을 호출
             .flatMap { [weak self] _ -> AnyPublisher<Void, ErrorResponse> in
-                guard let self = self else { return Fail(error: ErrorResponse(code: "500", message: "Unexpected error")).eraseToAnyPublisher() }
+                guard let self = self else { return Fail(error: ErrorResponse.unexpectedInternalError).eraseToAnyPublisher() }
                 return self.networkService.request(api: NotiAPI.changeNoti(method, requestModel)) // 2. 성공하면 changeNoti 호출
             }
             .eraseToAnyPublisher()

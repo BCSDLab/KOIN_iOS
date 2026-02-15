@@ -93,7 +93,7 @@ final class DefaultNoticeService: NoticeListService {
                     coreDataService.delete(deletedObject: deletedKeyword)
                 }
             }
-            return Fail(error: ErrorResponse(code: "", message: "로그인에 실패하여 코어데이터에서 키워드 삭제")).eraseToAnyPublisher()
+            return Fail(error: ErrorResponse.deleteKeywordError).eraseToAnyPublisher()
         }
     }
     
@@ -119,7 +119,7 @@ final class DefaultNoticeService: NoticeListService {
     
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse> {
         guard let url = URL(string: downloadUrl) else {
-            return Fail(error: ErrorResponse(code: "", message: "URL이 유효하지 않습니다."))
+            return Fail(error: ErrorResponse.invalidUrl)
                 .eraseToAnyPublisher()
         }
         var api = URLRequest(url: url)
@@ -176,6 +176,6 @@ final class DefaultNoticeService: NoticeListService {
         let keyword = NoticeKeywordInformation(context: self.coreDataService.context)
         keyword.name = requestModel.keyword
         self.coreDataService.insert(insertedObject: keyword)
-        return Fail(error: ErrorResponse(code: "", message: "로그인에 실패하여 코어데이터에 키워드 저장")).eraseToAnyPublisher()
+        return Fail(error: ErrorResponse.createKeywordError).eraseToAnyPublisher()
     }
 }

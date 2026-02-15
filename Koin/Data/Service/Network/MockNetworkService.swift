@@ -17,29 +17,35 @@ class MockNetworkService {
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
-                    throw URLError(.badServerResponse)
+                    throw ErrorResponse.networkError
                 }
                 
                 guard (200..<300).contains(httpResponse.statusCode) else {
                     if let data = response.data {
-                        let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: data)
-                        throw errorResponse
+                        if let errorResponse = try? JSONDecoder().decode(ErrorResponseDto.self, from: data) {
+                            throw errorResponse.toDomain(withStatusCode: httpResponse.statusCode)
+                        }
+                        throw ErrorResponse.decodingError(httpResponse.statusCode)
                     } else {
-                        throw ErrorResponse(code: "", message: "알 수 없는 에러")
+                        throw ErrorResponse.emptyDataError(httpResponse.statusCode)
                     }
                 }
                 
                 guard let data = response.data else {
-                    throw ErrorResponse(code: "", message: "응답이 없음")
+                    throw ErrorResponse.emptyDataError(httpResponse.statusCode)
                 }
                 
-                return try JSONDecoder().decode(T.self, from: data)
+                if let response = try? JSONDecoder().decode(T.self, from: data) {
+                    return response
+                } else {
+                    throw ErrorResponse.decodingError(httpResponse.statusCode)
+                }
             }
             .mapError { error in
                 if let errorResponse = error as? ErrorResponse {
                     return errorResponse
                 }
-                return ErrorResponse(code: "", message: "")
+                return ErrorResponse.typeCastingError
             }
             .eraseToAnyPublisher()
     }
