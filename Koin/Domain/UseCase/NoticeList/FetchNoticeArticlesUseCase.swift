@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchNoticeArticlesUseCase {
-    func execute(boardId: Int?, keyWord: String?, page: Int, type: LostItemType?) -> AnyPublisher<NoticeArticlesInfo, Error>
+    func execute(boardId: Int?, keyWord: String?, page: Int, type: LostItemType?) -> AnyPublisher<NoticeArticlesInfo, ErrorResponse>
 }
 
 final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
@@ -21,8 +21,8 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(boardId: Int?, keyWord: String?, page: Int, type: LostItemType? = nil) -> AnyPublisher<NoticeArticlesInfo, Error> {
-        let response: AnyPublisher<NoticeListDto, Error>
+    func execute(boardId: Int?, keyWord: String?, page: Int, type: LostItemType? = nil) -> AnyPublisher<NoticeArticlesInfo, ErrorResponse> {
+        let response: AnyPublisher<NoticeListDto, ErrorResponse>
         
         if let keyWord = keyWord { // 키워드로 검색해서 찾을 경우
             let searchRequest = SearchNoticeArticleRequest(query: keyWord, boardId: boardId, page: page, limit: maxArticleListNumber)
@@ -36,7 +36,7 @@ final class DefaultFetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase {
             response = noticeListRepository.fetchNoticeArticles(requestModel: fetchRequest)
         } else { // boardId는 꼭 필요하기 때문에 없다면 빈 배열을 반환
             response = Just(NoticeListDto(articles: [], totalCount: 0, currentCount: 0, totalPage: 0, currentPage: 0))
-                .setFailureType(to: Error.self)
+                .setFailureType(to: ErrorResponse.self)
                 .eraseToAnyPublisher()
         }
         

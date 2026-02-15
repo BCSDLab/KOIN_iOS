@@ -64,13 +64,12 @@ final class NoticeSearchViewModel: ViewModelProtocol {
 
 extension NoticeSearchViewModel {
     private func getHotKeyWord(count: Int) {
-        fetchHotKeywordUseCase.execute(count: count).sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchHotKeywordUseCase.execute(count: count).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] keyWords in
+                self?.outputSubject.send(.updateHotKeyWord(keyWords))
             }
-        }, receiveValue: { [weak self] keyWords in
-            self?.outputSubject.send(.updateHotKeyWord(keyWords))
-        }).store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func searchWord(word: String, searchedDate: Date, actionType: Int) {
@@ -100,18 +99,17 @@ extension NoticeSearchViewModel {
         if let keyWord = keyWord {
             self.keyWord = keyWord
         }
-        searchNoticeArticlesUseCase.execute(requestModel: requestModel).sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        searchNoticeArticlesUseCase.execute(requestModel: requestModel).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] articles in
+                if articles.currentPage == articles.totalPage {
+                    self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], true, isNewPage))
+                }
+                else {
+                    self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], false, isNewPage))
+                }
             }
-        }, receiveValue: { [weak self] articles in
-            if articles.currentPage == articles.totalPage {
-                self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], true, isNewPage))
-            }
-            else {
-                self?.outputSubject.send(.updateSearchedrsult(articles.articles ?? [], false, isNewPage))
-            }
-        }).store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

@@ -96,15 +96,14 @@ final class DiningViewModel: ViewModelProtocol {
 extension DiningViewModel {
 
     private func fetchNotiList() {
-        fetchNotiListUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchNotiListUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                let tuple = self.processSubscribes(response: response)
+                self.outputSubject.send(.showBottomSheet(tuple))
             }
-        } receiveValue: { [weak self] response in
-            guard let self = self else { return }
-            let tuple = self.processSubscribes(response: response)
-            self.outputSubject.send(.showBottomSheet(tuple))
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func processSubscribes(response: NotiAgreementDto) -> (Bool, Bool) {
@@ -126,27 +125,25 @@ extension DiningViewModel {
     }
     
     private func changeNoti(isOn: Bool, type: SubscribeType) {
-        changeNotiUseCase.execute(method: isOn ? .post : .delete , type: type).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] response in
-            if type == .diningSoldOut && isOn {
-                DetailSubscribeType.allCases.forEach {
-                    self?.changeNotiDetail(isOn: isOn, detailType: $0)
+        changeNotiUseCase.execute(method: isOn ? .post : .delete , type: type).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                if type == .diningSoldOut && isOn {
+                    DetailSubscribeType.allCases.forEach {
+                        self?.changeNotiDetail(isOn: isOn, detailType: $0)
+                    }
                 }
             }
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func changeNotiDetail(isOn: Bool, detailType: DetailSubscribeType) {
-        changeNotiDetailUseCase.execute(method: isOn ? .post : .delete , detailType: detailType).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        changeNotiDetailUseCase.execute(method: isOn ? .post : .delete , detailType: detailType).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { response in
+                print(response)
             }
-        } receiveValue: { response in
-            print(response)
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func shareMenuList(shareModel: ShareDiningMenu) {
@@ -163,14 +160,13 @@ extension DiningViewModel {
         }
         sharedDiningItem = nil
         
-        fetchDiningListUseCase.execute(diningInfo: fetchDate).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchDiningListUseCase.execute(diningInfo: fetchDate).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] list in
+                guard let self = self else { return }
+                self.outputSubject.send(.updateDiningList(list, currentDate.diningType))
             }
-        } receiveValue: { [weak self] list in
-            guard let self = self else { return }
-            self.outputSubject.send(.updateDiningList(list, currentDate.diningType))
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func updateDisplayDateTime(date: Date?, type: DiningType?) {

@@ -71,7 +71,6 @@ extension ChatListTableViewModel {
                 guard let self else { return Empty().eraseToAnyPublisher() }
                 return fetchChatRoomUseCase.execute()
                     .catch { error -> AnyPublisher<[ChatRoomItem], Never> in
-                        Log.make().error("\(error)")
                         return Empty().eraseToAnyPublisher()
                     }.eraseToAnyPublisher()
             }

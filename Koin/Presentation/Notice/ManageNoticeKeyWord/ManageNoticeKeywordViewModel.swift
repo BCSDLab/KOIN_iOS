@@ -76,26 +76,28 @@ extension ManageNoticeKeywordViewModel {
                 .execute(keyword: requestModel, myKeywords: myKeywords)
                 .receive(on: DispatchQueue.main)
                 .throttle(for: .milliseconds(400), scheduler: RunLoop.main, latest: true)
-                .sink(receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                    self?.fetchMyKeyword()
-                }
-            }, receiveValue: { [weak self] _, addKeywordResult in
-                switch addKeywordResult {
-                case .exceedNumber:
-                    self?.outputSubject.send(.keywordIsIllegal("키워드는 최대 10개까지 추가할 수 있습니다."))
-                case .notInRange:
-                    self?.outputSubject.send(.keywordIsIllegal("키워드는 2글자에서 10글자 사이어야 합니다."))
-                case .sameKeyword:
-                    self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
-                case .success:
-                    if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.recommendedKeyword, category: .click, value: keyword) }
-                    self?.fetchMyKeyword()
-                }
-            }).store(in: &self.subscriptions)
-        
-    }
+                .sink(
+                    receiveCompletion: { [weak self] completion in
+                        if case let .failure(error) = completion {
+                            self?.fetchMyKeyword()
+                        }
+                    },
+                    receiveValue: { [weak self] _, addKeywordResult in
+                        switch addKeywordResult {
+                        case .exceedNumber:
+                            self?.outputSubject.send(.keywordIsIllegal("키워드는 최대 10개까지 추가할 수 있습니다."))
+                        case .notInRange:
+                            self?.outputSubject.send(.keywordIsIllegal("키워드는 2글자에서 10글자 사이어야 합니다."))
+                        case .sameKeyword:
+                            self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
+                        case .success:
+                            if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.recommendedKeyword, category: .click, value: keyword) }
+                            self?.fetchMyKeyword()
+                        }
+                    }
+                ).store(in: &self.subscriptions)
+            
+        }
 }
 
     private func fetchMyKeyword() {
@@ -106,20 +108,18 @@ extension ManageNoticeKeywordViewModel {
     }
     
     private func getMyKeyword(completion: @escaping ([NoticeKeywordDto]) -> Void) {
-        fetchNotificationKeywordUseCase.execute().sink(receiveCompletion: { completionResult in
-            if case let .failure(error) = completionResult {
-                Log.make().error("\(error)")
+        fetchNotificationKeywordUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { fetchkeywords in
+                completion(fetchkeywords.0)
             }
-        }, receiveValue: { fetchkeywords in
-            completion(fetchkeywords.0)
-        }).store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func deleteMyKeyword(keyWord: NoticeKeywordDto) {
         deleteNotificationKeywordUseCase.execute(keyword: keyWord)
             .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
                     self?.fetchMyKeyword()
                 }
             }, receiveValue: { [weak self] result in
@@ -129,40 +129,40 @@ extension ManageNoticeKeywordViewModel {
     }
     
     private func fetchSubscription() {
-        fetchNotiListUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] response in
-            response.subscribes?.forEach {
-                if $0.type == .articleKeyWord {
-                    self?.outputSubject.send(.updateSwitch(isOn: $0.isPermit ?? false))
+        fetchNotiListUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                response.subscribes?.forEach {
+                    if $0.type == .articleKeyWord {
+                        self?.outputSubject.send(.updateSwitch(isOn: $0.isPermit ?? false))
+                    }
                 }
             }
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func getRecommendedKeyword(keywords: [NoticeKeywordDto]) {
-        fetchRecommendedKeywordUseCase.execute(filters: keywords).sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchRecommendedKeywordUseCase.execute(filters: keywords).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { keywords in
+                self.outputSubject.send(.updateRecommendedKeyword(keywords.keywords))
             }
-        }, receiveValue: { keywords in
-            self.outputSubject.send(.updateRecommendedKeyword(keywords.keywords))
-        }).store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func changeNotification(isOn: Bool) {
-        changeNotiUseCase.execute(method: isOn ? .post : .delete, type: .articleKeyWord).sink(receiveCompletion: { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                self?.outputSubject.send(.showLoginModal)
+        changeNotiUseCase.execute(method: isOn ? .post : .delete, type: .articleKeyWord).sink(
+            receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.outputSubject.send(.showLoginModal)
+                }
+            },
+            receiveValue: { [weak self] response in
+                self?.outputSubject.send(.updateSwitch(isOn: isOn))
+                let value = isOn ? "on" : "off"
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.keywordNotification, category: .click, value: value)
             }
-        }, receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateSwitch(isOn: isOn))
-            let value = isOn ? "on" : "off"
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.keywordNotification, category: .click, value: value)
-        }).store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

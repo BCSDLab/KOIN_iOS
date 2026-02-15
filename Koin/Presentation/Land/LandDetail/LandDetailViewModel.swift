@@ -41,12 +41,11 @@ final class LandDetailViewModel: ViewModelProtocol {
 
 extension LandDetailViewModel {
     private func getLandDetail() {
-        fetchLandDetailUseCase.execute(landId: landId).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchLandDetailUseCase.execute(landId: landId).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                self?.outputSubject.send(.showLandDetail(response))
             }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.showLandDetail(response))
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
 }

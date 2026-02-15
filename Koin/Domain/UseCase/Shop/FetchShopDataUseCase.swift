@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShopDataUseCase {
-    func execute(shopId: Int) -> AnyPublisher<ShopData, Error>
+    func execute(shopId: Int) -> AnyPublisher<ShopData, ErrorResponse>
 }
 
 final class DefaultFetchShopDataUseCase: FetchShopDataUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchShopDataUseCase: FetchShopDataUseCase {
         self.shopRepository = shopRepository
     }
     
-    func execute(shopId: Int) -> AnyPublisher<ShopData, Error> {
+    func execute(shopId: Int) -> AnyPublisher<ShopData, ErrorResponse> {
         return shopRepository.fetchShopData(requestModel: FetchShopDataRequest(shopId: shopId)).map { shopDataDto in
             shopDataDto.toDomain()
         }.eraseToAnyPublisher()

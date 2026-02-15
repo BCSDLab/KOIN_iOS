@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol DeleteLostItemUseCase {
-    func execute(id: Int) -> AnyPublisher<Void, Error>
+    func execute(id: Int) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultDeleteLostItemUseCase: DeleteLostItemUseCase {
@@ -20,7 +20,7 @@ final class DefaultDeleteLostItemUseCase: DeleteLostItemUseCase {
         self.repository = repository
     }
     
-    func execute(id: Int) -> AnyPublisher<Void, Error> {
+    func execute(id: Int) -> AnyPublisher<Void, ErrorResponse> {
         repository.deleteLostItem(id: id)
     }
 }

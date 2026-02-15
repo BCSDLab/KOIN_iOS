@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchNoticeDataUseCase {
-    func execute(request: FetchNoticeDataRequest) -> AnyPublisher<NoticeDataInfo, Error>
+    func execute(request: FetchNoticeDataRequest) -> AnyPublisher<NoticeDataInfo, ErrorResponse>
 }
 
 final class DefaultFetchNoticeDataUseCase: FetchNoticeDataUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchNoticeDataUseCase: FetchNoticeDataUseCase {
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(request: FetchNoticeDataRequest) -> AnyPublisher<NoticeDataInfo, Error> {
+    func execute(request: FetchNoticeDataRequest) -> AnyPublisher<NoticeDataInfo, ErrorResponse> {
         return noticeListRepository.fetchNoticeData(requestModel: request).map { data in
             data.toDomainWithChangedDate().toDomain()
         }.eraseToAnyPublisher()

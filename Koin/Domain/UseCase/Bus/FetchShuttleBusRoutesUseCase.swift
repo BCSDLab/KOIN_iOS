@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShuttleBusRoutesUseCase {
-    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDto, Error>
+    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDto, ErrorResponse>
 }
 
 final class DefaultFetchShuttleBusRoutesUseCase: FetchShuttleBusRoutesUseCase {
@@ -18,7 +18,7 @@ final class DefaultFetchShuttleBusRoutesUseCase: FetchShuttleBusRoutesUseCase {
         self.busRepository = busRepository
     }
     
-    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDto, Error> {
+    func execute(busRouteType: ShuttleRouteType) -> AnyPublisher<ShuttleRouteDto, ErrorResponse> {
         return busRepository.fetchShuttleRouteList().map { [weak self] routeList in
             return self?.filterByShuttleRouteType(busTimetableInfo: routeList, shuttleRouteType: busRouteType) ?? ShuttleRouteDto(routeRegions: [], semesterInfo: SemesterInfo(name: "", from: "", to: ""))
         }.eraseToAnyPublisher()

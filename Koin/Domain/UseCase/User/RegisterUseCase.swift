@@ -28,7 +28,7 @@ final class DefaultRegisterUseCase: RegisterUseCase {
             mutableRequestModel.sha256()
             return userRepository.register(requestModel: mutableRequestModel)
         case .failure(let error):
-            return Fail(error: ErrorResponse(code: "", message: error.localizedDescription))
+            return Fail(error: ErrorResponse(error))
                 .eraseToAnyPublisher()
         }
     }

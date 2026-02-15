@@ -15,6 +15,7 @@ protocol LogAnalyticsService {
 }
 
 final class GA4AnalyticsService: LogAnalyticsService {
+    
     func logEvent(name: String, label: String, value: String, category: String) {
         let parameters = [
             "event_label": label,
