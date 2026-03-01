@@ -16,6 +16,6 @@ final class DefaultAbTestRepository: AbTestRepository {
     }
     
     func assignAbTest(requestModel: AssignAbTestRequest) -> AnyPublisher<AssignAbTestResponse, ErrorResponse> {
-        return service.assignAbTest(requestModel: requestModel)
+        return service.assignAbTest(requestModel: requestModel, retry: false)
     }
 }

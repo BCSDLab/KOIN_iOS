@@ -8,8 +8,8 @@
 import Combine
 
 protocol CoreRepository {
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse>
-    func fetBanner() -> AnyPublisher<BannerDto, ErrorResponse>
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse>
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse>
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error>
+    func fetBanner() -> AnyPublisher<BannerDto, Error>
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error>
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error>
 }

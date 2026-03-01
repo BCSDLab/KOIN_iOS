@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchOrderShopSummaryFromShopUseCase {
-    func execute(id: Int) -> AnyPublisher<OrderShopSummary, ErrorResponse>
+    func execute(id: Int) -> AnyPublisher<OrderShopSummary, Error>
 }
 
 final class DefaultFetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFr
         self.repository = repository
     }
     
-    func execute(id: Int) -> AnyPublisher<OrderShopSummary, ErrorResponse> {
+    func execute(id: Int) -> AnyPublisher<OrderShopSummary, Error> {
         return repository.fetchShopSummary(id: id)
             .map { shopSummaryDto in
                 return OrderShopSummary(from: shopSummaryDto, shopId: id)

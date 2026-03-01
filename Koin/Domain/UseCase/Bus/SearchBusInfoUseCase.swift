@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol SearchBusInfoUseCase {
-    func execute(date: String, busType: BusType, departure: BusPlace, arrival: BusPlace) -> AnyPublisher<SearchBusInfoResult, ErrorResponse>
+    func execute(date: String, busType: BusType, departure: BusPlace, arrival: BusPlace) -> AnyPublisher<SearchBusInfoResult, Error>
 }
 
 final class DefaultSearchBusInfoUseCase: SearchBusInfoUseCase {
@@ -19,7 +19,7 @@ final class DefaultSearchBusInfoUseCase: SearchBusInfoUseCase {
         self.busRepository = busRepository
     }
     
-    func execute(date: String, busType: BusType, departure: BusPlace, arrival: BusPlace) -> AnyPublisher<SearchBusInfoResult, ErrorResponse> {
+    func execute(date: String, busType: BusType, departure: BusPlace, arrival: BusPlace) -> AnyPublisher<SearchBusInfoResult, Error> {
         let (departDate, departTime): (String, String) = self.processDate(date)
         let request = SearchBusInfoRequest(
             date: departDate,

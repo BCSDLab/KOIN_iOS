@@ -64,12 +64,13 @@ extension BusSearchViewModel {
     }
     
     private func getEmergencyNotice() {
-        fetchEmergencyNoticeUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] notice in
-                self?.outputSubject.send(.updateEmergencyNotice(notice: notice))
+        fetchEmergencyNoticeUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] notice in
+            self?.outputSubject.send(.updateEmergencyNotice(notice: notice))
+        }).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

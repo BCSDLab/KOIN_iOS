@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShuttleBusTimetableUseCase {
-    func execute(id: String) -> AnyPublisher<ShuttleBusTimetable, ErrorResponse>
+    func execute(id: String) -> AnyPublisher<ShuttleBusTimetable, Error>
 }
 
 final class DefaultFetchShuttleBusTimetableUseCase: FetchShuttleBusTimetableUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchShuttleBusTimetableUseCase: FetchShuttleBusTimetableUseC
         self.repository = repository
     }
     
-    func execute(id: String) -> AnyPublisher<ShuttleBusTimetable, ErrorResponse> {
+    func execute(id: String) -> AnyPublisher<ShuttleBusTimetable, Error> {
         return repository.fetchShuttleBusTimetable(id: id)
     }
 }

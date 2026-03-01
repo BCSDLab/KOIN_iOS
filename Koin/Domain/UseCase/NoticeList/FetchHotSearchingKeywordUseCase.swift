@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchHotSearchingKeywordUseCase {
-    func execute(count: Int) -> AnyPublisher<[String], ErrorResponse>
+    func execute(count: Int) -> AnyPublisher<[String], Error>
 }
 
 final class DefaultFetchHotSearchingKeywordUseCase: FetchHotSearchingKeywordUseCase {
@@ -18,7 +18,7 @@ final class DefaultFetchHotSearchingKeywordUseCase: FetchHotSearchingKeywordUseC
         self.noticeListRepository = noticeListRepository
     }
     
-    func execute(count: Int) -> AnyPublisher<[String], ErrorResponse> {
+    func execute(count: Int) -> AnyPublisher<[String], Error> {
         return noticeListRepository.fetchRecommendedKeyword(count: count).map { keywords in
             return keywords.keywords.map { keyword in
                 "#\(keyword)"

@@ -35,15 +35,15 @@ final class DefaultTimetableRepository: TimetableRepository {
         service.fetchMySemester()
     }
     
-    func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], ErrorResponse> {
+    func fetchLectureList(semester: String) -> AnyPublisher<[SemesterLecture], Error> {
         service.fetchLectureList(semester: semester)
     }
     
-    func fetchSemester() -> AnyPublisher<[SemesterDto], ErrorResponse> {
+    func fetchSemester() -> AnyPublisher<[SemesterDto], Error> {
         service.fetchSemester()
     }
     
-    func fetchDeptList() -> AnyPublisher<[DeptDto], ErrorResponse> {
+    func fetchDeptList() -> AnyPublisher<[DeptDto], Error> {
         return service.fetchDeptList()
     }
     

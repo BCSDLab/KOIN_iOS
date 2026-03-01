@@ -128,27 +128,32 @@ extension ShopViewModel {
     }
     
     private func fetchShopBenefits() {
-        fetchShopBenefitUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.updateShopBenefits(response))
+        fetchShopBenefitUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateShopBenefits(response))
+        }.store(in: &subscriptions)
     }
     
     private func fetchBeneficialShops(id: Int) {
-        fetchBeneficialShopUseCase.execute(id: id).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.updateBeneficialShops(response))
+        fetchBeneficialShopUseCase.execute(id: id).sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateBeneficialShops(response))
+        }.store(in: &subscriptions)
     }
     
     private func getShopInfo(id: Int) {
-        fetchShopListUseCase.execute(requestModel: sortStandard).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
+        fetchShopListUseCase.execute(requestModel: sortStandard)
+            .sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
+                }
+            }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 let shops = response
                 if self.selectedId != 0 {
@@ -157,29 +162,24 @@ extension ShopViewModel {
                     self.outputSubject.send(.changeFilteredShops(shops, self.selectedId))
                 }
                 self.shopList = response
-            }
-        ).store(in: &subscriptions)
+            }).store(in: &subscriptions)
     }
     
     private func getEventShopList() {
-        fetchEventListUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
+        fetchEventListUseCase.execute()
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 self.outputSubject.send(.updateEventShops(response.events ?? []))
                 self.getShopInfo(id: self.selectedId)
-            }
-        ).store(in: &subscriptions)
+            }).store(in: &subscriptions)
     }
     
     private func getShopCategory() {
-        fetchShopCategoryListUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
+        fetchShopCategoryListUseCase.execute()
+            .sink(receiveCompletion: { _ in }, receiveValue: { [weak self] response in
                 self?.categories = response.shopCategories
                 self?.outputSubject.send(.putImage(response))
-            }
-        ).store(in: &subscriptions)
+            }).store(in: &subscriptions)
     }
     
     func categoryName(for id: Int) -> String {
