@@ -52,11 +52,16 @@ final class Interceptor: RequestInterceptor {
                for session: Session,
                dueTo error: any Error,
                completion: @escaping @Sendable (RetryResult) -> Void) {
-
+        
         guard let responseCode = request.response?.statusCode,
-              responseCode == 401,
-              request.retryCount < retryLimit,
+              responseCode == 401 else {
+            completion(.doNotRetryWithError(error))
+            return
+        }
+        guard request.retryCount < retryLimit,
               let _ = KeychainWorker.shared.read(key: .refresh) else {
+            KeychainWorker.shared.delete(key: .access)
+            KeychainWorker.shared.delete(key: .refresh)
             completion(.doNotRetryWithError(error))
             return
         }
