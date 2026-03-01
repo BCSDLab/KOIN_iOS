@@ -18,7 +18,7 @@ protocol ChatService {
 
 final class DefaultChatService: ChatService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func createChatRoom(articleId: Int) -> AnyPublisher<CreateChatRoomResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: ChatAPI.createChatRoom(articleId))

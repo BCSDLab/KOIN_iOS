@@ -17,7 +17,7 @@ protocol CoreService {
 
 final class DefaultCoreService: CoreService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: CoreAPI.checkVersion)

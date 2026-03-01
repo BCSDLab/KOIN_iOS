@@ -17,7 +17,7 @@ protocol NotiService {
 
 final class DefaultNotiService: NotiService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     private func sendDeviceToken() -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: NotiAPI.sendDeviceToken)

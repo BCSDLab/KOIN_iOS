@@ -36,7 +36,7 @@ protocol UserService {
 
 final class DefaultUserService: UserService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func changePassword(requestModel: ChangePasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: UserAPI.changePassword(requestModel))

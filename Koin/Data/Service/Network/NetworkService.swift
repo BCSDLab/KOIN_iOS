@@ -11,7 +11,12 @@ import Combine
 
 final class NetworkService {
     
-    private let interceptor = Interceptor()
+    static let shared = NetworkService()
+    private let interceptor: Interceptor
+    
+    private init() {
+        self.interceptor = Interceptor()
+    }
     
     func request(api: URLRequestConvertible) -> AnyPublisher<Void, ErrorResponse> {
         return AF.request(api, interceptor: interceptor)

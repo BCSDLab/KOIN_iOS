@@ -15,7 +15,7 @@ protocol LandService {
 
 final class DefaultLandService: LandService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func fetchLandList() -> AnyPublisher<LandDto, ErrorResponse> {
         return networkService.requestWithResponse(api: LandAPI.fetchLandList)

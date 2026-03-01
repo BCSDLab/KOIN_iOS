@@ -16,7 +16,7 @@ protocol DiningService {
 
 final class DefaultDiningService: DiningService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDto], ErrorResponse> {
         return networkService.requestWithResponse(api: DiningAPI.fetchDiningList(requestModel))
