@@ -129,9 +129,8 @@ extension SceneDelegate {
         guard isPresentingErrorViewController == false else {
             return
         }
-        isPresentingErrorViewController = true
         
-        if let navigationController = window?.rootViewController as? UINavigationController {
+        if let navigationController = window?.rootViewController as? CustomNavigationController {
             
             let homeViewController = makeHomeViewController()
             let completion: ()->Void = { [weak self] in
@@ -151,6 +150,8 @@ extension SceneDelegate {
             } else {
                 navigationController.present(errorViewController, animated: true)
             }
+            
+            isPresentingErrorViewController = true
         }
     }
 }
