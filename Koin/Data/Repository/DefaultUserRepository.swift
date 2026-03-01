@@ -63,6 +63,11 @@ final class DefaultUserRepository: UserRepository {
         service.login(requestModel: requestModel)
     }
     
+    func logout() -> AnyPublisher<String, Error> {
+        let fakeResponse = ""
+        return Just(fakeResponse).setFailureType(to: Error.self).eraseToAnyPublisher()
+    }
+    
     func findPassword(requestModel: FindPasswordRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.findPassword(requestModel: requestModel)
     }
@@ -73,6 +78,11 @@ final class DefaultUserRepository: UserRepository {
     
     func checkDuplicatedNickname(requestModel: CheckDuplicatedNicknameRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.checkDuplicatedNickname(requestModel: requestModel)
+    }
+    
+    func checkDuplicatedEmail(email: String) -> AnyPublisher<String, Error> {
+        let fakeResponse = ""
+        return Just(fakeResponse).setFailureType(to: Error.self).eraseToAnyPublisher()
     }
     
     func revoke() -> AnyPublisher<Void, ErrorResponse> {

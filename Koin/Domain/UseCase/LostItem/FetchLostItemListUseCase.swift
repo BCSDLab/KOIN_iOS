@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol FetchLostItemListUseCase {
-    func execute(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemList, ErrorResponse>
+    func execute(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemList, Error>
 }
 
 final class DefaultFetchLostItemListUseCase: FetchLostItemListUseCase {
@@ -20,7 +20,7 @@ final class DefaultFetchLostItemListUseCase: FetchLostItemListUseCase {
         self.repository = repository
     }
     
-    func execute(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemList, ErrorResponse> {
+    func execute(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemList, Error> {
         return repository.fetchLostItemList(requestModel: requestModel)
     }
 }

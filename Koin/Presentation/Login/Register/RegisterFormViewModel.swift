@@ -158,12 +158,13 @@ extension RegisterFormViewModel {
     }
 
     private func fetchDeptList() {
-        fetchDeptListUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.showDeptDropDownList(response))
+        fetchDeptListUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showDeptDropDownList(response))
+        }.store(in: &subscriptions)
     }
     
     private func checkDuplicatedNickname(nickname: String) {

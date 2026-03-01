@@ -42,6 +42,12 @@ extension ChatAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
+        case .fetchChatRoom, .fetchChatDetail, .blockUser, .createChatRoom, .postChatDetail:
+            if let token = KeychainWorker.shared.read(key: .access) {
+                baseHeaders["Authorization"] = "Bearer \(token)"
+            }
+        }
+        switch self {
         case .createChatRoom, .postChatDetail: 
             baseHeaders["Content-Type"] = "application/json"
         default: break

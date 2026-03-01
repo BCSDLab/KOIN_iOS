@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShopEventListUseCase {
-    func execute(shopId: Int) -> AnyPublisher<[ShopEvent], ErrorResponse>
+    func execute(shopId: Int) -> AnyPublisher<[ShopEvent], Error>
 }
 
 final class DefaultFetchShopEventListUseCase: FetchShopEventListUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchShopEventListUseCase: FetchShopEventListUseCase {
         self.shopRepository = shopRepository
     }
     
-    func execute(shopId: Int) -> AnyPublisher<[ShopEvent], ErrorResponse> {
+    func execute(shopId: Int) -> AnyPublisher<[ShopEvent], Error> {
         return shopRepository.fetchShopEventList(requestModel: FetchShopDataRequest(shopId: shopId)).map { eventsDto in
              eventsDto.events ?? []
         }.map { events in

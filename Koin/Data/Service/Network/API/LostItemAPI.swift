@@ -45,7 +45,17 @@ extension LostItemAPI: Router, URLRequestConvertible {
     }
     
     public var headers: [String: String] {
-        return [:]
+        switch self {
+        case .fetchLostItemList, .fetchLostItemData, .changeListItemState, .deleteLostItem, .updateLostItem:
+            if let token = KeychainWorker.shared.read(key: .access) {
+                let headers = ["Authorization": "Bearer \(token)"]
+                return headers
+            } else {
+                return [:]
+            }
+        case .fetchLostItemStats:
+            return [:]
+        }
     }
     
     public var parameters: Any? {

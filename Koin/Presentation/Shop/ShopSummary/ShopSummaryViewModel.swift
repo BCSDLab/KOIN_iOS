@@ -90,35 +90,35 @@ final class ShopSummaryViewModel {
 
 extension ShopSummaryViewModel {
     private func fetchShopSummary(shopId: Int) {
-        fetchOrderShopSummaryFromShopUseCase.execute(id: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] shopSummary in
+        fetchOrderShopSummaryFromShopUseCase.execute(id: shopId)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { [weak self] shopSummary in
                 guard let self else { return }
                 self.outputSubject.send(.update1(
                     images: shopSummary.images,
                     name: shopSummary.name,
                     rating: shopSummary.ratingAverage,
                     reviewCount: shopSummary.reviewCount))
-            }
-        ).store(in: &subscriptions)
+            })
+            .store(in: &subscriptions)
     }
     
     private func fetchShopMenusAndGroups(shopId: Int) {
-        fetchOrderShopMenusAndGroupsFromShopUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] (shopMenusCategory, shopMenus) in
+        fetchOrderShopMenusAndGroupsFromShopUseCase.execute(shopId: shopId)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { [weak self] (shopMenusCategory, shopMenus) in
                 guard let self else { return }
                 self.outputSubject.send(.update3(
                     menusGroups: shopMenusCategory,
                     menus: shopMenus))
-            }
-        ).store(in: &subscriptions)
+            })
+            .store(in: &subscriptions)
     }
     
     private func fetchIsAvailable(shopId: Int) {
-        fetchShopDataUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] in
+        fetchShopDataUseCase.execute(shopId: shopId)
+            .sink(receiveCompletion: { _ in },
+                  receiveValue: { [weak self] in
                 guard let self else { return }
                 self.phonenumber = $0.phone
                 self.outputSubject.send(.update2(
@@ -128,8 +128,8 @@ extension ShopSummaryViewModel {
                     maxDeliveryTip: $0.deliveryPrice,
                     description: $0.description,
                     phone: $0.phone))
-            }
-        ).store(in: &subscriptions)
+            })
+            .store(in: &subscriptions)
     }
 }
 

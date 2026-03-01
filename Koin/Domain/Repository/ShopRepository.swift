@@ -9,15 +9,15 @@ import Combine
 import Foundation
 
 protocol ShopRepository {
-    func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDto, ErrorResponse>
-    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, ErrorResponse>
-    func fetchEventList() -> AnyPublisher<EventsDto, ErrorResponse>
-    func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, ErrorResponse>
-    func fetchShopMenusCategoryList(shopId: Int) -> AnyPublisher<ShopMenusCategoryDto, ErrorResponse>
+    func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDto, Error>
+    func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, Error>
+    func fetchEventList() -> AnyPublisher<EventsDto, Error>
+    func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, Error>
+    func fetchShopMenusCategoryList(shopId: Int) -> AnyPublisher<ShopMenusCategoryDto, Error>
     
-    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, ErrorResponse>
-    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDto, ErrorResponse>
-    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDto, ErrorResponse>
+    func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, Error>
+    func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDto, Error>
+    func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDto, Error>
     
     func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDto, ErrorResponse>
     func fetchReview(reviewId: Int, shopId: Int) -> AnyPublisher<OneReviewDto, ErrorResponse>
@@ -26,12 +26,12 @@ protocol ShopRepository {
     func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
-    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, ErrorResponse>
-    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, ErrorResponse>
-    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, ErrorResponse>
+    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, Error>
+    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, Error>
+    func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, Error>
     
     func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse>
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
-    func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearch, ErrorResponse>
+    func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearch, Error>
 }
 

@@ -15,27 +15,27 @@ final class DefaultBusRepository: BusRepository {
         self.service = service
     }
 
-    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, ErrorResponse> {
+    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, Error> {
         return service.searchBusInformation(requestModel: requestModel)
     }
     
-    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, ErrorResponse> {
+    func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, Error> {
         return service.fetchShuttleRouteList()
     }
     
-    func fetchExpressBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, ErrorResponse> {
+    func fetchExpressBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, Error> {
         return service.fetchExpressTimetableList(requestModel: requestModel)
     }
     
-    func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, ErrorResponse> {
+    func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, Error> {
         return service.fetchCityTimetableList(requestModel: requestModel)
     }
     
-    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, ErrorResponse> {
+    func fetchEmergencyNotice() -> AnyPublisher<BusNoticeDto, Error> {
         return service.fetchEmergencyNotice()
     }
     
-    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetable, ErrorResponse> {
+    func fetchShuttleBusTimetable(id: String) -> AnyPublisher<ShuttleBusTimetable, Error> {
         service.fetchShuttleBusTimetable(id: id)
             .map { $0.toDomain() }
             .eraseToAnyPublisher()

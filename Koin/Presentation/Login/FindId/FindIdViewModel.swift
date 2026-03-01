@@ -37,16 +37,14 @@ extension FindIdViewModel {
     }
     
     func checkVerificationCode(phoneNumber: String, code: String) {
-        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.checkMessagePublisher.send((error.message, false))
-                }
-            },
-            receiveValue: { [weak self] response in
-                self?.findIdSms(phoneNumber: phoneNumber)
+        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.checkMessagePublisher.send((error.message, false))
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.findIdSms(phoneNumber: phoneNumber)
+        }.store(in: &subscriptions)
     }
     
     func findIdSms(phoneNumber: String) {
@@ -58,7 +56,7 @@ extension FindIdViewModel {
             self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
         }.store(in: &subscriptions)
     }
-    
+    ///
     func sendVerificationEmail(email: String) {
         sendVerificationEmailUseCase.execute(requestModel: .init(email: email)).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -68,31 +66,24 @@ extension FindIdViewModel {
             self?.sendMessagePublisher.send(("인증번호가 발송되었습니다.", true))
         }.store(in: &subscriptions)
     }
-    
     func checkVerificationEmail(email: String, code: String) {
-        checkVerificationEmailUseCase.execute(requestModel: .init(email: email, verificationCode: code)).sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.checkMessagePublisher.send((error.message, false))
-                }
-            },
-            receiveValue: { [weak self] response in
-                self?.findIdEmail(email: email)
+        checkVerificationEmailUseCase.execute(requestModel: .init(email: email, verificationCode: code)).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.checkMessagePublisher.send((error.message, false))
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.findIdEmail(email: email)
+        }.store(in: &subscriptions)
     }
-    
     func findIdEmail(email: String) {
-        findIdEmailUseCase.execute(requestModel: .init(email: email)).sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.checkMessagePublisher.send((error.message, false))
-                }
-            },
-            receiveValue: { [weak self] response in
-                self?.loginId = response.loginID
-                self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
+        findIdEmailUseCase.execute(requestModel: .init(email: email)).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.checkMessagePublisher.send((error.message, false))
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.loginId = response.loginID
+            self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
+        }.store(in: &subscriptions)
     }
 }
