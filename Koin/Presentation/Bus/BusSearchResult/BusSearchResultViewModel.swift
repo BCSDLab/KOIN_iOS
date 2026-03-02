@@ -74,24 +74,22 @@ extension BusSearchResultViewModel {
             self.departBusType = busType
             busTypeValue = busType
         }
-        fetchSearchedResultUseCase.execute(date: departDateValue, busType: busTypeValue, departure: busPlaces.0, arrival: busPlaces.1).sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchSearchedResultUseCase.execute(date: departDateValue, busType: busTypeValue, departure: busPlaces.0, arrival: busPlaces.1).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] searchedResult in
+                let output = departDate != nil ? (departDate, searchedResult) : (nil, searchedResult)
+                self?.outputSubject.send(.udpatesSearchedResult(output.0, output.1))
             }
-        }, receiveValue: { [weak self] searchedResult in
-            let output = departDate != nil ? (departDate, searchedResult) : (nil, searchedResult)
-            self?.outputSubject.send(.udpatesSearchedResult(output.0, output.1))
-        }).store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func getSemesterInfo() {
-        fetchSemesterInfoUseCase.execute(busRouteType: .overall).sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchSemesterInfoUseCase.execute(busRouteType: .overall).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                self?.outputSubject.send(.updateSemesterInfo(response.semesterInfo))
             }
-        }, receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateSemesterInfo(response.semesterInfo))
-        }).store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

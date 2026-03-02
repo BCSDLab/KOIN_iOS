@@ -49,17 +49,13 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
     }
     
     private func getShuttleBusTimetable(shuttleTimetableType: ShuttleTimetableType) {
-        fetchShuttleTimetableUseCase.execute(id: shuttleRouteId)
-            .sink { [weak self] completion in
-                guard self != nil else { return }
-                if case let .failure(error) = completion {
-                    Log.make().error("\(error)")
-                }
-            } receiveValue: { [weak self] timetable in
+        fetchShuttleTimetableUseCase.execute(id: shuttleRouteId).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] timetable in
                 guard let self else { return }
                 self.outputSubject.send(.updateBusRoute(timetable, shuttleTimetableType))
             }
-            .store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchLectureListUseCase {
-    func execute(semester: String) -> AnyPublisher<[SemesterLecture], Error>
+    func execute(semester: String) -> AnyPublisher<[SemesterLecture], ErrorResponse>
 }
 
 final class DefaultFetchLectureListUseCase: FetchLectureListUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchLectureListUseCase: FetchLectureListUseCase {
         self.timetableRepository = timetableRepository
     }
     
-    func execute(semester: String) -> AnyPublisher<[SemesterLecture], Error> {
+    func execute(semester: String) -> AnyPublisher<[SemesterLecture], ErrorResponse> {
         return timetableRepository.fetchLectureList(semester: semester)
     }
     

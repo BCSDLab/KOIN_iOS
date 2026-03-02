@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchCoopShopListUseCase {
-    func execute() -> AnyPublisher<CoopShopData, Error>
+    func execute() -> AnyPublisher<CoopShopData, ErrorResponse>
 }
 
 final class DefaultFetchCoopShopListUseCase: FetchCoopShopListUseCase {
@@ -20,9 +20,9 @@ final class DefaultFetchCoopShopListUseCase: FetchCoopShopListUseCase {
         self.diningRepository = diningRepository
     }
     
-    func execute() -> AnyPublisher<CoopShopData, Error> {
+    func execute() -> AnyPublisher<CoopShopData, ErrorResponse> {
         return diningRepository.fetchCoopShopList()
-            .tryMap { coopShopDtos -> CoopShopData in
+            .map { coopShopDtos -> CoopShopData in
                 return coopShopDtos.toDomain()
             }
             .eraseToAnyPublisher()

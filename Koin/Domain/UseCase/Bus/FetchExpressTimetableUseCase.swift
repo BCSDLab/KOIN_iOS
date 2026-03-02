@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchExpressTimetableUseCase {
-    func execute(filterIdx: Int) -> AnyPublisher<(BusTimetableInfo, BusDirection), Error>
+    func execute(filterIdx: Int) -> AnyPublisher<(BusTimetableInfo, BusDirection), ErrorResponse>
 }
 
 final class DefaultFetchExpressTimetableUseCase: FetchExpressTimetableUseCase {
@@ -18,7 +18,7 @@ final class DefaultFetchExpressTimetableUseCase: FetchExpressTimetableUseCase {
         self.busRepository = busRepository
     }
     
-    func execute(filterIdx: Int) -> AnyPublisher<(BusTimetableInfo, BusDirection), Error> {
+    func execute(filterIdx: Int) -> AnyPublisher<(BusTimetableInfo, BusDirection), ErrorResponse> {
         let busCourse = setBusFilter()[filterIdx]
         let busDirection: BusDirection = filterIdx == 0 ? .from : .to
         let requestModel = FetchBusTimetableRequest(busType: busCourse.busType.rawValue, direction: busCourse.direction.rawValue, region: busCourse.region)

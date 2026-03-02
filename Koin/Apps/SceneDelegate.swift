@@ -10,7 +10,16 @@ import UIKit
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     var window: UIWindow?
-    var urlParameters: [String: String]?
+    private var isPresentingErrorViewController = false
+    
+    override init() {
+        super.init()
+        NotificationCenter.default.addObserver(self, selector: #selector(presentErrorViewController), name: NSNotification.Name("ServerError"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
     
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
@@ -115,5 +124,33 @@ extension SceneDelegate {
         return viewController
     }
     
-    
+    @objc private func presentErrorViewController() {
+        
+        guard isPresentingErrorViewController == false else {
+            return
+        }
+        isPresentingErrorViewController = true
+        
+        if let navigationController = window?.rootViewController as? UINavigationController {
+            
+            let homeViewController = makeHomeViewController()
+            let completion: ()->Void = { [weak self] in
+                navigationController.setViewControllers([homeViewController], animated: false)
+                navigationController.dismiss(animated: true) {
+                    self?.isPresentingErrorViewController = false
+                }
+            }
+            let errorViewController = ErrorViewController(completion: completion).then {
+                $0.modalPresentationStyle = .fullScreen
+            }
+            
+            if let _ = navigationController.presentedViewController {
+                navigationController.dismiss(animated: true) {
+                    navigationController.present(errorViewController, animated: true)
+                }
+            } else {
+                navigationController.present(errorViewController, animated: true)
+            }
+        }
+    }
 }

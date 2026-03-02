@@ -49,17 +49,18 @@ final class ServiceSelectViewModel: ViewModelProtocol {
 extension ServiceSelectViewModel {
     
     private func fetchUserData() {
-        fetchUserDataUseCase.execute().sink { [weak self] completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-                self?.isLogined = false
-                self?.outputSubject.send(.disappearProfile)
+        fetchUserDataUseCase.execute().sink(
+            receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.isLogined = false
+                    self?.outputSubject.send(.disappearProfile)
+                }
+            },
+            receiveValue: { [weak self] response in
+                self?.isLogined = true
+                self?.outputSubject.send(.updateProfile(response))
             }
-        } receiveValue: { [weak self] response in
-            self?.isLogined = true
-            self?.outputSubject.send(.updateProfile(response))
-        }.store(in: &subscriptions)
-
+        ).store(in: &subscriptions)
     }
     
     private func logOut() {

@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchClubCategoriesUseCase {
-    func execute() -> AnyPublisher<ClubCategoriesDto, Error>
+    func execute() -> AnyPublisher<ClubCategoriesDto, ErrorResponse>
 }
 
 final class DefaultFetchClubCategoriesUseCase: FetchClubCategoriesUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchClubCategoriesUseCase: FetchClubCategoriesUseCase {
         self.coreRepository = coreRepository
     }
     
-    func execute() -> AnyPublisher<ClubCategoriesDto, Error> {
+    func execute() -> AnyPublisher<ClubCategoriesDto, ErrorResponse> {
         return coreRepository.fetchClubCategories()
     }
 }
