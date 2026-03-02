@@ -79,12 +79,13 @@ final class ShopReviewViewModel: ViewModelProtocol {
     }
     
     private func updateShopName() {
-        fetchShopDataUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in},
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.updateShopName(response.name))
+        fetchShopDataUseCase.execute(shopId: shopId) .sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.updateShopName(response.name))
+        }.store(in: &subscriptions)
     }
     
     private func uploadFile(files: [Data]) {

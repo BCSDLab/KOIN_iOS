@@ -92,7 +92,14 @@ extension UserAPI: Router, URLRequestConvertible {
         case .fetchStudentUserData, .revoke, .checkAuth, .checkLogin, .fetchGeneralUserData:
             break
         }
-        return baseHeaders
+            switch self {
+            case .fetchStudentUserData, .revoke, .modifyStudentUserData, .checkPassword, .checkAuth , .fetchGeneralUserData, .modifyGeneralUserData, .changePassword:
+                if let token = KeychainWorker.shared.read(key: .access) {
+                    baseHeaders["Authorization"] = "Bearer \(token)"
+                }
+            default: break
+            }
+            return baseHeaders
     }
     
     public var parameters: Any? {

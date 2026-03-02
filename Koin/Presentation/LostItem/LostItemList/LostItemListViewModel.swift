@@ -88,7 +88,7 @@ extension LostItemListViewModel {
         
         fetchLostItemListUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
+                if case .failure(_) = completion {
                     self?.filterState.page -= 1
                 }
             },
@@ -103,7 +103,7 @@ extension LostItemListViewModel {
     
     private func checkLogin() {
         checkLoginUseCase.execute().sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { _ in},
             receiveValue: { [weak self] isLoggedIn in
                 self?.isLoggedIn = isLoggedIn
             }

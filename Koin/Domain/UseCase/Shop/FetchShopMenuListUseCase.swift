@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShopMenuListUseCase {
-    func execute(shopId: Int) -> AnyPublisher<[MenuCategory], ErrorResponse>
+    func execute(shopId: Int) -> AnyPublisher<[MenuCategory], Error>
 }
 
 final class DefaultFetchShopMenuListUseCase: FetchShopMenuListUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchShopMenuListUseCase: FetchShopMenuListUseCase {
         self.shopRepository = shopRepository
     }
     
-    func execute(shopId: Int) -> AnyPublisher<[MenuCategory], ErrorResponse> {
+    func execute(shopId: Int) -> AnyPublisher<[MenuCategory], Error> {
         return shopRepository.fetchShopMenuList(requestModel: FetchShopDataRequest(shopId: shopId)).map { menuDto in
             menuDto.menuCategories ?? []
         }.eraseToAnyPublisher()

@@ -80,39 +80,44 @@ final class BusTimetableViewModel: ViewModelProtocol {
     private func getBusTimetable(busType: BusType, firstFilterIdx: Int, secondFilterIdx: Int?) {
         switch busType {
         case .shuttleBus:
-            fetchShuttleRoutesUseCase.execute(busRouteType: ShuttleRouteType.allCases[firstFilterIdx]).sink(
-                receiveCompletion: { _ in },
-                receiveValue: { [weak self] busRoutes in
-                    self?.outputSubject.send(.updateShuttleBusRoutes(busRoutes: busRoutes))
+            fetchShuttleRoutesUseCase.execute(busRouteType: ShuttleRouteType.allCases[firstFilterIdx]).sink(receiveCompletion: {
+                completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
                 }
-            ).store(in: &subscriptions)
+            }, receiveValue: { [weak self] busRoutes in
+                self?.outputSubject.send(.updateShuttleBusRoutes(busRoutes: busRoutes))
+            }).store(in: &subscriptions)
         case .expressBus:
-            fetchExpressTimetableUseCase.execute(filterIdx: firstFilterIdx).sink(
-                receiveCompletion: { _ in },
-                receiveValue: { [weak self] timetable, busDirection in
-                    self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
-                    let busStop = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
-                    self?.outputSubject.send(.updateStopLabel(busStop: busStop))
+            fetchExpressTimetableUseCase.execute(filterIdx: firstFilterIdx).sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
                 }
-            ).store(in: &subscriptions)
+            }, receiveValue: { [weak self] timetable, busDirection in
+                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
+                let busStop = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
+                self?.outputSubject.send(.updateStopLabel(busStop: busStop))
+            }).store(in: &subscriptions)
         default:
-            fetchCityTimetableUseCase.execute(firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx ?? 0).sink(
-                receiveCompletion: { _ in },
-                receiveValue: { [weak self] timetable, busDirection in
-                    self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
-                    self?.outputSubject.send(.updateStopLabel(busStop: "\(busDirection) 승차"))
+            fetchCityTimetableUseCase.execute(firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx ?? 0).sink(receiveCompletion: { completion in
+                if case let .failure(error) = completion {
+                    Log.make().error("\(error)")
                 }
-            ).store(in: &subscriptions)
+            }, receiveValue: { [weak self] timetable, busDirection in
+                self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
+                self?.outputSubject.send(.updateStopLabel(busStop: "\(busDirection) 승차"))
+            }).store(in: &subscriptions)
         }
     }
     
     private func getEmergencyNotice() {
-        fetchEmergencyNoticeUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] notice in
-                self?.outputSubject.send(.updateEmergencyNotice(notice: notice))
+        fetchEmergencyNoticeUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] notice in
+            self?.outputSubject.send(.updateEmergencyNotice(notice: notice))
+        }).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

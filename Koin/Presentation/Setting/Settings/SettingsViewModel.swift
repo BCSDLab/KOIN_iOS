@@ -55,15 +55,14 @@ final class SettingsViewModel: ViewModelProtocol {
 
 extension SettingsViewModel {
     private func checkLogin(movingScene: MovingScene) {
-        checkAuthUseCase.execute().sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.outputSubject.send(.showToast(error.message, false, movingScene, nil))
-                }
-            }, receiveValue: { [weak self] response in
-                self?.outputSubject.send(.showToast("", true, movingScene, response.userType))
+        checkAuthUseCase.execute().sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message, false, movingScene, nil))
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showToast("", true, movingScene, response.userType))
+        }.store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

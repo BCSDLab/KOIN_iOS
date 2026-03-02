@@ -46,11 +46,14 @@ final class ShopDetailViewModel {
 extension ShopDetailViewModel {
     
     private func fetchShopDetail() {
-        fetchOrderShopDetailFromShopUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] orderShopDetail in
+        fetchOrderShopDetailFromShopUseCase.execute(shopId: shopId)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("fetchOrdershopDetailFromShop Failed: \(failure)")
+                }
+            }, receiveValue: { [weak self] orderShopDetail in
                 self?.outputSubject.send(.update(shopDetail: orderShopDetail))
-            }
-        ).store(in: &subscriptions)
+            })
+            .store(in: &subscriptions)
     }
 }

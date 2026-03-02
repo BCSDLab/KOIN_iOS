@@ -56,11 +56,15 @@ extension ShopSearchViewModel {
     }
     
     private func fetchSearchShop(_ keyword: String) {
-        fetchSearchShopUseCase.execute(keyword: keyword).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] shopSearchResult in
+        fetchSearchShopUseCase.execute(keyword: keyword)
+            .sink(receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print("failed : \(failure)")
+                }
+            },
+                  receiveValue: { [weak self] shopSearchResult in
                 self?.outputSubject.send(.update(shopSearchResult))
-            }
-        ).store(in: &subscriptions)
+            })
+            .store(in: &subscriptions)
     }
 }

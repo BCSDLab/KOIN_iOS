@@ -15,18 +15,18 @@ final class DefaultCoreRepository: CoreRepository {
         self.service = service
     }
     
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse> {
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error> {
         return service.fetchVersion()
     }
     
-    func fetBanner() -> AnyPublisher<BannerDto, ErrorResponse> {
+    func fetBanner() -> AnyPublisher<BannerDto, Error> {
         return service.fetchBanner()
     }
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse> {
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error> {
         return service.fetchClubCategories()
     }
     
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse> {
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error> {
         return service.fetchHotClubs()
     }
     

@@ -80,6 +80,13 @@ extension ShopAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
+        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopBenefits, .searchShop: break
+        default:
+            if let token = KeychainWorker.shared.read(key: .access) {
+                baseHeaders["Authorization"] = "Bearer \(token)"
+            } 
+        }
+        switch self {
         case .postReview, .reportReview, .modifyReview, .deleteReview, .postCallNotification:
             baseHeaders["Content-Type"] = "application/json"
         case .uploadFiles:

@@ -38,12 +38,15 @@ final class DiningNoticeViewModel: ViewModelProtocol {
 
 extension DiningNoticeViewModel {
     private func fetchCoopShopList() {
-        fetchCoopShopListUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.showCoopShopData(response))
+        fetchCoopShopListUseCase.execute().sink { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showCoopShopData(response))
+        }.store(in: &subscriptions)
+        
     }
+  
 }
 
