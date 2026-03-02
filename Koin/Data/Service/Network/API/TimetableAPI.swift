@@ -64,13 +64,6 @@ extension TimetableAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchFrame, .deleteFrame, .createFrame, .modifyFrame, .postLecture, .modifyLecture, .fetchLecture, .fetchMySemester, .deleteLecture, .deleteSemester, ._deleteLecture, .rollbackFrame, .fetchAllFrames:
-            if let token = KeychainWorker.shared.read(key: .access) {
-                baseHeaders["Authorization"] = "Bearer \(token)"
-            }
-        default: break
-        }
-        switch self {
         case .createFrame, .modifyFrame, .postLecture, .modifyLecture, .rollbackFrame:
             baseHeaders["Content-Type"] = "application/json"
         default:
