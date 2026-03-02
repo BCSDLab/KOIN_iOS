@@ -71,15 +71,14 @@ final class ClubWebViewController: UIViewController {
     }
     
     private func checkLogin() {
-        checkLoginUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        checkLoginUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                guard let self = self else { return }
+                setupWebView()
+                loadClubPage()
             }
-        } receiveValue: { [weak self] response in
-            guard let self = self else { return }
-            setupWebView()
-            loadClubPage()
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func loadClubPage() {

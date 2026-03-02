@@ -10,7 +10,7 @@ import Foundation
 
 
 protocol CheckVersionUseCase {
-    func execute() -> AnyPublisher<(Bool, String), Error>
+    func execute() -> AnyPublisher<(Bool, String), ErrorResponse>
 }
 
 final class DefaultCheckVersionUseCase: CheckVersionUseCase {
@@ -21,7 +21,7 @@ final class DefaultCheckVersionUseCase: CheckVersionUseCase {
         self.coreRepository = coreRepository
     }
     
-    func execute() -> AnyPublisher<(Bool, String), Error> {
+    func execute() -> AnyPublisher<(Bool, String), ErrorResponse> {
         return coreRepository.fetchVersion()
             .map { response in
                 let currentVersion = self.checkNowVersion()  // 현재 버전 확인

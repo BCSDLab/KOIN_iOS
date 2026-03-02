@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchEmergencyNoticeUseCase {
-    func execute() -> AnyPublisher<BusNoticeDto, Error>
+    func execute() -> AnyPublisher<BusNoticeDto, ErrorResponse>
 }
 
 final class DefaultFetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchEmergencyNoticeUseCase: FetchEmergencyNoticeUseCase {
         self.repository = repository
     }
     
-    func execute() -> AnyPublisher<BusNoticeDto, Error> {
+    func execute() -> AnyPublisher<BusNoticeDto, ErrorResponse> {
         return repository.fetchEmergencyNotice().eraseToAnyPublisher()
     }
 }

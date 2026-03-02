@@ -19,71 +19,107 @@ final class KeychainWorker {
     }
     static let shared = KeychainWorker()
     
-    private init() { }
+    private init() {}
+    private var keychains: [String: String?] = [:]
+    private let lock = NSLock()
     
     func create(key: TokenType, token: String) {
-        let query: NSDictionary = [
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        
+        let deleteQuery: NSDictionary = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: keyType(key: key)
+        ]
+        SecItemDelete(deleteQuery)
+        keychains.removeValue(forKey: keyType(key: key))
+        
+        let addQuery: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: keyType(key: key),
             kSecValueData: token.data(using: .utf8, allowLossyConversion: false) as Any
         ]
-        SecItemDelete(query)
+        let status = SecItemAdd(addQuery, nil)
         
-        let status = SecItemAdd(query, nil)
-        if status != errSecSuccess {
-            print("Failed to save token, status code: \(status)")
+        if status == errSecSuccess {
+//            print(key, "저장성공 :", token)
+            keychains.updateValue(token, forKey: keyType(key: key))
+        } else {
+            print(key, "저장실패 :", SecCopyErrorMessageString(status, nil) ?? "")
         }
     }
     
     func read(key: TokenType) -> String? {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        
+        if let token: String? = keychains[keyType(key: key)] {
+//            print("캐싱된", key, "읽기성공 :", token ?? "nil")
+            return token
+        }
+        
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: keyType(key: key),
             kSecReturnData: kCFBooleanTrue as Any,
             kSecMatchLimit: kSecMatchLimitOne
         ]
-        
         var dataTypeRef: AnyObject?
         let status = SecItemCopyMatching(query, &dataTypeRef)
         
-        if status == errSecSuccess {
-            if let retrievedData: Data = dataTypeRef as? Data {
-                let value = String(data: retrievedData, encoding: String.Encoding.utf8)
-                return value
-            } else { return nil }
+        if status == errSecSuccess,
+           let retrievedData: Data = dataTypeRef as? Data,
+           let value = String(data: retrievedData, encoding: String.Encoding.utf8) {
+            keychains.updateValue(value, forKey: keyType(key: key))
+//            print("키체인에서", key, "읽기성공 :", value)
+            return value
+        } else if status == errSecItemNotFound {
+//            print("키체인에서", key, "읽기성공 : nil")
+            keychains.updateValue(nil, forKey: keyType(key: key))
+            return nil
         } else {
-            print("failed to loading, status code = \(status)")
+            print(key, "읽기 실패 :", SecCopyErrorMessageString(status, nil) ?? "")
             return nil
         }
     }
     
     func delete(key: TokenType) {
+        lock.lock()
+        defer {
+            lock.unlock()
+        }
+        
+        keychains.removeValue(forKey: keyType(key: key))
+        
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: keyType(key: key)
         ]
         let status = SecItemDelete(query)
-          if status == errSecSuccess {
-              print("Item successfully deleted")
-          } else if status == errSecItemNotFound {
-              print("Item not found")
-          } else {
-              print("Error deleting the item, status code: \(status)")
-          }
+        if status == errSecSuccess {
+//            print(key, "삭제성공 :")
+            return
+        } else {
+            print(key, "삭제실패 :", SecCopyErrorMessageString(status, nil) ?? "")
+        }
     }
+}
+
+extension KeychainWorker {
     
     private func keyType(key: TokenType) -> String {
         let keyType: String
-        if key == .accessHistoryId {
-            if Bundle.main.isStage {
-                keyType = "stage\(key.rawValue)"
-            } else {
-                keyType = "production\(key.rawValue)"
-            }
+        
+        if Bundle.main.isStage {
+            keyType = "stage\(key.rawValue)"
         } else {
             keyType = key.rawValue
         }
+        
         return keyType
     }
-    
 }

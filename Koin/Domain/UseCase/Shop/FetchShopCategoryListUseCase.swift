@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchShopCategoryListUseCase {
-    func execute() -> AnyPublisher<ShopCategoryDto, Error>
+    func execute() -> AnyPublisher<ShopCategoryDto, ErrorResponse>
 }
 
 final class DefaultFetchShopCategoryListUseCase: FetchShopCategoryListUseCase {
@@ -18,7 +18,7 @@ final class DefaultFetchShopCategoryListUseCase: FetchShopCategoryListUseCase {
       self.shopRepository = shopRepository
     }
     
-    func execute() -> AnyPublisher<ShopCategoryDto, Error> {
+    func execute() -> AnyPublisher<ShopCategoryDto, ErrorResponse> {
         return shopRepository.fetchShopCategoryList()
             .map { shopCategoryDto in
                 return self.removeFirstCategory(in: shopCategoryDto)
