@@ -44,7 +44,7 @@ final class KeychainWorker {
         let status = SecItemAdd(addQuery, nil)
         
         if status == errSecSuccess {
-            print(key, "저장성공 :", token)
+//            print(key, "저장성공 :", token)
             keychains.updateValue(token, forKey: keyType(key: key))
         } else {
             print(key, "저장실패 :", SecCopyErrorMessageString(status, nil) ?? "")
@@ -58,7 +58,7 @@ final class KeychainWorker {
         }
         
         if let token: String? = keychains[keyType(key: key)] {
-            print("캐싱된", key, "읽기성공 :", token ?? "nil")
+//            print("캐싱된", key, "읽기성공 :", token ?? "nil")
             return token
         }
         
@@ -75,10 +75,10 @@ final class KeychainWorker {
            let retrievedData: Data = dataTypeRef as? Data,
            let value = String(data: retrievedData, encoding: String.Encoding.utf8) {
             keychains.updateValue(value, forKey: keyType(key: key))
-            print("키체인에서", key, "읽기성공 :", value)
+//            print("키체인에서", key, "읽기성공 :", value)
             return value
         } else if status == errSecItemNotFound {
-            print("키체인에서", key, "읽기성공 : nil")
+//            print("키체인에서", key, "읽기성공 : nil")
             keychains.updateValue(nil, forKey: keyType(key: key))
             return nil
         } else {
@@ -101,7 +101,7 @@ final class KeychainWorker {
         ]
         let status = SecItemDelete(query)
         if status == errSecSuccess {
-            print(key, "삭제성공 :")
+//            print(key, "삭제성공 :")
             return
         } else {
             print(key, "삭제실패 :", SecCopyErrorMessageString(status, nil) ?? "")
@@ -117,7 +117,7 @@ extension KeychainWorker {
         if Bundle.main.isStage {
             keyType = "stage\(key.rawValue)"
         } else {
-            keyType = "production\(key.rawValue)"
+            keyType = key.rawValue
         }
         
         return keyType

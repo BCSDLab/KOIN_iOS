@@ -143,14 +143,15 @@ extension SceneDelegate {
                 $0.modalPresentationStyle = .fullScreen
             }
             
-            if let _ = navigationController.presentedViewController {
-                navigationController.dismiss(animated: true) {
+            DispatchQueue.main.async {
+                if let _ = navigationController.presentedViewController {
+                    navigationController.dismiss(animated: true) {
+                        navigationController.present(errorViewController, animated: true)
+                    }
+                } else {
                     navigationController.present(errorViewController, animated: true)
                 }
-            } else {
-                navigationController.present(errorViewController, animated: true)
             }
-            
             isPresentingErrorViewController = true
         }
     }

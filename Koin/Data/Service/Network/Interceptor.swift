@@ -68,14 +68,13 @@ final class Interceptor: RequestInterceptor {
             refreshToken().sink { [weak self] shouldRetry in
                 guard let self else { return }
                 
-                lock.lock()
+                self.lock.lock()
                 let adaptRequests = self.adaptRequests
                 let retryRequests = self.retryRequests
                 self.adaptRequests.removeAll()
                 self.retryRequests.removeAll()
-                lock.unlock()
-                
                 self.isRefreshing = false
+                self.lock.unlock()
                 
                 adaptRequests.forEach {
                     self.adapt(urlRequest: $0.urlRequest, completion: $0.completion)
