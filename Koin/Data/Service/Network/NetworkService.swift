@@ -12,14 +12,13 @@ import Combine
 final class NetworkService {
     
     static let shared = NetworkService()
-    private let interceptor: Interceptor
-    
+    private let interceptor = Interceptor()
     private init() {
-        self.interceptor = Interceptor()
     }
     
     func request(api: URLRequestConvertible) -> AnyPublisher<Void, ErrorResponse> {
         return AF.request(api, interceptor: interceptor)
+            .validate()
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
@@ -44,6 +43,7 @@ final class NetworkService {
     
     func requestWithResponse<T: Decodable>(api: URLRequestConvertible) -> AnyPublisher<T, ErrorResponse> {
         return AF.request(api, interceptor: interceptor)
+            .validate()
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
@@ -83,6 +83,7 @@ final class NetworkService {
                          method: api.method,
                          headers: Alamofire.HTTPHeaders(api.headers),
                          interceptor: interceptor)
+            .validate()
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
@@ -120,6 +121,7 @@ final class NetworkService {
         }
         
         return AF.download(api, interceptor: interceptor, to: destination)
+            .validate()
             .publishData()
             .tryMap { response in
                 guard let httpResponse = response.response else {
