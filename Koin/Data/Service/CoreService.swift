@@ -9,29 +9,32 @@ import Alamofire
 import Combine
 
 protocol CoreService {
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse>
-    func fetchBanner() -> AnyPublisher<BannerDto, ErrorResponse>
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse>
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse>
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error>
+    func fetchBanner() -> AnyPublisher<BannerDto, Error>
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error>
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error>
 }
 
 final class DefaultCoreService: CoreService {
-    
-    private let networkService = NetworkService.shared
-    
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse> {
-        return networkService.requestWithResponse(api: CoreAPI.checkVersion)
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error> {
+        return request(.checkVersion)
+    }
+    func fetchBanner() -> AnyPublisher<BannerDto, Error> {
+        return request(.fetchBanner)
+    }
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error> {
+        return request(.fetchClubCategories)
     }
     
-    func fetchBanner() -> AnyPublisher<BannerDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: CoreAPI.fetchBanner)
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error> {
+        return request(.fetchHotClubs)
     }
-    
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: CoreAPI.fetchClubCategories)
-    }
-    
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: CoreAPI.fetchHotClubs)
+
+    private func request<T: Decodable>(_ api: CoreAPI) -> AnyPublisher<T, Error> {
+        return AF.request(api)
+            .publishDecodable(type: T.self)
+            .value()
+            .mapError { $0 as Error }
+            .eraseToAnyPublisher()
     }
 }

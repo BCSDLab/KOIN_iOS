@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-public protocol Router: URLRequestConvertible {
+public protocol Router {
     var baseURL: String { get }
     var path: String { get }
     var method: Alamofire.HTTPMethod { get }
@@ -37,15 +37,14 @@ extension Router {
         
         return request
     }
-
-    public func asMultipartFormData(data: [Data]) -> ((MultipartFormData)->Void) {
-        return { multipartFormData in
-            for (index, fileData) in data.enumerated() {
-                let uniqueFileName = "file_\(index + 1)"
-                multipartFormData.append(fileData, withName: "files", fileName: uniqueFileName, mimeType: "image/png")
-            }
-        }
-    }
+    public func asMultipartRequest(data: [Data], withName: String, fileName: String, mimeType: String) -> DataRequest {
+           return AF.upload(multipartFormData: { multipartFormData in
+               for (index, fileData) in data.enumerated() {
+                   let uniqueFileName = "\(fileName)_\(index + 1)"
+                   multipartFormData.append(fileData, withName: withName, fileName: uniqueFileName, mimeType: mimeType)
+               }
+           }, to: baseURL + path, method: method, headers: Alamofire.HTTPHeaders(headers))
+       }
 }
 
 extension Encodable {

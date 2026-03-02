@@ -102,7 +102,11 @@ extension LostItemDataViewModel {
     
     private func loadData() {
         fetchLostItemDataUseCase.execute(id: id).sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { completion in
+                if case .failure(let failure) = completion {
+                    print(failure)
+                }
+            },
             receiveValue: { [weak self] lostItemData in
                 self?.lostItemData = lostItemData
                 self?.type = lostItemData.type

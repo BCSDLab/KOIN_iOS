@@ -91,16 +91,14 @@ final class NoticeDataViewModel: ViewModelProtocol {
 extension NoticeDataViewModel {
     
     private func createChatRoom() {
-        createChatRoomUseCase.execute(articleId: noticeId).sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.outputSubject.send(.showToast(error.message))
-                }
-            },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.navigateToChat(response.articleId, response.chatRoomId, response.articleTitle))
+        createChatRoomUseCase.execute(articleId: noticeId).sink(receiveCompletion: { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message))
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] response in
+            self?.outputSubject.send(.navigateToChat(response.articleId, response.chatRoomId, response.articleTitle))
+        }).store(in: &subscriptions)
     }
     
     private func checkLogin(checkType: CheckType) {
@@ -114,57 +112,60 @@ extension NoticeDataViewModel {
     }
     func checkAuth() {
         
-        checkAuthUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.showAuth(response))
+        checkAuthUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showAuth(response))
+        }).store(in: &subscriptions)
+        
     }
     
     private func fetchLostItem(id: Int) {
-        fetchLostItemUseCase.execute(id: id).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.type = response.type ?? .lost
-                self?.outputSubject.send(.updateLostItem(response))
+        fetchLostItemUseCase.execute(id: id).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] response in
+            self?.type = response.type ?? .lost
+            self?.outputSubject.send(.updateLostItem(response))
+        }).store(in: &subscriptions)
     }
-    
     private func getNoticeData() {
         outputSubject.send(.updateActivityIndictor(true, nil, nil))
         let request = FetchNoticeDataRequest(noticeId: noticeId)
-        fetchNoticeDataUseCase.execute(request: request).sink(
-            receiveCompletion: { [weak self] completion in
-                self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
-            },
-            receiveValue: { [weak self] noticeData in
-                self?.outputSubject.send(.updateNoticeData(noticeData))
-                self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
+        fetchNoticeDataUseCase.execute(request: request).sink(receiveCompletion: { [weak self] completion in
+            self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] noticeData in
+            self?.outputSubject.send(.updateNoticeData(noticeData))
+            self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
+        }).store(in: &subscriptions)
     }
     
     private func getPopularArticle() {
-        fetchHotNoticeArticlesUseCase.execute(noticeId: noticeId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] notices in
-                self?.outputSubject.send(.updatePopularArticles(notices))
+        fetchHotNoticeArticlesUseCase.execute(noticeId: noticeId).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] notices in
+            self?.outputSubject.send(.updatePopularArticles(notices))
+        }).store(in: &subscriptions)
     }
     
     private func downloadFile(downloadUrl: String, fileName: String) {
         outputSubject.send(.updateActivityIndictor(true, nil, nil))
-        downloadNoticeAttachmentUseCase.execute(downloadUrl: downloadUrl, fileName: fileName).sink(
-            receiveCompletion: { [weak self] completion in
-                self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
-            },
-            receiveValue: { [weak self] downloadedPath in
-                self?.outputSubject.send(.updateActivityIndictor(false, fileName, downloadedPath))
+        downloadNoticeAttachmentUseCase.execute(downloadUrl: downloadUrl, fileName: fileName).sink(receiveCompletion: { [weak self] completion in
+            self?.outputSubject.send(.updateActivityIndictor(false, nil, nil))
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] downloadedPath in
+            self?.outputSubject.send(.updateActivityIndictor(false, fileName, downloadedPath))
+        }).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

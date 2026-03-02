@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchDeptListUseCase {
-    func execute() -> AnyPublisher<[String], ErrorResponse>
+    func execute() -> AnyPublisher<[String], Error>
 }
 
 final class DefaultFetchDeptListUseCase: FetchDeptListUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchDeptListUseCase: FetchDeptListUseCase {
         self.timetableRepository = timetableRepository
     }
     
-    func execute() -> AnyPublisher<[String], ErrorResponse> {
+    func execute() -> AnyPublisher<[String], Error> {
         return timetableRepository.fetchDeptList().map { $0.map { $0.name } }.eraseToAnyPublisher()
     }
     

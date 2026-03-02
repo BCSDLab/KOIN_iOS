@@ -84,23 +84,26 @@ extension NoticeListViewModel {
     
     func checkAuth() {
         
-        checkAuthUseCase.execute().sink(
-            receiveCompletion: { _ in},
-            receiveValue: { [weak self] response in
-                self?.auth = response.userType
+        checkAuthUseCase.execute().sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] response in
+            self?.auth = response.userType
+        }).store(in: &subscriptions)
+        
     }
     
     private func getNoticeInfo(page: Int) {
-        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page, type: fetchType).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] articleInfo in
-                guard let self = self else { return }
-                self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
-                self.noticeList = articleInfo.articles
+        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page, type: fetchType).sink(receiveCompletion: { completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] articleInfo in
+            guard let self = self else { return }
+            self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
+            self.noticeList = articleInfo.articles
+        }).store(in: &subscriptions)
     }
     
     private func getUserKeywordList(keyword: NoticeKeywordDto? = nil) {
@@ -126,15 +129,16 @@ extension NoticeListViewModel {
     }
     
     private func fetchUserKeyword(completion: @escaping ([NoticeKeywordDto]) -> Void) {
-        fetchMyKeywordUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] fetchResult in
-                if fetchResult.0.isEmpty {
-                    self?.outputSubject.send(.isLogined(fetchResult.1))
-                }
-                completion(fetchResult.0)
+        fetchMyKeywordUseCase.execute().sink(receiveCompletion: { response in
+            if case let .failure(error) = response {
+                Log.make().error("\(error)")
             }
-        ).store(in: &subscriptions)
+        }, receiveValue: { [weak self] fetchResult in
+            if fetchResult.0.isEmpty {
+                self?.outputSubject.send(.isLogined(fetchResult.1))
+            }
+            completion(fetchResult.0)
+        }).store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {

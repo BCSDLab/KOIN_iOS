@@ -106,6 +106,7 @@ extension ChatViewModel {
                 guard let self else { return Empty().eraseToAnyPublisher() }
                 return fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId)
                     .catch { error -> AnyPublisher<[ChatMessage], Never> in
+                        Log.make().error("\(error)")
                         return Empty().eraseToAnyPublisher()
                     }
                     .eraseToAnyPublisher()
@@ -119,7 +120,10 @@ extension ChatViewModel {
     private func sendMessage(message: String, isImage: Bool) {
         postChatDetailUseCase.execute(articleId: articleId, chatRoomId: chatRoomId, message: message, isImage: isImage).sink(
             receiveCompletion: { [weak self] completion in
-                if case .finished = completion {
+                switch completion {
+                case .failure(let error):
+                    Log.make().error("\(error)")
+                case .finished:
                     self?.fetchChatDetail()
                 }
             },

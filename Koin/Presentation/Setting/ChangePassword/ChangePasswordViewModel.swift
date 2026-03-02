@@ -71,44 +71,38 @@ final class ChangePasswordViewModel: ViewModelProtocol {
 extension ChangePasswordViewModel {
     
     private func changePassword(password: String) {
-        changePasswordUseCase.execute(requestModel: .init(newPassword: EncodingWorker().sha256(text: password))).sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.outputSubject.send(.showToast(error.message, false, false))
-                }
-            },
-            receiveValue: { [weak self] _ in
-                self?.outputSubject.send(.showToast("비밀번호 변경이 완료되었습니다.", true, true))
+        changePasswordUseCase.execute(requestModel: .init(newPassword: EncodingWorker().sha256(text: password))).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message, false, false))
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] _ in
+            self?.outputSubject.send(.showToast("비밀번호 변경이 완료되었습니다.", true, true))
+        }.store(in: &subscriptions)
     }
     
     private func fetchUserData() {
-        fetchUserDataUseCase.execute().sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.outputSubject.send(.showToast(error.message, false, true))
-                }
-            },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.showEmail(response.loginId ?? ""))
-                self?.userDto = response
+        fetchUserDataUseCase.execute().sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.outputSubject.send(.showToast(error.message, false, true))
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.outputSubject.send(.showEmail(response.loginId ?? ""))
+            self?.userDto = response
+        }.store(in: &subscriptions)
     }
     
     private func checkPassword(password: String) {
-        checkPasswordUseCase.execute(password: password).sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.outputSubject.send(.showErrorMessage(error.message))
-                }
-            },
-            receiveValue: { [weak self] response in
-                self?.currentStep = 2
-                self?.outputSubject.send(.passNextStep)
+        checkPasswordUseCase.execute(password: password).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                Log.make().error("\(error)")
+                self?.outputSubject.send(.showErrorMessage(error.message))
             }
-        ).store(in: &subscriptions)
+        } receiveValue: { [weak self] response in
+            self?.currentStep = 2
+            self?.outputSubject.send(.passNextStep)
+        }.store(in: &subscriptions)
     }
     
 }
