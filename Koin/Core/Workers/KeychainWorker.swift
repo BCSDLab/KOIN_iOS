@@ -101,10 +101,10 @@ final class KeychainWorker {
         ]
         let status = SecItemDelete(query)
         if status == errSecSuccess {
-            print(key, "삭제성공")
+            print(key, "삭제성공 :")
             return
         } else {
-            print(key, "삭제실패", SecCopyErrorMessageString(status, nil) ?? "")
+            print(key, "삭제실패 :", SecCopyErrorMessageString(status, nil) ?? "")
         }
     }
 }

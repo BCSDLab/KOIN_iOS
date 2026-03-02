@@ -11,12 +11,18 @@ import Combine
 
 final class Interceptor: RequestInterceptor {
     
+    // MARK: - Properties
     private let retryLimit = 1
-    private var subscriptions: Set<AnyCancellable> = []
     
     private let lock = NSLock()
-    @Published private var isRefreshing = false
+    private var isRefreshing = false
     
+    private var subscriptions: Set<AnyCancellable> = []
+    
+    private var adaptRequests: [(urlRequest: URLRequest, completion: (Result<URLRequest, any Error>) -> Void)] = []
+    private var retryRequests: [(error: Error, completion: @Sendable (RetryResult) -> Void)] = []
+    
+    // MARK: - Adapt
     func adapt(_ urlRequest: URLRequest,
                for session: Session,
                completion: @escaping (Result<URLRequest, any Error>) -> Void) {
@@ -26,25 +32,10 @@ final class Interceptor: RequestInterceptor {
             lock.unlock()
         }
         
-        switch isRefreshing {
-        case true:
-            $isRefreshing
-                .filter { $0 == false }
-                .first()
-                .sink { _ in
-                    var urlRequest = urlRequest
-                    if let token = KeychainWorker.shared.read(key: .access) {
-                        urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-                    }
-                    completion(.success(urlRequest))
-                }
-                .store(in: &subscriptions)
-        case false:
-            var urlRequest = urlRequest
-            if let token = KeychainWorker.shared.read(key: .access) {
-                urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
-            }
-            completion(.success(urlRequest))
+        if isRefreshing {
+            adaptRequests.append((urlRequest: urlRequest, completion: completion))
+        } else {
+            adapt(urlRequest: urlRequest, completion: completion)
         }
     }
     
@@ -70,27 +61,50 @@ final class Interceptor: RequestInterceptor {
         defer {
             lock.unlock()
         }
+        retryRequests.append((error: error, completion: completion))
         
-        switch isRefreshing {
-        case true:
-            $isRefreshing
-                .filter { $0 == false }
-                .first()
-                .sink { _ in
-                    completion(.retry)
-                }
-                .store(in: &subscriptions)
-        case false:
-            isRefreshing = true
-            refreshToken().sink( receiveValue: { [weak self] isRefreshed in
+        if !isRefreshing {
+            self.isRefreshing = true
+            refreshToken().sink { [weak self] shouldRetry in
                 guard let self else { return }
                 
                 lock.lock()
-                isRefreshing = false
+                let adaptRequests = self.adaptRequests
+                let retryRequests = self.retryRequests
+                self.adaptRequests.removeAll()
+                self.retryRequests.removeAll()
                 lock.unlock()
                 
-                completion(isRefreshed ? .retry : .doNotRetryWithError(error))
-            }).store(in: &subscriptions)
+                self.isRefreshing = false
+                
+                adaptRequests.forEach {
+                    self.adapt(urlRequest: $0.urlRequest, completion: $0.completion)
+                }
+                retryRequests.forEach {
+                    self.retry(error: $0.error, completion: $0.completion, shouldRetry: shouldRetry)
+                }
+            }.store(in: &subscriptions)
+        }
+    }
+}
+
+extension Interceptor {
+
+    private func adapt(urlRequest: URLRequest, completion: @escaping (Result<URLRequest, any Error>) -> Void) {
+        var urlRequest = urlRequest
+        
+        if let token = KeychainWorker.shared.read(key: .access) {
+            urlRequest.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        }
+        completion(.success(urlRequest))
+    }
+    
+    private func retry(error: Error, completion: @escaping @Sendable (RetryResult) -> Void, shouldRetry: Bool) {
+        
+        if shouldRetry {
+            completion(.retry)
+        } else {
+            completion(.doNotRetryWithError(error))
         }
     }
 }
