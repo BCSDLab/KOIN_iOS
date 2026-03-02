@@ -114,10 +114,18 @@ extension KeychainWorker {
     private func keyType(key: TokenType) -> String {
         let keyType: String
         
-        if Bundle.main.isStage {
-            keyType = "stage\(key.rawValue)"
+        if key == .accessHistoryId {
+            if Bundle.main.isStage {
+                keyType = "stage\(key.rawValue)"
+            } else {
+                keyType = "production\(key.rawValue)"
+            }
         } else {
-            keyType = key.rawValue
+            if Bundle.main.isStage {
+                keyType = "stage\(key.rawValue)"
+            } else {
+                keyType = key.rawValue
+            }
         }
         
         return keyType
