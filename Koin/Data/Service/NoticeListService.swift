@@ -31,7 +31,7 @@ protocol NoticeListService {
 
 final class DefaultNoticeService: NoticeListService {
         
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     private let coreDataService = CoreDataService.shared
     
     func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {

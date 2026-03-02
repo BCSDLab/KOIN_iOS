@@ -129,9 +129,8 @@ extension SceneDelegate {
         guard isPresentingErrorViewController == false else {
             return
         }
-        isPresentingErrorViewController = true
         
-        if let navigationController = window?.rootViewController as? UINavigationController {
+        if let navigationController = window?.rootViewController as? CustomNavigationController {
             
             let homeViewController = makeHomeViewController()
             let completion: ()->Void = { [weak self] in
@@ -144,13 +143,16 @@ extension SceneDelegate {
                 $0.modalPresentationStyle = .fullScreen
             }
             
-            if let _ = navigationController.presentedViewController {
-                navigationController.dismiss(animated: true) {
+            DispatchQueue.main.async {
+                if let _ = navigationController.presentedViewController {
+                    navigationController.dismiss(animated: true) {
+                        navigationController.present(errorViewController, animated: true)
+                    }
+                } else {
                     navigationController.present(errorViewController, animated: true)
                 }
-            } else {
-                navigationController.present(errorViewController, animated: true)
             }
+            isPresentingErrorViewController = true
         }
     }
 }

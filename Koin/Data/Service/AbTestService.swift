@@ -14,7 +14,7 @@ protocol AbTestService {
 
 final class DefaultAbTestService: AbTestService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func assignAbTest(requestModel: AssignAbTestRequest) -> AnyPublisher<AssignAbTestResponse, ErrorResponse> {
         if KeychainWorker.shared.read(key: .accessHistoryId) == nil {

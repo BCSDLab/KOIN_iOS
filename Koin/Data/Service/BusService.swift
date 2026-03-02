@@ -19,7 +19,7 @@ protocol BusService {
 
 final class DefaultBusService: BusService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func fetchExpressTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, ErrorResponse> {
         return networkService.requestWithResponse(api: BusAPI.fetchBusTimetableList(requestModel))

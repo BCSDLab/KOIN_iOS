@@ -20,7 +20,7 @@ final class KeychainWorker {
     static let shared = KeychainWorker()
     
     private init() {}
-    private var keychains: [TokenType: String?] = [:]
+    private var keychains: [String: String?] = [:]
     private let lock = NSLock()
     
     func create(key: TokenType, token: String) {
@@ -29,19 +29,25 @@ final class KeychainWorker {
             lock.unlock()
         }
         
-        let query: NSDictionary = [
+        let deleteQuery: NSDictionary = [
+            kSecClass: kSecClassGenericPassword,
+            kSecAttrAccount: keyType(key: key)
+        ]
+        SecItemDelete(deleteQuery)
+        keychains.removeValue(forKey: keyType(key: key))
+        
+        let addQuery: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
             kSecAttrAccount: keyType(key: key),
             kSecValueData: token.data(using: .utf8, allowLossyConversion: false) as Any
         ]
-        SecItemDelete(query)
-        keychains.removeValue(forKey: key)
+        let status = SecItemAdd(addQuery, nil)
         
-        let status = SecItemAdd(query, nil)
         if status == errSecSuccess {
-            keychains.updateValue(token, forKey: key)
+//            print(key, "저장성공 :", token)
+            keychains.updateValue(token, forKey: keyType(key: key))
         } else {
-            print("Failed to save \(key) token,", SecCopyErrorMessageString(status, nil) ?? "")
+            print(key, "저장실패 :", SecCopyErrorMessageString(status, nil) ?? "")
         }
     }
     
@@ -51,7 +57,8 @@ final class KeychainWorker {
             lock.unlock()
         }
         
-        if let token: String? = keychains[key] {
+        if let token: String? = keychains[keyType(key: key)] {
+//            print("캐싱된", key, "읽기성공 :", token ?? "nil")
             return token
         }
         
@@ -67,13 +74,15 @@ final class KeychainWorker {
         if status == errSecSuccess,
            let retrievedData: Data = dataTypeRef as? Data,
            let value = String(data: retrievedData, encoding: String.Encoding.utf8) {
-            keychains.updateValue(value, forKey: key)
+            keychains.updateValue(value, forKey: keyType(key: key))
+//            print("키체인에서", key, "읽기성공 :", value)
             return value
         } else if status == errSecItemNotFound {
-            keychains.updateValue(nil, forKey: key)
+//            print("키체인에서", key, "읽기성공 : nil")
+            keychains.updateValue(nil, forKey: keyType(key: key))
             return nil
         } else {
-            print("Failed to load \(key) token,", SecCopyErrorMessageString(status, nil) ?? "")
+            print(key, "읽기 실패 :", SecCopyErrorMessageString(status, nil) ?? "")
             return nil
         }
     }
@@ -84,7 +93,7 @@ final class KeychainWorker {
             lock.unlock()
         }
         
-        keychains.removeValue(forKey: key)
+        keychains.removeValue(forKey: keyType(key: key))
         
         let query: NSDictionary = [
             kSecClass: kSecClassGenericPassword,
@@ -92,11 +101,10 @@ final class KeychainWorker {
         ]
         let status = SecItemDelete(query)
         if status == errSecSuccess {
+//            print(key, "삭제성공 :")
             return
-        } else if status == errSecItemNotFound {
-            print("\(key) token not found")
         } else {
-            print("Error deleting \(key) token", SecCopyErrorMessageString(status, nil) ?? "")
+            print(key, "삭제실패 :", SecCopyErrorMessageString(status, nil) ?? "")
         }
     }
 }
@@ -105,15 +113,13 @@ extension KeychainWorker {
     
     private func keyType(key: TokenType) -> String {
         let keyType: String
-        if key == .accessHistoryId {
-            if Bundle.main.isStage {
-                keyType = "stage\(key.rawValue)"
-            } else {
-                keyType = "production\(key.rawValue)"
-            }
+        
+        if Bundle.main.isStage {
+            keyType = "stage\(key.rawValue)"
         } else {
             keyType = key.rawValue
         }
+        
         return keyType
     }
 }

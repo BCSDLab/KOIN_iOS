@@ -29,7 +29,7 @@ protocol TimetableService {
 
 final class DefaultTimetableService: TimetableService {
         
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func fetchAllFrames() -> AnyPublisher<SemestersDto, ErrorResponse> {
         return networkService.requestWithResponse(api: TimetableAPI.fetchAllFrames)

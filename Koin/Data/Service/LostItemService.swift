@@ -20,7 +20,7 @@ protocol LostItemService {
 
 final class DefaultLostItemService: LostItemService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemListDto, ErrorResponse> {
         return networkService.requestWithResponse(api: LostItemAPI.fetchLostItemList(requestModel))

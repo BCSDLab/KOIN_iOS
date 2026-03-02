@@ -39,7 +39,7 @@ protocol ShopService {
 
 final class DefaultShopService: ShopService {
     
-    private let networkService = NetworkService()
+    private let networkService = NetworkService.shared
     
     func fetchShopMenusCategory(shopId: Int) -> AnyPublisher<ShopMenusCategoryDto, ErrorResponse> {
         return networkService.requestWithResponse(api: ShopAPI.fetchShopMenusCategoryList(shopId: shopId))
