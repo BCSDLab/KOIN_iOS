@@ -9,7 +9,7 @@ import UIKit
 import RxSwift
 import RxCocoa
 
-class DebouncedButton: UIButton {
+final class DebouncedButton: UIButton {
     private let disposeBag = DisposeBag()
     private var isRequestInProgress = false
 

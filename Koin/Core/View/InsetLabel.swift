@@ -7,7 +7,7 @@
 
 import UIKit
 
-class InsetLabel: UILabel {
+final class InsetLabel: UILabel {
     private var padding: UIEdgeInsets
 
     init(top: CGFloat, left: CGFloat, bottom: CGFloat, right: CGFloat) {

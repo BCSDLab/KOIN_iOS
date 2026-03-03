@@ -7,7 +7,7 @@
 
 import UIKit
 
-class IndicatorView {
+final class IndicatorView {
     static func show() {
         DispatchQueue.main.async {
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
