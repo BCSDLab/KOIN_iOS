@@ -14,6 +14,15 @@ enum ImageAsset: String {
     case busStop
     case swap
     
+    // MARK: - CallVan
+    case bell
+    case bellNotification
+    case callVanCall
+    case callVanCar
+    case callVanChat
+    case callVanRoute
+    case callVanListPeople
+    
     // MARK: - Chat
     case basicPicture
     case block
