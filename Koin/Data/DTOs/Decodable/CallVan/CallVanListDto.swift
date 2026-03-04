@@ -48,10 +48,27 @@ struct CallVanListPostDto: Decodable {
     }
 }
 
-enum CallVanStateDto: String, Decodable {
+enum CallVanStateDto: String, Codable {
     case recruiting = "RECRUITING"
     case closed = "CLOSED"
     case completed = "COMPLETED"
+    
+    var description: String {
+        switch self {
+        case .recruiting: return "모집중"
+        case .closed: return "모집마감"
+        case .completed: return "종료됨"
+        }
+    }
+    
+    init?(description: String) {
+        switch description {
+        case "모집중": self = .recruiting
+        case "모집마감": self = .closed
+        case "종료됨": self = .completed
+        default: return nil
+        }
+    }
 }
 
 extension CallVanListDto {
