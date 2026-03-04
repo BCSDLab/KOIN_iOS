@@ -22,6 +22,7 @@ enum ImageAsset: String {
     case callVanChat
     case callVanRoute
     case callVanListPeople
+    case newCancel
     
     // MARK: - Chat
     case basicPicture
