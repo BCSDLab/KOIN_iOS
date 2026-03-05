@@ -22,7 +22,7 @@ struct CallVanListDto: Decodable {
 }
 
 struct CallVanListPostDto: Decodable {
-    let id: Int
+    let postId: Int
     let title: String
     let departure: String
     let arrival: String
@@ -31,18 +31,19 @@ struct CallVanListPostDto: Decodable {
     let authorNickname: String
     let currentParticipants: Int
     let maxParticipants: Int
-    let status: CallVanStateDto
+    let state: CallVanStateDto
     let isJoined: Bool
     let isAuthor: Bool
     
     enum CodingKeys: String, CodingKey {
-        case id, title, departure, arrival
+        case postId = "id"
+        case title, departure, arrival
         case departureDate = "departure_date"
         case departureTime = "departure_time"
         case authorNickname = "author_nickname"
         case currentParticipants = "current_participants"
         case maxParticipants = "max_participants"
-        case status
+        case state = "status"
         case isJoined = "is_joined"
         case isAuthor = "is_author"
     }
@@ -78,8 +79,12 @@ extension CallVanListDto {
                 .map {
                     $0.toDomain()
                 }
-                .filter {
-                    $0.status.count != 0
+                .compactMap {
+                    if let post = $0 {
+                        return post
+                    } else {
+                        return nil
+                    }
                 }
             ,
             totalCount: totalCount,
@@ -91,9 +96,21 @@ extension CallVanListDto {
 
 extension CallVanListPostDto {
     
-    func toDomain() -> CallVanListPost {
+    func toDomain() -> CallVanListPost? {
+        let states = callVanState(state: state, isJoined: isJoined, isAuthor: isAuthor)
+        guard let mainState = states.first else {
+            return nil
+        }
+        let subState = {
+            if states.first != states.last {
+                return states.last
+            } else {
+                return nil
+            }
+        }()
+        
         return CallVanListPost(
-            id: id,
+            postId: postId,
             title: title,
             departure: departure,
             arrival: arrival,
@@ -103,9 +120,10 @@ extension CallVanListPostDto {
             authorNickname: authorNickname,
             currentParticipants: currentParticipants,
             maxParticipants: maxParticipants,
-            status: callVanState(status: status, isJoined: isJoined, isAuthor: isAuthor),
-            showChatButton: showChatButton(status: status, isJoined: isJoined, isAuthor: isAuthor),
-            showCallButton: showCallButton(status: status, isJoined: isJoined, isAuthor: isAuthor)
+            mainState: mainState,
+            subState: subState,
+            showChatButton: showChatButton(state: state, isJoined: isJoined, isAuthor: isAuthor),
+            showCallButton: showCallButton(state: state, isJoined: isJoined, isAuthor: isAuthor)
         )
     }
     
@@ -140,8 +158,8 @@ extension CallVanListPostDto {
         }
     }
     
-    func callVanState(status: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> [CallVanState] {
-        switch (isAuthor, status, isJoined) {
+    func callVanState(state: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> [CallVanState] {
+        switch (isAuthor, state, isJoined) {
         case (true, .recruiting, _): return [.마감하기]
         case (true, .closed, _): return [.재모집, .이용완료]
         case (true, .completed, _): return []
@@ -152,15 +170,15 @@ extension CallVanListPostDto {
         }
     }
     
-    func showChatButton(status: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> Bool {
-        switch (isAuthor, status, isJoined) {
+    func showChatButton(state: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> Bool {
+        switch (isAuthor, state, isJoined) {
         case (false, _, true): return true
         default: return false
         }
     }
     
-    func showCallButton(status: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> Bool {
-        switch (isAuthor, status, isJoined) {
+    func showCallButton(state: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> Bool {
+        switch (isAuthor, state, isJoined) {
         case (true, .recruiting, _): return true
         case (true, .closed, _): return true
         default: return false
