@@ -6,10 +6,19 @@
 //
 
 import UIKit
+import Combine
 import Then
 import SnapKit
 
 final class CallVanListCollectionViewCell: UICollectionViewCell {
+    
+    // MARK: - Properties
+    let mainButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let subButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let chatButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let callButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    var subscriptions: Set<AnyCancellable> = []
+    private var postId: Int = 0
     
     // MARK: - UI Components
     private let routeImageLayoutGuide = UILayoutGuide()
@@ -25,6 +34,8 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
     private let peopleImageView = UIImageView()
     private let peopleCountLabel = UILabel()
     
+    private let mainButton = CallVanButton()
+    private let subButton = CallVanButton()
     private let callVanButtonStackView = UIStackView()
     
     private let chatButton = UIButton()
@@ -34,13 +45,22 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         configureView()
+        setAddTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - PrepareForReuse
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        subscriptions.removeAll()
+    }
+    
     // MARK: - Public
     func configure(_ post: CallVanListPost) {
+        
+        self.postId = post.postId
         
         departureLabel.do {
             $0.text = "출발: " + post.departure
@@ -73,12 +93,12 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
             $0.textColor = UIColor.appColor(.neutral600)
         }
         
-        callVanButtonStackView.arrangedSubviews.forEach {
-            $0.removeFromSuperview()
-        }
-        post.status.forEach {
-            let callVanButton = CallVanButton(state: $0)
-            callVanButtonStackView.addArrangedSubview(callVanButton)
+        mainButton.configure(state: post.mainState)
+        if let subState = post.subState {
+            subButton.configure(state: subState)
+            subButton.isHidden = false
+        } else {
+            subButton.isHidden = true
         }
         
         chatButton.isHidden = !post.showChatButton
@@ -140,6 +160,9 @@ extension CallVanListCollectionViewCell {
         [dateLabel, dayLabel, timeLabel, separatorLabel, peopleImageView, peopleCountLabel].forEach {
             labelsStackView.addArrangedSubview($0)
         }
+        [mainButton, subButton].forEach {
+            callVanButtonStackView.addArrangedSubview($0)
+        }
         [routeImageView, departureLabel, destinationLabel, labelsStackView, callVanButtonStackView, chatButton, callButton].forEach {
             contentView.addSubview($0)
         }
@@ -189,5 +212,28 @@ extension CallVanListCollectionViewCell {
             $0.top.equalToSuperview().offset(16.5)
             $0.trailing.equalToSuperview().offset(-24)
         }
+    }
+}
+
+extension CallVanListCollectionViewCell {
+    
+    private func setAddTargets() {
+        mainButton.addTarget(self, action: #selector(mainButtonTapped), for: .touchUpInside)
+        subButton.addTarget(self, action: #selector(subButtonTapped), for: .touchUpInside)
+        chatButton.addTarget(self, action: #selector(chatButtonTapped), for: .touchUpInside)
+        callButton.addTarget(self, action: #selector(callButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func mainButtonTapped() {
+        mainButtonTappedPublisher.send(postId)
+    }
+    @objc private func subButtonTapped() {
+        subButtonTappedPublisher.send(postId)
+    }
+    @objc private func chatButtonTapped() {
+        chatButtonTappedPublisher.send(postId)
+    }
+    @objc private func callButtonTapped() {
+        callButtonTappedPublisher.send(postId)
     }
 }

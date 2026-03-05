@@ -12,19 +12,24 @@ final class CallVanListViewModel {
     
     enum Input {
         case viewDidLoad
+        case checkLoginToParticapate
     }
     enum Output {
         case updateNotification([CallVanListPost])
+        case didCheckLoginToParticapate(Bool)
     }
     
     // MARK: - Properties
+    private let checkLoginUseCase: CheckLoginUseCase
     private let fetchCallVanListUseCase: FetchCallVanListUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var filterState = CallVanListRequest()
     
     // MARK: - Intializer
-    init(fetchCallVanListUseCase: FetchCallVanListUseCase) {
+    init(checkLoginUseCase: CheckLoginUseCase,
+         fetchCallVanListUseCase: FetchCallVanListUseCase) {
+        self.checkLoginUseCase = checkLoginUseCase
         self.fetchCallVanListUseCase = fetchCallVanListUseCase
     }
     
@@ -33,6 +38,8 @@ final class CallVanListViewModel {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
+            case .checkLoginToParticapate:
+                checkLoginToParticapate()
             case .viewDidLoad:
                 updateNotification()
             }
@@ -43,6 +50,13 @@ final class CallVanListViewModel {
 }
 
 extension CallVanListViewModel {
+    
+    private func checkLoginToParticapate() {
+        checkLoginUseCase.execute().sink(receiveValue: { [weak self] isLoggedIn in
+            guard let self else { return }
+            outputSubject.send(.didCheckLoginToParticapate(isLoggedIn))
+        }).store(in: &subscriptions)
+    }
     
     private func updateNotification() {
         fetchCallVanListUseCase.execute(request: filterState).sink(
