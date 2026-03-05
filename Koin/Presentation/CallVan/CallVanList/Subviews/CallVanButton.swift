@@ -9,8 +9,11 @@ import UIKit
 
 final class CallVanButton: UIButton {
     
-    init(state: CallVanState) {
+    init() {
         super.init(frame: .zero)
+    }
+    
+    func configure(state: CallVanState) {
         
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString(

@@ -9,6 +9,61 @@ import UIKit
 import Then
 import SnapKit
 
+extension CallVanBottomSheetViewController {
+    
+    convenience init(isLoggedIn: Bool?, state: CallVanState, onMainButtonTapped: @escaping () -> Void) {
+        let isLoggedIn = isLoggedIn ?? true
+        let titleText: String
+        var subTitleLabel: UILabel? = nil
+        let mainButtonText: String
+        let closeButtonText: String
+        switch (isLoggedIn, state) {
+        case (false, .참여하기):
+            titleText = "콜밴팟에 참여하려면 로그인이 필요해요."
+            mainButtonText = "로그인하기"
+            closeButtonText = "닫기"
+        case (true, .참여하기):
+            titleText = "해당 콜밴팟에 참여할까요?"
+            mainButtonText = "예"
+            closeButtonText = "아니요"
+        case (_ ,.참여취소):
+            titleText = "해당 콜밴팟 참여를 취소할까요?"
+            mainButtonText = "예"
+            closeButtonText = "아니요"
+        case (_, .마감하기):
+            titleText = "해당 콜밴팟 모집을 마감할까요?"
+            mainButtonText = "예"
+            closeButtonText = "아니요"
+        case (_, .재모집):
+            titleText = "해당 콜밴팟을 다시 모집할까요?"
+            mainButtonText = "예"
+            closeButtonText = "아니요"
+        case (_, .이용완료):
+            titleText = "이용 완료 상태로 변경할까요?"
+            subTitleLabel = UILabel().then {
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = UIFont.appFont(.pretendardRegular, size: 14).lineHeight * 0.6
+                $0.attributedText = NSAttributedString(
+                    string: "• 콜밴 이용(탑승, 정산)이 모두 완료된 뒤 눌러야 합니다.\n• 완료 시 대화 내역이 삭제되며, 되돌릴 수 없습니다.",
+                    attributes: [
+                        .font : UIFont.appFont(.pretendardRegular, size: 14),
+                        .foregroundColor : UIColor.appColor(.neutral600),
+                        .paragraphStyle : paragraphStyle
+                    ])
+                $0.numberOfLines = 2
+            }
+            mainButtonText = "예"
+            closeButtonText = "아니요"
+        case (_, .모집마감):
+            titleText = ""
+            mainButtonText = ""
+            closeButtonText = ""
+        }
+        
+        self.init(titleText: titleText, subTitleLabel: subTitleLabel, mainButtonText: mainButtonText, closeButtonText: closeButtonText, onMainButtonTapped: onMainButtonTapped)
+    }
+}
+
 final class CallVanBottomSheetViewController: UIViewController {
     
     // MARK: - Properties

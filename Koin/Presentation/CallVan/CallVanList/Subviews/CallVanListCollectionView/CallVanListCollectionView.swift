@@ -6,10 +6,16 @@
 //
 
 import UIKit
+import Combine
 
 final class CallVanListCollectionView: UICollectionView {
     
     // MARK: - Properties
+    let mainButtonTappedPublisher = PassthroughSubject<(Int, CallVanState), Never>()
+    let subButtonTappedPublisher = PassthroughSubject<(Int, CallVanState), Never>()
+    let chatButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let callButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     private var posts: [CallVanListPost] = []
     
     // MARK: - Initializer
@@ -69,6 +75,33 @@ extension CallVanListCollectionView: UICollectionViewDataSource {
             return UICollectionViewCell()
         }
         cell.configure(posts[indexPath.row])
+        bind(cell)
         return cell
+    }
+    
+    private func bind(_ cell: CallVanListCollectionViewCell) {
+        cell.mainButtonTappedPublisher.sink { [weak self] postId in
+            guard let self else { return }
+            if let mainState = posts.first(where: { $0.postId == postId })?.mainState {
+                mainButtonTappedPublisher.send((postId, mainState))
+                print(mainState.rawValue)
+            }
+        }.store(in: &cell.subscriptions)
+        
+        cell.subButtonTappedPublisher.sink { [weak self] postId in
+            guard let self else { return }
+            if let subState = posts.first(where: { $0.postId == postId })?.subState {
+                mainButtonTappedPublisher.send((postId, subState))
+                print(subState.rawValue)
+            }
+        }.store(in: &cell.subscriptions)
+        
+        cell.chatButtonTappedPublisher.sink { [weak self] postId in
+            self?.chatButtonTappedPublisher.send(postId)
+        }.store(in: &cell.subscriptions)
+        
+        cell.callButtonTappedPublisher.sink { [weak self] postId in
+            self?.callButtonTappedPublisher.send(postId)
+        }.store(in: &cell.subscriptions)
     }
 }

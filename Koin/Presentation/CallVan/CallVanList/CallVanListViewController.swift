@@ -47,9 +47,24 @@ final class CallVanListViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
             switch output {
+            case let .didCheckLoginToParticapate(isLoggedIn):
+                showBottomSheet(isLoggedIn: isLoggedIn, state: .참여하기)
             case let .updateNotification(posts):
                 callVanListCollectionView.configure(posts: posts)
             }
+        }.store(in: &subscriptions)
+        
+        callVanListCollectionView.mainButtonTappedPublisher.sink { [weak self] postId, state in
+            self?.cellButtonTapped(postId: postId, state: state)
+        }.store(in: &subscriptions)
+        callVanListCollectionView.subButtonTappedPublisher.sink { [weak self] postId, state in
+            self?.cellButtonTapped(postId: postId, state: state)
+        }.store(in: &subscriptions)
+        callVanListCollectionView.chatButtonTappedPublisher.sink { [weak self] postId in
+            self?.chatButtonTapped(postId: postId)
+        }.store(in: &subscriptions)
+        callVanListCollectionView.callButtonTappedPublisher.sink { [weak self] postId in
+            self?.callButtonTapped(postId: postId)
         }.store(in: &subscriptions)
     }
 }
@@ -66,6 +81,54 @@ extension CallVanListViewController {
         let viewModel = CallVanNotificationViewModel(fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
         let viewController = CallVanNotificationViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension CallVanListViewController {
+    
+    private func showBottomSheet(isLoggedIn: Bool?, state: CallVanState) {
+        let onMainButtonTapped: ()->Void
+        var defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
+        switch (isLoggedIn, state) {
+        case (true, .참여하기):
+            onMainButtonTapped = {}
+        case (false, .참여하기):
+            onMainButtonTapped = {}
+        case (_ , .참여취소):
+            onMainButtonTapped = {}
+        case (_ , .마감하기):
+            onMainButtonTapped = {}
+        case (_ , .재모집):
+            onMainButtonTapped = {}
+        case (_, .이용완료):
+            onMainButtonTapped = {}
+            defaultHeight = 255 + view.safeAreaInsets.bottom
+        default:
+            return
+        }
+        let contentViewController = CallVanBottomSheetViewController(isLoggedIn: isLoggedIn, state: state, onMainButtonTapped: onMainButtonTapped)
+        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        bottomSheetViewController.modalPresentationStyle = .overFullScreen
+        present(bottomSheetViewController, animated: true)
+    }
+    
+    private func cellButtonTapped(postId: Int, state: CallVanState) {
+        switch state {
+        case .참여하기:
+            inputSubject.send(.checkLoginToParticapate)
+        case .참여취소, .마감하기, .재모집, .이용완료:
+            showBottomSheet(isLoggedIn: nil, state: state)
+        case .모집마감:
+            break
+        }
+        
+    }
+    private func chatButtonTapped(postId: Int) {
+        
+    }
+    private func callButtonTapped(postId: Int) {
+        
     }
 }
 
