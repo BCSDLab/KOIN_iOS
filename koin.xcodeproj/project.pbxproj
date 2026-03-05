@@ -159,6 +159,7 @@
 		7CC42B422F598E7E00940CE1 /* CallVanNotificationEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B412F598E7E00940CE1 /* CallVanNotificationEmptyView.swift */; };
 		7CC42B442F5991AE00940CE1 /* CallVanListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B432F5991AE00940CE1 /* CallVanListViewModel.swift */; };
 		7CC42B4B2F59941200940CE1 /* FetchCallVanListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B4A2F59941200940CE1 /* FetchCallVanListUseCase.swift */; };
+		7CC42B4D2F59960100940CE1 /* FetchCallVanNotificationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B4C2F59960100940CE1 /* FetchCallVanNotificationListUseCase.swift */; };
 		7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
@@ -977,6 +978,7 @@
 		7CC42B412F598E7E00940CE1 /* CallVanNotificationEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotificationEmptyView.swift; sourceTree = "<group>"; };
 		7CC42B432F5991AE00940CE1 /* CallVanListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanListViewModel.swift; sourceTree = "<group>"; };
 		7CC42B4A2F59941200940CE1 /* FetchCallVanListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanListUseCase.swift; sourceTree = "<group>"; };
+		7CC42B4C2F59960100940CE1 /* FetchCallVanNotificationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanNotificationListUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailRequest.swift; sourceTree = "<group>"; };
 		7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
@@ -2182,6 +2184,7 @@
 			isa = PBXGroup;
 			children = (
 				7CC42B4A2F59941200940CE1 /* FetchCallVanListUseCase.swift */,
+				7CC42B4C2F59960100940CE1 /* FetchCallVanNotificationListUseCase.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -4913,6 +4916,7 @@
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
 				83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
+				7CC42B4D2F59960100940CE1 /* FetchCallVanNotificationListUseCase.swift in Sources */,
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,

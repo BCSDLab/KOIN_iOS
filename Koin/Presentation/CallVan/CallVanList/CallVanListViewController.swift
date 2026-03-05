@@ -61,7 +61,12 @@ extension CallVanListViewController {
                                          , style: .plain, target: self, action: #selector(bellButtonTapped))
         navigationItem.rightBarButtonItem = bellButton
     }
-    @objc private func bellButtonTapped() {}
+    @objc private func bellButtonTapped() {
+        let fetchCallVanNotificationListUseCase = MockFetchCallVanNotificationListUseCase()
+        let viewModel = CallVanNotificationViewModel(fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
+        let viewController = CallVanNotificationViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension CallVanListViewController {
