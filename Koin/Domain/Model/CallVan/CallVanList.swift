@@ -15,7 +15,7 @@ struct CallVanList {
 }
 
 struct CallVanListPost {
-    let id: Int
+    let postId: Int
     let title: String
     let departure: String
     let arrival: String
@@ -28,7 +28,8 @@ struct CallVanListPost {
     let currentParticipants: Int
     let maxParticipants: Int
     
-    let status: [CallVanState]
+    let mainState: CallVanState
+    let subState: CallVanState?
     
     let showChatButton: Bool
     let showCallButton: Bool    
