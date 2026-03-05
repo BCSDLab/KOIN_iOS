@@ -14,6 +14,8 @@ final class CallVanNotificationViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: CallVanNotificationViewModel
+    private let inputSubject = PassthroughSubject<CallVanNotificationViewModel.Input, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     private let notificationTableView = CallVanNotificationTableView()
@@ -31,9 +33,23 @@ final class CallVanNotificationViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "알림"
         configureView()
         configureNavigationBar(style: .empty)
         configureRightBarButton()
+        bind()
+        inputSubject.send(.viewDidLoad)
+    }
+    
+    private func bind() {
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+            guard let self else { return }
+            switch output {
+            case let .updateNotifications(notifications):
+                notificationTableView.configure(notifications: notifications)
+                emptyView.isHidden = !notifications.isEmpty
+            }
+        }.store(in: &subscriptions)
     }
 }
 
