@@ -6,11 +6,14 @@
 //
 
 import UIKit
+import Combine
 
 final class CallVanListViewController: UIViewController {
     
     // MARK: - Properties
-    
+    private let viewModel: CallVanListViewModel
+    private let inputSubject = PassthroughSubject<CallVanListViewModel.Input, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     private let searchTextField = UITextField()
@@ -20,7 +23,8 @@ final class CallVanListViewController: UIViewController {
     private let writeButton = UIButton()
     
     // MARK: - Initialzier
-    init() {
+    init(viewModel: CallVanListViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -30,34 +34,23 @@ final class CallVanListViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "콜벤팟"
         configureView()
         configureRightBarButton()
         configureNavigationBar(style: .empty)
         hideKeyboardWhenTappedAround()
-        title = "콜벤팟"
-        
-        let postsDto = [
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.closed, isJoined: false, isAuthor: false),
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.closed, isJoined: true, isAuthor: false),
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.closed, isJoined: false, isAuthor: true),
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.completed, isJoined: false, isAuthor: false),
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.completed, isJoined: true, isAuthor: false),
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.completed, isJoined: false, isAuthor: true),
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.recruiting, isJoined: false, isAuthor: false),
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.recruiting, isJoined: true, isAuthor: false),
-            CallVanListPostDto(id: 0, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
-                               status: CallVanStateDto.recruiting, isJoined: false, isAuthor: true)
-        ]
-        let callVanListDto = CallVanListDto(posts: postsDto, totalCount: 0, currentPage: 0, totalPage: 0)
-        callVanListCollectionView.configure(posts: callVanListDto.toDomain().posts)
+        bind()
+        inputSubject.send(.viewDidLoad)
+    }
+    
+    private func bind() {
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+            guard let self else { return }
+            switch output {
+            case let .updateNotification(posts):
+                callVanListCollectionView.configure(posts: posts)
+            }
+        }.store(in: &subscriptions)
     }
 }
 
