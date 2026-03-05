@@ -148,6 +148,14 @@
 		7CC42B2A2F575F4D00940CE1 /* CallVanFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B292F575F4D00940CE1 /* CallVanFilterButton.swift */; };
 		7CC42B2D2F57647700940CE1 /* CallVanListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B2C2F57647700940CE1 /* CallVanListRequest.swift */; };
 		7CC42B2F2F58105B00940CE1 /* CallVanBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B2E2F58105B00940CE1 /* CallVanBottomSheetViewController.swift */; };
+		7CC42B312F58232500940CE1 /* CallVanNotificationDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B302F58232500940CE1 /* CallVanNotificationDto.swift */; };
+		7CC42B332F58247D00940CE1 /* CallVanNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B322F58247D00940CE1 /* CallVanNotification.swift */; };
+		7CC42B362F58283500940CE1 /* CallVanNotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B352F58283500940CE1 /* CallVanNotificationViewController.swift */; };
+		7CC42B392F58284100940CE1 /* CallVanNotificationTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B382F58284100940CE1 /* CallVanNotificationTableView.swift */; };
+		7CC42B3C2F58284D00940CE1 /* CallVanNotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B3B2F58284D00940CE1 /* CallVanNotificationTableViewCell.swift */; };
+		7CC42B3E2F59600200940CE1 /* CallVanNotificationDropdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B3D2F59600200940CE1 /* CallVanNotificationDropdownViewController.swift */; };
+		7CC42B402F597B5B00940CE1 /* CallVanNotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B3F2F597B5B00940CE1 /* CallVanNotificationViewModel.swift */; };
+		7CC42B422F598E7E00940CE1 /* CallVanNotificationEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B412F598E7E00940CE1 /* CallVanNotificationEmptyView.swift */; };
 		7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
@@ -955,6 +963,14 @@
 		7CC42B292F575F4D00940CE1 /* CallVanFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanFilterButton.swift; sourceTree = "<group>"; };
 		7CC42B2C2F57647700940CE1 /* CallVanListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanListRequest.swift; sourceTree = "<group>"; };
 		7CC42B2E2F58105B00940CE1 /* CallVanBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanBottomSheetViewController.swift; sourceTree = "<group>"; };
+		7CC42B302F58232500940CE1 /* CallVanNotificationDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotificationDto.swift; sourceTree = "<group>"; };
+		7CC42B322F58247D00940CE1 /* CallVanNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotification.swift; sourceTree = "<group>"; };
+		7CC42B352F58283500940CE1 /* CallVanNotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotificationViewController.swift; sourceTree = "<group>"; };
+		7CC42B382F58284100940CE1 /* CallVanNotificationTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotificationTableView.swift; sourceTree = "<group>"; };
+		7CC42B3B2F58284D00940CE1 /* CallVanNotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotificationTableViewCell.swift; sourceTree = "<group>"; };
+		7CC42B3D2F59600200940CE1 /* CallVanNotificationDropdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotificationDropdownViewController.swift; sourceTree = "<group>"; };
+		7CC42B3F2F597B5B00940CE1 /* CallVanNotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotificationViewModel.swift; sourceTree = "<group>"; };
+		7CC42B412F598E7E00940CE1 /* CallVanNotificationEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotificationEmptyView.swift; sourceTree = "<group>"; };
 		7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailRequest.swift; sourceTree = "<group>"; };
 		7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
@@ -2065,6 +2081,7 @@
 			children = (
 				7CC42B2E2F58105B00940CE1 /* CallVanBottomSheetViewController.swift */,
 				7CC42B092F56AB0100940CE1 /* CallVanList */,
+				7CC42B342F58282600940CE1 /* CallVanNotification */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2094,6 +2111,7 @@
 			children = (
 				7CC42B1F2F56F3C400940CE1 /* CallVanState.swift */,
 				7CC42B212F56F9C100940CE1 /* CallVanList.swift */,
+				7CC42B322F58247D00940CE1 /* CallVanNotification.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2102,6 +2120,7 @@
 			isa = PBXGroup;
 			children = (
 				7CC42B242F56FA4200940CE1 /* CallVanListDto.swift */,
+				7CC42B302F58232500940CE1 /* CallVanNotificationDto.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2121,6 +2140,35 @@
 				7CC42B2C2F57647700940CE1 /* CallVanListRequest.swift */,
 			);
 			path = CallVan;
+			sourceTree = "<group>";
+		};
+		7CC42B342F58282600940CE1 /* CallVanNotification */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B372F58283800940CE1 /* Subviews */,
+				7CC42B352F58283500940CE1 /* CallVanNotificationViewController.swift */,
+				7CC42B3F2F597B5B00940CE1 /* CallVanNotificationViewModel.swift */,
+			);
+			path = CallVanNotification;
+			sourceTree = "<group>";
+		};
+		7CC42B372F58283800940CE1 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B3A2F58284500940CE1 /* CallVanNotificationTableView */,
+				7CC42B3D2F59600200940CE1 /* CallVanNotificationDropdownViewController.swift */,
+				7CC42B412F598E7E00940CE1 /* CallVanNotificationEmptyView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CC42B3A2F58284500940CE1 /* CallVanNotificationTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B382F58284100940CE1 /* CallVanNotificationTableView.swift */,
+				7CC42B3B2F58284D00940CE1 /* CallVanNotificationTableViewCell.swift */,
+			);
+			path = CallVanNotificationTableView;
 			sourceTree = "<group>";
 		};
 		7CCB1E4C2F29DB2500472669 /* Chat */ = {
@@ -4687,6 +4735,7 @@
 				7C61D3132F212DFA005FAC3A /* FetchLostItemDataUseCase.swift in Sources */,
 				7CED92332EF2D25900457128 /* DIContainer.swift in Sources */,
 				7CED92342EF2D25900457128 /* DIContainer+LostItem.swift in Sources */,
+				7CC42B312F58232500940CE1 /* CallVanNotificationDto.swift in Sources */,
 				7CED92352EF2D25900457128 /* DIConatiner+Login.swift in Sources */,
 				7CC42B052F56A78600940CE1 /* PaddingLabel.swift in Sources */,
 				7CED92372EF2D25900457128 /* DIContainer+Facility.swift in Sources */,
@@ -4696,6 +4745,8 @@
 				83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */,
 				D2B2193F2D66DDF900EAF5B1 /* ChatDateInfo.swift in Sources */,
 				D89F8FD92DF0A8A4000265DC /* DefaultTextField.swift in Sources */,
+				7CC42B392F58284100940CE1 /* CallVanNotificationTableView.swift in Sources */,
+				7CC42B332F58247D00940CE1 /* CallVanNotification.swift in Sources */,
 				B46B8CC22E76CB7300A8E797 /* ShopSummaryDTO.swift in Sources */,
 				D2D462662D63B98F00C60864 /* FetchChatRoomUseCase.swift in Sources */,
 				7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */,
@@ -4788,6 +4839,7 @@
 				83DD0DD22C568F6100278ABD /* UITableViewHeaderFooterView+.swift in Sources */,
 				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
+				7CC42B422F598E7E00940CE1 /* CallVanNotificationEmptyView.swift in Sources */,
 				83E770F82D05864800EB3F84 /* MockNetworkService.swift in Sources */,
 				D8B4E0022DBFAB95001FBC89 /* CheckVerificationCodeUsecase.swift in Sources */,
 				D22C54792C6A2A95000826DA /* DeleteReviewUseCase.swift in Sources */,
@@ -5143,6 +5195,7 @@
 				7C8ADD3E2F20C2C400F85BDE /* LostItemRepository.swift in Sources */,
 				7CED91F62EF2D1F900457128 /* LogoView.swift in Sources */,
 				7CED91F82EF2D1F900457128 /* TimetableViewModel.swift in Sources */,
+				7CC42B3E2F59600200940CE1 /* CallVanNotificationDropdownViewController.swift in Sources */,
 				7CED91F92EF2D1F900457128 /* LandOptionCollectionView.swift in Sources */,
 				7CED91FA2EF2D1F900457128 /* DeliveryTipsCollectionViewCell.swift in Sources */,
 				7CED91FC2EF2D1F900457128 /* DiningCollectionViewCellA.swift in Sources */,
@@ -5236,6 +5289,7 @@
 				B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */,
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
+				7CC42B362F58283500940CE1 /* CallVanNotificationViewController.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
@@ -5294,6 +5348,7 @@
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
 				D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */,
+				7CC42B3C2F58284D00940CE1 /* CallVanNotificationTableViewCell.swift in Sources */,
 				D20AD6F52E029F8D0067760A /* CheckVerificationEmailUseCase.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
@@ -5338,6 +5393,7 @@
 				D85939712DC0FF6F00CE4CB2 /* UITextField+.swift in Sources */,
 				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
 				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
+				7CC42B402F597B5B00940CE1 /* CallVanNotificationViewModel.swift in Sources */,
 				7C372EDD2F1B8DC900149729 /* LostItemListFilterButton.swift in Sources */,
 				833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */,
 				D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */,
