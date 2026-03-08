@@ -39,6 +39,7 @@ final class CallVanListViewController: UIViewController {
         configureRightBarButton()
         configureNavigationBar(style: .empty)
         hideKeyboardWhenTappedAround()
+        setAddTargets()
         bind()
         inputSubject.send(.viewDidLoad)
     }
@@ -81,6 +82,25 @@ extension CallVanListViewController {
         let viewModel = CallVanNotificationViewModel(fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
         let viewController = CallVanNotificationViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension CallVanListViewController {
+    
+    private func setAddTargets() {
+        writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
+        filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func writeButtonTapped() {
+        let viewController = CallVanPostViewController(viewModel: CallVanPostViewModel())
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc private func filterButtonTapped() {
+        let contentViewController = CallVanListFilterViewController(filter: CallVanListRequest(), onApplyButtonTapped: { _ in })
+        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: 605 + view.safeAreaInsets.bottom)
+        present(bottomSheetViewController, animated: true)
     }
 }
 
