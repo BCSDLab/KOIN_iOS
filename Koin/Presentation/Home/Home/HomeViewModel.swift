@@ -34,8 +34,6 @@ final class HomeViewModel: ViewModelProtocol {
         case showForceUpdate(String)
         case showForceModal
         case updateBanner(BannerDto)
-        case setHotClub(HotClubDto)
-        case setClubCategories(ClubCategoriesDto)
         case updateLostItem(LostItemStats)
     }
     
@@ -53,8 +51,6 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-    private let fetchClubCategoriesUseCase = DefaultFetchClubCategoriesUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-    private let fetchHotClubsUseCase = DefaultFetchHotClubsUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let checkLoginUseCase: CheckLoginUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var moved = false
@@ -93,7 +89,6 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getShopCategory()
                 self?.checkVersion()
                 self?.fetchUserData()
-                self?.fetchHotClub()
             case let .categorySelected(place):
                 self?.getDiningInformation(diningPlace: place)
             case .getDiningInfo:
@@ -130,24 +125,6 @@ extension HomeViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func fetchHotClub() {
-        fetchHotClubsUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] hotClub in
-                self?.outputSubject.send(.setHotClub(hotClub))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchClubCategories() {
-        fetchClubCategoriesUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] categories in
-                self?.outputSubject.send(.setClubCategories(categories))
-            }
-        ).store(in: &subscriptions)
-    }
-                
     private func fetchUserData() {
         fetchUserDataUseCase.execute().sink(
             receiveCompletion: { _ in },
