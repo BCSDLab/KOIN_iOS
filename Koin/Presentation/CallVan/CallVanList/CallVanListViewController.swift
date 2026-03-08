@@ -34,7 +34,7 @@ final class CallVanListViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "콜벤팟"
+        title = "콜밴팟"
         configureView()
         configureRightBarButton()
         configureNavigationBar(style: .empty)

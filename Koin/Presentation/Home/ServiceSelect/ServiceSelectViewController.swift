@@ -96,6 +96,8 @@ final class ServiceSelectViewController: UIViewController {
                 self.presentBusiness()
             case .lostItem:
                 self.pushLostItem()
+            case .callVan:
+                self.pushCallVanList()
             }
         }.store(in: &subscriptions)
     }
@@ -149,6 +151,18 @@ extension ServiceSelectViewController {
 }
 
 extension ServiceSelectViewController {
+    
+    private func pushCallVanList() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchCallVanListUseCase = MockFetchCallVanListUseCase()
+        let viewModel = CallVanListViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchCallVanListUseCase: fetchCallVanListUseCase
+        )
+        let viewController = CallVanListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
     
     private func pushLostItem() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "분실물"))

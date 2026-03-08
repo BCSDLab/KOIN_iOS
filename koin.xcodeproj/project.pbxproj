@@ -174,6 +174,7 @@
 		7CC42B762F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */; };
 		7CC42B7B2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */; };
 		7CC42B832F5D307C00940CE1 /* BottomSheetViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */; };
+		7CC42B852F5D719C00940CE1 /* CallVanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B842F5D719C00940CE1 /* CallVanView.swift */; };
 		7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
@@ -1007,6 +1008,7 @@
 		7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownViewDateDelegate.swift; sourceTree = "<group>"; };
 		7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostPlaceBottomSheetView.swift; sourceTree = "<group>"; };
 		7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewControllerB.swift; sourceTree = "<group>"; };
+		7CC42B842F5D719C00940CE1 /* CallVanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanView.swift; sourceTree = "<group>"; };
 		7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailRequest.swift; sourceTree = "<group>"; };
 		7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
@@ -2357,6 +2359,7 @@
 				7CED8ED72EF2D1F900457128 /* ClubView.swift */,
 				7CA63A2D2F1B119200226F86 /* LostItemListView.swift */,
 				7C16AA382F3E9FBC0071ABE6 /* ErrorViewController.swift */,
+				7CC42B842F5D719C00940CE1 /* CallVanView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -5346,6 +5349,7 @@
 				D86E2E152E7D860E006D63AF /* ShuttleBusTimetable.swift in Sources */,
 				B47839072E70FF2B00D002E3 /* OrderShopMenusGroups.swift in Sources */,
 				833D9C342C70418100982145 /* NoticeListPages.swift in Sources */,
+				7CC42B852F5D719C00940CE1 /* CallVanView.swift in Sources */,
 				D20AB9582C553621006BC684 /* NotiService.swift in Sources */,
 				D29F21DF2C4F2E3000994554 /* FetchShopDataRequest.swift in Sources */,
 				D2D4627A2D63D4D400C60864 /* BlockUserUseCase.swift in Sources */,
