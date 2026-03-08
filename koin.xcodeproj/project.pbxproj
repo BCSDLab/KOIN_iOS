@@ -168,6 +168,7 @@
 		7CC42B622F59D0EF00940CE1 /* CallVanPostPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B612F59D0EF00940CE1 /* CallVanPostPlaceView.swift */; };
 		7CC42B682F5A9C0C00940CE1 /* KoinPickerDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B672F5A9C0C00940CE1 /* KoinPickerDropDownView.swift */; };
 		7CC42B6A2F5A9C9B00940CE1 /* CallVanPostRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B692F5A9C9B00940CE1 /* CallVanPostRequest.swift */; };
+		7CC42B6C2F5A9CEA00940CE1 /* CallVanPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B6B2F5A9CEA00940CE1 /* CallVanPlace.swift */; };
 		7CC42B6E2F5AB00500940CE1 /* KoinPickerViewB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B6D2F5AB00500940CE1 /* KoinPickerViewB.swift */; };
 		7CC42B702F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B6F2F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift */; };
 		7CC42B762F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */; };
@@ -1000,6 +1001,7 @@
 		7CC42B612F59D0EF00940CE1 /* CallVanPostPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostPlaceView.swift; sourceTree = "<group>"; };
 		7CC42B672F5A9C0C00940CE1 /* KoinPickerDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownView.swift; sourceTree = "<group>"; };
 		7CC42B692F5A9C9B00940CE1 /* CallVanPostRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostRequest.swift; sourceTree = "<group>"; };
+		7CC42B6B2F5A9CEA00940CE1 /* CallVanPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPlace.swift; sourceTree = "<group>"; };
 		7CC42B6D2F5AB00500940CE1 /* KoinPickerViewB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerViewB.swift; sourceTree = "<group>"; };
 		7CC42B6F2F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownViewTimeDelegate.swift; sourceTree = "<group>"; };
 		7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownViewDateDelegate.swift; sourceTree = "<group>"; };
@@ -2175,6 +2177,7 @@
 			children = (
 				7CC42B2C2F57647700940CE1 /* CallVanListRequest.swift */,
 				7CC42B692F5A9C9B00940CE1 /* CallVanPostRequest.swift */,
+				7CC42B6B2F5A9CEA00940CE1 /* CallVanPlace.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -5005,6 +5008,7 @@
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
 				D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */,
 				D2078C102BC7B56D00A39861 /* Int+.swift in Sources */,
+				7CC42B6C2F5A9CEA00940CE1 /* CallVanPlace.swift in Sources */,
 				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
 				7C372F1E2F1CD8FB00149729 /* LostItemDataHeaderView.swift in Sources */,
 				D2078BE82BC4273200A39861 /* CALayer+.swift in Sources */,

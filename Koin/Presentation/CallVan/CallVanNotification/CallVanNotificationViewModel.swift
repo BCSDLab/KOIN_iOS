@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class CallVanNotificationViewModel {
+final class CallVanNotificationViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad

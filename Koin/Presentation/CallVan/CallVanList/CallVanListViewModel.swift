@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class CallVanListViewModel {
+final class CallVanListViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad
