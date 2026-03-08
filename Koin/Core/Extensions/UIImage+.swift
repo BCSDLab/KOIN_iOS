@@ -20,8 +20,11 @@ enum ImageAsset: String {
     case callVanCall
     case callVanCar
     case callVanChat
+    case callVanPlus
+    case callVanMinus
     case callVanRoute
     case callVanListPeople
+    case callVanSwapCircle
     case newCancel
     
     // MARK: - Chat
