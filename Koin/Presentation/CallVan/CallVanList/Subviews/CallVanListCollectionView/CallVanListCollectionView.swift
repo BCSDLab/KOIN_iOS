@@ -15,6 +15,7 @@ final class CallVanListCollectionView: UICollectionView {
     let subButtonTappedPublisher = PassthroughSubject<(Int, CallVanState), Never>()
     let chatButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let callButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let postTappedPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var posts: [CallVanListPost] = []
     
@@ -46,7 +47,6 @@ extension CallVanListCollectionView {
     private func commonInit() {
         delegate = self
         dataSource = self
-        allowsSelection = false
         register(CallVanListCollectionViewCell.self, forCellWithReuseIdentifier: CallVanListCollectionViewCell.identifier)
     }
 }
@@ -55,6 +55,13 @@ extension CallVanListCollectionView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.bounds.width - 48, height: 103)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if posts[indexPath.row].showChatButton || posts[indexPath.row].showCallButton {
+            postTappedPublisher.send(posts[indexPath.row].postId)
+        }
+        deselectItem(at: indexPath, animated: true)
     }
 }
 

@@ -67,6 +67,9 @@ final class CallVanListViewController: UIViewController {
         callVanListCollectionView.callButtonTappedPublisher.sink { [weak self] postId in
             self?.callButtonTapped(postId: postId)
         }.store(in: &subscriptions)
+        callVanListCollectionView.postTappedPublisher.sink { [weak self] postId in
+            self?.navigateToCallVanData(postId)
+        }.store(in: &subscriptions)
     }
 }
 
@@ -105,6 +108,13 @@ extension CallVanListViewController {
 }
 
 extension CallVanListViewController {
+    
+    private func navigateToCallVanData(_ postId: Int) {
+        let fetchCallVanDataUseCase = MockFetchCallVanDataUseCase()
+        let viewModel = CallVanDataViewModel(postId: postId, fetchCallVanDataUseCase: fetchCallVanDataUseCase)
+        let viewController = CallVanDataViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
     
     private func showBottomSheet(isLoggedIn: Bool?, state: CallVanState) {
         let onMainButtonTapped: ()->Void
