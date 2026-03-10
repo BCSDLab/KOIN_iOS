@@ -237,7 +237,7 @@ extension CallVanListViewController {
             $0.layer.borderColor = UIColor.appColor(.new400).cgColor
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 21
-            $0.layer.applySketchShadow(color: .black, alpha: 0.04, x: 0, y: 1, blur: 4, spread: 0)
+            $0.layer.applySketchShadow(color: .black, alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
         }
     }
     private func setUpLayouts() {
