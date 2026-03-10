@@ -175,6 +175,14 @@
 		7CC42B7B2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */; };
 		7CC42B832F5D307C00940CE1 /* BottomSheetViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */; };
 		7CC42B852F5D719C00940CE1 /* CallVanView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B842F5D719C00940CE1 /* CallVanView.swift */; };
+		7CC42B872F5D831B00940CE1 /* CallVanChatDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B862F5D831B00940CE1 /* CallVanChatDto.swift */; };
+		7CC42B892F5D85F700940CE1 /* CallVanChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B882F5D85F700940CE1 /* CallVanChat.swift */; };
+		7CC42B8F2F5DCE7400940CE1 /* CallVanChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */; };
+		7CC42B912F5DCE7D00940CE1 /* CallVanChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B902F5DCE7D00940CE1 /* CallVanChatViewModel.swift */; };
+		7CC42B942F5DCEA600940CE1 /* CallVanChatTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B932F5DCEA600940CE1 /* CallVanChatTableView.swift */; };
+		7CC42B962F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B952F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift */; };
+		7CC42B982F5E812F00940CE1 /* CallVanChatLeftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B972F5E812F00940CE1 /* CallVanChatLeftCell.swift */; };
+		7CC42B9C2F5E834E00940CE1 /* CallVanChatRightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */; };
 		7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
@@ -1009,6 +1017,14 @@
 		7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostPlaceBottomSheetView.swift; sourceTree = "<group>"; };
 		7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewControllerB.swift; sourceTree = "<group>"; };
 		7CC42B842F5D719C00940CE1 /* CallVanView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanView.swift; sourceTree = "<group>"; };
+		7CC42B862F5D831B00940CE1 /* CallVanChatDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatDto.swift; sourceTree = "<group>"; };
+		7CC42B882F5D85F700940CE1 /* CallVanChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChat.swift; sourceTree = "<group>"; };
+		7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatViewController.swift; sourceTree = "<group>"; };
+		7CC42B902F5DCE7D00940CE1 /* CallVanChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatViewModel.swift; sourceTree = "<group>"; };
+		7CC42B932F5DCEA600940CE1 /* CallVanChatTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatTableView.swift; sourceTree = "<group>"; };
+		7CC42B952F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatDateHeaderView.swift; sourceTree = "<group>"; };
+		7CC42B972F5E812F00940CE1 /* CallVanChatLeftCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatLeftCell.swift; sourceTree = "<group>"; };
+		7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatRightCell.swift; sourceTree = "<group>"; };
 		7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailRequest.swift; sourceTree = "<group>"; };
 		7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
@@ -2121,6 +2137,7 @@
 				7CC42B092F56AB0100940CE1 /* CallVanList */,
 				7CC42B342F58282600940CE1 /* CallVanNotification */,
 				7CC42B4E2F59C5D800940CE1 /* CallVanPost */,
+				7CC42B8A2F5DCE4800940CE1 /* CallVanChat */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2152,6 +2169,7 @@
 				7CC42B1F2F56F3C400940CE1 /* CallVanState.swift */,
 				7CC42B212F56F9C100940CE1 /* CallVanList.swift */,
 				7CC42B322F58247D00940CE1 /* CallVanNotification.swift */,
+				7CC42B882F5D85F700940CE1 /* CallVanChat.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2161,6 +2179,7 @@
 			children = (
 				7CC42B242F56FA4200940CE1 /* CallVanListDto.swift */,
 				7CC42B302F58232500940CE1 /* CallVanNotificationDto.swift */,
+				7CC42B862F5D831B00940CE1 /* CallVanChatDto.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2269,6 +2288,35 @@
 				7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */,
 			);
 			path = Delegates;
+			sourceTree = "<group>";
+		};
+		7CC42B8A2F5DCE4800940CE1 /* CallVanChat */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B8B2F5DCE5700940CE1 /* Subviews */,
+				7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */,
+				7CC42B902F5DCE7D00940CE1 /* CallVanChatViewModel.swift */,
+			);
+			path = CallVanChat;
+			sourceTree = "<group>";
+		};
+		7CC42B8B2F5DCE5700940CE1 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B922F5DCE9800940CE1 /* CallVanChatTableView */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CC42B922F5DCE9800940CE1 /* CallVanChatTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B932F5DCEA600940CE1 /* CallVanChatTableView.swift */,
+				7CC42B952F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift */,
+				7CC42B972F5E812F00940CE1 /* CallVanChatLeftCell.swift */,
+				7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */,
+			);
+			path = CallVanChatTableView;
 			sourceTree = "<group>";
 		};
 		7CCB1E4C2F29DB2500472669 /* Chat */ = {
@@ -4822,6 +4870,7 @@
 				B68D2CE32EA505A300F3B479 /* ToastConfig.swift in Sources */,
 				D22C54772C6A2A8A000826DA /* ModifyReviewUseCase.swift in Sources */,
 				835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */,
+				7CC42B892F5D85F700940CE1 /* CallVanChat.swift in Sources */,
 				D874DB4B2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift in Sources */,
 				7CC42B682F5A9C0C00940CE1 /* KoinPickerDropDownView.swift in Sources */,
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
@@ -4863,6 +4912,7 @@
 				D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */,
 				7CC42B622F59D0EF00940CE1 /* CallVanPostPlaceView.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
+				7CC42B9C2F5E834E00940CE1 /* CallVanChatRightCell.swift in Sources */,
 				D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */,
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
 				83DD0DB52C53773100278ABD /* SearchBusInfoRequest.swift in Sources */,
@@ -4871,6 +4921,7 @@
 				D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
 				7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */,
+				7CC42B912F5DCE7D00940CE1 /* CallVanChatViewModel.swift in Sources */,
 				7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */,
 				D2A513432C5B43180064941A /* Bundle+APIKey.swift in Sources */,
 				833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */,
@@ -4896,6 +4947,7 @@
 				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
 				7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */,
 				D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */,
+				7CC42B982F5E812F00940CE1 /* CallVanChatLeftCell.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
@@ -5173,6 +5225,7 @@
 				7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */,
 				7CED917B2EF2D1F900457128 /* WriteTypeModalViewController.swift in Sources */,
 				7C61D34B2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift in Sources */,
+				7CC42B942F5DCEA600940CE1 /* CallVanChatTableView.swift in Sources */,
 				7CED917D2EF2D1F900457128 /* ReviewImageUploadCollectionView.swift in Sources */,
 				7CED917F2EF2D1F900457128 /* NoticeListViewController.swift in Sources */,
 				7CED91802EF2D1F900457128 /* ReviewLoginModalViewController.swift in Sources */,
@@ -5292,6 +5345,7 @@
 				7CED91D82EF2D1F900457128 /* ClassComponentView.swift in Sources */,
 				7C372F222F1CD91200149729 /* LostItemDataRecentTableViewCell.swift in Sources */,
 				7CED91D92EF2D1F900457128 /* ImageScrollCollectionView.swift in Sources */,
+				7CC42B962F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift in Sources */,
 				7CED91DC2EF2D1F900457128 /* HomeViewController.swift in Sources */,
 				7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */,
 				7CED91DE2EF2D1F900457128 /* ClubCollectionView.swift in Sources */,
@@ -5416,6 +5470,7 @@
 				7CC42B362F58283500940CE1 /* CallVanNotificationViewController.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
+				7CC42B8F2F5DCE7400940CE1 /* CallVanChatViewController.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
 				D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */,
 				D208A7CF2CABB85B007040E7 /* DefaultCoreRepository.swift in Sources */,
@@ -5424,6 +5479,7 @@
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
 				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
 				7C3ECC7A2F41505000EE8F13 /* ErrorResponse.swift in Sources */,
+				7CC42B872F5D831B00940CE1 /* CallVanChatDto.swift in Sources */,
 				D2FB23552BFD49520098BA2B /* ShopRepository.swift in Sources */,
 				833D9C432C7061EC00982145 /* NoticeArticlesInfo.swift in Sources */,
 				833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */,

@@ -145,7 +145,12 @@ extension CallVanListViewController {
         
     }
     private func chatButtonTapped(postId: Int) {
-        
+        if let post = CallVanListPostDto(postId: 1, title: "A>B", departure: "테니스장", arrival: "시외버스터미널", departureDate: "2022-02-02", departureTime: "12:34", authorNickname: "익명", currentParticipants: 1, maxParticipants: 2,
+                                         state: CallVanStateDto.closed, isJoined: false, isAuthor: false).toDomain() {
+            let viewModel = CallVanChatViewModel(callVanPost: post)
+            let viewController = CallVanChatViewController(viewModel: viewModel)
+            navigationController?.pushViewController(viewController, animated: true)
+        }
     }
     private func callButtonTapped(postId: Int) {
         
