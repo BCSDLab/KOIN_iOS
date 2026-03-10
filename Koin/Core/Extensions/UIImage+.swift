@@ -21,8 +21,19 @@ enum ImageAsset: String {
     case callVanCar
     case callVanChat
     case callVanPlus
+    case callVanProfile0
+    case callVanProfile1
+    case callVanProfile2
+    case callVanProfile3
+    case callVanProfile4
+    case callVanProfile5
+    case callVanProfile6
+    case callVanProfile7
+    case callVanProfileMine
     case callVanMinus
     case callVanRoute
+    case callVanSendImage
+    case callVanSendMessage
     case callVanListPeople
     case callVanSwapCircle
     case newCancel
