@@ -74,6 +74,14 @@
 		7C58FE922F5FAC0100A2737B /* CallVanDataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE912F5FAC0100A2737B /* CallVanDataView.swift */; };
 		7C58FE942F5FB69E00A2737B /* CallVanDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE932F5FB69E00A2737B /* CallVanDataViewModel.swift */; };
 		7C58FE962F5FC80F00A2737B /* FetchCallVanDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE952F5FC80F00A2737B /* FetchCallVanDataUseCase.swift */; };
+		7C58FE9D2F5FE46C00A2737B /* CallVanReportReasonViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE9C2F5FE46C00A2737B /* CallVanReportReasonViewController.swift */; };
+		7C58FEA02F5FE4C900A2737B /* CallVanReportReasonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE9F2F5FE4C900A2737B /* CallVanReportReasonButton.swift */; };
+		7C58FEA22F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FEA12F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift */; };
+		7C58FEA42F5FE80500A2737B /* CallVanReportCustomReasonButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FEA32F5FE80500A2737B /* CallVanReportCustomReasonButton.swift */; };
+		7C58FEA62F60068B00A2737B /* CallVanReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FEA52F60068B00A2737B /* CallVanReportViewModel.swift */; };
+		7C58FEA82F60074900A2737B /* CallVanReportRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FEA72F60074900A2737B /* CallVanReportRequest.swift */; };
+		7C58FEAB2F6020A900A2737B /* CallVanReportImagesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FEAA2F6020A900A2737B /* CallVanReportImagesCollectionView.swift */; };
+		7C58FEAD2F6020AD00A2737B /* CallVanReportImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FEAC2F6020AD00A2737B /* CallVanReportImagesCollectionViewCell.swift */; };
 		7C61D3132F212DFA005FAC3A /* FetchLostItemDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */; };
 		7C61D3152F212FB3005FAC3A /* LostItemDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */; };
 		7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */; };
@@ -939,6 +947,14 @@
 		7C58FE912F5FAC0100A2737B /* CallVanDataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanDataView.swift; sourceTree = "<group>"; };
 		7C58FE932F5FB69E00A2737B /* CallVanDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanDataViewModel.swift; sourceTree = "<group>"; };
 		7C58FE952F5FC80F00A2737B /* FetchCallVanDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanDataUseCase.swift; sourceTree = "<group>"; };
+		7C58FE9C2F5FE46C00A2737B /* CallVanReportReasonViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportReasonViewController.swift; sourceTree = "<group>"; };
+		7C58FE9F2F5FE4C900A2737B /* CallVanReportReasonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportReasonButton.swift; sourceTree = "<group>"; };
+		7C58FEA12F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportEvidenceViewController.swift; sourceTree = "<group>"; };
+		7C58FEA32F5FE80500A2737B /* CallVanReportCustomReasonButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportCustomReasonButton.swift; sourceTree = "<group>"; };
+		7C58FEA52F60068B00A2737B /* CallVanReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportViewModel.swift; sourceTree = "<group>"; };
+		7C58FEA72F60074900A2737B /* CallVanReportRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportRequest.swift; sourceTree = "<group>"; };
+		7C58FEAA2F6020A900A2737B /* CallVanReportImagesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportImagesCollectionView.swift; sourceTree = "<group>"; };
+		7C58FEAC2F6020AD00A2737B /* CallVanReportImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportImagesCollectionViewCell.swift; sourceTree = "<group>"; };
 		7C61D3122F212DFA005FAC3A /* FetchLostItemDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemDataUseCase.swift; sourceTree = "<group>"; };
 		7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataDto.swift; sourceTree = "<group>"; };
 		7C61D3162F213D57005FAC3A /* ChangeLostItemStateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeLostItemStateUseCase.swift; sourceTree = "<group>"; };
@@ -1974,6 +1990,36 @@
 			path = CallVanDataTableView;
 			sourceTree = "<group>";
 		};
+		7C58FE9B2F5FE45A00A2737B /* CallVanReport */ = {
+			isa = PBXGroup;
+			children = (
+				7C58FE9E2F5FE46F00A2737B /* Subviews */,
+				7C58FE9C2F5FE46C00A2737B /* CallVanReportReasonViewController.swift */,
+				7C58FEA12F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift */,
+				7C58FEA52F60068B00A2737B /* CallVanReportViewModel.swift */,
+			);
+			path = CallVanReport;
+			sourceTree = "<group>";
+		};
+		7C58FE9E2F5FE46F00A2737B /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C58FEA92F60207D00A2737B /* CallVanReportEvidenceImagesCollectionView */,
+				7C58FE9F2F5FE4C900A2737B /* CallVanReportReasonButton.swift */,
+				7C58FEA32F5FE80500A2737B /* CallVanReportCustomReasonButton.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C58FEA92F60207D00A2737B /* CallVanReportEvidenceImagesCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				7C58FEAA2F6020A900A2737B /* CallVanReportImagesCollectionView.swift */,
+				7C58FEAC2F6020AD00A2737B /* CallVanReportImagesCollectionViewCell.swift */,
+			);
+			path = CallVanReportEvidenceImagesCollectionView;
+			sourceTree = "<group>";
+		};
 		7C61D3342F21FADF005FAC3A /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
@@ -2181,6 +2227,7 @@
 				7CC42B4E2F59C5D800940CE1 /* CallVanPost */,
 				7CC42B8A2F5DCE4800940CE1 /* CallVanChat */,
 				7C58FE842F5F9CC700A2737B /* CallVanData */,
+				7C58FE9B2F5FE45A00A2737B /* CallVanReport */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2244,6 +2291,7 @@
 				7CC42B2C2F57647700940CE1 /* CallVanListRequest.swift */,
 				7CC42B692F5A9C9B00940CE1 /* CallVanPostRequest.swift */,
 				7CC42B6B2F5A9CEA00940CE1 /* CallVanPlace.swift */,
+				7C58FEA72F60074900A2737B /* CallVanReportRequest.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -4881,6 +4929,7 @@
 				7C17EEA82EBF4F25008BCA89 /* ShopSearch.swift in Sources */,
 				835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */,
 				D2FB23642BFDB53C0098BA2B /* ShopService.swift in Sources */,
+				7C58FEA62F60068B00A2737B /* CallVanReportViewModel.swift in Sources */,
 				7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */,
 				D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDTO.swift in Sources */,
 				83DD0D8A2C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift in Sources */,
@@ -5009,6 +5058,7 @@
 				7CC42B5E2F59D01000940CE1 /* CallVanPostDateView.swift in Sources */,
 				7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
+				7C58FEA22F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
@@ -5074,6 +5124,7 @@
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
 				D2C163D82E252DB500DC68A8 /* ChangePasswordUseCase.swift in Sources */,
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
+				7C58FEA82F60074900A2737B /* CallVanReportRequest.swift in Sources */,
 				83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
 				D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */,
@@ -5200,6 +5251,7 @@
 				7CED911D2EF2D1F900457128 /* NoticeListTableViewFooter.swift in Sources */,
 				7CED911E2EF2D1F900457128 /* ShopReadyView.swift in Sources */,
 				7CED911F2EF2D1F900457128 /* DiningCollectionViewCellB.swift in Sources */,
+				7C58FEA42F5FE80500A2737B /* CallVanReportCustomReasonButton.swift in Sources */,
 				7CED91202EF2D1F900457128 /* TagCollectionView.swift in Sources */,
 				7CED91212EF2D1F900457128 /* CancelableImageView.swift in Sources */,
 				7CA63A022F1AA67300226F86 /* ServiceSelectTableViewHeaderView.swift in Sources */,
@@ -5349,6 +5401,7 @@
 				7C4D5A4E2F01638800B40128 /* ManyBusTimetableTableViewCell.swift in Sources */,
 				7C4D5A4F2F01638800B40128 /* BusTimetableTableViewFooterView.swift in Sources */,
 				7C4D5A502F01638800B40128 /* ExpressOrCityTimetableTableView.swift in Sources */,
+				7C58FE9D2F5FE46C00A2737B /* CallVanReportReasonViewController.swift in Sources */,
 				7C4D5A512F01638800B40128 /* BusAreaSelectedCollectionViewCell.swift in Sources */,
 				7C4D5A522F01638800B40128 /* ExpressOrCityTimetableTableViewCell.swift in Sources */,
 				7C4D5A532F01638800B40128 /* BusSearchResultViewController.swift in Sources */,
@@ -5521,6 +5574,7 @@
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				7CC42B8F2F5DCE7400940CE1 /* CallVanChatViewController.swift in Sources */,
+				7C58FEAB2F6020A900A2737B /* CallVanReportImagesCollectionView.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
 				D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */,
 				D208A7CF2CABB85B007040E7 /* DefaultCoreRepository.swift in Sources */,
@@ -5595,6 +5649,7 @@
 				7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */,
 				7C58FE8E2F5FA4D200A2737B /* CallVanDataTableView.swift in Sources */,
 				B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */,
+				7C58FEAD2F6020AD00A2737B /* CallVanReportImagesCollectionViewCell.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
@@ -5633,6 +5688,7 @@
 				D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */,
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
 				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
+				7C58FEA02F5FE4C900A2737B /* CallVanReportReasonButton.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
 				7C8ADD452F20C3FB00F85BDE /* FetchLostItemListUseCase.swift in Sources */,
 				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,

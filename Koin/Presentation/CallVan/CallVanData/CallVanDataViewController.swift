@@ -42,7 +42,13 @@ final class CallVanDataViewController: UIViewController {
         configureNavigationBar(style: .empty)
         configureRightBarButton()
         addGesture()
+        setAddTargets()
         inputSubject.send(.viewDidLoad)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        participantsTableView.closeReportButton()
     }
 }
 
@@ -66,9 +72,19 @@ extension CallVanDataViewController {
 
 extension CallVanDataViewController {
     
+    private func setAddTargets() {
+        enterChatRoomButton.addTarget(self, action: #selector(enterChatRoomButtonTapped), for: .touchUpInside)
+    }
+    
     private func addGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapAround))
         view.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func enterChatRoomButtonTapped() {
+        let viewModel = CallVanChatViewModel(postId: viewModel.postId)
+        let viewController = CallVanChatViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func didTapAround() {
@@ -92,7 +108,9 @@ extension CallVanDataViewController {
 extension CallVanDataViewController {
     
     private func navigateToReport(_ userId: Int) {
-        // TODO
+        let viewModel = CallVanReportViewModel(reportedUserId: userId)
+        let viewController = CallVanReportReasonViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

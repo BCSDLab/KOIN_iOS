@@ -15,10 +15,10 @@ final class CallVanChatViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    let callVanPost: CallVanListPost
+    let postId: Int
     
-    init(callVanPost: CallVanListPost) {
-        self.callVanPost = callVanPost
+    init(postId: Int) {
+        self.postId = postId
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
