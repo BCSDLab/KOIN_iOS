@@ -30,7 +30,10 @@ enum ImageAsset: String {
     case callVanProfile6
     case callVanProfile7
     case callVanProfileMine
+    case callVanRadioButtonSelected
+    case callVanRadioButtonDeselected
     case callVanMinus
+    case callVanReportImage
     case callVanRoute
     case callVanSendImage
     case callVanSendMessage
