@@ -72,7 +72,7 @@ extension CallVanChatViewController {
     private func configureNavigationBar() {
         
         let titleLabel = UILabel().then {
-            $0.text = "\(viewModel.callVanPost.title) \(viewModel.callVanPost.departureTime)"
+//            $0.text = "\(viewModel.callVanPost.title) \(viewModel.callVanPost.departureTime)"
             $0.textColor = UIColor.appColor(.neutral800)
             $0.font = UIFont.appFont(.pretendardMedium, size: 15)
         }
@@ -81,7 +81,7 @@ extension CallVanChatViewController {
             $0.tintColor = UIColor.appColor(.neutral600)
         }
         let paritipantsLabel = UILabel().then {
-            $0.text = "\(viewModel.callVanPost.currentParticipants)/\(viewModel.callVanPost.maxParticipants)"
+//            $0.text = "\(viewModel.callVanPost.currentParticipants)/\(viewModel.callVanPost.maxParticipants)"
             $0.textColor = UIColor.appColor(.neutral600)
             $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         }
@@ -196,7 +196,6 @@ extension CallVanChatViewController {
             $0.top.bottom.equalTo(wrapperView).inset(8)
             $0.leading.equalTo(sendImageButton.snp.trailing).offset(8)
             $0.trailing.equalTo(sendMessageButton.snp.leading).offset(-8)
-//            $0.height.greaterThanOrEqualTo(32)
         }
     }
 }

@@ -18,7 +18,7 @@ final class CallVanDataViewModel: ViewModelProtocol {
     }
     
     // MARK: - Properties
-    private let postId: Int
+    let postId: Int
     private let fetchCallVanDataUseCase: FetchCallVanDataUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
