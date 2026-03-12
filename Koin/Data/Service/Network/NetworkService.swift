@@ -72,8 +72,8 @@ final class NetworkService {
             .eraseToAnyPublisher()
     }
     
-    func uploadFiles(api: ShopAPI) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
-        guard case ShopAPI.uploadFiles(let files) = api else {
+    func uploadFiles(api: CoreAPI) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
+        guard case CoreAPI.uploadFiles(let files, _) = api else {
             return Fail(error: ErrorResponse.invalidApi)
                 .eraseToAnyPublisher()
         }

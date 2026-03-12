@@ -5,6 +5,7 @@
 //  Created by 김나훈 on 10/1/24.
 //
 
+import Foundation
 import Combine
 
 protocol CoreRepository {
@@ -12,4 +13,5 @@ protocol CoreRepository {
     func fetBanner() -> AnyPublisher<BannerDto, ErrorResponse>
     func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse>
     func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse>
+    func uploadFiles(files: [Data], domain: String) -> AnyPublisher<FileUploadResponse, ErrorResponse>
 }
