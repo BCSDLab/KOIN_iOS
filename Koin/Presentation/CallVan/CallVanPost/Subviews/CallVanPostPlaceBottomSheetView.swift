@@ -186,7 +186,7 @@ extension CallVanPostPlaceBottomSheetView {
             delegate?.dismiss()
         }
         else if customButton.isSelected,
-                let customPlace = customPlaceTextField.text,
+                let customPlace = customPlaceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
                 !customPlace.isEmpty {
             onApplyButtonTapped(.custom, customPlace)
             delegate?.dismiss()

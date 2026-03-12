@@ -44,6 +44,8 @@ final class CallVanPostViewController: UIViewController {
         configureView()
         setAddTargets()
         bind()
+        dateView.update(Date())
+        timeView.update(Date())
     }
     
     private func bind() {

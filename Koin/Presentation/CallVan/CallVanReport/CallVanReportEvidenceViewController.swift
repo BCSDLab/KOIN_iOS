@@ -14,7 +14,7 @@ final class CallVanReportEvidenceViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: CallVanReportViewModel
     private let placeHolder = "신고 상황을 확인하기 위해 자세히 작성해주세요."
-    private let maxContextTextCount = 1000
+    private let maximumContextLength = 1000
     private let maxImagesCount = 10
     
     // MARK: - UI Components
@@ -176,6 +176,17 @@ extension CallVanReportEvidenceViewController: UITextViewDelegate {
         updateEvidenceCount()
     }
     
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        let currentText = textView.textColor == UIColor.appColor(.gray) ? "" : (textView.text ?? "")
+        
+        guard let stringRange = Range(range, in: currentText) else {
+            return false
+        }
+        
+        let updatedText = currentText.replacingCharacters(in: stringRange, with: text)
+        return updatedText.count <= maximumContextLength
+    }
+    
     private func updateEvidenceCount() {
         let count: Int
         if contextTextView.textColor == UIColor.appColor(.gray) {
@@ -183,7 +194,7 @@ extension CallVanReportEvidenceViewController: UITextViewDelegate {
         } else {
             count = contextTextView.text.trimmingCharacters(in: .whitespacesAndNewlines).count
         }
-        contextCountLabel.text = "\(count)/\(maxContextTextCount)"
+        contextCountLabel.text = "\(count)/\(maximumContextLength)"
     }
 }
 

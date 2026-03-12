@@ -68,7 +68,7 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
             $0.textColor = UIColor.appColor(.neutral800)
         }
         destinationLabel.do {
-            $0.text = "도착 :" + post.arrival
+            $0.text = "도착: " + post.arrival
             $0.font = UIFont.appFont(.pretendardMedium, size: 14)
             $0.textColor = UIColor.appColor(.neutral800)
         }
@@ -93,16 +93,9 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
             $0.textColor = UIColor.appColor(.neutral600)
         }
         
-        let inset: CGFloat
-        switch (post.mainState, post.subState) {
-        case (.재모집, .이용완료), (.이용완료, .재모집):
-            inset = 8
-        default:
-            inset = 12
-        }
-        mainButton.configure(state: post.mainState, inset: inset)
+        mainButton.configure(state: post.mainState)
         if let subState = post.subState {
-            subButton.configure(state: subState, inset: inset)
+            subButton.configure(state: subState)
             subButton.isHidden = false
         } else {
             subButton.isHidden = true

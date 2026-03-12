@@ -35,7 +35,6 @@ final class CallVanPostTimeView: ExtendedTouchAreaView {
         configureView()
         setAddTargets()
         bind()
-        update(Date())
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

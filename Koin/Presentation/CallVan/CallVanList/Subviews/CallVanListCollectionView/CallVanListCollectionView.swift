@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import Then
 
 final class CallVanListCollectionView: UICollectionView {
     

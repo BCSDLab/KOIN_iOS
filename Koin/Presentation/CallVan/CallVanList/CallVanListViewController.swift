@@ -231,7 +231,7 @@ extension CallVanListViewController {
             ]))
             configuration.imagePadding = 8
             configuration.imagePlacement = .leading
-            configuration.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
+            configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
             $0.configuration = configuration
             $0.backgroundColor = UIColor.appColor(.neutral50)
             $0.layer.borderColor = UIColor.appColor(.new400).cgColor
@@ -266,6 +266,7 @@ extension CallVanListViewController {
             $0.leading.trailing.bottom.equalToSuperview()
         }
         writeButton.snp.makeConstraints {
+            $0.height.equalTo(42)
             $0.trailing.equalToSuperview().offset(-24)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-22)
         }
