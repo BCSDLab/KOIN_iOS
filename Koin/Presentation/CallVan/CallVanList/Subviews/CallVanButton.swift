@@ -13,7 +13,7 @@ final class CallVanButton: UIButton {
         super.init(frame: .zero)
     }
     
-    func configure(state: CallVanState) {
+    func configure(state: CallVanState, inset: CGFloat) {
         
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString(
@@ -24,23 +24,14 @@ final class CallVanButton: UIButton {
             ])
         )
         
-        let inset: CGFloat
-        switch state {
-        case .재모집, .이용완료:
-            inset = 8
-        default:
-            inset = 12
-        }
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
         
         self.configuration = configuration
         
         backgroundColor = state.backgroundColor
         layer.cornerRadius = 4
-        if let _ = state.borderColor {
-            layer.borderWidth = 1
-            layer.borderColor = state.borderColor?.cgColor
-        }
+        layer.borderWidth = 1
+        layer.borderColor = state.borderColor.cgColor
         
     }
     required init?(coder: NSCoder) {

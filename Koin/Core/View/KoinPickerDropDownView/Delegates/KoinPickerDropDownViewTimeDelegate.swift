@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Then
 
 final class KoinPickerDropDownViewTimeDelegate {
     
@@ -43,7 +44,7 @@ extension KoinPickerDropDownViewTimeDelegate {
         
         let amPm = ["AM", "PM"]
         let hours = Array(1...12).map { "\($0)" }
-        let minutes = Array(00...59).map { "\($0)" }
+        let minutes = Array(00...59).map { String(format: "%02d", $0) }
         
         return [amPm, hours, minutes]
     }

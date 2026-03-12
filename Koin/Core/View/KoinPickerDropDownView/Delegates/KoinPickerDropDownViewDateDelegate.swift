@@ -49,6 +49,7 @@ extension KoinPickerDropDownViewDateDelegate: KoinPickerDropDownViewDelegate {
         }
         guard let validDate = inputFormatter.date(from: String(format: "%d-%d-%d", yearInt, monthInt, dayInt)) else {
             assert(false)
+            return
         }
         reset(koinPicker: koinPicker, initialDate: validDate)
     }
@@ -61,6 +62,7 @@ extension KoinPickerDropDownViewDateDelegate {
         guard let selectedYearInt = Int(selectedItem[0].filter { $0.isNumber }),
               let selectedMonthInt = Int(selectedItem[1].filter { $0.isNumber }) else {
             assert(false)
+            return [[],[],[]]
         }
         
         let years: [String] = {
@@ -85,6 +87,7 @@ extension KoinPickerDropDownViewDateDelegate {
         guard let date = calendar.date(from: components),
               let dayRange = calendar.range(of: .day, in: .month, for: date) else {
             assert(false)
+            return []
         }
         
         return dayRange.map { String($0) + "일" }

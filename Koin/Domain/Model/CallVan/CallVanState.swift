@@ -51,12 +51,12 @@ enum CallVanState: String {
         }
     }
     
-    var borderColor: UIColor? {
+    var borderColor: UIColor {
         switch self {
         case .참여하기:
-            return nil
+            return UIColor.clear
         case .참여취소:
-            return nil
+            return UIColor.clear
         case .모집마감:
             return UIColor.appColor(.neutral500)
         case .마감하기:
@@ -64,7 +64,7 @@ enum CallVanState: String {
         case .재모집:
             return UIColor.appColor(.new500)
         case .이용완료:
-            return nil
+            return UIColor.clear
         }
     }
 }

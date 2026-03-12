@@ -98,7 +98,7 @@ extension CallVanListCollectionView: UICollectionViewDataSource {
         cell.subButtonTappedPublisher.sink { [weak self] postId in
             guard let self else { return }
             if let subState = posts.first(where: { $0.postId == postId })?.subState {
-                mainButtonTappedPublisher.send((postId, subState))
+                subButtonTappedPublisher.send((postId, subState))
                 print(subState.rawValue)
             }
         }.store(in: &cell.subscriptions)

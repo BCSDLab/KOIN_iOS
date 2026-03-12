@@ -50,7 +50,7 @@ final class CallVanPostPlaceBottomSheetView: UIView {
     private let bottomSeparatorView = UIView()
     
     // MARK: - Initialzier
-    init(title: Title, place: String?, onApplyButtonTapped: @escaping (CallVanPlace, String?)->Void) {
+    init(title: Title, place: CallVanPlace?, customPlace: String?, onApplyButtonTapped: @escaping (CallVanPlace, String?)->Void) {
         self.onApplyButtonTapped = onApplyButtonTapped
         super.init(frame: .zero)
         
@@ -60,16 +60,9 @@ final class CallVanPostPlaceBottomSheetView: UIView {
         
         titleLabel.text = title.rawValue
         
-        let place = place ?? CallVanPlace.frontGate.description
-        (buttons1 + buttons2).forEach {
-            $0.isSelected = $0.title == place.description
-        }
-        if let _ = (buttons1 + buttons2).first(where: { $0.isSelected }) {
-            customButton.isSelected = false
-        } else {
+        if place == .custom {
             customButton.isSelected = true
-            customPlaceTextField.text = place
-            
+            customPlaceTextField.text = customPlace
             customPlaceTextField.snp.remakeConstraints {
                 $0.height.equalTo(47)
                 $0.top.equalTo(separatorView.snp.bottom).offset(24)
@@ -91,6 +84,12 @@ final class CallVanPostPlaceBottomSheetView: UIView {
 
                 }
             )
+        } else {
+            let place = place ?? CallVanPlace.frontGate
+            (buttons1 + buttons2).forEach {
+                $0.isSelected = $0.title == place.description
+            }
+            customButton.isSelected = false
         }
     }
     required init?(coder: NSCoder) {

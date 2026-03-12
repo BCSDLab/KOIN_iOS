@@ -40,12 +40,10 @@ final class CallVanPostViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "콜밴팟"
-        configureView()
         configureNavigationBar(style: .empty)
+        configureView()
+        setAddTargets()
         bind()
-        dateView.update(Date())
-        timeView.update(Date())
-        participantsView.update(numberOfParticipants: 1)
     }
     
     private func bind() {
@@ -112,6 +110,18 @@ final class CallVanPostViewController: UIViewController {
 
 extension CallVanPostViewController {
     
+    private func setAddTargets() {
+        postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func postButtonTapped() {
+        // TODO: 
+    }
+    
+}
+
+extension CallVanPostViewController {
+    
     private func presentDeparturePlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
             guard let self else { return }
@@ -119,7 +129,8 @@ extension CallVanPostViewController {
         }
         let contentView = CallVanPostPlaceBottomSheetView(
             title: .departure,
-            place: viewModel.request.departureCustomName ?? viewModel.request.departureType?.description,
+            place: viewModel.request.departureType,
+            customPlace: viewModel.request.departureCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
         let bottomSheetViewController = BottomSheetViewControllerB(
@@ -138,7 +149,8 @@ extension CallVanPostViewController {
         }
         let contentView = CallVanPostPlaceBottomSheetView(
             title: .arrival,
-            place: viewModel.request.arrivalCustomName ?? viewModel.request.arrivalType?.description,
+            place: viewModel.request.arrivalType,
+            customPlace: viewModel.request.arrivalCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
         let bottomSheetViewController = BottomSheetViewControllerB(

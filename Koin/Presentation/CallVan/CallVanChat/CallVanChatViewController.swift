@@ -16,6 +16,13 @@ final class CallVanChatViewController: UIViewController {
     private let viewModel: CallVanChatViewModel
     private var subscriptions: Set<AnyCancellable> = []
     
+    // MARK: - TitleView
+    private lazy var titleLabel = UILabel()
+    private lazy var peopleImageView = UIImageView()
+    private lazy var paritipantsLabel = UILabel()
+    private lazy var layoutGuide = UILayoutGuide()
+    private lazy var titleView = UIView()
+    
     // MARK: - UI Components
     private let callVanChatTableView = CallVanChatTableView()
     private let wrapperView = UIView()
@@ -70,45 +77,6 @@ extension CallVanChatViewController: UITextViewDelegate {
 extension CallVanChatViewController {
     
     private func configureNavigationBar() {
-        
-        let titleLabel = UILabel().then {
-//            $0.text = "\(viewModel.callVanPost.title) \(viewModel.callVanPost.departureTime)"
-            $0.textColor = UIColor.appColor(.neutral800)
-            $0.font = UIFont.appFont(.pretendardMedium, size: 15)
-        }
-        let peopleImageView = UIImageView().then {
-            $0.image = UIImage.appImage(asset: .callVanListPeople)?.withRenderingMode(.alwaysTemplate)
-            $0.tintColor = UIColor.appColor(.neutral600)
-        }
-        let paritipantsLabel = UILabel().then {
-//            $0.text = "\(viewModel.callVanPost.currentParticipants)/\(viewModel.callVanPost.maxParticipants)"
-            $0.textColor = UIColor.appColor(.neutral600)
-            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        }
-        let layoutGuide = UILayoutGuide()
-        let titleView = UIView()
-        [titleLabel, peopleImageView, paritipantsLabel].forEach {
-            titleView.addSubview($0)
-        }
-        [layoutGuide].forEach {
-            titleView.addLayoutGuide($0)
-        }
-        
-        layoutGuide.snp.makeConstraints {
-            $0.center.equalTo(titleView)
-        }
-        titleLabel.snp.makeConstraints {
-            $0.leading.centerY.equalTo(layoutGuide)
-        }
-        peopleImageView.snp.makeConstraints {
-            $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
-            $0.centerY.equalTo(layoutGuide)
-        }
-        paritipantsLabel.snp.makeConstraints {
-            $0.leading.equalTo(peopleImageView.snp.trailing).offset(4)
-            $0.centerY.trailing.equalTo(layoutGuide)
-        }
-        
         navigationItem.titleView = titleView
         
         let appearance = UINavigationBarAppearance()
@@ -131,6 +99,23 @@ extension CallVanChatViewController {
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral100)
         
+        // MARK: - TitleView
+        titleLabel.do {
+            $0.text = "테니스장 - 천안터미널 16:00" //\(viewModel.callVanPost.title) \(viewModel.callVanPost.departureTime)"
+            $0.textColor = UIColor.appColor(.neutral800)
+            $0.font = UIFont.appFont(.pretendardMedium, size: 15)
+        }
+        peopleImageView.do {
+            $0.image = UIImage.appImage(asset: .callVanListPeople)?.withRenderingMode(.alwaysTemplate)
+            $0.tintColor = UIColor.appColor(.neutral600)
+        }
+        paritipantsLabel.do {
+            $0.text = "6/8" //"\(viewModel.callVanPost.currentParticipants)/\(viewModel.callVanPost.maxParticipants)"
+            $0.textColor = UIColor.appColor(.neutral600)
+            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        }
+        
+        // MARK: - UI Components
         callVanChatTableView.do {
             $0.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
             $0.backgroundColor = .white
@@ -164,6 +149,15 @@ extension CallVanChatViewController {
     }
     
     private func setUpLayouts() {
+        // MARK: - TitleView
+        [titleLabel, peopleImageView, paritipantsLabel].forEach {
+            titleView.addSubview($0)
+        }
+        [layoutGuide].forEach {
+            titleView.addLayoutGuide($0)
+        }
+        
+        // MARK: - UI Components
         [sendImageButton, messageTextView, sendMessageButton].forEach {
             wrapperView.addSubview($0)
         }
@@ -173,6 +167,23 @@ extension CallVanChatViewController {
     }
     
     private func setUpConstraints() {
+        // MARK: - TitleView
+        layoutGuide.snp.makeConstraints {
+            $0.center.equalTo(titleView)
+        }
+        titleLabel.snp.makeConstraints {
+            $0.leading.centerY.equalTo(layoutGuide)
+        }
+        peopleImageView.snp.makeConstraints {
+            $0.leading.equalTo(titleLabel.snp.trailing).offset(8)
+            $0.centerY.equalTo(layoutGuide)
+        }
+        paritipantsLabel.snp.makeConstraints {
+            $0.leading.equalTo(peopleImageView.snp.trailing).offset(4)
+            $0.centerY.trailing.equalTo(layoutGuide)
+        }
+        
+        // MARK: - UI Components
         callVanChatTableView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()

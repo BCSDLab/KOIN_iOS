@@ -56,23 +56,25 @@ extension CallVanDataDto {
         ]
         var userIdIndex: [Int: Int] = [:]
         var currentIndex = 0
-        var paritipantDtoes = participants
+        var paritipantdtos = participants
         var pariticipants: [CallVanParticipant] = []
-        if let me = paritipantDtoes.first(where: { $0.isMe }) {
+        if let me = paritipantdtos.first(where: { $0.isMe }) {
             pariticipants.append(CallVanParticipant(userId: me.userId, nickname: me.nickname + " (나)", isMe: true, index: -1, profileImage: UIImage.appImage(asset: .callVanProfileMine)))
-            paritipantDtoes = paritipantDtoes.filter { !$0.isMe }
+            paritipantdtos = paritipantdtos.filter { !$0.isMe }
         }
-        pariticipants = paritipantDtoes.map {
-            let index: Int
-            if let validIndex = userIdIndex[$0.userId] {
-                index = validIndex
-            } else {
-                userIdIndex[$0.userId] = currentIndex
-                index = currentIndex
-                currentIndex = min(currentIndex+1, 7)
+        pariticipants.append(contentsOf:
+            paritipantdtos.map {
+                let index: Int
+                if let validIndex = userIdIndex[$0.userId] {
+                    index = validIndex
+                } else {
+                    userIdIndex[$0.userId] = currentIndex
+                    index = currentIndex
+                    currentIndex = min(currentIndex+1, 7)
+                }
+                return CallVanParticipant(userId: $0.userId, nickname: $0.nickname, isMe: false, index: index, profileImage: profileImages[index])
             }
-            return CallVanParticipant(userId: $0.userId, nickname: $0.nickname, isMe: false, index: index, profileImage: profileImages[index])
-        }
+        )
         
         return CallVanData(
             id: id,

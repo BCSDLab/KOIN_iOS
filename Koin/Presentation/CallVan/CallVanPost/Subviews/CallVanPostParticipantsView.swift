@@ -30,6 +30,7 @@ final class CallVanPostParticipantsView: UIView {
         super.init(frame: .zero)
         configureView()
         setAddTargets()
+        update(numberOfParticipants: 1)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

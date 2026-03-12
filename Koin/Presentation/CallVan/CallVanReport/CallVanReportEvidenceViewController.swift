@@ -71,12 +71,12 @@ extension CallVanReportEvidenceViewController {
     }
     
     @objc private func reportButtonTapped() {
-        if let viewController = navigationController?.viewControllers.first(where: { $0 is CallVanDataViewController }) {
-            navigationController?.popToViewController(viewController, animated: true)
-            showToast(message: "사용자가 신고되었습니다.")
-        } else {
-            fatalError()
+        guard let viewController = navigationController?.viewControllers.first(where: { $0 is CallVanDataViewController }) else {
+            assert(false)
+            return
         }
+        navigationController?.popToViewController(viewController, animated: true)
+        showToast(message: "사용자가 신고되었습니다.")
     }
 }
 

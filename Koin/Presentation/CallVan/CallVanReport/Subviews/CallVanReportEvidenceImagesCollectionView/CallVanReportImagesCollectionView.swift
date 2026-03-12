@@ -62,8 +62,7 @@ extension CallVanReportImagesCollectionView: UICollectionViewDataSource {
         }
         
         cell.configure(imageUrl: imageUrls[indexPath.row])
-        
-        
+        bind(cell)
         return cell
     }
     

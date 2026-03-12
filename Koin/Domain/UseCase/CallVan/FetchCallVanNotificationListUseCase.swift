@@ -14,7 +14,7 @@ protocol FetchCallVanNotificationListUseCase {
 
 final class MockFetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase {
     func execute() -> AnyPublisher<[CallVanNotification], ErrorResponse> {
-        let notificationDtoes = [
+        let notificationdtos = [
             CallVanNotificationDto(id: 0,
                                    isRead: true,
                                    createdAt: "",
@@ -72,7 +72,7 @@ final class MockFetchCallVanNotificationListUseCase: FetchCallVanNotificationLis
                                    currentParticipants: 4,
                                    maxParticipants: 8)
         ]
-        let notifications = notificationDtoes.map { $0.toDomain() }
+        let notifications = notificationdtos.map { $0.toDomain() }
         return Just(notifications)
             .setFailureType(to: ErrorResponse.self)
             .eraseToAnyPublisher()
