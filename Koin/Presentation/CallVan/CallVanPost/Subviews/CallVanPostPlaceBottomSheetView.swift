@@ -61,6 +61,9 @@ final class CallVanPostPlaceBottomSheetView: UIView {
         titleLabel.text = title.rawValue
         
         if place == .custom {
+            (buttons1 + buttons2).forEach {
+                $0.isSelected = false
+            }
             customButton.isSelected = true
             customPlaceTextField.text = customPlace
             customPlaceTextField.snp.remakeConstraints {
@@ -68,21 +71,12 @@ final class CallVanPostPlaceBottomSheetView: UIView {
                 $0.top.equalTo(separatorView.snp.bottom).offset(24)
                 $0.leading.trailing.equalToSuperview().inset(32)
             }
-            UIView.animate(
-                withDuration: 0.2,
-                animations: { [weak self] in
-                    self?.superview?.layoutIfNeeded()
-                    self?.layoutIfNeeded()
-                    self?.applyButton.do {
-                        $0.setAttributedTitle(NSAttributedString(
-                            string: "입력완료",
-                            attributes: [
-                                .font : UIFont.appFont(.pretendardBold, size: 16),
-                                .foregroundColor : UIColor.appColor(.neutral0)
-                            ]), for: .normal)
-                    }
-
-                }
+            applyButton.setAttributedTitle(NSAttributedString(
+                string: "입력완료",
+                attributes: [
+                    .font : UIFont.appFont(.pretendardBold, size: 16),
+                    .foregroundColor : UIColor.appColor(.neutral0)
+                ]), for: .normal
             )
         } else {
             let place = place ?? CallVanPlace.frontGate
@@ -119,9 +113,6 @@ extension CallVanPostPlaceBottomSheetView {
             (buttons1 + buttons2).forEach {
                 $0.isSelected = $0.filterState.rawValue == placeButton.filterState.rawValue
             }
-        }
-        if let placeButton = sender as? CallVanFilterButton {
-            
         }
         customButton.isSelected = false
         
@@ -333,7 +324,7 @@ extension CallVanPostPlaceBottomSheetView {
             $0.height.equalTo(1)
             $0.top.equalTo(applyButton.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
+            $0.bottom.equalToSuperview().priority(999)
         }
     }
 }
