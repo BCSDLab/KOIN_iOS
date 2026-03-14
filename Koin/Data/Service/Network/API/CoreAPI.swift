@@ -13,6 +13,7 @@ enum CoreAPI {
     case fetchBanner
     case fetchClubCategories
     case fetchHotClubs
+    case uploadFiles([Data], String)
 }
 
 extension CoreAPI: Router, URLRequestConvertible {
@@ -27,19 +28,25 @@ extension CoreAPI: Router, URLRequestConvertible {
         case .fetchBanner: return "/banners/1"
         case .fetchClubCategories: return "/clubs/categories"
         case .fetchHotClubs: return "/clubs/hot"
+        case .uploadFiles(_, let domain): return "/\(domain)/upload/files"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
         case .checkVersion, .fetchBanner, .fetchClubCategories, .fetchHotClubs: return .get
+        case .uploadFiles: return .post
         }
     }
     
     public var headers: [String: String] {
+        var baseHeaders: [String: String] = [:]
         switch self {
         case .checkVersion, .fetchBanner, .fetchClubCategories, .fetchHotClubs: return [:]
+        case .uploadFiles:
+            baseHeaders["Content-Type"] = "multipart/form-data"
         }
+        return baseHeaders
     }
     
     
@@ -53,6 +60,8 @@ extension CoreAPI: Router, URLRequestConvertible {
             return nil
         case .fetchBanner:
             return ["platform": "IOS"]
+        case .uploadFiles:
+            return nil
         }
     }
     
@@ -62,6 +71,7 @@ extension CoreAPI: Router, URLRequestConvertible {
         case .fetchBanner: return URLEncoding.default
         case .fetchClubCategories: return URLEncoding.default
         case .fetchHotClubs: return URLEncoding.default
+        case .uploadFiles: return URLEncoding.default
         }
     }
  

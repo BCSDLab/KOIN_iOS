@@ -32,7 +32,7 @@ final class PostLostItemViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     
     var selectedIndex = 0
-    private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
+    private lazy var uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private lazy var postLostItemUseCase: PostLostItemUseCase = DefaultPostLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     let type: LostItemType
@@ -84,7 +84,7 @@ extension PostLostItemViewModel {
     }
     
     private func uploadFiles(files: [Data]) {
-        uploadFileUseCase.execute(files: files).sink { [weak self] completion in
+        uploadFileUseCase.execute(files: files, domain: .lostItem).sink { [weak self] completion in
             if case let .failure(error) = completion {               
                 self?.outputSubject.send(.showToast(error.message))
             }

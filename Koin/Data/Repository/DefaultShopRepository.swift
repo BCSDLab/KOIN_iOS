@@ -6,7 +6,6 @@
 //
 
 import Combine
-import Foundation
 
 final class DefaultShopRepository: ShopRepository {
 
@@ -30,10 +29,6 @@ final class DefaultShopRepository: ShopRepository {
     
     func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, ErrorResponse> {
         service.fetchShopBenefits()
-    }
-    
-    func uploadFiles(files: [Data]) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
-        service.uploadFiles(files: files)
     }
     
     func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, ErrorResponse> {

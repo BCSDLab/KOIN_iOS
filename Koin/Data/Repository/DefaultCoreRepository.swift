@@ -5,6 +5,7 @@
 //  Created by 김나훈 on 10/1/24.
 //
 
+import Foundation
 import Combine
 
 final class DefaultCoreRepository: CoreRepository {
@@ -30,4 +31,7 @@ final class DefaultCoreRepository: CoreRepository {
         return service.fetchHotClubs()
     }
     
+    func uploadFiles(files: [Data], domain: String) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
+        return service.uploadFiles(files: files, domain: domain)
+    }
 }
