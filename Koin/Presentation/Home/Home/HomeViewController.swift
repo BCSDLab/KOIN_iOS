@@ -50,7 +50,7 @@ final class HomeViewController: UIViewController {
     
     private let busView = BusView()
     
-    private let clubView = ClubView()
+    private let callVanView = CallVanView()
     
     private let noticeListCollectionView = NoticeListCollectionView(frame: .zero, collectionViewLayout:  UICollectionViewFlowLayout().then{
         $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 48, height: 175)
@@ -214,25 +214,9 @@ final class HomeViewController: UIViewController {
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .updateBanner(let banner):
                 self?.showBanner(banner: banner)
-            case .setHotClub(let hotClub):
-                self?.clubView.setupHotClub(club: hotClub)
-            case .setClubCategories(let response):
-                self?.clubView.setupClubCategories(categories: response.clubCategories)
             case .updateLostItem(let lostLostStats):
                 self?.lostItemListView.configure(lostItemStats: lostLostStats)
             }
-        }.store(in: &subscriptions)
-        
-        clubView.clubCategoryPublisher.sink { [weak self] id in
-            self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs?categoryId=\(id)"), animated: true)
-        }.store(in: &subscriptions)
-        
-        clubView.clubListButtonPublisher.sink { [weak self] in
-            self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
-        }.store(in: &subscriptions)
-        
-        clubView.hotClubButtonPublisher.sink { [weak self] id in
-            self?.navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
         }.store(in: &subscriptions)
         
         logoView.lineButtonPublisher.sink { [weak self] in
@@ -312,6 +296,14 @@ final class HomeViewController: UIViewController {
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemEntry, .click, "분실물"))
             self?.navigateToLostItemList()
         }.store(in: &subscriptions)
+        
+        callVanView.findButtonTappedPublisher.sink { [weak self] in
+            self?.navigateToCallVanList()
+        }.store(in: &subscriptions)
+        
+        callVanView.postButtonTappedPublisher.sink { [weak self] in
+            self?.navigateToCallVanPost()
+        }.store(in: &subscriptions)
     }
 }
 
@@ -356,9 +348,7 @@ extension HomeViewController {
                     fetchShopBenefitUseCase: fetchShopBenefitUseCase,
                     fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
                     logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                    getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                    selectedId: 0
-                )
+                    getUserScreenTimeUseCase: getUserScreenTimeUseCase)
                 let shopViewController = ShopViewController(viewModel: viewModel)
                 navigationController?.pushViewController(shopViewController, animated: true)
             } else if redirect == "dining" {
@@ -649,6 +639,24 @@ extension HomeViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdatePageView, .pageView, version))
         self.present(viewController, animated: true, completion: nil)
     }
+    
+    private func navigateToCallVanList() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchCallVanListUseCase = MockFetchCallVanListUseCase()
+        let viewModel = CallVanListViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchCallVanListUseCase: fetchCallVanListUseCase
+        )
+        let viewController = CallVanListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func navigateToCallVanPost() {
+        let viewModel = CallVanPostViewModel()
+        let viewController = CallVanPostViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 // AB Test
@@ -716,7 +724,7 @@ extension HomeViewController {
             view.addSubview($0)
         }
         wrapperView.addSubview(scrollView)
-        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, lostItemListView, orderLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, clubView].forEach {
+        [noticeLabel, noticeListCollectionView, noticePageControl, goNoticePageButton, busLabel, diningTooltipImageView, lostItemListView, orderLabel, categoryCollectionView, menuLabel, menuBackgroundView, tabBarView, grayColorView, goDiningPageButton, busView, busQrCodeButton, callVanView].forEach {
             scrollView.addSubview($0)
         }
         
@@ -796,13 +804,13 @@ extension HomeViewController {
             make.width.equalTo(scrollView.snp.width)
         }
         
-        clubView.snp.makeConstraints { make in
+        callVanView.snp.makeConstraints { make in
             make.top.equalTo(busView.snp.bottom).offset(24)
             make.horizontalEdges.equalTo(scrollView)
         }
         
         lostItemListView.snp.makeConstraints {
-            $0.top.equalTo(clubView.snp.bottom).offset(30)
+            $0.top.equalTo(callVanView.snp.bottom).offset(30)
             $0.leading.trailing.equalTo(scrollView)
         }
         
