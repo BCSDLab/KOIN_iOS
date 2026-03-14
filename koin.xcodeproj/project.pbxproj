@@ -2248,7 +2248,6 @@
 			isa = PBXGroup;
 			children = (
 				7CC42B262F575E6900940CE1 /* CallVanListCollectionView */,
-				7CC42B1D2F56F3B200940CE1 /* CallVanButton.swift */,
 				7CC42B292F575F4D00940CE1 /* CallVanFilterButton.swift */,
 				7CC42B272F575E8100940CE1 /* CallVanListFilterViewController.swift */,
 			);
@@ -2281,6 +2280,7 @@
 		7CC42B262F575E6900940CE1 /* CallVanListCollectionView */ = {
 			isa = PBXGroup;
 			children = (
+				7CC42B1D2F56F3B200940CE1 /* CallVanButton.swift */,
 				7CC42B122F56AB9D00940CE1 /* CallVanListCollectionView.swift */,
 				7CC42B142F56ABC000940CE1 /* CallVanListCollectionViewCell.swift */,
 			);

@@ -14,7 +14,6 @@ final class CallVanButton: UIButton {
     }
     
     func configure(state: CallVanState) {
-        
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString(
             state.rawValue,
@@ -23,25 +22,19 @@ final class CallVanButton: UIButton {
                 .foregroundColor : state.foregroundColor
             ])
         )
-        
-        let inset: CGFloat
-        switch state {
-        case .재모집, .이용완료:
-            inset = 8
-        default:
-            inset = 12
-        }
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: inset, bottom: 0, trailing: inset)
-        
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: state.inset, bottom: 0, trailing: state.inset)
         self.configuration = configuration
         
         backgroundColor = state.backgroundColor
         layer.cornerRadius = 4
-        if let _ = state.borderColor {
-            layer.borderWidth = 1
-            layer.borderColor = state.borderColor?.cgColor
-        }
         
+        if let borderColor = state.borderColor {
+            layer.borderWidth = 1
+            layer.borderColor = borderColor.cgColor
+        } else {
+            layer.borderWidth = 0
+            layer.borderColor = nil
+        }
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
