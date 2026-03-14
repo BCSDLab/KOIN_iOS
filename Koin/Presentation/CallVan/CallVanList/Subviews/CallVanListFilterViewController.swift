@@ -409,7 +409,7 @@ extension CallVanListFilterViewController {
             filter.departure = [.all]
         } else {
             filter.departure = filter.departure.filter { $0 != .all }
-            filter.departure.append(departure)
+            filter.departure.insert(departure)
         }
     }
     
@@ -423,7 +423,7 @@ extension CallVanListFilterViewController {
             filter.arrival = [.all]
         } else {
             filter.arrival = filter.arrival.filter { $0 != .all }
-            filter.arrival.append(arrival)
+            filter.arrival.insert(arrival)
         }
     }
     

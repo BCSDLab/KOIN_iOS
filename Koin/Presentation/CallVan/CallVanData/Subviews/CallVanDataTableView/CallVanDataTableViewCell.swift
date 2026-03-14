@@ -65,7 +65,8 @@ extension CallVanDataTableViewCell {
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         let pointInButton = self.convert(point, to: reportButton)
         
-        if reportButton.bounds.contains(pointInButton) {
+        if !reportButton.isHidden,
+           reportButton.bounds.contains(pointInButton) {
             return reportButton
         }
         return super.hitTest(point, with: event)

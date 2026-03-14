@@ -10,8 +10,8 @@ import Foundation
 struct CallVanListRequest {
     var sort: CallVanListSort = .latestDesc
     var state: CallVanRecruitmentState = .all
-    var departure: [CallVanPlace] = [.all]
-    var arrival: [CallVanPlace] = [.all]
+    var departure: Set<CallVanPlace> = [.all]
+    var arrival: Set<CallVanPlace> = [.all]
     var departureKeyword: String? = nil
     var arrivalKeyword: String? = nil
     

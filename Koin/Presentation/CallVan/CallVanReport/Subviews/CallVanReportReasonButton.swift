@@ -11,7 +11,7 @@ import Then
 
 final class CallVanReportReasonButton: UIButton {
     
-    let title: String
+    let reasonCode: CallVanReportRequestReasonCode
     
     override var isSelected: Bool {
         didSet {
@@ -25,12 +25,12 @@ final class CallVanReportReasonButton: UIButton {
     private let descriptionLabel = UILabel()
     
     // MARK: - Initializer
-    init(title: String, description: String?) {
-        self.title = title
+    init(reasonCode: CallVanReportRequestReasonCode) {
+        self.reasonCode = reasonCode
         super.init(frame: .zero)
         configureView()
-        reasonLabel.text = title
-        descriptionLabel.text = description
+        reasonLabel.text = reasonCode.rawValue
+        descriptionLabel.text = reasonCode.description
         isSelected = false
     }
     required init?(coder: NSCoder) {

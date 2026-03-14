@@ -373,7 +373,7 @@ extension CallVanReportEvidenceViewController {
             $0.height.equalTo(38)
             $0.top.equalTo(evidenceImagesCollectionView.snp.bottom).offset(12)
             $0.leading.trailing.equalTo(contentView).inset(24)
-            $0.bottom.equalTo(contentView)
+            $0.bottom.equalTo(contentView).offset(-24)
         }
         
         reportButton.snp.makeConstraints {

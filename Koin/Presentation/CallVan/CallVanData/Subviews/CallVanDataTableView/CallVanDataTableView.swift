@@ -67,8 +67,9 @@ extension CallVanDataTableView: UITableViewDataSource {
 extension CallVanDataTableView {
     
     private func bind(_ cell: CallVanDataTableViewCell) {
-        cell.threeCircleButtonTappedPublisher.sink { [weak self] in
-            self?.closeReportButton(cell)
+        cell.threeCircleButtonTappedPublisher.sink { [weak self, weak cell] in
+            guard let self, let cell else { return }
+            closeReportButton(cell)
         }.store(in: &cell.subscriptions)
         
         cell.reportButtonTappedPublisher.sink { [weak self] userId in
