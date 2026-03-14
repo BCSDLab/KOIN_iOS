@@ -46,13 +46,12 @@ final class CallVanListFilterViewController: UIViewController {
         CallVanFilterButton(filterState: CallVanPlace.all),
         CallVanFilterButton(filterState: CallVanPlace.frontGate),
         CallVanFilterButton(filterState: CallVanPlace.backGate),
-        CallVanFilterButton(filterState: CallVanPlace.tennisCourt),
-        CallVanFilterButton(filterState: CallVanPlace.dormitoryMain)
+        CallVanFilterButton(filterState: CallVanPlace.terminal)
     ]
     private let departureButtonsStackView2 = UIStackView()
     private let departureButtons2: [CallVanFilterButton] = [
+        CallVanFilterButton(filterState: CallVanPlace.dormitoryMain),
         CallVanFilterButton(filterState: CallVanPlace.dormitorySub),
-        CallVanFilterButton(filterState: CallVanPlace.terminal),
         CallVanFilterButton(filterState: CallVanPlace.station),
         CallVanFilterButton(filterState: CallVanPlace.asanStation)
     ]
@@ -65,13 +64,12 @@ final class CallVanListFilterViewController: UIViewController {
         CallVanFilterButton(filterState: CallVanPlace.all),
         CallVanFilterButton(filterState: CallVanPlace.frontGate),
         CallVanFilterButton(filterState: CallVanPlace.backGate),
-        CallVanFilterButton(filterState: CallVanPlace.tennisCourt),
-        CallVanFilterButton(filterState: CallVanPlace.dormitoryMain)
+        CallVanFilterButton(filterState: CallVanPlace.terminal)
     ]
     private let arrivalButtonsStackView2 = UIStackView()
     private var arrivalButtons2: [CallVanFilterButton] = [
+        CallVanFilterButton(filterState: CallVanPlace.dormitoryMain),
         CallVanFilterButton(filterState: CallVanPlace.dormitorySub),
-        CallVanFilterButton(filterState: CallVanPlace.terminal),
         CallVanFilterButton(filterState: CallVanPlace.station),
         CallVanFilterButton(filterState: CallVanPlace.asanStation)
     ]

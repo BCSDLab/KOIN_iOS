@@ -14,7 +14,7 @@ enum CallVanPlace: String, CallVanFilterState {
     case tennisCourt = "테니스장"
     case dormitoryMain = "본관동"
     case dormitorySub = "별관동"
-    case terminal = "야우리"
+    case terminal = "천안터미널"
     case station = "천안역"
     case asanStation = "천안아산역"
     case custom = "기타"
