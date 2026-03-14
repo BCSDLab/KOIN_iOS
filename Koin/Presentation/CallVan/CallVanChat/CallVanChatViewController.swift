@@ -46,10 +46,6 @@ final class CallVanChatViewController: UIViewController {
         configureNavigationBar()
         setDelegate()
         hideKeyboardWhenTappedAround()
-        
-        let dummy = CallVanChatDto.dummy().toDomain()
-        callVanChatTableView.configure(callVanChat: dummy)
-        title = dummy.roomName
     }
 }
 

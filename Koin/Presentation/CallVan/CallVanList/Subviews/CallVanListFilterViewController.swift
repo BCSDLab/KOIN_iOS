@@ -24,52 +24,56 @@ final class CallVanListFilterViewController: UIViewController {
     
     private let sortLabel = UILabel()
     private let sortButtonsStackView = UIStackView()
-    private let sortLatestDescButton = CallVanFilterButton(title: CallVanListSort.latestDesc.description)
-    private let sortDepartureDescButton = CallVanFilterButton(title: CallVanListSort.departureDesc.description)
+    private let sortButtons = [
+        CallVanFilterButton(filterState: CallVanListSort.latestDesc),
+        CallVanFilterButton(filterState: CallVanListSort.departureDesc)
+    ]
     private let sortSeparatorView = UIView()
     
     private let stateLabel = UILabel()
     private let stateButtonsStackView = UIStackView()
-    private let stateAllButton = CallVanFilterButton(title: "전체")
-    private let stateRecruitingButton = CallVanFilterButton(title: CallVanStateDto.recruiting.description)
-    private let stateClosedButton = CallVanFilterButton(title: CallVanStateDto.closed.description)
+    private let stateButtons = [
+        CallVanFilterButton(filterState: CallVanRecruitmentState.all),
+        CallVanFilterButton(filterState: CallVanRecruitmentState.recruiting),
+        CallVanFilterButton(filterState: CallVanRecruitmentState.closed)
+    ]
     private let stateSeparatorView = UIView()
     
     private let departureLabel = UILabel()
     private let departureDescriptionLabel = UILabel()
     private let departureButtonsStackView1 = UIStackView()
-    private let departureAllButton = CallVanFilterButton(title: "전체")
-    private let departureButtons1: [CallVanFilterButton] = [
-        CallVanFilterButton(title: CallVanPlace.frontGate.description),
-        CallVanFilterButton(title: CallVanPlace.backGate.description),
-        CallVanFilterButton(title: CallVanPlace.tennisCourt.description),
-        CallVanFilterButton(title: CallVanPlace.dormitoryMain.description)
+    private let departureButtons1 = [
+        CallVanFilterButton(filterState: CallVanPlace.all),
+        CallVanFilterButton(filterState: CallVanPlace.frontGate),
+        CallVanFilterButton(filterState: CallVanPlace.backGate),
+        CallVanFilterButton(filterState: CallVanPlace.tennisCourt),
+        CallVanFilterButton(filterState: CallVanPlace.dormitoryMain)
     ]
     private let departureButtonsStackView2 = UIStackView()
     private let departureButtons2: [CallVanFilterButton] = [
-        CallVanFilterButton(title: CallVanPlace.dormitorySub.description),
-        CallVanFilterButton(title: CallVanPlace.terminal.description),
-        CallVanFilterButton(title: CallVanPlace.station.description),
-        CallVanFilterButton(title: CallVanPlace.asanStation.description)
+        CallVanFilterButton(filterState: CallVanPlace.dormitorySub),
+        CallVanFilterButton(filterState: CallVanPlace.terminal),
+        CallVanFilterButton(filterState: CallVanPlace.station),
+        CallVanFilterButton(filterState: CallVanPlace.asanStation)
     ]
     private let departureSeparatorView = UIView()
     
     private let arrivalLabel = UILabel()
     private let arrivalDescriptionLabel = UILabel()
     private let arrivalButtonsStackView1 = UIStackView()
-    private let arrivalAllButton = CallVanFilterButton(title: "전체")
     private let arrivalButtons1: [CallVanFilterButton] = [
-        CallVanFilterButton(title: CallVanPlace.frontGate.description),
-        CallVanFilterButton(title: CallVanPlace.backGate.description),
-        CallVanFilterButton(title: CallVanPlace.tennisCourt.description),
-        CallVanFilterButton(title: CallVanPlace.dormitoryMain.description)
+        CallVanFilterButton(filterState: CallVanPlace.all),
+        CallVanFilterButton(filterState: CallVanPlace.frontGate),
+        CallVanFilterButton(filterState: CallVanPlace.backGate),
+        CallVanFilterButton(filterState: CallVanPlace.tennisCourt),
+        CallVanFilterButton(filterState: CallVanPlace.dormitoryMain)
     ]
     private let arrivalButtonsStackView2 = UIStackView()
     private var arrivalButtons2: [CallVanFilterButton] = [
-        CallVanFilterButton(title: CallVanPlace.dormitorySub.description),
-        CallVanFilterButton(title: CallVanPlace.terminal.description),
-        CallVanFilterButton(title: CallVanPlace.station.description),
-        CallVanFilterButton(title: CallVanPlace.asanStation.description)
+        CallVanFilterButton(filterState: CallVanPlace.dormitorySub),
+        CallVanFilterButton(filterState: CallVanPlace.terminal),
+        CallVanFilterButton(filterState: CallVanPlace.station),
+        CallVanFilterButton(filterState: CallVanPlace.asanStation)
     ]
     private let arrivalSeparatorView = UIView()
     
@@ -94,35 +98,36 @@ final class CallVanListFilterViewController: UIViewController {
             guard let self else { return }
             
             // MARK: - Sort
-            sortLatestDescButton.isSelected = !(filter.sort == .departureDesc)
-            sortDepartureDescButton.isSelected = (filter.sort == .departureDesc)
+            sortButtons.forEach { button in
+                button.isSelected = button.filterState as! CallVanListSort == filter.sort
+            }
             
             // MARK: - State
-            stateAllButton.isSelected = (filter.state == nil)
-            stateRecruitingButton.isSelected = (filter.state == .recruiting)
-            stateClosedButton.isSelected = (filter.state == .closed)
+            stateButtons.forEach { button in
+                button.isSelected = button.filterState as! CallVanRecruitmentState == filter.state
+            }
             
             // MARK: - Departure
-            departureAllButton.isSelected = (filter.departure == nil)
-            (departureButtons1 + departureButtons2).forEach { button in
-                if let departures = filter.departure {
-                    if let departure = CallVanPlace(description: button.title) {
-                        button.isSelected = departures.contains(departure)
-                    }
-                } else {
+            if filter.departure == [.all] {
+                (departureButtons1 + departureButtons2).forEach { button in
                     button.isSelected = false
+                }
+                departureButtons1.first?.isSelected = true
+            } else {
+                (departureButtons1 + departureButtons2).forEach { button in
+                    button.isSelected = filter.departure.contains(button.filterState as! CallVanPlace)
                 }
             }
             
             // MARK: - Arrival
-            arrivalAllButton.isSelected = (filter.arrival == nil)
-            (arrivalButtons1 + arrivalButtons2).forEach { button in
-                if let arrivals = filter.arrival {
-                    if let arrival = CallVanPlace(description: button.title) {
-                        button.isSelected = arrivals.contains(arrival)
-                    }
-                } else {
+            if filter.arrival == [.all] {
+                (arrivalButtons1 + arrivalButtons2).forEach { button in
                     button.isSelected = false
+                }
+                arrivalButtons1.first?.isSelected = true
+            } else {
+                (arrivalButtons1 + arrivalButtons2).forEach { button in
+                    button.isSelected = filter.arrival.contains(button.filterState as! CallVanPlace)
                 }
             }
         }.store(in: &subscriptions)
@@ -208,22 +213,18 @@ extension CallVanListFilterViewController {
     }
     
     private func setUpLayouts() {
-        sortButtonsStackView.addArrangedSubview(sortLatestDescButton)
-        sortButtonsStackView.addArrangedSubview(sortDepartureDescButton)
-        
-        stateButtonsStackView.addArrangedSubview(stateAllButton)
-        stateButtonsStackView.addArrangedSubview(stateRecruitingButton)
-        stateButtonsStackView.addArrangedSubview(stateClosedButton)
-        
-        departureButtonsStackView1.addArrangedSubview(departureAllButton)
+        sortButtons.forEach {
+            sortButtonsStackView.addArrangedSubview($0)
+        }
+        stateButtons.forEach {
+            stateButtonsStackView.addArrangedSubview($0)
+        }
         departureButtons1.forEach {
             departureButtonsStackView1.addArrangedSubview($0)
         }
         departureButtons2.forEach {
             departureButtonsStackView2.addArrangedSubview($0)
         }
-        
-        arrivalButtonsStackView1.addArrangedSubview(arrivalAllButton)
         arrivalButtons1.forEach {
             arrivalButtonsStackView1.addArrangedSubview($0)
         }
@@ -365,27 +366,17 @@ extension CallVanListFilterViewController {
     private func setAddTargets() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         
-        sortLatestDescButton.addTarget(self, action: #selector(sortLatestDescButtonTapped), for: .touchUpInside) // 최신순
-        sortDepartureDescButton.addTarget(self, action: #selector(sortDepartureDescButtonTapped), for: .touchUpInside) // 출발시각순
-        
-        stateAllButton.addTarget(self, action: #selector(stateAllButtonTapped), for: .touchUpInside) // 모집상태 전체
-        stateRecruitingButton.addTarget(self, action: #selector(stateButtonTapped), for: .touchUpInside)
-        stateClosedButton.addTarget(self, action: #selector(stateButtonTapped), for: .touchUpInside)
-        
-        departureAllButton.addTarget(self, action: #selector(departureAllButtonTapped), for: .touchUpInside)
-        departureButtons1.forEach {
-            $0.addTarget(self, action: #selector(departureButtonTapped), for: .touchUpInside)
+        sortButtons.forEach {
+            $0.addTarget(self, action: #selector(sortButtonTapped(_:)), for: .touchUpInside)
         }
-        departureButtons2.forEach {
-            $0.addTarget(self, action: #selector(departureButtonTapped), for: .touchUpInside)
+        stateButtons.forEach {
+            $0.addTarget(self, action: #selector(stateButtonTapped(_:)), for: .touchUpInside)
         }
-        
-        arrivalAllButton.addTarget(self, action: #selector(arrivalAllButtonTapped), for: .touchUpInside)
-        arrivalButtons1.forEach {
-            $0.addTarget(self, action: #selector(arrivalButtonTapped), for: .touchUpInside)
+        (departureButtons1 + departureButtons2).forEach {
+            $0.addTarget(self, action: #selector(departureButtonTapped(_:)), for: .touchUpInside)
         }
-        arrivalButtons2.forEach {
-            $0.addTarget(self, action: #selector(arrivalButtonTapped), for: .touchUpInside)
+        (arrivalButtons1 + arrivalButtons2).forEach {
+            $0.addTarget(self, action: #selector(arrivalButtonTapped(_:)), for: .touchUpInside)
         }
         
         resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
@@ -396,66 +387,45 @@ extension CallVanListFilterViewController {
         dismissView()
     }
     
-    // MARK: SORT
-    @objc private func sortLatestDescButtonTapped() {
-        filter.sort = .latestDesc
-        sortLatestDescButton.isSelected = true
-        sortDepartureDescButton.isSelected = false
+    @objc private func sortButtonTapped(_ sender: UIButton) {
+        if let sortButton = sender as? CallVanFilterButton,
+           let sort = sortButton.filterState as? CallVanListSort {
+            filter.sort = sort
+        }
     }
-    @objc private func sortDepartureDescButtonTapped() {
-        filter.sort = .departureDesc
-        sortLatestDescButton.isSelected = false
-        sortDepartureDescButton.isSelected = true
-    }
-    
-    // MARK: - State
-    @objc private func stateAllButtonTapped() {
-        filter.state = nil
-    }
+
     @objc private func stateButtonTapped(_ sender: UIButton) {
-        if let filterButton = sender as? CallVanFilterButton,
-           let state = CallVanStateDto(description: filterButton.title) {
+        if let stateButton = sender as? CallVanFilterButton,
+           let state = stateButton.filterState as? CallVanRecruitmentState {
             filter.state = state
         }
     }
     
     // MARK: - Departure
-    @objc private func departureAllButtonTapped() {
-        filter.departure = nil
-    }
     @objc private func departureButtonTapped(_ sender: UIButton) {
-        if let filterButton = sender as? CallVanFilterButton,
-           let departure = CallVanPlace(description: filterButton.title) {
-            if var departures = filter.departure {
-                if departures.contains(departure) {
-                    departures = departures.filter { $0 != departure }
-                } else {
-                    departures.append(departure)
-                }
-                filter.departure = departures
-            } else {
-                filter.departure = [departure]
-            }
+        guard let departureButton = sender as? CallVanFilterButton,
+              let departure = departureButton.filterState as? CallVanPlace else {
+            return
+        }
+        if departure == .all {
+            filter.departure = [.all]
+        } else {
+            filter.departure = filter.departure.filter { $0 != .all }
+            filter.departure.append(departure)
         }
     }
     
     // MARK: - Arrival
-    @objc private func arrivalAllButtonTapped() {
-        filter.arrival = nil
-    }
     @objc private func arrivalButtonTapped(_ sender: UIButton) {
-        if let filterButton = sender as? CallVanFilterButton,
-           let arrival = CallVanPlace(description: filterButton.title) {
-            if var arrivals = filter.arrival {
-                if arrivals.contains(arrival) {
-                    arrivals = arrivals.filter { $0 != arrival }
-                } else {
-                    arrivals.append(arrival)
-                }
-                filter.arrival = arrivals
-            } else {
-                filter.arrival = [arrival]
-            }
+        guard let arrivalButton = sender as? CallVanFilterButton,
+              let arrival = arrivalButton.filterState as? CallVanPlace else {
+            return
+        }
+        if arrival == .all {
+            filter.arrival = [.all]
+        } else {
+            filter.arrival = filter.arrival.filter { $0 != .all }
+            filter.arrival.append(arrival)
         }
     }
     

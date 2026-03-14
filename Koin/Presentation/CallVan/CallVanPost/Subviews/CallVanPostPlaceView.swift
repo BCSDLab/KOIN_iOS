@@ -44,7 +44,7 @@ final class CallVanPostPlaceView: UIView {
         
         departureButton.backgroundColor = backgroundColor
         departureButton.setAttributedTitle(NSAttributedString(
-            string: customPlace ?? placeType?.description ?? "출발지 선택",
+            string: customPlace ?? placeType?.rawValue ?? "출발지 선택",
             attributes: [
                 .font : font,
                 .foregroundColor : foregroundColor
@@ -60,7 +60,7 @@ final class CallVanPostPlaceView: UIView {
         
         arrivalButton.backgroundColor = backgroundColor
         arrivalButton.setAttributedTitle(NSAttributedString(
-            string: customPlace ?? placeType?.description ?? "도착지 선택",
+            string: customPlace ?? placeType?.rawValue ?? "도착지 선택",
             attributes: [
                 .font : font,
                 .foregroundColor : foregroundColor

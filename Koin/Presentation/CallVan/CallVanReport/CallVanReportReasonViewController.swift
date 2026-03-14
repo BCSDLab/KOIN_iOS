@@ -31,7 +31,7 @@ final class CallVanReportReasonViewController: UIViewController {
         var reasonButtons: [CallVanReportReasonButton] = []
         let reasonCodes: [CallVanReportRequestReasonCode] = [.noShow, .nonPayment, .profanity]
         for reasonCode in reasonCodes {
-            reasonButtons.append(CallVanReportReasonButton(title: reasonCode.title, description: reasonCode.description))
+            reasonButtons.append(CallVanReportReasonButton(title: reasonCode.rawValue, description: reasonCode.description))
         }
         return reasonButtons
     }()
@@ -187,7 +187,7 @@ extension CallVanReportReasonViewController {
         }
         customReasonButton.isSelected = false
         
-        if let reasonCode = CallVanReportRequestReasonCode(title: sender.title) {
+        if let reasonCode = CallVanReportRequestReasonCode(rawValue: sender.title) {
             inputSubject.send(.updateReasonCode(reasonCode))
         } else {
             print("\(#function) failed")

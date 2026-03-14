@@ -7,12 +7,16 @@
 
 import UIKit
 
+protocol CallVanFilterState: Equatable {
+    var rawValue: String { get }
+}
+
 final class CallVanFilterButton: UIButton {
     
-    let title: String
+    let filterState: CallVanFilterState
     
-    init(title: String) {
-        self.title = title
+    init(filterState: CallVanFilterState) {
+        self.filterState = filterState
         super.init(frame: .zero)
         layer.cornerRadius = 17
         layer.borderWidth = 1
@@ -30,7 +34,7 @@ final class CallVanFilterButton: UIButton {
             let foregroundColor = isSelected ? UIColor.appColor(.new500) : UIColor.appColor(.neutral500)
             let borderColor = isSelected ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
             
-            setAttributedTitle(NSAttributedString(string: title, attributes: [
+            setAttributedTitle(NSAttributedString(string: filterState.rawValue, attributes: [
                 .font : UIFont.appFont(.pretendardBold, size: 14),
                 .foregroundColor : foregroundColor
             ]), for: .normal)

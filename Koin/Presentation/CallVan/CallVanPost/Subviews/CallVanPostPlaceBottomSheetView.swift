@@ -30,19 +30,19 @@ final class CallVanPostPlaceBottomSheetView: UIView {
     
     private let buttonsStackView1 = UIStackView()
     private let buttons1 = [
-        CallVanFilterButton(title: CallVanPlace.frontGate.description),
-        CallVanFilterButton(title: CallVanPlace.backGate.description),
-        CallVanFilterButton(title: CallVanPlace.dormitoryMain.description),
-        CallVanFilterButton(title: CallVanPlace.dormitorySub.description)
+        CallVanFilterButton(filterState: CallVanPlace.frontGate),
+        CallVanFilterButton(filterState: CallVanPlace.backGate),
+        CallVanFilterButton(filterState: CallVanPlace.dormitoryMain),
+        CallVanFilterButton(filterState: CallVanPlace.dormitorySub)
     ]
     
     private let buttonsStackView2 = UIStackView()
     private let buttons2 = [
-        CallVanFilterButton(title: CallVanPlace.terminal.description),
-        CallVanFilterButton(title: CallVanPlace.station.description),
-        CallVanFilterButton(title: CallVanPlace.asanStation.description)
+        CallVanFilterButton(filterState: CallVanPlace.terminal),
+        CallVanFilterButton(filterState: CallVanPlace.station),
+        CallVanFilterButton(filterState: CallVanPlace.asanStation)
     ]
-    private let customButton = CallVanFilterButton(title: CallVanPlace.custom.description)
+    private let customButton = CallVanFilterButton(filterState: CallVanPlace.custom)
     
     private let separatorView = UIView()
     private let customPlaceTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral800), font: UIFont.appFont(.pretendardMedium, size: 15))
@@ -87,7 +87,7 @@ final class CallVanPostPlaceBottomSheetView: UIView {
         } else {
             let place = place ?? CallVanPlace.frontGate
             (buttons1 + buttons2).forEach {
-                $0.isSelected = $0.title == place.description
+                $0.isSelected = $0.filterState as! CallVanPlace == place
             }
             customButton.isSelected = false
         }
@@ -117,8 +117,11 @@ extension CallVanPostPlaceBottomSheetView {
     @objc private func placeButtonTapped(_ sender: UIButton) {
         if let placeButton = sender as? CallVanFilterButton {
             (buttons1 + buttons2).forEach {
-                $0.isSelected = $0.title == placeButton.title
+                $0.isSelected = $0.filterState.rawValue == placeButton.filterState.rawValue
             }
+        }
+        if let placeButton = sender as? CallVanFilterButton {
+            
         }
         customButton.isSelected = false
         
@@ -181,7 +184,7 @@ extension CallVanPostPlaceBottomSheetView {
     
     @objc private func applyButtonTapped() {
         if let selectedButton = (buttons1 + buttons2).first(where: { $0.isSelected }),
-           let selectedPlace = CallVanPlace(description: selectedButton.title) {
+           let selectedPlace = selectedButton.filterState as? CallVanPlace {
             onApplyButtonTapped(selectedPlace, nil)
             delegate?.dismiss()
         }

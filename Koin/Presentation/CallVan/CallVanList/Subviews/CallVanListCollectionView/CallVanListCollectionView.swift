@@ -92,7 +92,6 @@ extension CallVanListCollectionView: UICollectionViewDataSource {
             guard let self else { return }
             if let mainState = posts.first(where: { $0.postId == postId })?.mainState {
                 mainButtonTappedPublisher.send((postId, mainState))
-                print(mainState.rawValue)
             }
         }.store(in: &cell.subscriptions)
         
@@ -100,7 +99,6 @@ extension CallVanListCollectionView: UICollectionViewDataSource {
             guard let self else { return }
             if let subState = posts.first(where: { $0.postId == postId })?.subState {
                 subButtonTappedPublisher.send((postId, subState))
-                print(subState.rawValue)
             }
         }.store(in: &cell.subscriptions)
         
