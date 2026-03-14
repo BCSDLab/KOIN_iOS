@@ -62,21 +62,13 @@ final class CallVanDataTableViewCell: UITableViewCell{
 
 extension CallVanDataTableViewCell {
     
-    /// ExtendedTouchAreaView
-    override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
-        if super.point(inside: point, with: event) {
-            return true
-        }
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        let pointInButton = self.convert(point, to: reportButton)
         
-        for subview in subviews {
-            let pointInSubview = subview.convert(point, from: self)
-            if !subview.isHidden
-                && subview.isUserInteractionEnabled
-                && subview.point(inside: pointInSubview, with: event) {
-                return true
-            }
+        if reportButton.bounds.contains(pointInButton) {
+            return reportButton
         }
-        return false
+        return super.hitTest(point, with: event)
     }
 }
 

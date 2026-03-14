@@ -58,6 +58,7 @@ extension CallVanDataTableView: UITableViewDataSource {
             return UITableViewCell()
         }
         cell.configure(participant: participants[indexPath.row], shoudHideSepearatorView: indexPath.row == participants.count - 1)
+        cell.layer.zPosition = CGFloat(participants.count - indexPath.row)
         bind(cell)
         return cell
     }
