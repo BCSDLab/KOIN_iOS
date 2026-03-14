@@ -16,7 +16,7 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
     let mainButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let subButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let chatButtonTappedPublisher = PassthroughSubject<Int, Never>()
-    let callButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let callButtonTappedPublisher = PassthroughSubject<Void, Never>()
     var subscriptions: Set<AnyCancellable> = []
     private var postId: Int = 0
     
@@ -234,6 +234,6 @@ extension CallVanListCollectionViewCell {
         chatButtonTappedPublisher.send(postId)
     }
     @objc private func callButtonTapped() {
-        callButtonTappedPublisher.send(postId)
+        callButtonTappedPublisher.send()
     }
 }

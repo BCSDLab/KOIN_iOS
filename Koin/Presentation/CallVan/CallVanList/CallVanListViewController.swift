@@ -64,8 +64,8 @@ final class CallVanListViewController: UIViewController {
         callVanListCollectionView.chatButtonTappedPublisher.sink { [weak self] postId in
             self?.chatButtonTapped(postId: postId)
         }.store(in: &subscriptions)
-        callVanListCollectionView.callButtonTappedPublisher.sink { [weak self] postId in
-            self?.callButtonTapped(postId: postId)
+        callVanListCollectionView.callButtonTappedPublisher.sink { [weak self] in
+            self?.callButtonTapped()
         }.store(in: &subscriptions)
         callVanListCollectionView.postTappedPublisher.sink { [weak self] postId in
             self?.navigateToCallVanData(postId)
@@ -160,8 +160,28 @@ extension CallVanListViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func callButtonTapped(postId: Int) {
+    private func callButtonTapped() {
+        let shopService = DefaultShopService()
+        let shopRepository = DefaultShopRepository(service: shopService)
         
+        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let viewModel = ShopViewModel(
+            fetchShopListUseCase: fetchShopListUseCase,
+            fetchEventListUseCase: fetchEventListUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            selectedId: 11)
+        let shopViewController = ShopViewController(viewModel: viewModel)
+        navigationController?.pushViewController(shopViewController, animated: true)
     }
 }
 

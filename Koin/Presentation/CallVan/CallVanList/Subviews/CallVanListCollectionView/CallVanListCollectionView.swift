@@ -15,7 +15,7 @@ final class CallVanListCollectionView: UICollectionView {
     let mainButtonTappedPublisher = PassthroughSubject<(Int, CallVanState), Never>()
     let subButtonTappedPublisher = PassthroughSubject<(Int, CallVanState), Never>()
     let chatButtonTappedPublisher = PassthroughSubject<Int, Never>()
-    let callButtonTappedPublisher = PassthroughSubject<Int, Never>()
+    let callButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let postTappedPublisher = PassthroughSubject<Int, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var posts: [CallVanListPost] = []
@@ -106,8 +106,8 @@ extension CallVanListCollectionView: UICollectionViewDataSource {
             self?.chatButtonTappedPublisher.send(postId)
         }.store(in: &cell.subscriptions)
         
-        cell.callButtonTappedPublisher.sink { [weak self] postId in
-            self?.callButtonTappedPublisher.send(postId)
+        cell.callButtonTappedPublisher.sink { [weak self] in
+            self?.callButtonTappedPublisher.send()
         }.store(in: &cell.subscriptions)
     }
 }

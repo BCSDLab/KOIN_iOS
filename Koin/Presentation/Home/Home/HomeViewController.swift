@@ -348,9 +348,7 @@ extension HomeViewController {
                     fetchShopBenefitUseCase: fetchShopBenefitUseCase,
                     fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
                     logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                    getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                    selectedId: 0
-                )
+                    getUserScreenTimeUseCase: getUserScreenTimeUseCase)
                 let shopViewController = ShopViewController(viewModel: viewModel)
                 navigationController?.pushViewController(shopViewController, animated: true)
             } else if redirect == "dining" {
