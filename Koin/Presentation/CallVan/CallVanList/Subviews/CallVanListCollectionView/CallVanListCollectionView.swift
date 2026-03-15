@@ -60,6 +60,16 @@ final class CallVanListCollectionView: UICollectionView {
             self?.isWaiting = false
         }
     }
+    
+    func prepend(post: CallVanListPost) {
+        performBatchUpdates({ [weak self] in
+            guard let self else { return }
+            self.posts.insert(post, at: 0)
+            insertItems(at: [IndexPath(row: 0, section: 0)])
+        }) { [weak self] _ in
+            self?.isWaiting = false
+        }
+    }
 }
 
 extension CallVanListCollectionView {

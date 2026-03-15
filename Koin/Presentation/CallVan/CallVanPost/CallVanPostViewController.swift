@@ -10,9 +10,14 @@ import Combine
 import SnapKit
 import Then
 
+protocol CallVanPostViewControllerDelegate: AnyObject {
+    func appendPostData(_ postData: CallVanListPost)
+}
+
 final class CallVanPostViewController: UIViewController {
     
     // MARK: - Properties
+    weak var delegate: CallVanPostViewControllerDelegate?
     private let inputSubject = PassthroughSubject<CallVanPostViewModel.Input, Never>()
     private let viewModel: CallVanPostViewModel
     private var subscriptions: Set<AnyCancellable> = []
@@ -61,6 +66,8 @@ final class CallVanPostViewController: UIViewController {
                     placeView.updateDeparture(placeType: placeType, customPlace: customPlace)
                 case let .updateArrival(placeType, customPlace):
                     placeView.updateArrival(placeType: placeType, customPlace: customPlace)
+                case let .postDataCompleted(postData):
+                    postDataCompleted(postData)
                 }
             }.store(in: &subscriptions)
         
@@ -117,9 +124,9 @@ extension CallVanPostViewController {
     }
     
     @objc private func postButtonTapped() {
-        // TODO: 
+        postButton.isUserInteractionEnabled = false
+        inputSubject.send(.postData)
     }
-    
 }
 
 extension CallVanPostViewController {
@@ -128,6 +135,7 @@ extension CallVanPostViewController {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
             guard let self else { return }
             placeView.updateDeparture(placeType: place, customPlace: customPlace)
+            inputSubject.send(.updateDeparture(place, customPlace))
         }
         let contentView = CallVanPostPlaceBottomSheetView(
             title: .departure,
@@ -148,6 +156,7 @@ extension CallVanPostViewController {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
             guard let self else { return }
             placeView.updateArrival(placeType: place, customPlace: customPlace)
+            inputSubject.send(.updateArrival(place, customPlace))
         }
         let contentView = CallVanPostPlaceBottomSheetView(
             title: .arrival,
@@ -164,7 +173,34 @@ extension CallVanPostViewController {
         contentView.delegate = bottomSheetViewController
         present(bottomSheetViewController, animated: true)
     }
+}
+
+extension CallVanPostViewController {
     
+    private func postDataCompleted(_ postData: CallVanListPost) {
+        delegate?.appendPostData(postData)
+        
+        if let viewController = navigationController?.viewControllers.first(where: { $0 is CallVanListViewController }) {
+            navigationController?.popToViewController(viewController, animated: true)
+        } else {
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+            let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+            let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
+            let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+            let viewModel = CallVanListViewModel(
+                checkLoginUseCase: checkLoginUseCase,
+                fetchCallVanListUseCase: fetchCallVanListUseCase,
+                fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase
+            )
+            let viewController = CallVanListViewController(viewModel: viewModel)
+            if var viewControllers = navigationController?.viewControllers {
+                viewControllers.insert(viewController, at: viewControllers.count - 1)
+                navigationController?.setViewControllers(viewControllers, animated: false)
+                navigationController?.popViewController(animated: true)
+            }
+        }
+    }
 }
 
 extension CallVanPostViewController {

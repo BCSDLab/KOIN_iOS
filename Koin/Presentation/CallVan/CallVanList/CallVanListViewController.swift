@@ -116,7 +116,11 @@ extension CallVanListViewController {
     }
     
     @objc private func writeButtonTapped() {
-        let viewController = CallVanPostViewController(viewModel: CallVanPostViewModel())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
+        let viewModel = CallVanPostViewModel(postCallVanDataUseCase: postCallVanDataUseCase)
+        let viewController = CallVanPostViewController(viewModel: viewModel)
+        viewController.delegate = self
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -135,6 +139,13 @@ extension CallVanListViewController {
     @objc private func searchButtonTapped() {
         inputSubject.send(.updateFilterTitle(searchTextField.text))
         dismissKeyboard()
+    }
+}
+
+extension CallVanListViewController: CallVanPostViewControllerDelegate {
+    
+    func appendPostData(_ postData: CallVanListPost) {
+        callVanListCollectionView.prepend(post: postData)
     }
 }
 

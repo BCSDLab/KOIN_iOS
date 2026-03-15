@@ -14,7 +14,7 @@ final class CallVanPostTimeView: ExtendedTouchAreaView {
     
     // MARK: - Properteis
     let timeButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let timeChangedPublisher = PassthroughSubject<String, Never>()
+    let timeChangedPublisher = PassthroughSubject<Date, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let formatter = DateFormatter().then {
         $0.locale = Locale(identifier: "ko_KR")
@@ -50,8 +50,7 @@ final class CallVanPostTimeView: ExtendedTouchAreaView {
         formatter.dateFormat = "hh:mm"
         timeLabel.text = formatter.string(from: date)
         
-        formatter.dateFormat = "HH:mm"
-        timeChangedPublisher.send(formatter.string(from: date))
+        timeChangedPublisher.send(date)
     }
 }
 
@@ -68,6 +67,11 @@ extension CallVanPostTimeView {
             let minute = selectedItems[2]
             
             self?.timeLabel.text =  "\(hour):\(minute)"
+            
+            self?.formatter.dateFormat = "HH:mm"
+            if let date = self?.formatter.date(from: "\(hour):\(minute)") {
+                self?.timeChangedPublisher.send(date)
+            }
         }.store(in: &subscriptions)
         
         timeDropDownView.applyButtonTappedPublisher.sink { [weak self] in

@@ -656,7 +656,9 @@ extension HomeViewController {
     }
     
     private func navigateToCallVanPost() {
-        let viewModel = CallVanPostViewModel()
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
+        let viewModel = CallVanPostViewModel(postCallVanDataUseCase: postCallVanDataUseCase)
         let viewController = CallVanPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

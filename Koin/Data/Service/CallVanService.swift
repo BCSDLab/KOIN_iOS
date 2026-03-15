@@ -15,6 +15,7 @@ protocol CallVanService {
     func postAllNotificationsRead() -> AnyPublisher<Void, ErrorResponse>
     func deleteNotification(_ notificationId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteAllNotifications() -> AnyPublisher<Void, ErrorResponse>
+    func postData(_ request: CallVanPostRequestDto) -> AnyPublisher<CallVanPostResultDto, ErrorResponse>
 }
 
 final class DefaultCallVanService: CallVanService {
@@ -43,5 +44,9 @@ final class DefaultCallVanService: CallVanService {
     
     func deleteAllNotifications() -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: CallVanAPI.deleteAllNotifications)
+    }
+    
+    func postData(_ request: CallVanPostRequestDto) -> AnyPublisher<CallVanPostResultDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: CallVanAPI.postData(request))
     }
 }

@@ -31,6 +31,10 @@ final class NetworkService {
                     if let errorResponse = try? JSONDecoder().decode(ErrorResponseDto.self, from: data) {
                         throw errorResponse.toDomain(withStatusCode: httpResponse.statusCode)
                     }
+                    
+                    if let rawString = String(data: data, encoding: .utf8) {
+                        print(rawString)
+                    }
                     throw ErrorResponse.decodingError(httpResponse.statusCode)
                 }
                 throw ErrorResponse.emptyDataError(httpResponse.statusCode)
@@ -53,6 +57,9 @@ final class NetworkService {
                     if let data = response.data {
                         if let decodedResponse = try? JSONDecoder().decode(T.self, from: data) {
                             return decodedResponse
+                        }
+                        if let rawString = String(data: data, encoding: .utf8) {
+                            print(rawString)
                         }
                         throw ErrorResponse.decodingError(httpResponse.statusCode)
                     }

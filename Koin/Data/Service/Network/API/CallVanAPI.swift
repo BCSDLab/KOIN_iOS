@@ -15,6 +15,7 @@ enum CallVanAPI {
     case postAllNotificationsRead
     case deleteNotification(Int)
     case deleteAllNotifications
+    case postData(CallVanPostRequestDto)
 }
 
 extension CallVanAPI: Router, URLRequestConvertible {
@@ -31,6 +32,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .postAllNotificationsRead: return "/callvan/notifications/mark-all-read"
         case .deleteNotification(let notificationId): return "/callvan/notifications/\(notificationId)"
         case .deleteAllNotifications: return "/callvan/notifications"
+        case .postData: return "/callvan"
         }
     }
     
@@ -42,12 +44,13 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .postAllNotificationsRead: return .post
         case .deleteNotification: return .delete
         case .deleteAllNotifications: return .delete
+        case .postData: return .post
         }
     }
     
     public var headers: [String: String] {
         switch self {
-        case .fetchCallVanList, .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications:
+        case .fetchCallVanList, .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications, .postData:
             return [:]
         }
     }
@@ -55,6 +58,8 @@ extension CallVanAPI: Router, URLRequestConvertible {
     public var parameters: Any? {
         switch self {
         case .fetchCallVanList(let request):
+            return try? request.toDictionary()
+        case .postData(let request):
             return try? request.toDictionary()
         case .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications:
             return nil
@@ -64,6 +69,8 @@ extension CallVanAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCallVanList:
             return URLEncoding(arrayEncoding: .noBrackets)
+        case .postData:
+            return JSONEncoding.default
         case .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications:
             return nil
         }

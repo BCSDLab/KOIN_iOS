@@ -48,4 +48,13 @@ final class DefaultCallVanRepository: CallVanRepository {
     func deleteAllNotifications() -> AnyPublisher<Void, ErrorResponse> {
         return service.deleteAllNotifications()
     }
+    
+    func postData(_ request: CallVanPostRequest) -> AnyPublisher<CallVanListPost, ErrorResponse> {
+        let request = CallVanPostRequestDto(from: request)
+        return service.postData(request)
+            .map {
+                $0.toDomain()
+            }
+            .eraseToAnyPublisher()
+    }
 }

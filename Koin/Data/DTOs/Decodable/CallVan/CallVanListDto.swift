@@ -28,7 +28,7 @@ struct CallVanListPostDto: Decodable {
     let arrival: String
     let departureDate: String
     let departureTime: String
-    let authorNickname: String
+    let authorNickname: String?
     let currentParticipants: Int
     let maxParticipants: Int
     let state: CallVanStateDto
@@ -63,8 +63,8 @@ extension CallVanListDto {
                     $0.toDomain()
                 }
                 .compactMap {
-                    if let post = $0 {
-                        return post
+                    if let _ = $0.mainState {
+                        return $0
                     } else {
                         return nil
                     }
@@ -79,11 +79,9 @@ extension CallVanListDto {
 
 extension CallVanListPostDto {
     
-    func toDomain() -> CallVanListPost? {
+    func toDomain() -> CallVanListPost {
         let states = callVanState(state: state, isJoined: isJoined, isAuthor: isAuthor)
-        guard let mainState = states.first else {
-            return nil
-        }
+        let mainState = states.first
         let subState = {
             if states.first != states.last {
                 return states.last
@@ -94,13 +92,12 @@ extension CallVanListPostDto {
         
         return CallVanListPost(
             postId: postId,
-            title: title,
             departure: departure,
             arrival: arrival,
             departureDate: displayDate(departureDate),
             departureDay: displayDay(departureDate),
             departureTime: departureTime,
-            authorNickname: authorNickname,
+            authorNickname: authorNickname ?? "익명",
             currentParticipants: currentParticipants,
             maxParticipants: maxParticipants,
             mainState: mainState,

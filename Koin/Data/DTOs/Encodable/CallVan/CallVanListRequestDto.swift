@@ -28,7 +28,7 @@ struct CallVanListRequestDto: Encodable {
     }
 }
 
-enum CallVanListSortDto: String, Encodable {
+enum CallVanListSortDto: String, Codable {
     case departureAsc = "DEPARTURE_ASC"
     case departureDesc = "DEPARTURE_DESC"
     case latestAsc = "LATEST_ASC"
@@ -39,18 +39,6 @@ enum CallVanRecruitmentStateDto: String, Encodable {
     case recruiting = "RECRUITING"
     case closed = "CLOSED"
     case completed = "COMPLETED"
-}
-
-enum CallVanPlaceDto: String, Encodable {
-    case frontGate = "FRONT_GATE"
-    case backGate = "BACK_GATE"
-    case tennisCourt = "TENNIS_COURT"
-    case dormitoryMain = "DORMITORY_MAIN"
-    case dormitorySub = "DORMITORY_SUB"
-    case terminal = "TERMINAL"
-    case station = "STATION"
-    case asanStation = "ASAN_STATION"
-    case custom = "CUSTOM"
 }
 
 enum CallVanAuthorDto: String, Encodable {
@@ -111,23 +99,6 @@ extension CallVanListSortDto {
             self = .latestAsc
         case .latestDesc:
             self = .latestDesc
-        }
-    }
-}
-
-extension CallVanPlaceDto {
-    init?(from model: CallVanPlace) {
-        switch model {
-        case .asanStation: self = .asanStation
-        case .backGate: self = .backGate
-        case .custom: self = .custom
-        case .dormitoryMain: self = .dormitoryMain
-        case .dormitorySub: self = .dormitorySub
-        case .frontGate: self = .frontGate
-        case .station: self = .station
-        case .tennisCourt: self = .tennisCourt
-        case .terminal: self = .terminal
-        case .all: return nil
         }
     }
 }

@@ -15,4 +15,5 @@ protocol CallVanRepository {
     func postAllNotificationsRead() -> AnyPublisher<Void, ErrorResponse>
     func deleteNotification(_ notificationId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteAllNotifications() -> AnyPublisher<Void, ErrorResponse>
+    func postData(_ request: CallVanPostRequest) -> AnyPublisher<CallVanListPost, ErrorResponse>
 }
