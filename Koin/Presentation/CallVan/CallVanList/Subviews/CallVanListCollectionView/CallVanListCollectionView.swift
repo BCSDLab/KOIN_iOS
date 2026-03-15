@@ -17,8 +17,10 @@ final class CallVanListCollectionView: UICollectionView {
     let chatButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let callButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let postTappedPublisher = PassthroughSubject<Int, Never>()
+    let loadMoreListPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var posts: [CallVanListPost] = []
+    private var isWaiting = true
     
     // MARK: - Initializer
     init() {
@@ -37,9 +39,26 @@ final class CallVanListCollectionView: UICollectionView {
     }
     
     // MARK: - Public
-    func configure(posts: [CallVanListPost]) {
-        self.posts = posts
-        reloadData()
+    func reset(posts: [CallVanListPost]) {
+        performBatchUpdates({ [weak self] in
+            guard let self else { return }
+            self.posts = posts
+            reloadSections(IndexSet(integer: 0))
+        }) { [weak self] _ in
+            self?.isWaiting = false
+        }
+    }
+    
+    func append(posts: [CallVanListPost]) {
+        performBatchUpdates({ [weak self] in
+            guard let self else { return }
+            let currentCount = self.posts.count
+            self.posts.append(contentsOf: posts)
+            let indexPaths = (currentCount..<self.posts.count).map { IndexPath(row: $0, section: 0) }
+            insertItems(at: indexPaths)
+        }) { [weak self] _ in
+            self?.isWaiting = false
+        }
     }
 }
 
@@ -109,5 +128,24 @@ extension CallVanListCollectionView: UICollectionViewDataSource {
         cell.callButtonTappedPublisher.sink { [weak self] in
             self?.callButtonTappedPublisher.send()
         }.store(in: &cell.subscriptions)
+    }
+}
+
+extension CallVanListCollectionView: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffset = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        guard scrollView.frame.height < contentHeight,
+              0 < contentOffset else {
+            return
+        }
+        
+        if contentHeight - scrollView.frame.height < contentOffset,
+           !isWaiting {
+            isWaiting = true
+            loadMoreListPublisher.send()
+        }
     }
 }

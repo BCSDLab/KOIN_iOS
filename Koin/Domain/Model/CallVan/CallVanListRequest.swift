@@ -15,7 +15,7 @@ struct CallVanListRequest {
     var departureKeyword: String? = nil
     var arrivalKeyword: String? = nil
     
-    var title: String?
+    var title: String? = nil
     var page: Int = 1
     var limit: Int = 10
 }

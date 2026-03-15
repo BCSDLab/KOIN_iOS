@@ -71,6 +71,7 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
             $0.text = "도착: " + post.arrival
             $0.font = UIFont.appFont(.pretendardMedium, size: 14)
             $0.textColor = UIColor.appColor(.neutral800)
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         dateLabel.do {
             $0.text = post.departureDate
@@ -190,6 +191,7 @@ extension CallVanListCollectionViewCell {
             $0.height.equalTo(22)
             $0.leading.equalTo(routeImageView.snp.trailing).offset(8)
             $0.top.equalTo(departureLabel.snp.bottom).offset(4)
+            $0.trailing.lessThanOrEqualTo(callVanButtonStackView.snp.leading).offset(-8)
         }
         labelsStackView.snp.makeConstraints {
             $0.height.equalTo(19)

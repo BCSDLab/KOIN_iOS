@@ -40,6 +40,7 @@ final class CallVanListViewController: UIViewController {
         configureNavigationBar(style: .empty)
         hideKeyboardWhenTappedAround()
         setAddTargets()
+        setDelegates()
         bind()
         inputSubject.send(.viewDidLoad)
     }
@@ -50,8 +51,12 @@ final class CallVanListViewController: UIViewController {
             switch output {
             case let .didCheckLoginToParticapate(isLoggedIn):
                 showBottomSheet(isLoggedIn: isLoggedIn, state: .참여하기)
-            case let .updateNotification(posts):
-                callVanListCollectionView.configure(posts: posts)
+            case let .resetList(posts):
+                callVanListCollectionView.reset(posts: posts)
+            case let .appendList(posts):
+                callVanListCollectionView.append(posts: posts)
+            case .updateBellWithNotification:
+                configureRightBarButton(alert: true)
             }
         }.store(in: &subscriptions)
         
@@ -70,18 +75,23 @@ final class CallVanListViewController: UIViewController {
         callVanListCollectionView.postTappedPublisher.sink { [weak self] postId in
             self?.navigateToCallVanData(postId)
         }.store(in: &subscriptions)
+        
+        callVanListCollectionView.loadMoreListPublisher.sink { [weak self] in
+            self?.inputSubject.send(.loadMoreList)
+        }.store(in: &subscriptions)
     }
 }
 
 extension CallVanListViewController {
     
     private func configureRightBarButton(alert: Bool = false) {
-        let bellButton = UIBarButtonItem(image: UIImage.appImage(asset: .bell)?.withRenderingMode(.alwaysOriginal)
-                                         , style: .plain, target: self, action: #selector(bellButtonTapped))
+        let image = alert ? UIImage.appImage(asset: .bellNotification) : UIImage.appImage(asset: .bell)
+        let bellButton = UIBarButtonItem(image: image?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(bellButtonTapped))
         navigationItem.rightBarButtonItem = bellButton
     }
     @objc private func bellButtonTapped() {
-        let fetchCallVanNotificationListUseCase = MockFetchCallVanNotificationListUseCase()
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
         let viewModel = CallVanNotificationViewModel(fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
         let viewController = CallVanNotificationViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
@@ -93,6 +103,7 @@ extension CallVanListViewController {
     private func setAddTargets() {
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
     
     @objc private func writeButtonTapped() {
@@ -101,9 +112,32 @@ extension CallVanListViewController {
     }
     
     @objc private func filterButtonTapped() {
-        let contentViewController = CallVanListFilterViewController(filter: CallVanListRequest(), onApplyButtonTapped: { _ in })
+        let contentViewController = CallVanListFilterViewController(
+            filter: viewModel.filterState,
+            onApplyButtonTapped: { [weak self] filterState in
+                guard let self else { return }
+                inputSubject.send(.updateFilterState(filterState))
+            }
+        )
         let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: 605 + view.safeAreaInsets.bottom)
         present(bottomSheetViewController, animated: true)
+    }
+    
+    @objc private func searchButtonTapped() {
+        inputSubject.send(.updateFilterTitle(searchTextField.text))
+        dismissKeyboard()
+    }
+}
+
+extension CallVanListViewController {
+    
+    private func setDelegates() {
+        searchTextField.delegate = self
+    }
+    
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchButtonTapped()
+        return true
     }
 }
 

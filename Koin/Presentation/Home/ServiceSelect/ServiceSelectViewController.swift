@@ -154,11 +154,14 @@ extension ServiceSelectViewController {
     
     private func pushCallVanList() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let fetchCallVanListUseCase = MockFetchCallVanListUseCase()
+        let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
-            fetchCallVanListUseCase: fetchCallVanListUseCase
+            fetchCallVanListUseCase: fetchCallVanListUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
