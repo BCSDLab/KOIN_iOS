@@ -50,6 +50,29 @@ final class CallVanNotificationViewController: UIViewController {
                 emptyView.isHidden = !notifications.isEmpty
             }
         }.store(in: &subscriptions)
+        
+        notificationTableView.cellTapPublisher.sink { [weak self] (postId, notificationId) in
+            self?.inputSubject.send(.setNotificationRead(notificationId))
+            self?.navigateToCallVanData(postId)
+        }.store(in: &subscriptions)
+        
+        notificationTableView.deleteNotificationPublisher.sink { [weak self] notificationId in
+            self?.inputSubject.send(.deleteNotification(notificationId))
+        }.store(in: &subscriptions)
+        
+        notificationTableView.emptyNotificationPublisher.sink { [weak self] in
+            self?.emptyView.isHidden = false
+        }.store(in: &subscriptions)
+    }
+}
+
+extension CallVanNotificationViewController {
+    
+    private func navigateToCallVanData(_ postId: Int) {
+        let fetchCallVanDataUseCase = MockFetchCallVanDataUseCase()
+        let viewModel = CallVanDataViewModel(postId: postId, fetchCallVanDataUseCase: fetchCallVanDataUseCase)
+        let viewController = CallVanDataViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
@@ -66,7 +89,10 @@ extension CallVanNotificationViewController {
     }
     
     @objc private func rightBarButtonTapped() {
-        let onReadButtonTapped = { }
+        let onReadButtonTapped: ()->Void = { [weak self] in
+            self?.notificationTableView.markAllNotificationsRead()
+            self?.inputSubject.send(.setAllNotificationsRead)
+        }
         let onDeleteButtonTapped = { [weak self] in
             guard let self else { return }
             let subTitleLabel = UILabel().then {
@@ -77,7 +103,11 @@ extension CallVanNotificationViewController {
             subTitleLabel.snp.makeConstraints {
                 $0.height.equalTo(22)
             }
-            let onMainButtonTapped = {}
+            let onMainButtonTapped = { [weak self] in
+                self?.notificationTableView.configure(notifications: [])
+                self?.emptyView.isHidden = false
+                self?.inputSubject.send(.deleteAllNotifications)
+            }
             let contentViewController = CallVanBottomSheetViewController(
                 titleText: "알림을 모두 삭제할까요?",
                 subTitleLabel: subTitleLabel,

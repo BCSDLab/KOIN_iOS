@@ -92,7 +92,16 @@ extension CallVanListViewController {
     @objc private func bellButtonTapped() {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
-        let viewModel = CallVanNotificationViewModel(fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
+        let postNotificationReadUseCase = DefaultPostNotificationReadUseCase(repository: callVanRepository)
+        let postAllNotificationsReadUseCase = DefaultPostAllNotificationsReadUseCase(repository: callVanRepository)
+        let deleteNotificationUseCase = DefaultDeleteNotificationUseCase(repository: callVanRepository)
+        let deleteAllNotificationsUseCase = DefaultDeleteAllNotificationsUseCase(repository: callVanRepository)
+        let viewModel = CallVanNotificationViewModel(
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            postNotificationReadUseCase: postNotificationReadUseCase,
+            postAllNotificationsReadUseCase: postAllNotificationsReadUseCase,
+            deleteNotificationUseCase: deleteNotificationUseCase,
+            deleteAllNotificationsUseCase: deleteAllNotificationsUseCase)
         let viewController = CallVanNotificationViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

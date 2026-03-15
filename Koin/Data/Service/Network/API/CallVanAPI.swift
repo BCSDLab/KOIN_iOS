@@ -11,6 +11,10 @@ import Alamofire
 enum CallVanAPI {
     case fetchCallVanList(CallVanListRequestDto)
     case fetchNotification
+    case postNotificationRead(Int)
+    case postAllNotificationsRead
+    case deleteNotification(Int)
+    case deleteAllNotifications
 }
 
 extension CallVanAPI: Router, URLRequestConvertible {
@@ -23,6 +27,10 @@ extension CallVanAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCallVanList: return "/callvan"
         case .fetchNotification: return "/callvan/notifications"
+        case .postNotificationRead(let notificationId): return "/callvan/notifications/\(notificationId)/read"
+        case .postAllNotificationsRead: return "/callvan/notifications/mark-all-read"
+        case .deleteNotification(let notificationId): return "/callvan/notifications/\(notificationId)"
+        case .deleteAllNotifications: return "/callvan/notifications"
         }
     }
     
@@ -30,12 +38,16 @@ extension CallVanAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCallVanList: return .get
         case .fetchNotification: return .get
+        case .postNotificationRead: return .post
+        case .postAllNotificationsRead: return .post
+        case .deleteNotification: return .delete
+        case .deleteAllNotifications: return .delete
         }
     }
     
     public var headers: [String: String] {
         switch self {
-        case .fetchCallVanList, .fetchNotification:
+        case .fetchCallVanList, .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications:
             return [:]
         }
     }
@@ -44,7 +56,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCallVanList(let request):
             return try? request.toDictionary()
-        case .fetchNotification:
+        case .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications:
             return nil
         }
     }
@@ -52,7 +64,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCallVanList:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .fetchNotification:
+        case .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications:
             return nil
         }
     }

@@ -32,4 +32,20 @@ final class DefaultCallVanRepository: CallVanRepository {
             }
             .eraseToAnyPublisher()
     }
+    
+    func postNotificationRead(_ notificationId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.postNotificationRead(notificationId)
+    }
+    
+    func postAllNotificationsRead() -> AnyPublisher<Void, ErrorResponse> {
+        return service.postAllNotificationsRead()
+    }
+    
+    func deleteNotification(_ notificationId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.deleteNotification(notificationId)
+    }
+    
+    func deleteAllNotifications() -> AnyPublisher<Void, ErrorResponse> {
+        return service.deleteAllNotifications()
+    }
 }
