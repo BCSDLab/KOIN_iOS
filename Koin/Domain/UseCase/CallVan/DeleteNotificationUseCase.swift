@@ -21,6 +21,6 @@ final class DefaultDeleteNotificationUseCase: DeleteNotificationUseCase {
     }
     
     func execute(notificationId: Int) -> AnyPublisher<Void, ErrorResponse> {
-        return repository.deleteNotification(notificationId)
+        return repository.deleteNotification(notificationId: notificationId)
     }
 }

@@ -16,6 +16,11 @@ enum CallVanAPI {
     case deleteNotification(Int)
     case deleteAllNotifications
     case postData(CallVanPostRequestDto)
+    case participate(Int)
+    case quit(Int)
+    case close(Int)
+    case reopen(Int)
+    case complete(Int)
 }
 
 extension CallVanAPI: Router, URLRequestConvertible {
@@ -33,6 +38,11 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .deleteNotification(let notificationId): return "/callvan/notifications/\(notificationId)"
         case .deleteAllNotifications: return "/callvan/notifications"
         case .postData: return "/callvan"
+        case .participate(let postId): return "/callvan/posts/\(postId)/participants"
+        case .quit(let postId): return "/callvan/posts/\(postId)/participants"
+        case .close(let postId): return "/callvan/posts/\(postId)/close"
+        case .reopen(let postId): return "/callvan/posts/\(postId)/reopen"
+        case .complete(let postId): return "/callvan/posts/\(postId)/complete"
         }
     }
     
@@ -45,13 +55,17 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .deleteNotification: return .delete
         case .deleteAllNotifications: return .delete
         case .postData: return .post
+        case .participate: return .post
+        case .quit: return .delete
+        case .close: return .put
+        case .reopen: return .put
+        case .complete: return .put
         }
     }
     
     public var headers: [String: String] {
         switch self {
-        case .fetchCallVanList, .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications, .postData:
-            return [:]
+        default: return [:]
         }
     }
     
@@ -61,7 +75,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .postData(let request):
             return try? request.toDictionary()
-        case .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications:
+        default:
             return nil
         }
     }
@@ -71,7 +85,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
             return URLEncoding(arrayEncoding: .noBrackets)
         case .postData:
             return JSONEncoding.default
-        case .fetchNotification, .postNotificationRead, .postAllNotificationsRead, .deleteNotification, .deleteAllNotifications:
+        default:
             return nil
         }
     }

@@ -21,6 +21,6 @@ final class DefaultPostNotificationReadUseCase: PostNotificationReadUseCase {
     }
     
     func execute(notificationId: Int) -> AnyPublisher<Void, ErrorResponse> {
-        return repository.postNotificationRead(notificationId)
+        return repository.postNotificationRead(notificationId: notificationId)
     }
 }

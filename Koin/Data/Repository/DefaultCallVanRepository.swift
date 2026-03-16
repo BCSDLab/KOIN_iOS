@@ -16,7 +16,7 @@ final class DefaultCallVanRepository: CallVanRepository {
         self.service = service
     }
     
-    func fetchCallVanList(_ request: CallVanListRequest) -> AnyPublisher<CallVanList, ErrorResponse> {
+    func fetchCallVanList(request: CallVanListRequest) -> AnyPublisher<CallVanList, ErrorResponse> {
         let request = CallVanListRequestDto(from: request)
         return service.fetchCallVanList(request)
             .map {
@@ -33,7 +33,7 @@ final class DefaultCallVanRepository: CallVanRepository {
             .eraseToAnyPublisher()
     }
     
-    func postNotificationRead(_ notificationId: Int) -> AnyPublisher<Void, ErrorResponse> {
+    func postNotificationRead(notificationId: Int) -> AnyPublisher<Void, ErrorResponse> {
         return service.postNotificationRead(notificationId)
     }
     
@@ -41,7 +41,7 @@ final class DefaultCallVanRepository: CallVanRepository {
         return service.postAllNotificationsRead()
     }
     
-    func deleteNotification(_ notificationId: Int) -> AnyPublisher<Void, ErrorResponse> {
+    func deleteNotification(notificationId: Int) -> AnyPublisher<Void, ErrorResponse> {
         return service.deleteNotification(notificationId)
     }
     
@@ -49,12 +49,32 @@ final class DefaultCallVanRepository: CallVanRepository {
         return service.deleteAllNotifications()
     }
     
-    func postData(_ request: CallVanPostRequest) -> AnyPublisher<CallVanListPost, ErrorResponse> {
+    func postData(request: CallVanPostRequest) -> AnyPublisher<CallVanListPost, ErrorResponse> {
         let request = CallVanPostRequestDto(from: request)
         return service.postData(request)
             .map {
                 $0.toDomain()
             }
             .eraseToAnyPublisher()
+    }
+    
+    func participate(postId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.participate(postId: postId)
+    }
+    
+    func quit(postId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.quit(postId: postId)
+    }
+    
+    func close(postId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.close(postId: postId)
+    }
+    
+    func reopen(postId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.reopen(postId: postId)
+    }
+    
+    func complete(postId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.complete(postId: postId)
     }
 }

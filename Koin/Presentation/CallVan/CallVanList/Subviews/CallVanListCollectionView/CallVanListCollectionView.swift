@@ -40,34 +40,43 @@ final class CallVanListCollectionView: UICollectionView {
     
     // MARK: - Public
     func reset(posts: [CallVanListPost]) {
-        performBatchUpdates({ [weak self] in
+        performBatchUpdates{ [weak self] in
             guard let self else { return }
             self.posts = posts
             reloadSections(IndexSet(integer: 0))
-        }) { [weak self] _ in
+        } completion: { [weak self] _ in
             self?.isWaiting = false
         }
     }
     
     func append(posts: [CallVanListPost]) {
-        performBatchUpdates({ [weak self] in
+        performBatchUpdates() { [weak self] in
             guard let self else { return }
             let currentCount = self.posts.count
             self.posts.append(contentsOf: posts)
             let indexPaths = (currentCount..<self.posts.count).map { IndexPath(row: $0, section: 0) }
             insertItems(at: indexPaths)
-        }) { [weak self] _ in
+        } completion: { [weak self] _ in
             self?.isWaiting = false
         }
     }
     
     func prepend(post: CallVanListPost) {
-        performBatchUpdates({ [weak self] in
+        performBatchUpdates() { [weak self] in
             guard let self else { return }
             self.posts.insert(post, at: 0)
             insertItems(at: [IndexPath(row: 0, section: 0)])
-        }) { [weak self] _ in
-            self?.isWaiting = false
+        }
+    }
+    
+    func deleteItem(postId: Int) {
+        if let index = posts.firstIndex(where: { $0.postId == postId }) {
+            performBatchUpdates() { [weak self] in
+                guard let self else { return }
+                posts.remove(at: index)
+                let indexPath = IndexPath(row: index, section: 0)
+                deleteItems(at: [indexPath])   
+            }
         }
     }
 }

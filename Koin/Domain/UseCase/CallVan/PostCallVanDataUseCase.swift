@@ -22,6 +22,6 @@ final class DefaultPostCallVanDataUseCase: PostCallVanDataUseCase {
     }
     
     func execute(request: CallVanPostRequest) -> AnyPublisher<CallVanListPost, ErrorResponse> {
-        return repository.postData(request)
+        return repository.postData(request: request)
     }
 }

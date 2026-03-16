@@ -49,14 +49,18 @@ final class CallVanListViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
             switch output {
-            case let .didCheckLoginToParticapate(isLoggedIn):
-                showBottomSheet(isLoggedIn: isLoggedIn, state: .참여하기)
+            case let .didCheckLoginToParticapate(isLoggedIn, postId):
+                isLoggedIn ? showBottomSheet(state: .참여하기, postId: postId) : showLoginBottomSheet()
             case let .resetList(posts):
                 callVanListCollectionView.reset(posts: posts)
             case let .appendList(posts):
                 callVanListCollectionView.append(posts: posts)
+            case let .deleteListItem(postId):
+                callVanListCollectionView.deleteItem(postId: postId)
             case .updateBellWithNotification:
                 configureRightBarButton(alert: true)
+            case let .showToast(message):
+                showToastMessage(message: message, bottomInset: 75)
             }
         }.store(in: &subscriptions)
         
@@ -200,9 +204,9 @@ extension CallVanListViewController {
     private func cellButtonTapped(postId: Int, state: CallVanState) {
         switch state {
         case .참여하기:
-            inputSubject.send(.checkLoginToParticapate)
+            inputSubject.send(.checkLoginToParticapate(postId))
         case .참여취소, .마감하기, .재모집, .이용완료:
-            showBottomSheet(isLoggedIn: nil, state: state)
+            showBottomSheet(state: state, postId: postId)
         case .모집마감:
             break
         }

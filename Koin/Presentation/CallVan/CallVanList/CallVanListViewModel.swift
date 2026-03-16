@@ -12,22 +12,35 @@ final class CallVanListViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad
-        case checkLoginToParticapate
+        case checkLoginToParticapate(Int)
         case loadMoreList
         case updateFilterTitle(String?)
         case updateFilterState(CallVanListRequest)
+        
+        case participate(Int)
+        case quit(Int)
+        case close(Int)
+        case reopen(Int)
+        case complete(Int)
     }
     enum Output {
         case resetList([CallVanListPost])
         case appendList([CallVanListPost])
-        case didCheckLoginToParticapate(Bool)
+        case deleteListItem(Int)
+        case didCheckLoginToParticapate(Bool, Int)
         case updateBellWithNotification
+        case showToast(String)
     }
     
     // MARK: - Properties
     private let checkLoginUseCase: CheckLoginUseCase
     private let fetchCallVanListUseCase: FetchCallVanListUseCase
     private let fetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase
+    private let participateCallVanUseCase: ParticipateCallVanUseCase
+    private let quitCallVanUseCase: QuitCallVanUseCase
+    private let closeCallVanUseCase: CloseCallVanUseCase
+    private let reopenCallVanUseCase: ReopenCallVanUseCase
+    private let completeCallVanUseCase: CompleteCallVanUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var filterState = CallVanListRequest()
@@ -35,10 +48,21 @@ final class CallVanListViewModel: ViewModelProtocol {
     // MARK: - Intializer
     init(checkLoginUseCase: CheckLoginUseCase,
          fetchCallVanListUseCase: FetchCallVanListUseCase,
-         fetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase) {
+         fetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase,
+         participateCallVanUseCase: ParticipateCallVanUseCase,
+         quitCallVanUseCase: QuitCallVanUseCase,
+         closeCallVanUseCase: CloseCallVanUseCase,
+         reopenCallVanUseCase: ReopenCallVanUseCase,
+         completeCallVanUseCase: CompleteCallVanUseCase
+    ) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchCallVanListUseCase = fetchCallVanListUseCase
         self.fetchCallVanNotificationListUseCase = fetchCallVanNotificationListUseCase
+        self.participateCallVanUseCase = participateCallVanUseCase
+        self.quitCallVanUseCase = quitCallVanUseCase
+        self.closeCallVanUseCase = closeCallVanUseCase
+        self.reopenCallVanUseCase = reopenCallVanUseCase
+        self.completeCallVanUseCase = completeCallVanUseCase
     }
     
     // MARK: - Transform
@@ -46,8 +70,8 @@ final class CallVanListViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case .checkLoginToParticapate:
-                checkLoginToParticapate()
+            case let .checkLoginToParticapate(postId):
+                checkLoginToParticapate(postId)
             case .viewDidLoad:
                 loadList()
                 fetchNotification()
@@ -57,6 +81,16 @@ final class CallVanListViewModel: ViewModelProtocol {
                 updateFilterTitle(title)
             case let .updateFilterState(filterState):
                 updateFilterState(filterState)
+            case let .participate(postId):
+                participate(postId)
+            case let .quit(postId):
+                quit(postId)
+            case let .close(postId):
+                close(postId)
+            case let .reopen(postId):
+                reopen(postId)
+            case let .complete(postId):
+                complete(postId)
             }
         }.store(in: &subscriptions)
         
@@ -66,10 +100,10 @@ final class CallVanListViewModel: ViewModelProtocol {
 
 extension CallVanListViewModel {
     
-    private func checkLoginToParticapate() {
+    private func checkLoginToParticapate(_ postId: Int) {
         checkLoginUseCase.execute().sink(receiveValue: { [weak self] isLoggedIn in
             guard let self else { return }
-            outputSubject.send(.didCheckLoginToParticapate(isLoggedIn))
+            outputSubject.send(.didCheckLoginToParticapate(isLoggedIn, postId))
         }).store(in: &subscriptions)
     }
     
@@ -101,7 +135,30 @@ extension CallVanListViewModel {
     
     private func loadList() {
         fetchCallVanListUseCase.execute(request: filterState).sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { [weak self] callVanList in
+                guard let self else { return }
+                filterState.page = callVanList.currentPage
+                outputSubject.send(.resetList(callVanList.posts))
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func reloadList() {
+        var filterState = self.filterState
+        filterState.limit = filterState.limit * filterState.page
+        filterState.page = 1
+        
+        fetchCallVanListUseCase.execute(request: filterState).sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { [weak self] callVanList in
                 guard let self else { return }
                 filterState.page = callVanList.currentPage
@@ -113,7 +170,11 @@ extension CallVanListViewModel {
     private func loadMoreList() {
         filterState.page += 1
         fetchCallVanListUseCase.execute(request: filterState).sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { [weak self] callVanList in
                 guard let self else { return }
                 if filterState.page == callVanList.currentPage {
@@ -123,6 +184,75 @@ extension CallVanListViewModel {
                     outputSubject.send(.appendList([]))
                 }
             }
+        ).store(in: &subscriptions)
+    }
+    
+    private func participate(_ postId: Int) {
+        participateCallVanUseCase.execute(postId: postId).sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished:
+                    self?.reloadList()
+                case .failure(let error):
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { _ in}
+        ).store(in: &subscriptions)
+    }
+    
+    private func quit(_ postId: Int) {
+        quitCallVanUseCase.execute(postId: postId).sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished:
+                    self?.reloadList()
+                case .failure(let error):
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { _ in}
+        ).store(in: &subscriptions)
+    }
+    
+    private func close(_ postId: Int) {
+        closeCallVanUseCase.execute(postId: postId).sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished:
+                    self?.reloadList()
+                case .failure(let error):
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { _ in}
+        ).store(in: &subscriptions)
+    }
+    
+    private func reopen(_ postId: Int) {
+        reopenCallVanUseCase.execute(postId: postId).sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished:
+                    self?.reloadList()
+                case .failure(let error):
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { _ in}
+        ).store(in: &subscriptions)
+    }
+    private func complete(_ postId: Int) {
+        completeCallVanUseCase.execute(postId: postId).sink(
+            receiveCompletion: { [weak self] completion in
+                switch completion {
+                case .finished:
+                    self?.outputSubject.send(.deleteListItem(postId))
+                case .failure(let error):
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { _ in}
         ).store(in: &subscriptions)
     }
 }

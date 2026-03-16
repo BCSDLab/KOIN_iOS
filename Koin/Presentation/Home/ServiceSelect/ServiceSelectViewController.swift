@@ -158,10 +158,20 @@ extension ServiceSelectViewController {
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
         let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let participateCallVanUseCase = DefaultParticipateCallVanUseCase(repository: callVanRepository)
+        let quitCallVanUseCase = DefaultQuitCallVanUseCase(repository: callVanRepository)
+        let closeCallVanUseCase = DefaultCloseCallVanUseCase(repository: callVanRepository)
+        let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
+        let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchCallVanListUseCase: fetchCallVanListUseCase,
-            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            participateCallVanUseCase: participateCallVanUseCase,
+            quitCallVanUseCase: quitCallVanUseCase,
+            closeCallVanUseCase: closeCallVanUseCase,
+            reopenCallVanUseCase: reopenCallVanUseCase,
+            completeCallVanUseCase: completeCallVanUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

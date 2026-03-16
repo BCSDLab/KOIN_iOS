@@ -21,6 +21,6 @@ final class DefaultFetchCallVanListUseCase: FetchCallVanListUseCase {
     }
     
     func execute(request: CallVanListRequest) -> AnyPublisher<CallVanList, ErrorResponse> {
-        repository.fetchCallVanList(request)
+        repository.fetchCallVanList(request: request)
     }
 }

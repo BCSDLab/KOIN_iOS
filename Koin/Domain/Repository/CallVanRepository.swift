@@ -9,11 +9,16 @@ import Foundation
 import Combine
 
 protocol CallVanRepository {
-    func fetchCallVanList(_ request: CallVanListRequest) -> AnyPublisher<CallVanList, ErrorResponse>
+    func fetchCallVanList(request: CallVanListRequest) -> AnyPublisher<CallVanList, ErrorResponse>
     func fetchNotification() -> AnyPublisher<[CallVanNotification], ErrorResponse>
-    func postNotificationRead(_ notificationId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func postNotificationRead(notificationId: Int) -> AnyPublisher<Void, ErrorResponse>
     func postAllNotificationsRead() -> AnyPublisher<Void, ErrorResponse>
-    func deleteNotification(_ notificationId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func deleteNotification(notificationId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteAllNotifications() -> AnyPublisher<Void, ErrorResponse>
-    func postData(_ request: CallVanPostRequest) -> AnyPublisher<CallVanListPost, ErrorResponse>
+    func postData(request: CallVanPostRequest) -> AnyPublisher<CallVanListPost, ErrorResponse>
+    func participate(postId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func quit(postId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func close(postId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func reopen(postId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func complete(postId: Int) -> AnyPublisher<Void, ErrorResponse>
 }
