@@ -11,10 +11,10 @@ import UIKit
 final class CallVanReportImagesCollectionView: UICollectionView {
     
     // MARK: - Properties
-    let imageCountPublisher = PassthroughSubject<[String], Never>()
+    let imagesCountPublisher = PassthroughSubject<Int, Never>()
     private(set) var imageUrls: [String] = [] {
         didSet {
-            imageCountPublisher.send(imageUrls)
+            imagesCountPublisher.send(imageUrls.count)
         }
     }
     
@@ -72,12 +72,20 @@ extension CallVanReportImagesCollectionView: UICollectionViewDataSource {
 }
 
 extension CallVanReportImagesCollectionView {
-
+    
     private func bind(_ cell: CallVanReportImagesCollectionViewCell) {
-        cell.cancelButtonPublisher.sink { [weak self] imageUrl in
-            guard let self else { return }
-            imageUrls = imageUrls.filter { $0 != imageUrl }
-            reloadData()
-        }.store(in: &cell.subscriptions)
+        cell.cancelButtonPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] imageUrl in
+                guard let self else { return }
+                performBatchUpdates { [weak self] in
+                    guard let self else { return }
+                    if let index = imageUrls.firstIndex(of: imageUrl) {
+                        imageUrls.remove(at: index)
+                        let indexPath = IndexPath(row: index, section: 0)
+                        deleteItems(at: [indexPath])
+                    }
+                }
+            }.store(in: &cell.subscriptions)
     }
 }

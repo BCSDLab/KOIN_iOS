@@ -89,8 +89,7 @@ extension CallVanReportImagesCollectionViewCell {
             $0.clipsToBounds = true
         }
         cancelButton.do {
-            $0.setImage(UIImage.appImage(asset: .cancelBlue)?.withRenderingMode(.alwaysTemplate), for: .normal)
-            $0.tintColor = UIColor.appColor(.new900)
+            $0.setImage(UIImage.appImage(asset: .callVanCancel), for: .normal)
         }
     }
     

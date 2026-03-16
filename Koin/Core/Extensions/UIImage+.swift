@@ -18,6 +18,7 @@ enum ImageAsset: String {
     case bell
     case bellNotification
     case callVanCall
+    case callVanCancel
     case callVanCar
     case callVanChat
     case callVanPlus
