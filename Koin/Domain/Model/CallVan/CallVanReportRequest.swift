@@ -9,11 +9,13 @@ import Foundation
 
 struct CallVanReportRequest {
     let reportedUserId: Int
-    let reasons: [CallVanReportRequestReason]
+    var reasons: [CallVanReportRequestReason] = []
+    var descriptions: String?
+    var imageUrls: [String] = []
 }
 
 struct CallVanReportRequestReason {
-    var reasonCode: CallVanReportRequestReasonCode?
+    var reasonCode: CallVanReportRequestReasonCode
     var customReason: String?
 }
 
@@ -35,4 +37,13 @@ enum CallVanReportRequestReasonCode: String {
             return ""
         }
     }
+}
+
+struct CallVanReportRequestAttachment {
+    let attachmentType: CallVanReportRequestAttachmentType
+    let url: String?
+}
+
+enum CallVanReportRequestAttachmentType {
+    case image
 }

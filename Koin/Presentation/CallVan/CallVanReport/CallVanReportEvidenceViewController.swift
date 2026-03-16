@@ -12,6 +12,8 @@ import Combine
 final class CallVanReportEvidenceViewController: UIViewController {
     
     // MARK: - Properties
+    private let inputSubject = PassthroughSubject<CallVanReportViewModel.Input, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     private let viewModel: CallVanReportViewModel
     private let placeHolder = "신고 상황을 확인하기 위해 자세히 작성해주세요."
     private let maximumContextLength = 1000
@@ -60,10 +62,39 @@ final class CallVanReportEvidenceViewController: UIViewController {
         setDelegates()
         setAddTargets()
         addObserver()
+        bind()
+    }
+    
+    private func bind() {
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+            guard let self else { return }
+            switch output {
+            case let .showToast(message):
+                showToastMessage(message: message)
+            case let .apeendImageUrl(imageUrl):
+                evidenceImagesCollectionView.addImageUrl(imageUrl)
+            case .reportCompleted:
+                handleReportCompletion()
+            case .validateNextButton:
+                break
+            }
+        }.store(in: &subscriptions)
+        
+        evidenceImagesCollectionView.imagesCountPublisher.sink { [weak self] imagesCount in
+            guard let self else { return }
+            evidenceCountLabel.text = "\(imagesCount)/\(maxImagesCount)"
+        }.store(in: &subscriptions)
     }
 }
 
 extension CallVanReportEvidenceViewController {
+    
+    private func handleReportCompletion() {
+        if let viewController = navigationController?.viewControllers.first(where: { $0 is CallVanDataViewController }) {
+            navigationController?.popToViewController(viewController, animated: true)
+        }
+        showToast(message: "사용자가 신고되었습니다.")
+    }
     
     private func setAddTargets() {
         evidenceImageButton.addTarget(self, action: #selector(evidenceImageButtonTapped), for: .touchUpInside)
@@ -71,12 +102,7 @@ extension CallVanReportEvidenceViewController {
     }
     
     @objc private func reportButtonTapped() {
-        guard let viewController = navigationController?.viewControllers.first(where: { $0 is CallVanDataViewController }) else {
-            assert(false)
-            return
-        }
-        navigationController?.popToViewController(viewController, animated: true)
-        showToast(message: "사용자가 신고되었습니다.")
+        inputSubject.send(.report(evidenceImagesCollectionView.imageUrls))
     }
 }
 
@@ -146,7 +172,7 @@ extension CallVanReportEvidenceViewController: PHPickerViewControllerDelegate {
         guard let imageData = image.jpegData(compressionQuality: 0.5) else {
             return
         }
-//        inputSubject.send(.uploadFile([imageData]))
+        inputSubject.send(.uploadImage(imageData))
     }
 }
 

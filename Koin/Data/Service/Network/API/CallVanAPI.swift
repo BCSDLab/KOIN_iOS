@@ -21,6 +21,8 @@ enum CallVanAPI {
     case close(Int)
     case reopen(Int)
     case complete(Int)
+    case fetchCallVanData(Int)
+    case report(Int, CallVanReportRequestDto)
 }
 
 extension CallVanAPI: Router, URLRequestConvertible {
@@ -43,6 +45,8 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .close(let postId): return "/callvan/posts/\(postId)/close"
         case .reopen(let postId): return "/callvan/posts/\(postId)/reopen"
         case .complete(let postId): return "/callvan/posts/\(postId)/complete"
+        case .fetchCallVanData(let postId): return "/callvan/posts/\(postId)"
+        case .report(let postId, _): return "/callvan/posts/\(postId)/reports"
         }
     }
     
@@ -60,13 +64,20 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .close: return .put
         case .reopen: return .put
         case .complete: return .put
+        case .fetchCallVanData: return .get
+        case .report: return .post
         }
     }
     
     public var headers: [String: String] {
+        var baseHeaders: [String: String] = [:]
         switch self {
-        default: return [:]
+        case .report:
+            baseHeaders["Content-Type"] = "application/json"
+        default:
+            break
         }
+        return baseHeaders
     }
     
     public var parameters: Any? {
@@ -74,6 +85,8 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .fetchCallVanList(let request):
             return try? request.toDictionary()
         case .postData(let request):
+            return try? request.toDictionary()
+        case .report(_, let request):
             return try? request.toDictionary()
         default:
             return nil
@@ -83,7 +96,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCallVanList:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .postData:
+        case .postData, .report:
             return JSONEncoding.default
         default:
             return nil

@@ -83,10 +83,11 @@ extension CallVanReportReasonViewController {
             switch output {
             case let .validateNextButton(validation):
                 updateNextButton(validation)
+            case .apeendImageUrl, .showToast, .reportCompleted:
+                break
             }
         }.store(in: &subscriptions)
     }
-    
 }
 
 extension CallVanReportReasonViewController {

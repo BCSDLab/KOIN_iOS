@@ -108,7 +108,16 @@ extension CallVanDataViewController {
 extension CallVanDataViewController {
     
     private func navigateToReport(_ userId: Int) {
-        let viewModel = CallVanReportViewModel(reportedUserId: userId)
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let reportCallVanUserUseCase = DefaultReportCallVanUserUseCase(repository: callVanRepository)
+        let viewModel = CallVanReportViewModel(
+            postId: viewModel.postId,
+            reportedUserId: userId,
+            uploadFileUseCase: uploadFileUseCase,
+            reportCallVanUserUseCase: reportCallVanUserUseCase
+        )
         let viewController = CallVanReportReasonViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
