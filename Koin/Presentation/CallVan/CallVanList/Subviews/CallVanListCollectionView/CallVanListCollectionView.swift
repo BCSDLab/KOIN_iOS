@@ -18,6 +18,7 @@ final class CallVanListCollectionView: UICollectionView {
     let callButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let postTappedPublisher = PassthroughSubject<Int, Never>()
     let loadMoreListPublisher = PassthroughSubject<Void, Never>()
+    let didScrollPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var posts: [CallVanListPost] = []
     private var isWaiting = true

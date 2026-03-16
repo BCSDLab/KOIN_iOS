@@ -58,18 +58,18 @@ extension CallVanPostTimeView {
     
     private func bind() {
         timeDropDownView.selectedItemPublisher.sink { [weak self] selectedItems in
-            self?.amPmLabel.text = selectedItems[0] == "AM" ? "오전" : "오후"
-            
+            let amPm = selectedItems[0] == "AM" ? "오전" : "오후"
             var hour = selectedItems[1]
             if hour.count == 1 {
                 hour = "0" + hour
             }
             let minute = selectedItems[2]
             
+            self?.amPmLabel.text = amPm
             self?.timeLabel.text =  "\(hour):\(minute)"
             
-            self?.formatter.dateFormat = "HH:mm"
-            if let date = self?.formatter.date(from: "\(hour):\(minute)") {
+            self?.formatter.dateFormat = "a hh:mm"
+            if let date = self?.formatter.date(from: "\(amPm) \(hour):\(minute)") {
                 self?.timeChangedPublisher.send(date)
             }
         }.store(in: &subscriptions)

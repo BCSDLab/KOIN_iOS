@@ -11,34 +11,29 @@ import SnapKit
 
 extension CallVanBottomSheetViewController {
     
-    convenience init(isLoggedIn: Bool?, state: CallVanState, onMainButtonTapped: @escaping () -> Void) {
-        let isLoggedIn = isLoggedIn ?? true
+    convenience init(state: CallVanState, onMainButtonTapped: @escaping () -> Void) {
         let titleText: String
         var subTitleLabel: UILabel? = nil
         let mainButtonText: String
         let closeButtonText: String
-        switch (isLoggedIn, state) {
-        case (false, .참여하기):
-            titleText = "콜밴팟에 참여하려면 로그인이 필요해요."
-            mainButtonText = "로그인하기"
-            closeButtonText = "닫기"
-        case (true, .참여하기):
+        switch state {
+        case .참여하기:
             titleText = "해당 콜밴팟에 참여할까요?"
             mainButtonText = "예"
             closeButtonText = "아니요"
-        case (_ ,.참여취소):
+        case .참여취소:
             titleText = "해당 콜밴팟 참여를 취소할까요?"
             mainButtonText = "예"
             closeButtonText = "아니요"
-        case (_, .마감하기):
+        case .마감하기:
             titleText = "해당 콜밴팟 모집을 마감할까요?"
             mainButtonText = "예"
             closeButtonText = "아니요"
-        case (_, .재모집):
+        case .재모집:
             titleText = "해당 콜밴팟을 다시 모집할까요?"
             mainButtonText = "예"
             closeButtonText = "아니요"
-        case (_, .이용완료):
+        case .이용완료:
             titleText = "이용 완료 상태로 변경할까요?"
             subTitleLabel = UILabel().then {
                 let paragraphStyle = NSMutableParagraphStyle()
@@ -54,7 +49,7 @@ extension CallVanBottomSheetViewController {
             }
             mainButtonText = "예"
             closeButtonText = "아니요"
-        case (_, .모집마감):
+        case .모집마감:
             titleText = ""
             mainButtonText = ""
             closeButtonText = ""

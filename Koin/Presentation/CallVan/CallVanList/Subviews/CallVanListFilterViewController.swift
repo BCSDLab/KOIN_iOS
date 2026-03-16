@@ -408,8 +408,12 @@ extension CallVanListFilterViewController {
         if departure == .all {
             filter.departure = [.all]
         } else {
-            filter.departure = filter.departure.filter { $0 != .all }
-            filter.departure.insert(departure)
+            filter.departure.remove(.all)
+            if filter.departure == [departure] {
+                return
+            } else {
+                filter.departure.formSymmetricDifference([departure])
+            }
         }
     }
     
@@ -422,8 +426,12 @@ extension CallVanListFilterViewController {
         if arrival == .all {
             filter.arrival = [.all]
         } else {
-            filter.arrival = filter.arrival.filter { $0 != .all }
-            filter.arrival.insert(arrival)
+            filter.arrival.remove(.all)
+            if filter.arrival == [arrival] {
+                return
+            } else {
+                filter.arrival.formSymmetricDifference([arrival])
+            }
         }
     }
     
