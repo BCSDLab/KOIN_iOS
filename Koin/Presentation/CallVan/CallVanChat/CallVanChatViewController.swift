@@ -72,6 +72,14 @@ final class CallVanChatViewController: UIViewController {
                 callVanChatTableView.configure(callVanChat: callVanChat)
             }
         }.store(in: &subscriptions)
+        
+        callVanChatTableView.imageTappedPublisher.sink { [weak self] imageUrl in
+            let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
+            zoomedImageViewController.configure(url: imageUrl)
+            zoomedImageViewController.modalTransitionStyle = .crossDissolve
+            zoomedImageViewController.modalPresentationStyle = .overFullScreen
+            self?.present(zoomedImageViewController, animated: true)
+        }.store(in: &subscriptions)
     }
 }
 

@@ -85,6 +85,7 @@ final class CallVanListCollectionView: UICollectionView {
 extension CallVanListCollectionView {
     
     private func commonInit() {
+        keyboardDismissMode = .interactive
         delegate = self
         dataSource = self
         register(CallVanListCollectionViewCell.self, forCellWithReuseIdentifier: CallVanListCollectionViewCell.identifier)

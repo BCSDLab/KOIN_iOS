@@ -6,11 +6,13 @@
 //
 
 import UIKit
+import Combine
 import Then
 
 final class CallVanChatTableView: UITableView {
     
     // MARK: - Properties
+    let imageTappedPublisher = PassthroughSubject<String, Never>()
     private var dates: [String] = []
     private var messages: [[CallVanChatMessage]] = []
     
@@ -39,7 +41,8 @@ extension CallVanChatTableView {
         sectionHeaderTopPadding = 0
         sectionFooterHeight = 51
         rowHeight = UITableView.automaticDimension
-        
+        tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: CGFloat.leastNonzeroMagnitude))
+        keyboardDismissMode = .interactiveWithAccessory
         delegate = self
         dataSource = self
         register(CallVanChatLeftCell.self, forCellReuseIdentifier: CallVanChatLeftCell.identifier)
@@ -77,13 +80,27 @@ extension CallVanChatTableView: UITableViewDataSource {
                 return UITableViewCell()
             }
             cell.configure(message: message)
+            bind(cell)
             return cell
         } else {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: CallVanChatLeftCell.identifier, for: indexPath) as? CallVanChatLeftCell else {
                 return UITableViewCell()
             }
             cell.configure(message: message)
+            bind(cell)
             return cell
         }
+    }
+    
+    private func bind(_ cell: CallVanChatLeftCell) {
+        cell.imageTappedPublisher.sink { [weak self] imageUrl in
+            self?.imageTappedPublisher.send(imageUrl)
+        }.store(in: &cell.subscriptions)
+    }
+    
+    private func bind(_ cell: CallVanChatRightCell) {
+        cell.imageTappedPublisher.sink { [weak self] imageUrl in
+            self?.imageTappedPublisher.send(imageUrl)
+        }.store(in: &cell.subscriptions)
     }
 }

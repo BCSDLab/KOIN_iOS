@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import Combine
 import SnapKit
 import Then
 
 final class CallVanChatLeftCell: UITableViewCell {
     
     // MARK: - Properties
+    let imageTappedPublisher = PassthroughSubject<String, Never>()
+    var subscriptions: Set<AnyCancellable> = []
+    private var imageUrl: String?
     private let messageTextLabelAttributes: [NSAttributedString.Key : Any] = {
         let font = UIFont.appFont(.pretendardRegular, size: 12)
         let paragraph = NSMutableParagraphStyle()
@@ -44,6 +48,7 @@ final class CallVanChatLeftCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
+        setGesture()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -61,6 +66,7 @@ final class CallVanChatLeftCell: UITableViewCell {
         // MARK: 이미지
         messageImageWrapperView.isHidden = !message.isImage
         if message.isImage {
+            imageUrl = message.content
             messageImageView.loadImageWithSpinner(from: message.content)
             messageImageTimeLabel.text = message.time
         }
@@ -81,6 +87,22 @@ extension CallVanChatLeftCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         messageImageView.image = nil
+        imageUrl = nil
+        subscriptions.forEach {
+            $0.cancel()
+        }
+        subscriptions.removeAll()
+    }
+    
+    private func setGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
+        messageImageView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func imageTapped() {
+        if let imageUrl {
+            imageTappedPublisher.send(imageUrl)
+        }
     }
 }
 
@@ -116,6 +138,7 @@ extension CallVanChatLeftCell {
         // MARK: 이미지
         messageImageView.do {
             $0.backgroundColor = UIColor.appColor(.neutral100)
+            $0.isUserInteractionEnabled = true
         }
         messageImageTimeLabel.do {
             $0.font = UIFont.appFont(.pretendardRegular, size: 12)
@@ -150,7 +173,7 @@ extension CallVanChatLeftCell {
             contentsStackView.addArrangedSubview($0)
         }
         [contentsStackView].forEach {
-            addSubview($0)
+            contentView.addSubview($0)
         }
     }
     
