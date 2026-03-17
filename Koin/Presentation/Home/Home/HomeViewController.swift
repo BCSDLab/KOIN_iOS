@@ -298,11 +298,13 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         callVanView.findButtonTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_callvan_view", value: "", category: "click"))
             self?.navigateToCallVanList()
         }.store(in: &subscriptions)
         
         callVanView.postButtonTappedPublisher.sink { [weak self] in
             guard let self else { return }
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_callvan_write", value: "", category: "click"))
             if viewModel.isLoggedIn {
                 navigateToCallVanPost()
             } else {
