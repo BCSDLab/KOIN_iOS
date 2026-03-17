@@ -35,14 +35,14 @@ final class CallVanDataView: UIView {
         participantsLabel.text = "\(callVanData.currentParticipants)/\(callVanData.maxParticipants)"
         
         departureLabel.attributedText = NSAttributedString(
-            string: callVanData.departure,
+            string: "출발: \(callVanData.departure)",
             attributes: [
                 .font : UIFont.appFont(.pretendardMedium, size: 14),
                 .foregroundColor : UIColor.appColor(.neutral800)
             ]
         )
         arrivalLabel.attributedText = NSAttributedString(
-            string: callVanData.arrival,
+            string: "도착: \(callVanData.arrival)",
             attributes: [
                 .font : UIFont.appFont(.pretendardMedium, size: 14),
                 .foregroundColor : UIColor.appColor(.neutral800)

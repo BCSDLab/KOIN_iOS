@@ -96,6 +96,7 @@ extension CallVanListViewController {
         let bellButton = UIBarButtonItem(image: image?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(bellButtonTapped))
         navigationItem.rightBarButtonItem = bellButton
     }
+    
     @objc private func bellButtonTapped() {
         dismissKeyboard()
         
@@ -175,7 +176,11 @@ extension CallVanListViewController {
     private func navigateToCallVanData(_ postId: Int) {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
-        let viewModel = CallVanDataViewModel(postId: postId, fetchCallVanDataUseCase: fetchCallVanDataUseCase)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let viewModel = CallVanDataViewModel(
+            postId: postId,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
         let viewController = CallVanDataViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -243,11 +248,13 @@ extension CallVanListViewController {
         let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
         let fetchCallVanChatUseCase = DefaultFetchCallVanChatUseCase(repository: callVanRepository)
         let postCallVanChatUseCase = DefaultPostCallVanChatUseCase(repository: callVanRepository)
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
         let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
         let viewModel = CallVanChatViewModel(
             postId: postId,
             fetchCallVanChatUseCase: fetchCallVanChatUseCase,
             postCallVanChatUseCase: postCallVanChatUseCase,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
             uploadFileUseCase: uploadFileUseCase)
         let viewController = CallVanChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

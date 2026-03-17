@@ -11,6 +11,7 @@ import Combine
 final class CallVanChatViewModel: ViewModelProtocol {
     
     enum Input {
+        case viewDidLoad
         case viewWillAppear
         case viewWillDisappear
         case sendMessage(String)
@@ -19,11 +20,13 @@ final class CallVanChatViewModel: ViewModelProtocol {
     enum Output {
         case update(CallVanChat)
         case showToast(String)
+        case updateData(CallVanData)
     }
     
     // MARK: - Properties
     private let fetchCallVanChatUseCase: FetchCallVanChatUseCase
     private let postCallVanChatUseCase: PostCallVanChatUseCase
+    private let fetchCallVanDataUseCase: FetchCallVanDataUseCase
     private let uploadFileUseCase: UploadFileUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var pollingSubscription: AnyCancellable?
@@ -34,10 +37,12 @@ final class CallVanChatViewModel: ViewModelProtocol {
     init(postId: Int,
          fetchCallVanChatUseCase: FetchCallVanChatUseCase,
          postCallVanChatUseCase: PostCallVanChatUseCase,
+         fetchCallVanDataUseCase: FetchCallVanDataUseCase,
          uploadFileUseCase: UploadFileUseCase) {
         self.postId = postId
         self.fetchCallVanChatUseCase = fetchCallVanChatUseCase
         self.postCallVanChatUseCase = postCallVanChatUseCase
+        self.fetchCallVanDataUseCase = fetchCallVanDataUseCase
         self.uploadFileUseCase = uploadFileUseCase
     }
     
@@ -46,6 +51,8 @@ final class CallVanChatViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
+            case .viewDidLoad:
+                fetchData()
             case .viewWillAppear:
                 startPolling()
             case .viewWillDisappear:
@@ -112,6 +119,15 @@ extension CallVanChatViewModel {
                     let request = CallVanChatRequest(isImage: true, content: imageUrl)
                     self?.postCallVanChat(request)
                 }
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func fetchData() {
+        fetchCallVanDataUseCase.execute(postId: postId).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] callVanData in
+                self?.outputSubject.send(.updateData(callVanData))
             }
         ).store(in: &subscriptions)
     }

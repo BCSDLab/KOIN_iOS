@@ -12,6 +12,7 @@ final class CallVanDataViewModel: ViewModelProtocol {
     
     enum Output {
         case update(CallVanData)
+        case updateBellWithNotification
     }
     enum Input {
         case viewDidLoad
@@ -20,16 +21,19 @@ final class CallVanDataViewModel: ViewModelProtocol {
     // MARK: - Properties
     let postId: Int
     private let fetchCallVanDataUseCase: FetchCallVanDataUseCase
+    private let fetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Initializer
     init(
         postId: Int,
-        fetchCallVanDataUseCase: FetchCallVanDataUseCase
+        fetchCallVanDataUseCase: FetchCallVanDataUseCase,
+        fetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase
     ) {
         self.postId = postId
         self.fetchCallVanDataUseCase = fetchCallVanDataUseCase
+        self.fetchCallVanNotificationListUseCase = fetchCallVanNotificationListUseCase
     }
     
     // MARK: - Public
@@ -39,6 +43,7 @@ final class CallVanDataViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad:
                 fetchData()
+                fetchNotification()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -52,6 +57,17 @@ extension CallVanDataViewModel {
             receiveCompletion: { _ in },
             receiveValue: { [weak self] callVanData in
                 self?.outputSubject.send(.update(callVanData))
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func fetchNotification() {
+        fetchCallVanNotificationListUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] notifications in
+                if 0 < notifications.count {
+                    self?.outputSubject.send(.updateBellWithNotification)
+                }
             }
         ).store(in: &subscriptions)
     }

@@ -78,8 +78,8 @@ extension CallVanDataDto {
         
         return CallVanData(
             id: id,
-            departure: "출발: \(departure)",
-            arrival: "도착: \(arrival)",
+            departure: departure,
+            arrival: arrival,
             dateTime: dateTime(departureDate: departureDate, departureTime: departureTime),
             currentParticipants: currentParticipants,
             maxParticipants: maxParticipants,

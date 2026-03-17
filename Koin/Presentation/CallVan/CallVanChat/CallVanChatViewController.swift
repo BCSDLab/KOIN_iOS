@@ -46,10 +46,11 @@ final class CallVanChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        configureNavigationBar()
         setDelegate()
         setAddTargets()
         bind()
+        configureNavigationBar(style: .empty)
+        inputSubject.send(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -70,6 +71,8 @@ final class CallVanChatViewController: UIViewController {
                 showToastMessage(message: message)
             case let .update(callVanChat):
                 callVanChatTableView.configure(callVanChat: callVanChat)
+            case let .updateData(callVanData):
+                configureNavigationBar(callVanData)
             }
         }.store(in: &subscriptions)
         
@@ -161,7 +164,22 @@ extension CallVanChatViewController: UITextViewDelegate {
 
 extension CallVanChatViewController {
     
-    private func configureNavigationBar() {
+    private func configureNavigationBar(_ callVanData: CallVanData) {
+        titleLabel.do {
+            $0.text = "\(callVanData.departure) - \(callVanData.arrival)"
+            $0.textColor = UIColor.appColor(.neutral800)
+            $0.font = UIFont.appFont(.pretendardMedium, size: 15)
+        }
+        peopleImageView.do {
+            $0.image = UIImage.appImage(asset: .callVanListPeople)?.withRenderingMode(.alwaysTemplate)
+            $0.tintColor = UIColor.appColor(.neutral600)
+        }
+        paritipantsLabel.do {
+            $0.text = "\(callVanData.currentParticipants)/\(callVanData.maxParticipants)"
+            $0.textColor = UIColor.appColor(.neutral600)
+            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        }
+        
         navigationItem.titleView = titleView
         
         let appearance = UINavigationBarAppearance()
@@ -183,22 +201,6 @@ extension CallVanChatViewController {
     
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral100)
-        
-        // MARK: - TitleView
-        titleLabel.do {
-            $0.text = "테니스장 - 천안터미널 16:00" //\(viewModel.callVanPost.title) \(viewModel.callVanPost.departureTime)"
-            $0.textColor = UIColor.appColor(.neutral800)
-            $0.font = UIFont.appFont(.pretendardMedium, size: 15)
-        }
-        peopleImageView.do {
-            $0.image = UIImage.appImage(asset: .callVanListPeople)?.withRenderingMode(.alwaysTemplate)
-            $0.tintColor = UIColor.appColor(.neutral600)
-        }
-        paritipantsLabel.do {
-            $0.text = "6/8" //"\(viewModel.callVanPost.currentParticipants)/\(viewModel.callVanPost.maxParticipants)"
-            $0.textColor = UIColor.appColor(.neutral600)
-            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        }
         
         // MARK: - UI Components
         callVanChatTableView.do {

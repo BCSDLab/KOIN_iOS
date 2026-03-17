@@ -9,8 +9,8 @@ import UIKit
 
 struct CallVanData {
     let id: Int
-    let departure: String
-    let arrival: String
+    var departure: String
+    var arrival: String
     let dateTime: String
     let currentParticipants: Int
     let maxParticipants: Int
