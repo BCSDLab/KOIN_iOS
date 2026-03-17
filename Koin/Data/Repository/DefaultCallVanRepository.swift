@@ -90,4 +90,17 @@ final class DefaultCallVanRepository: CallVanRepository {
         let request = CallVanReportRequestDto(from: request)
         return service.report(postId: postId, request: request)
     }
+    
+    func fetchCallVanChat(postId: Int) -> AnyPublisher<CallVanChat, ErrorResponse> {
+        return service.fetchCallVanChat(postId: postId)
+            .map {
+                $0.toDomain()
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func postCallVanChat(postId: Int, request: CallVanChatRequest) -> AnyPublisher<Void, ErrorResponse> {
+        let request = CallVanChatRequestDto(from: request)
+        return service.postCallVanChat(postId: postId, request: request)
+    }
 }

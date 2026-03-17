@@ -23,6 +23,8 @@ protocol CallVanService {
     func complete(postId: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchCallVanData(postId: Int) -> AnyPublisher<CallVanDataDto, ErrorResponse>
     func report(postId: Int, request: CallVanReportRequestDto) -> AnyPublisher<Void, ErrorResponse>
+    func fetchCallVanChat(postId: Int) -> AnyPublisher<CallVanChatDto, ErrorResponse>
+    func postCallVanChat(postId: Int, request: CallVanChatRequestDto) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultCallVanService: CallVanService {
@@ -83,5 +85,13 @@ final class DefaultCallVanService: CallVanService {
     
     func report(postId: Int, request: CallVanReportRequestDto) -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: CallVanAPI.report(postId, request))
+    }
+    
+    func fetchCallVanChat(postId: Int) -> AnyPublisher<CallVanChatDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: CallVanAPI.fetchCallVanChat(postId))
+    }
+    
+    func postCallVanChat(postId: Int, request: CallVanChatRequestDto) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: CallVanAPI.postCallVanChat(postId, request))
     }
 }

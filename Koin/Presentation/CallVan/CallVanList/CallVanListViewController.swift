@@ -239,7 +239,16 @@ extension CallVanListViewController {
         
     }
     private func chatButtonTapped(postId: Int) {
-        let viewModel = CallVanChatViewModel(postId: postId)
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let fetchCallVanChatUseCase = DefaultFetchCallVanChatUseCase(repository: callVanRepository)
+        let postCallVanChatUseCase = DefaultPostCallVanChatUseCase(repository: callVanRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let viewModel = CallVanChatViewModel(
+            postId: postId,
+            fetchCallVanChatUseCase: fetchCallVanChatUseCase,
+            postCallVanChatUseCase: postCallVanChatUseCase,
+            uploadFileUseCase: uploadFileUseCase)
         let viewController = CallVanChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

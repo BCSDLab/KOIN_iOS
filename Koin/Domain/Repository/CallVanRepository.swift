@@ -23,4 +23,6 @@ protocol CallVanRepository {
     func complete(postId: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchCallVanData(postId: Int) -> AnyPublisher<CallVanData, ErrorResponse>
     func report(postId: Int, request: CallVanReportRequest) -> AnyPublisher<Void, ErrorResponse>
+    func fetchCallVanChat(postId: Int) -> AnyPublisher<CallVanChat, ErrorResponse>
+    func postCallVanChat(postId: Int, request: CallVanChatRequest) -> AnyPublisher<Void, ErrorResponse>
 }

@@ -23,6 +23,8 @@ enum CallVanAPI {
     case complete(Int)
     case fetchCallVanData(Int)
     case report(Int, CallVanReportRequestDto)
+    case fetchCallVanChat(Int)
+    case postCallVanChat(Int, CallVanChatRequestDto)
 }
 
 extension CallVanAPI: Router, URLRequestConvertible {
@@ -47,6 +49,8 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .complete(let postId): return "/callvan/posts/\(postId)/complete"
         case .fetchCallVanData(let postId): return "/callvan/posts/\(postId)"
         case .report(let postId, _): return "/callvan/posts/\(postId)/reports"
+        case .fetchCallVanChat(let postId): return "/callvan/posts/\(postId)/chat"
+        case .postCallVanChat(let postId, _): return "/callvan/posts/\(postId)/chat"
         }
     }
     
@@ -66,13 +70,15 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .complete: return .put
         case .fetchCallVanData: return .get
         case .report: return .post
+        case .fetchCallVanChat: return .get
+        case .postCallVanChat: return .post
         }
     }
     
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .report:
+        case .report, .postCallVanChat:
             baseHeaders["Content-Type"] = "application/json"
         default:
             break
@@ -88,6 +94,8 @@ extension CallVanAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .report(_, let request):
             return try? request.toDictionary()
+        case .postCallVanChat(_, let request):
+            return try? request.toDictionary()
         default:
             return nil
         }
@@ -96,7 +104,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCallVanList:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .postData, .report:
+        case .postData, .report, .postCallVanChat:
             return JSONEncoding.default
         default:
             return nil
