@@ -153,7 +153,7 @@ extension CallVanListViewModel {
     }
     
     private func refresh() {
-        DispatchQueue.global().asyncAfter(deadline: .now()+0.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
             guard let self else { return }
             filterState.page = 1
             loadList()
@@ -194,6 +194,7 @@ extension CallVanListViewModel {
         fetchCallVanListUseCase.execute(request: filterState).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
+                    self?.filterState.page -= 1
                     self?.outputSubject.send(.showToast(error.message))
                 }
             },

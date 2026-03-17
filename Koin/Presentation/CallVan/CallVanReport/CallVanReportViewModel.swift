@@ -69,7 +69,7 @@ extension CallVanReportViewModel {
     private func updateReasonCode(_ reasonCode: CallVanReportRequestReasonCode, _ isSelected: Bool) {
         if isSelected {
             let reason = CallVanReportRequestReason(reasonCode: reasonCode, customReason: nil)
-            reportRequest.reasons.append(reason)
+            reportRequest.reasons.insert(reason)
         } else {
             reportRequest.reasons = reportRequest.reasons.filter { $0.reasonCode != reasonCode }
         }
@@ -77,8 +77,9 @@ extension CallVanReportViewModel {
     }
     
     private func updateCustomReason(_ customReason: String?) {
-        if let index = reportRequest.reasons.firstIndex(where: { $0.reasonCode == .other }) {
-            reportRequest.reasons[index].customReason = customReason
+        if let reason = reportRequest.reasons.first(where: { $0.reasonCode == .other }) {
+            reportRequest.reasons.remove(reason)
+            reportRequest.reasons.insert(.init(reasonCode: .other, customReason: customReason))
         }
         validate()
     }

@@ -110,9 +110,13 @@ extension CallVanListPostDto {
     func displayDate(_ inputDate: String) -> String {
         let inputFormatter = DateFormatter().then {
             $0.dateFormat = "yyyy-MM-dd"
+            $0.locale = Locale(identifier: "ko_KR")
+            $0.calendar = Calendar(identifier: .gregorian)
         }
         let displayFormatter = DateFormatter().then {
             $0.dateFormat = "MM.dd"
+            $0.locale = Locale(identifier: "ko_KR")
+            $0.calendar = Calendar(identifier: .gregorian)
         }
         
         if let date = inputFormatter.date(from: inputDate) {
@@ -125,10 +129,13 @@ extension CallVanListPostDto {
     func displayDay(_ inputDate: String) -> String {
         let inputFormatter = DateFormatter().then {
             $0.dateFormat = "yyyy-MM-dd"
+            $0.locale = Locale(identifier: "ko_KR")
+            $0.calendar = Calendar(identifier: .gregorian)
         }
         let displayFormatter = DateFormatter().then {
             $0.dateFormat = "(E)"
             $0.locale = Locale(identifier: "ko_KR")
+            $0.calendar = Calendar(identifier: .gregorian)
         }
         
         if let date = inputFormatter.date(from: inputDate) {

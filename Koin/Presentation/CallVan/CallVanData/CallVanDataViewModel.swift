@@ -56,7 +56,7 @@ final class CallVanDataViewModel: ViewModelProtocol {
 extension CallVanDataViewModel {
     
     private func refresh() {
-        DispatchQueue.global().asyncAfter(deadline: .now()+0.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
             self?.fetchData()
             self?.fetchNotification()
         }

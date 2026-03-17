@@ -52,7 +52,7 @@ final class CallVanListViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case let .didCheckLoginToParticapate(isLoggedIn, postId):
@@ -75,26 +75,26 @@ final class CallVanListViewController: UIViewController {
             refreshControl.endRefreshing()
         }.store(in: &subscriptions)
         
-        callVanListCollectionView.mainButtonTappedPublisher.sink { [weak self] postId, state in
+        callVanListCollectionView.mainButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] postId, state in
             self?.cellButtonTapped(postId: postId, state: state)
         }.store(in: &subscriptions)
-        callVanListCollectionView.subButtonTappedPublisher.sink { [weak self] postId, state in
+        callVanListCollectionView.subButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] postId, state in
             self?.cellButtonTapped(postId: postId, state: state)
         }.store(in: &subscriptions)
-        callVanListCollectionView.chatButtonTappedPublisher.sink { [weak self] postId in
+        callVanListCollectionView.chatButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] postId in
             self?.chatButtonTapped(postId: postId)
         }.store(in: &subscriptions)
-        callVanListCollectionView.callButtonTappedPublisher.sink { [weak self] in
+        callVanListCollectionView.callButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.callButtonTapped()
         }.store(in: &subscriptions)
-        callVanListCollectionView.postTappedPublisher.sink { [weak self] postId in
+        callVanListCollectionView.postTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] postId in
             self?.navigateToCallVanData(postId)
         }.store(in: &subscriptions)
         
         callVanListCollectionView.loadMoreListPublisher.sink { [weak self] in
             self?.inputSubject.send(.loadMoreList)
         }.store(in: &subscriptions)
-        callVanListCollectionView.didScrollPublisher.sink { [weak self] in
+        callVanListCollectionView.didScrollPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.dismissKeyboard()
         }.store(in: &subscriptions)
     }
@@ -188,6 +188,7 @@ extension CallVanListViewController {
     }
     
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        super.textFieldShouldReturn(textField)
         searchButtonTapped()
         return true
     }

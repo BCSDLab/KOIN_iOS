@@ -64,7 +64,7 @@ final class CallVanChatViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case let .showToast(message):
@@ -76,7 +76,7 @@ final class CallVanChatViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        callVanChatTableView.imageTappedPublisher.sink { [weak self] imageUrl in
+        callVanChatTableView.imageTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] imageUrl in
             let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
             zoomedImageViewController.configure(url: imageUrl)
             zoomedImageViewController.modalTransitionStyle = .crossDissolve

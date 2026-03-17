@@ -66,7 +66,7 @@ final class CallVanReportEvidenceViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case let .showToast(message):
@@ -80,7 +80,7 @@ final class CallVanReportEvidenceViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        evidenceImagesCollectionView.imagesCountPublisher.sink { [weak self] imagesCount in
+        evidenceImagesCollectionView.imagesCountPublisher.receive(on: DispatchQueue.main).sink { [weak self] imagesCount in
             guard let self else { return }
             evidenceCountLabel.text = "\(imagesCount)/\(maxImagesCount)"
         }.store(in: &subscriptions)

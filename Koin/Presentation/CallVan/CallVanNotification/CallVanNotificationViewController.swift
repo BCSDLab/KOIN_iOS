@@ -48,17 +48,19 @@ final class CallVanNotificationViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case let .updateNotifications(notifications):
                 notificationTableView.configure(notifications: notifications)
                 notifications.isEmpty ? showEmptyView() : hideEmptyView()
+            case let .showToast(message):
+                showToastMessage(message: message)
             }
             refreshControl.endRefreshing()
         }.store(in: &subscriptions)
         
-        notificationTableView.cellTapPublisher.sink { [weak self] (postId, notificationId) in
+        notificationTableView.cellTapPublisher.receive(on: DispatchQueue.main).sink { [weak self] (postId, notificationId) in
             self?.inputSubject.send(.setNotificationRead(notificationId))
             self?.navigateToCallVanData(postId)
         }.store(in: &subscriptions)
@@ -67,7 +69,7 @@ final class CallVanNotificationViewController: UIViewController {
             self?.inputSubject.send(.deleteNotification(notificationId))
         }.store(in: &subscriptions)
         
-        notificationTableView.emptyNotificationPublisher.sink { [weak self] in
+        notificationTableView.emptyNotificationPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.showEmptyView()
         }.store(in: &subscriptions)
     }

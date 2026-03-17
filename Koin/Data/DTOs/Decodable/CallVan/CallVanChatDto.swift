@@ -118,7 +118,13 @@ extension CallVanChatDto {
             )
         }
         let groupedMessages = Dictionary(grouping: allMessages, by: { $0.date })
-        let sortedDates = groupedMessages.keys.sorted()
+        let sortedDates = groupedMessages.keys.sorted(by: { date1, date2 in
+            guard let date1 = outputDateFormatter.date(from: date1),
+                  let date2 = outputDateFormatter.date(from: date2) else {
+                return date1 < date2
+            }
+            return date1 < date2
+        })
         let sectionMessages = sortedDates.map { date in
             groupedMessages[date] ?? []
         }

@@ -60,7 +60,7 @@ final class CallVanDataViewController: UIViewController {
 extension CallVanDataViewController {
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case let .update(callVanData):
@@ -72,7 +72,7 @@ extension CallVanDataViewController {
             refreshControl.endRefreshing()
         }.store(in: &subscriptions)
         
-        participantsTableView.reportButtonTappedPublisher.sink { [weak self] userId in
+        participantsTableView.reportButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] userId in
             self?.navigateToReport(userId)
         }.store(in: &subscriptions)
     }

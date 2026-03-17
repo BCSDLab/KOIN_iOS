@@ -24,12 +24,17 @@ final class CallVanPostViewModel: ViewModelProtocol {
         case updateDeparture(CallVanPlace?, String?)
         case updateArrival(CallVanPlace?, String?)
         case postDataCompleted(CallVanListPost)
+        case showToast(String)
     }
     
     // MARK: - Properties
     private let postCallVanDataUseCase: PostCallVanDataUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private let dateFormatter = DateFormatter().then {
+        $0.locale = Locale(identifier: "ko_KR")
+        $0.calendar = Calendar(identifier: .gregorian)
+    }
     private(set) var request = CallVanPostRequest() {
         didSet {
             validateRequest()
@@ -72,17 +77,13 @@ final class CallVanPostViewModel: ViewModelProtocol {
 extension CallVanPostViewModel {
     
     private func updateDepartureDate(_ departureDate: Date) {
-        let dateFormatter = DateFormatter().then {
-            $0.dateFormat = "yyyy-MM-dd"
-        }
+        dateFormatter.dateFormat = "yyyy-MM-dd"
         request.departureDate = dateFormatter.string(from: departureDate)
     }
     
     private func updateDepartureTime(_ departureTime: Date) {
-        let timeFormatter = DateFormatter().then {
-            $0.dateFormat = "HH:mm"
-        }
-        request.departureTime = timeFormatter.string(from: departureTime)
+        dateFormatter.dateFormat = "HH:mm"
+        request.departureTime = dateFormatter.string(from: departureTime)
     }
     
     private func swapPlace() {
@@ -108,9 +109,9 @@ extension CallVanPostViewModel {
     
     private func postData() {
         postCallVanDataUseCase.execute(request: request).sink(
-            receiveCompletion: { completion in
-                if case .failure(let failure) = completion {
-                    Log.make().error("\(failure)")
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
                 }
             },
             receiveValue: { [weak self] postData in

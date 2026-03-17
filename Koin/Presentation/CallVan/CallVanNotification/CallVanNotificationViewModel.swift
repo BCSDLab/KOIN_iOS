@@ -21,6 +21,7 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
     
     enum Output {
         case updateNotifications([CallVanNotification])
+        case showToast(String)
     }
     
     // MARK: - Properties
@@ -72,14 +73,18 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
 extension CallVanNotificationViewModel {
     
     private func refresh() {
-        DispatchQueue.global().asyncAfter(deadline: .now()+0.5) { [weak self] in
+        DispatchQueue.main.asyncAfter(deadline: .now()+0.5) { [weak self] in
             self?.updateNotifications()
         }
     }
     
     private func updateNotifications() {
         fetchCallVanNotificationListUseCase.execute().sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] comepltion in
+                if case .failure(let error) = comepltion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { [weak self] notifications in
                 guard let self else { return }
                 outputSubject.send(.updateNotifications(notifications))
@@ -89,28 +94,44 @@ extension CallVanNotificationViewModel {
     
     private func setNotificationRead(_ notificationId: Int) {
         postNotificationReadUseCase.execute(notificationId: notificationId).sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] comepltion in
+                if case .failure(let error) = comepltion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { _ in }
         ).store(in: &subscriptions)
     }
     
     private func setAllNotificationsRead() {
         postAllNotificationsReadUseCase.execute().sink(
-            receiveCompletion: { _ in},
+            receiveCompletion: { [weak self] comepltion in
+                if case .failure(let error) = comepltion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { _ in }
         ).store(in: &subscriptions)
     }
     
     private func deleteNotification(_ notificationId: Int) {
         deleteNotificationUseCase.execute(notificationId: notificationId).sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] comepltion in
+                if case .failure(let error) = comepltion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { _ in }
         ).store(in: &subscriptions)
     }
     
     private func deleteAllNotifications() {
         deleteAllNotificationsUseCase.execute().sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] comepltion in
+                if case .failure(let error) = comepltion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { _ in }
         ).store(in: &subscriptions)
     }

@@ -63,9 +63,7 @@ final class CallVanPostViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
                 guard let self else { return }
                 switch output {
                 case let .enablePostButton(isEnabled):
@@ -77,14 +75,16 @@ final class CallVanPostViewController: UIViewController {
                     placeView.updateArrival(placeType: placeType, customPlace: customPlace)
                 case let .postDataCompleted(postData):
                     postDataCompleted(postData)
+                case let .showToast(message):
+                    showToastMessage(message: message)
                 }
             }.store(in: &subscriptions)
         
-        placeView.departureButtonTappedPublisher.sink { [weak self] in
+        placeView.departureButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.presentDeparturePlaceBottomSheet()
         }.store(in: &subscriptions)
         
-        placeView.arrivalButtonTappedPublisher.sink { [weak self] in
+        placeView.arrivalButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.presentArrivalPlaceBottomSheet()
         }.store(in: &subscriptions)
         
@@ -100,9 +100,7 @@ final class CallVanPostViewController: UIViewController {
             self?.inputSubject.send(.updateArrival(departureType, customPlace))
         }.store(in: &subscriptions)
         
-        dateView.dateButtonTappedPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
+        dateView.dateButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
                 self?.timeView.dismissTimeDropDownView()
             }.store(in: &subscriptions)
         
@@ -110,9 +108,7 @@ final class CallVanPostViewController: UIViewController {
             self?.inputSubject.send(.updateDepartureDate(date))
         }.store(in: &subscriptions)
         
-        timeView.timeButtonTappedPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
+        timeView.timeButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
                 self?.dateView.dismissDateDropDownView()
             }.store(in: &subscriptions)
         

@@ -9,14 +9,22 @@ import Foundation
 
 struct CallVanReportRequest {
     let reportedUserId: Int
-    var reasons: [CallVanReportRequestReason] = []
+    var reasons: Set<CallVanReportRequestReason> = []
     var descriptions: String?
     var imageUrls: [String] = []
 }
 
-struct CallVanReportRequestReason {
+struct CallVanReportRequestReason: Hashable {
     var reasonCode: CallVanReportRequestReasonCode
     var customReason: String?
+    
+    static func ==(lhs: CallVanReportRequestReason, rhs: CallVanReportRequestReason) -> Bool {
+        return lhs.reasonCode == rhs.reasonCode
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(reasonCode)
+    }
 }
 
 enum CallVanReportRequestReasonCode: String {
