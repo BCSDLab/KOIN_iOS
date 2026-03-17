@@ -18,6 +18,7 @@ final class CallVanNotificationViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let refreshControl = UIRefreshControl()
     private let notificationTableView = CallVanNotificationTableView()
     private let emptyView = CallVanNotificationEmptyView()
     
@@ -38,18 +39,80 @@ final class CallVanNotificationViewController: UIViewController {
         configureNavigationBar(style: .empty)
         configureRightBarButton()
         bind()
-        inputSubject.send(.viewDidLoad)
+        setAddTargets()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.viewWillAppear)
     }
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case let .updateNotifications(notifications):
                 notificationTableView.configure(notifications: notifications)
-                emptyView.isHidden = !notifications.isEmpty
+                notifications.isEmpty ? showEmptyView() : hideEmptyView()
+            case let .showToast(message):
+                showToastMessage(message: message)
             }
+            refreshControl.endRefreshing()
         }.store(in: &subscriptions)
+        
+        notificationTableView.cellTapPublisher.receive(on: DispatchQueue.main).sink { [weak self] (postId, notificationId) in
+            self?.inputSubject.send(.setNotificationRead(notificationId))
+            self?.navigateToCallVanData(postId)
+        }.store(in: &subscriptions)
+        
+        notificationTableView.deleteNotificationPublisher.sink { [weak self] notificationId in
+            self?.inputSubject.send(.deleteNotification(notificationId))
+        }.store(in: &subscriptions)
+        
+        notificationTableView.emptyNotificationPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
+            self?.showEmptyView()
+        }.store(in: &subscriptions)
+    }
+    
+    private func showEmptyView() {
+        UIView.transition(
+            with: emptyView,
+            duration: 0.25) { [weak self] in
+                self?.emptyView.isHidden = false
+            }
+    }
+    private func hideEmptyView() {
+        UIView.transition(
+            with: emptyView,
+            duration: 0.25) { [weak self] in
+                self?.emptyView.isHidden = true
+            }
+    }
+}
+
+extension CallVanNotificationViewController {
+    
+    private func setAddTargets() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    @objc private func refresh() {
+        inputSubject.send(.refresh)
+    }
+}
+
+extension CallVanNotificationViewController {
+    
+    private func navigateToCallVanData(_ postId: Int) {
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let viewModel = CallVanDataViewModel(
+            postId: postId,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
+        let viewController = CallVanDataViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
@@ -66,7 +129,10 @@ extension CallVanNotificationViewController {
     }
     
     @objc private func rightBarButtonTapped() {
-        let onReadButtonTapped = { }
+        let onReadButtonTapped: ()->Void = { [weak self] in
+            self?.notificationTableView.markAllNotificationsRead()
+            self?.inputSubject.send(.setAllNotificationsRead)
+        }
         let onDeleteButtonTapped = { [weak self] in
             guard let self else { return }
             let subTitleLabel = UILabel().then {
@@ -77,7 +143,11 @@ extension CallVanNotificationViewController {
             subTitleLabel.snp.makeConstraints {
                 $0.height.equalTo(22)
             }
-            let onMainButtonTapped = {}
+            let onMainButtonTapped = { [weak self] in
+                self?.notificationTableView.configure(notifications: [])
+                self?.showEmptyView()
+                self?.inputSubject.send(.deleteAllNotifications)
+            }
             let contentViewController = CallVanBottomSheetViewController(
                 titleText: "알림을 모두 삭제할까요?",
                 subTitleLabel: subTitleLabel,
@@ -90,7 +160,7 @@ extension CallVanNotificationViewController {
             )
             bottomSheetViewController.modalTransitionStyle = .crossDissolve
             bottomSheetViewController.modalPresentationStyle = .overFullScreen
-            present(bottomSheetViewController, animated: true)
+            present(bottomSheetViewController, animated: false)
         }
         let dropdownViewController = CallVanNotificationDropdownViewController(
             onReadButtonTapped: onReadButtonTapped,
@@ -98,7 +168,7 @@ extension CallVanNotificationViewController {
         )
         dropdownViewController.modalTransitionStyle = .crossDissolve
         dropdownViewController.modalPresentationStyle = .overFullScreen
-        present(dropdownViewController, animated: true)
+        present(dropdownViewController, animated: false)
     }
 }
 
@@ -112,6 +182,8 @@ extension CallVanNotificationViewController {
     
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral0)
+        emptyView.isHidden = true
+        notificationTableView.refreshControl = refreshControl
     }
     
     private func setUpLayouts() {

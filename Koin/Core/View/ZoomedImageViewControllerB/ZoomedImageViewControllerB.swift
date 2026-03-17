@@ -29,7 +29,11 @@ final class ZoomedImageViewControllerB: UINavigationController {
     }
     
     // MARK: - Configure
-    func configure(urls: [String], initialIndexPath: IndexPath) {
+    func configure(url: String) {
+        configure(urls: [url])
+    }
+    
+    func configure(urls: [String], initialIndexPath: IndexPath = IndexPath(row: 0, section: 0)) {
         rootViewController.configure(urls: urls, initialIndexPath: initialIndexPath)
     }
 }

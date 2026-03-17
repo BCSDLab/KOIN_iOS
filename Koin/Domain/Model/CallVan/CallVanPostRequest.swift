@@ -14,5 +14,5 @@ struct CallVanPostRequest {
     var arrivalCustomName: String?
     var departureDate: String? // "yyyy-MM-dd"
     var departureTime: String? // "HH:mm"
-    var maxParticipants: Int = 1
+    var maxParticipants: Int = 2
 }

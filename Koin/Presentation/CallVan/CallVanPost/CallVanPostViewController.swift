@@ -10,9 +10,14 @@ import Combine
 import SnapKit
 import Then
 
+protocol CallVanPostViewControllerDelegate: AnyObject {
+    func appendPostData(_ postData: CallVanListPost)
+}
+
 final class CallVanPostViewController: UIViewController {
     
     // MARK: - Properties
+    weak var delegate: CallVanPostViewControllerDelegate?
     private let inputSubject = PassthroughSubject<CallVanPostViewModel.Input, Never>()
     private let viewModel: CallVanPostViewModel
     private var subscriptions: Set<AnyCancellable> = []
@@ -26,6 +31,14 @@ final class CallVanPostViewController: UIViewController {
     private let separatorView = UIView()
     private let descriptionLabel = UILabel()
     private let postButton = UIButton()
+    
+    private let bottomSheetContentView = CallVanPostPlaceBottomSheetView()
+    private lazy var bottomSheetViewController = BottomSheetViewControllerB(
+        contentView: bottomSheetContentView,
+        dimColor: .black,
+        dimAlpha: 0.7,
+        backgroundColor: UIColor.appColor(.neutral0)
+    )
     
     // MARK: - Initializer
     init(viewModel: CallVanPostViewModel) {
@@ -43,15 +56,14 @@ final class CallVanPostViewController: UIViewController {
         configureNavigationBar(style: .empty)
         configureView()
         setAddTargets()
+        setDelegates()
         bind()
         dateView.update(Date())
         timeView.update(Date())
     }
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
                 guard let self else { return }
                 switch output {
                 case let .enablePostButton(isEnabled):
@@ -61,14 +73,18 @@ final class CallVanPostViewController: UIViewController {
                     placeView.updateDeparture(placeType: placeType, customPlace: customPlace)
                 case let .updateArrival(placeType, customPlace):
                     placeView.updateArrival(placeType: placeType, customPlace: customPlace)
+                case let .postDataCompleted(postData):
+                    postDataCompleted(postData)
+                case let .showToast(message):
+                    showToastMessage(message: message)
                 }
             }.store(in: &subscriptions)
         
-        placeView.departureButtonTappedPublisher.sink { [weak self] in
+        placeView.departureButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.presentDeparturePlaceBottomSheet()
         }.store(in: &subscriptions)
         
-        placeView.arrivalButtonTappedPublisher.sink { [weak self] in
+        placeView.arrivalButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.presentArrivalPlaceBottomSheet()
         }.store(in: &subscriptions)
         
@@ -84,9 +100,7 @@ final class CallVanPostViewController: UIViewController {
             self?.inputSubject.send(.updateArrival(departureType, customPlace))
         }.store(in: &subscriptions)
         
-        dateView.dateButtonTappedPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
+        dateView.dateButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
                 self?.timeView.dismissTimeDropDownView()
             }.store(in: &subscriptions)
         
@@ -94,9 +108,7 @@ final class CallVanPostViewController: UIViewController {
             self?.inputSubject.send(.updateDepartureDate(date))
         }.store(in: &subscriptions)
         
-        timeView.timeButtonTappedPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] in
+        timeView.timeButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
                 self?.dateView.dismissDateDropDownView()
             }.store(in: &subscriptions)
         
@@ -112,14 +124,18 @@ final class CallVanPostViewController: UIViewController {
 
 extension CallVanPostViewController {
     
+    private func setDelegates() {
+        bottomSheetContentView.delegate = bottomSheetViewController
+    }
+    
     private func setAddTargets() {
         postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
     }
     
     @objc private func postButtonTapped() {
-        // TODO: 
+        postButton.isUserInteractionEnabled = false
+        inputSubject.send(.postData)
     }
-    
 }
 
 extension CallVanPostViewController {
@@ -128,43 +144,71 @@ extension CallVanPostViewController {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
             guard let self else { return }
             placeView.updateDeparture(placeType: place, customPlace: customPlace)
+            inputSubject.send(.updateDeparture(place, customPlace))
         }
-        let contentView = CallVanPostPlaceBottomSheetView(
+        bottomSheetContentView.configure(
             title: .departure,
             place: viewModel.request.departureType,
             customPlace: viewModel.request.departureCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
-        let bottomSheetViewController = BottomSheetViewControllerB(
-            contentView: contentView,
-            dimColor: .black,
-            dimAlpha: 0.7,
-            backgroundColor: UIColor.appColor(.neutral0)
-        )
-        contentView.delegate = bottomSheetViewController
-        present(bottomSheetViewController, animated: true)
+        present(bottomSheetViewController, animated: false)
     }
     private func presentArrivalPlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
             guard let self else { return }
             placeView.updateArrival(placeType: place, customPlace: customPlace)
+            inputSubject.send(.updateArrival(place, customPlace))
         }
-        let contentView = CallVanPostPlaceBottomSheetView(
+        bottomSheetContentView.configure(
             title: .arrival,
             place: viewModel.request.arrivalType,
             customPlace: viewModel.request.arrivalCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
-        let bottomSheetViewController = BottomSheetViewControllerB(
-            contentView: contentView,
-            dimColor: .black,
-            dimAlpha: 0.7,
-            backgroundColor: UIColor.appColor(.neutral0)
-        )
-        contentView.delegate = bottomSheetViewController
-        present(bottomSheetViewController, animated: true)
+        present(bottomSheetViewController, animated: false)
     }
+}
+
+extension CallVanPostViewController {
     
+    private func postDataCompleted(_ postData: CallVanListPost) {
+        delegate?.appendPostData(postData)
+        
+        if let viewController = navigationController?.viewControllers.first(where: { $0 is CallVanListViewController }) {
+            navigationController?.popToViewController(viewController, animated: true)
+        } else {
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+            let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+            let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
+            let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+            let participateCallVanUseCase = DefaultParticipateCallVanUseCase(repository: callVanRepository)
+            let quitCallVanUseCase = DefaultQuitCallVanUseCase(repository: callVanRepository)
+            let closeCallVanUseCase = DefaultCloseCallVanUseCase(repository: callVanRepository)
+            let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
+            let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
+            let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+            let viewModel = CallVanListViewModel(
+                checkLoginUseCase: checkLoginUseCase,
+                fetchCallVanListUseCase: fetchCallVanListUseCase,
+                fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+                participateCallVanUseCase: participateCallVanUseCase,
+                quitCallVanUseCase: quitCallVanUseCase,
+                closeCallVanUseCase: closeCallVanUseCase,
+                reopenCallVanUseCase: reopenCallVanUseCase,
+                completeCallVanUseCase: completeCallVanUseCase,
+                fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase
+            )
+            let viewController = CallVanListViewController(viewModel: viewModel)
+            if var viewControllers = navigationController?.viewControllers {
+                viewControllers.insert(viewController, at: viewControllers.count - 1)
+                navigationController?.setViewControllers(viewControllers, animated: false)
+                navigationController?.popViewController(animated: true)
+            }
+        }
+        showToastMessage(message: "작성되었습니다.", bottomInset: 75)
+    }
 }
 
 extension CallVanPostViewController {

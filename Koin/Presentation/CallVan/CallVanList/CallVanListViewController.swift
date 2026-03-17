@@ -16,6 +16,7 @@ final class CallVanListViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let refreshControl = UIRefreshControl()
     private let searchTextField = UITextField()
     private let searchButton = UIButton()
     private let filterButton = UIButton()
@@ -40,35 +41,61 @@ final class CallVanListViewController: UIViewController {
         configureNavigationBar(style: .empty)
         hideKeyboardWhenTappedAround()
         setAddTargets()
+        setDelegates()
         bind()
         inputSubject.send(.viewDidLoad)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.viewWillAppear)
+    }
+    
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
-            case let .didCheckLoginToParticapate(isLoggedIn):
-                showBottomSheet(isLoggedIn: isLoggedIn, state: .참여하기)
-            case let .updateNotification(posts):
-                callVanListCollectionView.configure(posts: posts)
+            case let .didCheckLoginToParticapate(isLoggedIn, postId):
+                isLoggedIn ? showBottomSheet(state: .참여하기, postId: postId) : showLoginToParticipateBottomSheet()
+            case let .didCheckLoginToPost(isLoggedIn):
+                isLoggedIn ? navigateToPost() : showLoginToPostBottomSheet()
+            case let .resetList(posts):
+                callVanListCollectionView.reset(posts: posts)
+            case let .appendList(posts):
+                callVanListCollectionView.append(posts: posts)
+            case let .updateListItem(callVanListPost, postId):
+                callVanListCollectionView.updateItem(callVanListPost, postId)
+            case let .deleteListItem(postId):
+                callVanListCollectionView.deleteItem(postId: postId)
+            case let .updateBell(alert):
+                configureRightBarButton(alert: alert)
+            case let .showToast(message):
+                showToastMessage(message: message, bottomInset: 75)
             }
+            refreshControl.endRefreshing()
         }.store(in: &subscriptions)
         
-        callVanListCollectionView.mainButtonTappedPublisher.sink { [weak self] postId, state in
+        callVanListCollectionView.mainButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] postId, state in
             self?.cellButtonTapped(postId: postId, state: state)
         }.store(in: &subscriptions)
-        callVanListCollectionView.subButtonTappedPublisher.sink { [weak self] postId, state in
+        callVanListCollectionView.subButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] postId, state in
             self?.cellButtonTapped(postId: postId, state: state)
         }.store(in: &subscriptions)
-        callVanListCollectionView.chatButtonTappedPublisher.sink { [weak self] postId in
+        callVanListCollectionView.chatButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] postId in
             self?.chatButtonTapped(postId: postId)
         }.store(in: &subscriptions)
-        callVanListCollectionView.callButtonTappedPublisher.sink { [weak self] in
+        callVanListCollectionView.callButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.callButtonTapped()
         }.store(in: &subscriptions)
-        callVanListCollectionView.postTappedPublisher.sink { [weak self] postId in
+        callVanListCollectionView.postTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] postId in
             self?.navigateToCallVanData(postId)
+        }.store(in: &subscriptions)
+        
+        callVanListCollectionView.loadMoreListPublisher.sink { [weak self] in
+            self?.inputSubject.send(.loadMoreList)
+        }.store(in: &subscriptions)
+        callVanListCollectionView.didScrollPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
+            self?.dismissKeyboard()
         }.store(in: &subscriptions)
     }
 }
@@ -76,13 +103,26 @@ final class CallVanListViewController: UIViewController {
 extension CallVanListViewController {
     
     private func configureRightBarButton(alert: Bool = false) {
-        let bellButton = UIBarButtonItem(image: UIImage.appImage(asset: .bell)?.withRenderingMode(.alwaysOriginal)
-                                         , style: .plain, target: self, action: #selector(bellButtonTapped))
+        let image = alert ? UIImage.appImage(asset: .bellNotification) : UIImage.appImage(asset: .bell)
+        let bellButton = UIBarButtonItem(image: image?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(bellButtonTapped))
         navigationItem.rightBarButtonItem = bellButton
     }
+    
     @objc private func bellButtonTapped() {
-        let fetchCallVanNotificationListUseCase = MockFetchCallVanNotificationListUseCase()
-        let viewModel = CallVanNotificationViewModel(fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
+        dismissKeyboard()
+        
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let postNotificationReadUseCase = DefaultPostNotificationReadUseCase(repository: callVanRepository)
+        let postAllNotificationsReadUseCase = DefaultPostAllNotificationsReadUseCase(repository: callVanRepository)
+        let deleteNotificationUseCase = DefaultDeleteNotificationUseCase(repository: callVanRepository)
+        let deleteAllNotificationsUseCase = DefaultDeleteAllNotificationsUseCase(repository: callVanRepository)
+        let viewModel = CallVanNotificationViewModel(
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            postNotificationReadUseCase: postNotificationReadUseCase,
+            postAllNotificationsReadUseCase: postAllNotificationsReadUseCase,
+            deleteNotificationUseCase: deleteNotificationUseCase,
+            deleteAllNotificationsUseCase: deleteAllNotificationsUseCase)
         let viewController = CallVanNotificationViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -93,69 +133,164 @@ extension CallVanListViewController {
     private func setAddTargets() {
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    @objc private func refresh() {
+        inputSubject.send(.refresh)
     }
     
     @objc private func writeButtonTapped() {
-        let viewController = CallVanPostViewController(viewModel: CallVanPostViewModel())
+        inputSubject.send(.checkLoginToPost)
+    }
+    
+    private func navigateToPost() {
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
+        let viewModel = CallVanPostViewModel(postCallVanDataUseCase: postCallVanDataUseCase)
+        let viewController = CallVanPostViewController(viewModel: viewModel)
+        viewController.delegate = self
         navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc private func filterButtonTapped() {
-        let contentViewController = CallVanListFilterViewController(filter: CallVanListRequest(), onApplyButtonTapped: { _ in })
+        let contentViewController = CallVanListFilterViewController(
+            filter: viewModel.filterState,
+            onApplyButtonTapped: { [weak self] filterState in
+                guard let self else { return }
+                inputSubject.send(.updateFilterState(filterState))
+            }
+        )
         let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: 605 + view.safeAreaInsets.bottom)
-        present(bottomSheetViewController, animated: true)
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        bottomSheetViewController.modalPresentationStyle = .overFullScreen
+        present(bottomSheetViewController, animated: false)
+    }
+    
+    @objc private func searchButtonTapped() {
+        inputSubject.send(.updateFilterTitle(searchTextField.text))
+        dismissKeyboard()
+    }
+}
+
+extension CallVanListViewController: CallVanPostViewControllerDelegate {
+    
+    func appendPostData(_ postData: CallVanListPost) {
+        callVanListCollectionView.prepend(post: postData)
+    }
+}
+
+extension CallVanListViewController {
+    
+    private func setDelegates() {
+        searchTextField.delegate = self
+    }
+    
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        super.textFieldShouldReturn(textField)
+        searchButtonTapped()
+        return true
     }
 }
 
 extension CallVanListViewController {
     
     private func navigateToCallVanData(_ postId: Int) {
-        let fetchCallVanDataUseCase = MockFetchCallVanDataUseCase()
-        let viewModel = CallVanDataViewModel(postId: postId, fetchCallVanDataUseCase: fetchCallVanDataUseCase)
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let viewModel = CallVanDataViewModel(
+            postId: postId,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
         let viewController = CallVanDataViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func showBottomSheet(isLoggedIn: Bool?, state: CallVanState) {
+    private func showBottomSheet(state: CallVanState, postId: Int) {
         let onMainButtonTapped: ()->Void
         var defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
-        switch (isLoggedIn, state) {
-        case (true, .참여하기):
-            onMainButtonTapped = {}
-        case (false, .참여하기):
-            onMainButtonTapped = {}
-        case (_ , .참여취소):
-            onMainButtonTapped = {}
-        case (_ , .마감하기):
-            onMainButtonTapped = {}
-        case (_ , .재모집):
-            onMainButtonTapped = {}
-        case (_, .이용완료):
-            onMainButtonTapped = {}
+        switch state {
+        case .참여하기:
+            onMainButtonTapped = { [weak self] in
+                self?.inputSubject.send(.participate(postId))
+            }
+        case .참여취소:
+            onMainButtonTapped = { [weak self] in
+                self?.inputSubject.send(.quit(postId))
+            }
+        case .마감하기:
+            onMainButtonTapped = { [weak self] in
+                self?.inputSubject.send(.close(postId))
+            }
+        case .재모집:
+            onMainButtonTapped = { [weak self] in
+                self?.inputSubject.send(.reopen(postId))
+            }
+        case .이용완료:
+            onMainButtonTapped = { [weak self] in
+                self?.inputSubject.send(.complete(postId))
+            }
             defaultHeight = 255 + view.safeAreaInsets.bottom
         default:
             return
         }
-        let contentViewController = CallVanBottomSheetViewController(isLoggedIn: isLoggedIn, state: state, onMainButtonTapped: onMainButtonTapped)
+        let contentViewController = CallVanBottomSheetViewController(state: state, onMainButtonTapped: onMainButtonTapped)
         let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        present(bottomSheetViewController, animated: true)
+        present(bottomSheetViewController, animated: false)
+    }
+    
+    private func showLoginToPostBottomSheet() {
+        let onMainButtonTapped: ()->Void = { [weak self] in
+            self?.navigateToLogin()
+        }
+        let defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
+        let contentViewController = CallVanBottomSheetViewController(titleText: "콜밴팟을 모집하려면 로그인이 필요해요.", subTitleLabel: nil, mainButtonText: "로그인하기", closeButtonText: "닫기", onMainButtonTapped: onMainButtonTapped)
+        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        bottomSheetViewController.modalPresentationStyle = .overFullScreen
+        present(bottomSheetViewController, animated: false)
+    }
+    
+    private func showLoginToParticipateBottomSheet() {
+        let onMainButtonTapped: ()->Void = { [weak self] in
+            self?.navigateToLogin()
+        }
+        let defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
+        let contentViewController = CallVanBottomSheetViewController(titleText: "콜밴팟에 참여하려면 로그인이 필요해요.", subTitleLabel: nil, mainButtonText: "로그인하기", closeButtonText: "닫기", onMainButtonTapped: onMainButtonTapped)
+        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        bottomSheetViewController.modalPresentationStyle = .overFullScreen
+        present(bottomSheetViewController, animated: false)
     }
     
     private func cellButtonTapped(postId: Int, state: CallVanState) {
         switch state {
         case .참여하기:
-            inputSubject.send(.checkLoginToParticapate)
+            inputSubject.send(.checkLoginToParticapate(postId))
         case .참여취소, .마감하기, .재모집, .이용완료:
-            showBottomSheet(isLoggedIn: nil, state: state)
+            showBottomSheet(state: state, postId: postId)
         case .모집마감:
             break
         }
         
     }
     private func chatButtonTapped(postId: Int) {
-        let viewModel = CallVanChatViewModel(postId: postId)
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let fetchCallVanChatUseCase = DefaultFetchCallVanChatUseCase(repository: callVanRepository)
+        let postCallVanChatUseCase = DefaultPostCallVanChatUseCase(repository: callVanRepository)
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let viewModel = CallVanChatViewModel(
+            postId: postId,
+            fetchCallVanChatUseCase: fetchCallVanChatUseCase,
+            postCallVanChatUseCase: postCallVanChatUseCase,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            uploadFileUseCase: uploadFileUseCase)
         let viewController = CallVanChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -258,6 +393,10 @@ extension CallVanListViewController {
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 21
             $0.layer.applySketchShadow(color: .black, alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
+        }
+        
+        callVanListCollectionView.do {
+            $0.refreshControl = refreshControl
         }
     }
     private func setUpLayouts() {

@@ -14,7 +14,7 @@ final class CallVanPostDateView: ExtendedTouchAreaView {
     
     // MARK: - Properties
     let dateButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let dateChangedPublisher = PassthroughSubject<String, Never>()
+    let dateChangedPublisher = PassthroughSubject<Date, Never>()
     let selectedItemPublisher = PassthroughSubject<[String], Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let formatter = DateFormatter()
@@ -43,9 +43,7 @@ final class CallVanPostDateView: ExtendedTouchAreaView {
         formatter.dateFormat = "yyyy년 M월 d일"
         dateLabel.text = formatter.string(from: date)
         dateDropDownView.reset(initialDate: date)
-        
-        formatter.dateFormat = "yyyy-MM-dd"
-        dateChangedPublisher.send(formatter.string(from: date))
+        dateChangedPublisher.send(date)
     }
 }
 
@@ -53,7 +51,12 @@ extension CallVanPostDateView {
     
     private func bind() {
         dateDropDownView.selectedItemPublisher.sink { [weak self] selectedItems in
-            self?.dateLabel.text = "\(selectedItems[0]) \(selectedItems[1]) \(selectedItems[2])"
+            guard let self else { return }
+            dateLabel.text = "\(selectedItems[0]) \(selectedItems[1]) \(selectedItems[2])"
+            if let date = formatter.date(from: dateLabel.text ?? "") {
+                dateChangedPublisher.send(date)
+            }
+            
         }.store(in: &subscriptions)
         
         dateDropDownView.applyButtonTappedPublisher.sink { [weak self] in

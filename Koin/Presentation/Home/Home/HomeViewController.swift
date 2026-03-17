@@ -302,7 +302,20 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         callVanView.postButtonTappedPublisher.sink { [weak self] in
-            self?.navigateToCallVanPost()
+            guard let self else { return }
+            if viewModel.isLoggedIn {
+                navigateToCallVanPost()
+            } else {
+                let onMainButtonTapped: ()->Void = { [weak self] in
+                    self?.navigateToLogin()
+                }
+                let defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
+                let contentViewController = CallVanBottomSheetViewController(titleText: "콜밴팟을 모집하려면 로그인이 필요해요.", subTitleLabel: nil, mainButtonText: "로그인하기", closeButtonText: "닫기", onMainButtonTapped: onMainButtonTapped)
+                let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
+                bottomSheetViewController.modalTransitionStyle = .crossDissolve
+                bottomSheetViewController.modalPresentationStyle = .overFullScreen
+                present(bottomSheetViewController, animated: false)
+            }
         }.store(in: &subscriptions)
     }
 }
@@ -642,18 +655,35 @@ extension HomeViewController {
     
     private func navigateToCallVanList() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let fetchCallVanListUseCase = MockFetchCallVanListUseCase()
+        let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let participateCallVanUseCase = DefaultParticipateCallVanUseCase(repository: callVanRepository)
+        let quitCallVanUseCase = DefaultQuitCallVanUseCase(repository: callVanRepository)
+        let closeCallVanUseCase = DefaultCloseCallVanUseCase(repository: callVanRepository)
+        let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
+        let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
+        let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
-            fetchCallVanListUseCase: fetchCallVanListUseCase
+            fetchCallVanListUseCase: fetchCallVanListUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            participateCallVanUseCase: participateCallVanUseCase,
+            quitCallVanUseCase: quitCallVanUseCase,
+            closeCallVanUseCase: closeCallVanUseCase,
+            reopenCallVanUseCase: reopenCallVanUseCase,
+            completeCallVanUseCase: completeCallVanUseCase,
+            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func navigateToCallVanPost() {
-        let viewModel = CallVanPostViewModel()
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
+        let viewModel = CallVanPostViewModel(postCallVanDataUseCase: postCallVanDataUseCase)
         let viewController = CallVanPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

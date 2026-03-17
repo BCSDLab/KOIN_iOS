@@ -12,7 +12,9 @@ final class CallVanNotificationTableView: UITableView {
     
     // MARK: - Properties
     private var notifications: [CallVanNotification] = []
-    let cellTapPublisher = PassthroughSubject<Int, Never>()
+    let cellTapPublisher = PassthroughSubject<(postId: Int, notificationId: Int), Never>()
+    let deleteNotificationPublisher = PassthroughSubject<Int, Never>()
+    let emptyNotificationPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Intiailizer
     init() {
@@ -26,7 +28,14 @@ final class CallVanNotificationTableView: UITableView {
     // MARK: - Public
     func configure(notifications: [CallVanNotification]) {
         self.notifications = notifications
-        reloadData()
+        reloadSections(IndexSet(integer: 0), with: .automatic)
+    }
+    
+    func markAllNotificationsRead() {
+        for index in notifications.indices {
+            notifications[index].isRead = true
+        }
+        reloadSections(IndexSet(integer: 0), with: .automatic)
     }
 }
 
@@ -47,7 +56,23 @@ extension CallVanNotificationTableView {
 extension CallVanNotificationTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        cellTapPublisher.send(notifications[indexPath.row].postId)
+        cellTapPublisher.send((postId: notifications[indexPath.row].postId, notificationId: notifications[indexPath.row].id))
+        deselectRow(at: indexPath, animated: true)
+        notifications[indexPath.row].isRead = true
+        reloadRows(at: [indexPath], with: .automatic)
+    }
+    
+    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
+        return .delete
+    }
+    
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
+        deleteNotificationPublisher.send(notifications[indexPath.row].id)
+        notifications.remove(at: indexPath.row)
+        tableView.deleteRows(at: [indexPath], with: .automatic)
+        if notifications.count == 0 {
+            emptyNotificationPublisher.send()
+        }
     }
 }
 
@@ -66,3 +91,4 @@ extension CallVanNotificationTableView: UITableViewDataSource {
         return cell
     }
 }
+

@@ -113,6 +113,7 @@ extension BottomSheetViewControllerB {
     }
     
     @objc private func dimViewTapped() {
+        dismissKeyboard()
         dismiss()
     }
     

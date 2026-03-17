@@ -35,14 +35,14 @@ final class CallVanDataView: UIView {
         participantsLabel.text = "\(callVanData.currentParticipants)/\(callVanData.maxParticipants)"
         
         departureLabel.attributedText = NSAttributedString(
-            string: callVanData.departure,
+            string: "출발: \(callVanData.departure)",
             attributes: [
                 .font : UIFont.appFont(.pretendardMedium, size: 14),
                 .foregroundColor : UIColor.appColor(.neutral800)
             ]
         )
         arrivalLabel.attributedText = NSAttributedString(
-            string: callVanData.arrival,
+            string: "도착: \(callVanData.arrival)",
             attributes: [
                 .font : UIFont.appFont(.pretendardMedium, size: 14),
                 .foregroundColor : UIColor.appColor(.neutral800)
@@ -127,6 +127,7 @@ extension CallVanDataView {
         wrapperLayoutGuide.snp.makeConstraints {
             $0.top.bottom.equalTo(wrapperView).inset(12)
             $0.leading.equalTo(wrapperView).offset(24)
+            $0.trailing.lessThanOrEqualTo(dateTimeLabel.snp.leading).offset(-8)
         }
         routeImageView.snp.makeConstraints {
             $0.leading.centerY.equalTo(wrapperLayoutGuide)

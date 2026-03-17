@@ -18,6 +18,7 @@ final class CallVanDataViewController: UIViewController {
     private let viewModel: CallVanDataViewModel
     
     // MARK: - UI Components
+    private let refreshControl = UIRefreshControl()
     private let scrollView = UIScrollView()
     private let dataView = CallVanDataView()
     private let participantsTableView = CallVanDataTableView()
@@ -43,7 +44,11 @@ final class CallVanDataViewController: UIViewController {
         configureRightBarButton()
         addGesture()
         setAddTargets()
-        inputSubject.send(.viewDidLoad)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.viewWillAppear)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -55,16 +60,19 @@ final class CallVanDataViewController: UIViewController {
 extension CallVanDataViewController {
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case let .update(callVanData):
                 dataView.configure(callVanData: callVanData)
                 participantsTableView.configure(participants: callVanData.participants)
+            case let .updateBell(alert):
+                configureRightBarButton(alert: alert)
             }
+            refreshControl.endRefreshing()
         }.store(in: &subscriptions)
         
-        participantsTableView.reportButtonTappedPublisher.sink { [weak self] userId in
+        participantsTableView.reportButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] userId in
             self?.navigateToReport(userId)
         }.store(in: &subscriptions)
     }
@@ -73,7 +81,12 @@ extension CallVanDataViewController {
 extension CallVanDataViewController {
     
     private func setAddTargets() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         enterChatRoomButton.addTarget(self, action: #selector(enterChatRoomButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func refresh() {
+        inputSubject.send(.refresh)
     }
     
     private func addGesture() {
@@ -82,7 +95,18 @@ extension CallVanDataViewController {
     }
     
     @objc private func enterChatRoomButtonTapped() {
-        let viewModel = CallVanChatViewModel(postId: viewModel.postId)
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let fetchCallVanChatUseCase = DefaultFetchCallVanChatUseCase(repository: callVanRepository)
+        let postCallVanChatUseCase = DefaultPostCallVanChatUseCase(repository: callVanRepository)
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let viewModel = CallVanChatViewModel(
+            postId: viewModel.postId,
+            fetchCallVanChatUseCase: fetchCallVanChatUseCase,
+            postCallVanChatUseCase: postCallVanChatUseCase,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            uploadFileUseCase: uploadFileUseCase)
         let viewController = CallVanChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -95,20 +119,42 @@ extension CallVanDataViewController {
 extension CallVanDataViewController {
     
     private func configureRightBarButton(alert: Bool = false) {
-        let bellButton = UIBarButtonItem(image: UIImage.appImage(asset: .bell)?.withRenderingMode(.alwaysOriginal)
-                                         , style: .plain, target: self, action: #selector(bellButtonTapped))
+        let image = alert ? UIImage.appImage(asset: .bellNotification) : UIImage.appImage(asset: .bell)
+        let bellButton = UIBarButtonItem(image: image?.withRenderingMode(.alwaysOriginal), style: .plain, target: self, action: #selector(bellButtonTapped))
         navigationItem.rightBarButtonItem = bellButton
     }
     
     @objc private func bellButtonTapped() {
-        // TODO
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let postNotificationReadUseCase = DefaultPostNotificationReadUseCase(repository: callVanRepository)
+        let postAllNotificationsReadUseCase = DefaultPostAllNotificationsReadUseCase(repository: callVanRepository)
+        let deleteNotificationUseCase = DefaultDeleteNotificationUseCase(repository: callVanRepository)
+        let deleteAllNotificationsUseCase = DefaultDeleteAllNotificationsUseCase(repository: callVanRepository)
+        let viewModel = CallVanNotificationViewModel(
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            postNotificationReadUseCase: postNotificationReadUseCase,
+            postAllNotificationsReadUseCase: postAllNotificationsReadUseCase,
+            deleteNotificationUseCase: deleteNotificationUseCase,
+            deleteAllNotificationsUseCase: deleteAllNotificationsUseCase)
+        let viewController = CallVanNotificationViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
 extension CallVanDataViewController {
     
     private func navigateToReport(_ userId: Int) {
-        let viewModel = CallVanReportViewModel(reportedUserId: userId)
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let reportCallVanUserUseCase = DefaultReportCallVanUserUseCase(repository: callVanRepository)
+        let viewModel = CallVanReportViewModel(
+            postId: viewModel.postId,
+            reportedUserId: userId,
+            uploadFileUseCase: uploadFileUseCase,
+            reportCallVanUserUseCase: reportCallVanUserUseCase
+        )
         let viewController = CallVanReportReasonViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -124,6 +170,10 @@ extension CallVanDataViewController {
     
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral0)
+        
+        scrollView.do {
+            $0.refreshControl = refreshControl
+        }
         
         participantsTableView.do {
             $0.backgroundColor = .clear

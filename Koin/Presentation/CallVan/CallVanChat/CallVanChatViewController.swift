@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PhotosUI
 import Combine
 import SnapKit
 import Then
@@ -13,8 +14,10 @@ import Then
 final class CallVanChatViewController: UIViewController {
     
     // MARK: - Properties
+    private let inputSubject = PassthroughSubject<CallVanChatViewModel.Input, Never>()
     private let viewModel: CallVanChatViewModel
     private var subscriptions: Set<AnyCancellable> = []
+    private let textViewPlaceHolder = "메시지 보내기"
     
     // MARK: - TitleView
     private lazy var titleLabel = UILabel()
@@ -43,9 +46,98 @@ final class CallVanChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        configureNavigationBar()
         setDelegate()
-        hideKeyboardWhenTappedAround()
+        setAddTargets()
+        bind()
+        configureNavigationBar(style: .empty)
+        inputSubject.send(.viewDidLoad)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.viewWillAppear)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        inputSubject.send(.viewWillDisappear)
+    }
+    
+    private func bind() {
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
+            guard let self else { return }
+            switch output {
+            case let .showToast(message):
+                showToastMessage(message: message)
+            case let .update(callVanChat):
+                callVanChatTableView.configure(callVanChat: callVanChat)
+            case let .updateData(callVanData):
+                configureNavigationBar(callVanData)
+            }
+        }.store(in: &subscriptions)
+        
+        callVanChatTableView.imageTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] imageUrl in
+            let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
+            zoomedImageViewController.configure(url: imageUrl)
+            zoomedImageViewController.modalTransitionStyle = .crossDissolve
+            zoomedImageViewController.modalPresentationStyle = .overFullScreen
+            self?.present(zoomedImageViewController, animated: true)
+        }.store(in: &subscriptions)
+    }
+}
+
+extension CallVanChatViewController {
+    
+    private func setAddTargets() {
+        sendImageButton.addTarget(self, action: #selector(sendImageButtonTapped), for: .touchUpInside)
+        sendMessageButton.addTarget(self, action: #selector(sendMessageButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func sendMessageButtonTapped() {
+        guard messageTextView.textColor == UIColor.appColor(.neutral800) else {
+            return
+        }
+        let text = messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !text.isEmpty {
+            inputSubject.send(.sendMessage(text))
+            messageTextView.text = ""
+        }
+    }
+}
+
+extension CallVanChatViewController: PHPickerViewControllerDelegate {
+    
+    @objc private func sendImageButtonTapped() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        configuration.selectionLimit = 1
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        present(picker, animated: true, completion: nil)
+    }
+    
+    func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        guard let provider = results.first?.itemProvider else { return }
+        
+        if provider.canLoadObject(ofClass: UIImage.self) {
+            provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                DispatchQueue.main.async {
+                    if let selectedImage = image as? UIImage {
+                        self?.handleSelectedImage(image: selectedImage)
+                    }
+                }
+            }
+        }
+    }
+    
+    private func handleSelectedImage(image: UIImage) {
+        guard let imageData = image.jpegData(compressionQuality: 0.5) else {
+            return
+        }
+        inputSubject.send(.sendImage(imageData))
     }
 }
 
@@ -64,7 +156,7 @@ extension CallVanChatViewController: UITextViewDelegate {
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
-            textView.text = "메시지 보내기"
+            textView.text = textViewPlaceHolder
             textView.textColor = UIColor.appColor(.neutral500)
         }
     }
@@ -72,7 +164,22 @@ extension CallVanChatViewController: UITextViewDelegate {
 
 extension CallVanChatViewController {
     
-    private func configureNavigationBar() {
+    private func configureNavigationBar(_ callVanData: CallVanData) {
+        titleLabel.do {
+            $0.text = "\(callVanData.departure) - \(callVanData.arrival)"
+            $0.textColor = UIColor.appColor(.neutral800)
+            $0.font = UIFont.appFont(.pretendardMedium, size: 15)
+        }
+        peopleImageView.do {
+            $0.image = UIImage.appImage(asset: .callVanListPeople)?.withRenderingMode(.alwaysTemplate)
+            $0.tintColor = UIColor.appColor(.neutral600)
+        }
+        paritipantsLabel.do {
+            $0.text = "\(callVanData.currentParticipants)/\(callVanData.maxParticipants)"
+            $0.textColor = UIColor.appColor(.neutral600)
+            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        }
+        
         navigationItem.titleView = titleView
         
         let appearance = UINavigationBarAppearance()
@@ -95,22 +202,6 @@ extension CallVanChatViewController {
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral100)
         
-        // MARK: - TitleView
-        titleLabel.do {
-            $0.text = "테니스장 - 천안터미널 16:00" //\(viewModel.callVanPost.title) \(viewModel.callVanPost.departureTime)"
-            $0.textColor = UIColor.appColor(.neutral800)
-            $0.font = UIFont.appFont(.pretendardMedium, size: 15)
-        }
-        peopleImageView.do {
-            $0.image = UIImage.appImage(asset: .callVanListPeople)?.withRenderingMode(.alwaysTemplate)
-            $0.tintColor = UIColor.appColor(.neutral600)
-        }
-        paritipantsLabel.do {
-            $0.text = "6/8" //"\(viewModel.callVanPost.currentParticipants)/\(viewModel.callVanPost.maxParticipants)"
-            $0.textColor = UIColor.appColor(.neutral600)
-            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        }
-        
         // MARK: - UI Components
         callVanChatTableView.do {
             $0.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
@@ -128,13 +219,16 @@ extension CallVanChatViewController {
             $0.clipsToBounds = true
         }
         messageTextView.do {
-            $0.isScrollEnabled = false
-            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-            $0.backgroundColor = UIColor.appColor(.neutral0)
-            $0.textContainerInset = UIEdgeInsets(top: 6.5, left: 16, bottom: 6.5, right: 16)
-            $0.layer.cornerRadius = 12
+            let font = UIFont.appFont(.pretendardRegular, size: 12)
+            let height: CGFloat = 32
+            let topBottomInset = (height - font.lineHeight) / 2
             
-            $0.text = "메시지 보내기"
+            $0.isScrollEnabled = false
+            $0.font = font
+            $0.backgroundColor = UIColor.appColor(.neutral0)
+            $0.textContainerInset = UIEdgeInsets(top: topBottomInset, left: 16, bottom: topBottomInset, right: 16)
+            $0.layer.cornerRadius = 12
+            $0.text = textViewPlaceHolder
             $0.textColor = UIColor.appColor(.neutral500)
         }
         sendMessageButton.do {
@@ -203,6 +297,7 @@ extension CallVanChatViewController {
             $0.top.bottom.equalTo(wrapperView).inset(8)
             $0.leading.equalTo(sendImageButton.snp.trailing).offset(8)
             $0.trailing.equalTo(sendMessageButton.snp.leading).offset(-8)
+            $0.bottom.greaterThanOrEqualTo(sendImageButton)
         }
     }
 }

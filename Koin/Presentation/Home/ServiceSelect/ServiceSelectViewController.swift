@@ -154,11 +154,26 @@ extension ServiceSelectViewController {
     
     private func pushCallVanList() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let fetchCallVanListUseCase = MockFetchCallVanListUseCase()
+        let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let participateCallVanUseCase = DefaultParticipateCallVanUseCase(repository: callVanRepository)
+        let quitCallVanUseCase = DefaultQuitCallVanUseCase(repository: callVanRepository)
+        let closeCallVanUseCase = DefaultCloseCallVanUseCase(repository: callVanRepository)
+        let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
+        let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
+        let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
-            fetchCallVanListUseCase: fetchCallVanListUseCase
+            fetchCallVanListUseCase: fetchCallVanListUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            participateCallVanUseCase: participateCallVanUseCase,
+            quitCallVanUseCase: quitCallVanUseCase,
+            closeCallVanUseCase: closeCallVanUseCase,
+            reopenCallVanUseCase: reopenCallVanUseCase,
+            completeCallVanUseCase: completeCallVanUseCase,
+            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

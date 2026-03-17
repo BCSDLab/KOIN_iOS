@@ -71,6 +71,7 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
             $0.text = "도착: " + post.arrival
             $0.font = UIFont.appFont(.pretendardMedium, size: 14)
             $0.textColor = UIColor.appColor(.neutral800)
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         dateLabel.do {
             $0.text = post.departureDate
@@ -93,7 +94,12 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
             $0.textColor = UIColor.appColor(.neutral600)
         }
         
-        mainButton.configure(state: post.mainState)
+        guard let mainState = post.mainState else {
+            assert(false)
+            return
+        }
+        mainButton.configure(state: mainState)
+        
         if let subState = post.subState {
             subButton.configure(state: subState)
             subButton.isHidden = false
@@ -190,6 +196,7 @@ extension CallVanListCollectionViewCell {
             $0.height.equalTo(22)
             $0.leading.equalTo(routeImageView.snp.trailing).offset(8)
             $0.top.equalTo(departureLabel.snp.bottom).offset(4)
+            $0.trailing.lessThanOrEqualTo(callVanButtonStackView.snp.leading).offset(-8)
         }
         labelsStackView.snp.makeConstraints {
             $0.height.equalTo(19)

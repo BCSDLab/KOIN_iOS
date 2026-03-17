@@ -30,7 +30,7 @@ final class CallVanPostParticipantsView: UIView {
         super.init(frame: .zero)
         configureView()
         setAddTargets()
-        update(numberOfParticipants: 1)
+        update(numberOfParticipants: 2)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -61,7 +61,7 @@ extension CallVanPostParticipantsView {
     @objc private func minusButtonTapped() {
         if let numberOfParticipantsString = numberOfParticipantsLabel.text,
            let numberOfParticipantsInt = Int(numberOfParticipantsString) {
-            update(numberOfParticipants: max(numberOfParticipantsInt - 1, 1))
+            update(numberOfParticipants: max(numberOfParticipantsInt - 1, 2))
         }
     }
 }

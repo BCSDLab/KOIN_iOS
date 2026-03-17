@@ -17,8 +17,11 @@ final class CallVanListCollectionView: UICollectionView {
     let chatButtonTappedPublisher = PassthroughSubject<Int, Never>()
     let callButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let postTappedPublisher = PassthroughSubject<Int, Never>()
+    let loadMoreListPublisher = PassthroughSubject<Void, Never>()
+    let didScrollPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var posts: [CallVanListPost] = []
+    private var isWaiting = true
     
     // MARK: - Initializer
     init() {
@@ -37,15 +40,63 @@ final class CallVanListCollectionView: UICollectionView {
     }
     
     // MARK: - Public
-    func configure(posts: [CallVanListPost]) {
-        self.posts = posts
-        reloadData()
+    func reset(posts: [CallVanListPost]) {
+        performBatchUpdates{ [weak self] in
+            guard let self else { return }
+            self.posts = posts
+            reloadSections(IndexSet(integer: 0))
+        } completion: { [weak self] _ in
+            self?.isWaiting = false
+        }
+    }
+    
+    func append(posts: [CallVanListPost]) {
+        performBatchUpdates() { [weak self] in
+            guard let self else { return }
+            let currentCount = self.posts.count
+            self.posts.append(contentsOf: posts)
+            let indexPaths = (currentCount..<self.posts.count).map { IndexPath(row: $0, section: 0) }
+            insertItems(at: indexPaths)
+        } completion: { [weak self] _ in
+            self?.isWaiting = false
+        }
+    }
+    
+    func prepend(post: CallVanListPost) {
+        performBatchUpdates() { [weak self] in
+            guard let self else { return }
+            self.posts.insert(post, at: 0)
+            insertItems(at: [IndexPath(row: 0, section: 0)])
+        }
+    }
+    
+    func deleteItem(postId: Int) {
+        if let index = posts.firstIndex(where: { $0.postId == postId }) {
+            performBatchUpdates() { [weak self] in
+                guard let self else { return }
+                posts.remove(at: index)
+                let indexPath = IndexPath(row: index, section: 0)
+                deleteItems(at: [indexPath])   
+            }
+        }
+    }
+    
+    func updateItem(_ callVanListPost: CallVanListPost, _ postId: Int) {
+        if let index = posts.firstIndex(where: { $0.postId == postId }) {
+            performBatchUpdates() { [weak self] in
+                guard let self else { return }
+                posts[index] = callVanListPost
+                let indexPath = IndexPath(row: index, section: 0)
+                reloadItems(at: [indexPath])
+            }
+        }
     }
 }
 
 extension CallVanListCollectionView {
     
     private func commonInit() {
+        keyboardDismissMode = .interactive
         delegate = self
         dataSource = self
         register(CallVanListCollectionViewCell.self, forCellWithReuseIdentifier: CallVanListCollectionViewCell.identifier)
@@ -109,5 +160,24 @@ extension CallVanListCollectionView: UICollectionViewDataSource {
         cell.callButtonTappedPublisher.sink { [weak self] in
             self?.callButtonTappedPublisher.send()
         }.store(in: &cell.subscriptions)
+    }
+}
+
+extension CallVanListCollectionView: UIScrollViewDelegate {
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let contentOffset = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        guard scrollView.frame.height < contentHeight,
+              0 < contentOffset else {
+            return
+        }
+        
+        if contentHeight - scrollView.frame.height < contentOffset,
+           !isWaiting {
+            isWaiting = true
+            loadMoreListPublisher.send()
+        }
     }
 }

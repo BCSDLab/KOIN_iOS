@@ -11,16 +11,22 @@ struct CallVanNotification {
     let id: Int
     let postId: Int
     let type: CallVanNotificationType
-    let isRead: Bool
+    var isRead: Bool
     let title: String
     let description: String
     let currentParticipants: Int
     let maxParticipants: Int
     let messagePreview: String
     
-    let titleTextColor: UIColor
-    let descriptionTextColor: UIColor
-    let messagePreviewTextColor: UIColor
+    var titleTextColor: UIColor {
+        isRead ? UIColor.appColor(.neutral500) : UIColor.appColor(.neutral800)
+    }
+    var descriptionTextColor: UIColor {
+        isRead ? UIColor.appColor(.neutral500) : UIColor.appColor(.new500)
+    }
+    var messagePreviewTextColor: UIColor {
+        isRead ? UIColor.appColor(.neutral500) : UIColor.appColor(.neutral600)
+    }
     
     init(id: Int, postId: Int, type: CallVanNotificationType, isRead: Bool, description: String, currentParticipants: Int, maxParticipants: Int, messagePreview: String) {
         self.id = id
@@ -32,9 +38,6 @@ struct CallVanNotification {
         self.currentParticipants = currentParticipants
         self.maxParticipants = maxParticipants
         self.messagePreview = messagePreview
-        self.titleTextColor = isRead ? UIColor.appColor(.neutral500) : UIColor.appColor(.neutral800)
-        self.descriptionTextColor = isRead ? UIColor.appColor(.neutral500) : UIColor.appColor(.new500)
-        self.messagePreviewTextColor = isRead ? UIColor.appColor(.neutral500) : UIColor.appColor(.neutral600)
     }
 }
 

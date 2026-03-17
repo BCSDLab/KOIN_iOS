@@ -27,14 +27,8 @@ final class CallVanReportReasonViewController: UIViewController {
     private let descriptionLabel = UILabel()
     
     private let buttonsStackView = UIStackView()
-    private let reasonButtons: [CallVanReportReasonButton] = {
-        var reasonButtons: [CallVanReportReasonButton] = []
-        let reasonCodes: [CallVanReportRequestReasonCode] = [.noShow, .nonPayment, .profanity]
-        for reasonCode in reasonCodes {
-            reasonButtons.append(CallVanReportReasonButton(reasonCode: reasonCode))
-        }
-        return reasonButtons
-    }()
+    private let reasonButtons: [CallVanReportReasonButton] = [.noShow, .nonPayment, .profanity].map { CallVanReportReasonButton(reasonCode: $0)
+    }
     private let separatorViews = [
         UIView(),
         UIView(),
@@ -78,15 +72,16 @@ final class CallVanReportReasonViewController: UIViewController {
 extension CallVanReportReasonViewController {
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case let .validateNextButton(validation):
                 updateNextButton(validation)
+            case .apeendImageUrl, .showToast, .reportCompleted:
+                break
             }
         }.store(in: &subscriptions)
     }
-    
 }
 
 extension CallVanReportReasonViewController {
@@ -132,7 +127,9 @@ extension CallVanReportReasonViewController: UITextViewDelegate {
             textView.text = ""
             textView.textColor = UIColor.appColor(.neutral800)
         }
-        setCustomReasonButtonSelected()
+        if !customReasonButton.isSelected {
+            customReasonButtonTapped()
+        }
         updateTextCount()
     }
     
@@ -166,40 +163,24 @@ extension CallVanReportReasonViewController {
     
     // MARK: - Button
     @objc private func reasonButtonTapped(_ sender: CallVanReportReasonButton) {
-        setReasonButtonSelected(sender)
+        sender.isSelected.toggle()
+        inputSubject.send(.updateReasonCode(sender.reasonCode, sender.isSelected))
         dismissKeyboard()
     }
     
     @objc private func customReasonButtonTapped() {
-        setCustomReasonButtonSelected()
-        
-        customReasonTextView.becomeFirstResponder()
+        customReasonButton.isSelected.toggle()
+        inputSubject.send(.updateReasonCode(.other, customReasonButton.isSelected))
+        if customReasonButton.isSelected {
+            customReasonTextView.becomeFirstResponder()
+        }
     }
     
     @objc private func nextButtonTapped() {
         let viewController = CallVanReportEvidenceViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
-    
-    private func setReasonButtonSelected(_ sender: CallVanReportReasonButton) {
-        reasonButtons.forEach { button in
-            button.isSelected = button === sender
-        }
-        customReasonButton.isSelected = false
-        
-        let reasonCode = (sender as CallVanReportReasonButton).reasonCode
-        inputSubject.send(.updateReasonCode(reasonCode))
-    }
-    
-    private func setCustomReasonButtonSelected() {
-        reasonButtons.forEach { button in
-            button.isSelected = false
-        }
-        customReasonButton.isSelected = true
-        
-        inputSubject.send(.updateReasonCode(.other))
-    }
-    
+
     private func updateNextButton(_ isEnabled: Bool) {
         nextButton.isEnabled = isEnabled
         nextButton.backgroundColor = isEnabled ? UIColor.appColor(.new500) : UIColor.appColor(.neutral400)
