@@ -18,6 +18,7 @@ final class CallVanNotificationViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let refreshControl = UIRefreshControl()
     private let notificationTableView = CallVanNotificationTableView()
     private let emptyView = CallVanNotificationEmptyView()
     
@@ -39,6 +40,7 @@ final class CallVanNotificationViewController: UIViewController {
         configureRightBarButton()
         bind()
         inputSubject.send(.viewDidLoad)
+        setAddTargets()
     }
     
     private func bind() {
@@ -49,6 +51,7 @@ final class CallVanNotificationViewController: UIViewController {
                 notificationTableView.configure(notifications: notifications)
                 notifications.isEmpty ? showEmptyView() : hideEmptyView()
             }
+            refreshControl.endRefreshing()
         }.store(in: &subscriptions)
         
         notificationTableView.cellTapPublisher.sink { [weak self] (postId, notificationId) in
@@ -78,6 +81,17 @@ final class CallVanNotificationViewController: UIViewController {
             duration: 0.25) { [weak self] in
                 self?.emptyView.isHidden = true
             }
+    }
+}
+
+extension CallVanNotificationViewController {
+    
+    private func setAddTargets() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    @objc private func refresh() {
+        inputSubject.send(.refresh)
     }
 }
 
@@ -163,6 +177,7 @@ extension CallVanNotificationViewController {
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral0)
         emptyView.isHidden = true
+        notificationTableView.refreshControl = refreshControl
     }
     
     private func setUpLayouts() {

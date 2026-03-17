@@ -211,7 +211,7 @@ extension CallVanPostViewController {
                 navigationController?.popViewController(animated: true)
             }
         }
-        showToastMessage(message: "작성되었습니다.")
+        showToastMessage(message: "작성되었습니다.", bottomInset: 75)
     }
 }
 

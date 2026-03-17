@@ -18,6 +18,7 @@ final class CallVanDataViewController: UIViewController {
     private let viewModel: CallVanDataViewModel
     
     // MARK: - UI Components
+    private let refreshControl = UIRefreshControl()
     private let scrollView = UIScrollView()
     private let dataView = CallVanDataView()
     private let participantsTableView = CallVanDataTableView()
@@ -46,6 +47,11 @@ final class CallVanDataViewController: UIViewController {
         inputSubject.send(.viewDidLoad)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.viewWillAppear)
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         participantsTableView.closeReportButton()
@@ -61,9 +67,10 @@ extension CallVanDataViewController {
             case let .update(callVanData):
                 dataView.configure(callVanData: callVanData)
                 participantsTableView.configure(participants: callVanData.participants)
-            case .updateBellWithNotification:
-                configureRightBarButton(alert: true)
+            case let .updateBell(alert):
+                configureRightBarButton(alert: alert)
             }
+            refreshControl.endRefreshing()
         }.store(in: &subscriptions)
         
         participantsTableView.reportButtonTappedPublisher.sink { [weak self] userId in
@@ -75,7 +82,12 @@ extension CallVanDataViewController {
 extension CallVanDataViewController {
     
     private func setAddTargets() {
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         enterChatRoomButton.addTarget(self, action: #selector(enterChatRoomButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func refresh() {
+        inputSubject.send(.refresh)
     }
     
     private func addGesture() {
@@ -159,6 +171,10 @@ extension CallVanDataViewController {
     
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral0)
+        
+        scrollView.do {
+            $0.refreshControl = refreshControl
+        }
         
         participantsTableView.do {
             $0.backgroundColor = .clear

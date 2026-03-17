@@ -12,6 +12,8 @@ final class CallVanListViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad
+        case viewWillAppear
+        case refresh
         case checkLoginToParticapate(Int)
         case loadMoreList
         case updateFilterTitle(String?)
@@ -29,7 +31,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         case updateListItem(CallVanListPost, Int)
         case deleteListItem(Int)
         case didCheckLoginToParticapate(Bool, Int)
-        case updateBellWithNotification
+        case updateBell(alert: Bool)
         case showToast(String)
     }
     
@@ -78,6 +80,7 @@ final class CallVanListViewModel: ViewModelProtocol {
                 checkLoginToParticapate(postId)
             case .viewDidLoad:
                 loadList()
+            case .viewWillAppear:
                 fetchNotification()
             case .loadMoreList:
                 loadMoreList()
@@ -95,6 +98,8 @@ final class CallVanListViewModel: ViewModelProtocol {
                 reopen(postId)
             case let .complete(postId):
                 complete(postId)
+            case .refresh:
+                refresh()
             }
         }.store(in: &subscriptions)
         
@@ -115,9 +120,8 @@ extension CallVanListViewModel {
         fetchCallVanNotificationListUseCase.execute().sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] notifications in
-                if 0 < notifications.count {
-                    self?.outputSubject.send(.updateBellWithNotification)
-                }
+                let alert = notifications.filter { !$0.isRead }.count != 0
+                self?.outputSubject.send(.updateBell(alert: alert))
             }
         ).store(in: &subscriptions)
     }
@@ -135,6 +139,15 @@ extension CallVanListViewModel {
         self.filterState.arrival = filterState.arrival
         self.filterState.page = 1
         loadList()
+    }
+    
+    private func refresh() {
+        DispatchQueue.global().asyncAfter(deadline: .now()+0.5) { [weak self] in
+            guard let self else { return }
+            filterState.page = 1
+            loadList()
+            fetchNotification()
+        }
     }
     
     private func loadList() {

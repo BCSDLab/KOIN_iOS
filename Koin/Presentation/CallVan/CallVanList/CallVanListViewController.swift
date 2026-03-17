@@ -16,6 +16,7 @@ final class CallVanListViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let refreshControl = UIRefreshControl()
     private let searchTextField = UITextField()
     private let searchButton = UIButton()
     private let filterButton = UIButton()
@@ -45,6 +46,11 @@ final class CallVanListViewController: UIViewController {
         inputSubject.send(.viewDidLoad)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.viewWillAppear)
+    }
+    
     private func bind() {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
@@ -59,11 +65,12 @@ final class CallVanListViewController: UIViewController {
                 callVanListCollectionView.updateItem(callVanListPost, postId)
             case let .deleteListItem(postId):
                 callVanListCollectionView.deleteItem(postId: postId)
-            case .updateBellWithNotification:
-                configureRightBarButton(alert: true)
+            case let .updateBell(alert):
+                configureRightBarButton(alert: alert)
             case let .showToast(message):
                 showToastMessage(message: message, bottomInset: 75)
             }
+            refreshControl.endRefreshing()
         }.store(in: &subscriptions)
         
         callVanListCollectionView.mainButtonTappedPublisher.sink { [weak self] postId, state in
@@ -125,6 +132,11 @@ extension CallVanListViewController {
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
         filterButton.addTarget(self, action: #selector(filterButtonTapped), for: .touchUpInside)
         searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
+        refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
+    }
+    
+    @objc private func refresh() {
+        inputSubject.send(.refresh)
     }
     
     @objc private func writeButtonTapped() {
@@ -362,6 +374,10 @@ extension CallVanListViewController {
             $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 21
             $0.layer.applySketchShadow(color: .black, alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
+        }
+        
+        callVanListCollectionView.do {
+            $0.refreshControl = refreshControl
         }
     }
     private func setUpLayouts() {

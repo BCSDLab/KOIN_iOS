@@ -119,6 +119,7 @@ extension CallVanReportViewModel {
     }
     
     private func report(_ imageUrls: [String]) {
+        reportRequest.imageUrls = imageUrls
         reportCallVanUserUseCase.execute(postId: postId, request: reportRequest).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {

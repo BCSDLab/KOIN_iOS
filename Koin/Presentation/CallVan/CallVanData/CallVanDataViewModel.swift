@@ -12,10 +12,12 @@ final class CallVanDataViewModel: ViewModelProtocol {
     
     enum Output {
         case update(CallVanData)
-        case updateBellWithNotification
+        case updateBell(alert: Bool)
     }
     enum Input {
         case viewDidLoad
+        case viewWillAppear
+        case refresh
     }
     
     // MARK: - Properties
@@ -43,7 +45,10 @@ final class CallVanDataViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad:
                 fetchData()
+            case .viewWillAppear:
                 fetchNotification()
+            case .refresh:
+                refresh()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -51,6 +56,13 @@ final class CallVanDataViewModel: ViewModelProtocol {
 }
 
 extension CallVanDataViewModel {
+    
+    private func refresh() {
+        DispatchQueue.global().asyncAfter(deadline: .now()+0.5) { [weak self] in
+            self?.fetchData()
+            self?.fetchNotification()
+        }
+    }
     
     private func fetchData() {
         fetchCallVanDataUseCase.execute(postId: postId).sink(
@@ -65,9 +77,8 @@ extension CallVanDataViewModel {
         fetchCallVanNotificationListUseCase.execute().sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] notifications in
-                if 0 < notifications.count {
-                    self?.outputSubject.send(.updateBellWithNotification)
-                }
+                let alert = notifications.filter { !$0.isRead }.count != 0
+                self?.outputSubject.send(.updateBell(alert: alert))
             }
         ).store(in: &subscriptions)
     }

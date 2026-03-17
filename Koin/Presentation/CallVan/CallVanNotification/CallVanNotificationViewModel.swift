@@ -12,6 +12,7 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad
+        case refresh
         case setNotificationRead(Int)
         case setAllNotificationsRead
         case deleteNotification(Int)
@@ -59,10 +60,21 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
                 deleteNotification(notificationId)
             case .deleteAllNotifications:
                 deleteAllNotifications()
+            case .refresh:
+                refresh()
             }
         }.store(in: &subscriptions)
         
         return outputSubject.eraseToAnyPublisher()
+    }
+}
+
+extension CallVanNotificationViewModel {
+    
+    private func refresh() {
+        DispatchQueue.global().asyncAfter(deadline: .now()+0.5) { [weak self] in
+            self?.updateNotifications()
+        }
     }
     
     private func updateNotifications() {
