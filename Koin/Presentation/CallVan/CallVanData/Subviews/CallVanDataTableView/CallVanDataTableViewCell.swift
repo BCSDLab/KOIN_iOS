@@ -25,6 +25,7 @@ final class CallVanDataTableViewCell: UITableViewCell{
     private let threeCircleImageView = UIImageView()
     private let separatorView = UIView()
     private let reportButton = UIButton()
+    private let reportedUserLabel = UILabel()
     
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -44,6 +45,7 @@ final class CallVanDataTableViewCell: UITableViewCell{
         threeCircleButton.isHidden = participant.isMe
         threeCircleImageView.isHidden = participant.isMe
         separatorView.isHidden = shoudHideSepearatorView
+        reportedUserLabel.isHidden = !participant.isReported
     }
     
     func closeReportButton() {
@@ -128,6 +130,7 @@ extension CallVanDataTableViewCell {
         nickNameLabel.do {
             $0.font = UIFont.appFont(.pretendardRegular, size: 16)
             $0.textColor = UIColor.appColor(.neutral800)
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         threeCircleImageView.do {
             $0.image = UIImage.appImage(asset: .callVanThreeCircle)
@@ -156,10 +159,17 @@ extension CallVanDataTableViewCell {
             $0.isHidden = true
             $0.alpha = 0
         }
+        reportedUserLabel.do {
+            $0.text = "(신고됨)"
+            $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+            $0.textColor = UIColor.appColor(.new500)
+            $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+            $0.isHidden = true
+        }
     }
     
     private func setUpLayouts() {
-        [profileImageView, nickNameLabel, threeCircleButton, threeCircleImageView, separatorView, reportButton].forEach {
+        [profileImageView, nickNameLabel, threeCircleButton, threeCircleImageView, separatorView, reportButton, reportedUserLabel].forEach {
             contentView.addSubview($0)
         }
     }
@@ -191,6 +201,11 @@ extension CallVanDataTableViewCell {
             $0.height.equalTo(35)
             $0.top.equalTo(threeCircleImageView.snp.bottom)
             $0.trailing.equalTo(threeCircleImageView)
+        }
+        reportedUserLabel.snp.makeConstraints {
+            $0.centerY.equalTo(nickNameLabel)
+            $0.leading.equalTo(nickNameLabel.snp.trailing).offset(4)
+            $0.trailing.lessThanOrEqualTo(threeCircleButton.snp.trailing).offset(-8)
         }
     }
 }

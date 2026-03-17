@@ -23,4 +23,5 @@ struct CallVanParticipant {
     let isMe: Bool
     let index: Int
     let profileImage: UIImage?
+    let isReported: Bool
 }

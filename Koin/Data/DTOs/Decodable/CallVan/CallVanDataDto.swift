@@ -33,11 +33,13 @@ struct CallVanParticipantDto: Decodable {
     let userId: Int
     let nickname: String
     let isMe: Bool
+    let isReported: Bool
 
     enum CodingKeys: String, CodingKey {
         case userId = "user_id"
         case nickname
         case isMe = "is_me"
+        case isReported = "is_reported"
     }
 }
 
@@ -59,7 +61,7 @@ extension CallVanDataDto {
         var paritipantdtos = participants
         var pariticipants: [CallVanParticipant] = []
         if let me = paritipantdtos.first(where: { $0.isMe }) {
-            pariticipants.append(CallVanParticipant(userId: me.userId, nickname: me.nickname + " (나)", isMe: true, index: -1, profileImage: UIImage.appImage(asset: .callVanProfileMine)))
+            pariticipants.append(CallVanParticipant(userId: me.userId, nickname: me.nickname + " (나)", isMe: true, index: -1, profileImage: UIImage.appImage(asset: .callVanProfileMine), isReported: false))
             paritipantdtos = paritipantdtos.filter { !$0.isMe }
         }
         pariticipants.append(contentsOf:
@@ -72,7 +74,7 @@ extension CallVanDataDto {
                     index = currentIndex
                     currentIndex = min(currentIndex+1, 7)
                 }
-                return CallVanParticipant(userId: $0.userId, nickname: $0.nickname, isMe: false, index: index, profileImage: profileImages[index])
+            return CallVanParticipant(userId: $0.userId, nickname: $0.nickname, isMe: false, index: index, profileImage: profileImages[index], isReported: $0.isReported)
             }
         )
         
