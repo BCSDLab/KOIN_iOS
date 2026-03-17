@@ -302,7 +302,20 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         callVanView.postButtonTappedPublisher.sink { [weak self] in
-            self?.navigateToCallVanPost()
+            guard let self else { return }
+            if viewModel.isLoggedIn {
+                navigateToCallVanPost()
+            } else {
+                let onMainButtonTapped: ()->Void = { [weak self] in
+                    self?.navigateToLogin()
+                }
+                let defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
+                let contentViewController = CallVanBottomSheetViewController(titleText: "콜밴팟을 모집하려면 로그인이 필요해요.", subTitleLabel: nil, mainButtonText: "로그인하기", closeButtonText: "닫기", onMainButtonTapped: onMainButtonTapped)
+                let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
+                bottomSheetViewController.modalTransitionStyle = .crossDissolve
+                bottomSheetViewController.modalPresentationStyle = .overFullScreen
+                present(bottomSheetViewController, animated: false)
+            }
         }.store(in: &subscriptions)
     }
 }
