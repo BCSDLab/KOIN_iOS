@@ -127,6 +127,7 @@ extension CallVanDataView {
         wrapperLayoutGuide.snp.makeConstraints {
             $0.top.bottom.equalTo(wrapperView).inset(12)
             $0.leading.equalTo(wrapperView).offset(24)
+            $0.trailing.lessThanOrEqualTo(dateTimeLabel.snp.leading).offset(-8)
         }
         routeImageView.snp.makeConstraints {
             $0.leading.centerY.equalTo(wrapperLayoutGuide)

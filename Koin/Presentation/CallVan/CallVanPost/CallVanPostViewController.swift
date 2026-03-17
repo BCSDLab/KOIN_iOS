@@ -32,6 +32,14 @@ final class CallVanPostViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private let postButton = UIButton()
     
+    private let bottomSheetContentView = CallVanPostPlaceBottomSheetView()
+    private lazy var bottomSheetViewController = BottomSheetViewControllerB(
+        contentView: bottomSheetContentView,
+        dimColor: .black,
+        dimAlpha: 0.7,
+        backgroundColor: UIColor.appColor(.neutral0)
+    )
+    
     // MARK: - Initializer
     init(viewModel: CallVanPostViewModel) {
         self.viewModel = viewModel
@@ -48,6 +56,7 @@ final class CallVanPostViewController: UIViewController {
         configureNavigationBar(style: .empty)
         configureView()
         setAddTargets()
+        setDelegates()
         bind()
         dateView.update(Date())
         timeView.update(Date())
@@ -119,6 +128,10 @@ final class CallVanPostViewController: UIViewController {
 
 extension CallVanPostViewController {
     
+    private func setDelegates() {
+        bottomSheetContentView.delegate = bottomSheetViewController
+    }
+    
     private func setAddTargets() {
         postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
     }
@@ -137,20 +150,13 @@ extension CallVanPostViewController {
             placeView.updateDeparture(placeType: place, customPlace: customPlace)
             inputSubject.send(.updateDeparture(place, customPlace))
         }
-        let contentView = CallVanPostPlaceBottomSheetView(
+        bottomSheetContentView.configure(
             title: .departure,
             place: viewModel.request.departureType,
             customPlace: viewModel.request.departureCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
-        let bottomSheetViewController = BottomSheetViewControllerB(
-            contentView: contentView,
-            dimColor: .black,
-            dimAlpha: 0.7,
-            backgroundColor: UIColor.appColor(.neutral0)
-        )
-        contentView.delegate = bottomSheetViewController
-        present(bottomSheetViewController, animated: true)
+        present(bottomSheetViewController, animated: false)
     }
     private func presentArrivalPlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
@@ -158,20 +164,13 @@ extension CallVanPostViewController {
             placeView.updateArrival(placeType: place, customPlace: customPlace)
             inputSubject.send(.updateArrival(place, customPlace))
         }
-        let contentView = CallVanPostPlaceBottomSheetView(
+        bottomSheetContentView.configure(
             title: .arrival,
             place: viewModel.request.arrivalType,
             customPlace: viewModel.request.arrivalCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
-        let bottomSheetViewController = BottomSheetViewControllerB(
-            contentView: contentView,
-            dimColor: .black,
-            dimAlpha: 0.7,
-            backgroundColor: UIColor.appColor(.neutral0)
-        )
-        contentView.delegate = bottomSheetViewController
-        present(bottomSheetViewController, animated: true)
+        present(bottomSheetViewController, animated: false)
     }
 }
 
@@ -212,6 +211,7 @@ extension CallVanPostViewController {
                 navigationController?.popViewController(animated: true)
             }
         }
+        showToastMessage(message: "작성되었습니다.")
     }
 }
 

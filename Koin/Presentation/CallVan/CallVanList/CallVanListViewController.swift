@@ -145,7 +145,9 @@ extension CallVanListViewController {
             }
         )
         let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: 605 + view.safeAreaInsets.bottom)
-        present(bottomSheetViewController, animated: true)
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        bottomSheetViewController.modalPresentationStyle = .overFullScreen
+        present(bottomSheetViewController, animated: false)
     }
     
     @objc private func searchButtonTapped() {
@@ -219,7 +221,7 @@ extension CallVanListViewController {
         let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        present(bottomSheetViewController, animated: true)
+        present(bottomSheetViewController, animated: false)
     }
     
     private func showLoginBottomSheet() {
@@ -231,7 +233,7 @@ extension CallVanListViewController {
         let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        present(bottomSheetViewController, animated: true)
+        present(bottomSheetViewController, animated: false)
     }
     
     private func cellButtonTapped(postId: Int, state: CallVanState) {

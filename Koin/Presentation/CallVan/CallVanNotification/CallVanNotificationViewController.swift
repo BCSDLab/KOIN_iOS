@@ -47,7 +47,7 @@ final class CallVanNotificationViewController: UIViewController {
             switch output {
             case let .updateNotifications(notifications):
                 notificationTableView.configure(notifications: notifications)
-                emptyView.isHidden = !notifications.isEmpty
+                notifications.isEmpty ? showEmptyView() : hideEmptyView()
             }
         }.store(in: &subscriptions)
         
@@ -61,8 +61,23 @@ final class CallVanNotificationViewController: UIViewController {
         }.store(in: &subscriptions)
         
         notificationTableView.emptyNotificationPublisher.sink { [weak self] in
-            self?.emptyView.isHidden = false
+            self?.showEmptyView()
         }.store(in: &subscriptions)
+    }
+    
+    private func showEmptyView() {
+        UIView.transition(
+            with: emptyView,
+            duration: 0.25) { [weak self] in
+                self?.emptyView.isHidden = false
+            }
+    }
+    private func hideEmptyView() {
+        UIView.transition(
+            with: emptyView,
+            duration: 0.25) { [weak self] in
+                self?.emptyView.isHidden = true
+            }
     }
 }
 
@@ -110,7 +125,7 @@ extension CallVanNotificationViewController {
             }
             let onMainButtonTapped = { [weak self] in
                 self?.notificationTableView.configure(notifications: [])
-                self?.emptyView.isHidden = false
+                self?.showEmptyView()
                 self?.inputSubject.send(.deleteAllNotifications)
             }
             let contentViewController = CallVanBottomSheetViewController(
@@ -125,7 +140,7 @@ extension CallVanNotificationViewController {
             )
             bottomSheetViewController.modalTransitionStyle = .crossDissolve
             bottomSheetViewController.modalPresentationStyle = .overFullScreen
-            present(bottomSheetViewController, animated: true)
+            present(bottomSheetViewController, animated: false)
         }
         let dropdownViewController = CallVanNotificationDropdownViewController(
             onReadButtonTapped: onReadButtonTapped,
@@ -133,7 +148,7 @@ extension CallVanNotificationViewController {
         )
         dropdownViewController.modalTransitionStyle = .crossDissolve
         dropdownViewController.modalPresentationStyle = .overFullScreen
-        present(dropdownViewController, animated: true)
+        present(dropdownViewController, animated: false)
     }
 }
 
@@ -147,6 +162,7 @@ extension CallVanNotificationViewController {
     
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral0)
+        emptyView.isHidden = true
     }
     
     private func setUpLayouts() {

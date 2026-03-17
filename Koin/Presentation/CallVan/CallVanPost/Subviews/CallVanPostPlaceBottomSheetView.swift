@@ -19,7 +19,7 @@ final class CallVanPostPlaceBottomSheetView: UIView {
     
     // MARK: - Properties
     weak var delegate: BottomSheetViewControllerBDelegate?
-    private let onApplyButtonTapped: (CallVanPlace, String?)->Void
+    private var onApplyButtonTapped: ((CallVanPlace, String?)->Void)?
     
     // MARK: - UI Components
     private let containerView = UIView()
@@ -50,13 +50,21 @@ final class CallVanPostPlaceBottomSheetView: UIView {
     private let bottomSeparatorView = UIView()
     
     // MARK: - Initialzier
-    init(title: Title, place: CallVanPlace?, customPlace: String?, onApplyButtonTapped: @escaping (CallVanPlace, String?)->Void) {
-        self.onApplyButtonTapped = onApplyButtonTapped
+    init() {
         super.init(frame: .zero)
-        
         configureView()
         setAddTargets()
         setDelegate()
+    }
+    
+    // MARK: - Public
+    func configure(
+        title: Title,
+        place: CallVanPlace?,
+        customPlace: String?,
+        onApplyButtonTapped: @escaping (CallVanPlace, String?)->Void
+    ) {
+        self.onApplyButtonTapped = onApplyButtonTapped
         
         titleLabel.text = title.rawValue
         
@@ -102,9 +110,12 @@ extension CallVanPostPlaceBottomSheetView {
         customButton.addTarget(self, action: #selector(customButtonTapped(_:)), for: .touchUpInside)
         
         applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
+        
+        customPlaceTextField.addTarget(self, action: #selector(valiate(_:)), for: .editingChanged)
     }
     
     @objc private func closeButtonTapped() {
+        customPlaceTextField.resignFirstResponder()
         delegate?.dismiss()
     }
     
@@ -126,6 +137,8 @@ extension CallVanPostPlaceBottomSheetView {
             animations: { [weak self] in
                 self?.superview?.layoutIfNeeded()
                 self?.layoutIfNeeded()
+                self?.applyButton.isEnabled = true
+                self?.applyButton.backgroundColor = UIColor.appColor(.new500)
                 self?.applyButton.do {
                     $0.setAttributedTitle(NSAttributedString(
                         string: "선택하기",
@@ -176,13 +189,15 @@ extension CallVanPostPlaceBottomSheetView {
     @objc private func applyButtonTapped() {
         if let selectedButton = (buttons1 + buttons2).first(where: { $0.isSelected }),
            let selectedPlace = selectedButton.filterState as? CallVanPlace {
-            onApplyButtonTapped(selectedPlace, nil)
+            onApplyButtonTapped?(selectedPlace, nil)
+            customPlaceTextField.resignFirstResponder()
             delegate?.dismiss()
         }
         else if customButton.isSelected,
                 let customPlace = customPlaceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
                 !customPlace.isEmpty {
-            onApplyButtonTapped(.custom, customPlace)
+            onApplyButtonTapped?(.custom, customPlace)
+            customPlaceTextField.resignFirstResponder()
             delegate?.dismiss()
         }
     }
@@ -197,6 +212,21 @@ extension CallVanPostPlaceBottomSheetView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.endEditing(true)
         return true
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        valiate(textField)
+    }
+    
+    @objc private func valiate(_ textField: UITextField) {
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+           !text.isEmpty {
+            applyButton.backgroundColor = UIColor.appColor(.new500)
+            applyButton.isEnabled = true
+        } else {
+            applyButton.backgroundColor = UIColor.appColor(.neutral400)
+            applyButton.isEnabled = false
+        }
     }
 }
 
