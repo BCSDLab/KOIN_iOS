@@ -16,6 +16,8 @@
 		7C0C18992F68AA2B001781B3 /* CallVanChatDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C18982F68AA2B001781B3 /* CallVanChatDto.swift */; };
 		7C0C189B2F68AAFA001781B3 /* CallVanChatRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C189A2F68AAFA001781B3 /* CallVanChatRequestDto.swift */; };
 		7C0C189F2F68AB33001781B3 /* CallVanChatRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C189E2F68AB33001781B3 /* CallVanChatRequest.swift */; };
+		7C0C18A12F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C18A02F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift */; };
+		7C0C18A32F68FD3D001781B3 /* CallVanSummaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C18A22F68FD3D001781B3 /* CallVanSummaryDto.swift */; };
 		7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C16AA362F3E0DBE0071ABE6 /* Interceptor.swift */; };
 		7C16AA392F3E9FBC0071ABE6 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C16AA382F3E9FBC0071ABE6 /* ErrorViewController.swift */; };
 		7C17EEA82EBF4F25008BCA89 /* ShopSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */; };
@@ -915,6 +917,8 @@
 		7C0C18982F68AA2B001781B3 /* CallVanChatDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatDto.swift; sourceTree = "<group>"; };
 		7C0C189A2F68AAFA001781B3 /* CallVanChatRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatRequestDto.swift; sourceTree = "<group>"; };
 		7C0C189E2F68AB33001781B3 /* CallVanChatRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatRequest.swift; sourceTree = "<group>"; };
+		7C0C18A02F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanSummaryUseCase.swift; sourceTree = "<group>"; };
+		7C0C18A22F68FD3D001781B3 /* CallVanSummaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanSummaryDto.swift; sourceTree = "<group>"; };
 		7C16AA362F3E0DBE0071ABE6 /* Interceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interceptor.swift; sourceTree = "<group>"; };
 		7C16AA382F3E9FBC0071ABE6 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
 		7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearch.swift; sourceTree = "<group>"; };
@@ -2159,6 +2163,7 @@
 				7CA60D822F66605E007C08C1 /* CallVanPlaceDto.swift */,
 				7C0C188E2F67F8BA001781B3 /* CallVanDataDto.swift */,
 				7C0C18982F68AA2B001781B3 /* CallVanChatDto.swift */,
+				7C0C18A22F68FD3D001781B3 /* CallVanSummaryDto.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2389,6 +2394,7 @@
 			isa = PBXGroup;
 			children = (
 				7CC42B4A2F59941200940CE1 /* FetchCallVanListUseCase.swift */,
+				7C0C18A02F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift */,
 				7CC42B4C2F59960100940CE1 /* FetchCallVanNotificationListUseCase.swift */,
 				7CA60D762F663F7B007C08C1 /* PostNotificationReadUseCase.swift */,
 				7CA60D782F664952007C08C1 /* PostAllNotificationsReadUseCase.swift */,
@@ -5141,6 +5147,7 @@
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				7C58FEA22F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift in Sources */,
 				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
+				7C0C18A12F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
 				7C58FE902F5FA4D600A2737B /* CallVanDataTableViewCell.swift in Sources */,
@@ -5210,6 +5217,7 @@
 				83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
 				D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */,
+				7C0C18A32F68FD3D001781B3 /* CallVanSummaryDto.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
 				83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */,

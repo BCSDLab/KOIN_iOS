@@ -55,6 +55,8 @@ final class CallVanListViewController: UIViewController {
                 callVanListCollectionView.reset(posts: posts)
             case let .appendList(posts):
                 callVanListCollectionView.append(posts: posts)
+            case let .updateListItem(callVanListPost, postId):
+                callVanListCollectionView.updateItem(callVanListPost, postId)
             case let .deleteListItem(postId):
                 callVanListCollectionView.deleteItem(postId: postId)
             case .updateBellWithNotification:

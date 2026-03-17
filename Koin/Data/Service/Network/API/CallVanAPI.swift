@@ -25,6 +25,7 @@ enum CallVanAPI {
     case report(Int, CallVanReportRequestDto)
     case fetchCallVanChat(Int)
     case postCallVanChat(Int, CallVanChatRequestDto)
+    case fetchCallVanSummary(Int)
 }
 
 extension CallVanAPI: Router, URLRequestConvertible {
@@ -51,6 +52,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .report(let postId, _): return "/callvan/posts/\(postId)/reports"
         case .fetchCallVanChat(let postId): return "/callvan/posts/\(postId)/chat"
         case .postCallVanChat(let postId, _): return "/callvan/posts/\(postId)/chat"
+        case .fetchCallVanSummary(let postId): return "/callvan/posts/\(postId)/summary"
         }
     }
     
@@ -72,6 +74,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .report: return .post
         case .fetchCallVanChat: return .get
         case .postCallVanChat: return .post
+        case .fetchCallVanSummary: return .get
         }
     }
     

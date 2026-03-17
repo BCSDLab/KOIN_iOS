@@ -80,6 +80,17 @@ final class CallVanListCollectionView: UICollectionView {
             }
         }
     }
+    
+    func updateItem(_ callVanListPost: CallVanListPost, _ postId: Int) {
+        if let index = posts.firstIndex(where: { $0.postId == postId }) {
+            performBatchUpdates() { [weak self] in
+                guard let self else { return }
+                posts[index] = callVanListPost
+                let indexPath = IndexPath(row: index, section: 0)
+                reloadItems(at: [indexPath])
+            }
+        }
+    }
 }
 
 extension CallVanListCollectionView {

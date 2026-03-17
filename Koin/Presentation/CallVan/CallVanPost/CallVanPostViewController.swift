@@ -193,6 +193,7 @@ extension CallVanPostViewController {
             let closeCallVanUseCase = DefaultCloseCallVanUseCase(repository: callVanRepository)
             let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
             let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
+            let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
             let viewModel = CallVanListViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchCallVanListUseCase: fetchCallVanListUseCase,
@@ -201,7 +202,8 @@ extension CallVanPostViewController {
                 quitCallVanUseCase: quitCallVanUseCase,
                 closeCallVanUseCase: closeCallVanUseCase,
                 reopenCallVanUseCase: reopenCallVanUseCase,
-                completeCallVanUseCase: completeCallVanUseCase
+                completeCallVanUseCase: completeCallVanUseCase,
+                fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase
             )
             let viewController = CallVanListViewController(viewModel: viewModel)
             if var viewControllers = navigationController?.viewControllers {
