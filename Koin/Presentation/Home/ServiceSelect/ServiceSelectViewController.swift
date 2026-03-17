@@ -153,6 +153,7 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func pushCallVanList() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "콜밴팟 모집"))
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
