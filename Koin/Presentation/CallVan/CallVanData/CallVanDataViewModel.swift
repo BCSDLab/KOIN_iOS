@@ -15,7 +15,6 @@ final class CallVanDataViewModel: ViewModelProtocol {
         case updateBell(alert: Bool)
     }
     enum Input {
-        case viewDidLoad
         case viewWillAppear
         case refresh
     }
@@ -43,9 +42,8 @@ final class CallVanDataViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case .viewDidLoad:
-                fetchData()
             case .viewWillAppear:
+                fetchData()
                 fetchNotification()
             case .refresh:
                 refresh()

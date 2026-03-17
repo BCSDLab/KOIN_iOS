@@ -44,7 +44,6 @@ final class CallVanDataViewController: UIViewController {
         configureRightBarButton()
         addGesture()
         setAddTargets()
-        inputSubject.send(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {

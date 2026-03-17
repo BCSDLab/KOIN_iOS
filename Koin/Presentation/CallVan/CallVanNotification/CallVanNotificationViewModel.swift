@@ -11,7 +11,7 @@ import Combine
 final class CallVanNotificationViewModel: ViewModelProtocol {
     
     enum Input {
-        case viewDidLoad
+        case viewWillAppear
         case refresh
         case setNotificationRead(Int)
         case setAllNotificationsRead
@@ -50,7 +50,7 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case .viewDidLoad:
+            case .viewWillAppear:
                 updateNotifications()
             case .setNotificationRead(let notificationId):
                 setNotificationRead(notificationId)

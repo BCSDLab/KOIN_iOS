@@ -39,8 +39,12 @@ final class CallVanNotificationViewController: UIViewController {
         configureNavigationBar(style: .empty)
         configureRightBarButton()
         bind()
-        inputSubject.send(.viewDidLoad)
         setAddTargets()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.viewWillAppear)
     }
     
     private func bind() {
