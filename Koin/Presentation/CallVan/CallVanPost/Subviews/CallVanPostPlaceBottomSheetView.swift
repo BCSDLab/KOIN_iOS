@@ -65,33 +65,30 @@ final class CallVanPostPlaceBottomSheetView: UIView {
         onApplyButtonTapped: @escaping (CallVanPlace, String?)->Void
     ) {
         self.onApplyButtonTapped = onApplyButtonTapped
-        
+
         titleLabel.text = title.rawValue
-        
+
+        resetState()
+
         if place == .custom {
             (buttons1 + buttons2).forEach {
                 $0.isSelected = false
             }
             customButton.isSelected = true
             customPlaceTextField.text = customPlace
-            customPlaceTextField.snp.remakeConstraints {
-                $0.height.equalTo(47)
-                $0.top.equalTo(separatorView.snp.bottom).offset(24)
-                $0.leading.trailing.equalToSuperview().inset(32)
-            }
-            applyButton.setAttributedTitle(NSAttributedString(
-                string: "입력완료",
-                attributes: [
-                    .font : UIFont.appFont(.pretendardBold, size: 16),
-                    .foregroundColor : UIColor.appColor(.neutral0)
-                ]), for: .normal
-            )
+            updateCustomPlaceTextField(isVisible: true)
+            updateApplyButtonTitle(isCustomSelected: true)
+            valiate(customPlaceTextField)
         } else {
             let place = place ?? CallVanPlace.frontGate
             (buttons1 + buttons2).forEach {
-                $0.isSelected = $0.filterState as! CallVanPlace == place
+                $0.isSelected = $0.filterState as? CallVanPlace == place
             }
             customButton.isSelected = false
+            updateCustomPlaceTextField(isVisible: false)
+            updateApplyButtonTitle(isCustomSelected: false)
+            applyButton.backgroundColor = UIColor.appColor(.new500)
+            applyButton.isEnabled = true
         }
     }
     required init?(coder: NSCoder) {
@@ -126,12 +123,8 @@ extension CallVanPostPlaceBottomSheetView {
             }
         }
         customButton.isSelected = false
-        
-        customPlaceTextField.snp.remakeConstraints {
-            $0.height.equalTo(0)
-            $0.top.equalTo(separatorView.snp.bottom).offset(0)
-            $0.leading.trailing.equalToSuperview().inset(32)
-        }
+
+        updateCustomPlaceTextField(isVisible: false)
         UIView.animate(
             withDuration: 0.2,
             animations: { [weak self] in
@@ -139,14 +132,7 @@ extension CallVanPostPlaceBottomSheetView {
                 self?.layoutIfNeeded()
                 self?.applyButton.isEnabled = true
                 self?.applyButton.backgroundColor = UIColor.appColor(.new500)
-                self?.applyButton.do {
-                    $0.setAttributedTitle(NSAttributedString(
-                        string: "선택하기",
-                        attributes: [
-                            .font : UIFont.appFont(.pretendardBold, size: 16),
-                            .foregroundColor : UIColor.appColor(.neutral0)
-                        ]), for: .normal)
-                }
+                self?.updateApplyButtonTitle(isCustomSelected: false)
             },
             completion: { [weak self] _ in
                 self?.customPlaceTextField.resignFirstResponder()
@@ -159,26 +145,14 @@ extension CallVanPostPlaceBottomSheetView {
             $0.isSelected = false
         }
         sender.isSelected = true
-        
-        customPlaceTextField.snp.remakeConstraints {
-            $0.height.equalTo(47)
-            $0.top.equalTo(separatorView.snp.bottom).offset(24)
-            $0.leading.trailing.equalToSuperview().inset(32)
-        }
+
+        updateCustomPlaceTextField(isVisible: true)
         UIView.animate(
             withDuration: 0.2,
             animations: { [weak self] in
                 self?.superview?.layoutIfNeeded()
                 self?.layoutIfNeeded()
-                self?.applyButton.do {
-                    $0.setAttributedTitle(NSAttributedString(
-                        string: "입력완료",
-                        attributes: [
-                            .font : UIFont.appFont(.pretendardBold, size: 16),
-                            .foregroundColor : UIColor.appColor(.neutral0)
-                        ]), for: .normal)
-                }
-
+                self?.updateApplyButtonTitle(isCustomSelected: true)
             },
             completion: { [weak self] _ in
                 self?.customPlaceTextField.becomeFirstResponder()
@@ -190,16 +164,14 @@ extension CallVanPostPlaceBottomSheetView {
         if let selectedButton = (buttons1 + buttons2).first(where: { $0.isSelected }),
            let selectedPlace = selectedButton.filterState as? CallVanPlace {
             onApplyButtonTapped?(selectedPlace, nil)
-            customPlaceTextField.resignFirstResponder()
-            delegate?.dismiss()
         }
         else if customButton.isSelected,
                 let customPlace = customPlaceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
                 !customPlace.isEmpty {
             onApplyButtonTapped?(.custom, customPlace)
-            customPlaceTextField.resignFirstResponder()
-            delegate?.dismiss()
         }
+        customPlaceTextField.resignFirstResponder()
+        delegate?.dismiss()
     }
 }
 
@@ -231,6 +203,38 @@ extension CallVanPostPlaceBottomSheetView: UITextFieldDelegate {
 }
 
 extension CallVanPostPlaceBottomSheetView {
+
+    private func resetState() {
+        (buttons1 + buttons2).forEach {
+            $0.isSelected = false
+        }
+        customButton.isSelected = false
+        customPlaceTextField.text = nil
+        customPlaceTextField.resignFirstResponder()
+        updateCustomPlaceTextField(isVisible: false)
+        updateApplyButtonTitle(isCustomSelected: false)
+        applyButton.backgroundColor = UIColor.appColor(.new500)
+        applyButton.isEnabled = true
+    }
+
+    private func updateCustomPlaceTextField(isVisible: Bool) {
+        customPlaceTextField.snp.remakeConstraints {
+            $0.height.equalTo(isVisible ? 47 : 0)
+            $0.top.equalTo(separatorView.snp.bottom).offset(isVisible ? 24 : 0)
+            $0.leading.trailing.equalToSuperview().inset(32)
+        }
+    }
+
+    private func updateApplyButtonTitle(isCustomSelected: Bool) {
+        let title = isCustomSelected ? "입력완료" : "선택하기"
+        applyButton.setAttributedTitle(NSAttributedString(
+            string: title,
+            attributes: [
+                .font : UIFont.appFont(.pretendardBold, size: 16),
+                .foregroundColor : UIColor.appColor(.neutral0)
+            ]), for: .normal
+        )
+    }
     
     private func configureView() {
         setUpStyles()
