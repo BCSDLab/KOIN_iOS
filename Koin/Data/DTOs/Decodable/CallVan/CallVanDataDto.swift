@@ -95,7 +95,7 @@ extension CallVanDataDto {
             formatter.dateFormat = "yyyy-MM-dd"
             formatter.locale = Locale(identifier: "ko_KR")
             if let date = formatter.date(from: departureDate) {
-                formatter.dateFormat = "MM.dd (a)"
+                formatter.dateFormat = "MM.dd (E)"
                 return formatter.string(from: date)
             } else {
                 return departureDate
