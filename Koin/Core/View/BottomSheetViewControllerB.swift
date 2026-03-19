@@ -17,6 +17,7 @@ protocol BottomSheetViewControllerBDelegate: AnyObject {
 final class BottomSheetViewControllerB: UIViewController {
     
     // MARK: - Properties
+    private var contentViewBottomConstraint: Constraint?
     private var safeAreaHeightConstraint: Constraint?
     private var alpha: CGFloat
     
@@ -54,7 +55,6 @@ final class BottomSheetViewControllerB: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        addObserver()
         setGesture()
         hideKeyboardWhenTappedAround()
     }
@@ -69,33 +69,26 @@ final class BottomSheetViewControllerB: UIViewController {
 extension BottomSheetViewControllerB: BottomSheetViewControllerBDelegate {
     
     func present() {
-        contentView.snp.remakeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-        }
+//        view.layoutIfNeeded()
+        contentViewBottomConstraint?.update(offset: 0)
         UIView.animate(withDuration: 0.25) { [weak self] in
             guard let self else { return }
             dimView.alpha = alpha
-            view.setNeedsLayout()
             view.layoutIfNeeded()
         }
     }
     
     func dismiss() {
-        contentView.snp.remakeConstraints {
-            $0.top.equalTo(view.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-        }
+        contentViewBottomConstraint?.update(offset: contentView.bounds.height)
         UIView.animate(
             withDuration: 0.25,
             animations: { [weak self] in
                 guard let self else { return }
                 dimView.alpha = 0
-                view.setNeedsLayout()
                 view.layoutIfNeeded()
             },
             completion: { [weak self] _ in
-                self?.dismiss(animated: true)
+                self?.dismiss(animated: false)
             })
     }
 }
@@ -107,33 +100,9 @@ extension BottomSheetViewControllerB {
         dimView.addGestureRecognizer(tapGesture)
     }
     
-    private func addObserver() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-    
     @objc private func dimViewTapped() {
         dismissKeyboard()
         dismiss()
-    }
-    
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        contentView.snp.remakeConstraints {
-            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
-            $0.leading.trailing.equalToSuperview()
-        }
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            self?.view.layoutIfNeeded()
-        }
-    }
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        contentView.snp.remakeConstraints {
-            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
-            $0.leading.trailing.equalToSuperview()
-        }
-        UIView.animate(withDuration: 0.25) { [weak self] in
-            self?.view.layoutIfNeeded()
-        }
     }
 }
 
@@ -155,7 +124,8 @@ extension BottomSheetViewControllerB {
             $0.edges.equalToSuperview()
         }
         contentView.snp.makeConstraints {
-            $0.top.equalTo(view.snp.bottom)
+            contentView.layoutIfNeeded()
+            contentViewBottomConstraint = $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(contentView.bounds.height).constraint
             $0.leading.trailing.equalToSuperview()
         }
         safeAreaView.snp.makeConstraints {
