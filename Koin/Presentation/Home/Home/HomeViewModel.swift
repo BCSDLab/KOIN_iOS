@@ -22,6 +22,7 @@ final class HomeViewModel: ViewModelProtocol {
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
         case fetchBanner
+        case checkLogin
         case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     
@@ -85,7 +86,6 @@ final class HomeViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case .viewDidLoad:
-                self?.checkLogin()
                 self?.getShopCategory()
                 self?.checkVersion()
                 self?.fetchUserData()
@@ -103,6 +103,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getNoticeBanners(date: date)
             case .fetchBanner:
                 self?.fetchBanner()
+            case .checkLogin:
+                self?.checkLogin()
             case let .logEventDirect(name, label, value, category):
                 self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
             case let .logSessionEvent(label, category, value, sessionId):
