@@ -100,6 +100,7 @@ extension CallVanChatViewController {
         let text = messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
         if !text.isEmpty {
             inputSubject.send(.sendMessage(text))
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanChatSend, category: .click, value: ""))
             messageTextView.text = ""
         }
     }

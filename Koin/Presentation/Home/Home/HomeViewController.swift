@@ -667,6 +667,7 @@ extension HomeViewController {
         let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
         let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
         let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchCallVanListUseCase: fetchCallVanListUseCase,
@@ -676,7 +677,8 @@ extension HomeViewController {
             closeCallVanUseCase: closeCallVanUseCase,
             reopenCallVanUseCase: reopenCallVanUseCase,
             completeCallVanUseCase: completeCallVanUseCase,
-            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase
+            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

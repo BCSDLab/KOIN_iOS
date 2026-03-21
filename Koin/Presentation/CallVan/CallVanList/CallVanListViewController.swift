@@ -14,6 +14,7 @@ final class CallVanListViewController: UIViewController {
     private let viewModel: CallVanListViewModel
     private let inputSubject = PassthroughSubject<CallVanListViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var didSwipeToPop = false
     
     // MARK: - UI Components
     private let refreshControl = UIRefreshControl()
@@ -44,11 +45,18 @@ final class CallVanListViewController: UIViewController {
         setDelegates()
         bind()
         inputSubject.send(.viewDidLoad)
+        navigationController?.interactivePopGestureRecognizer?.addTarget(self, action: #selector(popGestureRecognized))
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.viewWillAppear)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        let category: EventParameter.EventCategory = didSwipeToPop ? .swipe : .click
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanBack, category: category, value: ""))
     }
     
     private func bind() {
@@ -143,6 +151,7 @@ extension CallVanListViewController {
     
     @objc private func writeButtonTapped() {
         inputSubject.send(.checkLoginToPost)
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanCreate, category: .click, value: ""))
     }
     
     private func navigateToPost() {
@@ -160,17 +169,23 @@ extension CallVanListViewController {
             onApplyButtonTapped: { [weak self] filterState in
                 guard let self else { return }
                 inputSubject.send(.updateFilterState(filterState))
+                inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanFilterApply, category: .click, value: ""))
             }
         )
         let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: 605 + view.safeAreaInsets.bottom)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
         present(bottomSheetViewController, animated: false)
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanFilter, category: .click, value: ""))
     }
     
     @objc private func searchButtonTapped() {
         inputSubject.send(.updateFilterTitle(searchTextField.text))
         dismissKeyboard()
+    }
+    
+    @objc private func popGestureRecognized() {
+        didSwipeToPop = true
     }
 }
 
@@ -186,6 +201,11 @@ extension CallVanListViewController {
     private func setDelegates() {
         searchTextField.delegate = self
     }
+
+    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanSsearch, category: .click, value: ""))
+        return true
+    }
     
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         super.textFieldShouldReturn(textField)
@@ -200,25 +220,36 @@ extension CallVanListViewController {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
         let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanDataViewModel(
             postId: postId,
             fetchCallVanDataUseCase: fetchCallVanDataUseCase,
-            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let viewController = CallVanDataViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func showBottomSheet(state: CallVanState, postId: Int) {
         let onMainButtonTapped: ()->Void
+        var onCloseButtonTapped: (()->Void)? = nil
         var defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
         switch state {
         case .참여하기:
             onMainButtonTapped = { [weak self] in
                 self?.inputSubject.send(.participate(postId))
+                self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanJoin, category: .click, value: "예"))
+            }
+            onCloseButtonTapped = { [weak self] in
+                self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanJoin, category: .click, value: "아니요"))
             }
         case .참여취소:
             onMainButtonTapped = { [weak self] in
                 self?.inputSubject.send(.quit(postId))
+                self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanJoinCancel, category: .click, value: "예"))
+            }
+            onCloseButtonTapped = { [weak self] in
+                self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanJoinCancel, category: .click, value: "아니요"))
             }
         case .마감하기:
             onMainButtonTapped = { [weak self] in
@@ -236,7 +267,7 @@ extension CallVanListViewController {
         default:
             return
         }
-        let contentViewController = CallVanBottomSheetViewController(state: state, onMainButtonTapped: onMainButtonTapped)
+        let contentViewController = CallVanBottomSheetViewController(state: state, onMainButtonTapped: onMainButtonTapped, onCloseButtonTapped: onCloseButtonTapped)
         let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
@@ -285,14 +316,17 @@ extension CallVanListViewController {
         let postCallVanChatUseCase = DefaultPostCallVanChatUseCase(repository: callVanRepository)
         let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
         let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanChatViewModel(
             postId: postId,
             fetchCallVanChatUseCase: fetchCallVanChatUseCase,
             postCallVanChatUseCase: postCallVanChatUseCase,
             fetchCallVanDataUseCase: fetchCallVanDataUseCase,
-            uploadFileUseCase: uploadFileUseCase)
+            uploadFileUseCase: uploadFileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let viewController = CallVanChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanChat, category: .click, value: ""))
     }
     
     private func callButtonTapped() {
@@ -317,6 +351,7 @@ extension CallVanListViewController {
             selectedId: 11)
         let shopViewController = ShopViewController(viewModel: viewModel)
         navigationController?.pushViewController(shopViewController, animated: true)
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanCall, category: .click, value: ""))
     }
 }
 

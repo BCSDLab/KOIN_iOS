@@ -101,14 +101,18 @@ extension CallVanDataViewController {
         let postCallVanChatUseCase = DefaultPostCallVanChatUseCase(repository: callVanRepository)
         let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
         let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanChatViewModel(
             postId: viewModel.postId,
             fetchCallVanChatUseCase: fetchCallVanChatUseCase,
             postCallVanChatUseCase: postCallVanChatUseCase,
             fetchCallVanDataUseCase: fetchCallVanDataUseCase,
-            uploadFileUseCase: uploadFileUseCase)
+            uploadFileUseCase: uploadFileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = CallVanChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanChatEntry, category: .click, value: ""))
     }
     
     @objc private func didTapAround() {

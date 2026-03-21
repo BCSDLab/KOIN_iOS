@@ -17,12 +17,14 @@ final class CallVanDataViewModel: ViewModelProtocol {
     enum Input {
         case viewWillAppear
         case refresh
+        case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
     }
     
     // MARK: - Properties
     let postId: Int
     private let fetchCallVanDataUseCase: FetchCallVanDataUseCase
     private let fetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -30,11 +32,13 @@ final class CallVanDataViewModel: ViewModelProtocol {
     init(
         postId: Int,
         fetchCallVanDataUseCase: FetchCallVanDataUseCase,
-        fetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase
+        fetchCallVanNotificationListUseCase: FetchCallVanNotificationListUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.postId = postId
         self.fetchCallVanDataUseCase = fetchCallVanDataUseCase
         self.fetchCallVanNotificationListUseCase = fetchCallVanNotificationListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Public
@@ -47,6 +51,8 @@ final class CallVanDataViewModel: ViewModelProtocol {
                 fetchNotification()
             case .refresh:
                 refresh()
+            case let .logEvent(label, category, value):
+                logEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -79,5 +85,9 @@ extension CallVanDataViewModel {
                 self?.outputSubject.send(.updateBell(alert: alert))
             }
         ).store(in: &subscriptions)
+    }
+    
+    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }
