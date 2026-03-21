@@ -181,6 +181,10 @@ enum EventParameter {
             case itemPostType = "item_post_type"
             
             case loginPrompt = "login_prompt"
+            
+            // CallVan
+            case mainCallVanView = "main_callvan_view"
+            case mainCallVanWrite = "main_callvan_write"
 
             var team: String {
                 return "CAMPUS"
