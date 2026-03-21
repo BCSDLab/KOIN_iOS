@@ -45,7 +45,6 @@ final class CallVanListViewController: UIViewController {
         setDelegates()
         bind()
         inputSubject.send(.viewDidLoad)
-        navigationController?.interactivePopGestureRecognizer?.addTarget(self, action: #selector(popGestureRecognized))
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -53,10 +52,19 @@ final class CallVanListViewController: UIViewController {
         inputSubject.send(.viewWillAppear)
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let didSwipeToPop = (navigationController as? CustomNavigationController)?.didSwipeToPop {
+            self.didSwipeToPop = didSwipeToPop
+        }
+    }
+    
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        let category: EventParameter.EventCategory = didSwipeToPop ? .swipe : .click
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanBack, category: category, value: ""))
+        if isMovingFromParent {
+            let category: EventParameter.EventCategory = didSwipeToPop ? .swipe : .click
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanBack, category: category, value: ""))
+        }
     }
     
     private func bind() {
@@ -157,7 +165,11 @@ extension CallVanListViewController {
     private func navigateToPost() {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
-        let viewModel = CallVanPostViewModel(postCallVanDataUseCase: postCallVanDataUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = CallVanPostViewModel(
+            postCallVanDataUseCase: postCallVanDataUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = CallVanPostViewController(viewModel: viewModel)
         viewController.delegate = self
         navigationController?.pushViewController(viewController, animated: true)
@@ -182,10 +194,6 @@ extension CallVanListViewController {
     @objc private func searchButtonTapped() {
         inputSubject.send(.updateFilterTitle(searchTextField.text))
         dismissKeyboard()
-    }
-    
-    @objc private func popGestureRecognized() {
-        didSwipeToPop = true
     }
 }
 
