@@ -21,6 +21,7 @@ final class CallVanPostViewController: UIViewController {
     private let inputSubject = PassthroughSubject<CallVanPostViewModel.Input, Never>()
     private let viewModel: CallVanPostViewModel
     private var subscriptions: Set<AnyCancellable> = []
+    private var didSwipeToPop = false
     
     // MARK: - UI Components
     private let placeView = CallVanPostPlaceView()
@@ -60,6 +61,21 @@ final class CallVanPostViewController: UIViewController {
         bind()
         dateView.update(Date())
         timeView.update(Date())
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let didSwipeToPop = (navigationController as? CustomNavigationController)?.didSwipeToPop {
+            self.didSwipeToPop = didSwipeToPop
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isMovingFromParent {
+            let category: EventParameter.EventCategory = didSwipeToPop ? .swipe : .click
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteBack, category: category, value: ""))
+        }
     }
     
     private func bind() {
@@ -113,6 +129,13 @@ final class CallVanPostViewController: UIViewController {
             }.store(in: &subscriptions)
         
         timeView.timeChangedPublisher.sink { [weak self] time in
+            let value = {
+                let formatter = DateFormatter()
+                formatter.locale = Locale(identifier: "ko_KR")
+                formatter.dateFormat = "a hh:mm"
+                return formatter.string(from: time)
+            }()
+            self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteTime, category: .click, value: value))
             self?.inputSubject.send(.updateDepartureTime(time))
         }.store(in: &subscriptions)
         
@@ -134,6 +157,7 @@ extension CallVanPostViewController {
     
     @objc private func postButtonTapped() {
         postButton.isUserInteractionEnabled = false
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteDone, category: .click, value: ""))
         inputSubject.send(.postData)
     }
 }
@@ -145,6 +169,9 @@ extension CallVanPostViewController {
             guard let self else { return }
             placeView.updateDeparture(placeType: place, customPlace: customPlace)
             inputSubject.send(.updateDeparture(place, customPlace))
+            
+            let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteArrival, category: .click, value: value))
         }
         bottomSheetContentView.configure(
             title: .departure,
@@ -159,6 +186,9 @@ extension CallVanPostViewController {
             guard let self else { return }
             placeView.updateArrival(placeType: place, customPlace: customPlace)
             inputSubject.send(.updateArrival(place, customPlace))
+            
+            let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteDeparture, category: .click, value: value))
         }
         bottomSheetContentView.configure(
             title: .arrival,

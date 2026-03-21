@@ -18,6 +18,7 @@ final class CallVanPostViewModel: ViewModelProtocol {
         case updateMaxParticipants(Int)
         case swapButtonTapped
         case postData
+        case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
     }
     enum Output {
         case enablePostButton(Bool)
@@ -29,6 +30,7 @@ final class CallVanPostViewModel: ViewModelProtocol {
     
     // MARK: - Properties
     private let postCallVanDataUseCase: PostCallVanDataUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let dateFormatter = DateFormatter().then {
@@ -42,8 +44,12 @@ final class CallVanPostViewModel: ViewModelProtocol {
     }
     
     // MARK: - Initializer
-    init(postCallVanDataUseCase: PostCallVanDataUseCase) {
+    init(
+        postCallVanDataUseCase: PostCallVanDataUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    ) {
         self.postCallVanDataUseCase = postCallVanDataUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Public
@@ -67,6 +73,9 @@ final class CallVanPostViewModel: ViewModelProtocol {
                 swapPlace()
             case .postData:
                 postData()
+            case let .logEvent(label, category, value):
+                logEvent(label: label, category: category, value: value)
+                
             }
         }.store(in: &subscriptions)
         
@@ -118,5 +127,9 @@ extension CallVanPostViewModel {
                 self?.outputSubject.send(.postDataCompleted(postData))
             }
         ).store(in: &subscriptions)
+    }
+    
+    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

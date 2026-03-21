@@ -687,7 +687,11 @@ extension HomeViewController {
     private func navigateToCallVanPost() {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
-        let viewModel = CallVanPostViewModel(postCallVanDataUseCase: postCallVanDataUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = CallVanPostViewModel(
+            postCallVanDataUseCase: postCallVanDataUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = CallVanPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

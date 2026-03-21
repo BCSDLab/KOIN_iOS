@@ -196,6 +196,11 @@ enum EventParameter {
             case callvanCreate = "callvan_create"
             case callvanChatEntry = "callvan_chat_entry"
             case callvanBack = "callvan_back"
+            case callvanWriteDeparture = "callvan_write_departure"
+            case callvanWriteArrival = "callvan_write_arrival"
+            case callvanWriteTime = "callvan_write_time"
+            case callvanWriteDone = "callvan_write_done"
+            case callvanWriteBack = "callvan_write_back"
             
             var team: String {
                 return "CAMPUS"
