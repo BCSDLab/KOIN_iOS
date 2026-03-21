@@ -68,6 +68,8 @@ extension CallVanDataViewController {
                 participantsTableView.configure(participants: callVanData.participants)
             case let .updateBell(alert):
                 configureRightBarButton(alert: alert)
+            case let .showToast(message):
+                showToastMessage(message: message)
             }
             refreshControl.endRefreshing()
         }.store(in: &subscriptions)

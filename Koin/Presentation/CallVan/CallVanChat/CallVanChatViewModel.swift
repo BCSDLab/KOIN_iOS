@@ -125,7 +125,11 @@ extension CallVanChatViewModel {
     
     private func fetchData() {
         fetchCallVanDataUseCase.execute(postId: postId).sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] comepltion in
+                if case .failure(let error) = comepltion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { [weak self] callVanData in
                 self?.outputSubject.send(.updateData(callVanData))
             }
