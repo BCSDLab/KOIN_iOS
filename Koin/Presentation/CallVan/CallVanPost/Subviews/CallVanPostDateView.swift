@@ -25,7 +25,7 @@ final class CallVanPostDateView: ExtendedTouchAreaView {
     private let dateButton = UIButton()
     private let dateLabel = UILabel()
     private let downArrowImageView = UIImageView()
-    private let dateDropDownView = KoinPickerDropDownView(delegate: KoinPickerDropDownViewDateDelegate())
+    private let dateDropDownView = KoinPickerDropDownView(delegate: KoinPickerDropDownViewDateDelegate(range: 0..<365))
     
     // MARK: - Initializer
     init() {

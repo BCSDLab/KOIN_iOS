@@ -37,7 +37,7 @@ final class CallVanPostViewModel: ViewModelProtocol {
     }
     private(set) var request = CallVanPostRequest() {
         didSet {
-            validateRequest()
+            validate()
         }
     }
     
@@ -98,13 +98,42 @@ extension CallVanPostViewModel {
         outputSubject.send(.updateArrival(request.arrivalType, request.arrivalCustomName))
     }
     
-    private func validateRequest() {
-        let validation = request.departureType != nil
-            && request.arrivalType != nil
-            && request.departureDate != nil
-            && request.departureTime != nil
+    private func validate() {
+        var isValid = true
         
-        outputSubject.send(.enablePostButton(validation))
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd HH:mm"
+        let tenMinutes: TimeInterval = 1 * 60 * 10
+        
+        /// 빈 값이 있는지 확인
+        if request.departureType == nil
+            || request.arrivalType == nil
+            || request.departureDate?.isEmpty == true
+            || request.departureTime?.isEmpty == true {
+            isValid = false
+        }
+        
+        /// 출발지와 도착지가 다른지 확인
+        switch (request.departureType, request.arrivalType) {
+        case (.custom, .custom):
+            if request.departureCustomName == request.arrivalCustomName {
+                isValid = false
+            }
+        default:
+            if request.departureType == request.arrivalType {
+                isValid = false
+            }
+        }
+        
+        /// 현재 시각으로부터 최소 10분 이후 일정인지 확인
+        let date = request.departureDate ?? ""
+        let time = request.departureTime ?? ""
+        if let requestDate = formatter.date(from: "\(date) \(time)"),
+           requestDate.timeIntervalSince(Date()) < tenMinutes {
+            isValid = false
+        }
+        
+        outputSubject.send(.enablePostButton(isValid))
     }
     
     private func postData() {
