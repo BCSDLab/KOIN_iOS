@@ -91,7 +91,7 @@ extension OneBusTimetableTableView: UITableViewDataSource {
 
 extension OneBusTimetableTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 44
+        return 46
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
