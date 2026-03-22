@@ -171,7 +171,7 @@ extension CallVanPostViewController {
             inputSubject.send(.updateDeparture(place, customPlace))
             
             let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
-            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteArrival, category: .click, value: value))
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteDeparture, category: .click, value: value))
         }
         bottomSheetContentView.configure(
             title: .departure,
@@ -188,7 +188,7 @@ extension CallVanPostViewController {
             inputSubject.send(.updateArrival(place, customPlace))
             
             let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
-            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteDeparture, category: .click, value: value))
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteArrival, category: .click, value: value))
         }
         bottomSheetContentView.configure(
             title: .arrival,
