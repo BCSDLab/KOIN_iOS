@@ -13,6 +13,7 @@ final class CallVanDataViewModel: ViewModelProtocol {
     enum Output {
         case update(CallVanData)
         case updateBell(alert: Bool)
+        case showToast(String)
     }
     enum Input {
         case viewWillAppear
@@ -64,7 +65,11 @@ extension CallVanDataViewModel {
     
     private func fetchData() {
         fetchCallVanDataUseCase.execute(postId: postId).sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { [weak self] callVanData in
                 self?.outputSubject.send(.update(callVanData))
             }
@@ -73,7 +78,11 @@ extension CallVanDataViewModel {
     
     private func fetchNotification() {
         fetchCallVanNotificationListUseCase.execute().sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { [weak self] notifications in
                 let alert = notifications.filter { !$0.isRead }.count != 0
                 self?.outputSubject.send(.updateBell(alert: alert))

@@ -176,6 +176,7 @@ final class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        inputSubject.send(.checkLogin)
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .mainShopCategories))
         inputSubject.send(.categorySelected(getDiningPlace()))
