@@ -17,7 +17,9 @@ final class CallVanPostDateView: ExtendedTouchAreaView {
     let dateChangedPublisher = PassthroughSubject<Date, Never>()
     let selectedItemPublisher = PassthroughSubject<[String], Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let formatter = DateFormatter()
+    private let formatter = DateFormatter().then {
+        $0.dateFormat = "yyyy년 M월 d일"
+    }
     
     // MARK: - UI Components
     private let titleLabel = UILabel()
