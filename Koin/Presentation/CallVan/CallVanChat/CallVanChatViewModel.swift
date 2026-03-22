@@ -16,6 +16,7 @@ final class CallVanChatViewModel: ViewModelProtocol {
         case viewWillDisappear
         case sendMessage(String)
         case sendImage(Data)
+        case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
     }
     enum Output {
         case update(CallVanChat)
@@ -28,6 +29,7 @@ final class CallVanChatViewModel: ViewModelProtocol {
     private let postCallVanChatUseCase: PostCallVanChatUseCase
     private let fetchCallVanDataUseCase: FetchCallVanDataUseCase
     private let uploadFileUseCase: UploadFileUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var pollingSubscription: AnyCancellable?
     private var subscriptions: Set<AnyCancellable> = []
@@ -38,12 +40,14 @@ final class CallVanChatViewModel: ViewModelProtocol {
          fetchCallVanChatUseCase: FetchCallVanChatUseCase,
          postCallVanChatUseCase: PostCallVanChatUseCase,
          fetchCallVanDataUseCase: FetchCallVanDataUseCase,
-         uploadFileUseCase: UploadFileUseCase) {
+         uploadFileUseCase: UploadFileUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.postId = postId
         self.fetchCallVanChatUseCase = fetchCallVanChatUseCase
         self.postCallVanChatUseCase = postCallVanChatUseCase
         self.fetchCallVanDataUseCase = fetchCallVanDataUseCase
         self.uploadFileUseCase = uploadFileUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Public
@@ -61,6 +65,8 @@ final class CallVanChatViewModel: ViewModelProtocol {
                 postCallVanChat(CallVanChatRequest(isImage: false, content: message))
             case let .sendImage(imageData):
                 uploadImage(imageData)
+            case let .logEvent(label, category, value):
+                logEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -134,5 +140,9 @@ extension CallVanChatViewModel {
                 self?.outputSubject.send(.updateData(callVanData))
             }
         ).store(in: &subscriptions)
+    }
+    
+    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

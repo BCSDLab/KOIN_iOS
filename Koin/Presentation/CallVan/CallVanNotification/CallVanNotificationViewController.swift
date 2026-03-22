@@ -107,10 +107,12 @@ extension CallVanNotificationViewController {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
         let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanDataViewModel(
             postId: postId,
             fetchCallVanDataUseCase: fetchCallVanDataUseCase,
-            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase)
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let viewController = CallVanDataViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

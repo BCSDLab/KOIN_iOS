@@ -11,7 +11,7 @@ import SnapKit
 
 extension CallVanBottomSheetViewController {
     
-    convenience init(state: CallVanState, onMainButtonTapped: @escaping () -> Void) {
+    convenience init(state: CallVanState, onMainButtonTapped: @escaping () -> Void, onCloseButtonTapped: (()->Void)? = nil) {
         let titleText: String
         var subTitleLabel: UILabel? = nil
         let mainButtonText: String
@@ -55,7 +55,7 @@ extension CallVanBottomSheetViewController {
             closeButtonText = ""
         }
         
-        self.init(titleText: titleText, subTitleLabel: subTitleLabel, mainButtonText: mainButtonText, closeButtonText: closeButtonText, onMainButtonTapped: onMainButtonTapped)
+        self.init(titleText: titleText, subTitleLabel: subTitleLabel, mainButtonText: mainButtonText, closeButtonText: closeButtonText, onMainButtonTapped: onMainButtonTapped, onCloseButtonTapped: onCloseButtonTapped)
     }
 }
 
@@ -66,6 +66,7 @@ final class CallVanBottomSheetViewController: UIViewController {
     private let mainButtonText: String
     private let closeButtonText: String
     private let onMainButtonTapped: ()->Void
+    private let onCloseButtonTapped: (()->Void)?
     
     // MARK: - UI Components
     private let titleLabel = UILabel()
@@ -81,13 +82,15 @@ final class CallVanBottomSheetViewController: UIViewController {
         subTitleLabel: UILabel?,
         mainButtonText: String,
         closeButtonText: String,
-        onMainButtonTapped: @escaping () -> Void
+        onMainButtonTapped: @escaping () -> Void,
+        onCloseButtonTapped: (()->Void)? = nil
     ) {
         self.titleText = titleText
         self.subTitleLabel = subTitleLabel
         self.mainButtonText = mainButtonText
         self.closeButtonText = closeButtonText
         self.onMainButtonTapped = onMainButtonTapped
+        self.onCloseButtonTapped = onCloseButtonTapped
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -202,6 +205,7 @@ extension CallVanBottomSheetViewController {
         dismissView()
     }
     @objc private func closeButtonTapped() {
+        onCloseButtonTapped?()
         dismissView()
     }
 }

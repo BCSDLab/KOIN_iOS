@@ -9,7 +9,6 @@ import UIKit
 import Combine
 
 protocol KoinPickerDropDownViewDelegate: AnyObject {
-    func reset(koinPicker: KoinPickerDropDownView)
     func reset(koinPicker: KoinPickerDropDownView, initialDate: Date)
     func selectedItemUpdated(koinPicker: KoinPickerDropDownView, selectedItem: [String])
 }
@@ -83,7 +82,7 @@ extension KoinPickerDropDownView {
     }
     
     @objc private func resetButtonTapped() {
-        delegate.reset(koinPicker: self)
+        delegate.reset(koinPicker: self, initialDate: Date())
     }
 }
 

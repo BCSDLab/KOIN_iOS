@@ -22,10 +22,6 @@ final class KoinPickerDropDownViewDateDelegate {
 
 extension KoinPickerDropDownViewDateDelegate: KoinPickerDropDownViewDelegate {
     
-    func reset(koinPicker: KoinPickerDropDownView) {
-        reset(koinPicker: koinPicker, initialDate: Date())
-    }
-    
     func reset(koinPicker: KoinPickerDropDownView, initialDate: Date) {
         let year = initialDate.year
         let month = initialDate.month

@@ -299,11 +299,13 @@ final class HomeViewController: UIViewController {
         }.store(in: &subscriptions)
         
         callVanView.findButtonTappedPublisher.sink { [weak self] in
+            self?.inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_callvan_view", value: "", category: "click"))
             self?.navigateToCallVanList()
         }.store(in: &subscriptions)
         
         callVanView.postButtonTappedPublisher.sink { [weak self] in
             guard let self else { return }
+            inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_callvan_write", value: "", category: "click"))
             if viewModel.isLoggedIn {
                 navigateToCallVanPost()
             } else {
@@ -666,6 +668,7 @@ extension HomeViewController {
         let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
         let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
         let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchCallVanListUseCase: fetchCallVanListUseCase,
@@ -675,7 +678,8 @@ extension HomeViewController {
             closeCallVanUseCase: closeCallVanUseCase,
             reopenCallVanUseCase: reopenCallVanUseCase,
             completeCallVanUseCase: completeCallVanUseCase,
-            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase
+            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
@@ -684,7 +688,11 @@ extension HomeViewController {
     private func navigateToCallVanPost() {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
-        let viewModel = CallVanPostViewModel(postCallVanDataUseCase: postCallVanDataUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = CallVanPostViewModel(
+            postCallVanDataUseCase: postCallVanDataUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = CallVanPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

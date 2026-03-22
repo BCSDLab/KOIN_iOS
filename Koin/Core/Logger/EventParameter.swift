@@ -181,7 +181,27 @@ enum EventParameter {
             case itemPostType = "item_post_type"
             
             case loginPrompt = "login_prompt"
-
+            
+            // CallVan
+            case mainCallVanView = "main_callvan_view"
+            case mainCallVanWrite = "main_callvan_write"
+            case callvanSsearch = "callvan_search"
+            case callvanFilter = "callvan_filter"
+            case callvanFilterApply = "callvan_filter_apply"
+            case callvanJoin = "callvan_join"
+            case callvanJoinCancel = "callvan_join_cancel"
+            case callvanChat = "callvan_chat"
+            case callvanChatSend = "callvan_chat_send"
+            case callvanCall = "callvan_call"
+            case callvanCreate = "callvan_create"
+            case callvanChatEntry = "callvan_chat_entry"
+            case callvanBack = "callvan_back"
+            case callvanWriteDeparture = "callvan_write_departure"
+            case callvanWriteArrival = "callvan_write_arrival"
+            case callvanWriteTime = "callvan_write_time"
+            case callvanWriteDone = "callvan_write_done"
+            case callvanWriteBack = "callvan_write_back"
+            
             var team: String {
                 return "CAMPUS"
             }

@@ -43,14 +43,6 @@ final class CallVanPostTimeView: ExtendedTouchAreaView {
     // MARK: - Public
     func update(_ date: Date) {
         timeDropDownView.reset(initialDate: date)
-        
-        formatter.dateFormat = "a"
-        amPmLabel.text = formatter.string(from: date)
-        
-        formatter.dateFormat = "hh:mm"
-        timeLabel.text = formatter.string(from: date)
-        
-        timeChangedPublisher.send(date)
     }
 }
 

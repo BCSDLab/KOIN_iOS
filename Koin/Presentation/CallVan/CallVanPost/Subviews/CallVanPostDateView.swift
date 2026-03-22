@@ -40,10 +40,7 @@ final class CallVanPostDateView: ExtendedTouchAreaView {
     
     // MARK: - Public
     func update(_ date: Date) {
-        formatter.dateFormat = "yyyy년 M월 d일"
-        dateLabel.text = formatter.string(from: date)
         dateDropDownView.reset(initialDate: date)
-        dateChangedPublisher.send(date)
     }
 }
 

@@ -23,10 +23,6 @@ final class KoinPickerDropDownViewTimeDelegate {
 
 extension KoinPickerDropDownViewTimeDelegate: KoinPickerDropDownViewDelegate {
     
-    func reset(koinPicker: KoinPickerDropDownView) {
-        reset(koinPicker: koinPicker, initialDate: Date())
-    }
-    
     func reset(koinPicker: KoinPickerDropDownView, initialDate: Date) {
         let dateString = outputFormatter.string(from: initialDate)
         let selectedItem = dateString.components(separatedBy: "*")

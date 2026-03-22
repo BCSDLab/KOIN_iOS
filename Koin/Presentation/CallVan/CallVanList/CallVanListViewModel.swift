@@ -19,12 +19,14 @@ final class CallVanListViewModel: ViewModelProtocol {
         case loadMoreList
         case updateFilterTitle(String?)
         case updateFilterState(CallVanListRequest)
-        
+
         case participate(Int)
         case quit(Int)
         case close(Int)
         case reopen(Int)
         case complete(Int)
+        
+        case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
     }
     enum Output {
         case resetList([CallVanListPost])
@@ -47,6 +49,7 @@ final class CallVanListViewModel: ViewModelProtocol {
     private let reopenCallVanUseCase: ReopenCallVanUseCase
     private let completeCallVanUseCase: CompleteCallVanUseCase
     private let fetchCallVanSummaryUseCase: FetchCallVanSummaryUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var filterState = CallVanListRequest()
@@ -60,7 +63,8 @@ final class CallVanListViewModel: ViewModelProtocol {
          closeCallVanUseCase: CloseCallVanUseCase,
          reopenCallVanUseCase: ReopenCallVanUseCase,
          completeCallVanUseCase: CompleteCallVanUseCase,
-         fetchCallVanSummaryUseCase: FetchCallVanSummaryUseCase
+         fetchCallVanSummaryUseCase: FetchCallVanSummaryUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchCallVanListUseCase = fetchCallVanListUseCase
@@ -71,6 +75,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         self.reopenCallVanUseCase = reopenCallVanUseCase
         self.completeCallVanUseCase = completeCallVanUseCase
         self.fetchCallVanSummaryUseCase = fetchCallVanSummaryUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Transform
@@ -104,6 +109,8 @@ final class CallVanListViewModel: ViewModelProtocol {
                 complete(postId)
             case .refresh:
                 refresh()
+            case let .logEvent(label, category, value):
+                logEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         
@@ -281,5 +288,9 @@ extension CallVanListViewModel {
             },
             receiveValue: { _ in}
         ).store(in: &subscriptions)
+    }
+    
+    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

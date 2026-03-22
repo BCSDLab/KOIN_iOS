@@ -88,7 +88,6 @@ extension KoinPickerViewB {
                 pickerView.selectRow(row, inComponent: index, animated: false)
             }
         }
-//        selectedItemPublisher.send(selectedItem)
     }
     
     private func configureView() {

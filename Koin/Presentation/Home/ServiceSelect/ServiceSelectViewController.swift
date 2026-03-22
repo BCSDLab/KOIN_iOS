@@ -153,6 +153,7 @@ extension ServiceSelectViewController {
 extension ServiceSelectViewController {
     
     private func pushCallVanList() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "콜밴팟 모집"))
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
@@ -164,6 +165,7 @@ extension ServiceSelectViewController {
         let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
         let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
         let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchCallVanListUseCase: fetchCallVanListUseCase,
@@ -173,7 +175,8 @@ extension ServiceSelectViewController {
             closeCallVanUseCase: closeCallVanUseCase,
             reopenCallVanUseCase: reopenCallVanUseCase,
             completeCallVanUseCase: completeCallVanUseCase,
-            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase
+            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
