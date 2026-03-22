@@ -110,7 +110,7 @@ extension ManyBusTimetableCollectionView: UICollectionViewDelegateFlowLayout {
             let time = busTimeData[indexPath.section].arrivalTime[indexPath.item - 1] ?? "—"
             let width = textWidth(time,
                                   font: .appFont(.pretendardBold, size: 16)) + 20
-            return CGSize(width: width, height: 46)
+            return CGSize(width: width, height: 50)
         }
     }
 
