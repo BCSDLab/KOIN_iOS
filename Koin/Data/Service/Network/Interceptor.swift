@@ -17,7 +17,7 @@ final class Interceptor: RequestInterceptor {
     private let lock = NSLock()
     private var isRefreshing = false
     
-    private var subscriptions: Set<AnyCancellable> = []
+    private var refreshSubscription: AnyCancellable?
     
     private var adaptRequests: [(urlRequest: URLRequest, completion: (Result<URLRequest, any Error>) -> Void)] = []
     private var retryRequests: [(error: Error, completion: @Sendable (RetryResult) -> Void)] = []
@@ -65,7 +65,7 @@ final class Interceptor: RequestInterceptor {
         
         if !isRefreshing {
             self.isRefreshing = true
-            refreshToken().sink { [weak self] shouldRetry in
+            refreshSubscription = refreshToken().sink { [weak self] shouldRetry in
                 guard let self else { return }
                 
                 self.lock.lock()
@@ -82,7 +82,7 @@ final class Interceptor: RequestInterceptor {
                 retryRequests.forEach {
                     self.retry(error: $0.error, completion: $0.completion, shouldRetry: shouldRetry)
                 }
-            }.store(in: &subscriptions)
+            }
         }
     }
 }
