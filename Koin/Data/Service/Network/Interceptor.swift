@@ -20,7 +20,7 @@ final class Interceptor: RequestInterceptor {
     private var refreshSubscription: AnyCancellable?
     
     private var adaptRequests: [(urlRequest: URLRequest, completion: (Result<URLRequest, any Error>) -> Void)] = []
-    private var retryRequests: [(error: Error, completion: @Sendable (RetryResult) -> Void)] = []
+    private var retryRequests: [@Sendable (RetryResult) -> Void] = []
     
     // MARK: - Adapt
     func adapt(_ urlRequest: URLRequest,
@@ -46,14 +46,14 @@ final class Interceptor: RequestInterceptor {
         
         guard let responseCode = request.response?.statusCode,
               responseCode == 401 else {
-            completion(.doNotRetryWithError(error))
+            completion(.doNotRetry)
             return
         }
         guard request.retryCount < retryLimit,
               let _ = KeychainWorker.shared.read(key: .refresh) else {
             KeychainWorker.shared.delete(key: .access)
             KeychainWorker.shared.delete(key: .refresh)
-            completion(.doNotRetryWithError(error))
+            completion(.doNotRetry)
             return
         }
         
@@ -61,11 +61,11 @@ final class Interceptor: RequestInterceptor {
         defer {
             lock.unlock()
         }
-        retryRequests.append((error: error, completion: completion))
+        retryRequests.append(completion)
         
         if !isRefreshing {
             self.isRefreshing = true
-            refreshSubscription = refreshToken().sink { [weak self] shouldRetry in
+            refreshSubscription = refreshToken().sink { [weak self] in
                 guard let self else { return }
                 
                 self.lock.lock()
@@ -76,11 +76,11 @@ final class Interceptor: RequestInterceptor {
                 self.isRefreshing = false
                 self.lock.unlock()
                 
-                adaptRequests.forEach {
-                    self.adapt(urlRequest: $0.urlRequest, completion: $0.completion)
+                adaptRequests.forEach { [weak self] in
+                    self?.adapt(urlRequest: $0.urlRequest, completion: $0.completion)
                 }
-                retryRequests.forEach {
-                    self.retry(error: $0.error, completion: $0.completion, shouldRetry: shouldRetry)
+                retryRequests.forEach { [weak self] in
+                    self?.retry(completion: $0)
                 }
             }
         }
@@ -98,29 +98,24 @@ extension Interceptor {
         completion(.success(urlRequest))
     }
     
-    private func retry(error: Error, completion: @escaping @Sendable (RetryResult) -> Void, shouldRetry: Bool) {
-        
-        if shouldRetry {
-            completion(.retry)
-        } else {
-            completion(.doNotRetryWithError(error))
-        }
+    private func retry(completion: @escaping @Sendable (RetryResult) -> Void) {
+        completion(.retry)
     }
 }
 
 extension Interceptor {
     
-    private func refreshToken() -> AnyPublisher<Bool, Never> {
+    private func refreshToken() -> AnyPublisher<Void, Never> {
         return requestWithResponse(api: UserAPI.refreshToken(RefreshTokenRequest(refreshToken: KeychainWorker.shared.read(key: .refresh) ?? "")))
             .map { (tokenDto: TokenDto) in
                 KeychainWorker.shared.create(key: .access, token: tokenDto.token)
                 KeychainWorker.shared.create(key: .refresh, token: tokenDto.refreshToken)
-                return true
+                return
             }
-            .catch { _ -> Just<Bool> in
+            .catch { _ -> Just<Void> in
                 KeychainWorker.shared.delete(key: .access)
                 KeychainWorker.shared.delete(key: .refresh)
-                return Just(false)
+                return Just(Void())
             }
             .eraseToAnyPublisher()
     }
