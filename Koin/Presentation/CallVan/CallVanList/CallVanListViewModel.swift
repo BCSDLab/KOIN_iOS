@@ -136,11 +136,7 @@ extension CallVanListViewModel {
     
     private func fetchNotification() {
         fetchCallVanNotificationListUseCase.execute().sink(
-            receiveCompletion: { [weak self] completion in
-                if case .failure(let error) = completion {
-                    self?.outputSubject.send(.showToast(error.message))
-                }
-            },
+            receiveCompletion: { _ in },
             receiveValue: { [weak self] notifications in
                 let alert = notifications.filter { !$0.isRead }.count != 0
                 self?.outputSubject.send(.updateBell(alert: alert))
