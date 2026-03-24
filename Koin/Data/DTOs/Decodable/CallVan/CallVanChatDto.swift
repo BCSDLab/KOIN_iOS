@@ -50,7 +50,7 @@ extension CallVanChatDto {
         inputTimeFormatter.locale = Locale(identifier: "ko_KR")
         inputTimeFormatter.dateFormat = "a h:mm"
         let outputTimeFormatter = DateFormatter()
-        outputTimeFormatter.dateFormat = "hh:mm"
+        outputTimeFormatter.dateFormat = "HH:mm"
         
         let profileImages: [UIImage?] = [
             UIImage.appImage(asset: .callVanProfile0),
