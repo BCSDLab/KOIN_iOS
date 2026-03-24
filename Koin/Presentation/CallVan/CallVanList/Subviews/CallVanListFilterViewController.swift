@@ -17,11 +17,15 @@ final class CallVanListFilterViewController: UIViewController {
     private let onApplyButtonTapped: (CallVanListRequest)->Void
     private var subscriptions: Set<AnyCancellable> = []
     private let isLoggedIn: Bool
+    private let height: CGFloat
     
     // MARK: - UI Components
     private let titleLabel = UILabel()
     private let closeButton = UIButton()
     private let topSeparatorView = UIView()
+    
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     
     private let listLabel = UILabel()
     private let listButtonsStackView = UIStackView()
@@ -92,11 +96,13 @@ final class CallVanListFilterViewController: UIViewController {
     init(
         filter: CallVanListRequest,
         onApplyButtonTapped: @escaping (CallVanListRequest)->Void,
-        isLoggedIn: Bool
+        isLoggedIn: Bool,
+        height: CGFloat
     ) {
         self.filter = filter
         self.onApplyButtonTapped = onApplyButtonTapped
         self.isLoggedIn = isLoggedIn
+        self.height = height
         super.init(nibName: nil, bundle: nil)
         configureView()
         bind()
@@ -253,18 +259,26 @@ extension CallVanListFilterViewController {
             arrivalButtonsStackView2.addArrangedSubview($0)
         }
         
-        [titleLabel, closeButton, topSeparatorView,
-         listLabel, listButtonsStackView, listSeparatorView,
+        [listLabel, listButtonsStackView, listSeparatorView,
          sortLabel, sortButtonsStackView, sortSeparatorView,
          stateLabel, stateButtonsStackView, stateSeparatorView,
          departureLabel, departureDescriptionLabel, departureButtonsStackView1, departureButtonsStackView2, departureSeparatorView,
-         arrivalLabel, arrivalDescriptionLabel, arrivalButtonsStackView1, arrivalButtonsStackView2, arrivalSeparatorView,
+         arrivalLabel, arrivalDescriptionLabel, arrivalButtonsStackView1, arrivalButtonsStackView2, arrivalSeparatorView].forEach {
+            contentView.addSubview($0)
+        }
+        [contentView].forEach {
+            scrollView.addSubview($0)
+        }
+        [titleLabel, closeButton, topSeparatorView,
+         scrollView,
          resetButton, applyButton, bottomSeparatorView].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        
+        // MARK: - 상단
         titleLabel.snp.makeConstraints {
             $0.height.equalTo(29)
             $0.top.equalToSuperview().offset(12)
@@ -280,9 +294,21 @@ extension CallVanListFilterViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
+        // MARK: - ScrollView
+        let height = height - 54 - 72
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(topSeparatorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(height)
+        }
+        contentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+        }
+        
         // MARK: - List
         listLabel.snp.makeConstraints {
-            $0.top.equalTo(topSeparatorView).offset(12)
+            $0.top.equalToSuperview().offset(12)
         }
         listButtonsStackView.snp.makeConstraints {
             $0.top.equalTo(listLabel.snp.bottom).offset(12)
@@ -347,13 +373,14 @@ extension CallVanListFilterViewController {
         }
         arrivalSeparatorView.snp.makeConstraints {
             $0.top.equalTo(arrivalButtonsStackView2.snp.bottom).offset(12)
+            $0.bottom.equalTo(contentView).offset(-12)
         }
         
-        // MARK: - Buttons
+        // MARK: - 하단
         resetButton.snp.makeConstraints {
             $0.height.equalTo(48)
             $0.width.equalTo(resetButton.intrinsicContentSize.width)
-            $0.top.equalTo(arrivalSeparatorView.snp.bottom).offset(24)
+            $0.top.equalTo(scrollView.snp.bottom).offset(12)
             $0.leading.equalToSuperview().offset(32)
         }
         applyButton.snp.makeConstraints {

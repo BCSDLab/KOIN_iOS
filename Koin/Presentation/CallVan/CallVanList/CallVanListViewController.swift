@@ -176,6 +176,7 @@ extension CallVanListViewController {
     }
     
     @objc private func filterButtonTapped() {
+        let height = min(view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom, 707)
         let contentViewController = CallVanListFilterViewController(
             filter: viewModel.filterState,
             onApplyButtonTapped: { [weak self] filterState in
@@ -183,9 +184,10 @@ extension CallVanListViewController {
                 inputSubject.send(.updateFilterState(filterState))
                 inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanFilterApply, category: .click, value: ""))
             },
-            isLoggedIn: viewModel.isLoggedIn
+            isLoggedIn: viewModel.isLoggedIn,
+            height: height
         )
-        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: 701 + view.safeAreaInsets.bottom)
+        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: height + view.safeAreaInsets.bottom)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
         present(bottomSheetViewController, animated: false)
