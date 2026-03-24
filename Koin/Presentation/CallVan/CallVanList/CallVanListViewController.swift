@@ -71,10 +71,6 @@ final class CallVanListViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
-            case let .didCheckLoginToParticapate(isLoggedIn, postId):
-                isLoggedIn ? showBottomSheet(state: .참여하기, postId: postId) : showLoginToParticipateBottomSheet()
-            case let .didCheckLoginToPost(isLoggedIn):
-                isLoggedIn ? navigateToPost() : showLoginToPostBottomSheet()
             case let .resetList(posts):
                 callVanListCollectionView.reset(posts: posts)
             case let .appendList(posts):
@@ -158,8 +154,12 @@ extension CallVanListViewController {
     }
     
     @objc private func writeButtonTapped() {
-        inputSubject.send(.checkLoginToPost)
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanCreate, category: .click, value: ""))
+        if viewModel.isLoggedIn {
+            navigateToPost()
+        } else {
+            showLoginToPostBottomSheet()
+        }
     }
     
     private func navigateToPost() {
@@ -310,7 +310,11 @@ extension CallVanListViewController {
     private func cellButtonTapped(postId: Int, state: CallVanState) {
         switch state {
         case .참여하기:
-            inputSubject.send(.checkLoginToParticapate(postId))
+            if viewModel.isLoggedIn {
+                showBottomSheet(state: .참여하기, postId: postId)
+            } else {
+                showLoginToParticipateBottomSheet()
+            }
         case .참여취소, .마감하기, .재모집, .이용완료:
             showBottomSheet(state: state, postId: postId)
         case .모집마감:

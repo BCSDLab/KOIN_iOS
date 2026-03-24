@@ -14,8 +14,6 @@ final class CallVanListViewModel: ViewModelProtocol {
         case viewDidLoad
         case viewWillAppear
         case refresh
-        case checkLoginToPost
-        case checkLoginToParticapate(Int)
         case loadMoreList
         case updateFilterTitle(String?)
         case updateFilterState(CallVanListRequest)
@@ -33,8 +31,6 @@ final class CallVanListViewModel: ViewModelProtocol {
         case appendList([CallVanListPost])
         case updateListItem(CallVanListPost, Int)
         case deleteListItem(Int)
-        case didCheckLoginToParticapate(Bool, Int)
-        case didCheckLoginToPost(Bool)
         case updateBell(alert: Bool)
         case showToast(String)
     }
@@ -84,14 +80,11 @@ final class CallVanListViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case let .checkLoginToParticapate(postId):
-                checkLoginToParticapate(postId)
-            case .checkLoginToPost:
-                checkLoginToPost()
             case .viewDidLoad:
                 loadList()
             case .viewWillAppear:
                 fetchNotification()
+                checkLogin()
             case .loadMoreList:
                 loadMoreList()
             case let .updateFilterTitle(title):
