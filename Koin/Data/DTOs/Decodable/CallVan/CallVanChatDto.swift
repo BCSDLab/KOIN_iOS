@@ -130,8 +130,8 @@ extension CallVanChatDto {
         }
         return CallVanChat(
             roomName: roomName,
-            dates: sortedDates,
-            messages: sectionMessages.map { $0.reversed() }
+            dates: sortedDates.reversed(),
+            messages: sectionMessages.map { $0.reversed() }.reversed()
         )
     }
 }
