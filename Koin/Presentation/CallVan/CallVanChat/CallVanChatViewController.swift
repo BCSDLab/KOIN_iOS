@@ -49,6 +49,7 @@ final class CallVanChatViewController: UIViewController {
         setDelegate()
         setAddTargets()
         bind()
+        setGesture()
         configureNavigationBar(style: .empty)
         inputSubject.send(.viewDidLoad)
     }
@@ -88,9 +89,19 @@ final class CallVanChatViewController: UIViewController {
 
 extension CallVanChatViewController {
     
+    private func setGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapAround))
+        tapGesture.cancelsTouchesInView = false
+        callVanChatTableView.addGestureRecognizer(tapGesture)
+    }
+    
     private func setAddTargets() {
         sendImageButton.addTarget(self, action: #selector(sendImageButtonTapped), for: .touchUpInside)
         sendMessageButton.addTarget(self, action: #selector(sendMessageButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc private func didTapAround() {
+        dismissKeyboard()
     }
     
     @objc private func sendMessageButtonTapped() {

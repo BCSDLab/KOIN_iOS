@@ -122,6 +122,9 @@ extension CallVanChatRightCell {
         messageImageView.do {
             $0.backgroundColor = UIColor.appColor(.neutral100)
             $0.isUserInteractionEnabled = true
+            $0.contentMode = .scaleAspectFill
+            $0.clipsToBounds = true
+            $0.layer.cornerRadius = 12
         }
         messageImageTimeLabel.do {
             $0.font = UIFont.appFont(.pretendardRegular, size: 12)
