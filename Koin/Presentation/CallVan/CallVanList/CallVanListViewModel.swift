@@ -53,6 +53,7 @@ final class CallVanListViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var filterState = CallVanListRequest()
+    private(set) var isLoggedIn: Bool = false
     
     // MARK: - Intializer
     init(checkLoginUseCase: CheckLoginUseCase,
@@ -120,17 +121,10 @@ final class CallVanListViewModel: ViewModelProtocol {
 
 extension CallVanListViewModel {
     
-    private func checkLoginToParticapate(_ postId: Int) {
+    private func checkLogin() {
         checkLoginUseCase.execute().sink(receiveValue: { [weak self] isLoggedIn in
             guard let self else { return }
-            outputSubject.send(.didCheckLoginToParticapate(isLoggedIn, postId))
-        }).store(in: &subscriptions)
-    }
-    
-    private func checkLoginToPost() {
-        checkLoginUseCase.execute().sink(receiveValue: { [weak self] isLoggedIn in
-            guard let self else { return }
-            outputSubject.send(.didCheckLoginToPost(isLoggedIn))
+            self.isLoggedIn = isLoggedIn
         }).store(in: &subscriptions)
     }
     
@@ -151,6 +145,7 @@ extension CallVanListViewModel {
     }
     
     private func updateFilterState(_ filterState: CallVanListRequest) {
+        self.filterState.mineOrJoined = filterState.mineOrJoined
         self.filterState.sort = filterState.sort
         self.filterState.state = filterState.state
         self.filterState.departure = filterState.departure

@@ -182,9 +182,10 @@ extension CallVanListViewController {
                 guard let self else { return }
                 inputSubject.send(.updateFilterState(filterState))
                 inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanFilterApply, category: .click, value: ""))
-            }
+            },
+            isLoggedIn: viewModel.isLoggedIn
         )
-        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: 605 + view.safeAreaInsets.bottom)
+        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: 701 + view.safeAreaInsets.bottom)
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
         present(bottomSheetViewController, animated: false)
