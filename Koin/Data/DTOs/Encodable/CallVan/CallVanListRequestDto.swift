@@ -18,6 +18,7 @@ struct CallVanListRequestDto: Encodable {
     var author: CallVanAuthorDto?
     var page: Int
     var limit: Int
+    var joined: Bool?
     
     enum CodingKeys: String, CodingKey {
         case author, departures
@@ -25,6 +26,7 @@ struct CallVanListRequestDto: Encodable {
         case arrivals
         case arrivalKeyword = "arrival_keyword"
         case statuses, title, sort, page, limit
+        case joined
     }
 }
 
@@ -85,6 +87,18 @@ extension CallVanListRequestDto {
         self.author = .all
         self.page = model.page
         self.limit = model.limit
+        
+        switch model.mineOrJoined {
+        case .all:
+            self.author = .all
+            self.joined = nil
+        case .mine:
+            self.author = .my
+            self.joined = nil
+        case .joined:
+            self.author = .all
+            self.joined = true
+        }
     }
 }
 

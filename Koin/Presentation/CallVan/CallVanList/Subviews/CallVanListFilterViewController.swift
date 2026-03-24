@@ -16,12 +16,25 @@ final class CallVanListFilterViewController: UIViewController {
     @Published private var filter: CallVanListRequest
     private let onApplyButtonTapped: (CallVanListRequest)->Void
     private var subscriptions: Set<AnyCancellable> = []
+    private let isLoggedIn: Bool
+    private let height: CGFloat
     
     // MARK: - UI Components
     private let titleLabel = UILabel()
     private let closeButton = UIButton()
     private let topSeparatorView = UIView()
     
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    
+    private let listLabel = UILabel()
+    private let listButtonsStackView = UIStackView()
+    private let listButtons = [
+        CallVanFilterButton(filterState: CallVanMineOrJoined.all),
+        CallVanFilterButton(filterState: CallVanMineOrJoined.mine),
+        CallVanFilterButton(filterState: CallVanMineOrJoined.joined)
+    ]
+    private let listSeparatorView = UIView()
     private let sortLabel = UILabel()
     private let sortButtonsStackView = UIStackView()
     private let sortButtons = [
@@ -80,9 +93,16 @@ final class CallVanListFilterViewController: UIViewController {
     private let bottomSeparatorView = UIView()
     
     // MARK: - Initializer
-    init(filter: CallVanListRequest, onApplyButtonTapped: @escaping (CallVanListRequest)->Void) {
+    init(
+        filter: CallVanListRequest,
+        onApplyButtonTapped: @escaping (CallVanListRequest)->Void,
+        isLoggedIn: Bool,
+        height: CGFloat
+    ) {
         self.filter = filter
         self.onApplyButtonTapped = onApplyButtonTapped
+        self.isLoggedIn = isLoggedIn
+        self.height = height
         super.init(nibName: nil, bundle: nil)
         configureView()
         bind()
@@ -94,6 +114,11 @@ final class CallVanListFilterViewController: UIViewController {
     private func bind() {
         $filter.sink { [weak self] filter in
             guard let self else { return }
+            
+            // MARK: - List
+            listButtons.forEach { button in
+                button.isSelected = button.filterState as! CallVanMineOrJoined == filter.mineOrJoined
+            }
             
             // MARK: - Sort
             sortButtons.forEach { button in
@@ -150,10 +175,11 @@ extension CallVanListFilterViewController {
             $0.textColor = UIColor.appColor(.new500)
         }
         
-        [sortLabel, stateLabel, departureLabel, arrivalLabel].forEach {
+        [listLabel, sortLabel, stateLabel, departureLabel, arrivalLabel].forEach {
             $0.font = UIFont.appFont(.pretendardBold, size: 16)
             $0.textColor = UIColor.appColor(.neutral800)
         }
+        listLabel.text = "목록"
         sortLabel.text = "정렬"
         stateLabel.text = "모집 상태"
         departureLabel.text = "출발지"
@@ -166,14 +192,14 @@ extension CallVanListFilterViewController {
         }
         
         // MARK: - StackView
-        [sortButtonsStackView, stateButtonsStackView, departureButtonsStackView1, departureButtonsStackView2, arrivalButtonsStackView1, arrivalButtonsStackView2].forEach {
+        [listButtonsStackView, sortButtonsStackView, stateButtonsStackView, departureButtonsStackView1, departureButtonsStackView2, arrivalButtonsStackView1, arrivalButtonsStackView2].forEach {
             $0.axis = .horizontal
             $0.distribution = .fillProportionally
             $0.spacing = 12
         }
         
         // MARK: - Separator View
-        [topSeparatorView, sortSeparatorView, stateSeparatorView, departureSeparatorView, arrivalSeparatorView, bottomSeparatorView].forEach {
+        [topSeparatorView, listSeparatorView, sortSeparatorView, stateSeparatorView, departureSeparatorView, arrivalSeparatorView, bottomSeparatorView].forEach {
             $0.backgroundColor = UIColor.appColor(.neutral200)
         }
         
@@ -211,6 +237,9 @@ extension CallVanListFilterViewController {
     }
     
     private func setUpLayouts() {
+        listButtons.forEach {
+            listButtonsStackView.addArrangedSubview($0)
+        }
         sortButtons.forEach {
             sortButtonsStackView.addArrangedSubview($0)
         }
@@ -230,17 +259,26 @@ extension CallVanListFilterViewController {
             arrivalButtonsStackView2.addArrangedSubview($0)
         }
         
-        [titleLabel, closeButton, topSeparatorView,
+        [listLabel, listButtonsStackView, listSeparatorView,
          sortLabel, sortButtonsStackView, sortSeparatorView,
          stateLabel, stateButtonsStackView, stateSeparatorView,
          departureLabel, departureDescriptionLabel, departureButtonsStackView1, departureButtonsStackView2, departureSeparatorView,
-         arrivalLabel, arrivalDescriptionLabel, arrivalButtonsStackView1, arrivalButtonsStackView2, arrivalSeparatorView,
+         arrivalLabel, arrivalDescriptionLabel, arrivalButtonsStackView1, arrivalButtonsStackView2, arrivalSeparatorView].forEach {
+            contentView.addSubview($0)
+        }
+        [contentView].forEach {
+            scrollView.addSubview($0)
+        }
+        [titleLabel, closeButton, topSeparatorView,
+         scrollView,
          resetButton, applyButton, bottomSeparatorView].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        
+        // MARK: - 상단
         titleLabel.snp.makeConstraints {
             $0.height.equalTo(29)
             $0.top.equalToSuperview().offset(12)
@@ -256,9 +294,32 @@ extension CallVanListFilterViewController {
             $0.leading.trailing.equalToSuperview()
         }
         
+        // MARK: - ScrollView
+        let height = height - 54 - 72
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(topSeparatorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(height)
+        }
+        contentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView)
+            $0.width.equalTo(scrollView)
+        }
+        
+        // MARK: - List
+        listLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(12)
+        }
+        listButtonsStackView.snp.makeConstraints {
+            $0.top.equalTo(listLabel.snp.bottom).offset(12)
+        }
+        listSeparatorView.snp.makeConstraints {
+            $0.top.equalTo(listButtonsStackView.snp.bottom).offset(12)
+        }
+        
         // MARK: - Sort
         sortLabel.snp.makeConstraints {
-            $0.top.equalTo(topSeparatorView).offset(12)
+            $0.top.equalTo(listSeparatorView.snp.bottom).offset(12)
         }
         sortButtonsStackView.snp.makeConstraints {
             $0.top.equalTo(sortLabel.snp.bottom).offset(12)
@@ -312,13 +373,14 @@ extension CallVanListFilterViewController {
         }
         arrivalSeparatorView.snp.makeConstraints {
             $0.top.equalTo(arrivalButtonsStackView2.snp.bottom).offset(12)
+            $0.bottom.equalTo(contentView).offset(-12)
         }
         
-        // MARK: - Buttons
+        // MARK: - 하단
         resetButton.snp.makeConstraints {
             $0.height.equalTo(48)
             $0.width.equalTo(resetButton.intrinsicContentSize.width)
-            $0.top.equalTo(arrivalSeparatorView.snp.bottom).offset(24)
+            $0.top.equalTo(scrollView.snp.bottom).offset(12)
             $0.leading.equalToSuperview().offset(32)
         }
         applyButton.snp.makeConstraints {
@@ -333,7 +395,7 @@ extension CallVanListFilterViewController {
         }
         
         // MARK: - Common
-        [sortLabel, stateLabel, departureLabel, arrivalLabel].forEach {
+        [listLabel, sortLabel, stateLabel, departureLabel, arrivalLabel].forEach {
             $0.snp.makeConstraints {
                 $0.height.equalTo(26)
                 $0.leading.equalTo(titleLabel)
@@ -344,13 +406,13 @@ extension CallVanListFilterViewController {
                 $0.height.equalTo(19)
             }
         }
-        [sortButtonsStackView, stateButtonsStackView, departureButtonsStackView1, departureButtonsStackView2, arrivalButtonsStackView1, arrivalButtonsStackView2].forEach {
+        [listButtonsStackView, sortButtonsStackView, stateButtonsStackView, departureButtonsStackView1, departureButtonsStackView2, arrivalButtonsStackView1, arrivalButtonsStackView2].forEach {
             $0.snp.makeConstraints {
                 $0.height.equalTo(34)
                 $0.leading.equalTo(titleLabel)
             }
         }
-        [sortSeparatorView, stateSeparatorView, departureSeparatorView, arrivalSeparatorView].forEach {
+        [listSeparatorView, sortSeparatorView, stateSeparatorView, departureSeparatorView, arrivalSeparatorView].forEach {
             $0.snp.makeConstraints {
                 $0.height.equalTo(1)
                 $0.leading.trailing.equalToSuperview().inset(32)
@@ -364,6 +426,9 @@ extension CallVanListFilterViewController {
     private func setAddTargets() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         
+        listButtons.forEach {
+            $0.addTarget(self, action: #selector(listButtonTapped(_:)), for: .touchUpInside)
+        }
         sortButtons.forEach {
             $0.addTarget(self, action: #selector(sortButtonTapped(_:)), for: .touchUpInside)
         }
@@ -383,6 +448,18 @@ extension CallVanListFilterViewController {
     
     @objc private func closeButtonTapped() {
         dismissView()
+    }
+    
+    @objc private func listButtonTapped(_ sender: UIButton) {
+        guard let listButton = sender as? CallVanFilterButton,
+              let state = listButton.filterState as? CallVanMineOrJoined else {
+            return
+        }
+        if state != .all && isLoggedIn != true {
+            showToastMessage(message: "로그인이 필요한 기능입니다.")
+        } else {
+            filter.mineOrJoined = state
+        }
     }
     
     @objc private func sortButtonTapped(_ sender: UIButton) {

@@ -14,8 +14,6 @@ final class CallVanListViewModel: ViewModelProtocol {
         case viewDidLoad
         case viewWillAppear
         case refresh
-        case checkLoginToPost
-        case checkLoginToParticapate(Int)
         case loadMoreList
         case updateFilterTitle(String?)
         case updateFilterState(CallVanListRequest)
@@ -33,8 +31,6 @@ final class CallVanListViewModel: ViewModelProtocol {
         case appendList([CallVanListPost])
         case updateListItem(CallVanListPost, Int)
         case deleteListItem(Int)
-        case didCheckLoginToParticapate(Bool, Int)
-        case didCheckLoginToPost(Bool)
         case updateBell(alert: Bool)
         case showToast(String)
     }
@@ -53,6 +49,7 @@ final class CallVanListViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var filterState = CallVanListRequest()
+    private(set) var isLoggedIn: Bool = false
     
     // MARK: - Intializer
     init(checkLoginUseCase: CheckLoginUseCase,
@@ -83,14 +80,11 @@ final class CallVanListViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case let .checkLoginToParticapate(postId):
-                checkLoginToParticapate(postId)
-            case .checkLoginToPost:
-                checkLoginToPost()
             case .viewDidLoad:
                 loadList()
             case .viewWillAppear:
                 fetchNotification()
+                checkLogin()
             case .loadMoreList:
                 loadMoreList()
             case let .updateFilterTitle(title):
@@ -120,27 +114,16 @@ final class CallVanListViewModel: ViewModelProtocol {
 
 extension CallVanListViewModel {
     
-    private func checkLoginToParticapate(_ postId: Int) {
+    private func checkLogin() {
         checkLoginUseCase.execute().sink(receiveValue: { [weak self] isLoggedIn in
             guard let self else { return }
-            outputSubject.send(.didCheckLoginToParticapate(isLoggedIn, postId))
-        }).store(in: &subscriptions)
-    }
-    
-    private func checkLoginToPost() {
-        checkLoginUseCase.execute().sink(receiveValue: { [weak self] isLoggedIn in
-            guard let self else { return }
-            outputSubject.send(.didCheckLoginToPost(isLoggedIn))
+            self.isLoggedIn = isLoggedIn
         }).store(in: &subscriptions)
     }
     
     private func fetchNotification() {
         fetchCallVanNotificationListUseCase.execute().sink(
-            receiveCompletion: { [weak self] completion in
-                if case .failure(let error) = completion {
-                    self?.outputSubject.send(.showToast(error.message))
-                }
-            },
+            receiveCompletion: { _ in },
             receiveValue: { [weak self] notifications in
                 let alert = notifications.filter { !$0.isRead }.count != 0
                 self?.outputSubject.send(.updateBell(alert: alert))
@@ -155,6 +138,7 @@ extension CallVanListViewModel {
     }
     
     private func updateFilterState(_ filterState: CallVanListRequest) {
+        self.filterState.mineOrJoined = filterState.mineOrJoined
         self.filterState.sort = filterState.sort
         self.filterState.state = filterState.state
         self.filterState.departure = filterState.departure
