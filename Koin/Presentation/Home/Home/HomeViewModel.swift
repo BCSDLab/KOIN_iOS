@@ -22,6 +22,7 @@ final class HomeViewModel: ViewModelProtocol {
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
         case fetchBanner
+        case checkLogin
         case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     
@@ -34,8 +35,6 @@ final class HomeViewModel: ViewModelProtocol {
         case showForceUpdate(String)
         case showForceModal
         case updateBanner(BannerDto)
-        case setHotClub(HotClubDto)
-        case setClubCategories(ClubCategoriesDto)
         case updateLostItem(LostItemStats)
     }
     
@@ -53,8 +52,6 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-    private let fetchClubCategoriesUseCase = DefaultFetchClubCategoriesUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-    private let fetchHotClubsUseCase = DefaultFetchHotClubsUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let checkLoginUseCase: CheckLoginUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var moved = false
@@ -89,11 +86,9 @@ final class HomeViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case .viewDidLoad:
-                self?.checkLogin()
                 self?.getShopCategory()
                 self?.checkVersion()
                 self?.fetchUserData()
-                self?.fetchHotClub()
             case let .categorySelected(place):
                 self?.getDiningInformation(diningPlace: place)
             case .getDiningInfo:
@@ -108,6 +103,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.getNoticeBanners(date: date)
             case .fetchBanner:
                 self?.fetchBanner()
+            case .checkLogin:
+                self?.checkLogin()
             case let .logEventDirect(name, label, value, category):
                 self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
             case let .logSessionEvent(label, category, value, sessionId):
@@ -122,79 +119,55 @@ final class HomeViewModel: ViewModelProtocol {
 extension HomeViewModel {
     
     private func fetchBanner() {
-        fetchBannerUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchBannerUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                self?.outputSubject.send(.updateBanner(response))
             }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateBanner(response))
-        }.store(in: &subscriptions)
-    }
-    private func fetchHotClub() {
-        fetchHotClubsUseCase.execute().sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        }, receiveValue: { [weak self] hotClub in
-            self?.outputSubject.send(.setHotClub(hotClub))
-        }).store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
-    private func fetchClubCategories() {
-        fetchClubCategoriesUseCase.execute().sink(receiveCompletion: { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        }, receiveValue: { [weak self] categories in
-            self?.outputSubject.send(.setClubCategories(categories))
-        }).store(in: &subscriptions)
-    }
-                
     private func fetchUserData() {
-        fetchUserDataUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
-            }
-        } receiveValue: { [weak self] response in
-            UserDataManager.shared.setUserData(userData: response)
-            if !UserDefaults.standard.bool(forKey: "forceModal") {
-                if response.userType == "STUDENT" {
-                    if response.name == nil ||
-                        response.phoneNumber == nil ||
-                        response.gender == nil ||
-                        response.major == nil ||
-                        response.studentNumber == nil {
-                        self?.outputSubject.send(.showForceModal)
-                        UserDefaults.standard.set(true, forKey: "forceModal")
+        fetchUserDataUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                UserDataManager.shared.setUserData(userData: response)
+                if !UserDefaults.standard.bool(forKey: "forceModal") {
+                    if response.userType == "STUDENT" {
+                        if response.name == nil ||
+                            response.phoneNumber == nil ||
+                            response.gender == nil ||
+                            response.major == nil ||
+                            response.studentNumber == nil {
+                            self?.outputSubject.send(.showForceModal)
+                            UserDefaults.standard.set(true, forKey: "forceModal")
+                        }
                     }
                 }
             }
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     private func checkVersion() {
-        checkVersionUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        checkVersionUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                if response.0 {
+                    self?.outputSubject.send(.showForceUpdate(response.1))
+                }
             }
-        } receiveValue: { [weak self] response in
-            if response.0 {
-                self?.outputSubject.send(.showForceUpdate(response.1))
-            }
-        }.store(in: &subscriptions)
-        
+        ).store(in: &subscriptions)
     }
     
     private func getDiningInformation(diningPlace: DiningPlace = .cornerA) {
         let dateInfo = dateProvider.execute(date: Date())
         
-        fetchDiningListUseCase.execute(diningInfo: dateInfo).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchDiningListUseCase.execute(diningInfo: dateInfo).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                let result = response.filter { $0.place == diningPlace }.first
+                self?.outputSubject.send(.updateDining(result, dateInfo.diningType, dateInfo.date.formatDateToYYMMDD() == Date().formatDateToYYMMDD()))
             }
-        } receiveValue: { [weak self] response in
-            let result = response.filter { $0.place == diningPlace }.first
-            self?.outputSubject.send(.updateDining(result, dateInfo.diningType, dateInfo.date.formatDateToYYMMDD() == Date().formatDateToYYMMDD()))
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func getLostItemStat() {
@@ -207,14 +180,13 @@ extension HomeViewModel {
     }
     
     private func getShopCategory() {
-        fetchShopCategoryListUseCase.execute().sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchShopCategoryListUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] response in
+                self?.shopCategories = response.shopCategories
+                self?.outputSubject.send(.putImage(response))
             }
-        } receiveValue: { [weak self] response in
-            self?.shopCategories = response.shopCategories
-            self?.outputSubject.send(.putImage(response))
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     func getCategoryName(for id: Int) -> String? {
@@ -253,18 +225,17 @@ extension HomeViewModel {
         if let date = date {
             phrase = fetchKeywordNoticePhraseUseCase.execute(date: date)
         }
-        fetchHotNoticeArticlesUseCase.execute(noticeId: nil).sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchHotNoticeArticlesUseCase.execute(noticeId: nil).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] articles in
+                if date == nil {
+                    self?.outputSubject.send(.updateNoticeBanners(articles, nil))
+                }
+                else {
+                    self?.outputSubject.send(.updateNoticeBanners(articles, phrase))
+                }
             }
-        } receiveValue: { [weak self] articles in
-            if date == nil {
-                self?.outputSubject.send(.updateNoticeBanners(articles, nil))
-            }
-            else {
-                self?.outputSubject.send(.updateNoticeBanners(articles, phrase))
-            }
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
   
     private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {

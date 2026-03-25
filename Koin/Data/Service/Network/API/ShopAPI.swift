@@ -30,8 +30,6 @@ enum ShopAPI {
     case searchShop(String)
     
     case postCallNotification(Int)
-    case uploadFiles([Data])
-    
     case fetchSearchShop(FetchShopSearchRequest)
 }
 
@@ -60,7 +58,6 @@ extension ShopAPI: Router, URLRequestConvertible {
         case .modifyReview(_, let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)"
         case .deleteReview(let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)"
         case .reportReview(_, let reviewId, let shopId): return "/shops/\(shopId)/reviews/\(reviewId)/reports"
-        case .uploadFiles: return "/shops/upload/files"
         case .postCallNotification(let shopId): return "/shops/\(shopId)/call-notification"
         case .searchShop(let text): return "/shops/search/related/\(text)" // TODO: 삭제 예정
         case .fetchSearchShop: return "/v2/shops/search/related"
@@ -70,7 +67,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .postReview, .reportReview, .uploadFiles, .postCallNotification: .post
+        case .postReview, .reportReview, .postCallNotification: .post
         case .modifyReview: .put
         case .deleteReview: .delete
         default: .get
@@ -80,17 +77,8 @@ extension ShopAPI: Router, URLRequestConvertible {
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchShopList, .fetchEventList, .fetchShopCategoryList, .fetchShopData, .fetchShopMenuList, .fetchShopEventList, .fetchShopBenefits, .searchShop: break
-        default:
-            if let token = KeychainWorker.shared.read(key: .access) {
-                baseHeaders["Authorization"] = "Bearer \(token)"
-            } 
-        }
-        switch self {
         case .postReview, .reportReview, .modifyReview, .deleteReview, .postCallNotification:
             baseHeaders["Content-Type"] = "application/json"
-        case .uploadFiles:
-            baseHeaders["Content-Type"] = "multipart/form-data"
         default: break
         }
         return baseHeaders
@@ -98,7 +86,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchShopSummary, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .uploadFiles, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification, .searchShop, .fetchShopMenusCategoryList:
+        case .fetchShopSummary, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification, .searchShop, .fetchShopMenusCategoryList:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()

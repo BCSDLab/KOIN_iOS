@@ -17,7 +17,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let fetchShopReviewUseCase: FetchShopReviewUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
-    private let uploadFileUseCase: UploadFileUseCase
+    private let uploadFileUseCase: any UploadFileUseCase
     private let fetchShopDataUseCase: FetchShopDataUseCase
     private let reviewId: Int?
     var isEdit: Bool { reviewId != nil}
@@ -41,7 +41,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
         case reviewWriteSuccess(Bool, Int?, WriteReviewRequest)
     }
     
-    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: UploadFileUseCase, fetchShopDataUseCase: FetchShopDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, reviewId: Int? = nil, shopId: Int, shopName: String) {
+    init(postReviewUseCase: PostReviewUseCase, modifyReviewUseCase: ModifyReviewUseCase, fetchShopReviewUseCase: FetchShopReviewUseCase, uploadFileUseCase: any UploadFileUseCase, fetchShopDataUseCase: FetchShopDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, getUserScreenTimeUseCase: GetUserScreenTimeUseCase, reviewId: Int? = nil, shopId: Int, shopName: String) {
         self.postReviewUseCase = postReviewUseCase
         self.modifyReviewUseCase = modifyReviewUseCase
         self.fetchShopReviewUseCase = fetchShopReviewUseCase
@@ -79,17 +79,16 @@ final class ShopReviewViewModel: ViewModelProtocol {
     }
     
     private func updateShopName() {
-        fetchShopDataUseCase.execute(shopId: shopId) .sink { completion in
-            if case let .failure(error) = completion {
-                Log.make().error("\(error)")
+        fetchShopDataUseCase.execute(shopId: shopId).sink(
+            receiveCompletion: { _ in},
+            receiveValue: { [weak self] response in
+                self?.outputSubject.send(.updateShopName(response.name))
             }
-        } receiveValue: { [weak self] response in
-            self?.outputSubject.send(.updateShopName(response.name))
-        }.store(in: &subscriptions)
+        ).store(in: &subscriptions)
     }
     
     private func uploadFile(files: [Data]) {
-        uploadFileUseCase.execute(files: files).sink { [weak self] completion in
+        uploadFileUseCase.execute(files: files, domain: .shops).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.outputSubject.send(.showToast(error.message, false))
             }

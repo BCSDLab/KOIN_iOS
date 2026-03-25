@@ -458,12 +458,12 @@ extension ReviewListViewController {
     
     private func makeShopReviewViewController(reviewId: Int?, shopId: Int, shopName: String) -> ShopReviewViewController {
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
         let viewModel = ShopReviewViewModel(
             postReviewUseCase: DefaultPostReviewUseCase(shopRepository: shopRepository),
             modifyReviewUseCase: DefaultModifyReviewUseCase(shopRepository: shopRepository),
             fetchShopReviewUseCase: DefaultFetchShopReviewUseCase(shopRepository: shopRepository),
-            uploadFileUseCase: DefaultUploadFileUseCase(shopRepository: shopRepository),
+            uploadFileUseCase: DefaultUploadFileUseCase(coreRepository: coreRepository),
             fetchShopDataUseCase: DefaultFetchShopDataUseCase(shopRepository: shopRepository),
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
                 repository: GA4AnalyticsRepository(service: GA4AnalyticsService())

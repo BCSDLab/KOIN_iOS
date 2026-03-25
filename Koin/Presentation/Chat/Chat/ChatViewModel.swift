@@ -36,7 +36,7 @@ final class ChatViewModel: ViewModelProtocol {
     private lazy var blockUserUserCase = DefaultBlockUserUseCase(chatRepository: chatRepository)
     private lazy var postChatDetailUseCase = DefaultPostChatDetailUseCase(chatRepository: chatRepository)
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-    private lazy var uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
+    private lazy var uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     let articleId: Int
     let chatRoomId: Int
     let articleTitle: String
@@ -75,7 +75,7 @@ final class ChatViewModel: ViewModelProtocol {
 extension ChatViewModel {
     
     private func uploadFiles(files: [Data]) {
-        uploadFileUseCase.execute(files: files).sink { [weak self] completion in
+        uploadFileUseCase.execute(files: files, domain: .lostItem).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.outputSubject.send(.showToast(error.message, false))
             }
@@ -99,14 +99,13 @@ extension ChatViewModel {
     
     private func fetchChatDetail() {
         pollingSubscriptions?.cancel()
-        pollingSubscriptions = Timer.publish(every: 10, on: .main, in: .common)
+        pollingSubscriptions = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .prepend(Date())
             .flatMap { [weak self] _ -> AnyPublisher<[ChatMessage], Never> in
                 guard let self else { return Empty().eraseToAnyPublisher() }
                 return fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId)
                     .catch { error -> AnyPublisher<[ChatMessage], Never> in
-                        Log.make().error("\(error)")
                         return Empty().eraseToAnyPublisher()
                     }
                     .eraseToAnyPublisher()
@@ -120,10 +119,7 @@ extension ChatViewModel {
     private func sendMessage(message: String, isImage: Bool) {
         postChatDetailUseCase.execute(articleId: articleId, chatRoomId: chatRoomId, message: message, isImage: isImage).sink(
             receiveCompletion: { [weak self] completion in
-                switch completion {
-                case .failure(let error):
-                    Log.make().error("\(error)")
-                case .finished:
+                if case .finished = completion {
                     self?.fetchChatDetail()
                 }
             },

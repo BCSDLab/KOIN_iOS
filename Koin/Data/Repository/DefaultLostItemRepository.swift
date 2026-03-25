@@ -16,13 +16,13 @@ final class DefaultLostItemRepository: LostItemRepository {
         self.service = service
     }
     
-    func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemList, any Error> {
+    func fetchLostItemList(requestModel: FetchLostItemListRequest) -> AnyPublisher<LostItemList, ErrorResponse> {
         return service.fetchLostItemList(requestModel: requestModel)
             .map { $0.toDomain() }
             .eraseToAnyPublisher()
     }
     
-    func fetchLostItemData(id: Int) -> AnyPublisher<LostItemData, Error> {
+    func fetchLostItemData(id: Int) -> AnyPublisher<LostItemData, ErrorResponse> {
         return service.fetchLostItemData(id: id)
             .map { $0.toDomain() }
             .eraseToAnyPublisher()
@@ -32,7 +32,7 @@ final class DefaultLostItemRepository: LostItemRepository {
         return service.changeLostItemState(id: id)
     }
     
-    func deleteLostItem(id: Int) -> AnyPublisher<Void, Error> {
+    func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse> {
         return service.deleteLostItem(id: id)
     }
     
@@ -42,7 +42,7 @@ final class DefaultLostItemRepository: LostItemRepository {
             .eraseToAnyPublisher()
     }
     
-    func fetchLostItemStats() -> AnyPublisher<LostItemStats, Error> {
+    func fetchLostItemStats() -> AnyPublisher<LostItemStats, ErrorResponse> {
         return service.fetchLostItemStats()
             .map { $0.toDomain() }
             .eraseToAnyPublisher()

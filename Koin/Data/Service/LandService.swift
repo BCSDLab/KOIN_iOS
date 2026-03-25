@@ -9,25 +9,19 @@ import Alamofire
 import Combine
 
 protocol LandService {
-    func fetchLandList() -> AnyPublisher<LandDto, Error>
-    func fetchLandDetail(requestModel: FetchLandDetailRequest) -> AnyPublisher<LandDetailDto, Error>
+    func fetchLandList() -> AnyPublisher<LandDto, ErrorResponse>
+    func fetchLandDetail(requestModel: FetchLandDetailRequest) -> AnyPublisher<LandDetailDto, ErrorResponse>
 }
 
 final class DefaultLandService: LandService {
     
-    func fetchLandList() -> AnyPublisher<LandDto, Error> {
-        return request(.fetchLandList)
+    private let networkService = NetworkService.shared
+    
+    func fetchLandList() -> AnyPublisher<LandDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: LandAPI.fetchLandList)
     }
     
-    func fetchLandDetail(requestModel: FetchLandDetailRequest) -> AnyPublisher<LandDetailDto, Error> {
-        return request(.fetchLandDetail(requestModel))
-    }
-
-    private func request<T: Decodable>(_ api: LandAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
+    func fetchLandDetail(requestModel: FetchLandDetailRequest) -> AnyPublisher<LandDetailDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: LandAPI.fetchLandDetail(requestModel))
     }
 }

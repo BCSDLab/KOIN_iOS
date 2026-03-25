@@ -29,7 +29,7 @@ final class EditLostItemViewModel: ViewModelProtocol {
     
     private(set) var lostItemData: LostItemData
     
-    private let uploadFileUseCase: UploadFileUseCase = DefaultUploadFileUseCase(shopRepository: DefaultShopRepository(service: DefaultShopService()))
+    private let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let updateLostItemUseCase: UpdateLostItemUseCase
     
 
@@ -58,7 +58,7 @@ final class EditLostItemViewModel: ViewModelProtocol {
 extension EditLostItemViewModel {
     
     private func uploadFiles(files: [Data]) {
-        uploadFileUseCase.execute(files: files).sink { [weak self] completion in
+        uploadFileUseCase.execute(files: files, domain: .lostItem).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.outputSubject.send(.showToast(error.message))
             }

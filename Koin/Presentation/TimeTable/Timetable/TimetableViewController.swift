@@ -261,26 +261,23 @@ final class TimetableViewController: UIViewController {
             guard let self = self else { return }
             
             if let lectureData = response as? LectureData {
-                    self.viewModel.performLectureModification(lectureData: lectureData)
-                        .sink(receiveCompletion: { _ in
-                            self.viewModel.selectedFrameId = self.viewModel.selectedFrameId
-                        }, receiveValue: { _ in })
-                        .store(in: &self.subscriptions)
-                    
-                } else if let customLecture = response as? (String, [Int]) {
-                    self.viewModel.performCustomLectureModification(
-                        lectureName: customLecture.0,
-                        lectureTime: customLecture.1
-                    ).sink(receiveCompletion: { _ in
+                self.viewModel.performLectureModification(lectureData: lectureData).sink(
+                    receiveCompletion: { _ in
                         self.viewModel.selectedFrameId = self.viewModel.selectedFrameId
-                    }, receiveValue: { _ in })
-                    .store(in: &self.subscriptions)
-                }
+                    },
+                    receiveValue: { _ in }
+                ).store(in: &self.subscriptions)
+                
+            } else if let customLecture = response as? (String, [Int]) {
+                self.viewModel.performCustomLectureModification(lectureName: customLecture.0, lectureTime: customLecture.1).sink(
+                    receiveCompletion: { _ in
+                        self.viewModel.selectedFrameId = self.viewModel.selectedFrameId
+                    },
+                    receiveValue: { _ in }
+                ).store(in: &self.subscriptions)
+            }
         }.store(in: &subscriptions)
-
-        
     }
-    
 }
 
 extension TimetableViewController {

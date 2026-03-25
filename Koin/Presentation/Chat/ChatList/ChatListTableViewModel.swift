@@ -64,14 +64,13 @@ extension ChatListTableViewModel {
 
     private func fetchChatRooms() {
         pollingSubscriptions?.cancel()
-        pollingSubscriptions = Timer.publish(every: 10, on: .main, in: .common)
+        pollingSubscriptions = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .prepend(Date())
             .flatMap { [weak self] _ -> AnyPublisher<[ChatRoomItem], Never> in
                 guard let self else { return Empty().eraseToAnyPublisher() }
                 return fetchChatRoomUseCase.execute()
                     .catch { error -> AnyPublisher<[ChatRoomItem], Never> in
-                        Log.make().error("\(error)")
                         return Empty().eraseToAnyPublisher()
                     }.eraseToAnyPublisher()
             }

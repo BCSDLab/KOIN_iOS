@@ -96,6 +96,8 @@ final class ServiceSelectViewController: UIViewController {
                 self.presentBusiness()
             case .lostItem:
                 self.pushLostItem()
+            case .callVan:
+                self.pushCallVanList()
             }
         }.store(in: &subscriptions)
     }
@@ -149,6 +151,36 @@ extension ServiceSelectViewController {
 }
 
 extension ServiceSelectViewController {
+    
+    private func pushCallVanList() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "콜밴팟 모집"))
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let participateCallVanUseCase = DefaultParticipateCallVanUseCase(repository: callVanRepository)
+        let quitCallVanUseCase = DefaultQuitCallVanUseCase(repository: callVanRepository)
+        let closeCallVanUseCase = DefaultCloseCallVanUseCase(repository: callVanRepository)
+        let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
+        let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
+        let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = CallVanListViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchCallVanListUseCase: fetchCallVanListUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            participateCallVanUseCase: participateCallVanUseCase,
+            quitCallVanUseCase: quitCallVanUseCase,
+            closeCallVanUseCase: closeCallVanUseCase,
+            reopenCallVanUseCase: reopenCallVanUseCase,
+            completeCallVanUseCase: completeCallVanUseCase,
+            fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let viewController = CallVanListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
     
     private func pushLostItem() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "분실물"))

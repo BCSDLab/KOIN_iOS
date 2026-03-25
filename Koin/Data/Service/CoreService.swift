@@ -5,36 +5,39 @@
 //  Created by 김나훈 on 10/1/24.
 //
 
-import Alamofire
+import Foundation
 import Combine
+import Alamofire
 
 protocol CoreService {
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error>
-    func fetchBanner() -> AnyPublisher<BannerDto, Error>
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error>
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error>
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse>
+    func fetchBanner() -> AnyPublisher<BannerDto, ErrorResponse>
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse>
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse>
+    func uploadFiles(files: [Data], domain: String) -> AnyPublisher<FileUploadResponse, ErrorResponse>
 }
 
 final class DefaultCoreService: CoreService {
-    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, Error> {
-        return request(.checkVersion)
-    }
-    func fetchBanner() -> AnyPublisher<BannerDto, Error> {
-        return request(.fetchBanner)
-    }
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, Error> {
-        return request(.fetchClubCategories)
+    
+    private let networkService = NetworkService.shared
+    
+    func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse> {
+        return networkService.requestWithResponse(api: CoreAPI.checkVersion)
     }
     
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, Error> {
-        return request(.fetchHotClubs)
+    func fetchBanner() -> AnyPublisher<BannerDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: CoreAPI.fetchBanner)
     }
-
-    private func request<T: Decodable>(_ api: CoreAPI) -> AnyPublisher<T, Error> {
-        return AF.request(api)
-            .publishDecodable(type: T.self)
-            .value()
-            .mapError { $0 as Error }
-            .eraseToAnyPublisher()
+    
+    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: CoreAPI.fetchClubCategories)
+    }
+    
+    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: CoreAPI.fetchHotClubs)
+    }
+    
+    func uploadFiles(files: [Data], domain: String) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
+        return networkService.uploadFiles(api: CoreAPI.uploadFiles(files, domain))
     }
 }

@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 protocol FetchSearchShopUseCase {
-    func execute(keyword: String) -> AnyPublisher<ShopSearch, Error>
+    func execute(keyword: String) -> AnyPublisher<ShopSearch, ErrorResponse>
 }
 
 final class DefaultFetchSearchShopUseCase: FetchSearchShopUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchSearchShopUseCase: FetchSearchShopUseCase {
         self.repository = repository
     }
     
-    func execute(keyword: String) -> AnyPublisher<ShopSearch, Error> {
+    func execute(keyword: String) -> AnyPublisher<ShopSearch, ErrorResponse> {
         let requestModel = FetchShopSearchRequest(keyword: keyword)
         return repository.fetchSearchShop(requestModel: requestModel)
     }

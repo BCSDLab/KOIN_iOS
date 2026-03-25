@@ -44,13 +44,7 @@ extension NotiAPI: Router, URLRequestConvertible {
     }
     
     public var headers: [String: String] {
-        if let token = KeychainWorker.shared.read(key: .access) {
-            let headers = ["Authorization": "Bearer \(token)",
-                           "Content-Type": "application/json" ]
-            return headers
-        } else {
-            return [:]
-        }
+        return ["Content-Type": "application/json"]
     }
     
     public var parameters: Any? {

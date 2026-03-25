@@ -32,8 +32,8 @@
   - 의존성 역전을 통해 유지보수성과 테스트 용이성 확보.
   - Presentation, Domain, Data 영역으로 구분
 ### 📦 의존성 관리
-- CocoaPods  
-  - WebSocket-Stomp, Alamofire 등 서드파티 라이브러리 관리.  
+- SPM
+  - Alamofire, Firebase 등 서드파티 라이브러리 관리.  
 ### 🧩 기타 ( Data / Reactive )
 - WebSocket + STOMP
   - 실시간 스트림(채팅 기능) 수신. 서버와 양방향 메시징 채널 유지.  
@@ -69,15 +69,15 @@
       <p style="font-size:12px;">오늘의 학식 메뉴를 간편하게 확인하세요.</p>
     </td>
     <td align="center" width="180">
-      <b>식당 리뷰</b><br/>
+      <b>콜밴팟 모집</b><br/>
       ───<br/>
-      <img src="https://github.com/user-attachments/assets/64749b6a-7c92-4111-b46f-88a6923ad653" width="160"/><br/>
-      <p style="font-size:12px;">학교 주변 식당의 리뷰와 평점을 공유합니다.</p>
+      <img src="https://github.com/user-attachments/assets/9e1932a8-d03d-40e0-ab7e-c874f4c5eda8" width="160"/><br/>
+      <p style="font-size:12px;">콜밴을 함께 탑승할 사람을 모집합니다.</p>
     </td>
     <td align="center" width="180">
       <b>채팅 기능</b><br/>
       ───<br/>
-      <img src="https://github.com/user-attachments/assets/7d654fdd-cda8-416d-9e4c-1a85644da8ac" width="160"/><br/>
+      <img src="https://github.com/user-attachments/assets/72ac3da4-a82d-495b-a8a7-ee76563cd4a6" width="160"/><br/>
       <p style="font-size:12px;">학생들 간 실시간 소통을 지원합니다.</p>
     </td>
   </tr>
@@ -91,13 +91,13 @@
     <td align="center" width="180">
       <b>강제 업데이트</b><br/>
       ───<br/>
-      <img src="https://github.com/user-attachments/assets/ea99fe47-302e-4148-b848-05ed40f7783a" width="160"/><br/>
+      <img src="https://github.com/user-attachments/assets/479d5289-2e42-4534-b2c9-668684b6f856" width="160"/><br/>
       <p style="font-size:12px;">필수 업데이트 시 강제 업데이트를 안내합니다.</p>
     </td>
     <td align="center" width="180">
       <b>주변 식당</b><br/>
       ───<br/>
-      <img src="https://github.com/user-attachments/assets/6ae93867-5450-4e3b-aa44-1863aa433c2f" width="160"/><br/>
+      <img src="https://github.com/user-attachments/assets/4c89e560-2d39-4272-9910-47f834edcd13" width="160"/><br/>
       <p style="font-size:12px;">학교 주변 식당 메뉴와 위치를 제공합니다.</p>
     </td>
     <td align="center" width="180">
@@ -137,10 +137,12 @@ Koin
 │
 ├── Resources                       # 리소스 모음
 │   ├── Gif
+│   ├── Lottie
 │   ├── Assets
 │   └── Fonts
 │
 ├── Core                            # 공통 유틸리티 & 시스템 계층
+│   ├── DesignSystem                # 디자인 시스템
 │   ├── CoreData                    # Core Data 스택 및 관리 코드
 │   ├── Workers                     # 싱글톤 패턴 Worker
 │   ├── Extensions                  # Swift Extensions
@@ -160,7 +162,6 @@ Koin
 │   └── koinUITestsLaunchTests.swift
 │
 ├── Products                        # Xcode 기본 Products
-├── Pods                            # CocoaPods 종속성
 └── Frameworks                      # 외부 프레임워크
 ```
 
@@ -171,7 +172,7 @@ Koin
 | <img src="https://avatars.githubusercontent.com/u/118811606?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/74389635?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/139556438?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/183201303?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/202774410?v=4" width="130"> |
 | :--: | :--: | :--: | :--: | :--: |
 | [나훈](https://github.com/KimNahun) | [민경](https://github.com/Ju-Min-Kyung) | [은지](https://github.com/oeunji) | [기정](https://github.com/hgjwilly-koreatech) | [성민](https://github.com/xp65241) |
-| 2024.3 ~ 2025.5 | 2024.4 ~ 2024.12 | 2025.3 ~ 2024.12 | 2025.9 ~ ing | 2025.9 ~ ing |
+| 2024.3 ~ 2025.5 | 2024.4 ~ 2024.12 | 2025.3 ~ 2025.12 | 2025.9 ~ ing | 2025.9 ~ 2026.02 |
    
 --- 
 

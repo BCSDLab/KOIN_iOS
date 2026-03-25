@@ -192,9 +192,7 @@ final class NotificationHandler {
             fetchShopBenefitUseCase: fetchShopBenefitUseCase,
             fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            selectedId: 0
-        )
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase)
         let shopViewController = ShopViewController(viewModel: viewModel)
         shopViewController.title = "주변상점"
         return shopViewController
