@@ -40,6 +40,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                     handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
                 }
     }
+    
     private func handleIncomingDeepLink(url: URL, navigationController: UINavigationController) {
             // URL 경로가 "/articles/lost-item"인 경우에 처리
             if url.path == "/articles/lost-item" || url.path == "/lost-item" {
@@ -93,6 +94,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 }
 
 extension SceneDelegate {
+    func handleNotificationData(userInfo: [AnyHashable: Any]) {
+        NotificationHandler.shared.handleNotificationData(userInfo: userInfo, rootViewController: window?.rootViewController as? UINavigationController)
+    }
+    
     private func makeHomeViewController() -> UIViewController {
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())

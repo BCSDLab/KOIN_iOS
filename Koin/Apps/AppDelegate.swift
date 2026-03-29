@@ -13,29 +13,20 @@ import SwiftRater
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+    
     var window: UIWindow?
+    var sceneDelegate: SceneDelegate? {
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        return windowScene?.delegate as? SceneDelegate
+    }
 
     // MARK: - 푸시알림을 탭했을 때의 동작 구현
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
         let userInfo = response.notification.request.content.userInfo
-        let application = UIApplication.shared
-        
-        if application.applicationState == .active || application.applicationState == .inactive || application.applicationState == .background {
-            
-            if let rootViewController = UIApplication.shared.connectedScenes
-                .compactMap({ $0 as? UIWindowScene })
-                .first?
-                .windows
-                .first(where: { $0.isKeyWindow })?
-                .rootViewController as? CustomNavigationController {
-                NotificationHandler.shared.handleNotificationData(userInfo: userInfo, rootViewController: rootViewController)
-            }
-            
-            
-            completionHandler()
-        }
+        sceneDelegate?.handleNotificationData(userInfo: userInfo)
+        completionHandler()
     }
     
     // MARK: - 앱 시작시 초기화 메서드
@@ -51,10 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         application.registerForRemoteNotifications()
         
         Messaging.messaging().delegate = self
-        if let notification = launchOptions?[.remoteNotification] as? [AnyHashable: Any],
-           let rootViewController = window?.rootViewController as? UINavigationController {
-            NotificationHandler.shared.handleNotificationData(userInfo: notification, rootViewController: rootViewController)
-        }
         
         SwiftRater.daysUntilPrompt = 7
         SwiftRater.significantUsesUntilPrompt = 10
@@ -73,13 +60,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification) async
     -> UNNotificationPresentationOptions {
-        // 푸시 알림 데이터가 userInfo에 담겨있다.
-        let userInfo = notification.request.content.userInfo
-        
         // 푸시 알림 옵션 반환
         return [[.banner, .list, .sound]]
     }
-    
     
     // MARK: UISceneSession Lifecycle
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
