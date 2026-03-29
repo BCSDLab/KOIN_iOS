@@ -21,6 +21,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
+    // MARK: - 딥링크 cold start
     func scene(_ scene: UIScene,
                willConnectTo session: UISceneSession,
                options connectionOptions: UIScene.ConnectionOptions) {
@@ -57,6 +58,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             // 다른 딥링크 처리 로직을 추가할 수 있습니다.
         }
+    
+    // MARK: - 딥링크 (URI Scheme) warm start
     func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
                let incomingURL = userActivity.webpageURL else { return }
@@ -82,16 +85,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
     }
     
+    // MARK: - 딥링크 (Universal Link) warm start
     func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
         guard let urlContext = URLContexts.first else { return }
         NotificationHandler.shared.handleIncomingURL(url: urlContext.url, rootViewController: window?.rootViewController)
-    }
-    
-    func scene(_ scene: UIScene, didReceive notificationResponse: UNNotificationResponse) {
-        let userInfo = notificationResponse.notification.request.content.userInfo
-        if let rootViewController = window?.rootViewController as? UINavigationController {
-            NotificationHandler.shared.handleNotificationData(userInfo: userInfo, rootViewController: rootViewController)
-        }
     }
 }
 

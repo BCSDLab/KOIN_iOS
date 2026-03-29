@@ -14,27 +14,8 @@ import SwiftRater
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     var window: UIWindow?
-    
-    
-    func application(_ app: UIApplication, open url: URL, options: [UIApplication.OpenURLOptionsKey: Any] = [:]) -> Bool {
-        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: true),
-              let params = components.queryItems else { return false }
-        
-        let path = components.path
-        
-        if path == "keyword", let noticeId = params.first(where: { $0.name == "id" })?.value, let intId = Int(noticeId) {
-            if let rootViewController = UIApplication.topViewController() as? UINavigationController {
-                NotificationHandler.shared.handleNotificationData(
-                    userInfo: ["id": "\(intId)"],
-                    rootViewController: rootViewController
-                )
-            }
-            return true
-        }
-        return false
-    }
-    
-    
+
+    // MARK: - 푸시알림을 탭했을 때의 동작 구현
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 didReceive response: UNNotificationResponse,
                                 withCompletionHandler completionHandler: @escaping () -> Void) {
@@ -57,7 +38,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
     }
     
-    
+    // MARK: - 앱 시작시 초기화 메서드
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         KakaoSDK.initSDK(appKey: Bundle.main.kakaoApiKey)
         
@@ -83,9 +64,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
+    // MARK: - APNS 토큰 처리
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         Messaging.messaging().apnsToken = deviceToken
     }
+    
+    // MARK: - Foreground에서 푸시알림 옵션
     func userNotificationCenter(_ center: UNUserNotificationCenter,
                                 willPresent notification: UNNotification) async
     -> UNNotificationPresentationOptions {
@@ -98,24 +82,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     
     // MARK: UISceneSession Lifecycle
-    
     func application(_ application: UIApplication, configurationForConnecting connectingSceneSession: UISceneSession, options: UIScene.ConnectionOptions) -> UISceneConfiguration {
         return UISceneConfiguration(name: "Default Configuration", sessionRole: connectingSceneSession.role)
     }
-    
 }
-extension AppDelegate {
+
+extension AppDelegate: MessagingDelegate {
     
-    func application(application: UIApplication,
-                     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        Messaging.messaging().apnsToken = deviceToken
-    }
-    func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable: Any]) async -> UIBackgroundFetchResult {
-        if let rootViewController = window?.rootViewController as? UINavigationController {
-            NotificationHandler.shared.handleNotificationData(userInfo: userInfo, rootViewController: rootViewController)
-        }
-        return .newData
-    }
+    // MARK: - FCM 토큰 처리
     func messaging(_ messaging: Messaging, didReceiveRegistrationToken fcmToken: String?) {
         guard let fcmToken = fcmToken else { return }
         
@@ -129,9 +103,3 @@ extension AppDelegate {
         )
     }
 }
-
-extension AppDelegate: MessagingDelegate {
-    
- 
-}
-

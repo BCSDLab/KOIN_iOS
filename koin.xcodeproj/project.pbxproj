@@ -303,7 +303,6 @@
 		7CED91212EF2D1F900457128 /* CancelableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */; };
 		7CED91252EF2D1F900457128 /* EventShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FB12EF2D1F900457128 /* EventShopCollectionView.swift */; };
 		7CED91262EF2D1F900457128 /* NoticeSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F582EF2D1F900457128 /* NoticeSearchViewModel.swift */; };
-		7CED91282EF2D1F900457128 /* ClubCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EBE2EF2D1F900457128 /* ClubCollectionViewCell.swift */; };
 		7CED91292EF2D1F900457128 /* ReportDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED901F2EF2D1F900457128 /* ReportDetailView.swift */; };
 		7CED912A2EF2D1F900457128 /* NoticeAttachmentsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F682EF2D1F900457128 /* NoticeAttachmentsTableViewCell.swift */; };
 		7CED912B2EF2D1F900457128 /* PostLostItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EF12EF2D1F900457128 /* PostLostItemViewModel.swift */; };
@@ -426,9 +425,7 @@
 		7CED91D92EF2D1F900457128 /* ImageScrollCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6A2EF2D1F900457128 /* ImageScrollCollectionView.swift */; };
 		7CED91DC2EF2D1F900457128 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EDA2EF2D1F900457128 /* HomeViewController.swift */; };
 		7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE02EF2D1F900457128 /* ShopDetailTableViewNameCell.swift */; };
-		7CED91DE2EF2D1F900457128 /* ClubCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */; };
 		7CED91DF2EF2D1F900457128 /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F152EF2D1F900457128 /* NotiViewController.swift */; };
-		7CED91E12EF2D1F900457128 /* ClubView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED72EF2D1F900457128 /* ClubView.swift */; };
 		7CED91E32EF2D1F900457128 /* AddClassCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90962EF2D1F900457128 /* AddClassCollectionViewCell.swift */; };
 		7CED91E52EF2D1F900457128 /* ModifyUserModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F222EF2D1F900457128 /* ModifyUserModalViewController.swift */; };
 		7CED91E62EF2D1F900457128 /* ShopSummaryInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FC82EF2D1F900457128 /* ShopSummaryInfoView.swift */; };
@@ -465,13 +462,11 @@
 		7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A82EF2D1F900457128 /* LandCollectionViewCell.swift */; };
 		7CED92152EF2D1F900457128 /* BannerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EC02EF2D1F900457128 /* BannerCollectionView.swift */; };
 		7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90792EF2D1F900457128 /* DiningOperatingTimeFooterView.swift */; };
-		7CED92182EF2D1F900457128 /* ClubWebViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EF62EF2D1F900457128 /* ClubWebViewController.swift */; };
 		7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE52EF2D1F900457128 /* ReportLostItemViewModel.swift */; };
 		7CED921A2EF2D1F900457128 /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FB82EF2D1F900457128 /* ShopViewController.swift */; };
 		7CED922B2EF2D25900457128 /* DIContainer+Notice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92222EF2D25900457128 /* DIContainer+Notice.swift */; };
 		7CED922C2EF2D25900457128 /* DIContainer+Dining.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92262EF2D25900457128 /* DIContainer+Dining.swift */; };
 		7CED922D2EF2D25900457128 /* DIContainer+Land.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92292EF2D25900457128 /* DIContainer+Land.swift */; };
-		7CED922E2EF2D25900457128 /* DIContainer+Club.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED921E2EF2D25900457128 /* DIContainer+Club.swift */; };
 		7CED922F2EF2D25900457128 /* DIContainer+TimeTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92272EF2D25900457128 /* DIContainer+TimeTable.swift */; };
 		7CED92302EF2D25900457128 /* DIContainer+Home.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED921C2EF2D25900457128 /* DIContainer+Home.swift */; };
 		7CED92322EF2D25900457128 /* DIConatiner+Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92252EF2D25900457128 /* DIConatiner+Shop.swift */; };
@@ -634,10 +629,6 @@
 		D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9642C554B95006BC684 /* DiningLikeRequest.swift */; };
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
 		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
-		D20AD6CB2DFB429E0067760A /* ClubCategoriesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */; };
-		D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */; };
-		D20AD6CF2DFB45670067760A /* FetchHotClubsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */; };
-		D20AD6D12DFB457A0067760A /* FetchClubCategoriesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */; };
 		D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */; };
 		D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */; };
 		D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */; };
@@ -1113,8 +1104,6 @@
 		7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatRightCell.swift; sourceTree = "<group>"; };
 		7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailRequest.swift; sourceTree = "<group>"; };
-		7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionView.swift; sourceTree = "<group>"; };
-		7CED8EBE2EF2D1F900457128 /* ClubCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8EC02EF2D1F900457128 /* BannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EC12EF2D1F900457128 /* BannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
@@ -1131,7 +1120,6 @@
 		7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImageView.swift; sourceTree = "<group>"; };
 		7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceModifyUserViewController.swift; sourceTree = "<group>"; };
 		7CED8ED52EF2D1F900457128 /* BannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerViewController.swift; sourceTree = "<group>"; };
-		7CED8ED72EF2D1F900457128 /* ClubView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubView.swift; sourceTree = "<group>"; };
 		7CED8ED92EF2D1F900457128 /* HomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewModel.swift; sourceTree = "<group>"; };
 		7CED8EDA2EF2D1F900457128 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		7CED8EDC2EF2D1F900457128 /* ServiceSelectViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ServiceSelectViewModel.swift; sourceTree = "<group>"; };
@@ -1149,7 +1137,6 @@
 		7CED8EEF2EF2D1F900457128 /* DatePickerDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerDropdownView.swift; sourceTree = "<group>"; };
 		7CED8EF12EF2D1F900457128 /* PostLostItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemViewModel.swift; sourceTree = "<group>"; };
 		7CED8EF22EF2D1F900457128 /* PostLostItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemViewController.swift; sourceTree = "<group>"; };
-		7CED8EF62EF2D1F900457128 /* ClubWebViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubWebViewController.swift; sourceTree = "<group>"; };
 		7CED8EF92EF2D1F900457128 /* ChatListTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewModel.swift; sourceTree = "<group>"; };
 		7CED8EFA2EF2D1F900457128 /* ChatListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListTableViewController.swift; sourceTree = "<group>"; };
 		7CED8EFC2EF2D1F900457128 /* ChatHistoryTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryTableView.swift; sourceTree = "<group>"; };
@@ -1356,7 +1343,6 @@
 		7CED921B2EF2D25900457128 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		7CED921C2EF2D25900457128 /* DIContainer+Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Home.swift"; sourceTree = "<group>"; };
 		7CED921D2EF2D25900457128 /* DIContainer+LostItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+LostItem.swift"; sourceTree = "<group>"; };
-		7CED921E2EF2D25900457128 /* DIContainer+Club.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Club.swift"; sourceTree = "<group>"; };
 		7CED921F2EF2D25900457128 /* DIContainer+Chat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Chat.swift"; sourceTree = "<group>"; };
 		7CED92202EF2D25900457128 /* DIContainer+Setting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Setting.swift"; sourceTree = "<group>"; };
 		7CED92212EF2D25900457128 /* DIConatiner+Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIConatiner+Login.swift"; sourceTree = "<group>"; };
@@ -1526,10 +1512,6 @@
 		D20AB9642C554B95006BC684 /* DiningLikeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLikeRequest.swift; sourceTree = "<group>"; };
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
-		D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClubCategoriesDTO.swift; sourceTree = "<group>"; };
-		D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotClubDTO.swift; sourceTree = "<group>"; };
-		D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotClubsUseCase.swift; sourceTree = "<group>"; };
-		D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchClubCategoriesUseCase.swift; sourceTree = "<group>"; };
 		D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsRequest.swift; sourceTree = "<group>"; };
 		D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailRequest.swift; sourceTree = "<group>"; };
 		D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationEmailRequest.swift; sourceTree = "<group>"; };
@@ -2500,15 +2482,6 @@
 			path = Chat;
 			sourceTree = "<group>";
 		};
-		7CED8EBF2EF2D1F900457128 /* ClubCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				7CED8EBD2EF2D1F900457128 /* ClubCollectionView.swift */,
-				7CED8EBE2EF2D1F900457128 /* ClubCollectionViewCell.swift */,
-			);
-			path = ClubCollectionView;
-			sourceTree = "<group>";
-		};
 		7CED8EC22EF2D1F900457128 /* BannerCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2567,7 +2540,6 @@
 		7CED8ED82EF2D1F900457128 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				7CED8EBF2EF2D1F900457128 /* ClubCollectionView */,
 				7CED8EC22EF2D1F900457128 /* BannerCollectionView */,
 				7CED8EC52EF2D1F900457128 /* ShopCollectionView */,
 				7CED8EC92EF2D1F900457128 /* NoticeListCollectionView */,
@@ -2577,7 +2549,6 @@
 				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
 				7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */,
 				7CED8ED52EF2D1F900457128 /* BannerViewController.swift */,
-				7CED8ED72EF2D1F900457128 /* ClubView.swift */,
 				7CA63A2D2F1B119200226F86 /* LostItemListView.swift */,
 				7C16AA382F3E9FBC0071ABE6 /* ErrorViewController.swift */,
 				7CC42B842F5D719C00940CE1 /* CallVanView.swift */,
@@ -2684,14 +2655,6 @@
 				7C61D3372F21FADF005FAC3A /* EditLostItem */,
 			);
 			path = LostItem;
-			sourceTree = "<group>";
-		};
-		7CED8EF72EF2D1F900457128 /* Club */ = {
-			isa = PBXGroup;
-			children = (
-				7CED8EF62EF2D1F900457128 /* ClubWebViewController.swift */,
-			);
-			path = Club;
 			sourceTree = "<group>";
 		};
 		7CED8EFB2EF2D1F900457128 /* ChatList */ = {
@@ -3672,7 +3635,6 @@
 			children = (
 				7CED8EE32EF2D1F900457128 /* Home */,
 				7CED8EF42EF2D1F900457128 /* LostItem */,
-				7CED8EF72EF2D1F900457128 /* Club */,
 				7CED8F052EF2D1F900457128 /* Chat */,
 				7CED8F202EF2D1F900457128 /* Setting */,
 				7CED8F3B2EF2D1F900457128 /* Login */,
@@ -3694,7 +3656,6 @@
 				7CED921B2EF2D25900457128 /* DIContainer.swift */,
 				7CED921C2EF2D25900457128 /* DIContainer+Home.swift */,
 				7CED921D2EF2D25900457128 /* DIContainer+LostItem.swift */,
-				7CED921E2EF2D25900457128 /* DIContainer+Club.swift */,
 				7CED921F2EF2D25900457128 /* DIContainer+Chat.swift */,
 				7CED92202EF2D25900457128 /* DIContainer+Setting.swift */,
 				7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */,
@@ -3988,8 +3949,6 @@
 			children = (
 				D208A7C82CABB486007040E7 /* CheckVersionUseCase.swift */,
 				D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */,
-				D20AD6CE2DFB45670067760A /* FetchHotClubsUseCase.swift */,
-				D20AD6D02DFB457A0067760A /* FetchClubCategoriesUseCase.swift */,
 				D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */,
 			);
 			path = Core;
@@ -4028,8 +3987,6 @@
 			isa = PBXGroup;
 			children = (
 				D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */,
-				D20AD6CA2DFB429E0067760A /* ClubCategoriesDTO.swift */,
-				D20AD6CC2DFB43AC0067760A /* HotClubDTO.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -5026,7 +4983,6 @@
 				D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */,
 				D2B2193B2D66626900EAF5B1 /* ChatHistoryData.swift in Sources */,
 				83DD0DBB2C551E5100278ABD /* BusTimetableInfo.swift in Sources */,
-				D20AD6CB2DFB429E0067760A /* ClubCategoriesDTO.swift in Sources */,
 				B47839052E70FAFE00D002E3 /* OrderShopSummary.swift in Sources */,
 				D249CD3D2C159350000813F9 /* DateProvider.swift in Sources */,
 				D2D422612BAC2D7300A8AF04 /* EncodingWorker.swift in Sources */,
@@ -5065,7 +5021,6 @@
 				7CED922B2EF2D25900457128 /* DIContainer+Notice.swift in Sources */,
 				7CED922C2EF2D25900457128 /* DIContainer+Dining.swift in Sources */,
 				7CED922D2EF2D25900457128 /* DIContainer+Land.swift in Sources */,
-				7CED922E2EF2D25900457128 /* DIContainer+Club.swift in Sources */,
 				7CED922F2EF2D25900457128 /* DIContainer+TimeTable.swift in Sources */,
 				7CED92302EF2D25900457128 /* DIContainer+Home.swift in Sources */,
 				7CED92322EF2D25900457128 /* DIConatiner+Shop.swift in Sources */,
@@ -5351,7 +5306,6 @@
 				7CC42B222F56F9C100940CE1 /* CallVanList.swift in Sources */,
 				7CED91252EF2D1F900457128 /* EventShopCollectionView.swift in Sources */,
 				7CED91262EF2D1F900457128 /* NoticeSearchViewModel.swift in Sources */,
-				7CED91282EF2D1F900457128 /* ClubCollectionViewCell.swift in Sources */,
 				7CED923B2EF2D26000457128 /* Coordinator.swift in Sources */,
 				7CED91292EF2D1F900457128 /* ReportDetailView.swift in Sources */,
 				7CED912A2EF2D1F900457128 /* NoticeAttachmentsTableViewCell.swift in Sources */,
@@ -5555,10 +5509,8 @@
 				7CC42B962F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift in Sources */,
 				7CED91DC2EF2D1F900457128 /* HomeViewController.swift in Sources */,
 				7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */,
-				7CED91DE2EF2D1F900457128 /* ClubCollectionView.swift in Sources */,
 				7CED91DF2EF2D1F900457128 /* NotiViewController.swift in Sources */,
 				7CC42B602F59D06C00940CE1 /* CallVanPostParticipantsView.swift in Sources */,
-				7CED91E12EF2D1F900457128 /* ClubView.swift in Sources */,
 				7CED91E32EF2D1F900457128 /* AddClassCollectionViewCell.swift in Sources */,
 				7C61D3492F220EAC005FAC3A /* EditLostItemFoundDateView.swift in Sources */,
 				7CC42B202F56F3C400940CE1 /* CallVanState.swift in Sources */,
@@ -5605,7 +5557,6 @@
 				7C0C18952F68A913001781B3 /* FetchCallVanChatUseCase.swift in Sources */,
 				7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */,
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
-				7CED92182EF2D1F900457128 /* ClubWebViewController.swift in Sources */,
 				7C372EE62F1C0CC400149729 /* LostItemListData.swift in Sources */,
 				7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */,
 				7CED921A2EF2D1F900457128 /* ShopViewController.swift in Sources */,
@@ -5624,7 +5575,6 @@
 				8354BE222C78AEFC009D4D7A /* UICollectionVIewFlowLayout.swift in Sources */,
 				D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */,
 				D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */,
-				D20AD6D12DFB457A0067760A /* FetchClubCategoriesUseCase.swift in Sources */,
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */,
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
@@ -5670,7 +5620,6 @@
 				D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
-				D20AD6CF2DFB45670067760A /* FetchHotClubsUseCase.swift in Sources */,
 				D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */,
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponseDto.swift in Sources */,
 				D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */,
@@ -5803,7 +5752,6 @@
 				7C58FEA02F5FE4C900A2737B /* CallVanReportReasonButton.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
 				7C8ADD452F20C3FB00F85BDE /* FetchLostItemListUseCase.swift in Sources */,
-				D20AD6CD2DFB43AC0067760A /* HotClubDTO.swift in Sources */,
 				B68D2CE72EA505B000F3B479 /* ToastMessageView.swift in Sources */,
 				D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */,
 				83E770FA2D05B5EC00EB3F84 /* BusNoticeDTO.swift in Sources */,

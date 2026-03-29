@@ -23,14 +23,7 @@ final class DefaultCoreRepository: CoreRepository {
     func fetBanner() -> AnyPublisher<BannerDto, ErrorResponse> {
         return service.fetchBanner()
     }
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse> {
-        return service.fetchClubCategories()
-    }
-    
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse> {
-        return service.fetchHotClubs()
-    }
-    
+
     func uploadFiles(files: [Data], domain: String) -> AnyPublisher<FileUploadResponse, ErrorResponse> {
         return service.uploadFiles(files: files, domain: domain)
     }

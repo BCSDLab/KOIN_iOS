@@ -47,13 +47,6 @@ enum ImageAsset: String {
     case basicPicture
     case block
     
-    // MARK: - Club
-    case club1
-    case club2
-    case club3
-    case club4
-    case club5
-    
     // MARK: - Dining
     case coopInfo
     case diningShare
