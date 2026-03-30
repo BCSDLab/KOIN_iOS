@@ -84,7 +84,7 @@ extension SceneDelegate {
         navigationController: UINavigationController?
     ) {
         // URL 경로가 "/articles/lost-item"인 경우에 처리
-        if url.path == "/articles/lost-item" || url.path == "/lost-item" {
+        if url.host == "lost-item" || (url.host == "articles" && url.path == "/lost-item") {
             handleLostItemNavigation(navigationController: navigationController)
         }
         
