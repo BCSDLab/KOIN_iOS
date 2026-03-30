@@ -12,8 +12,6 @@ import Alamofire
 protocol CoreService {
     func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse>
     func fetchBanner() -> AnyPublisher<BannerDto, ErrorResponse>
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse>
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse>
     func uploadFiles(files: [Data], domain: String) -> AnyPublisher<FileUploadResponse, ErrorResponse>
 }
 
@@ -27,14 +25,6 @@ final class DefaultCoreService: CoreService {
     
     func fetchBanner() -> AnyPublisher<BannerDto, ErrorResponse> {
         return networkService.requestWithResponse(api: CoreAPI.fetchBanner)
-    }
-    
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: CoreAPI.fetchClubCategories)
-    }
-    
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: CoreAPI.fetchHotClubs)
     }
     
     func uploadFiles(files: [Data], domain: String) -> AnyPublisher<FileUploadResponse, ErrorResponse> {

@@ -402,8 +402,6 @@ extension HomeViewController {
                 }
                 let viewController = ChatListTableViewController(viewModel: ChatListTableViewModel())
                 navigationController?.pushViewController(viewController, animated: true)
-            } else if redirect == "club" {
-                navigationController?.pushViewController(ClubWebViewController(parameter: "/clubs"), animated: true)
             } else if redirect == "lostitem" {
                 let userRepository = DefaultUserRepository(service: DefaultUserService())
                 let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
