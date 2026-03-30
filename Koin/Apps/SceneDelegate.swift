@@ -9,9 +9,11 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
+    // MARK: - Properties
     var window: UIWindow?
     private var isPresentingErrorViewController = false
     
+    // MARK: - Initializer
     override init() {
         super.init()
         NotificationCenter.default.addObserver(
@@ -26,20 +28,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
-    // MARK: - 딥링크 cold start
+    // MARK: - cold start & 딥링크
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
         options connectionOptions: UIScene.ConnectionOptions
     ) {
+        // cold start
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        
         let navigationController = CustomNavigationController(rootViewController: makeHomeViewController())
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
         
+        // 딥링크
         if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
            let incomingURL = userActivity.webpageURL {
             handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
@@ -65,12 +68,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         guard let urlContext = URLContexts.first else { return }
-        NotificationHandler.shared.handleIncomingURL(url: urlContext.url, navigationController: window?.rootViewController as? UINavigationController)
+        handleIncomingDeepLink(url: urlContext.url, navigationController: window?.rootViewController as? UINavigationController)
     }
     
     // MARK: - 푸시알림 처리 (AppDelegate에 의해 호출)
     func handleNotificationData(userInfo: [AnyHashable: Any]) {
-        NotificationHandler.shared.handleNotificationData(userInfo: userInfo, navigationController: window?.rootViewController as? UINavigationController)
+        handleNotificationData(userInfo: userInfo, navigationController: window?.rootViewController as? UINavigationController)
     }
 }
 
@@ -82,21 +85,46 @@ extension SceneDelegate {
     ) {
         // URL 경로가 "/articles/lost-item"인 경우에 처리
         if url.path == "/articles/lost-item" || url.path == "/lost-item" {
-            let userRepository = DefaultUserRepository(service: DefaultUserService())
-            let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
-            let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-            let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let viewModel = LostItemListViewModel(
-                checkLoginUseCase: checkLoginUseCase,
-                fetchLostItemListUseCase: fetchLostItemItemUseCase,
-                logAnalyticsEventUseCase: logAnalyticsEventUseCase
-            )
-            let viewController = LostItemListViewController(viewModel: viewModel)
-            navigationController?.pushViewController(viewController, animated: false)
+            handleLostItemNavigation(navigationController: navigationController)
         }
-        // 다른 딥링크 처리 로직을 추가할 수 있습니다.
+        
+        // 카카오톡 식단공유
+        guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
+        
+        var parameters: [String: String] = [:]
+        components.queryItems?.forEach { queryItem in
+            parameters[queryItem.name] = queryItem.value
+        }
+        
+        if let date = parameters["date"], let type = parameters["type"], let place = parameters["place"] {
+            handleDiningNavigation(date: date, type: type, place: place, navigationController: navigationController)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.menuShare, category: .click, value: "코인으로 이동")
+            return
+        }
     }
+    
+    private func handleNotificationData(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
+        guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String else {
+            print("Invalid notification data")
+            return
+        }
+        switch category {
+        case "keyword":
+            handleKeywordNotification(userInfo: userInfo, navigationController: navigationController)
+        case "dining":
+            let diningViewController = createDiningViewController()
+            navigationController?.pushViewController(diningViewController, animated: true)
+        case "shop":
+            let shopViewController = createShopViewController()
+            navigationController?.pushViewController(shopViewController, animated: true)
+        default:
+            return
+        }
+    }
+}
+
+extension SceneDelegate {
     
     private func makeHomeViewController() -> UIViewController {
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
@@ -156,5 +184,132 @@ extension SceneDelegate {
             }
             isPresentingErrorViewController = true
         }
+    }
+    
+    private func handleDiningNavigation(date: String, type: String, place: String, navigationController: UINavigationController?) {
+        let diningService = DefaultDiningService()
+        let shareService = KakaoShareService()
+        let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let diningLikeUseCase = DefaultDiningLikeUseCase(diningRepository: diningRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let dateProvider = DefaultDateProvider()
+        let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewModel = DiningViewModel(
+            fetchDiningListUseCase: fetchDiningListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            dateProvder: dateProvider,
+            shareMenuListUseCase: shareMenuListUseCase,
+            diningLikeUseCase: diningLikeUseCase,
+            changeNotiUseCase: changeNotiUseCase,
+            fetchNotiListUsecase: fetchNotiListUseCase,
+            changeNotiDetailUseCase: changeNotiDetailUseCase,
+            sharedDiningItem: CurrentDiningTime(date: date.toDateFromYYMMDD() ?? Date(), diningType: DiningType(rawValue: "\(type)") ?? .breakfast)
+        )
+        let diningViewController = DiningViewController(viewModel: viewModel)
+        diningViewController.title = "식단"
+        
+        navigationController?.pushViewController(diningViewController, animated: true)
+    }
+    
+    private func handleKeywordNotification(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
+        guard let schemeUri = userInfo["schemeUri"] as? String else {
+            print("No schemeUri found")
+            return
+        }
+        guard let id = extractValue(from: schemeUri, value: "id"), let intId = Int(id) else {
+            print("Invalid or missing ID")
+            return
+        }
+        
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let viewModel = NoticeDataViewModel(
+            fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository),
+            fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository),
+            downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository),
+            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
+            noticeId: intId, boardId: -1
+        )
+        let viewController = NoticeDataViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+        
+        if let keyword = extractValue(from: schemeUri, value: "keyword") {
+            let logAnalyticsEventUseCase =
+            DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: MockAnalyticsService()))
+            logAnalyticsEventUseCase.execute(
+                label: EventParameter.EventLabel.Campus.keywordNotification,
+                category: .notification,
+                value: keyword
+            )
+        }
+    }
+    
+    private func createDiningViewController() -> UIViewController {
+        let diningService = DefaultDiningService()
+        let shareService = KakaoShareService()
+        let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let diningLikeUseCase = DefaultDiningLikeUseCase(diningRepository: diningRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let dateProvider = DefaultDateProvider()
+        let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
+        let diningViewController = DiningViewController(viewModel: viewModel)
+        diningViewController.title = "식단"
+        return diningViewController
+    }
+    
+    private func createShopViewController() -> UIViewController {
+        let shopService = DefaultShopService()
+        let shopRepository = DefaultShopRepository(service: shopService)
+        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
+        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
+        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
+        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
+        let viewModel = ShopViewModel(
+            fetchShopListUseCase: fetchShopListUseCase,
+            fetchEventListUseCase: fetchEventListUseCase,
+            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
+            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
+            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase)
+        let shopViewController = ShopViewController(viewModel: viewModel)
+        shopViewController.title = "주변상점"
+        return shopViewController
+    }
+    
+    private func handleLostItemNavigation(navigationController: UINavigationController?) {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LostItemListViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchLostItemListUseCase: fetchLostItemItemUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let viewController = LostItemListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: false)
+    }
+}
+
+extension SceneDelegate {
+    private func extractValue(from urlString: String, value: String) -> String? {
+        let components = URLComponents(string: urlString)
+        return components?.queryItems?.first(where: { $0.name == value })?.value
     }
 }
