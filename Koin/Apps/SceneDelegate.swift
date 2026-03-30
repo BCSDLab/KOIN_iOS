@@ -14,7 +14,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     override init() {
         super.init()
-        NotificationCenter.default.addObserver(self, selector: #selector(presentErrorViewController), name: NSNotification.Name("ServerError"), object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(presentErrorViewController),
+            name: NSNotification.Name("ServerError"),
+            object: nil
+        )
     }
     
     deinit {
@@ -22,9 +27,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     }
     
     // MARK: - 딥링크 cold start
-    func scene(_ scene: UIScene,
-               willConnectTo session: UISceneSession,
-               options connectionOptions: UIScene.ConnectionOptions) {
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         
@@ -34,68 +41,61 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window.makeKeyAndVisible()
         
         if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
-                   let incomingURL = userActivity.webpageURL {
-                    handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
-                } else if let urlContext = connectionOptions.urlContexts.first {
-                    handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
-                }
+           let incomingURL = userActivity.webpageURL {
+            handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
+        } else if let urlContext = connectionOptions.urlContexts.first {
+            handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
+        }
     }
     
-    private func handleIncomingDeepLink(url: URL, navigationController: UINavigationController) {
-            // URL 경로가 "/articles/lost-item"인 경우에 처리
-            if url.path == "/articles/lost-item" || url.path == "/lost-item" {
-                let userRepository = DefaultUserRepository(service: DefaultUserService())
-                let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
-                let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-                let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
-                let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                let viewModel = LostItemListViewModel(
-                    checkLoginUseCase: checkLoginUseCase,
-                    fetchLostItemListUseCase: fetchLostItemItemUseCase,
-                    logAnalyticsEventUseCase: logAnalyticsEventUseCase
-                )
-                let viewController = LostItemListViewController(viewModel: viewModel)
-                navigationController.pushViewController(viewController, animated: false)
-            }
-            // 다른 딥링크 처리 로직을 추가할 수 있습니다.
-        }
-    
     // MARK: - 딥링크 (URI Scheme) warm start
-    func scene(_ scene: UIScene, continue userActivity: NSUserActivity) {
+    func scene(
+        _ scene: UIScene,
+        continue userActivity: NSUserActivity
+    ) {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
-               let incomingURL = userActivity.webpageURL else { return }
-         
-         // URL의 경로가 "/articles/lost-item"인지 확인
-         if incomingURL.path == "/articles/lost-item" || incomingURL.path == "/lost-item" {
-                if let navigationController = window?.rootViewController as? UINavigationController {
-                    let userRepository = DefaultUserRepository(service: DefaultUserService())
-                    let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
-                    let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-                    let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
-                    let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                    let viewModel = LostItemListViewModel(
-                        checkLoginUseCase: checkLoginUseCase,
-                        fetchLostItemListUseCase: fetchLostItemItemUseCase,
-                        logAnalyticsEventUseCase: logAnalyticsEventUseCase
-                    )
-                    let viewController = LostItemListViewController(viewModel: viewModel)
-                    navigationController.pushViewController(viewController, animated: false)
-                       }
-                // 네비게이션 컨트롤러를 통해 LostItemViewController로 이동
-              
-            }
+              let incomingURL = userActivity.webpageURL else { return }
+        
+        handleIncomingDeepLink(url: incomingURL, navigationController: window?.rootViewController as? UINavigationController)
     }
     
     // MARK: - 딥링크 (Universal Link) warm start
-    func scene(_ scene: UIScene, openURLContexts URLContexts: Set<UIOpenURLContext>) {
+    func scene(
+        _ scene: UIScene,
+        openURLContexts URLContexts: Set<UIOpenURLContext>
+    ) {
         guard let urlContext = URLContexts.first else { return }
-        NotificationHandler.shared.handleIncomingURL(url: urlContext.url, rootViewController: window?.rootViewController)
+        NotificationHandler.shared.handleIncomingURL(url: urlContext.url, navigationController: window?.rootViewController as? UINavigationController)
+    }
+    
+    // MARK: - 푸시알림 처리 (AppDelegate에 의해 호출)
+    func handleNotificationData(userInfo: [AnyHashable: Any]) {
+        NotificationHandler.shared.handleNotificationData(userInfo: userInfo, navigationController: window?.rootViewController as? UINavigationController)
     }
 }
 
 extension SceneDelegate {
-    func handleNotificationData(userInfo: [AnyHashable: Any]) {
-        NotificationHandler.shared.handleNotificationData(userInfo: userInfo, rootViewController: window?.rootViewController as? UINavigationController)
+    
+    private func handleIncomingDeepLink(
+        url: URL,
+        navigationController: UINavigationController?
+    ) {
+        // URL 경로가 "/articles/lost-item"인 경우에 처리
+        if url.path == "/articles/lost-item" || url.path == "/lost-item" {
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+            let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+            let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let viewModel = LostItemListViewModel(
+                checkLoginUseCase: checkLoginUseCase,
+                fetchLostItemListUseCase: fetchLostItemItemUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            )
+            let viewController = LostItemListViewController(viewModel: viewModel)
+            navigationController?.pushViewController(viewController, animated: false)
+        }
+        // 다른 딥링크 처리 로직을 추가할 수 있습니다.
     }
     
     private func makeHomeViewController() -> UIViewController {

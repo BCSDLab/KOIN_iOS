@@ -13,7 +13,8 @@ final class NotificationHandler {
     
     private init() {}
     
-    func handleIncomingURL(url: URL, rootViewController: UIViewController?) {
+    // MARK: - 카카오톡 딥링크 처리
+    func handleIncomingURL(url: URL, navigationController: UINavigationController?) {
         guard let components = URLComponents(url: url, resolvingAgainstBaseURL: false) else { return }
         
         var parameters: [String: String] = [:]
@@ -22,14 +23,37 @@ final class NotificationHandler {
         }
         
         if let date = parameters["date"], let type = parameters["type"], let place = parameters["place"] {
-            handleDiningNavigation(date: date, type: type, place: place, rootViewController: rootViewController)
+            handleDiningNavigation(date: date, type: type, place: place, navigationController: navigationController)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.menuShare, category: .click, value: "코인으로 이동")
             return
         }
     }
     
-    private func handleDiningNavigation(date: String, type: String, place: String, rootViewController: UIViewController?) {
+    // MARK: - 푸시알림 처리
+    func handleNotificationData(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
+        guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String else {
+            print("Invalid notification data")
+            return
+        }
+        switch category {
+        case "keyword":
+            handleKeywordNotification(userInfo: userInfo, navigationController: navigationController)
+        case "dining":
+            let diningViewController = createDiningViewController()
+            navigationController?.pushViewController(diningViewController, animated: true)
+        case "shop":
+            let shopViewController = createShopViewController()
+            navigationController?.pushViewController(shopViewController, animated: true)
+        default:
+            return
+        }
+    }
+}
+
+extension NotificationHandler {
+    
+    private func handleDiningNavigation(date: String, type: String, place: String, navigationController: UINavigationController?) {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
         let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
@@ -55,29 +79,11 @@ final class NotificationHandler {
         )
         let diningViewController = DiningViewController(viewModel: viewModel)
         diningViewController.title = "식단"
-
-        if let navigationController = rootViewController as? UINavigationController {
-            navigationController.pushViewController(diningViewController, animated: true)
-        } else {
-            let navigationController = UINavigationController(rootViewController: diningViewController)
-            rootViewController?.present(navigationController, animated: true, completion: nil)
-        }
+        
+        navigationController?.pushViewController(diningViewController, animated: true)
     }
     
-    func handleNotificationData(userInfo: [AnyHashable: Any], rootViewController: UINavigationController?) {
-        guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String else {
-            print("Invalid notification data")
-            return
-        }
-        switch category {
-        case "keyword":
-            handleKeywordNotification(userInfo: userInfo, rootViewController: rootViewController)
-        default:
-            navigateToScene(category: category, rootViewController: rootViewController)
-        }
-    }
-    
-    private func handleKeywordNotification(userInfo: [AnyHashable: Any], rootViewController: UINavigationController?) {
+    private func handleKeywordNotification(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
         guard let schemeUri = userInfo["schemeUri"] as? String else {
             print("No schemeUri found")
             return
@@ -96,8 +102,8 @@ final class NotificationHandler {
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
             noticeId: intId, boardId: -1
         )
-        let vc = NoticeDataViewController(viewModel: viewModel)
-        rootViewController?.pushViewController(vc, animated: true)
+        let viewController = NoticeDataViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
         
         if let keyword = extractValue(from: schemeUri, value: "keyword") {
             let logAnalyticsEventUseCase =
@@ -110,23 +116,13 @@ final class NotificationHandler {
         }
     }
     
-    func navigateToScene(category: String, rootViewController: UINavigationController?) {
-        switch category {
-        case "dining":
-            let diningViewController = createDiningViewController()
-            rootViewController?.pushViewController(diningViewController, animated: true)
-        case "shop":
-            let shopViewController = createShopViewController()
-            rootViewController?.pushViewController(shopViewController, animated: true)
-        default:
-            print("Unknown category")
-        }
-    }
-    
     private func extractValue(from urlString: String, value: String) -> String? {
         let components = URLComponents(string: urlString)
         return components?.queryItems?.first(where: { $0.name == value })?.value
     }
+}
+
+extension NotificationHandler {
     
     private func createDiningViewController() -> UIViewController {
         let diningService = DefaultDiningService()
