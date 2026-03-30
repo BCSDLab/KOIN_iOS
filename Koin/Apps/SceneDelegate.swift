@@ -51,7 +51,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         }
     }
     
-    // MARK: - 딥링크 (URI Scheme) warm start
+    // MARK: - 딥링크 (Universal Link) warm start
     func scene(
         _ scene: UIScene,
         continue userActivity: NSUserActivity
@@ -62,7 +62,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         handleIncomingDeepLink(url: incomingURL, navigationController: window?.rootViewController as? UINavigationController)
     }
     
-    // MARK: - 딥링크 (Universal Link) warm start
+    // MARK: - 딥링크 (URI Scheme) warm start
     func scene(
         _ scene: UIScene,
         openURLContexts URLContexts: Set<UIOpenURLContext>
@@ -240,7 +240,7 @@ extension SceneDelegate {
         
         if let keyword = extractValue(from: schemeUri, value: "keyword") {
             let logAnalyticsEventUseCase =
-            DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: MockAnalyticsService()))
+            DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             logAnalyticsEventUseCase.execute(
                 label: EventParameter.EventLabel.Campus.keywordNotification,
                 category: .notification,
