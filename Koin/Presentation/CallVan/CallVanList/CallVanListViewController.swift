@@ -416,7 +416,7 @@ extension CallVanListViewController {
         filterButton.do {
             var configuration = UIButton.Configuration.plain()
             configuration.attributedTitle = AttributedString("필터", attributes: AttributeContainer([
-                .font : UIFont.appFont(.pretendardBold, size: 14),
+                .font : UIFont.appFont(.pretendardSemiBold, size: 14),
                 .foregroundColor : UIColor.ColorSystem.Primary.purple1300
             ]))
             configuration.image = UIImage.appImage(asset: .filter)?
