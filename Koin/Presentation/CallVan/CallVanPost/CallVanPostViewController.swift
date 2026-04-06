@@ -92,7 +92,12 @@ final class CallVanPostViewController: UIViewController {
                 case let .postDataCompleted(postData):
                     postDataCompleted(postData)
                 case let .showToast(message):
+                    postButton.isUserInteractionEnabled = true
                     showToastMessage(message: message)
+                case .showReportedModal:
+                    postButton.isEnabled = false
+                    postButton.backgroundColor = UIColor.appColor(.neutral400)
+                    showReportedModal()
                 }
             }.store(in: &subscriptions)
         
@@ -163,6 +168,12 @@ extension CallVanPostViewController {
 }
 
 extension CallVanPostViewController {
+    
+    private func showReportedModal() {
+        let modalViewController = CallVanModalViewController(title: "이용 정지", description: "해당 계정은 콜밴팟 기능을\n사용할 수 없습니다.")
+        modalViewController.modalPresentationStyle = .overFullScreen
+        present(modalViewController, animated: false)
+    }
     
     private func presentDeparturePlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in

@@ -83,6 +83,8 @@ final class CallVanListViewController: UIViewController {
                 configureRightBarButton(alert: alert)
             case let .showToast(message):
                 showToastMessage(message: message, bottomInset: 75)
+            case .showReportedModal:
+                showReportedModal()
             }
             refreshControl.endRefreshing()
         }.store(in: &subscriptions)
@@ -367,6 +369,12 @@ extension CallVanListViewController {
         let shopViewController = ShopViewController(viewModel: viewModel)
         navigationController?.pushViewController(shopViewController, animated: true)
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanCall, category: .click, value: ""))
+    }
+    
+    private func showReportedModal() {
+        let modalViewController = CallVanModalViewController(title: "이용 정지", description: "해당 계정은 콜밴팟 기능을\n사용할 수 없습니다.")
+        modalViewController.modalPresentationStyle = .overFullScreen
+        present(modalViewController, animated: false)
     }
 }
 

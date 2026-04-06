@@ -33,6 +33,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         case deleteListItem(Int)
         case updateBell(alert: Bool)
         case showToast(String)
+        case showReportedModal
     }
     
     // MARK: - Properties
@@ -212,7 +213,11 @@ extension CallVanListViewModel {
                 case .finished:
                     self?.reloadList(postId)
                 case .failure(let error):
-                    self?.outputSubject.send(.showToast(error.message))
+                    if error.statusCode == 403 {
+                        self?.outputSubject.send(.showReportedModal)
+                    } else {
+                        self?.outputSubject.send(.showToast(error.message))
+                    }
                 }
             },
             receiveValue: { _ in}
