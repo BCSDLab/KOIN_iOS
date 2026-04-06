@@ -62,13 +62,6 @@ extension CallVanListDto {
                 .map {
                     $0.toDomain()
                 }
-                .compactMap {
-                    if let _ = $0.mainState {
-                        return $0
-                    } else {
-                        return nil
-                    }
-                }
             ,
             totalCount: totalCount,
             currentPage: currentPage,
@@ -89,30 +82,35 @@ extension CallVanListPostDto {
                 return nil
             }
         }()
+        let shouldShowButton = shouldShowButton(state: state, isJoined: isJoined, isAuthor: isAuthor)
+        let inputFormatter = DateFormatter().then {
+            $0.dateFormat = "yyyy-MM-dd"
+            $0.locale = Locale(identifier: "ko_KR")
+            $0.calendar = Calendar(identifier: .gregorian)
+        }
+        let date = inputFormatter.date(from: departureDate)
         
         return CallVanListPost(
             postId: postId,
             departure: departure,
             arrival: arrival,
-            departureDate: displayDate(departureDate),
-            departureDay: displayDay(departureDate),
+            departureDate: displayDate(inputFormatter, departureDate),
+            departureDay: displayDay(inputFormatter, departureDate),
             departureTime: departureTime,
             authorNickname: authorNickname ?? "익명",
             currentParticipants: currentParticipants,
             maxParticipants: maxParticipants,
             mainState: mainState,
             subState: subState,
-            showChatButton: showChatButton(state: state, isJoined: isJoined, isAuthor: isAuthor),
-            showCallButton: showCallButton(state: state, isJoined: isJoined, isAuthor: isAuthor)
+            showChatButton: shouldShowButton.chat,
+            showCallButton: shouldShowButton.call,
+            isJoined: isJoined,
+            isCompleted: state == .completed,
+            date: date
         )
     }
     
-    func displayDate(_ inputDate: String) -> String {
-        let inputFormatter = DateFormatter().then {
-            $0.dateFormat = "yyyy-MM-dd"
-            $0.locale = Locale(identifier: "ko_KR")
-            $0.calendar = Calendar(identifier: .gregorian)
-        }
+    func displayDate(_ inputFormatter: DateFormatter, _ inputDate: String) -> String {
         let displayFormatter = DateFormatter().then {
             $0.dateFormat = "MM.dd"
             $0.locale = Locale(identifier: "ko_KR")
@@ -126,12 +124,7 @@ extension CallVanListPostDto {
         }
     }
     
-    func displayDay(_ inputDate: String) -> String {
-        let inputFormatter = DateFormatter().then {
-            $0.dateFormat = "yyyy-MM-dd"
-            $0.locale = Locale(identifier: "ko_KR")
-            $0.calendar = Calendar(identifier: .gregorian)
-        }
+    func displayDay(_ inputFormatter: DateFormatter, _ inputDate: String) -> String {
         let displayFormatter = DateFormatter().then {
             $0.dateFormat = "(E)"
             $0.locale = Locale(identifier: "ko_KR")
@@ -153,22 +146,16 @@ extension CallVanListPostDto {
         case (false, .recruiting, false): return [.참여하기]
         case (false, .recruiting, true): return [.참여취소]
         case (false, .closed, _): return [.모집마감]
-        case (false, .completed, _): return []
+        case (false, .completed, _): return [] // MARK: 이용완료, 상태 변경 불가능
         }
     }
     
-    func showChatButton(state: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> Bool {
-        switch (isAuthor, state, isJoined) {
-        case (false, _, true): return true
-        default: return false
-        }
-    }
-    
-    func showCallButton(state: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> Bool {
-        switch (isAuthor, state, isJoined) {
-        case (true, .recruiting, _): return true
-        case (true, .closed, _): return true
-        default: return false
+    func shouldShowButton(state: CallVanStateDto, isJoined: Bool, isAuthor: Bool) -> (chat: Bool, call: Bool) {
+        switch (state, isJoined, isAuthor) {
+        case (.completed, true, _): return (chat: true, call: false)
+        case (_, true, false): return (chat: true, call: false)
+        case (_, _, true): return (chat: false, call: true)
+        default: return (chat: false, call: false)
         }
     }
 }

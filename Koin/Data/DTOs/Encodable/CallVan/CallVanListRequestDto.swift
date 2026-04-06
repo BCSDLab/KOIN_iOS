@@ -9,7 +9,7 @@ import Foundation
 
 struct CallVanListRequestDto: Encodable {
     var sort: CallVanListSortDto?
-    var statuses: [CallVanRecruitmentStateDto]?
+    var statuses: [CallVanRecruitmentStateDto]
     var departures: [CallVanPlaceDto]?
     var arrivals: [CallVanPlaceDto]?
     var departureKeyword: String?
@@ -54,7 +54,7 @@ extension CallVanListRequestDto {
         self.statuses = {
             switch model.state {
             case .all:
-                return [.recruiting, .closed]
+                return [.recruiting, .closed, .completed]
             case .recruiting:
                 return [.recruiting]
             case .closed:
