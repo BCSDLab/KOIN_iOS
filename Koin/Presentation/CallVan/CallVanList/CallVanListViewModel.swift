@@ -51,6 +51,7 @@ final class CallVanListViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var filterState = CallVanListRequest()
     private(set) var isLoggedIn: Bool = false
+    private var totalPage: Int?
     
     // MARK: - Intializer
     init(checkLoginUseCase: CheckLoginUseCase,
@@ -166,6 +167,7 @@ extension CallVanListViewModel {
             },
             receiveValue: { [weak self] callVanList in
                 guard let self else { return }
+                totalPage = callVanList.totalPage
                 filterState.page = callVanList.currentPage
                 outputSubject.send(.resetList(callVanList.posts))
             }
@@ -187,6 +189,10 @@ extension CallVanListViewModel {
     
     private func loadMoreList() {
         filterState.page += 1
+        if let totalPage,
+           totalPage < filterState.page {
+            return
+        }
         fetchCallVanListUseCase.execute(request: filterState).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
@@ -196,11 +202,9 @@ extension CallVanListViewModel {
             },
             receiveValue: { [weak self] callVanList in
                 guard let self else { return }
+                totalPage = callVanList.totalPage
                 if filterState.page == callVanList.currentPage {
                     outputSubject.send(.appendList(callVanList.posts))
-                } else {
-                    filterState.page = callVanList.currentPage
-                    outputSubject.send(.appendList([]))
                 }
             }
         ).store(in: &subscriptions)
