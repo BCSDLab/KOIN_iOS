@@ -274,7 +274,7 @@ extension CallVanListViewModel {
             receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished:
-                    self?.outputSubject.send(.deleteListItem(postId))
+                    self?.reloadList(postId)
                 case .failure(let error):
                     self?.outputSubject.send(.showToast(error.message))
                 }

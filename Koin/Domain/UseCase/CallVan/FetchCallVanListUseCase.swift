@@ -45,11 +45,14 @@ extension DefaultFetchCallVanListUseCase {
     
     private func isMoreThanWeekAgo(date: Date?) -> Bool {
         guard let date else {
-            assert(false)
             return true
         }
-        let weekAgo = Date(timeIntervalSinceNow: -60 * 60 * 24 * 7)
-        if date < weekAgo {
+        let calendar = Calendar(identifier: .gregorian)
+        let todayStart = calendar.startOfDay(for: Date())
+        guard let weekAgoStart = calendar.date(byAdding: .day, value: -7, to: todayStart) else {
+            return true
+        }
+        if date < weekAgoStart {
             return true
         } else {
             return false
