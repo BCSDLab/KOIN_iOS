@@ -26,6 +26,7 @@ final class CallVanPostViewModel: ViewModelProtocol {
         case updateArrival(CallVanPlace?, String?)
         case postDataCompleted(CallVanListPost)
         case showToast(String)
+        case showReportedModal
     }
     
     // MARK: - Properties
@@ -149,7 +150,11 @@ extension CallVanPostViewModel {
         postCallVanDataUseCase.execute(request: request).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
-                    self?.outputSubject.send(.showToast(error.message))
+                    if error.statusCode == 403 {
+                        self?.outputSubject.send(.showReportedModal)
+                    } else {
+                        self?.outputSubject.send(.showToast(error.message))
+                    }
                 }
             },
             receiveValue: { [weak self] postData in

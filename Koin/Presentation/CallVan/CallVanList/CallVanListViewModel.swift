@@ -33,6 +33,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         case deleteListItem(Int)
         case updateBell(alert: Bool)
         case showToast(String)
+        case showReportedModal
     }
     
     // MARK: - Properties
@@ -50,6 +51,7 @@ final class CallVanListViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var filterState = CallVanListRequest()
     private(set) var isLoggedIn: Bool = false
+    private var totalPage: Int?
     
     // MARK: - Intializer
     init(checkLoginUseCase: CheckLoginUseCase,
@@ -165,6 +167,7 @@ extension CallVanListViewModel {
             },
             receiveValue: { [weak self] callVanList in
                 guard let self else { return }
+                totalPage = callVanList.totalPage
                 filterState.page = callVanList.currentPage
                 outputSubject.send(.resetList(callVanList.posts))
             }
@@ -186,6 +189,10 @@ extension CallVanListViewModel {
     
     private func loadMoreList() {
         filterState.page += 1
+        if let totalPage,
+           totalPage < filterState.page {
+            return
+        }
         fetchCallVanListUseCase.execute(request: filterState).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
@@ -195,11 +202,9 @@ extension CallVanListViewModel {
             },
             receiveValue: { [weak self] callVanList in
                 guard let self else { return }
+                totalPage = callVanList.totalPage
                 if filterState.page == callVanList.currentPage {
                     outputSubject.send(.appendList(callVanList.posts))
-                } else {
-                    filterState.page = callVanList.currentPage
-                    outputSubject.send(.appendList([]))
                 }
             }
         ).store(in: &subscriptions)
@@ -212,7 +217,11 @@ extension CallVanListViewModel {
                 case .finished:
                     self?.reloadList(postId)
                 case .failure(let error):
-                    self?.outputSubject.send(.showToast(error.message))
+                    if error.statusCode == 403 {
+                        self?.outputSubject.send(.showReportedModal)
+                    } else {
+                        self?.outputSubject.send(.showToast(error.message))
+                    }
                 }
             },
             receiveValue: { _ in}
@@ -265,7 +274,7 @@ extension CallVanListViewModel {
             receiveCompletion: { [weak self] completion in
                 switch completion {
                 case .finished:
-                    self?.outputSubject.send(.deleteListItem(postId))
+                    self?.reloadList(postId)
                 case .failure(let error):
                     self?.outputSubject.send(.showToast(error.message))
                 }

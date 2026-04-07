@@ -113,14 +113,14 @@ final class CallVanBottomSheetViewController: UIViewController {
     private func setUpStyles() {
         titleLabel.do {
             $0.text = titleText
-            $0.font = UIFont.appFont(.pretendardBold, size: 18)
+            $0.font = UIFont.appFont(.pretendardSemiBold, size: 18)
             $0.textColor = UIColor.appColor(.new500)
         }
         mainButton.do {
             $0.setAttributedTitle(NSAttributedString(
                 string: mainButtonText,
                 attributes: [
-                    .font : UIFont.appFont(.pretendardBold, size: 18),
+                    .font : UIFont.appFont(.pretendardSemiBold, size: 18),
                     .foregroundColor : UIColor.appColor(.neutral0)
                 ]), for: .normal)
             $0.backgroundColor = UIColor.appColor(.new500)
@@ -130,7 +130,7 @@ final class CallVanBottomSheetViewController: UIViewController {
             $0.setAttributedTitle(NSAttributedString(
                 string: closeButtonText,
                 attributes: [
-                    .font : UIFont.appFont(.pretendardBold, size: 18),
+                    .font : UIFont.appFont(.pretendardSemiBold, size: 18),
                     .foregroundColor : UIColor.appColor(.neutral600)
                 ]), for: .normal)
             $0.backgroundColor = UIColor.appColor(.neutral0)

@@ -35,7 +35,7 @@ final class CallVanFilterButton: UIButton {
             let borderColor = isSelected ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
             
             setAttributedTitle(NSAttributedString(string: filterState.rawValue, attributes: [
-                .font : UIFont.appFont(.pretendardBold, size: 14),
+                .font : UIFont.appFont(.pretendardSemiBold, size: 14),
                 .foregroundColor : foregroundColor
             ]), for: .normal)
             

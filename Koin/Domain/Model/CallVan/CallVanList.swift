@@ -8,7 +8,7 @@
 import Foundation
 
 struct CallVanList {
-    let posts: [CallVanListPost]
+    var posts: [CallVanListPost]
     let totalCount: Int
     let currentPage: Int
     let totalPage: Int
@@ -33,4 +33,8 @@ struct CallVanListPost {
     
     var showChatButton: Bool
     var showCallButton: Bool
+    
+    let isJoined: Bool
+    let isCompleted: Bool
+    let date: Date?
 }
