@@ -94,11 +94,12 @@ final class CallVanListCollectionViewCell: UICollectionViewCell {
             $0.textColor = UIColor.appColor(.neutral600)
         }
         
-        guard let mainState = post.mainState else {
-            assert(false)
-            return
+        if let mainState = post.mainState {
+            mainButton.configure(state: mainState)
+            mainButton.isHidden = false
+        } else {
+            mainButton.isHidden = true
         }
-        mainButton.configure(state: mainState)
         
         if let subState = post.subState {
             subButton.configure(state: subState)

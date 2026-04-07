@@ -171,12 +171,12 @@ extension CallVanListFilterViewController {
         // MARK: - Labels
         titleLabel.do {
             $0.text = "필터"
-            $0.font = UIFont.appFont(.pretendardBold, size: 18)
+            $0.font = UIFont.appFont(.pretendardSemiBold, size: 18)
             $0.textColor = UIColor.appColor(.new500)
         }
         
         [listLabel, sortLabel, stateLabel, departureLabel, arrivalLabel].forEach {
-            $0.font = UIFont.appFont(.pretendardBold, size: 16)
+            $0.font = UIFont.appFont(.pretendardSemiBold, size: 16)
             $0.textColor = UIColor.appColor(.neutral800)
         }
         listLabel.text = "목록"
@@ -211,7 +211,7 @@ extension CallVanListFilterViewController {
         resetButton.do {
             var configuration = UIButton.Configuration.plain()
             configuration.attributedTitle = AttributedString("초기화", attributes: AttributeContainer([
-                .font : UIFont.appFont(.pretendardBold, size: 16),
+                .font : UIFont.appFont(.pretendardSemiBold, size: 16),
                 .foregroundColor : UIColor.appColor(.neutral600)
             ]))
             configuration.image = UIImage.appImage(asset: .refresh)
@@ -228,7 +228,7 @@ extension CallVanListFilterViewController {
             $0.setAttributedTitle(NSAttributedString(
                 string: "적용하기",
                 attributes: [
-                    .font : UIFont.appFont(.pretendardBold, size: 16),
+                    .font : UIFont.appFont(.pretendardSemiBold, size: 16),
                     .foregroundColor : UIColor.appColor(.neutral0)
                 ]), for: .normal)
             $0.backgroundColor = UIColor.appColor(.new500)

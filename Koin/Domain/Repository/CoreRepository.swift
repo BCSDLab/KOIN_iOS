@@ -11,7 +11,5 @@ import Combine
 protocol CoreRepository {
     func fetchVersion() -> AnyPublisher<ForceUpdateResponse, ErrorResponse>
     func fetBanner() -> AnyPublisher<BannerDto, ErrorResponse>
-    func fetchClubCategories() -> AnyPublisher<ClubCategoriesDto, ErrorResponse>
-    func fetchHotClubs() -> AnyPublisher<HotClubDto, ErrorResponse>
     func uploadFiles(files: [Data], domain: String) -> AnyPublisher<FileUploadResponse, ErrorResponse>
 }

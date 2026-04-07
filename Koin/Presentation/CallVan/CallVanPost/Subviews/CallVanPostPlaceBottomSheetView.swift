@@ -230,7 +230,7 @@ extension CallVanPostPlaceBottomSheetView {
         applyButton.setAttributedTitle(NSAttributedString(
             string: title,
             attributes: [
-                .font : UIFont.appFont(.pretendardBold, size: 16),
+                .font : UIFont.appFont(.pretendardSemiBold, size: 16),
                 .foregroundColor : UIColor.appColor(.neutral0)
             ]), for: .normal
         )
@@ -274,7 +274,7 @@ extension CallVanPostPlaceBottomSheetView {
             $0.setAttributedTitle(NSAttributedString(
                 string: "선택하기",
                 attributes: [
-                    .font : UIFont.appFont(.pretendardBold, size: 16),
+                    .font : UIFont.appFont(.pretendardSemiBold, size: 16),
                     .foregroundColor : UIColor.appColor(.neutral0)
                 ]), for: .normal)
             $0.backgroundColor = UIColor.appColor(.new500)

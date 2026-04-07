@@ -41,7 +41,7 @@ extension CallVanNotificationEmptyView {
         
         titleLabel.do {
             $0.text = "아직 알림이 없어요"
-            $0.font = UIFont.appFont(.pretendardBold, size: 18)
+            $0.font = UIFont.appFont(.pretendardSemiBold, size: 18)
             $0.textColor = UIColor.appColor(.new500)
         }
         
