@@ -140,7 +140,17 @@ extension SceneDelegate {
                 value: category.rawValue
             )
         case .chat:
-            break // TODO: CHAT Scheme Uri를 모름
+            guard let articleId = extractValue(from: schemeUri, value: "articleId"), let intArticleId = Int(articleId) else {
+                print("articleId : Invalid or missing")
+                return
+            }
+            guard let chatRoomId = extractValue(from: schemeUri, value: "chatRoomId"), let intChatRoomId = Int(chatRoomId) else {
+                print("chatRoomId : Invalid or missing")
+                return
+            }
+            let viewModel = ChatViewModel(articleId: intArticleId, chatRoomId: intChatRoomId, articleTitle: nil)
+            let chatViewController = ChatViewController(viewModel: viewModel)
+            navigationController?.pushViewController(chatViewController, animated: true)
         case .callvan:
             guard let postId = extractValue(from: schemeUri, value: "id"), let intPostId = Int(postId) else {
                 print("postId : Invalid or missing")

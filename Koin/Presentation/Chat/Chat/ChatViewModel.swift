@@ -13,6 +13,7 @@ final class ChatViewModel: ViewModelProtocol {
     // MARK: - Input
     
     enum Input {
+        case viewDidLoad
         case uploadFile([Data])
         case fetchChatDetail
         case blockUser
@@ -23,6 +24,7 @@ final class ChatViewModel: ViewModelProtocol {
     // MARK: - Output
     
     enum Output {
+        case updateTitle(String)
         case showChatHistory([ChatMessage])
         case showToast(String, Bool)
     }
@@ -37,14 +39,14 @@ final class ChatViewModel: ViewModelProtocol {
     private lazy var postChatDetailUseCase = DefaultPostChatDetailUseCase(chatRepository: chatRepository)
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private lazy var uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+    private lazy var fetchChatRoomUseCase = DefaultFetchChatRoomUseCase(chatRepository: chatRepository)
     let articleId: Int
     let chatRoomId: Int
-    let articleTitle: String
+    private var articleTitle: String?
     
     
     // MARK: - Initialization
-    
-    init(articleId: Int, chatRoomId: Int, articleTitle: String) {
+    init(articleId: Int, chatRoomId: Int, articleTitle: String?) {
         self.articleId = articleId
         self.chatRoomId = chatRoomId
         self.articleTitle = articleTitle
@@ -53,6 +55,8 @@ final class ChatViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
+            case .viewDidLoad:
+                self?.fetchArticleTitle()
             case .fetchChatDetail:
                 self?.fetchChatDetail()
             case .blockUser:
@@ -124,6 +128,23 @@ extension ChatViewModel {
                 }
             },
             receiveValue: { _ in }
+        ).store(in: &subscriptions)
+    }
+    
+    private func fetchArticleTitle() {
+        if let articleTitle {
+            outputSubject.send(.updateTitle(articleTitle))
+            return
+        }        
+        fetchChatRoomUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] chatRoomItem in
+                guard let self else { return }
+                if let chatRomItem = chatRoomItem.first(where: { $0.chatRoomId == self.chatRoomId }) {
+                    self.articleTitle = chatRomItem.articleTitle
+                    outputSubject.send(.updateTitle(chatRomItem.articleTitle))
+                }
+            }
         ).store(in: &subscriptions)
     }
     
