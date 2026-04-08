@@ -14,6 +14,8 @@ enum AppPath: String {
     case dining
     case keyword
     case chat
+    case callvan
+    case callvanChat = "callvan-chat"
     case club
     case timeTable = "timetable"
 }

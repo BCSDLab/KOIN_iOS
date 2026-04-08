@@ -141,6 +141,20 @@ extension SceneDelegate {
             )
         case .chat:
             break // TODO: CHAT Scheme Uri를 모름
+        case .callvan:
+            guard let postId = extractValue(from: schemeUri, value: "id"), let intPostId = Int(postId) else {
+                print("postId : Invalid or missing")
+                return
+            }
+            let callVanDataViewController = createCallVanDataViewController(postId: intPostId)
+            navigationController?.pushViewController(callVanDataViewController, animated: true)
+        case .callvanChat:
+            guard let postId = extractValue(from: schemeUri, value: "postId"), let intPostId = Int(postId) else {
+                print("postId : Invalid or missing")
+                return
+            }
+            let callVanChatViewController = createCallVanChatViewController(postId: intPostId)
+            navigationController?.pushViewController(callVanChatViewController, animated: true)
         }
     }
 }
@@ -237,6 +251,39 @@ extension SceneDelegate {
         navigationController?.pushViewController(diningViewController, animated: true)
     }
     
+    private func createCallVanDataViewController(postId: Int) -> CallVanDataViewController {
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = CallVanDataViewModel(
+            postId: postId,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let callVanDataViewController = CallVanDataViewController(viewModel: viewModel)
+        return callVanDataViewController
+    }
+    
+    private func createCallVanChatViewController(postId: Int) -> CallVanChatViewController {
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let fetchCallVanChatUseCase = DefaultFetchCallVanChatUseCase(repository: callVanRepository)
+        let postCallVanChatUseCase = DefaultPostCallVanChatUseCase(repository: callVanRepository)
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = CallVanChatViewModel(
+            postId: postId,
+            fetchCallVanChatUseCase: fetchCallVanChatUseCase,
+            postCallVanChatUseCase: postCallVanChatUseCase,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            uploadFileUseCase: uploadFileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let callVanChatViewController = CallVanChatViewController(viewModel: viewModel)
+        return callVanChatViewController
+    }
+
     private func createNoticeDataViewController(noticeId: Int) -> NoticeDataViewController {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
