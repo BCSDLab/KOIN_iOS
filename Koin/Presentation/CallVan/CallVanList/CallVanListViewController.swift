@@ -83,8 +83,8 @@ final class CallVanListViewController: UIViewController {
                 configureRightBarButton(alert: alert)
             case let .showToast(message):
                 showToastMessage(message: message, bottomInset: 75)
-            case .showReportedModal:
-                showReportedModal()
+            case let .checkRestrictionCompleted(reason, isRestricted, type, until):
+                checkRestrictionCompleted(reason, isRestricted, type, until)
             }
             refreshControl.endRefreshing()
         }.store(in: &subscriptions)
@@ -158,19 +158,39 @@ extension CallVanListViewController {
     @objc private func writeButtonTapped() {
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanCreate, category: .click, value: ""))
         if viewModel.isLoggedIn {
-            navigateToPost()
+            inputSubject.send(.checkRestriction(reason: .post))
         } else {
             showLoginToPostBottomSheet()
+        }
+    }
+    
+    private func checkRestrictionCompleted(
+        _ reason: CallVanListViewModel.CheckRestrictionReason,
+        _ isRestricted: Bool,
+        _ type: RestrictionType?,
+        _ until: String?
+    ) {
+        if isRestricted {
+            showRestrictedModal(type: type, until: until)
+        } else {
+            switch reason {
+            case .post:
+                navigateToPost()
+            case .paritipate(let postId):
+                inputSubject.send(.participate(postId))
+            }
         }
     }
     
     private func navigateToPost() {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanPostViewModel(
             postCallVanDataUseCase: postCallVanDataUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
         )
         let viewController = CallVanPostViewController(viewModel: viewModel)
         viewController.delegate = self
@@ -250,7 +270,7 @@ extension CallVanListViewController {
         switch state {
         case .참여하기:
             onMainButtonTapped = { [weak self] in
-                self?.inputSubject.send(.participate(postId))
+                self?.inputSubject.send(.checkRestriction(reason: .paritipate(postId: postId)))
                 self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanJoin, category: .click, value: "예"))
             }
             onCloseButtonTapped = { [weak self] in
@@ -371,8 +391,23 @@ extension CallVanListViewController {
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanCall, category: .click, value: ""))
     }
     
-    private func showReportedModal() {
-        let modalViewController = CallVanModalViewController(title: "이용 정지", description: "해당 계정은 콜밴팟 기능을\n사용할 수 없습니다.")
+    private func showRestrictedModal(type: RestrictionType?, until: String?) {
+        let modalViewController: CallVanModalViewController
+        switch type {
+        case .temporaryRestriction14Days:
+            guard let until else {
+                return
+            }
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
+        case .premanentRestriction:
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.temporaryRestriction14Days.getDescription(until: nil))
+        default:
+            return
+        }
         modalViewController.modalPresentationStyle = .overFullScreen
         present(modalViewController, animated: false)
     }

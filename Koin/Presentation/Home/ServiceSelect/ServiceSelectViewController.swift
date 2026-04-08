@@ -165,6 +165,7 @@ extension ServiceSelectViewController {
         let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
         let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
         let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
@@ -176,7 +177,8 @@ extension ServiceSelectViewController {
             reopenCallVanUseCase: reopenCallVanUseCase,
             completeCallVanUseCase: completeCallVanUseCase,
             fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

@@ -23,6 +23,7 @@ final class HomeViewModel: ViewModelProtocol {
         case getNoticeBanner(Date?)
         case fetchBanner
         case checkLogin
+        case checkRestriction
         case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
     }
     
@@ -36,6 +37,7 @@ final class HomeViewModel: ViewModelProtocol {
         case showForceModal
         case updateBanner(BannerDto)
         case updateLostItem(LostItemStats)
+        case checkRestrictionCompleted(isRestricted: Bool, type: RestrictionType?, until: String?)
     }
     
     // MARK: - Properties
@@ -52,6 +54,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+    private let fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
     private let checkLoginUseCase: CheckLoginUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var moved = false
@@ -68,7 +71,8 @@ final class HomeViewModel: ViewModelProtocol {
          checkVersionUseCase: CheckVersionUseCase,
          fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase,
          checkLoginUseCase: CheckLoginUseCase,
-         fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
+         fetchLostItemStatsUseCase: FetchLostItemStatsUseCase,
+         fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
     ) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
@@ -80,6 +84,7 @@ final class HomeViewModel: ViewModelProtocol {
         self.fetchKeywordNoticePhraseUseCase = fetchKeywordNoticePhraseUseCase
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemStatsUseCase = fetchLostItemStatsUseCase
+        self.fetchCallVanRestrictionUseCase = fetchCallVanRestrictionUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -109,6 +114,8 @@ final class HomeViewModel: ViewModelProtocol {
                 self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
             case let .logSessionEvent(label, category, value, sessionId):
                 self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
+            case .checkRestriction:
+                self?.checkRestriction()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -238,6 +245,18 @@ extension HomeViewModel {
         ).store(in: &subscriptions)
     }
   
+    private func checkRestriction() {
+        fetchCallVanRestrictionUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] restriction in
+                self?.outputSubject.send(.checkRestrictionCompleted(
+                    isRestricted: restriction.isRestricted,
+                    type: restriction.restrictionType,
+                    until: restriction.restrictedUntil))
+            }
+        ).store(in: &subscriptions)
+    }
+    
     private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
         logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }

@@ -217,6 +217,8 @@ final class HomeViewController: UIViewController {
                 self?.showBanner(banner: banner)
             case .updateLostItem(let lostLostStats):
                 self?.lostItemListView.configure(lostItemStats: lostLostStats)
+            case let .checkRestrictionCompleted(isRestricted, type, until):
+                self?.checkRestrictionCompleted(isRestricted, type, until)
             }
         }.store(in: &subscriptions)
         
@@ -307,7 +309,7 @@ final class HomeViewController: UIViewController {
             guard let self else { return }
             inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_callvan_write", value: "", category: "click"))
             if viewModel.isLoggedIn {
-                navigateToCallVanPost()
+                inputSubject.send(.checkRestriction)
             } else {
                 let onMainButtonTapped: ()->Void = { [weak self] in
                     self?.navigateToLogin()
@@ -666,6 +668,7 @@ extension HomeViewController {
         let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
         let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
         let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
@@ -677,19 +680,51 @@ extension HomeViewController {
             reopenCallVanUseCase: reopenCallVanUseCase,
             completeCallVanUseCase: completeCallVanUseCase,
             fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
+    private func checkRestrictionCompleted(_ isRestricted: Bool, _ type: RestrictionType?, _ until: String?) {
+        if isRestricted {
+            showRestrictedModal(type: type, until: until)
+        } else {
+            navigateToCallVanPost()
+        }
+    }
+    
+    private func showRestrictedModal(type: RestrictionType?, until: String?) {
+        let modalViewController: CallVanModalViewController
+        switch type {
+        case .temporaryRestriction14Days:
+            guard let until else {
+                return
+            }
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
+        case .premanentRestriction:
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.temporaryRestriction14Days.getDescription(until: nil))
+        default:
+            return
+        }
+        modalViewController.modalPresentationStyle = .overFullScreen
+        present(modalViewController, animated: false)
+    }
+    
     private func navigateToCallVanPost() {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanPostViewModel(
             postCallVanDataUseCase: postCallVanDataUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
         )
         let viewController = CallVanPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

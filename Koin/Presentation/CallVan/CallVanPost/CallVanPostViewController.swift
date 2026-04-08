@@ -94,10 +94,8 @@ final class CallVanPostViewController: UIViewController {
                 case let .showToast(message):
                     postButton.isUserInteractionEnabled = true
                     showToastMessage(message: message)
-                case .showReportedModal:
-                    postButton.isEnabled = false
-                    postButton.backgroundColor = UIColor.appColor(.neutral400)
-                    showReportedModal()
+                case let .showRestrictedModal(type, until):
+                    showRestrictedModal(type, until)
                 }
             }.store(in: &subscriptions)
         
@@ -169,11 +167,26 @@ extension CallVanPostViewController {
 
 extension CallVanPostViewController {
     
-    private func showReportedModal() {
-        let modalViewController = CallVanModalViewController(title: "이용 정지", description: "해당 계정은 콜밴팟 기능을\n사용할 수 없습니다.")
+    private func showRestrictedModal(_ type: RestrictionType?, _ until: String?) {
+        let modalViewController: CallVanModalViewController
+        switch type {
+        case .temporaryRestriction14Days:
+            guard let until else {
+                return
+            }
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
+        case .premanentRestriction:
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.temporaryRestriction14Days.getDescription(until: nil))
+        default:
+            return
+        }
         modalViewController.modalPresentationStyle = .overFullScreen
         present(modalViewController, animated: false)
-    }
+    }    
     
     private func presentDeparturePlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
@@ -230,6 +243,7 @@ extension CallVanPostViewController {
             let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
             let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
             let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+            let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let viewModel = CallVanListViewModel(
                 checkLoginUseCase: checkLoginUseCase,
@@ -241,7 +255,8 @@ extension CallVanPostViewController {
                 reopenCallVanUseCase: reopenCallVanUseCase,
                 completeCallVanUseCase: completeCallVanUseCase,
                 fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
-                logAnalyticsEventUseCase: logAnalyticsEventUseCase
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
             )
             let viewController = CallVanListViewController(viewModel: viewModel)
             if var viewControllers = navigationController?.viewControllers {

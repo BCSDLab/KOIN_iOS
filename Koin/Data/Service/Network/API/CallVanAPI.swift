@@ -26,6 +26,7 @@ enum CallVanAPI {
     case fetchCallVanChat(Int)
     case postCallVanChat(Int, CallVanChatRequestDto)
     case fetchCallVanSummary(Int)
+    case fetchRestriction
 }
 
 extension CallVanAPI: Router, URLRequestConvertible {
@@ -53,6 +54,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .fetchCallVanChat(let postId): return "/callvan/posts/\(postId)/chat"
         case .postCallVanChat(let postId, _): return "/callvan/posts/\(postId)/chat"
         case .fetchCallVanSummary(let postId): return "/callvan/posts/\(postId)/summary"
+        case .fetchRestriction: return "/callvan/restriction"
         }
     }
     
@@ -75,6 +77,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         case .fetchCallVanChat: return .get
         case .postCallVanChat: return .post
         case .fetchCallVanSummary: return .get
+        case .fetchRestriction: return .get
         }
     }
     
@@ -107,7 +110,7 @@ extension CallVanAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchCallVanList:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .postData, .report, .postCallVanChat:
+        case .postData, .report, .postCallVanChat, .fetchRestriction:
             return JSONEncoding.default
         default:
             return nil
