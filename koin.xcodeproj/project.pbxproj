@@ -2082,6 +2082,15 @@
 			path = EditLostItem;
 			sourceTree = "<group>";
 		};
+		7C7CCE6E2F866E8900E3A54B /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */,
+				7C7F429A2F629B8800CC5860 /* UploadDomain.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		7C8ADD362F20C0A500F85BDE /* LostItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -3988,6 +3997,8 @@
 			isa = PBXGroup;
 			children = (
 				D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */,
+				D2D380FC2BA7415C009AD5A9 /* ErrorResponseDto.swift */,
+				D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -4162,8 +4173,6 @@
 				D23479DD2BDB715700FA91BD /* Timetable */,
 				D23479D82BDB5EEF00FA91BD /* Land */,
 				D208A7A32CA1118D007040E7 /* AbTest */,
-				D2D380FC2BA7415C009AD5A9 /* ErrorResponseDto.swift */,
-				D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */,
 			);
 			path = Decodable;
 			sourceTree = "<group>";
@@ -4562,6 +4571,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7C7CCE6E2F866E8900E3A54B /* Core */,
 				7CA63A1F2F1AF73500226F86 /* LostItem */,
 				D815DD972E08216B004A72BE /* Order */,
 				D2D4626F2D63C58900C60864 /* Chat */,
@@ -4573,8 +4583,6 @@
 				D2CA2DCE2C1CAC4B0036F02C /* Shop */,
 				D249CD392C158EEC000813F9 /* Dining */,
 				7CC42B1A2F56F21A00940CE1 /* CallVan */,
-				7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */,
-				7C7F429A2F629B8800CC5860 /* UploadDomain.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
