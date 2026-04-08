@@ -105,21 +105,42 @@ extension SceneDelegate {
     }
     
     private func handleNotificationData(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
-        guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String else {
+        guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String,
+              let category = AppPath(rawValue: category) else {
             print("Invalid notification data")
             return
         }
+        let schemeUri = userInfo["schemeUri"] as? String
+        
         switch category {
-        case "keyword":
-            handleKeywordNotification(userInfo: userInfo, navigationController: navigationController)
-        case "dining":
-            let diningViewController = createDiningViewController()
-            navigationController?.pushViewController(diningViewController, animated: true)
-        case "shop":
+        case .home, .login, .club:
+            break
+        case .shop:
             let shopViewController = createShopViewController()
             navigationController?.pushViewController(shopViewController, animated: true)
-        default:
-            return
+        case .dining:
+            let diningViewController = createDiningViewController()
+            navigationController?.pushViewController(diningViewController, animated: true)
+        case .timeTable:
+            let timeTableViewController = createTimeTableViewController()
+            navigationController?.pushViewController(timeTableViewController, animated: true)
+        case .keyword:
+            guard let id = extractValue(from: schemeUri, value: "id"), let intId = Int(id) else {
+                print("noticeId : Invalid or missing")
+                return
+            }
+            let noticeDataViewController = createNoticeDataViewController(noticeId: intId)
+            navigationController?.pushViewController(noticeDataViewController, animated: true)
+            
+            DefaultLogAnalyticsEventUseCase(
+                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+            ).execute(
+                label: EventParameter.EventLabel.Campus.keywordNotification,
+                category: .notification,
+                value: category.rawValue
+            )
+        case .chat:
+            break // TODO: CHAT Scheme Uri를 모름
         }
     }
 }
@@ -216,16 +237,7 @@ extension SceneDelegate {
         navigationController?.pushViewController(diningViewController, animated: true)
     }
     
-    private func handleKeywordNotification(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
-        guard let schemeUri = userInfo["schemeUri"] as? String else {
-            print("No schemeUri found")
-            return
-        }
-        guard let id = extractValue(from: schemeUri, value: "id"), let intId = Int(id) else {
-            print("Invalid or missing ID")
-            return
-        }
-        
+    private func createNoticeDataViewController(noticeId: Int) -> NoticeDataViewController {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
         let viewModel = NoticeDataViewModel(
@@ -233,23 +245,13 @@ extension SceneDelegate {
             fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository),
             downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository),
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
-            noticeId: intId, boardId: -1
+            noticeId: noticeId, boardId: -1
         )
         let viewController = NoticeDataViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
-        
-        if let keyword = extractValue(from: schemeUri, value: "keyword") {
-            let logAnalyticsEventUseCase =
-            DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            logAnalyticsEventUseCase.execute(
-                label: EventParameter.EventLabel.Campus.keywordNotification,
-                category: .notification,
-                value: keyword
-            )
-        }
+        return viewController
     }
     
-    private func createDiningViewController() -> UIViewController {
+    private func createDiningViewController() -> DiningViewController {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
         let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
@@ -268,7 +270,7 @@ extension SceneDelegate {
         return diningViewController
     }
     
-    private func createShopViewController() -> UIViewController {
+    private func createShopViewController() -> ShopViewController {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
@@ -291,6 +293,11 @@ extension SceneDelegate {
         return shopViewController
     }
     
+    private func createTimeTableViewController() -> TimetableViewController {
+        let viewController = TimetableViewController(viewModel: TimetableViewModel())
+        return viewController
+    }
+    
     private func handleLostItemNavigation(navigationController: UINavigationController?) {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
@@ -308,8 +315,13 @@ extension SceneDelegate {
 }
 
 extension SceneDelegate {
-    private func extractValue(from urlString: String, value: String) -> String? {
+    private func extractValue(from urlString: String?, value: String) -> String? {
+        guard let urlString else {
+            return nil
+        }
         let components = URLComponents(string: urlString)
+        print("components : \(components)")
+        print("value: \(components?.queryItems?.first(where: { $0.name == value })?.value)")
         return components?.queryItems?.first(where: { $0.name == value })?.value
     }
 }
