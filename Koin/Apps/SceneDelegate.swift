@@ -129,16 +129,19 @@ extension SceneDelegate {
                 print("noticeId : Invalid or missing")
                 return
             }
+            
             let noticeDataViewController = createNoticeDataViewController(noticeId: intId)
             navigationController?.pushViewController(noticeDataViewController, animated: true)
             
-            DefaultLogAnalyticsEventUseCase(
-                repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-            ).execute(
-                label: EventParameter.EventLabel.Campus.keywordNotification,
-                category: .notification,
-                value: category.rawValue
-            )
+            if let keyword = extractValue(from: schemeUri, value: "keyword") {
+                DefaultLogAnalyticsEventUseCase(
+                    repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+                ).execute(
+                    label: EventParameter.EventLabel.Campus.keywordNotification,
+                    category: .notification,
+                    value: keyword
+                )
+            }
         case .chat:
             guard let articleId = extractValue(from: schemeUri, value: "articleId"), let intArticleId = Int(articleId) else {
                 print("articleId : Invalid or missing")
