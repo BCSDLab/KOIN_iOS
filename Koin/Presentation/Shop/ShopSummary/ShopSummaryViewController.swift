@@ -15,6 +15,9 @@ final class ShopSummaryViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
+    var navigationBarAlpha: CGFloat = 0
+    var navigationBarItemColor: UIColor = .white
+    
     // MARK: - UI Components
     private let gradientView = UIView()
     private let gradientLayer = CAGradientLayer().then {
@@ -100,7 +103,7 @@ final class ShopSummaryViewController: UIViewController {
     }
     
     override var preferredStatusBarStyle: UIStatusBarStyle {
-        return (viewModel.opacity == 1 ? .darkContent : .lightContent)
+        return (navigationBarAlpha == 1 ? .darkContent : .lightContent)
     }
     
     override func viewDidLayoutSubviews() {
@@ -212,9 +215,9 @@ extension ShopSummaryViewController {
         
         // MARK: - tableView
         menuGroupTableView.updateNavigationBarPublisher
-            .sink { [weak self] navigationBarItemColor, opacity in
-                self?.viewModel.navigationBarItemColor = navigationBarItemColor
-                self?.viewModel.opacity = opacity
+            .sink { [weak self] navigationBarItemColor, navigationBarAlpha in
+                self?.navigationBarItemColor = navigationBarItemColor
+                self?.navigationBarAlpha = navigationBarAlpha
                 self?.configureNavigationBar()
             }.store(in: &subscriptions)
         
@@ -271,12 +274,12 @@ extension ShopSummaryViewController {
         setNeedsStatusBarAppearanceUpdate()
         let appearance = UINavigationBarAppearance()
         appearance.configureWithTransparentBackground()
-        appearance.backgroundColor = UIColor.appColor(.newBackground).withAlphaComponent(viewModel.opacity)
-        appearance.titleTextAttributes.updateValue(viewModel.navigationBarItemColor.withAlphaComponent(viewModel.opacity), forKey: .foregroundColor)
+        appearance.backgroundColor = UIColor.appColor(.newBackground).withAlphaComponent(navigationBarAlpha)
+        appearance.titleTextAttributes.updateValue(navigationBarItemColor.withAlphaComponent(navigationBarAlpha), forKey: .foregroundColor)
         navigationItem.standardAppearance = appearance
         navigationItem.scrollEdgeAppearance = appearance
         navigationItem.compactAppearance = appearance
-        navigationController?.navigationBar.tintColor = viewModel.navigationBarItemColor
+        navigationController?.navigationBar.tintColor = navigationBarItemColor
     }
     
     // MARK: - shouldShowBottomSheet
