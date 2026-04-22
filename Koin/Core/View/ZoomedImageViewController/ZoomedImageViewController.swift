@@ -12,9 +12,8 @@ final class ZoomedImageViewController: UIViewController {
     
     // MARK: - Properties
     
-    private var imageWidth: CGFloat
-    private var imageHeight: CGFloat
     private var cancellables: Set<AnyCancellable> = []
+    private var currentIndex = 0
     
     // MARK: - UI Components
     
@@ -26,14 +25,34 @@ final class ZoomedImageViewController: UIViewController {
         $0.showsHorizontalScrollIndicator = false
     }
     
-    private let zoomingView = ZoomingView()
+    private let collectionView = ZoomingCollectionView()
+    
+    private let nextButton: UIButton = {
+        let button = UIButton()
+        let image = UIImage(systemName: "arrow.right")?
+            .withTintColor(UIColor.appColor(.neutral0), renderingMode: .alwaysOriginal)
+        button.setImage(image, for: .normal)
+        button.layer.cornerRadius = 22
+        button.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.5)
+        return button
+    }()
+    
+    private let prevButton: UIButton = {
+        let button = UIButton()
+        let image = UIImage(systemName: "arrow.left")?
+            .withTintColor(UIColor.appColor(.neutral0), renderingMode: .alwaysOriginal)
+        button.setImage(image, for: .normal)
+        button.layer.cornerRadius = 22
+        button.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.5)
+        return button
+    }()
     
     // MARK: - Initialize
     
-    init(imageWidth: CGFloat, imageHeight: CGFloat) {
-        self.imageWidth = imageWidth
-        self.imageHeight = imageHeight
+    init() {
         super.init(nibName: nil, bundle: nil)
+        modalPresentationStyle = .fullScreen
+        modalTransitionStyle = .crossDissolve
     }
     
     @available(*, unavailable)
@@ -45,45 +64,33 @@ final class ZoomedImageViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        modalPresentationStyle = .overCurrentContext
-        modalTransitionStyle = .crossDissolve
-        
         configureView()
         setupScrollView()
         bind()
     }
     
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        updateZoomScaleForSize(view.bounds.size)
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        
+        if scrollView.zoomScale == scrollView.minimumZoomScale {
+            centerScrollViewContents()
+        }
     }
         
     func setImage(_ image: UIImage?) {
-        zoomingView.setImage(image)
-        guard let image = image else { return }
-        
-        let widthScale = imageWidth / image.size.width
-        let heightScale = imageHeight / image.size.height
-        let initialScale = min(widthScale, heightScale)
-        
-        scrollView.minimumZoomScale = initialScale
-        scrollView.setZoomScale(initialScale, animated: false)
-        updateZoomScaleForSize(view.bounds.size)
+        currentIndex = 0
+        collectionView.setImage(image)
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+        updateButtonVisibility()
+        centerScrollViewContents()
     }
     
     func setImages(_ images: [UIImage?]) {
-        let imageList = images.compactMap { $0 }
-        zoomingView.setImages(imageList)
-        
-        guard let firstImage = imageList.first else { return }
-        
-        let widthScale = imageWidth / firstImage.size.width
-        let heightScale = imageHeight / firstImage.size.height
-        let initialScale = min(widthScale, heightScale)
-        
-        scrollView.minimumZoomScale = initialScale
-        scrollView.setZoomScale(initialScale, animated: false)
-        updateZoomScaleForSize(view.bounds.size)
+        currentIndex = 0
+        collectionView.setImages(images)
+        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+        updateButtonVisibility()
+        centerScrollViewContents()
     }
 }
 
@@ -92,29 +99,45 @@ extension ZoomedImageViewController {
     private func configureView() {
         view.backgroundColor = .black
         view.addSubview(scrollView)
-        scrollView.addSubview(zoomingView)
-        scrollView.frame = view.bounds
-        zoomingView.frame = CGRect(x: 0, y: 0, width: imageWidth, height: imageHeight)
-        scrollView.contentSize = zoomingView.frame.size
+        scrollView.addSubview(collectionView)
+        view.addSubview(nextButton)
+        view.addSubview(prevButton)
+        
+        scrollView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        
+        collectionView.snp.makeConstraints { make in
+            make.edges.equalTo(scrollView.contentLayoutGuide)
+            make.width.equalTo(scrollView.frameLayoutGuide)
+            make.height.equalTo(scrollView.frameLayoutGuide)
+        }
+        
+        nextButton.snp.makeConstraints { make in
+            make.centerY.equalTo(view.safeAreaLayoutGuide)
+            make.trailing.equalToSuperview()
+            make.width.height.equalTo(44)
+        }
+        
+        prevButton.snp.makeConstraints { make in
+            make.centerY.equalTo(view.safeAreaLayoutGuide)
+            make.leading.equalToSuperview()
+            make.width.height.equalTo(44)
+        }
     }
     
     private func setupScrollView() {
         scrollView.delegate = self
+        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
+        prevButton.addTarget(self, action: #selector(prevButtonTapped), for: .touchUpInside)
     }
     
     private func bind() {
-        zoomingView.closeButtonPublisher
+        collectionView.closeButtonPublisher
             .sink { [weak self] in
                 self?.dismiss(animated: true)
             }
             .store(in: &cancellables)
-    }
-    
-    private func updateZoomScaleForSize(_ size: CGSize) {
-        if scrollView.zoomScale < scrollView.minimumZoomScale {
-            scrollView.zoomScale = scrollView.minimumZoomScale
-        }
-        centerScrollViewContents()
     }
     
     private func centerScrollViewContents() {
@@ -122,14 +145,33 @@ extension ZoomedImageViewController {
         let offsetY = max((scrollView.bounds.height - scrollView.contentSize.height) * 0.5, 0)
         scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: offsetY, right: offsetX)
     }
+    
+    private func updateButtonVisibility() {
+        nextButton.isHidden = currentIndex >= collectionView.imageCount - 1
+        prevButton.isHidden = currentIndex <= 0
+    }
+    
+    @objc private func nextButtonTapped() {
+        if currentIndex < collectionView.imageCount - 1 {
+            currentIndex += 1
+            collectionView.showImage(at: currentIndex, animated: true)
+        }
+        updateButtonVisibility()
+    }
+    
+    @objc private func prevButtonTapped() {
+        if currentIndex > 0 {
+            currentIndex -= 1
+            collectionView.showImage(at: currentIndex, animated: true)
+        }
+        updateButtonVisibility()
+    }
 }
-
-// MARK: - UIScrollViewDelegate
 
 extension ZoomedImageViewController: UIScrollViewDelegate {
     
     func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return zoomingView
+        collectionView
     }
     
     func scrollViewDidZoom(_ scrollView: UIScrollView) {

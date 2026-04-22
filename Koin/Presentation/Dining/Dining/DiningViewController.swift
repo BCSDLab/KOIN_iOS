@@ -209,10 +209,7 @@ final class DiningViewController: UIViewController {
             let tappedDiningImage = tuple.0
             let tappedPlaceText = tuple.1
             
-            let imageWidth: CGFloat = UIScreen.main.bounds.width - 48
-            let smallProportion: CGFloat = tappedDiningImage.size.width / imageWidth
-            let imageHeight: CGFloat = tappedDiningImage.size.height / smallProportion
-            let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageHeight.isNaN ? 100 : imageHeight)
+            let zoomedImageViewController = ZoomedImageViewController()
             zoomedImageViewController.setImage(tappedDiningImage)
             self.present(zoomedImageViewController, animated: true, completion: nil)
             
