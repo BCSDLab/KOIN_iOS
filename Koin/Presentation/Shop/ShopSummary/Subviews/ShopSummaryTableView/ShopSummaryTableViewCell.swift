@@ -7,8 +7,16 @@
 
 import UIKit
 import SnapKit
+import Combine
 
 final class ShopSummaryTableViewCell: UITableViewCell {
+
+    // MARK: - Publishers
+    let didTapThumbnailPublisher = PassthroughSubject<String, Never>()
+
+    // MARK: - Properties
+    var cancellables: Set<AnyCancellable> = []
+    private var thumbnailImageUrl: String?
     
     // MARK: - UI Components
     private var insetBackgroundView = UIView().then { $0.backgroundColor = .yellow }
@@ -90,12 +98,16 @@ final class ShopSummaryTableViewCell: UITableViewCell {
         }
         
         if let url = thumbnailImage {
+            thumbnailImageUrl = url
+            thumbnailImageView.isUserInteractionEnabled = true
             thumbnailImageView.loadImageWithSpinner(from: url)
             stackView.snp.updateConstraints {
                 $0.trailing.equalToSuperview().offset(-(12+88+12))
             }
         } else {
+            thumbnailImageUrl = nil
             thumbnailImageView.image = nil
+            thumbnailImageView.isUserInteractionEnabled = false
             stackView.snp.updateConstraints {
                 $0.trailing.equalToSuperview().offset(-12)
             }
@@ -146,11 +158,20 @@ final class ShopSummaryTableViewCell: UITableViewCell {
     // MARK: - prepareForReuse
     override func prepareForReuse() {
         super.prepareForReuse()
+        cancellables.forEach { $0.cancel() }
+        cancellables.removeAll()
+        thumbnailImageUrl = nil
+
         nameLabel.text = nil
         descriptionLabel.text = nil
         priceTableView.configure(prices: [])
         thumbnailImageView.image = nil // 기존이미지 지우기
         thumbnailImageView.kf.cancelDownloadTask() // 로딩중이던 이미지 취소
+    }
+
+    @objc private func didTapThumbnailImageView() {
+        guard let thumbnailImageUrl else { return }
+        didTapThumbnailPublisher.send(thumbnailImageUrl)
     }
 }
 
@@ -229,5 +250,8 @@ extension ShopSummaryTableViewCell {
         setUpLayout()
         setUpConstaints()
         backgroundView = nil
+
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapThumbnailImageView))
+        thumbnailImageView.addGestureRecognizer(tapGesture)
     }
 }

@@ -240,8 +240,16 @@ extension ShopSummaryViewController {
                 self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, self.viewModel.shopName))
             }
             .store(in: &subscriptions)
-            
-        
+
+        menuGroupTableView.didTapThumbnailPublisher
+            .sink { [weak self] imageUrl in
+                guard let self else { return }
+                let zoomedViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
+                zoomedViewController.configure(url: imageUrl)
+                self.present(zoomedViewController, animated: true)
+            }
+            .store(in: &subscriptions)
+
         // MARK: - PopUpView
         popUpView.leftButtonTappedPublisher
             .sink { [weak self] in

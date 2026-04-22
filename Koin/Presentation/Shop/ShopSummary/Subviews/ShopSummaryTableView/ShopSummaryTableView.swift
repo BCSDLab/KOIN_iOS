@@ -22,6 +22,7 @@ final class ShopSummaryTableView: UITableView, UITableViewDelegate, UITableViewD
     private var safeAreaHeight: CGFloat = 0
     
     let didTapCellPublisher = PassthroughSubject<Int, Never>()
+    let didTapThumbnailPublisher = PassthroughSubject<String, Never>()
     let updateNavigationBarPublisher = PassthroughSubject<(UIColor, CGFloat), Never>()
     let shouldShowStickyPublisher = PassthroughSubject<Bool, Never>()
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
@@ -97,6 +98,13 @@ extension ShopSummaryTableView {
                   isFirstRow: indexPath.row == 0,
                   isLastRow: names[indexPath.section].count - 1 == indexPath.row,
                   isSoldOut: isSoldOuts[indexPath.section][indexPath.row])
+
+        cell.didTapThumbnailPublisher
+            .sink { [weak self] imageUrl in
+                self?.didTapThumbnailPublisher.send(imageUrl)
+            }
+            .store(in: &cell.cancellables)
+
         return cell
         
     }
