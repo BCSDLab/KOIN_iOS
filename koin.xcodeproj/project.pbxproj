@@ -682,7 +682,6 @@
 		D22C54902C6ADE1A000826DA /* UITextFiled+Publisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */; };
 		D22C54922C6AF5A9000826DA /* UIViewController+ToastMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
-		D23582A12BC30B9300D615DD /* ZoomingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23582A02BC30B9300D615DD /* ZoomingView.swift */; };
 		D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944812C3C24A200048F45 /* ReviewsDTO.swift */; };
 		D23944842C3C3ABC00048F45 /* ShopReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944832C3C3ABC00048F45 /* ShopReview.swift */; };
 		D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944852C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift */; };
@@ -858,6 +857,8 @@
 		D8F5C5542E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
+		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
+		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1565,7 +1566,6 @@
 		D22C548F2C6ADE1A000826DA /* UITextFiled+Publisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITextFiled+Publisher.swift"; sourceTree = "<group>"; };
 		D22C54912C6AF5A9000826DA /* UIViewController+ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ToastMessage.swift"; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
-		D23582A02BC30B9300D615DD /* ZoomingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingView.swift; sourceTree = "<group>"; };
 		D23944812C3C24A200048F45 /* ReviewsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsDTO.swift; sourceTree = "<group>"; };
 		D23944832C3C3ABC00048F45 /* ShopReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReview.swift; sourceTree = "<group>"; };
 		D23944852C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewListUseCase.swift; sourceTree = "<group>"; };
@@ -1740,6 +1740,8 @@
 		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
+		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
+		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2276,7 +2278,8 @@
 		7CC42B072F56A7F600940CE1 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				D23582A02BC30B9300D615DD /* ZoomingView.swift */,
+				F1A000010000000000000002 /* ZoomingCollectionView.swift */,
+				F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -5593,7 +5596,8 @@
 				D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */,
 				7C61D3452F220E98005FAC3A /* EditLostItemImagesView.swift in Sources */,
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
-				D23582A12BC30B9300D615DD /* ZoomingView.swift in Sources */,
+				F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */,
+				F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */,

@@ -323,8 +323,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         }.store(in: &subscriptions)
         
         imageCollectionView.imageTapPublisher.sink { [weak self] image in
-            let imageWidth: CGFloat = UIScreen.main.bounds.width - 15
-            let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageWidth)
+            let zoomedImageViewController = ZoomedImageViewController()
             zoomedImageViewController.setImage(image)
             self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &subscriptions)
@@ -504,10 +503,7 @@ extension NoticeDataViewController: UITextViewDelegate {
     func textView(_ textView: UITextView, shouldInteractWith textAttachment: NSTextAttachment, in characterRange: NSRange) -> Bool {
         guard let image = textAttachment.image else { return false}
         
-        let imageWidth: CGFloat = UIScreen.main.bounds.width - 48
-        let smallProportion: CGFloat = image.size.width / imageWidth
-        let imageHeight: CGFloat = image.size.height / smallProportion
-        let zoomedImageViewController = ZoomedImageViewController(imageWidth: imageWidth, imageHeight: imageHeight.isNaN ? 100 : imageHeight)
+        let zoomedImageViewController = ZoomedImageViewController()
         zoomedImageViewController.setImage(image)
         self.present(zoomedImageViewController, animated: true)
         
