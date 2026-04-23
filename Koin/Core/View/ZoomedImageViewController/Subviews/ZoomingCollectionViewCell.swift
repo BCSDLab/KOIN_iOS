@@ -52,6 +52,7 @@ final class ZoomingCollectionViewCell: UICollectionViewCell {
         if let image, image.size.width > 0 {
             let ratio = image.size.height / image.size.width
             let constraint = imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor, multiplier: ratio)
+            constraint.priority = .defaultHigh
             constraint.isActive = true
             imageAspectRatioConstraint = constraint
         }
