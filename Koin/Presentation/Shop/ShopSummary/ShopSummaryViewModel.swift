@@ -7,7 +7,6 @@
 
 import Combine
 import Foundation
-import UIKit.UIColor
 
 final class ShopSummaryViewModel {
     
@@ -34,8 +33,6 @@ final class ShopSummaryViewModel {
     var cachedImages: [OrderImage] = []
     let shopName: String
     let backCategoryName: String?
-    var opacity: CGFloat = 0
-    var navigationBarItemColor: UIColor = .white
 
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
     private let fetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMenusAndGroupsFromShopUseCase

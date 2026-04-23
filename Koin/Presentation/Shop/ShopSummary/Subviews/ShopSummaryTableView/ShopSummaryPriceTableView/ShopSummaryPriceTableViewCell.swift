@@ -21,6 +21,15 @@ final class ShopSummaryPriceTableViewCell: UITableViewCell {
         $0.textColor = .appColor(.neutral800)
         $0.contentMode = .center
         $0.textAlignment = .left
+        $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    }
+    private let separatorLabel = UILabel().then {
+        $0.numberOfLines = 1
+        $0.font = .appFont(.pretendardRegular, size: 14)
+        $0.textColor = .appColor(.neutral800)
+        $0.contentMode = .center
+        $0.textAlignment = .left
+        $0.text = " : "
     }
     private let priceLabel = UILabel().then {
         $0.numberOfLines = 1
@@ -41,7 +50,7 @@ final class ShopSummaryPriceTableViewCell: UITableViewCell {
     
     func configure(price: Price){
         if let name = price.name {
-            nameLabel.text = "\(name) : "
+            nameLabel.text = name
             nameLabel.isHidden = false
         } else {
             nameLabel.isHidden = true
@@ -58,13 +67,14 @@ final class ShopSummaryPriceTableViewCell: UITableViewCell {
 extension ShopSummaryPriceTableViewCell {
     
     private func configureView() {
-        [nameLabel, priceLabel].forEach {
+        [nameLabel, separatorLabel, priceLabel].forEach {
             stackView.addArrangedSubview($0)
         }
         addSubview(stackView)
         
         stackView.snp.makeConstraints {
             $0.top.leading.bottom.equalToSuperview()
+            $0.trailing.lessThanOrEqualToSuperview()
         }
     }
 }
