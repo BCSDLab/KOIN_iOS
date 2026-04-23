@@ -81,11 +81,15 @@ final class ShopSearchViewController: UIViewController {
         bind()
         setAddTarget()
         setDelegate()
-        searchTextField.becomeFirstResponder()
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .order)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        searchTextField.becomeFirstResponder()
     }
     
     // MARK: Bind
