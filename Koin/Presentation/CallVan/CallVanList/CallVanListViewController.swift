@@ -15,6 +15,7 @@ final class CallVanListViewController: UIViewController {
     private let inputSubject = PassthroughSubject<CallVanListViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var didSwipeToPop = false
+    private var hasShownNotificationBottomSheet = false
     
     // MARK: - UI Components
     private let refreshControl = UIRefreshControl()
@@ -52,6 +53,11 @@ final class CallVanListViewController: UIViewController {
         inputSubject.send(.viewWillAppear)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkNotification()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let didSwipeToPop = (navigationController as? CustomNavigationController)?.didSwipeToPop {
@@ -85,6 +91,8 @@ final class CallVanListViewController: UIViewController {
                 showToastMessage(message: message, bottomInset: 75)
             case let .checkRestrictionCompleted(reason, isRestricted, type, until):
                 checkRestrictionCompleted(reason, isRestricted, type, until)
+            case .requestNotificationAgreement:
+                requestNotificationAgreement()
             }
             refreshControl.endRefreshing()
         }.store(in: &subscriptions)
@@ -410,6 +418,60 @@ extension CallVanListViewController {
         }
         modalViewController.modalPresentationStyle = .overFullScreen
         present(modalViewController, animated: false)
+    }
+    
+    private func checkNotification() {
+        guard viewModel.isLoggedIn,
+              UserDefaults.standard.bool(forKey: "callvanNotificationLater") == false else {
+            return
+        }
+        inputSubject.send(.checkNotification)
+    }
+    
+    private func requestNotificationAgreement() {
+        if hasShownNotificationBottomSheet {
+            return
+        }
+        hasShownNotificationBottomSheet = true
+        
+        let subTitleLabel = UILabel().then {
+            $0.text = "채팅부터 출발까지, 필요한 순간을 놓치지 않게 알려드려요."
+            $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+            $0.textColor = UIColor.appColor(.neutral600)
+            $0.snp.makeConstraints {
+                $0.height.equalTo(22)
+            }
+        }
+        let onMainButtonTapped: ()->Void = { [weak self] in
+            self?.navigateToNoti()
+        }
+        let onCloseButtonTapped: ()->Void = {
+            UserDefaults.standard.set(true, forKey: "callvanNotificationLater")
+        }
+        let contentViewController = CallVanBottomSheetViewController(
+            titleText: "알림을 켜볼까요?",
+            subTitleLabel: subTitleLabel,
+            mainButtonText: "알림 켜기",
+            closeButtonText: "나중에 할게요",
+            onMainButtonTapped: onMainButtonTapped,
+            onCloseButtonTapped: onCloseButtonTapped
+        )
+        let bottomSheetViewController = BottomSheetViewController(
+            contentViewController: contentViewController,
+            defaultHeight: 180 + 53 + view.safeAreaInsets.bottom
+        )
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        bottomSheetViewController.modalPresentationStyle = .overFullScreen
+        present(bottomSheetViewController, animated: false)
+    }
+    
+    private func navigateToNoti() {
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

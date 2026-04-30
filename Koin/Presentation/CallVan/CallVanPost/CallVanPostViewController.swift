@@ -234,6 +234,7 @@ extension CallVanPostViewController {
         } else {
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+            let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
             let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
@@ -245,6 +246,7 @@ extension CallVanPostViewController {
             let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
             let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
             let viewModel = CallVanListViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchCallVanListUseCase: fetchCallVanListUseCase,
@@ -256,7 +258,8 @@ extension CallVanPostViewController {
                 completeCallVanUseCase: completeCallVanUseCase,
                 fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
+                fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
+                fetchNotiListUseCase: fetchNotiListUseCase
             )
             let viewController = CallVanListViewController(viewModel: viewModel)
             if var viewControllers = navigationController?.viewControllers {

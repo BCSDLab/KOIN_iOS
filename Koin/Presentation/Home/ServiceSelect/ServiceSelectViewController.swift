@@ -156,6 +156,7 @@ extension ServiceSelectViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.hamburger, .click, "콜밴팟 모집"))
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
         let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
@@ -167,6 +168,7 @@ extension ServiceSelectViewController {
         let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
         let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchCallVanListUseCase: fetchCallVanListUseCase,
@@ -178,7 +180,8 @@ extension ServiceSelectViewController {
             completeCallVanUseCase: completeCallVanUseCase,
             fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
+            fetchNotiListUseCase: fetchNotiListUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

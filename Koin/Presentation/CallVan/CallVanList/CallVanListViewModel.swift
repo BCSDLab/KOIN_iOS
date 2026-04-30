@@ -26,6 +26,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         
         case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
         case checkRestriction(reason: CheckRestrictionReason)
+        case checkNotification
     }
     enum Output {
         case resetList([CallVanListPost])
@@ -35,6 +36,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         case updateBell(alert: Bool)
         case showToast(String)
         case checkRestrictionCompleted(reason: CheckRestrictionReason, isRestricted: Bool, type: RestrictionType?, until: String?)
+        case requestNotificationAgreement
     }
     enum CheckRestrictionReason {
         case post
@@ -53,6 +55,7 @@ final class CallVanListViewModel: ViewModelProtocol {
     private let fetchCallVanSummaryUseCase: FetchCallVanSummaryUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
+    private let fetchNotiListUseCase: FetchNotiListUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var filterState = CallVanListRequest()
@@ -70,7 +73,8 @@ final class CallVanListViewModel: ViewModelProtocol {
          completeCallVanUseCase: CompleteCallVanUseCase,
          fetchCallVanSummaryUseCase: FetchCallVanSummaryUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-         fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
+         fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase,
+         fetchNotiListUseCase: FetchNotiListUseCase
     ) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchCallVanListUseCase = fetchCallVanListUseCase
@@ -83,6 +87,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         self.fetchCallVanSummaryUseCase = fetchCallVanSummaryUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchCallVanRestrictionUseCase = fetchCallVanRestrictionUseCase
+        self.fetchNotiListUseCase = fetchNotiListUseCase
     }
     
     // MARK: - Transform
@@ -117,6 +122,8 @@ final class CallVanListViewModel: ViewModelProtocol {
                 logEvent(label: label, category: category, value: value)
             case .checkRestriction(let reason):
                 checkRestriction(for: reason)
+            case .checkNotification:
+                checkNotification()
             }
         }.store(in: &subscriptions)
         
@@ -311,6 +318,26 @@ extension CallVanListViewModel {
                         type: restriction.restrictionType,
                         until: restriction.restrictedUntil)
                     )
+                }
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func checkNotification() {
+        fetchNotiListUseCase.execute().sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { [weak self] agreements in
+                var isNotificationOn = false
+                if let subscribes = agreements.subscribes,
+                   let callvanAgreement = subscribes.first(where: { $0.type == .callvan }) {
+                    isNotificationOn = callvanAgreement.isPermit ?? false
+                }
+                if isNotificationOn == false {
+                    self?.outputSubject.send(.requestNotificationAgreement)
                 }
             }
         ).store(in: &subscriptions)
