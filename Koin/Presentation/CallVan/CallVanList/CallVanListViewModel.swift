@@ -301,24 +301,18 @@ extension CallVanListViewModel {
     
     private func checkRestriction(for reason: CheckRestrictionReason) {
         fetchCallVanRestrictionUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] restriction in
-                switch reason {
-                case .post:
-                    self?.outputSubject.send(.checkRestrictionCompleted(
-                        reason: reason,
-                        isRestricted: restriction.isRestricted,
-                        type: restriction.restrictionType,
-                        until: restriction.restrictedUntil)
-                    )
-                case .paritipate:
-                    self?.outputSubject.send(.checkRestrictionCompleted(
-                        reason: reason,
-                        isRestricted: restriction.isRestricted,
-                        type: restriction.restrictionType,
-                        until: restriction.restrictedUntil)
-                    )
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
                 }
+            },
+            receiveValue: { [weak self] restriction in
+                self?.outputSubject.send(.checkRestrictionCompleted(
+                    reason: reason,
+                    isRestricted: restriction.isRestricted,
+                    type: restriction.restrictionType,
+                    until: restriction.restrictedUntil)
+                )
             }
         ).store(in: &subscriptions)
     }

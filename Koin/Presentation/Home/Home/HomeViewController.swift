@@ -217,8 +217,10 @@ final class HomeViewController: UIViewController {
                 self?.showBanner(banner: banner)
             case .updateLostItem(let lostLostStats):
                 self?.lostItemListView.configure(lostItemStats: lostLostStats)
-            case let .checkRestrictionCompleted(isRestricted, type, until):
-                self?.checkRestrictionCompleted(isRestricted, type, until)
+            case let .checkRestrictionCompleted(restriction):
+                self?.checkRestrictionCompleted(restriction)
+            case let .showToast(message):
+                self?.showToastMessage(message: message)
             }
         }.store(in: &subscriptions)
         
@@ -690,28 +692,28 @@ extension HomeViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func checkRestrictionCompleted(_ isRestricted: Bool, _ type: RestrictionType?, _ until: String?) {
-        if isRestricted {
-            showRestrictedModal(type: type, until: until)
+    private func checkRestrictionCompleted(_ restriction: CallVanRestriction) {
+        if restriction.isRestricted {
+            showRestrictedModal(restriction: restriction)
         } else {
             navigateToCallVanPost()
         }
     }
     
-    private func showRestrictedModal(type: RestrictionType?, until: String?) {
+    private func showRestrictedModal(restriction: CallVanRestriction) {
         let modalViewController: CallVanModalViewController
-        switch type {
+        switch restriction.restrictionType {
         case .temporaryRestriction14Days:
-            guard let until else {
+            guard let until = restriction.restrictedUntil else {
                 return
             }
             modalViewController = CallVanModalViewController(
                 title: RestrictionType.temporaryRestriction14Days.rawValue,
                 description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
-        case .premanentRestriction:
+        case .permanentRestriction:
             modalViewController = CallVanModalViewController(
                 title: RestrictionType.temporaryRestriction14Days.rawValue,
-                description: RestrictionType.temporaryRestriction14Days.getDescription(until: nil))
+                description: RestrictionType.permanentRestriction.getDescription())
         default:
             return
         }

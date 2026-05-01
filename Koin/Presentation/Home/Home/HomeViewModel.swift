@@ -37,7 +37,8 @@ final class HomeViewModel: ViewModelProtocol {
         case showForceModal
         case updateBanner(BannerDto)
         case updateLostItem(LostItemStats)
-        case checkRestrictionCompleted(isRestricted: Bool, type: RestrictionType?, until: String?)
+        case checkRestrictionCompleted(restriction: CallVanRestriction)
+        case showToast(String)
     }
     
     // MARK: - Properties
@@ -247,12 +248,13 @@ extension HomeViewModel {
   
     private func checkRestriction() {
         fetchCallVanRestrictionUseCase.execute().sink(
-            receiveCompletion: { _ in },
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
             receiveValue: { [weak self] restriction in
-                self?.outputSubject.send(.checkRestrictionCompleted(
-                    isRestricted: restriction.isRestricted,
-                    type: restriction.restrictionType,
-                    until: restriction.restrictedUntil))
+                self?.outputSubject.send(.checkRestrictionCompleted(restriction: restriction))
             }
         ).store(in: &subscriptions)
     }

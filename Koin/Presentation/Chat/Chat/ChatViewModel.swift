@@ -140,9 +140,9 @@ extension ChatViewModel {
             receiveCompletion: { _ in },
             receiveValue: { [weak self] chatRoomItem in
                 guard let self else { return }
-                if let chatRomItem = chatRoomItem.first(where: { $0.chatRoomId == self.chatRoomId }) {
-                    self.articleTitle = chatRomItem.articleTitle
-                    outputSubject.send(.updateTitle(chatRomItem.articleTitle))
+                if let chatRoomItem = chatRoomItem.first(where: { $0.chatRoomId == self.chatRoomId }) {
+                    self.articleTitle = chatRoomItem.articleTitle
+                    outputSubject.send(.updateTitle(chatRoomItem.articleTitle))
                 }
             }
         ).store(in: &subscriptions)

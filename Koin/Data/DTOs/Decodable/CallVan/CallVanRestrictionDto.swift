@@ -21,7 +21,7 @@ struct CallVanRestrictionDto: Decodable {
 
 enum RestrictionTypeDto: String, Decodable {
     case temporaryRestriction14Days = "TEMPORARY_RESTRICTION_14_DAYS"
-    case premanentRestriction = "PERMANENT_RESTRICTION"
+    case permanentRestriction = "PERMANENT_RESTRICTION"
 }
 
 extension CallVanRestrictionDto {
@@ -58,7 +58,7 @@ extension RestrictionTypeDto {
     func toDomain() -> RestrictionType {
         switch self {
         case .temporaryRestriction14Days: .temporaryRestriction14Days
-        case .premanentRestriction: .premanentRestriction
+        case .permanentRestriction: .permanentRestriction
         }
     }
 }

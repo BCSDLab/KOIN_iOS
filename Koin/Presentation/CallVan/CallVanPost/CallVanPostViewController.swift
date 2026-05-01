@@ -177,10 +177,10 @@ extension CallVanPostViewController {
             modalViewController = CallVanModalViewController(
                 title: RestrictionType.temporaryRestriction14Days.rawValue,
                 description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
-        case .premanentRestriction:
+        case .permanentRestriction:
             modalViewController = CallVanModalViewController(
                 title: RestrictionType.temporaryRestriction14Days.rawValue,
-                description: RestrictionType.temporaryRestriction14Days.getDescription(until: nil))
+                description: RestrictionType.permanentRestriction.getDescription())
         default:
             return
         }
