@@ -105,21 +105,69 @@ extension SceneDelegate {
     }
     
     private func handleNotificationData(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
-        guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String else {
+        guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String,
+              let category = AppPath(rawValue: category) else {
             print("Invalid notification data")
             return
         }
+        let schemeUri = userInfo["schemeUri"] as? String
+        
         switch category {
-        case "keyword":
-            handleKeywordNotification(userInfo: userInfo, navigationController: navigationController)
-        case "dining":
-            let diningViewController = createDiningViewController()
-            navigationController?.pushViewController(diningViewController, animated: true)
-        case "shop":
+        case .home, .login, .club:
+            break
+        case .shop:
             let shopViewController = createShopViewController()
             navigationController?.pushViewController(shopViewController, animated: true)
-        default:
-            return
+        case .dining:
+            let diningViewController = createDiningViewController()
+            navigationController?.pushViewController(diningViewController, animated: true)
+        case .timeTable:
+            let timeTableViewController = createTimeTableViewController()
+            navigationController?.pushViewController(timeTableViewController, animated: true)
+        case .keyword:
+            guard let id = extractValue(from: schemeUri, value: "id"), let intId = Int(id) else {
+                print("noticeId : Invalid or missing")
+                return
+            }
+            
+            let noticeDataViewController = createNoticeDataViewController(noticeId: intId)
+            navigationController?.pushViewController(noticeDataViewController, animated: true)
+            
+            if let keyword = extractValue(from: schemeUri, value: "keyword") {
+                DefaultLogAnalyticsEventUseCase(
+                    repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+                ).execute(
+                    label: EventParameter.EventLabel.Campus.keywordNotification,
+                    category: .notification,
+                    value: keyword
+                )
+            }
+        case .chat:
+            guard let articleId = extractValue(from: schemeUri, value: "articleId"), let intArticleId = Int(articleId) else {
+                print("articleId : Invalid or missing")
+                return
+            }
+            guard let chatRoomId = extractValue(from: schemeUri, value: "chatRoomId"), let intChatRoomId = Int(chatRoomId) else {
+                print("chatRoomId : Invalid or missing")
+                return
+            }
+            let viewModel = ChatViewModel(articleId: intArticleId, chatRoomId: intChatRoomId, articleTitle: nil)
+            let chatViewController = ChatViewController(viewModel: viewModel)
+            navigationController?.pushViewController(chatViewController, animated: true)
+        case .callvan:
+            guard let postId = extractValue(from: schemeUri, value: "id"), let intPostId = Int(postId) else {
+                print("postId : Invalid or missing")
+                return
+            }
+            let callVanDataViewController = createCallVanDataViewController(postId: intPostId)
+            navigationController?.pushViewController(callVanDataViewController, animated: true)
+        case .callvanChat:
+            guard let postId = extractValue(from: schemeUri, value: "postId"), let intPostId = Int(postId) else {
+                print("postId : Invalid or missing")
+                return
+            }
+            let callVanChatViewController = createCallVanChatViewController(postId: intPostId)
+            navigationController?.pushViewController(callVanChatViewController, animated: true)
         }
     }
 }
@@ -129,6 +177,7 @@ extension SceneDelegate {
     private func makeHomeViewController() -> UIViewController {
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
         let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
@@ -137,7 +186,7 @@ extension SceneDelegate {
         let dateProvider = DefaultDateProvider()
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
         let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
-        
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let homeViewModel = HomeViewModel(
             fetchDiningListUseCase: fetchDiningListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
@@ -148,7 +197,8 @@ extension SceneDelegate {
             checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
             fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
             checkLoginUseCase: checkLoginUseCase,
-            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase
+            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
         )
         let viewController = HomeViewController(viewModel: homeViewModel)
         return viewController
@@ -216,16 +266,40 @@ extension SceneDelegate {
         navigationController?.pushViewController(diningViewController, animated: true)
     }
     
-    private func handleKeywordNotification(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
-        guard let schemeUri = userInfo["schemeUri"] as? String else {
-            print("No schemeUri found")
-            return
-        }
-        guard let id = extractValue(from: schemeUri, value: "id"), let intId = Int(id) else {
-            print("Invalid or missing ID")
-            return
-        }
-        
+    private func createCallVanDataViewController(postId: Int) -> CallVanDataViewController {
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
+        let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = CallVanDataViewModel(
+            postId: postId,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let callVanDataViewController = CallVanDataViewController(viewModel: viewModel)
+        return callVanDataViewController
+    }
+    
+    private func createCallVanChatViewController(postId: Int) -> CallVanChatViewController {
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let fetchCallVanChatUseCase = DefaultFetchCallVanChatUseCase(repository: callVanRepository)
+        let postCallVanChatUseCase = DefaultPostCallVanChatUseCase(repository: callVanRepository)
+        let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = CallVanChatViewModel(
+            postId: postId,
+            fetchCallVanChatUseCase: fetchCallVanChatUseCase,
+            postCallVanChatUseCase: postCallVanChatUseCase,
+            fetchCallVanDataUseCase: fetchCallVanDataUseCase,
+            uploadFileUseCase: uploadFileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let callVanChatViewController = CallVanChatViewController(viewModel: viewModel)
+        return callVanChatViewController
+    }
+
+    private func createNoticeDataViewController(noticeId: Int) -> NoticeDataViewController {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
         let viewModel = NoticeDataViewModel(
@@ -233,23 +307,13 @@ extension SceneDelegate {
             fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository),
             downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository),
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
-            noticeId: intId, boardId: -1
+            noticeId: noticeId, boardId: -1
         )
         let viewController = NoticeDataViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
-        
-        if let keyword = extractValue(from: schemeUri, value: "keyword") {
-            let logAnalyticsEventUseCase =
-            DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            logAnalyticsEventUseCase.execute(
-                label: EventParameter.EventLabel.Campus.keywordNotification,
-                category: .notification,
-                value: keyword
-            )
-        }
+        return viewController
     }
     
-    private func createDiningViewController() -> UIViewController {
+    private func createDiningViewController() -> DiningViewController {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
         let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
@@ -268,7 +332,7 @@ extension SceneDelegate {
         return diningViewController
     }
     
-    private func createShopViewController() -> UIViewController {
+    private func createShopViewController() -> ShopViewController {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
@@ -291,6 +355,11 @@ extension SceneDelegate {
         return shopViewController
     }
     
+    private func createTimeTableViewController() -> TimetableViewController {
+        let viewController = TimetableViewController(viewModel: TimetableViewModel())
+        return viewController
+    }
+    
     private func handleLostItemNavigation(navigationController: UINavigationController?) {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
@@ -308,8 +377,13 @@ extension SceneDelegate {
 }
 
 extension SceneDelegate {
-    private func extractValue(from urlString: String, value: String) -> String? {
+    private func extractValue(from urlString: String?, value: String) -> String? {
+        guard let urlString else {
+            return nil
+        }
         let components = URLComponents(string: urlString)
+        print("components : \(components)")
+        print("value: \(components?.queryItems?.first(where: { $0.name == value })?.value)")
         return components?.queryItems?.first(where: { $0.name == value })?.value
     }
 }

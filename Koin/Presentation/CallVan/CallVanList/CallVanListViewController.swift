@@ -15,6 +15,7 @@ final class CallVanListViewController: UIViewController {
     private let inputSubject = PassthroughSubject<CallVanListViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var didSwipeToPop = false
+    private var hasShownNotificationBottomSheet = false
     
     // MARK: - UI Components
     private let refreshControl = UIRefreshControl()
@@ -52,6 +53,11 @@ final class CallVanListViewController: UIViewController {
         inputSubject.send(.viewWillAppear)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        checkNotification()
+    }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         if let didSwipeToPop = (navigationController as? CustomNavigationController)?.didSwipeToPop {
@@ -83,8 +89,10 @@ final class CallVanListViewController: UIViewController {
                 configureRightBarButton(alert: alert)
             case let .showToast(message):
                 showToastMessage(message: message, bottomInset: 75)
-            case .showReportedModal:
-                showReportedModal()
+            case let .checkRestrictionCompleted(reason, isRestricted, type, until):
+                checkRestrictionCompleted(reason, isRestricted, type, until)
+            case .requestNotificationAgreement:
+                requestNotificationAgreement()
             }
             refreshControl.endRefreshing()
         }.store(in: &subscriptions)
@@ -158,19 +166,39 @@ extension CallVanListViewController {
     @objc private func writeButtonTapped() {
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanCreate, category: .click, value: ""))
         if viewModel.isLoggedIn {
-            navigateToPost()
+            inputSubject.send(.checkRestriction(reason: .post))
         } else {
             showLoginToPostBottomSheet()
+        }
+    }
+    
+    private func checkRestrictionCompleted(
+        _ reason: CallVanListViewModel.CheckRestrictionReason,
+        _ isRestricted: Bool,
+        _ type: RestrictionType?,
+        _ until: String?
+    ) {
+        if isRestricted {
+            showRestrictedModal(type: type, until: until)
+        } else {
+            switch reason {
+            case .post:
+                navigateToPost()
+            case .paritipate(let postId):
+                inputSubject.send(.participate(postId))
+            }
         }
     }
     
     private func navigateToPost() {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanPostViewModel(
             postCallVanDataUseCase: postCallVanDataUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
         )
         let viewController = CallVanPostViewController(viewModel: viewModel)
         viewController.delegate = self
@@ -250,7 +278,7 @@ extension CallVanListViewController {
         switch state {
         case .참여하기:
             onMainButtonTapped = { [weak self] in
-                self?.inputSubject.send(.participate(postId))
+                self?.inputSubject.send(.checkRestriction(reason: .paritipate(postId: postId)))
                 self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanJoin, category: .click, value: "예"))
             }
             onCloseButtonTapped = { [weak self] in
@@ -371,10 +399,79 @@ extension CallVanListViewController {
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanCall, category: .click, value: ""))
     }
     
-    private func showReportedModal() {
-        let modalViewController = CallVanModalViewController(title: "이용 정지", description: "해당 계정은 콜밴팟 기능을\n사용할 수 없습니다.")
+    private func showRestrictedModal(type: RestrictionType?, until: String?) {
+        let modalViewController: CallVanModalViewController
+        switch type {
+        case .temporaryRestriction14Days:
+            guard let until else {
+                return
+            }
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
+        case .permanentRestriction:
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.permanentRestriction.getDescription())
+        default:
+            return
+        }
         modalViewController.modalPresentationStyle = .overFullScreen
         present(modalViewController, animated: false)
+    }
+    
+    private func checkNotification() {
+        guard viewModel.isLoggedIn,
+              UserDefaults.standard.bool(forKey: "callvanNotificationLater") == false else {
+            return
+        }
+        inputSubject.send(.checkNotification)
+    }
+    
+    private func requestNotificationAgreement() {
+        if hasShownNotificationBottomSheet {
+            return
+        }
+        hasShownNotificationBottomSheet = true
+        
+        let subTitleLabel = UILabel().then {
+            $0.text = "채팅부터 출발까지, 필요한 순간을 놓치지 않게 알려드려요."
+            $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+            $0.textColor = UIColor.appColor(.neutral600)
+            $0.snp.makeConstraints {
+                $0.height.equalTo(22)
+            }
+        }
+        let onMainButtonTapped: ()->Void = { [weak self] in
+            self?.navigateToNoti()
+        }
+        let onCloseButtonTapped: ()->Void = {
+            UserDefaults.standard.set(true, forKey: "callvanNotificationLater")
+        }
+        let contentViewController = CallVanBottomSheetViewController(
+            titleText: "알림을 켜볼까요?",
+            subTitleLabel: subTitleLabel,
+            mainButtonText: "알림 켜기",
+            closeButtonText: "나중에 할게요",
+            onMainButtonTapped: onMainButtonTapped,
+            onCloseButtonTapped: onCloseButtonTapped
+        )
+        let bottomSheetViewController = BottomSheetViewController(
+            contentViewController: contentViewController,
+            defaultHeight: 180 + 53 + view.safeAreaInsets.bottom
+        )
+        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        bottomSheetViewController.modalPresentationStyle = .overFullScreen
+        present(bottomSheetViewController, animated: false)
+    }
+    
+    private func navigateToNoti() {
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

@@ -110,6 +110,10 @@
 		7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */; };
 		7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */; };
 		7C7CCE4A2F834D4B00E3A54B /* CallVanModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */; };
+		7C7CCE702F866E9400E3A54B /* AppPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE6F2F866E9400E3A54B /* AppPath.swift */; };
+		7C7CCE722F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */; };
+		7C7CCE742F86866B00E3A54B /* CallVanRestriction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE732F86866B00E3A54B /* CallVanRestriction.swift */; };
+		7C7CCE762F86872F00E3A54B /* CallVanRestrictionDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE752F86872F00E3A54B /* CallVanRestrictionDto.swift */; };
 		7C7F429B2F629B8800CC5860 /* UploadDomain.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F429A2F629B8800CC5860 /* UploadDomain.swift */; };
 		7C7F43222F65F1F100CC5860 /* CallVanListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F43212F65F1F100CC5860 /* CallVanListRequest.swift */; };
 		7C7F43242F65F21500CC5860 /* CallVanPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F43232F65F21500CC5860 /* CallVanPlace.swift */; };
@@ -1003,6 +1007,10 @@
 		7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataButtonsView.swift; sourceTree = "<group>"; };
 		7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemHeaderView.swift; sourceTree = "<group>"; };
 		7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanModalViewController.swift; sourceTree = "<group>"; };
+		7C7CCE6F2F866E9400E3A54B /* AppPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPath.swift; sourceTree = "<group>"; };
+		7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanRestrictionUseCase.swift; sourceTree = "<group>"; };
+		7C7CCE732F86866B00E3A54B /* CallVanRestriction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRestriction.swift; sourceTree = "<group>"; };
+		7C7CCE752F86872F00E3A54B /* CallVanRestrictionDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRestrictionDto.swift; sourceTree = "<group>"; };
 		7C7F429A2F629B8800CC5860 /* UploadDomain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadDomain.swift; sourceTree = "<group>"; };
 		7C7F43212F65F1F100CC5860 /* CallVanListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanListRequest.swift; sourceTree = "<group>"; };
 		7C7F43232F65F21500CC5860 /* CallVanPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPlace.swift; sourceTree = "<group>"; };
@@ -2084,6 +2092,16 @@
 			path = EditLostItem;
 			sourceTree = "<group>";
 		};
+		7C7CCE6E2F866E8900E3A54B /* Core */ = {
+			isa = PBXGroup;
+			children = (
+				7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */,
+				7C7F429A2F629B8800CC5860 /* UploadDomain.swift */,
+				7C7CCE6F2F866E9400E3A54B /* AppPath.swift */,
+			);
+			path = Core;
+			sourceTree = "<group>";
+		};
 		7C8ADD362F20C0A500F85BDE /* LostItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -2148,6 +2166,7 @@
 				7C0C188E2F67F8BA001781B3 /* CallVanDataDto.swift */,
 				7C0C18982F68AA2B001781B3 /* CallVanChatDto.swift */,
 				7C0C18A22F68FD3D001781B3 /* CallVanSummaryDto.swift */,
+				7C7CCE752F86872F00E3A54B /* CallVanRestrictionDto.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2333,6 +2352,7 @@
 				7C0C189E2F68AB33001781B3 /* CallVanChatRequest.swift */,
 				7C7F43252F65F2F900CC5860 /* CallVanPostRequest.swift */,
 				7C7F43272F65F31500CC5860 /* CallVanReportRequest.swift */,
+				7C7CCE732F86866B00E3A54B /* CallVanRestriction.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -2396,6 +2416,7 @@
 				7C0C18902F67FA58001781B3 /* ReportCallVanUserUseCase.swift */,
 				7C0C18942F68A913001781B3 /* FetchCallVanChatUseCase.swift */,
 				7C0C18962F68A91A001781B3 /* PostCallVanChatUseCase.swift */,
+				7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */,
 			);
 			path = CallVan;
 			sourceTree = "<group>";
@@ -3991,6 +4012,8 @@
 			isa = PBXGroup;
 			children = (
 				D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */,
+				D2D380FC2BA7415C009AD5A9 /* ErrorResponseDto.swift */,
+				D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -4165,8 +4188,6 @@
 				D23479DD2BDB715700FA91BD /* Timetable */,
 				D23479D82BDB5EEF00FA91BD /* Land */,
 				D208A7A32CA1118D007040E7 /* AbTest */,
-				D2D380FC2BA7415C009AD5A9 /* ErrorResponseDto.swift */,
-				D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */,
 			);
 			path = Decodable;
 			sourceTree = "<group>";
@@ -4565,6 +4586,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7C7CCE6E2F866E8900E3A54B /* Core */,
 				7CA63A1F2F1AF73500226F86 /* LostItem */,
 				D815DD972E08216B004A72BE /* Order */,
 				D2D4626F2D63C58900C60864 /* Chat */,
@@ -4576,8 +4598,6 @@
 				D2CA2DCE2C1CAC4B0036F02C /* Shop */,
 				D249CD392C158EEC000813F9 /* Dining */,
 				7CC42B1A2F56F21A00940CE1 /* CallVan */,
-				7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */,
-				7C7F429A2F629B8800CC5860 /* UploadDomain.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -5223,6 +5243,7 @@
 				7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */,
 				7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */,
 				7CED90C02EF2D1F900457128 /* DatePickerDropdownView.swift in Sources */,
+				7C7CCE762F86872F00E3A54B /* CallVanRestrictionDto.swift in Sources */,
 				7CED90C12EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift in Sources */,
 				7CED90C32EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift in Sources */,
 				7CED90C42EF2D1F900457128 /* BusView.swift in Sources */,
@@ -5272,6 +5293,7 @@
 				7CED90FE2EF2D1F900457128 /* SelectTimeView.swift in Sources */,
 				7CED90FF2EF2D1F900457128 /* PolicyViewController.swift in Sources */,
 				7CA60D812F665E22007C08C1 /* CallVanPostResultDto.swift in Sources */,
+				7C7CCE722F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift in Sources */,
 				7CED91002EF2D1F900457128 /* ChangePasswordSuccessViewController.swift in Sources */,
 				7CC42B5C2F59CFD600940CE1 /* CallVanPostTimeView.swift in Sources */,
 				7CED91012EF2D1F900457128 /* FindIdViewModel.swift in Sources */,
@@ -5705,6 +5727,7 @@
 				D2FCBE902CFF49B10097A388 /* UIViewController+NavigationBarStyle.swift in Sources */,
 				7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */,
 				D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */,
+				7C7CCE702F866E9400E3A54B /* AppPath.swift in Sources */,
 				D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */,
 				7C61D3472F220EA2005FAC3A /* EditLostItemCategoryView.swift in Sources */,
 				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
@@ -5724,6 +5747,7 @@
 				D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */,
 				D208A7AE2CA117AA007040E7 /* AbTestAPI.swift in Sources */,
 				D208A7CB2CABB755007040E7 /* CoreService.swift in Sources */,
+				7C7CCE742F86866B00E3A54B /* CallVanRestriction.swift in Sources */,
 				D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */,
 				83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */,
 				D2D4627E2D64835B00C60864 /* CreateChatRoomUseCase.swift in Sources */,

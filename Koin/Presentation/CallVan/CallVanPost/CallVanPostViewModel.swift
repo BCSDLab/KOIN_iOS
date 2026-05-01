@@ -26,12 +26,13 @@ final class CallVanPostViewModel: ViewModelProtocol {
         case updateArrival(CallVanPlace?, String?)
         case postDataCompleted(CallVanListPost)
         case showToast(String)
-        case showReportedModal
+        case showRestrictedModal(type: RestrictionType?, until: String?)
     }
     
     // MARK: - Properties
     private let postCallVanDataUseCase: PostCallVanDataUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let dateFormatter = DateFormatter().then {
@@ -47,10 +48,12 @@ final class CallVanPostViewModel: ViewModelProtocol {
     // MARK: - Initializer
     init(
         postCallVanDataUseCase: PostCallVanDataUseCase,
-        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+        fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
     ) {
         self.postCallVanDataUseCase = postCallVanDataUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.fetchCallVanRestrictionUseCase = fetchCallVanRestrictionUseCase
     }
     
     // MARK: - Public
@@ -73,7 +76,7 @@ final class CallVanPostViewModel: ViewModelProtocol {
             case .swapButtonTapped:
                 swapPlace()
             case .postData:
-                postData()
+                checkRestriction()
             case let .logEvent(label, category, value):
                 logEvent(label: label, category: category, value: value)
                 
@@ -146,15 +149,24 @@ extension CallVanPostViewModel {
         outputSubject.send(.enablePostButton(isValid))
     }
     
+    private func checkRestriction() {
+        fetchCallVanRestrictionUseCase.execute().sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] restriction in
+                if restriction.isRestricted {
+                    self?.outputSubject.send(.showRestrictedModal(type: restriction.restrictionType, until: restriction.restrictedUntil))
+                } else {
+                    self?.postData()
+                }
+            }
+        ).store(in: &subscriptions)
+    }
+    
     private func postData() {
         postCallVanDataUseCase.execute(request: request).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
-                    if error.statusCode == 403 {
-                        self?.outputSubject.send(.showReportedModal)
-                    } else {
-                        self?.outputSubject.send(.showToast(error.message))
-                    }
+                    self?.outputSubject.send(.showToast(error.message))
                 }
             },
             receiveValue: { [weak self] postData in

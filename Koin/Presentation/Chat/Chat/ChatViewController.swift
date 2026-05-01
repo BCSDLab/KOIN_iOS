@@ -56,7 +56,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     init(viewModel: ChatViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = viewModel.articleTitle
         let rightButton = UIBarButtonItem(image: UIImage.appImage(asset: .threeCircle), style: .plain, target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
     }
@@ -82,6 +81,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
         sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
         textView.delegate = self
+        inputSubject.send(.viewDidLoad)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -106,6 +106,8 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
             case .showToast(let message, let success):
                 showToast(message: message)
                 if success { navigationController?.popViewController(animated: true) }
+            case .updateTitle(let title):
+                self.title = title
             }
         }.store(in: &subscriptions)
         
