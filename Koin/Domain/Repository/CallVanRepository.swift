@@ -26,4 +26,5 @@ protocol CallVanRepository {
     func fetchCallVanChat(postId: Int) -> AnyPublisher<CallVanChat, ErrorResponse>
     func postCallVanChat(postId: Int, request: CallVanChatRequest) -> AnyPublisher<Void, ErrorResponse>
     func fetchCallVanSummary(postId: Int) -> AnyPublisher<CallVanListPost, ErrorResponse>
+    func fetchRestriction() -> AnyPublisher<CallVanRestriction, ErrorResponse>
 }

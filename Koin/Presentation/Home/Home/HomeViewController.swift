@@ -217,6 +217,10 @@ final class HomeViewController: UIViewController {
                 self?.showBanner(banner: banner)
             case .updateLostItem(let lostLostStats):
                 self?.lostItemListView.configure(lostItemStats: lostLostStats)
+            case let .checkRestrictionCompleted(restriction):
+                self?.checkRestrictionCompleted(restriction)
+            case let .showToast(message):
+                self?.showToastMessage(message: message)
             }
         }.store(in: &subscriptions)
         
@@ -307,7 +311,7 @@ final class HomeViewController: UIViewController {
             guard let self else { return }
             inputSubject.send(.logEventDirect(name: "CAMPUS", label: "main_callvan_write", value: "", category: "click"))
             if viewModel.isLoggedIn {
-                navigateToCallVanPost()
+                inputSubject.send(.checkRestriction)
             } else {
                 let onMainButtonTapped: ()->Void = { [weak self] in
                     self?.navigateToLogin()
@@ -657,6 +661,7 @@ extension HomeViewController {
     private func navigateToCallVanList() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchCallVanListUseCase = DefaultFetchCallVanListUseCase(repository: callVanRepository)
         let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
@@ -666,7 +671,9 @@ extension HomeViewController {
         let reopenCallVanUseCase = DefaultReopenCallVanUseCase(repository: callVanRepository)
         let completeCallVanUseCase = DefaultCompleteCallVanUseCase(repository: callVanRepository)
         let fetchCallVanSummaryUseCase = DefaultFetchCallVanSummaryUseCase(repository: callVanRepository)
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
         let viewModel = CallVanListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchCallVanListUseCase: fetchCallVanListUseCase,
@@ -677,19 +684,52 @@ extension HomeViewController {
             reopenCallVanUseCase: reopenCallVanUseCase,
             completeCallVanUseCase: completeCallVanUseCase,
             fetchCallVanSummaryUseCase: fetchCallVanSummaryUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
+            fetchNotiListUseCase: fetchNotiListUseCase
         )
         let viewController = CallVanListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
+    private func checkRestrictionCompleted(_ restriction: CallVanRestriction) {
+        if restriction.isRestricted {
+            showRestrictedModal(restriction: restriction)
+        } else {
+            navigateToCallVanPost()
+        }
+    }
+    
+    private func showRestrictedModal(restriction: CallVanRestriction) {
+        let modalViewController: CallVanModalViewController
+        switch restriction.restrictionType {
+        case .temporaryRestriction14Days:
+            guard let until = restriction.restrictedUntil else {
+                return
+            }
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
+        case .permanentRestriction:
+            modalViewController = CallVanModalViewController(
+                title: RestrictionType.temporaryRestriction14Days.rawValue,
+                description: RestrictionType.permanentRestriction.getDescription())
+        default:
+            return
+        }
+        modalViewController.modalPresentationStyle = .overFullScreen
+        present(modalViewController, animated: false)
+    }
+    
     private func navigateToCallVanPost() {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let postCallVanDataUseCase = DefaultPostCallVanDataUseCase(repository: callVanRepository)
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanPostViewModel(
             postCallVanDataUseCase: postCallVanDataUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
         )
         let viewController = CallVanPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

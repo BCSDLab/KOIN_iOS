@@ -111,4 +111,12 @@ final class DefaultCallVanRepository: CallVanRepository {
             }
             .eraseToAnyPublisher()
     }
+    
+    func fetchRestriction() -> AnyPublisher<CallVanRestriction, ErrorResponse> {
+        return service.fetchRestriction()
+            .map {
+                $0.toDomain()
+            }
+            .eraseToAnyPublisher()
+    }
 }

@@ -17,7 +17,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         case loadMoreList
         case updateFilterTitle(String?)
         case updateFilterState(CallVanListRequest)
-
+        
         case participate(Int)
         case quit(Int)
         case close(Int)
@@ -25,6 +25,8 @@ final class CallVanListViewModel: ViewModelProtocol {
         case complete(Int)
         
         case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
+        case checkRestriction(reason: CheckRestrictionReason)
+        case checkNotification
     }
     enum Output {
         case resetList([CallVanListPost])
@@ -33,7 +35,12 @@ final class CallVanListViewModel: ViewModelProtocol {
         case deleteListItem(Int)
         case updateBell(alert: Bool)
         case showToast(String)
-        case showReportedModal
+        case checkRestrictionCompleted(reason: CheckRestrictionReason, isRestricted: Bool, type: RestrictionType?, until: String?)
+        case requestNotificationAgreement
+    }
+    enum CheckRestrictionReason {
+        case post
+        case paritipate(postId: Int)
     }
     
     // MARK: - Properties
@@ -47,6 +54,8 @@ final class CallVanListViewModel: ViewModelProtocol {
     private let completeCallVanUseCase: CompleteCallVanUseCase
     private let fetchCallVanSummaryUseCase: FetchCallVanSummaryUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
+    private let fetchNotiListUseCase: FetchNotiListUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var filterState = CallVanListRequest()
@@ -63,7 +72,9 @@ final class CallVanListViewModel: ViewModelProtocol {
          reopenCallVanUseCase: ReopenCallVanUseCase,
          completeCallVanUseCase: CompleteCallVanUseCase,
          fetchCallVanSummaryUseCase: FetchCallVanSummaryUseCase,
-         logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase,
+         fetchNotiListUseCase: FetchNotiListUseCase
     ) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchCallVanListUseCase = fetchCallVanListUseCase
@@ -75,6 +86,8 @@ final class CallVanListViewModel: ViewModelProtocol {
         self.completeCallVanUseCase = completeCallVanUseCase
         self.fetchCallVanSummaryUseCase = fetchCallVanSummaryUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.fetchCallVanRestrictionUseCase = fetchCallVanRestrictionUseCase
+        self.fetchNotiListUseCase = fetchNotiListUseCase
     }
     
     // MARK: - Transform
@@ -107,6 +120,10 @@ final class CallVanListViewModel: ViewModelProtocol {
                 refresh()
             case let .logEvent(label, category, value):
                 logEvent(label: label, category: category, value: value)
+            case .checkRestriction(let reason):
+                checkRestriction(for: reason)
+            case .checkNotification:
+                checkNotification()
             }
         }.store(in: &subscriptions)
         
@@ -213,18 +230,13 @@ extension CallVanListViewModel {
     private func participate(_ postId: Int) {
         participateCallVanUseCase.execute(postId: postId).sink(
             receiveCompletion: { [weak self] completion in
-                switch completion {
-                case .finished:
-                    self?.reloadList(postId)
-                case .failure(let error):
-                    if error.statusCode == 403 {
-                        self?.outputSubject.send(.showReportedModal)
-                    } else {
-                        self?.outputSubject.send(.showToast(error.message))
-                    }
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
                 }
             },
-            receiveValue: { _ in}
+            receiveValue: { [weak self] in
+                self?.reloadList(postId)
+            }
         ).store(in: &subscriptions)
     }
     
@@ -285,5 +297,43 @@ extension CallVanListViewModel {
     
     private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
+    
+    private func checkRestriction(for reason: CheckRestrictionReason) {
+        fetchCallVanRestrictionUseCase.execute().sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { [weak self] restriction in
+                self?.outputSubject.send(.checkRestrictionCompleted(
+                    reason: reason,
+                    isRestricted: restriction.isRestricted,
+                    type: restriction.restrictionType,
+                    until: restriction.restrictedUntil)
+                )
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func checkNotification() {
+        fetchNotiListUseCase.execute().sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { [weak self] agreements in
+                var isNotificationOn = false
+                if let subscribes = agreements.subscribes,
+                   let callvanAgreement = subscribes.first(where: { $0.type == .callvan }) {
+                    isNotificationOn = callvanAgreement.isPermit ?? false
+                }
+                if isNotificationOn == false {
+                    self?.outputSubject.send(.requestNotificationAgreement)
+                }
+            }
+        ).store(in: &subscriptions)
     }
 }

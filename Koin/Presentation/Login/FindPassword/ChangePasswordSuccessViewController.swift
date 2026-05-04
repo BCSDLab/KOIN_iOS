@@ -73,6 +73,7 @@ extension ChangePasswordSuccessViewController {
     private func makeHomeViewController() -> UIViewController {
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
         let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
@@ -83,7 +84,7 @@ extension ChangePasswordSuccessViewController {
             userRepository: DefaultUserRepository(service: DefaultUserService())
         )
         let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
-        
+        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
         let homeViewModel = HomeViewModel(
             fetchDiningListUseCase: fetchDiningListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
@@ -94,7 +95,8 @@ extension ChangePasswordSuccessViewController {
             checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
             fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
             checkLoginUseCase: checkLoginUseCase,
-            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase
+            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
         )
         let viewController = HomeViewController(viewModel: homeViewModel)
         return viewController
