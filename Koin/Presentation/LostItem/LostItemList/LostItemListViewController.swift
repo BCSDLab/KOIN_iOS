@@ -97,7 +97,7 @@ final class LostItemListViewController: UIViewController {
         setDelegate()
         title = "분실물"
         bind()
-        inputSubject.send(.loadList)
+        inputSubject.send(.load)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -110,9 +110,9 @@ final class LostItemListViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
             switch output {
-            case .updateList(let lostItemListData):
+            case .update(let lostItemListData):
                 self.lostItemListTableView.update(lostItemListData)
-            case .appendList(let lostItemListData):
+            case .append(let lostItemListData):
                 self.lostItemListTableView.append(lostItemListData)
             case .updateKeywords(let keywords):
                 lostItemKeywordCollectionView.configure(keywords: keywords)
@@ -153,7 +153,7 @@ final class LostItemListViewController: UIViewController {
         }.store(in: &subscriptions)
         
         lostItemListTableView.loadMoreListPublisher.sink { [weak self] in
-            self?.inputSubject.send(.loadMoreList)
+            self?.inputSubject.send(.loadMore)
         }.store(in: &subscriptions)
         
         lostItemListTableView.dismissKeyBoardPublisher.sink { [weak self] in
@@ -283,7 +283,7 @@ extension LostItemListViewController {
             filterState: self.viewModel.filterState,
             onApplyFilterButtonTapped: { [weak self] filter in
                 self?.dismissView()
-                self?.inputSubject.send(.updateFilter(filter: filter))
+                self?.inputSubject.send(.updateFilter(filter))
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemFilterApply, .click, "분실물"))
             }
         )
@@ -302,14 +302,14 @@ extension LostItemListViewController {
     
     @objc private func searchButtonTapped() {
         dismissKeyboard()
-        inputSubject.send(.updateTitle(title: searchTextField.text))
+        inputSubject.send(.updateTitle(searchTextField.text))
     }
 }
 
 extension LostItemListViewController {
     
     private func setLayouts() {
-        [lostItemListTableView, searchTextField, searchButton, filterButton, writeButton].forEach {
+        [lostItemListTableView, searchTextField, searchButton, filterButton, lostItemKeywordCollectionView, writeButton].forEach {
             view.addSubview($0)
         }
     }
