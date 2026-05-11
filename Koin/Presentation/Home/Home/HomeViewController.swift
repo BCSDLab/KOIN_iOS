@@ -11,7 +11,7 @@ import UIKit
 final class HomeViewController: UIViewController {
     
     // MARK: - Properties
-    
+
     private let viewModel: HomeViewModel
     private let inputSubject: PassthroughSubject<HomeViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -415,7 +415,8 @@ extension HomeViewController {
                 let viewModel = LostItemListViewModel(
                     checkLoginUseCase: checkLoginUseCase,
                     fetchLostItemListUseCase: fetchLostItemItemUseCase,
-                    logAnalyticsEventUseCase: logAnalyticsEventUseCase
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                    fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase()
                 )
                 let viewController = LostItemListViewController(viewModel: viewModel)
                 navigationController?.pushViewController(viewController, animated: true)
@@ -609,7 +610,8 @@ extension HomeViewController {
         let viewModel = LostItemListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchLostItemListUseCase: fetchLostItemItemUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase()
         )
         let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

@@ -52,6 +52,9 @@ final class LostItemListViewController: UIViewController {
         $0.backgroundColor = .appColor(.info200)
         $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
+    private let lostItemKeywordCollectionView = LostItemKeywordCollectionView().then {
+        $0.contentInset = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
+    }
     private let lostItemListTableView = LostItemListTableView()
     
     private let writeButton = UIButton().then {
@@ -111,8 +114,8 @@ final class LostItemListViewController: UIViewController {
                 self.lostItemListTableView.update(lostItemListData)
             case .appendList(let lostItemListData):
                 self.lostItemListTableView.append(lostItemListData)
-            case .resetList:
-                self.lostItemListTableView.reset()
+            case .updateKeywords(let keywords):
+                lostItemKeywordCollectionView.configure(keywords: keywords)
             }
         }.store(in: &subscriptions)
         
@@ -156,6 +159,17 @@ final class LostItemListViewController: UIViewController {
         lostItemListTableView.dismissKeyBoardPublisher.sink { [weak self] in
             self?.dismissKeyboard()
         }.store(in: &subscriptions)
+        
+        lostItemKeywordCollectionView.didTapSettingPublisher.sink { [weak self] in
+            self?.navigateToLostItemKeyword()
+        }.store(in: &subscriptions)
+        lostItemKeywordCollectionView.didTapAllPublisher.sink { [weak self] in
+            self?.inputSubject.send(.reset)
+        }.store(in: &subscriptions)
+        lostItemKeywordCollectionView.didTapKeywordPublisher.sink { [weak self] keyword in
+            self?.inputSubject.send(.updateKeyword(keyword))
+        }.store(in: &subscriptions)
+        
     }
     
     private func setDelegate() {
@@ -164,6 +178,11 @@ final class LostItemListViewController: UIViewController {
 }
 
 extension LostItemListViewController {
+    
+    private func navigateToLostItemKeyword() {
+        // TODO: navigation
+        print(#function)
+    }
     
     private func showLogin() {
         let onLeftButtonTapped: ()->Void = { [weak self] in
@@ -313,8 +332,13 @@ extension LostItemListViewController {
             $0.centerY.equalTo(searchTextField)
             $0.trailing.equalToSuperview().offset(-24)
         }
-        lostItemListTableView.snp.makeConstraints {
+        lostItemKeywordCollectionView.snp.makeConstraints {
+            $0.height.equalTo(66)
             $0.top.equalTo(searchTextField.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview()
+        }
+        lostItemListTableView.snp.makeConstraints {
+            $0.top.equalTo(lostItemKeywordCollectionView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         writeButton.snp.makeConstraints {

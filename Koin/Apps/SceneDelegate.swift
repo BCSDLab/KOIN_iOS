@@ -369,7 +369,8 @@ extension SceneDelegate {
         let viewModel = LostItemListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchLostItemListUseCase: fetchLostItemItemUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase()
         )
         let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: false)

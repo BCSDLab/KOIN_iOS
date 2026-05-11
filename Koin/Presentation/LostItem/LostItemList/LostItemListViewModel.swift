@@ -16,12 +16,13 @@ final class LostItemListViewModel {
         case loadMoreList
         case updateTitle(title: String?)
         case updateFilter(filter: FetchLostItemListRequest)
+        case updateKeyword(String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateList([LostItemListData])
         case appendList([LostItemListData])
-        case resetList
+        case updateKeywords([String])
     }
     
     // MARK: - Properties
@@ -32,17 +33,24 @@ final class LostItemListViewModel {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscription: Set<AnyCancellable> = []
     
-    private(set) var isLoggedIn: Bool = false
+    private(set) var isLoggedIn: Bool = false {
+        didSet {
+            isLoggedIn ? fetchMyKeyword() : outputSubject.send(.updateKeywords([]))
+        }
+    }
     var filterState = FetchLostItemListRequest()
     
     
     // MARK: - Initializer
     init(checkLoginUseCase: CheckLoginUseCase,
          fetchLostItemListUseCase: FetchLostItemListUseCase,
-         logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         fetchMyKeywordUseCase: FetchLostItemMyKeywordUseCase
+    ) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemListUseCase = fetchLostItemListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.fetchMyKeywordUseCase = fetchMyKeywordUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -59,6 +67,8 @@ final class LostItemListViewModel {
                 self.updateTitle(title)
             case .updateFilter(let filter):
                 self.updateFilter(filter)
+            case .updateKeyword(let keyword):
+                self.update(keyword: keyword)
             case let .logEvent(label, category, value):
                 self.logEvent(label: label, category: category, value: value)
             }
@@ -110,11 +120,11 @@ extension LostItemListViewModel {
         ).store(in: &subscription)
     }
     
-    private func updateTitle(_ title: String?) {
+    private func fetchMyKeyword() {
         
         guard filterState.title != title else {
-            return
-        }
+            receiveValue: { [weak self] keywords in
+                self?.outputSubject.send(.updateKeywords(keywords))
         outputSubject.send(.resetList)
         
         if let title, !title.trimmingCharacters(in: .whitespaces).isEmpty {
