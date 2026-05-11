@@ -193,6 +193,7 @@ enum ImageAsset: String {
     
     // MARK: - LostItem
     case lostItem
+    case lostItemGear
     
     // MARK: - Notice
     case noticeLoginToolTip
