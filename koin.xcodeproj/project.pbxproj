@@ -196,6 +196,11 @@
 		7CB11C0E2FB198BC004E0C80 /* LostItemKeywordCollectionViewSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C0D2FB198BC004E0C80 /* LostItemKeywordCollectionViewSettingCell.swift */; };
 		7CB11C102FB1A5BA004E0C80 /* LostItemKeywordCollectionViewAllCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C0F2FB1A5BA004E0C80 /* LostItemKeywordCollectionViewAllCell.swift */; };
 		7CB11C132FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C122FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift */; };
+		7CB11C152FB1BDA6004E0C80 /* FetchLostItemKeywordSuggestionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C142FB1BDA6004E0C80 /* FetchLostItemKeywordSuggestionUseCase.swift */; };
+		7CB11C182FB1D017004E0C80 /* LostItemKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C172FB1D017004E0C80 /* LostItemKeywordViewController.swift */; };
+		7CB11C1B2FB1D038004E0C80 /* LostItemKeywordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C1A2FB1D038004E0C80 /* LostItemKeywordViewModel.swift */; };
+		7CB11C212FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C202FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift */; };
+		7CB11C232FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C222FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift */; };
 		7CC42B052F56A78600940CE1 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B042F56A78600940CE1 /* PaddingLabel.swift */; };
 		7CC42B0E2F56AB7900940CE1 /* CallVanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B0D2F56AB7900940CE1 /* CallVanListViewController.swift */; };
 		7CC42B132F56AB9D00940CE1 /* CallVanListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B122F56AB9D00940CE1 /* CallVanListCollectionView.swift */; };
@@ -1082,6 +1087,11 @@
 		7CB11C0D2FB198BC004E0C80 /* LostItemKeywordCollectionViewSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordCollectionViewSettingCell.swift; sourceTree = "<group>"; };
 		7CB11C0F2FB1A5BA004E0C80 /* LostItemKeywordCollectionViewAllCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordCollectionViewAllCell.swift; sourceTree = "<group>"; };
 		7CB11C122FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemMyKeywordUseCase.swift; sourceTree = "<group>"; };
+		7CB11C142FB1BDA6004E0C80 /* FetchLostItemKeywordSuggestionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemKeywordSuggestionUseCase.swift; sourceTree = "<group>"; };
+		7CB11C172FB1D017004E0C80 /* LostItemKeywordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordViewController.swift; sourceTree = "<group>"; };
+		7CB11C1A2FB1D038004E0C80 /* LostItemKeywordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordViewModel.swift; sourceTree = "<group>"; };
+		7CB11C202FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordLeftAlignedCollectionView.swift; sourceTree = "<group>"; };
+		7CB11C222FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordLeftAlignedCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CC42B042F56A78600940CE1 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		7CC42B0D2F56AB7900940CE1 /* CallVanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanListViewController.swift; sourceTree = "<group>"; };
 		7CC42B122F56AB9D00940CE1 /* CallVanListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanListCollectionView.swift; sourceTree = "<group>"; };
@@ -2133,6 +2143,7 @@
 				7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */,
 				7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */,
 				7CB11C122FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift */,
+				7CB11C142FB1BDA6004E0C80 /* FetchLostItemKeywordSuggestionUseCase.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -2306,6 +2317,33 @@
 				7CB11C0F2FB1A5BA004E0C80 /* LostItemKeywordCollectionViewAllCell.swift */,
 			);
 			path = LostItemKeywordCollectionView;
+			sourceTree = "<group>";
+		};
+		7CB11C162FB1CFED004E0C80 /* LostItemKeyword */ = {
+			isa = PBXGroup;
+			children = (
+				7CB11C192FB1D030004E0C80 /* Subviews */,
+				7CB11C172FB1D017004E0C80 /* LostItemKeywordViewController.swift */,
+				7CB11C1A2FB1D038004E0C80 /* LostItemKeywordViewModel.swift */,
+			);
+			path = LostItemKeyword;
+			sourceTree = "<group>";
+		};
+		7CB11C192FB1D030004E0C80 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CB11C1F2FB24A7D004E0C80 /* LostItemKeywordLeftAlignedCollectionView */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CB11C1F2FB24A7D004E0C80 /* LostItemKeywordLeftAlignedCollectionView */ = {
+			isa = PBXGroup;
+			children = (
+				7CB11C202FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift */,
+				7CB11C222FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift */,
+			);
+			path = LostItemKeywordLeftAlignedCollectionView;
 			sourceTree = "<group>";
 		};
 		7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */ = {
@@ -2701,6 +2739,7 @@
 				7CED8EE72EF2D1F900457128 /* ReportLostItem */,
 				7CED8EF32EF2D1F900457128 /* PostLostItem */,
 				7C61D3372F21FADF005FAC3A /* EditLostItem */,
+				7CB11C162FB1CFED004E0C80 /* LostItemKeyword */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -5364,6 +5403,7 @@
 				7CED912D2EF2D1F900457128 /* ShopSearchTableViewMenuNameCell.swift in Sources */,
 				7CED912E2EF2D1F900457128 /* NoticeListTableView.swift in Sources */,
 				7CED912F2EF2D1F900457128 /* FindPasswordChangeViewController.swift in Sources */,
+				7CB11C182FB1D017004E0C80 /* LostItemKeywordViewController.swift in Sources */,
 				7C372F322F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift in Sources */,
 				7C372F332F1DB4C300149729 /* LostItemImagesCollectionView.swift in Sources */,
 				7CED91302EF2D1F900457128 /* NoticeListSearchTableViewFooter.swift in Sources */,
@@ -5523,6 +5563,7 @@
 				7CED91A92EF2D1F900457128 /* MenuCollectionViewCell.swift in Sources */,
 				7CED91AA2EF2D1F900457128 /* DeleteLectureView.swift in Sources */,
 				7CED91AB2EF2D1F900457128 /* NoticeListViewModel.swift in Sources */,
+				7CB11C152FB1BDA6004E0C80 /* FetchLostItemKeywordSuggestionUseCase.swift in Sources */,
 				7C7F43282F65F31500CC5860 /* CallVanReportRequest.swift in Sources */,
 				7CED91AC2EF2D1F900457128 /* DiningToShopAbTestButton.swift in Sources */,
 				7CED91AE2EF2D1F900457128 /* ShopInfoColletionView.swift in Sources */,
@@ -5576,6 +5617,7 @@
 				7CA63A042F1AA68100226F86 /* ServiceSelectTableHeaderView.swift in Sources */,
 				7CED91EF2EF2D1F900457128 /* PostLostItemViewController.swift in Sources */,
 				7CA639FE2F1AA5C400226F86 /* ServiceSelectTableView.swift in Sources */,
+				7CB11C1B2FB1D038004E0C80 /* LostItemKeywordViewModel.swift in Sources */,
 				7CED91F02EF2D1F900457128 /* DeleteFrameModalViewController.swift in Sources */,
 				7CED91F42EF2D1F900457128 /* NonReviewListView.swift in Sources */,
 				7CED91F52EF2D1F900457128 /* PolicyContentCollectionViewCell.swift in Sources */,
@@ -5798,6 +5840,7 @@
 				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
 				7CA60D772F663F7B007C08C1 /* PostNotificationReadUseCase.swift in Sources */,
 				7CC42B402F597B5B00940CE1 /* CallVanNotificationViewModel.swift in Sources */,
+				7CB11C232FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift in Sources */,
 				7C372EDD2F1B8DC900149729 /* LostItemListFilterButton.swift in Sources */,
 				833D9C472C7067AE00982145 /* NoticeListAPI.swift in Sources */,
 				D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */,
@@ -5818,6 +5861,7 @@
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,
 				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,
+				7CB11C212FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift in Sources */,
 				D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */,
 				7CC42B152F56ABC000940CE1 /* CallVanListCollectionViewCell.swift in Sources */,
 				D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */,

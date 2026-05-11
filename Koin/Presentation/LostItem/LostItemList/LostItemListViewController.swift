@@ -180,8 +180,18 @@ final class LostItemListViewController: UIViewController {
 extension LostItemListViewController {
     
     private func navigateToLostItemKeyword() {
-        // TODO: navigation
-        print(#function)
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewModel = LostItemKeywordViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchKeywordSuggestionUseCase: MockFetchLostItemKeywordSuggestionUseCase(),
+            fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase(),
+            fetchNotiListUseCase: fetchNotiListUseCase
+        )
+        let viewController = LostItemKeywordViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func showLogin() {
