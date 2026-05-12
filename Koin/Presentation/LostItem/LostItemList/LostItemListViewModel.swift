@@ -23,7 +23,7 @@ final class LostItemListViewModel {
     enum Output {
         case update([LostItemListData])
         case append([LostItemListData])
-        case updateKeywords([String])
+        case updateKeywords([LostItemKeyword])
     }
     
     // MARK: - Properties
@@ -101,7 +101,7 @@ extension LostItemListViewModel {
         fetchMyKeywordUseCase.execute().sink(
             receiveCompletion: { _ in},
             receiveValue: { [weak self] keywords in
-                self?.outputSubject.send(.updateKeywords(keywords))
+                self?.outputSubject.send(.updateKeywords(keywords.keywords))
             }
         ).store(in: &subscription)
     }

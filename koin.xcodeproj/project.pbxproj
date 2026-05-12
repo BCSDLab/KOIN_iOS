@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
+		7C04A47F2FB3380700214992 /* NotiSubscribeDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */; };
+		7C04A4802FB3380700214992 /* NotiSubscribeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */; };
+		7C04A4812FB3380700214992 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */; };
 		7C0C188F2F67F8BA001781B3 /* CallVanDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C188E2F67F8BA001781B3 /* CallVanDataDto.swift */; };
 		7C0C18912F67FA58001781B3 /* ReportCallVanUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C18902F67FA58001781B3 /* ReportCallVanUserUseCase.swift */; };
 		7C0C18932F67FA8D001781B3 /* CallVanReportRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C18922F67FA8D001781B3 /* CallVanReportRequestDto.swift */; };
@@ -201,6 +204,11 @@
 		7CB11C1B2FB1D038004E0C80 /* LostItemKeywordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C1A2FB1D038004E0C80 /* LostItemKeywordViewModel.swift */; };
 		7CB11C212FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C202FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift */; };
 		7CB11C232FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C222FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift */; };
+		7CB11C782FB32656004E0C80 /* SubscribeKeywordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C772FB32656004E0C80 /* SubscribeKeywordRequest.swift */; };
+		7CB11C7A2FB32716004E0C80 /* LostItemKeywordDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C792FB32716004E0C80 /* LostItemKeywordDto.swift */; };
+		7CB11C7C2FB32817004E0C80 /* LostItemKeyword.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C7B2FB32817004E0C80 /* LostItemKeyword.swift */; };
+		7CB11C7E2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C7D2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift */; };
+		7CB11C802FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C7F2FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift */; };
 		7CC42B052F56A78600940CE1 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B042F56A78600940CE1 /* PaddingLabel.swift */; };
 		7CC42B0E2F56AB7900940CE1 /* CallVanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B0D2F56AB7900940CE1 /* CallVanListViewController.swift */; };
 		7CC42B132F56AB9D00940CE1 /* CallVanListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B122F56AB9D00940CE1 /* CallVanListCollectionView.swift */; };
@@ -637,13 +645,10 @@
 		D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9552C55352A006BC684 /* ChangeNotiDetailUseCase.swift */; };
 		D20AB9582C553621006BC684 /* NotiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9572C553621006BC684 /* NotiService.swift */; };
 		D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9592C55369F006BC684 /* NotiAPI.swift */; };
-		D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB95C2C553B13006BC684 /* NotiSubscribeRequest.swift */; };
-		D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB95E2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift */; };
 		D20AB9612C5543AA006BC684 /* DefaultNotiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9602C5543AA006BC684 /* DefaultNotiRepository.swift */; };
 		D20AB9632C554B4E006BC684 /* DiningLikeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9622C554B4E006BC684 /* DiningLikeUseCase.swift */; };
 		D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9642C554B95006BC684 /* DiningLikeRequest.swift */; };
 		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
-		D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */; };
 		D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */; };
 		D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */; };
 		D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */; };
@@ -915,6 +920,9 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
+		7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeDetailRequest.swift; sourceTree = "<group>"; };
+		7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeRequest.swift; sourceTree = "<group>"; };
+		7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
 		7C0C188E2F67F8BA001781B3 /* CallVanDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanDataDto.swift; sourceTree = "<group>"; };
 		7C0C18902F67FA58001781B3 /* ReportCallVanUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportCallVanUserUseCase.swift; sourceTree = "<group>"; };
 		7C0C18922F67FA8D001781B3 /* CallVanReportRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportRequestDto.swift; sourceTree = "<group>"; };
@@ -1092,6 +1100,11 @@
 		7CB11C1A2FB1D038004E0C80 /* LostItemKeywordViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordViewModel.swift; sourceTree = "<group>"; };
 		7CB11C202FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordLeftAlignedCollectionView.swift; sourceTree = "<group>"; };
 		7CB11C222FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordLeftAlignedCollectionViewCell.swift; sourceTree = "<group>"; };
+		7CB11C772FB32656004E0C80 /* SubscribeKeywordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeKeywordRequest.swift; sourceTree = "<group>"; };
+		7CB11C792FB32716004E0C80 /* LostItemKeywordDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordDto.swift; sourceTree = "<group>"; };
+		7CB11C7B2FB32817004E0C80 /* LostItemKeyword.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeyword.swift; sourceTree = "<group>"; };
+		7CB11C7D2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeLostItemKeywordUseCase.swift; sourceTree = "<group>"; };
+		7CB11C7F2FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsubscribeLostItemKeywordUseCase.swift; sourceTree = "<group>"; };
 		7CC42B042F56A78600940CE1 /* PaddingLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingLabel.swift; sourceTree = "<group>"; };
 		7CC42B0D2F56AB7900940CE1 /* CallVanListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanListViewController.swift; sourceTree = "<group>"; };
 		7CC42B122F56AB9D00940CE1 /* CallVanListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanListCollectionView.swift; sourceTree = "<group>"; };
@@ -1535,13 +1548,10 @@
 		D20AB9552C55352A006BC684 /* ChangeNotiDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeNotiDetailUseCase.swift; sourceTree = "<group>"; };
 		D20AB9572C553621006BC684 /* NotiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiService.swift; sourceTree = "<group>"; };
 		D20AB9592C55369F006BC684 /* NotiAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAPI.swift; sourceTree = "<group>"; };
-		D20AB95C2C553B13006BC684 /* NotiSubscribeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeRequest.swift; sourceTree = "<group>"; };
-		D20AB95E2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeDetailRequest.swift; sourceTree = "<group>"; };
 		D20AB9602C5543AA006BC684 /* DefaultNotiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNotiRepository.swift; sourceTree = "<group>"; };
 		D20AB9622C554B4E006BC684 /* DiningLikeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLikeUseCase.swift; sourceTree = "<group>"; };
 		D20AB9642C554B95006BC684 /* DiningLikeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLikeRequest.swift; sourceTree = "<group>"; };
 		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
-		D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
 		D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsRequest.swift; sourceTree = "<group>"; };
 		D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailRequest.swift; sourceTree = "<group>"; };
 		D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationEmailRequest.swift; sourceTree = "<group>"; };
@@ -1820,6 +1830,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7C04A47E2FB3380700214992 /* Noti */ = {
+			isa = PBXGroup;
+			children = (
+				7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */,
+				7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */,
+				7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */,
+			);
+			path = Noti;
+			sourceTree = "<group>";
+		};
 		7C16AA352F3DE8F50071ABE6 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -1834,6 +1854,7 @@
 				7C372ED82F1B7F3900149729 /* FetchLostItemListRequest.swift */,
 				7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */,
 				D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */,
+				7CB11C772FB32656004E0C80 /* SubscribeKeywordRequest.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -2129,6 +2150,7 @@
 				7C8ADD392F20C10500F85BDE /* LostItemListDataDto.swift */,
 				7C61D3142F212FB3005FAC3A /* LostItemDataDto.swift */,
 				7C61D3562F23CD8B005FAC3A /* LostItemStatsDto.swift */,
+				7CB11C792FB32716004E0C80 /* LostItemKeywordDto.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -2142,8 +2164,10 @@
 				7C61D3522F22E686005FAC3A /* DeleteLostItemUseCase.swift */,
 				7C61D3542F22FC7B005FAC3A /* EditLostItemUseCase.swift */,
 				7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */,
-				7CB11C122FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift */,
+				7CB11C7D2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift */,
 				7CB11C142FB1BDA6004E0C80 /* FetchLostItemKeywordSuggestionUseCase.swift */,
+				7CB11C122FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift */,
+				7CB11C7F2FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -2211,6 +2235,7 @@
 				7C372EE52F1C0CC400149729 /* LostItemListData.swift */,
 				7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */,
 				7C372F262F1D644A00149729 /* LostItemData.swift */,
+				7CB11C7B2FB32817004E0C80 /* LostItemKeyword.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -4051,17 +4076,6 @@
 			path = Noti;
 			sourceTree = "<group>";
 		};
-		D20AB95B2C553ADF006BC684 /* Noti */ = {
-			isa = PBXGroup;
-			children = (
-				D20AB95C2C553B13006BC684 /* NotiSubscribeRequest.swift */,
-				D20AB95E2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift */,
-				D20AB9722C58E3C8006BC684 /* SendDeviceTokenRequest.swift */,
-			);
-			name = Noti;
-			path = "ㅜㅐ샤";
-			sourceTree = "<group>";
-		};
 		D215726D2CEE28C30061E725 /* Timetable */ = {
 			isa = PBXGroup;
 			children = (
@@ -4541,7 +4555,7 @@
 				7CCB1E4C2F29DB2500472669 /* Chat */,
 				7C372ED72F1B7F3100149729 /* LostItem */,
 				833D9C3A2C705E3F00982145 /* NoticeList */,
-				D20AB95B2C553ADF006BC684 /* Noti */,
+				7C04A47E2FB3380700214992 /* Noti */,
 				D29F21F42C4FD2A000994554 /* Land */,
 				83DD0D792C4F8E4300278ABD /* Bus */,
 				D29F21E02C4F302A00994554 /* Dining */,
@@ -5101,6 +5115,7 @@
 				7CC42B2F2F58105B00940CE1 /* CallVanBottomSheetViewController.swift in Sources */,
 				D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */,
 				7C61D3392F21FADF005FAC3A /* EditLostItemViewModel.swift in Sources */,
+				7CB11C7A2FB32716004E0C80 /* LostItemKeywordDto.swift in Sources */,
 				833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */,
 				D2FFA96E2D5F3EC200EF8E56 /* UIViewController+Navigate.swift in Sources */,
 				7CED922B2EF2D25900457128 /* DIContainer+Notice.swift in Sources */,
@@ -5185,7 +5200,6 @@
 				7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */,
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				7C58FEA22F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift in Sources */,
-				D20AB95F2C553B5D006BC684 /* NotiSubscribeDetailRequest.swift in Sources */,
 				7C0C18A12F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift in Sources */,
 				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
@@ -5273,6 +5287,7 @@
 				7CC42B0E2F56AB7900940CE1 /* CallVanListViewController.swift in Sources */,
 				835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */,
 				7CB11C132FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift in Sources */,
+				7CB11C782FB32656004E0C80 /* SubscribeKeywordRequest.swift in Sources */,
 				836242362BD9522400845499 /* FirebaseLog.swift in Sources */,
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
@@ -5364,6 +5379,7 @@
 				7CC42B5C2F59CFD600940CE1 /* CallVanPostTimeView.swift in Sources */,
 				7CED91012EF2D1F900457128 /* FindIdViewModel.swift in Sources */,
 				7C8ADD3A2F20C10500F85BDE /* LostItemListDataDto.swift in Sources */,
+				7CB11C802FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift in Sources */,
 				7CED91022EF2D1F900457128 /* ShopCollectionViewCell.swift in Sources */,
 				7CED91042EF2D1F900457128 /* TimetableCell.swift in Sources */,
 				7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */,
@@ -5434,6 +5450,7 @@
 				7CED914E2EF2D1F900457128 /* ModifySemesterModalViewController.swift in Sources */,
 				7CED914F2EF2D1F900457128 /* AddClassHeaderView.swift in Sources */,
 				7CED91522EF2D1F900457128 /* ChangeMyProfileViewController.swift in Sources */,
+				7CB11C7E2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift in Sources */,
 				7CED91532EF2D1F900457128 /* LoginViewController.swift in Sources */,
 				7C61D3572F23CD8B005FAC3A /* LostItemStatsDto.swift in Sources */,
 				7CED91552EF2D1F900457128 /* HotNoticeArticlesTableView.swift in Sources */,
@@ -5487,6 +5504,7 @@
 				7CA60D792F664952007C08C1 /* PostAllNotificationsReadUseCase.swift in Sources */,
 				7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */,
 				7CED918E2EF2D1F900457128 /* BannerViewController.swift in Sources */,
+				7CB11C7C2FB32817004E0C80 /* LostItemKeyword.swift in Sources */,
 				7CED918F2EF2D1F900457128 /* BackButtonPopUpViewController.swift in Sources */,
 				7C58FE862F5F9CDD00A2737B /* CallVanDataViewController.swift in Sources */,
 				7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */,
@@ -5634,6 +5652,9 @@
 				7CED92002EF2D1F900457128 /* MyKeywordCollectionView.swift in Sources */,
 				7CED92022EF2D1F900457128 /* ShopSummaryMenuGroupCollectionViewCell.swift in Sources */,
 				7CED92042EF2D1F900457128 /* DeleteSemesterModalViewController.swift in Sources */,
+				7C04A47F2FB3380700214992 /* NotiSubscribeDetailRequest.swift in Sources */,
+				7C04A4802FB3380700214992 /* NotiSubscribeRequest.swift in Sources */,
+				7C04A4812FB3380700214992 /* SendDeviceTokenRequest.swift in Sources */,
 				7CED92062EF2D1F900457128 /* ShopSearchTableViewShopNameCell.swift in Sources */,
 				7CED92072EF2D1F900457128 /* SortTypeBottomSheetViewController.swift in Sources */,
 				7CED92082EF2D1F900457128 /* DeleteLectureModalViewController.swift in Sources */,
@@ -5677,7 +5698,6 @@
 				D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */,
 				8354BE3D2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift in Sources */,
-				D20AB9732C58E3C8006BC684 /* SendDeviceTokenRequest.swift in Sources */,
 				D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */,
 				D20AB9612C5543AA006BC684 /* DefaultNotiRepository.swift in Sources */,
 				B68D2CE92EA505B800F3B479 /* ToastVariant.swift in Sources */,
@@ -5757,7 +5777,6 @@
 				7CA60D7B2F664C0C007C08C1 /* DeleteAllNotificationsUseCase.swift in Sources */,
 				7CA60D972F667AE9007C08C1 /* CompleteCallVanUseCase.swift in Sources */,
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
-				D20AB95D2C553B13006BC684 /* NotiSubscribeRequest.swift in Sources */,
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
 				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
 				D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */,

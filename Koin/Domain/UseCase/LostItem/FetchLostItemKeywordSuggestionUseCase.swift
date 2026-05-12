@@ -12,14 +12,15 @@ protocol FetchLostItemKeywordSuggestionUseCase {
     func execute() -> AnyPublisher<[String], ErrorResponse>
 }
 
-final class MockFetchLostItemKeywordSuggestionUseCase: FetchLostItemKeywordSuggestionUseCase {
+final class DefaultFetchLostItemKeywordSuggestionUseCase: FetchLostItemKeywordSuggestionUseCase {
     
-    let suggestions: [String] = [
-        "추천1", "추천2", "추천3"
-    ]
+    private let repository: LostItemRepository
+    
+    init(repository: LostItemRepository) {
+        self.repository = repository
+    }
+    
     func execute() -> AnyPublisher<[String], ErrorResponse> {
-        return Just(suggestions)
-            .setFailureType(to: ErrorResponse.self)
-            .eraseToAnyPublisher()
+        return repository.fetchKeywordSuggestion()
     }
 }

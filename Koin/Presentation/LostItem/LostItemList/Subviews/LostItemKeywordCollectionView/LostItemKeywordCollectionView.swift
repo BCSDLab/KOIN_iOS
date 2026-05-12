@@ -40,8 +40,8 @@ final class LostItemKeywordCollectionView: UICollectionView {
     }
     
     // MARK: - Public
-    func configure(keywords: [String]) {
-        self.keywords = [all] + keywords
+    func configure(keywords: [LostItemKeyword]) {
+        self.keywords = [all] + keywords.map { $0.keyword }
         reloadData()
         selectItem(at: allIndexPath, animated: false, scrollPosition: .right)
     }
