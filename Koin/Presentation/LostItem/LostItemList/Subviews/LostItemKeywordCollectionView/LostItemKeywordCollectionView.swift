@@ -91,7 +91,9 @@ extension LostItemKeywordCollectionView: UICollectionViewDelegateFlowLayout {
             return CGSize(width: width, height: height)
         case 1:
             let font = UIFont.appFont(.pretendardSemiBold, size: 14)
-            let width = Int((keywords[indexPath.row] as NSString).size(withAttributes: [.font : font]).width + 32)
+            var keyword = keywords[indexPath.row]
+            keyword = (keyword == all) ? keyword : "#\(keyword)"
+            let width = Int((keyword as NSString).size(withAttributes: [.font : font]).width + 32)
             return CGSize(width: width, height: height)
         case 2:
             let font = UIFont.appFont(.pretendardMedium, size: 14)

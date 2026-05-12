@@ -64,10 +64,13 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
             guard let self else { return }
             switch input {
             case .viewWillAppear:
-                checkLogin()
-                fetchMyKeyword()
                 fetchKeywordSuggestion()
-                fetchNotificationPermission()
+                checkLogin() { [weak self] isLoggedIn in
+                    if isLoggedIn {
+                        self?.fetchMyKeyword()
+                        self?.fetchNotificationPermission()
+                    }
+                }
             case .deleteKeyword(let keyword):
                 deleteKeyword(keyword)
             case .subscribeKeyword(let keyword):
@@ -82,10 +85,11 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
 
 extension LostItemKeywordViewModel {
     
-    private func checkLogin() {
+    private func checkLogin(completion: @escaping (Bool)->Void) {
         checkLoginUseCase.execute().sink { [weak self] isLoggedIn in
             guard let self else { return }
             self.isLoggedIn = isLoggedIn
+            completion(isLoggedIn)
         }.store(in: &subscriptions)
     }
     
@@ -122,7 +126,7 @@ extension LostItemKeywordViewModel {
 extension LostItemKeywordViewModel {
     
     private func deleteKeyword(_ keyword: String) {
-        currentCount -= 1
+        currentCount = max(0, currentCount-1)
         // TODO: - API 호출
     }
     private func subscribeKeyword(_ keyword: String) {
