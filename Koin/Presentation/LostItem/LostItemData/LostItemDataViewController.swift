@@ -225,7 +225,8 @@ extension LostItemDataViewController {
             let viewModel = LostItemListViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemListUseCase: fetchLostItemItemUseCase,
-                logAnalyticsEventUseCase: logAnalyticsEventUseCase
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase()
             )
             let lostItemListViewController = LostItemListViewController(viewModel: viewModel)
             navigationController?.setViewControllers([homeViewController, lostItemListViewController], animated: true)

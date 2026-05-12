@@ -12,53 +12,68 @@ final class LostItemListViewModel {
     
     enum Input {
         case checkLogin
-        case loadList
-        case loadMoreList
-        case updateTitle(title: String?)
-        case updateFilter(filter: FetchLostItemListRequest)
+        case load
+        case reset
+        case loadMore
+        case updateTitle(String?)
+        case updateFilter(FetchLostItemListRequest)
+        case updateKeyword(String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
-        case updateList([LostItemListData])
-        case appendList([LostItemListData])
-        case resetList
+        case update([LostItemListData])
+        case append([LostItemListData])
+        case updateKeywords([String])
     }
     
     // MARK: - Properties
     private let checkLoginUseCase: CheckLoginUseCase
     private let fetchLostItemListUseCase: FetchLostItemListUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let fetchMyKeywordUseCase: FetchLostItemMyKeywordUseCase
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscription: Set<AnyCancellable> = []
     
-    private(set) var isLoggedIn: Bool = false
+    private(set) var isLoggedIn: Bool = false {
+        didSet {
+            isLoggedIn ? fetchMyKeyword() : outputSubject.send(.updateKeywords([]))
+        }
+    }
     var filterState = FetchLostItemListRequest()
     
     
     // MARK: - Initializer
     init(checkLoginUseCase: CheckLoginUseCase,
          fetchLostItemListUseCase: FetchLostItemListUseCase,
-         logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+         fetchMyKeywordUseCase: FetchLostItemMyKeywordUseCase
+    ) {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemListUseCase = fetchLostItemListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.fetchMyKeywordUseCase = fetchMyKeywordUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
-            case .loadList:
-                self.loadList()
-            case .loadMoreList:
-                self.loadMoreList()
+            case .load:
+                self.load()
+            case .reset:
+                self.filterState = .init()
+                self.load()
+            case .loadMore:
+                self.loadMore()
             case .checkLogin:
                 self.checkLogin()
             case .updateTitle(let title):
-                self.updateTitle(title)
+                self.update(title: title)
             case .updateFilter(let filter):
-                self.updateFilter(filter)
+                self.update(filter: filter)
+            case .updateKeyword(let keyword):
+                self.update(keyword: keyword)
             case let .logEvent(label, category, value):
                 self.logEvent(label: label, category: category, value: value)
             }
@@ -73,34 +88,6 @@ extension LostItemListViewModel {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     
-    private func loadList() {
-        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] lostItemList in
-                guard let self else { return }
-                self.outputSubject.send(.updateList(lostItemList.articles))
-            }
-        ).store(in: &subscription)
-    }
-    
-    private func loadMoreList() {
-        filterState.page += 1
-        
-        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.filterState.page -= 1
-                }
-            },
-            receiveValue: { [weak self] lostItemList in
-                guard let self, self.filterState.page == lostItemList.currentPage else {
-                    return
-                }
-                self.outputSubject.send(.appendList(lostItemList.articles))
-            }
-        ).store(in: &subscription)
-    }
-    
     private func checkLogin() {
         checkLoginUseCase.execute().sink(
             receiveCompletion: { _ in },
@@ -110,45 +97,70 @@ extension LostItemListViewModel {
         ).store(in: &subscription)
     }
     
-    private func updateTitle(_ title: String?) {
-        
-        guard filterState.title != title else {
-            return
-        }
-        outputSubject.send(.resetList)
-        
-        if let title, !title.trimmingCharacters(in: .whitespaces).isEmpty {
-            filterState.title = title
-        } else {
-            filterState.title = nil
-        }
-        filterState.page = 1
-        
-        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] lostItemList in
-                self?.outputSubject.send(.updateList(lostItemList.articles))
+    private func fetchMyKeyword() {
+        fetchMyKeywordUseCase.execute().sink(
+            receiveCompletion: { _ in},
+            receiveValue: { [weak self] keywords in
+                self?.outputSubject.send(.updateKeywords(keywords))
             }
         ).store(in: &subscription)
     }
     
-    private func updateFilter(_ filter: FetchLostItemListRequest) {
-        
-        guard filterState != filter else {
-            return
-        }
-        outputSubject.send(.resetList)
-        
+    private func update(filter: FetchLostItemListRequest) {
+        // 필터 적용
         filterState.type = filter.type
         filterState.category = filter.category
         filterState.foundStatus = filter.foundStatus
         filterState.author = filter.author
+        // API 호출
+        load()
+    }
+    private func update(title: String?) {
+        // 타이틀 적용
+        filterState.title = title?.trimmingCharacters(in: .whitespacesAndNewlines)
+        // API 호출
+        load()
+    }
+    private func update(keyword: String) {
+        // 키워드 적용
+        filterState.title = keyword
+        // API 호출
+        load()
+    }
+    private func reset() {
+        // 필터 초기화
+        filterState = .init()
+        // API 호출
+        load()
+    }
+    
+    private func load() {
+        // 첫페이지부터 시작
         filterState.page = 1
-        
+        // API 호출
         fetchLostItemListUseCase.execute(requestModel: filterState).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] lostItemList in
-                self?.outputSubject.send(.updateList(lostItemList.articles))
+                self?.outputSubject.send(.update(lostItemList.articles))
+            }
+        ).store(in: &subscription)
+    }
+    
+    private func loadMore() {
+        // 필터 적용
+        filterState.page += 1
+        // API 호출
+        fetchLostItemListUseCase.execute(requestModel: filterState).sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure = completion {
+                    self?.filterState.page -= 1
+                }
+            },
+            receiveValue: { [weak self] lostItemList in
+                guard let self, self.filterState.page == lostItemList.currentPage else {
+                    return
+                }
+                self.outputSubject.send(.append(lostItemList.articles))
             }
         ).store(in: &subscription)
     }

@@ -52,6 +52,9 @@ final class LostItemListViewController: UIViewController {
         $0.backgroundColor = .appColor(.info200)
         $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
+    private let lostItemKeywordCollectionView = LostItemKeywordCollectionView().then {
+        $0.contentInset = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
+    }
     private let lostItemListTableView = LostItemListTableView()
     
     private let writeButton = UIButton().then {
@@ -94,7 +97,7 @@ final class LostItemListViewController: UIViewController {
         setDelegate()
         title = "분실물"
         bind()
-        inputSubject.send(.loadList)
+        inputSubject.send(.load)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -107,12 +110,12 @@ final class LostItemListViewController: UIViewController {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
             switch output {
-            case .updateList(let lostItemListData):
+            case .update(let lostItemListData):
                 self.lostItemListTableView.update(lostItemListData)
-            case .appendList(let lostItemListData):
+            case .append(let lostItemListData):
                 self.lostItemListTableView.append(lostItemListData)
-            case .resetList:
-                self.lostItemListTableView.reset()
+            case .updateKeywords(let keywords):
+                lostItemKeywordCollectionView.configure(keywords: keywords)
             }
         }.store(in: &subscriptions)
         
@@ -150,12 +153,23 @@ final class LostItemListViewController: UIViewController {
         }.store(in: &subscriptions)
         
         lostItemListTableView.loadMoreListPublisher.sink { [weak self] in
-            self?.inputSubject.send(.loadMoreList)
+            self?.inputSubject.send(.loadMore)
         }.store(in: &subscriptions)
         
         lostItemListTableView.dismissKeyBoardPublisher.sink { [weak self] in
             self?.dismissKeyboard()
         }.store(in: &subscriptions)
+        
+        lostItemKeywordCollectionView.didTapSettingPublisher.sink { [weak self] in
+            self?.navigateToLostItemKeyword()
+        }.store(in: &subscriptions)
+        lostItemKeywordCollectionView.didTapAllPublisher.sink { [weak self] in
+            self?.inputSubject.send(.reset)
+        }.store(in: &subscriptions)
+        lostItemKeywordCollectionView.didTapKeywordPublisher.sink { [weak self] keyword in
+            self?.inputSubject.send(.updateKeyword(keyword))
+        }.store(in: &subscriptions)
+        
     }
     
     private func setDelegate() {
@@ -164,6 +178,21 @@ final class LostItemListViewController: UIViewController {
 }
 
 extension LostItemListViewController {
+    
+    private func navigateToLostItemKeyword() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewModel = LostItemKeywordViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchKeywordSuggestionUseCase: MockFetchLostItemKeywordSuggestionUseCase(),
+            fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase(),
+            fetchNotiListUseCase: fetchNotiListUseCase
+        )
+        let viewController = LostItemKeywordViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
     
     private func showLogin() {
         let onLeftButtonTapped: ()->Void = { [weak self] in
@@ -264,7 +293,7 @@ extension LostItemListViewController {
             filterState: self.viewModel.filterState,
             onApplyFilterButtonTapped: { [weak self] filter in
                 self?.dismissView()
-                self?.inputSubject.send(.updateFilter(filter: filter))
+                self?.inputSubject.send(.updateFilter(filter))
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemFilterApply, .click, "분실물"))
             }
         )
@@ -283,14 +312,14 @@ extension LostItemListViewController {
     
     @objc private func searchButtonTapped() {
         dismissKeyboard()
-        inputSubject.send(.updateTitle(title: searchTextField.text))
+        inputSubject.send(.updateTitle(searchTextField.text))
     }
 }
 
 extension LostItemListViewController {
     
     private func setLayouts() {
-        [lostItemListTableView, searchTextField, searchButton, filterButton, writeButton].forEach {
+        [lostItemListTableView, searchTextField, searchButton, filterButton, lostItemKeywordCollectionView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -313,8 +342,13 @@ extension LostItemListViewController {
             $0.centerY.equalTo(searchTextField)
             $0.trailing.equalToSuperview().offset(-24)
         }
-        lostItemListTableView.snp.makeConstraints {
+        lostItemKeywordCollectionView.snp.makeConstraints {
+            $0.height.equalTo(66)
             $0.top.equalTo(searchTextField.snp.bottom).offset(4)
+            $0.leading.trailing.equalToSuperview()
+        }
+        lostItemListTableView.snp.makeConstraints {
+            $0.top.equalTo(lostItemKeywordCollectionView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
         }
         writeButton.snp.makeConstraints {

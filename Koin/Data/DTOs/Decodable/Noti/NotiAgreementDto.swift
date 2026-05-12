@@ -48,6 +48,7 @@ enum SubscribeType: String, Codable {
     case lostItemChat = "LOST_ITEM_CHAT"
     case callvan = "CALLVAN"
     case marketing = "MARKETING"
+    case lostItemKeyword = "LOST_ITEM_KEYWORD"
     case unknown = "UNKNOWN"
     
     init(from decoder: Decoder) throws {
