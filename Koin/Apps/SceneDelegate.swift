@@ -366,11 +366,12 @@ extension SceneDelegate {
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
         let viewModel = LostItemListViewModel(
             checkLoginUseCase: checkLoginUseCase,
             fetchLostItemListUseCase: fetchLostItemItemUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase()
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase
         )
         let viewController = LostItemListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: false)

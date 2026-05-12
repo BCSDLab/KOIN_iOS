@@ -222,11 +222,12 @@ extension LostItemDataViewController {
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
             let viewModel = LostItemListViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemListUseCase: fetchLostItemItemUseCase,
                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase()
+                fetchMyKeywordUseCase: fetchMyKeywordUseCase
             )
             let lostItemListViewController = LostItemListViewController(viewModel: viewModel)
             navigationController?.setViewControllers([homeViewController, lostItemListViewController], animated: true)
@@ -270,8 +271,6 @@ extension LostItemDataViewController {
     }
     
     private func navigateToChat(_ createChatRoomResponse: CreateChatRoomResponse) {
-        guard let type = viewModel.type else { return }
-        
         let chatViewModel = ChatViewModel(
             articleId: createChatRoomResponse.articleId,
             chatRoomId: createChatRoomResponse.chatRoomId,

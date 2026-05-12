@@ -12,27 +12,32 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
     
     enum Input {
         case viewWillAppear
-        case deleteKeyword(String)
+        case deleteKeyword(Int)
         case subscribeKeyword(String)
         case notificationSwitchTapped(isOn: Bool)
     }
     enum Output {
         case showLoginModal
-        case updateMyKeyword([String])
+        case updateMyKeyword(LostItemKeywords)
         case updateKeywordSuggestion([String])
         case updateSubscription(isPermit: Bool)
         case updateCurrentCount(Int)
         case removeKeywordSuggestion(String)
-        case appendMyKeyword(String)
+        case removeMyKeyword(Int)
+        case appendMyKeyword(LostItemKeyword)
         case showToastExceedCount
         case showToastKeywordLength
+        case showToast(String)
     }
     
     // MARK: - Properties
     private let checkLoginUseCase: CheckLoginUseCase
+    private let subscribeKeywordUseCase: SubscribeLostItemKeywordUseCase
     private let fetchKeywordSuggestionUseCase: FetchLostItemKeywordSuggestionUseCase
     private let fetchMyKeywordUseCase: FetchLostItemMyKeywordUseCase
+    private let unsubscribeKeywordUseCase: UnsubscribeLostItemKeywordUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
+    private let changeNotiUseCase: ChangeNotiUseCase
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -48,14 +53,20 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
     // MARK: - Intializer
     init(
         checkLoginUseCase: CheckLoginUseCase,
+        subscribeKeywordUseCase: SubscribeLostItemKeywordUseCase,
         fetchKeywordSuggestionUseCase: FetchLostItemKeywordSuggestionUseCase,
         fetchMyKeywordUseCase: FetchLostItemMyKeywordUseCase,
-        fetchNotiListUseCase: FetchNotiListUseCase
+        unsubscribeKeywordUseCase: UnsubscribeLostItemKeywordUseCase,
+        fetchNotiListUseCase: FetchNotiListUseCase,
+        changeNotiUseCase: ChangeNotiUseCase
     ) {
         self.checkLoginUseCase = checkLoginUseCase
+        self.subscribeKeywordUseCase = subscribeKeywordUseCase
         self.fetchKeywordSuggestionUseCase = fetchKeywordSuggestionUseCase
         self.fetchMyKeywordUseCase = fetchMyKeywordUseCase
+        self.unsubscribeKeywordUseCase = unsubscribeKeywordUseCase
         self.fetchNotiListUseCase = fetchNotiListUseCase
+        self.changeNotiUseCase = changeNotiUseCase
     }
     
     // MARK: - Transform
@@ -71,8 +82,8 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
                         self?.fetchNotificationPermission()
                     }
                 }
-            case .deleteKeyword(let keyword):
-                deleteKeyword(keyword)
+            case .deleteKeyword(let id):
+                deleteKeyword(id)
             case .subscribeKeyword(let keyword):
                 subscribeKeyword(keyword)
             case .notificationSwitchTapped(let isOn):
@@ -125,10 +136,21 @@ extension LostItemKeywordViewModel {
 
 extension LostItemKeywordViewModel {
     
-    private func deleteKeyword(_ keyword: String) {
-        currentCount = max(0, currentCount-1)
-        // TODO: - API 호출
+    private func deleteKeyword(_ id: Int) {
+        unsubscribeKeywordUseCase.execute(id: id).sink(
+            receiveCompletion: { [weak self] completion in
+                if case let .failure(error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { [weak self] in
+                guard let self else { return }
+                currentCount = max(0, currentCount-1)
+                outputSubject.send(.removeMyKeyword(id))
+            }
+        ).store(in: &subscriptions)
     }
+    
     private func subscribeKeyword(_ keyword: String) {
         guard isLoggedIn else {
             outputSubject.send(.showLoginModal)
@@ -143,16 +165,32 @@ extension LostItemKeywordViewModel {
             outputSubject.send(.showToastKeywordLength)
             return
         }
-        outputSubject.send(.removeKeywordSuggestion(keyword))
-        outputSubject.send(.appendMyKeyword(keyword))
-        currentCount += 1
-        // TODO: - API 호출
+        
+        subscribeKeywordUseCase.execute(keyword: keyword).sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { [weak self] keyword in
+                self?.outputSubject.send(.removeKeywordSuggestion(keyword.keyword))
+                self?.outputSubject.send(.appendMyKeyword(keyword))
+                self?.currentCount += 1
+            }
+        ).store(in: &subscriptions)
     }
     private func changeSubscription(isPermit: Bool) {
         guard isLoggedIn else {
             outputSubject.send(.showLoginModal)
             return
         }
-        // TODO: - API 호출
+        changeNotiUseCase.execute(method: isPermit ? .post : .delete, type: .lostItemKeyword).sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.outputSubject.send(.showToast(error.message))
+                }
+            },
+            receiveValue: { _ in }
+        ).store(in: &subscriptions)
     }
 }

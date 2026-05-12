@@ -17,8 +17,8 @@ final class LostItemKeywordLeftAlignedCollectionView: UICollectionView {
     
     // MARK: - Properties
     let didLayoutSubviewsPublisher = PassthroughSubject<CGFloat, Never>()
-    let didTapItemPublisher = PassthroughSubject<String, Never>()
-    private var keywords: [String] = []
+    let didTapItemPublisher = PassthroughSubject<LostItemKeyword, Never>()
+    private var keywords: [LostItemKeyword] = []
     private let action: Action
     private var height: CGFloat = 0
     
@@ -49,17 +49,29 @@ final class LostItemKeywordLeftAlignedCollectionView: UICollectionView {
     
     // MARK: - Public
     func configure(keywords: [String]) {
+        self.keywords = keywords.map { LostItemKeyword(id: nil, keyword: $0) }
+        reloadSections([0])
+    }
+    
+    func configure(keywords: [LostItemKeyword]) {
         self.keywords = keywords
         reloadSections([0])
     }
     
-    func append(keyword: String) {
+    func append(keyword: LostItemKeyword) {
         keywords.append(keyword)
         reloadSections([0])
     }
     
+    func remove(id: Int) {
+        if let row = keywords.firstIndex(where: { $0.id == id }) {
+            keywords.remove(at: row)
+            reloadSections([0])
+        }
+    }
+    
     func remove(keyword: String) {
-        if let row = keywords.firstIndex(where: { $0 == keyword }) {
+        if let row = keywords.firstIndex(where: { $0.keyword == keyword }) {
             keywords.remove(at: row)
             reloadSections([0])
         }
@@ -72,7 +84,8 @@ extension LostItemKeywordLeftAlignedCollectionView: UICollectionViewDelegateFlow
         _ collectionView: UICollectionView,
         shouldSelectItemAt indexPath: IndexPath
     ) -> Bool {
-        didTapItemPublisher.send(keywords[indexPath.row])
+        let keyword = keywords[indexPath.row]
+        didTapItemPublisher.send(keyword)
         return false
     }
     
@@ -85,7 +98,7 @@ extension LostItemKeywordLeftAlignedCollectionView: UICollectionViewDelegateFlow
         let inset = 16 * 2
         let padding = 2
         let imageWidth = 18
-        let keyword = keywords[indexPath.row]
+        let keyword = keywords[indexPath.row].keyword
         var width = Int((keyword as NSString).size(withAttributes: [.font : font]).width)
         width = width + inset + padding + imageWidth
         return CGSize(width: width, height: 34)
@@ -108,7 +121,7 @@ extension LostItemKeywordLeftAlignedCollectionView: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: LostItemKeywordLeftAlignedCollectionViewCell.identifier, for: indexPath) as? LostItemKeywordLeftAlignedCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(keyword: keywords[indexPath.row], action: action)
+        cell.configure(keyword: keywords[indexPath.row].keyword, action: action)
         return cell
     }
 }

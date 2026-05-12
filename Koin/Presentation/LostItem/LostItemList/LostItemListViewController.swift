@@ -182,13 +182,22 @@ extension LostItemListViewController {
     private func navigateToLostItemKeyword() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let subscribeKeywordUseCase = DefaultSubscribeLostItemKeywordUseCase(repository: lostItemRepository)
+        let fetchKeywordSuggestionUseCase = DefaultFetchLostItemKeywordSuggestionUseCase(repository: lostItemRepository)
+        let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
+        let unsubscribeKeywordUseCase = DefaultUnsubscribeLostItemKeywordUseCase(repository: lostItemRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let viewModel = LostItemKeywordViewModel(
             checkLoginUseCase: checkLoginUseCase,
-            fetchKeywordSuggestionUseCase: MockFetchLostItemKeywordSuggestionUseCase(),
-            fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase(),
-            fetchNotiListUseCase: fetchNotiListUseCase
+            subscribeKeywordUseCase: subscribeKeywordUseCase,
+            fetchKeywordSuggestionUseCase: fetchKeywordSuggestionUseCase,
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+            unsubscribeKeywordUseCase: unsubscribeKeywordUseCase,
+            fetchNotiListUseCase: fetchNotiListUseCase,
+            changeNotiUseCase: changeNotiUseCase
         )
         let viewController = LostItemKeywordViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

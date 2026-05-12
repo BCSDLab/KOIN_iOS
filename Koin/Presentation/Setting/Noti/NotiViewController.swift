@@ -346,10 +346,25 @@ extension NotiViewController {
     
     @objc private func moveManageKeywordVC() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationManageKeyword, .click, "공지사항 키워드 알림"))
-        let service = DefaultNoticeService()
-        let repository = DefaultNoticeListRepository(service: service)
-        let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: DefaultAddNotificationKeywordUseCase(noticeListRepository: repository), deleteNotificationKeywordUseCase: DefaultDeleteNotificationKeywordUseCase(noticeListRepository: repository), fetchNotificationKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository), fetchRecommendedKeywordUseCase: DefaultFetchRecommendedKeywordUseCase(noticeListRepository: repository), changeNotiUseCase: DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), fetchNotiListUseCase: DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
-        
+        let noticeListRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let ga4Repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+        let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let deleteNotificationKeywordUseCase = DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let fetchNotificationKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: ga4Repository)
+        let viewModel = ManageNoticeKeywordViewModel(
+            addNotificationKeywordUseCase: addNotificationKeywordUseCase,
+            deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase,
+            fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase,
+            fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase,
+            changeNotiUseCase: changeNotiUseCase,
+            fetchNotiListUseCase: fetchNotiListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -357,13 +372,22 @@ extension NotiViewController {
     @objc private func moveLostItemManageKeywordVC() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let subscribeKeywordUseCase = DefaultSubscribeLostItemKeywordUseCase(repository: lostItemRepository)
+        let fetchKeywordSuggestionUseCase = DefaultFetchLostItemKeywordSuggestionUseCase(repository: lostItemRepository)
+        let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
+        let unsubscribeKeywordUseCase = DefaultUnsubscribeLostItemKeywordUseCase(repository: lostItemRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let viewModel = LostItemKeywordViewModel(
             checkLoginUseCase: checkLoginUseCase,
-            fetchKeywordSuggestionUseCase: MockFetchLostItemKeywordSuggestionUseCase(),
-            fetchMyKeywordUseCase: MockFetchLostItemMyKeywordUseCase(),
-            fetchNotiListUseCase: fetchNotiListUseCase
+            subscribeKeywordUseCase: subscribeKeywordUseCase,
+            fetchKeywordSuggestionUseCase: fetchKeywordSuggestionUseCase,
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+            unsubscribeKeywordUseCase: unsubscribeKeywordUseCase,
+            fetchNotiListUseCase: fetchNotiListUseCase,
+            changeNotiUseCase: changeNotiUseCase
         )
         let viewController = LostItemKeywordViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

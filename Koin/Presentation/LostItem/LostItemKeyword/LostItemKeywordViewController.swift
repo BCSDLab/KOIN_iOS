@@ -80,7 +80,7 @@ extension LostItemKeywordViewController {
                 keywordSuggestionCollectionView.configure(keywords: keywords)
             case let .updateMyKeyword(keywords):
                 updateMyKeywordCountLabel(keywords.count)
-                myKeywordCollectionView.configure(keywords: keywords)
+                myKeywordCollectionView.configure(keywords: keywords.keywords)
             case let .updateSubscription(isOn):
                 notificationSwitch.isOn = isOn
             case let .updateCurrentCount(count):
@@ -93,6 +93,10 @@ extension LostItemKeywordViewController {
                 showToast(message: "키워드는 최대 10개까지 추가할 수 있습니다.", success: false)
             case .showToastKeywordLength:
                 showToast(message: "키워드는 2글자에서 10글자 사이여야 합니다.", success: false)
+            case .showToast(let message):
+                showToast(message: message)
+            case .removeMyKeyword(let id):
+                myKeywordCollectionView.remove(id: id)
             }
         }.store(in: &subscriptions)
         
@@ -108,12 +112,12 @@ extension LostItemKeywordViewController {
         }.store(in: &subscriptions)
         
         myKeywordCollectionView.didTapItemPublisher.sink { [weak self] keyword in
-            self?.inputSubject.send(.deleteKeyword(keyword))
-            self?.myKeywordCollectionView.remove(keyword: keyword)
+            guard let id = keyword.id else { return }
+            self?.inputSubject.send(.deleteKeyword(id))
         }.store(in: &subscriptions)
         
         keywordSuggestionCollectionView.didTapItemPublisher.sink { [weak self] keyword in
-            self?.inputSubject.send(.subscribeKeyword(keyword))
+            self?.inputSubject.send(.subscribeKeyword(keyword.keyword))
         }.store(in: &subscriptions)
     }
     

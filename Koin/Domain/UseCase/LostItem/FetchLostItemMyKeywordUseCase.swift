@@ -9,17 +9,18 @@ import Foundation
 import Combine
 
 protocol FetchLostItemMyKeywordUseCase {
-    func execute() -> AnyPublisher<[String], ErrorResponse>
+    func execute() -> AnyPublisher<LostItemKeywords, ErrorResponse>
 }
 
-final class MockFetchLostItemMyKeywordUseCase: FetchLostItemMyKeywordUseCase {
+final class DefaultFetchLostItemMyKeywordUseCase: FetchLostItemMyKeywordUseCase {
     
-    let keywords: [String] = [
-        "내꺼1", "내꺼2", "내거3"
-    ]
-    func execute() -> AnyPublisher<[String], ErrorResponse> {
-        return Just(keywords)
-            .setFailureType(to: ErrorResponse.self)
-            .eraseToAnyPublisher()
+    private let repository: LostItemRepository
+    
+    init(repository: LostItemRepository) {
+        self.repository = repository
+    }
+    
+    func execute() -> AnyPublisher<LostItemKeywords, ErrorResponse> {
+        return repository.fetchMyKeyword()
     }
 }
