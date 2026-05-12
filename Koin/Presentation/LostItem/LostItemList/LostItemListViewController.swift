@@ -189,13 +189,15 @@ extension LostItemListViewController {
         let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
         let unsubscribeKeywordUseCase = DefaultUnsubscribeLostItemKeywordUseCase(repository: lostItemRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let viewModel = LostItemKeywordViewModel(
             checkLoginUseCase: checkLoginUseCase,
             subscribeKeywordUseCase: subscribeKeywordUseCase,
             fetchKeywordSuggestionUseCase: fetchKeywordSuggestionUseCase,
             fetchMyKeywordUseCase: fetchMyKeywordUseCase,
             unsubscribeKeywordUseCase: unsubscribeKeywordUseCase,
-            fetchNotiListUseCase: fetchNotiListUseCase
+            fetchNotiListUseCase: fetchNotiListUseCase,
+            changeNotiUseCase: changeNotiUseCase
         )
         let viewController = LostItemKeywordViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

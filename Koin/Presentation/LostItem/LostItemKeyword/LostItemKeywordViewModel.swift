@@ -37,6 +37,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
     private let fetchMyKeywordUseCase: FetchLostItemMyKeywordUseCase
     private let unsubscribeKeywordUseCase: UnsubscribeLostItemKeywordUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
+    private let changeNotiUseCase: ChangeNotiUseCase
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -57,6 +58,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         fetchMyKeywordUseCase: FetchLostItemMyKeywordUseCase,
         unsubscribeKeywordUseCase: UnsubscribeLostItemKeywordUseCase,
         fetchNotiListUseCase: FetchNotiListUseCase,
+        changeNotiUseCase: ChangeNotiUseCase
     ) {
         self.checkLoginUseCase = checkLoginUseCase
         self.subscribeKeywordUseCase = subscribeKeywordUseCase
@@ -64,6 +66,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         self.fetchMyKeywordUseCase = fetchMyKeywordUseCase
         self.unsubscribeKeywordUseCase = unsubscribeKeywordUseCase
         self.fetchNotiListUseCase = fetchNotiListUseCase
+        self.changeNotiUseCase = changeNotiUseCase
     }
     
     // MARK: - Transform
@@ -181,17 +184,13 @@ extension LostItemKeywordViewModel {
             outputSubject.send(.showLoginModal)
             return
         }
-        fetchNotiListUseCase.execute().sink(
+        changeNotiUseCase.execute(method: isPermit ? .post : .delete, type: .lostItemKeyword).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
                     self?.outputSubject.send(.showToast(error.message))
                 }
-            }, receiveValue: { [weak self] agreement in
-                guard let agreement = agreement.subscribes?.first(where: { $0.type == .lostItemKeyword }) else {
-                    return
-                }
-                self?.outputSubject.send(.updateSubscription(isPermit: agreement.isPermit ?? false))
-            }
+            },
+            receiveValue: { _ in }
         ).store(in: &subscriptions)
     }
 }
