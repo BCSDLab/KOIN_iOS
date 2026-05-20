@@ -52,7 +52,7 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
         setupUI()
         bind()
         navigateButton.addTarget(self, action: #selector(navigateButtonTapped), for: .touchUpInside)
-        setupLottieObservers()
+        setupLottie()
         startLottieAnimation()
     }
     

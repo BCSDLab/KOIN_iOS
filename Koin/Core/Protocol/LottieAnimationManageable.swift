@@ -14,35 +14,17 @@ protocol LottieAnimationManageable: AnyObject {
 
     var lottieAnimationView: LottieAnimationView { get }
     
-    var subscriptions: Set<AnyCancellable> { get set }
-    
-    func setupLottieObservers()
+    func setupLottie()
     
     func startLottieAnimation()
-    
-    func stopLottieAnimation()
-    
-    func pauseLottieAnimation()
     
     func clearLottieAnimation()
 }
 
-extension LottieAnimationManageable where Self: UIViewController {
+extension LottieAnimationManageable {
     
-    func setupLottieObservers() {
-        // 앱이 백그라운드로 갈 때 애니메이션 일시 정지
-        NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
-            .sink { [weak self] _ in
-                self?.pauseLottieAnimation()
-            }
-            .store(in: &subscriptions)
-        
-        // 앱이 포그라운드로 돌아올 때 애니메이션 재시작
-        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-            .sink { [weak self] _ in
-                self?.startLottieAnimation()
-            }
-            .store(in: &subscriptions)
+    func setupLottie() {
+        lottieAnimationView.backgroundBehavior = .pauseAndRestore
     }
     
     func startLottieAnimation() {
@@ -50,16 +32,8 @@ extension LottieAnimationManageable where Self: UIViewController {
         lottieAnimationView.play()
     }
     
-    func stopLottieAnimation() {
-        lottieAnimationView.stop()
-    }
-    
-    func pauseLottieAnimation() {
-        lottieAnimationView.pause()
-    }
-    
     func clearLottieAnimation() {
-        stopLottieAnimation()
+        lottieAnimationView.stop()
         lottieAnimationView.animation = nil // 메모리 해제를 위한 nil 할당
     }
 }
