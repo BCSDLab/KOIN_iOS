@@ -64,7 +64,7 @@ final class ShopBenefitTableViewCell: UITableViewCell {
         self.onImageTapped = onImageTapped
     }
     
-    func configure(event: ShopEvent, animated: Bool = false) {
+    func configure(event: ShopEvent, animated: Bool = true) {
         self.isExpanded = event.isExpanded
         
         // 썸네일

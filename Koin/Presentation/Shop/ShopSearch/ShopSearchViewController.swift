@@ -162,15 +162,19 @@ extension ShopSearchViewController {
         let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: shopRepository)
         let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: shopRepository)
         let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
+        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-                                             fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-                                             fetchShopDataUseCase: fetchShopDataUseCase,
-                                             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                                             getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                             shopId: shopId,
-                                             shopName: shopName)
+        let viewModel = ShopSummaryViewModel(
+            fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
+            fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
+            fetchShopDataUseCase: fetchShopDataUseCase,
+            fetchShopEventListUseCase: fetchShopEventListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            shopId: shopId,
+            shopName: shopName
+        )
         let viewController = ShopSummaryViewController(viewModel: viewModel)
         viewController.title = shopName
         navigationController?.pushViewController(viewController, animated: true)
