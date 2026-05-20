@@ -7,10 +7,11 @@
 
 import UIKit
 import Combine
+import Lottie
 import SnapKit
 import Then
 
-final class ShopBenefitTableViewCell: UITableViewCell {
+final class ShopBenefitTableViewCell: UITableViewCell, LottieAnimationManageable {
     
     private var onCurrentPageChanged: ((Int)->Void)?
     private var onImageTapped: (([String], IndexPath)->Void)?
@@ -28,9 +29,13 @@ final class ShopBenefitTableViewCell: UITableViewCell {
 
     var cellSubscription: Set<AnyCancellable> = []
     private var subscription: Set<AnyCancellable> = []
+    
+    var lottieAnimationView: LottieAnimationView {
+        return emptyThumbnailLottieAnimationView
+    }
 
     // MARK: - UI Components
-    private let emptyThumbnailImageView = UIImageView(image: .appImage(asset: .bcsdSymbolLogo)) // TODO: Lottie로 바꿔야함
+    private let emptyThumbnailLottieAnimationView = LottieAnimationView()
     private let thumbnailImageView = UIImageView()
     
     private let titleLabel = UILabel()
@@ -50,9 +55,15 @@ final class ShopBenefitTableViewCell: UITableViewCell {
         configureView()
         selectionStyle = .none
         bind()
+        setupLottie()
+        startLottieAnimation()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        clearLottieAnimation()
     }
     
     // MARK: - Public
@@ -108,7 +119,7 @@ final class ShopBenefitTableViewCell: UITableViewCell {
             
             descriptionLabel.numberOfLines = isExpanded ? 0 : 2
             
-            emptyThumbnailImageView.alpha = (!isExpanded && shouldShowEmptyView) ? 1 : 0
+            emptyThumbnailLottieAnimationView.alpha = (!isExpanded && shouldShowEmptyView) ? 1 : 0
             thumbnailImageView.alpha = (!isExpanded && !shouldShowEmptyView) ? 1 : 0
             
             thumbnailImagesCollectionView.alpha = (isExpanded && !shouldShowEmptyView) ? 1 : 0
@@ -161,8 +172,12 @@ extension ShopBenefitTableViewCell {
             $0.contentMode = .scaleAspectFill
             $0.clipsToBounds = true
         }
-        emptyThumbnailImageView.do {
-            $0.contentMode = .scaleAspectFill
+        emptyThumbnailLottieAnimationView.do {
+            $0.animation = LottieAnimation.named("floatingLogo")
+            $0.loopMode = .loop
+            $0.animationSpeed = 1.0
+            $0.contentMode = .scaleAspectFit
+            $0.backgroundColor = .clear
         }
         titleLabel.do {
             $0.font = .appFont(.pretendardSemiBold, size: 15)
@@ -182,13 +197,13 @@ extension ShopBenefitTableViewCell {
     }
     
     private func setUpLayouts() {
-        [emptyThumbnailImageView, thumbnailImageView, titleLabel, openCloseView, descriptionLabel, dateLabel, emptyThumbnailView, thumbnailImagesCollectionView, thumbnailImagesPageControl, separatorView].forEach {
+        [emptyThumbnailLottieAnimationView, thumbnailImageView, titleLabel, openCloseView, descriptionLabel, dateLabel, emptyThumbnailView, thumbnailImagesCollectionView, thumbnailImagesPageControl, separatorView].forEach {
             contentView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        [emptyThumbnailImageView, thumbnailImageView, titleLabel, openCloseView, descriptionLabel, dateLabel, emptyThumbnailView, thumbnailImagesCollectionView, thumbnailImagesPageControl].forEach {
+        [emptyThumbnailLottieAnimationView, thumbnailImageView, titleLabel, openCloseView, descriptionLabel, dateLabel, emptyThumbnailView, thumbnailImagesCollectionView, thumbnailImagesPageControl].forEach {
             $0.snp.removeConstraints()
         }
         separatorView.snp.makeConstraints {
@@ -215,7 +230,7 @@ extension ShopBenefitTableViewCell {
                 $0.leading.equalToSuperview().offset(24)
                 $0.trailing.equalToSuperview().offset(-24)
             }
-            [thumbnailImageView, emptyThumbnailImageView, thumbnailImagesCollectionView, emptyThumbnailView].forEach {
+            [thumbnailImageView, emptyThumbnailLottieAnimationView, thumbnailImagesCollectionView, emptyThumbnailView].forEach {
                 $0.snp.makeConstraints {
                     $0.height.equalTo(220)
                     $0.top.equalTo(dateLabel.snp.bottom).offset(16)
@@ -232,7 +247,7 @@ extension ShopBenefitTableViewCell {
                 $0.bottom.equalToSuperview().offset(-16).priority(999)
             }
         case false:
-            [thumbnailImageView, emptyThumbnailImageView, thumbnailImagesCollectionView, emptyThumbnailView].forEach {
+            [thumbnailImageView, emptyThumbnailLottieAnimationView, thumbnailImagesCollectionView, emptyThumbnailView].forEach {
                 $0.snp.makeConstraints {
                     $0.size.equalTo(70)
                     $0.top.bottom.equalToSuperview().inset(17.5).priority(999)
