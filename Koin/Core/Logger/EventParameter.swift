@@ -163,6 +163,11 @@ enum EventParameter {
             case lostItemWriteLoginRequest = "lost_item_write_login_request"
             case lostItemStateChange = "lost_item_state_change"
             case lostItemFound = "lost_item_found"
+            case lostItemKeywordSetting = "lost_item_keyword_setting"
+            case lostItemKeywordAdd = "lost_item_keyword_add"
+            case lostItemKeywordRecommend = "lost_item_keyword_recommend"
+            case lostItemKeywordAlarm = "lost_item_keyword_alarm"
+            case lostItemKeywordRemove = "lost_item_keyword_remove"
             
             case lostItemWrite = "lost_item_write"
             case findUserWrite = "find_user_write"
