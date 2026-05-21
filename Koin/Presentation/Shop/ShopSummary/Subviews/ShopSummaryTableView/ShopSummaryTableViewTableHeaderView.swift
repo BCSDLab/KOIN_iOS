@@ -15,6 +15,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     let didSelectCellPublisher = PassthroughSubject<IndexPath, Never>()
     let shouldSetContentInsetPublisher = PassthroughSubject<Bool, Never>()
     let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
+    let benefitButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let phoneButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let didTapThumbnailPublisher = PassthroughSubject<IndexPath, Never>()
@@ -105,6 +106,9 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
                 self?.phoneButtonTappedPublisher.send()
             }
             .store(in: &subscriptions)
+        shopSummaryInfoView.benefitButtonTappedPublisher.sink { [weak self] in
+            self?.benefitButtonTappedPublisher.send()
+        }.store(in: &subscriptions)
     }
     
     // MARK: - update
@@ -142,7 +146,6 @@ extension ShopSummaryTableViewTableHeaderView {
         payBank: Bool,
         payCard: Bool,
         maxDeliveryTip: Int,
-        description: String,
         phonenumber: String,
     ) {
         shopSummaryInfoView.configure2(
@@ -150,12 +153,16 @@ extension ShopSummaryTableViewTableHeaderView {
             payCard: payCard,
             payBank: payBank,
             maxDelieveryTip: maxDeliveryTip,
-            phonenumber: phonenumber,
-            description: description)
+            phonenumber: phonenumber
+        )
     }
     
     func configure3(orderShopMenusGroups: OrderShopMenusGroups) {
         menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
+    }
+    
+    func configure(event: String) {
+        shopSummaryInfoView.configure(event: event)
     }
 }
 

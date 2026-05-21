@@ -15,6 +15,11 @@ enum LostItemAPI {
     case deleteLostItem(Int)
     case updateLostItem((Int, UpdateLostItemRequest))
     case fetchLostItemStats
+    
+    case subscribeKeyword(SubscribeKeywordRequest)
+    case fetchKeywordSuggestion
+    case fetchMyKeyword
+    case unsubscribeKeyword(Int)
 }
 
 extension LostItemAPI: Router, URLRequestConvertible {
@@ -30,6 +35,11 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .deleteLostItem(let id): return "/articles/lost-item/\(id)"
         case .updateLostItem((let id, _)): return "/articles/lost-item/\(id)"
         case .fetchLostItemStats: return "/articles/lost-item/stats"
+            
+        case .subscribeKeyword: return "/articles/keyword?type=LOST_ITEM"
+        case .fetchKeywordSuggestion: return "/articles/keyword/suggestions?type=LOST_ITEM"
+        case .fetchMyKeyword: return "/articles/keyword/me?type=LOST_ITEM"
+        case .unsubscribeKeyword(let id): return "/articles/keyword/\(id)"
         }
     }
     
@@ -41,6 +51,11 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .deleteLostItem: return .delete
         case .updateLostItem: return .put
         case .fetchLostItemStats: return .get
+            
+        case .subscribeKeyword: return .post
+        case .fetchKeywordSuggestion: return .get
+        case .fetchMyKeyword: return .get
+        case .unsubscribeKeyword: return .delete
         }
     }
     
@@ -56,6 +71,11 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .deleteLostItem: return nil
         case .updateLostItem((_, let request)): return try? request.toDictionary()
         case .fetchLostItemStats: return nil
+            
+        case .subscribeKeyword(let request):
+            return try? request.toDictionary()
+        case .fetchKeywordSuggestion, .fetchMyKeyword, .unsubscribeKeyword:
+            return nil
         }
     }
     
@@ -67,6 +87,11 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .deleteLostItem: return URLEncoding.default
         case .updateLostItem: return JSONEncoding.default
         case .fetchLostItemStats: return nil
+            
+        case .subscribeKeyword:
+            return JSONEncoding.default
+        case .fetchKeywordSuggestion, .fetchMyKeyword, .unsubscribeKeyword:
+            return nil
         }
     }
 }

@@ -193,6 +193,9 @@ enum ImageAsset: String {
     
     // MARK: - LostItem
     case lostItem
+    case lostItemGear
+    case lostItemAdd
+    case lostItemDelete
     
     // MARK: - Notice
     case noticeLoginToolTip
@@ -231,6 +234,7 @@ enum ImageAsset: String {
     case shop
     case shopBenefit
     case shopButton
+    case shopOpenCloseChevron
     case shoppingCart
     case shoppingCartLarge
     case shoppingCartShadowOval

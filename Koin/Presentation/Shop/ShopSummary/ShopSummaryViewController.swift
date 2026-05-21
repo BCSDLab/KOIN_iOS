@@ -130,18 +130,19 @@ extension ShopSummaryViewController {
                     reviewCount: reviewCount
                 )
                 break
-            case let .update2(delivery, payBank, payCard, maxDeliveryTip, description, phonenumber):
+            case let .update2(delivery, payBank, payCard, maxDeliveryTip, phonenumber):
                 self.tableHeaderView.configure2(
                     delivery: delivery,
                     payBank: payBank,
                     payCard: payCard,
                     maxDeliveryTip: maxDeliveryTip,
-                    description: description,
                     phonenumber: phonenumber)
             case let .update3(menusGroups, menus):
                 self.tableHeaderView.configure3(orderShopMenusGroups: menusGroups)
                 self.menuGroupNameCollectionViewSticky.configure(menuGroup: menusGroups.menuGroups)
                 self.menuGroupTableView.configure(menus)
+            case let .updateShopEvent(event):
+                self.tableHeaderView.configure(event: event ?? "아직 이벤트가 없어요.")
             }
         }
         .store(in: &subscriptions)
@@ -195,6 +196,11 @@ extension ShopSummaryViewController {
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, self.viewModel.shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
         }
         .store(in: &subscriptions)
+        
+        tableHeaderView.benefitButtonTappedPublisher.sink { [weak self] in
+            guard let self else { return }
+            navigateToShopBenefit()
+        }.store(in: &subscriptions)
         
         // MARK: - GroupNameCollectionView
         menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
@@ -320,6 +326,14 @@ extension ShopSummaryViewController {
         reviewListViewController.title = "리뷰"
         inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, viewModel.shopName))
         navigationController?.pushViewController(reviewListViewController, animated: true)
+    }
+    
+    private func navigateToShopBenefit() {
+        let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
+        let viewModel = ShopBenefitViewModel(fetchShopEventListUseCase: fetchShopEventListUseCase, shopId: viewModel.shopId)
+        let viewController = ShopBenefitViewController(viewModel: viewModel, title: title ?? "")
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

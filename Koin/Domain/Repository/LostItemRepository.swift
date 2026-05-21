@@ -15,4 +15,9 @@ protocol LostItemRepository {
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemData, ErrorResponse>
     func fetchLostItemStats() -> AnyPublisher<LostItemStats, ErrorResponse>
+    
+    func subscribeKeyword(requestModel: SubscribeKeywordRequest) -> AnyPublisher<LostItemKeyword, ErrorResponse>
+    func fetchKeywordSuggestion() -> AnyPublisher<[String], ErrorResponse>
+    func fetchMyKeyword() -> AnyPublisher<LostItemKeywords, ErrorResponse>
+    func unsubscribeKeyword(id: Int) -> AnyPublisher<Void, ErrorResponse>
 }

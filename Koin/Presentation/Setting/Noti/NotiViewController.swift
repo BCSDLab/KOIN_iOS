@@ -45,6 +45,11 @@ final class NotiViewController: UIViewController {
         let view = UIView()
         return view
     }()
+
+    private let lostItemKeywordWrappedView: UIView = {
+        let view = UIView()
+        return view
+    }()
     
     private let chatWrappedView = UIView().then { _ in
     }
@@ -141,6 +146,24 @@ final class NotiViewController: UIViewController {
     }()
     
     private let keywordNotiChevronImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage.appImage(asset: .chevronRight)
+        return imageView
+    }()
+
+    private let lostItemKeywordNotiLabel: UILabel = {
+        let label = UILabel()
+        label.text = "분실물 키워드 알림"
+        return label
+    }()
+
+    private let lostItemKeywordNotiDescriptionLabel: UILabel = {
+        let label = UILabel()
+        label.text = "키워드가 포함된 분실물 게시글의 알림을 받습니다."
+        return label
+    }()
+
+    private let lostItemKeywordNotiChevronImage: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage.appImage(asset: .chevronRight)
         return imageView
@@ -289,6 +312,10 @@ final class NotiViewController: UIViewController {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(moveManageKeywordVC))
         noticeKeywordWrappedView.isUserInteractionEnabled = true
         noticeKeywordWrappedView.addGestureRecognizer(tapGesture)
+
+        let lostItemTapGesture = UITapGestureRecognizer(target: self, action: #selector(moveLostItemManageKeywordVC))
+        lostItemKeywordWrappedView.isUserInteractionEnabled = true
+        lostItemKeywordWrappedView.addGestureRecognizer(lostItemTapGesture)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -319,11 +346,53 @@ extension NotiViewController {
     
     @objc private func moveManageKeywordVC() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationManageKeyword, .click, "공지사항 키워드 알림"))
-        let service = DefaultNoticeService()
-        let repository = DefaultNoticeListRepository(service: service)
-        let viewModel = ManageNoticeKeywordViewModel(addNotificationKeywordUseCase: DefaultAddNotificationKeywordUseCase(noticeListRepository: repository), deleteNotificationKeywordUseCase: DefaultDeleteNotificationKeywordUseCase(noticeListRepository: repository), fetchNotificationKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository), fetchRecommendedKeywordUseCase: DefaultFetchRecommendedKeywordUseCase(noticeListRepository: repository), changeNotiUseCase: DefaultChangeNotiUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), fetchNotiListUseCase: DefaultFetchNotiListUseCase(notiRepository: DefaultNotiRepository(service: DefaultNotiService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())))
-        
+        let noticeListRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let ga4Repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+        let addNotificationKeywordUseCase = DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let deleteNotificationKeywordUseCase = DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let fetchNotificationKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let fetchRecommendedKeywordUseCase = DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: ga4Repository)
+        let viewModel = ManageNoticeKeywordViewModel(
+            addNotificationKeywordUseCase: addNotificationKeywordUseCase,
+            deleteNotificationKeywordUseCase: deleteNotificationKeywordUseCase,
+            fetchNotificationKeywordUseCase: fetchNotificationKeywordUseCase,
+            fetchRecommendedKeywordUseCase: fetchRecommendedKeywordUseCase,
+            changeNotiUseCase: changeNotiUseCase,
+            fetchNotiListUseCase: fetchNotiListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = ManageNoticeKeywordViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+
+    @objc private func moveLostItemManageKeywordVC() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+        let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let subscribeKeywordUseCase = DefaultSubscribeLostItemKeywordUseCase(repository: lostItemRepository)
+        let fetchKeywordSuggestionUseCase = DefaultFetchLostItemKeywordSuggestionUseCase(repository: lostItemRepository)
+        let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
+        let unsubscribeKeywordUseCase = DefaultUnsubscribeLostItemKeywordUseCase(repository: lostItemRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
+        let viewModel = LostItemKeywordViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            subscribeKeywordUseCase: subscribeKeywordUseCase,
+            fetchKeywordSuggestionUseCase: fetchKeywordSuggestionUseCase,
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+            unsubscribeKeywordUseCase: unsubscribeKeywordUseCase,
+            fetchNotiListUseCase: fetchNotiListUseCase,
+            changeNotiUseCase: changeNotiUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let viewController = LostItemKeywordViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -421,7 +490,7 @@ extension NotiViewController {
     private func setUpLayOuts() {
         
         view.addSubview(scrollView)
-        [diningGuideLabel, soldOutWrapView, noticeKeywordWrappedView, diningImageUploadWrapView, shopGuideLabel, eventWrapView, reviewWrapView, noticeGuideLabel, chatWrappedView, callVanGuideLabel, callVanWrapView].forEach {
+        [diningGuideLabel, soldOutWrapView, noticeKeywordWrappedView, lostItemKeywordWrappedView, diningImageUploadWrapView, shopGuideLabel, eventWrapView, reviewWrapView, noticeGuideLabel, chatWrappedView, callVanGuideLabel, callVanWrapView].forEach {
             scrollView.addSubview($0)
         }
         mealViews.forEach {
@@ -432,6 +501,9 @@ extension NotiViewController {
         }
         [keywordNotiLabel, keywordNotiDescriptionLabel, keywordNotiChevronImage].forEach {
             noticeKeywordWrappedView.addSubview($0)
+        }
+        [lostItemKeywordNotiLabel, lostItemKeywordNotiDescriptionLabel, lostItemKeywordNotiChevronImage].forEach {
+            lostItemKeywordWrappedView.addSubview($0)
         }
         [diningImageUploadNotiLabel, diningImageUploadSwitch, diningImageUploadDescriptionLabel].forEach {
             diningImageUploadWrapView.addSubview($0)
@@ -528,7 +600,7 @@ extension NotiViewController {
             make.height.equalTo(33)
         }
         chatWrappedView.snp.makeConstraints { make in
-            make.top.equalTo(noticeKeywordWrappedView.snp.bottom)
+            make.top.equalTo(lostItemKeywordWrappedView.snp.bottom)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(83)
         }
@@ -552,6 +624,12 @@ extension NotiViewController {
             make.top.equalTo(noticeGuideLabel.snp.bottom)
             make.height.equalTo(83)
         }
+
+        lostItemKeywordWrappedView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(noticeKeywordWrappedView.snp.bottom)
+            make.height.equalTo(83)
+        }
         
         keywordNotiLabel.snp.makeConstraints { make in
             make.leading.equalTo(24)
@@ -566,6 +644,25 @@ extension NotiViewController {
         }
         
         keywordNotiChevronImage.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(21)
+            make.top.equalToSuperview().inset(15)
+            make.width.equalTo(16)
+            make.height.equalTo(20)
+        }
+
+        lostItemKeywordNotiLabel.snp.makeConstraints { make in
+            make.leading.equalTo(24)
+            make.height.equalTo(26)
+            make.top.equalTo(16)
+        }
+
+        lostItemKeywordNotiDescriptionLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().inset(24)
+            make.top.equalTo(lostItemKeywordNotiLabel.snp.bottom).offset(8)
+            make.height.equalTo(17)
+        }
+
+        lostItemKeywordNotiChevronImage.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(21)
             make.top.equalToSuperview().inset(15)
             make.width.equalTo(16)
@@ -660,19 +757,19 @@ extension NotiViewController {
             label.contentMode = .center
         }
         
-        [soldOutNotiLabel, diningImageUploadNotiLabel, eventNotiLabel, keywordNotiLabel, reviewNotiLabel, chatNotiLabel, callVanNotiLabel].forEach { label in
+        [soldOutNotiLabel, diningImageUploadNotiLabel, eventNotiLabel, keywordNotiLabel, lostItemKeywordNotiLabel, reviewNotiLabel, chatNotiLabel, callVanNotiLabel].forEach { label in
             label.textColor = UIColor.appColor(.neutral800)
             label.contentMode = .center
             label.font = UIFont.appFont(.pretendardMedium, size: 16)
         }
         
-        [soldOutDescriptionLabel, diningImageUploadDescriptionLabel, eventDescriptionLabel, keywordNotiDescriptionLabel, reviewDescriptionLabel, chatDescriptionLabel, callVanDescriptionLabel].forEach { label in
+        [soldOutDescriptionLabel, diningImageUploadDescriptionLabel, eventDescriptionLabel, keywordNotiDescriptionLabel, lostItemKeywordNotiDescriptionLabel, reviewDescriptionLabel, chatDescriptionLabel, callVanDescriptionLabel].forEach { label in
             label.textColor = UIColor.appColor(.neutral500)
             label.contentMode = .center
             label.font = UIFont.appFont(.pretendardRegular, size: 13)
         }
         
-        [soldOutWrapView, diningImageUploadWrapView, eventWrapView, noticeKeywordWrappedView, reviewWrapView, chatWrappedView, callVanWrapView].forEach { view in
+        [soldOutWrapView, diningImageUploadWrapView, eventWrapView, noticeKeywordWrappedView, lostItemKeywordWrappedView, reviewWrapView, chatWrappedView, callVanWrapView].forEach { view in
             view.backgroundColor = .systemBackground
             view.layer.borderWidth = 0.5
             view.layer.borderColor = UIColor.appColor(.neutral100).cgColor

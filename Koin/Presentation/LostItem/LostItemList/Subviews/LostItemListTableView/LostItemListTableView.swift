@@ -32,22 +32,17 @@ final class LostItemListTableView: UITableView {
     func update(_ lostItemListData: [LostItemListData]) {
         isWaiting = false
         self.lostItemListData = lostItemListData
-        reloadData()
+        reloadSections([0], with: .fade)
     }
     func append(_ lostItemListData: [LostItemListData]) {
         isWaiting = false
         self.lostItemListData.append(contentsOf: lostItemListData)
         reloadData()
     }
-    func reset() {
-        isWaiting = true
-        lostItemListData = []
-        reloadData()
-    }
     
     func appendAtFirst(_ newData: LostItemListData) {
         lostItemListData.insert(newData, at: 0)
-        reloadData()
+        reloadSections([0], with: .automatic)
     }
     
     func updateState(foundDataId id: Int) {

@@ -30,6 +30,21 @@ struct EventDto: Decodable {
     }
     
     func toDomain() -> ShopEvent {
-        return .init(shopId: shopId, shopName: shopName, title: title, content: content, thumbnailImages: thumbnailImages, startDate: startDate, endDate: endDate)
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+        let outputFormatter = DateFormatter()
+        outputFormatter.dateFormat = "yyyy.MM.dd"
+        
+        var startDateString: String = ""
+        var endDateString: String = ""
+        
+        if let startDate = inputFormatter.date(from: startDate),
+           let endDate = inputFormatter.date(from: endDate)
+        {
+            startDateString = outputFormatter.string(from: startDate)
+            endDateString = outputFormatter.string(from: endDate)
+        }
+        
+        return .init(shopId: shopId, shopName: shopName, title: title, content: content, thumbnailImages: thumbnailImages, startDate: startDateString, endDate: endDateString)
     }
 }

@@ -47,4 +47,26 @@ final class DefaultLostItemRepository: LostItemRepository {
             .map { $0.toDomain() }
             .eraseToAnyPublisher()
     }
+    
+    func subscribeKeyword(requestModel: SubscribeKeywordRequest) -> AnyPublisher<LostItemKeyword, ErrorResponse> {
+        return service.subscribeKeyword(requestModel: requestModel)
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchKeywordSuggestion() -> AnyPublisher<[String], ErrorResponse> {
+        return service.fetchKeywordSuggestion()
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
+    }
+    
+    func fetchMyKeyword() -> AnyPublisher<LostItemKeywords, ErrorResponse> {
+        return service.fetchMyKeyword()
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
+    }
+    
+    func unsubscribeKeyword(id: Int) -> AnyPublisher<Void, ErrorResponse> {
+        return service.unsubscribeKeyword(id: id)
+    }
 }

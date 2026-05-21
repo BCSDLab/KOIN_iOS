@@ -52,7 +52,7 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
         setupUI()
         bind()
         navigateButton.addTarget(self, action: #selector(navigateButtonTapped), for: .touchUpInside)
-        setupLottieObservers()
+        setupLottie()
         startLottieAnimation()
     }
     
@@ -66,6 +66,8 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
 
 extension ForceModifyUserViewController {
     @objc private func navigateButtonTapped() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())        
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
@@ -75,11 +77,12 @@ extension ForceModifyUserViewController {
         let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let dateProvider = DefaultDateProvider()
-        let checkLoginUseCase = DefaultCheckLoginUseCase(
-            userRepository: DefaultUserRepository(service: DefaultUserService())
-        )
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
         let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
+        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+            userRepository: userRepository,
+            notiRepository: notiRepository)
         let homeViewModel = HomeViewModel(
             fetchDiningListUseCase: fetchDiningListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
@@ -91,7 +94,8 @@ extension ForceModifyUserViewController {
             fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
             checkLoginUseCase: checkLoginUseCase,
             fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
-            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
+            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
         )
         let homeViewController = HomeViewController(viewModel: homeViewModel)
         

@@ -222,10 +222,12 @@ extension LostItemDataViewController {
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
             let viewModel = LostItemListViewModel(
                 checkLoginUseCase: checkLoginUseCase,
                 fetchLostItemListUseCase: fetchLostItemItemUseCase,
-                logAnalyticsEventUseCase: logAnalyticsEventUseCase
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                fetchMyKeywordUseCase: fetchMyKeywordUseCase
             )
             let lostItemListViewController = LostItemListViewController(viewModel: viewModel)
             navigationController?.setViewControllers([homeViewController, lostItemListViewController], animated: true)
@@ -269,8 +271,6 @@ extension LostItemDataViewController {
     }
     
     private func navigateToChat(_ createChatRoomResponse: CreateChatRoomResponse) {
-        guard let type = viewModel.type else { return }
-        
         let chatViewModel = ChatViewModel(
             articleId: createChatRoomResponse.articleId,
             chatRoomId: createChatRoomResponse.chatRoomId,
@@ -287,13 +287,24 @@ extension LostItemDataViewController {
         let onRightButtonTapped: ()->Void = { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemMessageLoginRequest, .click, "로그인하기"))
             
-            let repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
             let userRepository = DefaultUserRepository(service: DefaultUserService())
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: repository)
+            let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+            let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
             let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
-            let viewModel = LoginViewModel(loginUseCase: loginUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-            let viewController = LoginViewController(viewModel: viewModel)
-            self?.navigationController?.pushViewController(viewController, animated: true)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
+            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
+            let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+                userRepository: userRepository,
+                notiRepository: notiRepository
+            )
+            let viewModel = LoginViewModel(
+                loginUseCase: loginUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                fetchUserDataUseCase: fetchUserDataUseCase,
+                sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
+            )
+            let loginViewController = LoginViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
         let modalViewController = ModalViewControllerB(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 대화를 시작하세요!", titleColor: .appColor(.neutral600), subTitleColor: .appColor(.gray))
         modalViewController.modalTransitionStyle = .crossDissolve
@@ -303,13 +314,24 @@ extension LostItemDataViewController {
     
     private func showLoginToReportModal() {
         let onRightButtonTapped: ()->Void = { [weak self] in
-            let repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
             let userRepository = DefaultUserRepository(service: DefaultUserService())
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: repository)
+            let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+            let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
             let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
-            let viewModel = LoginViewModel(loginUseCase: loginUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-            let viewController = LoginViewController(viewModel: viewModel)
-            self?.navigationController?.pushViewController(viewController, animated: true)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
+            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
+            let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+                userRepository: userRepository,
+                notiRepository: notiRepository
+            )
+            let viewModel = LoginViewModel(
+                loginUseCase: loginUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                fetchUserDataUseCase: fetchUserDataUseCase,
+                sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
+            )
+            let loginViewController = LoginViewController(viewModel: viewModel)
+            self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
         let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 신고하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: .appColor(.neutral600), subTitleColor: .appColor(.gray))
         modalViewController.modalTransitionStyle = .crossDissolve
