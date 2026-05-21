@@ -111,7 +111,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         configureView()
         bind()
         setAddTarget()
-        setupLottieObservers()
+        setupLottie()
     }
     
     override func viewWillAppear(_ animated: Bool) {

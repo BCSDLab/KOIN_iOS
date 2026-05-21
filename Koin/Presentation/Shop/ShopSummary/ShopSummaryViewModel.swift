@@ -21,8 +21,9 @@ final class ShopSummaryViewModel {
     // MARK: - Output
     enum Output {
         case update1(images: [OrderImage], name: String, rating: Double, reviewCount: Int)
-        case update2(delivery: Bool, payBank: Bool, payCard: Bool, maxDeliveryTip: Int = 0, description: String, phone: String)
+        case update2(delivery: Bool, payBank: Bool, payCard: Bool, maxDeliveryTip: Int = 0, phone: String)
         case update3(menusGroups: OrderShopMenusGroups, menus: [OrderShopMenus])
+        case updateShopEvent(event: String?)
     }
     
     // MARK: - Properties
@@ -37,6 +38,7 @@ final class ShopSummaryViewModel {
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
     private let fetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMenusAndGroupsFromShopUseCase
     private let fetchShopDataUseCase: FetchShopDataUseCase
+    private let fetchShopEventListUseCase: FetchShopEventListUseCase
     
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
@@ -45,6 +47,7 @@ final class ShopSummaryViewModel {
     init(fetchOrderShopSummaryFromShopUseCase: DefaultFetchOrderShopSummaryFromShopUseCase,
          fetchOrderShopMenusAndGroupsFromShopUseCase: DefaultFetchOrderShopMenusAndGroupsFromShopUseCase,
          fetchShopDataUseCase: DefaultFetchShopDataUseCase,
+         fetchShopEventListUseCase: FetchShopEventListUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int,
@@ -53,6 +56,7 @@ final class ShopSummaryViewModel {
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
         self.fetchOrderShopMenusAndGroupsFromShopUseCase = fetchOrderShopMenusAndGroupsFromShopUseCase
         self.fetchShopDataUseCase = fetchShopDataUseCase
+        self.fetchShopEventListUseCase = fetchShopEventListUseCase
         self.shopId = shopId
         self.shopName = shopName
         self.backCategoryName = backCategoryName
@@ -69,7 +73,7 @@ final class ShopSummaryViewModel {
                 self.fetchShopSummary(shopId: shopId)
                 self.fetchShopMenusAndGroups(shopId: shopId)
                 self.fetchIsAvailable(shopId: shopId)
-                
+                self.fetchShopEvenet(shopId: shopId)
             case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
                 
@@ -123,8 +127,17 @@ extension ShopSummaryViewModel {
                     payBank: $0.payBank,
                     payCard: $0.payCard,
                     maxDeliveryTip: $0.deliveryPrice,
-                    description: $0.description,
                     phone: $0.phone))
+            }
+        ).store(in: &subscriptions)
+    }
+    
+    private func fetchShopEvenet(shopId: Int) {
+        fetchShopEventListUseCase.execute(shopId: shopId).sink(
+            receiveCompletion: { _ in },
+            receiveValue: { [weak self] events in
+                let event = events.first?.title
+                self?.outputSubject.send(.updateShopEvent(event: event))
             }
         ).store(in: &subscriptions)
     }

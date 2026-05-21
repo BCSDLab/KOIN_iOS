@@ -234,6 +234,7 @@ enum ImageAsset: String {
     case shop
     case shopBenefit
     case shopButton
+    case shopOpenCloseChevron
     case shoppingCart
     case shoppingCartLarge
     case shoppingCartShadowOval

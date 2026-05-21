@@ -12,6 +12,7 @@ final class ShopSummaryInfoView: UIView {
     
     // MARK: - Properties
     let navigateToShopInfoPublisher = PassthroughSubject<ShopDetailTableView.HighlightableCell, Never>()
+    let benefitButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let phoneButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
@@ -100,8 +101,7 @@ final class ShopSummaryInfoView: UIView {
         minOrderAmount: Int = 0,
         minDeliveryTip: Int = 0,
         maxDelieveryTip: Int,
-        phonenumber: String,
-        description: String
+        phonenumber: String
     )
     {
         isDeliveryAvailableLabel.isHidden = !isDelieveryAvailable ? true : false
@@ -112,7 +112,10 @@ final class ShopSummaryInfoView: UIView {
                                                 minDeliveryTip: minDeliveryTip,
                                                 maxDelieveryTip: maxDelieveryTip)
         phoneButton.configure(phonenumber: phonenumber)
-        introductionButton.configure(introduction: description)
+    }
+    
+    func configure(event: String) {
+        introductionButton.configure(introduction: event)
     }
     
     private func setAddTarget() {
@@ -212,7 +215,7 @@ extension ShopSummaryInfoView {
         navigateToShopInfoPublisher.send(.deliveryTips)
     }
     @objc private func introductionButtonTapped() {
-        navigateToShopInfoPublisher.send(.description)
+        benefitButtonTappedPublisher.send()
     }
     @objc private func phoneButtonTapped() {
         phoneButtonTappedPublisher.send()
