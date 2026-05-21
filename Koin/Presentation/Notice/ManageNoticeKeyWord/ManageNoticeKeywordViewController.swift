@@ -167,8 +167,23 @@ final class ManageNoticeKeywordViewController: UIViewController {
         }.store(in: &subscriptions)
         
         keywordLoginModalViewController.rightButtonPublisher.sink { [weak self] in
-            let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
-            loginViewController.title = "로그인"
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+            let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+            let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
+            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
+            let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+                userRepository: userRepository,
+                notiRepository: notiRepository
+            )
+            let viewModel = LoginViewModel(
+                loginUseCase: loginUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                fetchUserDataUseCase: fetchUserDataUseCase,
+                sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
+            )
+            let loginViewController = LoginViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPrompt, .click, "키워드 알림 팝업"))
         }.store(in: &subscriptions)

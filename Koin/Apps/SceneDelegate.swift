@@ -175,6 +175,8 @@ extension SceneDelegate {
 extension SceneDelegate {
     
     private func makeHomeViewController() -> UIViewController {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
@@ -184,9 +186,12 @@ extension SceneDelegate {
         let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let dateProvider = DefaultDateProvider()
-        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
         let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
+        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+            userRepository: userRepository,
+            notiRepository: notiRepository)
         let homeViewModel = HomeViewModel(
             fetchDiningListUseCase: fetchDiningListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
@@ -198,7 +203,8 @@ extension SceneDelegate {
             fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
             checkLoginUseCase: checkLoginUseCase,
             fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
-            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
+            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
         )
         let viewController = HomeViewController(viewModel: homeViewModel)
         return viewController

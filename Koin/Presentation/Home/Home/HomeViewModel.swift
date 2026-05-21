@@ -25,6 +25,7 @@ final class HomeViewModel: ViewModelProtocol {
         case checkLogin
         case checkRestriction
         case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
+        case sendDeviceTokenIfNeeded
     }
     
     // MARK: - Output
@@ -57,6 +58,7 @@ final class HomeViewModel: ViewModelProtocol {
     private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
     private let checkLoginUseCase: CheckLoginUseCase
+    private let sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var moved = false
     private var shopCategories: [ShopCategory] = []
@@ -73,7 +75,8 @@ final class HomeViewModel: ViewModelProtocol {
          fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase,
          checkLoginUseCase: CheckLoginUseCase,
          fetchLostItemStatsUseCase: FetchLostItemStatsUseCase,
-         fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
+         fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase,
+         sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
     ) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
@@ -86,37 +89,41 @@ final class HomeViewModel: ViewModelProtocol {
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemStatsUseCase = fetchLostItemStatsUseCase
         self.fetchCallVanRestrictionUseCase = fetchCallVanRestrictionUseCase
+        self.sendDeviceTokenIfNeededUseCase = sendDeviceTokenIfNeededUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
+            guard let self else { return }
             switch input {
             case .viewDidLoad:
-                self?.getShopCategory()
-                self?.checkVersion()
-                self?.fetchUserData()
+                getShopCategory()
+                checkVersion()
+                fetchUserData()
             case let .categorySelected(place):
-                self?.getDiningInformation(diningPlace: place)
+                getDiningInformation(diningPlace: place)
             case .getDiningInfo:
-                self?.getDiningInformation()
+                getDiningInformation()
             case .getLostItemStat:
-                self?.getLostItemStat()
+                getLostItemStat()
             case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
+                makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
-                self?.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+                getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getNoticeBanner(date):
-                self?.getNoticeBanners(date: date)
+                getNoticeBanners(date: date)
             case .fetchBanner:
-                self?.fetchBanner()
+                fetchBanner()
             case .checkLogin:
-                self?.checkLogin()
+                checkLogin()
             case let .logEventDirect(name, label, value, category):
-                self?.logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
+                logAnalyticsEventUseCase.logEvent(name: name, label: label, value: value, category: category)
             case let .logSessionEvent(label, category, value, sessionId):
-                self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
+                makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
             case .checkRestriction:
-                self?.checkRestriction()
+                checkRestriction()
+            case .sendDeviceTokenIfNeeded:
+                sendDeviceTokenIfNeeded()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -261,5 +268,9 @@ extension HomeViewModel {
     
     private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
         logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
+    }
+    
+    private func sendDeviceTokenIfNeeded() {
+        sendDeviceTokenIfNeededUseCase.execute()
     }
 }
