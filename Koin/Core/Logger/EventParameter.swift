@@ -166,7 +166,7 @@ enum EventParameter {
             case lostItemKeywordSetting = "lost_item_keyword_setting"
             case lostItemKeywordAdd = "lost_item_keyword_add"
             case lostItemKeywordRecommend = "lost_item_keyword_recommend"
-            case lostItemKeywordAlarm = "lost_item_keyword_Alarm"
+            case lostItemKeywordAlarm = "lost_item_keyword_alarm"
             case lostItemKeywordRemove = "lost_item_keyword_remove"
             
             case lostItemWrite = "lost_item_write"
