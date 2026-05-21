@@ -66,11 +66,29 @@ final class ChangePasswordSuccessViewController: UIViewController {
 extension ChangePasswordSuccessViewController {
     @objc private func goLoginButtonTapped() {
         let homeViewController = makeHomeViewController()
-        let loginViewController = LoginViewController(viewModel: LoginViewModel(loginUseCase: DefaultLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
+        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+            userRepository: userRepository,
+            notiRepository: notiRepository
+        )
+        let viewModel = LoginViewModel(
+            loginUseCase: loginUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchUserDataUseCase: fetchUserDataUseCase,
+            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
+        )
+        let loginViewController = LoginViewController(viewModel: viewModel)
         let viewControllers = [homeViewController, loginViewController]
         navigationController?.setViewControllers(viewControllers, animated: true)
     }
     private func makeHomeViewController() -> UIViewController {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
@@ -80,11 +98,12 @@ extension ChangePasswordSuccessViewController {
         let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let dateProvider = DefaultDateProvider()
-        let checkLoginUseCase = DefaultCheckLoginUseCase(
-            userRepository: DefaultUserRepository(service: DefaultUserService())
-        )
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
         let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
+        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+            userRepository: userRepository,
+            notiRepository: notiRepository)
         let homeViewModel = HomeViewModel(
             fetchDiningListUseCase: fetchDiningListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
@@ -96,7 +115,8 @@ extension ChangePasswordSuccessViewController {
             fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
             checkLoginUseCase: checkLoginUseCase,
             fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
-            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase
+            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
+            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
         )
         let viewController = HomeViewController(viewModel: homeViewModel)
         return viewController

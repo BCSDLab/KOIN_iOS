@@ -213,15 +213,23 @@ extension LostItemListViewController {
         }
         let onRightButtonTapped: ()->Void = { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemWriteLoginRequest, .click, "로그인하기"))
-            
-            let userService = DefaultUserService()
-            let logAnalyticsService = GA4AnalyticsService()
-            let userRepository = DefaultUserRepository(service: userService)
-            let analyticsRepository = GA4AnalyticsRepository(service: logAnalyticsService)
+            let userRepository = DefaultUserRepository(service: DefaultUserService())
+            let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+            let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
             let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
-            let loginViewModel = LoginViewModel(loginUseCase: loginUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-            let loginViewController = LoginViewController(viewModel: loginViewModel)
+            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
+            let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+                userRepository: userRepository,
+                notiRepository: notiRepository
+            )
+            let viewModel = LoginViewModel(
+                loginUseCase: loginUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                fetchUserDataUseCase: fetchUserDataUseCase,
+                sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
+            )
+            let loginViewController = LoginViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
         let loginModalViewController = ModalViewControllerB(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 글을 작성해주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {

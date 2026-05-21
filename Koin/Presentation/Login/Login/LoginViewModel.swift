@@ -26,11 +26,19 @@ final class LoginViewModel: ViewModelProtocol {
     private var subscriptions: Set<AnyCancellable> = []
     private let loginUseCase: LoginUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let fetchUserDataUseCase =  DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+    private let fetchUserDataUseCase: FetchUserDataUseCase
+    private let sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
     
-    init(loginUseCase: LoginUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
+    init(
+        loginUseCase: LoginUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+        fetchUserDataUseCase: FetchUserDataUseCase,
+        sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
+    ) {
         self.loginUseCase = loginUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.fetchUserDataUseCase = fetchUserDataUseCase
+        self.sendDeviceTokenIfNeededUseCase = sendDeviceTokenIfNeededUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -61,6 +69,7 @@ extension LoginViewModel {
             KeychainWorker.shared.create(key: .refresh, token: response.refreshToken)
             self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인")
             self?.setUserInfo()
+            self?.sendDeviceTokenIfNeededUseCase.execute()
         }.store(in: &subscriptions)
     }
     private func setUserInfo() {
