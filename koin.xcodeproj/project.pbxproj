@@ -50,6 +50,7 @@
 		7C372F332F1DB4C300149729 /* LostItemImagesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F2F2F1DB4C300149729 /* LostItemImagesCollectionView.swift */; };
 		7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */; };
 		7C3ECC7A2F41505000EE8F13 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */; };
+		7C4C714E2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */; };
 		7C4D5A3C2F01638800B40128 /* BusSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A122F01638800B40128 /* BusSearchViewController.swift */; };
 		7C4D5A3D2F01638800B40128 /* BusSearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A1D2F01638800B40128 /* BusSearchResultViewModel.swift */; };
 		7C4D5A3E2F01638800B40128 /* OneBusTimetableTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A362F01638800B40128 /* OneBusTimetableTableViewFooter.swift */; };
@@ -972,6 +973,7 @@
 		7C372F302F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemImagesCollectionViewCell.swift; sourceTree = "<group>"; };
 		7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewControllerB.swift; sourceTree = "<group>"; };
 		7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
+		7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenIfNeededUseCase.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
 		7C4D5A0F2F01638800B40128 /* BusAreaSelectedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -4132,6 +4134,7 @@
 			isa = PBXGroup;
 			children = (
 				D20AB9512C5534F7006BC684 /* FetchNotiListUseCase.swift */,
+				7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */,
 				D20AB9532C553503006BC684 /* ChangeNotiUseCase.swift */,
 				D20AB9552C55352A006BC684 /* ChangeNotiDetailUseCase.swift */,
 			);
@@ -5773,6 +5776,7 @@
 				D20AB9612C5543AA006BC684 /* DefaultNotiRepository.swift in Sources */,
 				7C05D07B2FBC2A0100F4D825 /* ShopBenefitTableView.swift in Sources */,
 				B68D2CE92EA505B800F3B479 /* ToastVariant.swift in Sources */,
+				7C4C714E2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift in Sources */,
 				7CA60D952F667AE4007C08C1 /* ReopenCallVanUseCase.swift in Sources */,
 				D29F21D92C4E1AB800994554 /* CheckDuplicatedNicknameUseCase.swift in Sources */,
 				D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */,
