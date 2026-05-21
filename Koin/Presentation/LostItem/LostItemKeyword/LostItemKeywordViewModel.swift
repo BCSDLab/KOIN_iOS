@@ -15,6 +15,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         case deleteKeyword(Int)
         case subscribeKeyword(String)
         case notificationSwitchTapped(isOn: Bool)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case showLoginModal
@@ -38,6 +39,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
     private let unsubscribeKeywordUseCase: UnsubscribeLostItemKeywordUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -58,7 +60,8 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         fetchMyKeywordUseCase: FetchLostItemMyKeywordUseCase,
         unsubscribeKeywordUseCase: UnsubscribeLostItemKeywordUseCase,
         fetchNotiListUseCase: FetchNotiListUseCase,
-        changeNotiUseCase: ChangeNotiUseCase
+        changeNotiUseCase: ChangeNotiUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.checkLoginUseCase = checkLoginUseCase
         self.subscribeKeywordUseCase = subscribeKeywordUseCase
@@ -67,6 +70,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         self.unsubscribeKeywordUseCase = unsubscribeKeywordUseCase
         self.fetchNotiListUseCase = fetchNotiListUseCase
         self.changeNotiUseCase = changeNotiUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Transform
@@ -88,6 +92,8 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
                 subscribeKeyword(keyword)
             case .notificationSwitchTapped(let isOn):
                 changeSubscription(isPermit: isOn)
+            case let .logEvent(label, category, value):
+                self.logEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -95,6 +101,10 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
 }
 
 extension LostItemKeywordViewModel {
+    
+    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
     
     private func checkLogin(completion: @escaping (Bool)->Void) {
         checkLoginUseCase.execute().sink { [weak self] isLoggedIn in

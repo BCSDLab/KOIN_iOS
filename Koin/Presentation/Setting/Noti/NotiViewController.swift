@@ -373,6 +373,7 @@ extension NotiViewController {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+        let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let subscribeKeywordUseCase = DefaultSubscribeLostItemKeywordUseCase(repository: lostItemRepository)
         let fetchKeywordSuggestionUseCase = DefaultFetchLostItemKeywordSuggestionUseCase(repository: lostItemRepository)
@@ -380,6 +381,7 @@ extension NotiViewController {
         let unsubscribeKeywordUseCase = DefaultUnsubscribeLostItemKeywordUseCase(repository: lostItemRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
         let viewModel = LostItemKeywordViewModel(
             checkLoginUseCase: checkLoginUseCase,
             subscribeKeywordUseCase: subscribeKeywordUseCase,
@@ -387,7 +389,8 @@ extension NotiViewController {
             fetchMyKeywordUseCase: fetchMyKeywordUseCase,
             unsubscribeKeywordUseCase: unsubscribeKeywordUseCase,
             fetchNotiListUseCase: fetchNotiListUseCase,
-            changeNotiUseCase: changeNotiUseCase
+            changeNotiUseCase: changeNotiUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = LostItemKeywordViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

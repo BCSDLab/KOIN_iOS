@@ -162,6 +162,7 @@ final class LostItemListViewController: UIViewController {
         
         lostItemKeywordCollectionView.didTapSettingPublisher.sink { [weak self] in
             self?.navigateToLostItemKeyword()
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemKeywordSetting, .click, "키워드 설정"))
         }.store(in: &subscriptions)
         lostItemKeywordCollectionView.didTapAllPublisher.sink { [weak self] in
             self?.inputSubject.send(.reset)
@@ -183,6 +184,7 @@ extension LostItemListViewController {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+        let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let subscribeKeywordUseCase = DefaultSubscribeLostItemKeywordUseCase(repository: lostItemRepository)
         let fetchKeywordSuggestionUseCase = DefaultFetchLostItemKeywordSuggestionUseCase(repository: lostItemRepository)
@@ -190,6 +192,7 @@ extension LostItemListViewController {
         let unsubscribeKeywordUseCase = DefaultUnsubscribeLostItemKeywordUseCase(repository: lostItemRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
         let viewModel = LostItemKeywordViewModel(
             checkLoginUseCase: checkLoginUseCase,
             subscribeKeywordUseCase: subscribeKeywordUseCase,
@@ -197,7 +200,8 @@ extension LostItemListViewController {
             fetchMyKeywordUseCase: fetchMyKeywordUseCase,
             unsubscribeKeywordUseCase: unsubscribeKeywordUseCase,
             fetchNotiListUseCase: fetchNotiListUseCase,
-            changeNotiUseCase: changeNotiUseCase
+            changeNotiUseCase: changeNotiUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = LostItemKeywordViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
