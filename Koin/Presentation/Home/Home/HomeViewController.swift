@@ -667,7 +667,11 @@ extension HomeViewController {
     }
     
     private func navigateToServiceSelectViewController() {
-        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        let viewModel = ServiceSelectViewModel(
+            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())),
+            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
+            deleteDeviceTokenUseCase: DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService())))
+        let serviceSelectViewController = ServiceSelectViewController(viewModel: viewModel)
         navigationController?.pushViewController(serviceSelectViewController, animated: true)
     }
     

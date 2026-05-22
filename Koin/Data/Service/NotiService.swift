@@ -10,6 +10,7 @@ import Combine
 
 protocol NotiService {
     func sendDeviceToken() -> AnyPublisher<Void, ErrorResponse>
+    func deleteDeviceToken() -> AnyPublisher<Void, ErrorResponse>
     func changeNoti(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeRequest) -> AnyPublisher<Void, ErrorResponse>
     func changeNotiDetail(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeDetailRequest) -> AnyPublisher<Void, ErrorResponse>
     func fetchNotiList() -> AnyPublisher<NotiAgreementDto, ErrorResponse>
@@ -22,6 +23,10 @@ final class DefaultNotiService: NotiService {
     
     func sendDeviceToken() -> AnyPublisher<Void, ErrorResponse> {
         return networkService.request(api: NotiAPI.sendDeviceToken)
+    }
+    
+    func deleteDeviceToken() -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: NotiAPI.deleteDeviceToken)
     }
         
     func changeNoti(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeRequest) -> AnyPublisher<Void, ErrorResponse> {

@@ -75,7 +75,12 @@ final class FoundIdViewController: UIViewController {
 extension FoundIdViewController {
     @objc private func loginButtonTapped() {
         let homeViewController = makeHomeViewController()
-        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        let serviceSelectViewModel = ServiceSelectViewModel(
+            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())),
+            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
+            deleteDeviceTokenUseCase: DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService()))
+        )
+        let serviceSelectViewController = ServiceSelectViewController(viewModel: serviceSelectViewModel)
         
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
@@ -87,20 +92,24 @@ extension FoundIdViewController {
             userRepository: userRepository,
             notiRepository: notiRepository
         )
-        let viewModel = LoginViewModel(
+        let loginViewModel = LoginViewModel(
             loginUseCase: loginUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             fetchUserDataUseCase: fetchUserDataUseCase,
             sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
         )
-        let loginViewController = LoginViewController(viewModel: viewModel)
+        let loginViewController = LoginViewController(viewModel: loginViewModel)
         
         let viewControllers = [homeViewController, serviceSelectViewController, loginViewController]
         navigationController?.setViewControllers(viewControllers, animated: true)
     }
     @objc private func registerButtonTapped() {
         let homeViewController = makeHomeViewController()
-        let serviceSelectViewController = ServiceSelectViewController(viewModel: ServiceSelectViewModel(fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        let viewModel = ServiceSelectViewModel(
+            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())),
+            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
+            deleteDeviceTokenUseCase: DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService())))
+        let serviceSelectViewController = ServiceSelectViewController(viewModel: viewModel)
         let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
         let viewControllers = [homeViewController, serviceSelectViewController, findPasswordViewController]
         navigationController?.setViewControllers(viewControllers, animated: true)

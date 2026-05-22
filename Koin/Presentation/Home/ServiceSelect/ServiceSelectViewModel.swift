@@ -23,11 +23,17 @@ final class ServiceSelectViewModel: ViewModelProtocol {
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private var subscriptions: Set<AnyCancellable> = []
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private(set) var isLogined = false 
+    private let deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase
+    private(set) var isLogined = false
     
-    init(fetchUserDataUseCase: FetchUserDataUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
+    init(
+        fetchUserDataUseCase: FetchUserDataUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+        deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase
+    ) {
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.deleteDeviceTokenUseCase = deleteDeviceTokenUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -51,7 +57,7 @@ extension ServiceSelectViewModel {
     private func fetchUserData() {
         fetchUserDataUseCase.execute().sink(
             receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
+                if case .failure = completion {
                     self?.isLogined = false
                     self?.outputSubject.send(.disappearProfile)
                 }
@@ -64,11 +70,14 @@ extension ServiceSelectViewModel {
     }
     
     private func logOut() {
-        KeychainWorker.shared.delete(key: .access)
-        KeychainWorker.shared.delete(key: .refresh)
-        UserDataManager.shared.resetUserData()
-        isLogined = false
-        outputSubject.send(.disappearProfile)
+        deleteDeviceTokenUseCase.execute().replaceError(with: ()).sink { [weak self] in
+            guard let self else { return }
+            KeychainWorker.shared.delete(key: .access)
+            KeychainWorker.shared.delete(key: .refresh)
+            UserDataManager.shared.resetUserData()
+            isLogined = false
+            outputSubject.send(.disappearProfile)
+        }.store(in: &subscriptions)
     }
     
     private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
