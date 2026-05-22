@@ -10,6 +10,7 @@ import Combine
 
 protocol NotiRepository {
     func sendDeviceToken() -> AnyPublisher<Void, ErrorResponse>
+    func deleteDeviceToken() -> AnyPublisher<Void, ErrorResponse>
     func changeNoti(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeRequest) -> AnyPublisher<Void, ErrorResponse>
     func changeNotiDetail(method: Alamofire.HTTPMethod, requestModel: NotiSubscribeDetailRequest) -> AnyPublisher<Void, ErrorResponse>
     func fetchNotiList() -> AnyPublisher<NotiAgreementDto, ErrorResponse>

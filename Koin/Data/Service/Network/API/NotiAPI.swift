@@ -13,6 +13,7 @@ enum NotiAPI {
     case changeNotiDetail(Alamofire.HTTPMethod, NotiSubscribeDetailRequest)
     case fetchNotiList
     case sendDeviceToken
+    case deleteDeviceToken
 }
 
 extension NotiAPI: Router, URLRequestConvertible {
@@ -27,6 +28,7 @@ extension NotiAPI: Router, URLRequestConvertible {
         case .changeNotiDetail: return "/notification/subscribe/detail"
         case .fetchNotiList: return "/notification"
         case .sendDeviceToken: return "/notification"
+        case .deleteDeviceToken: return "/notification"
         }
     }
     
@@ -40,6 +42,8 @@ extension NotiAPI: Router, URLRequestConvertible {
             return .get
         case .sendDeviceToken:
             return .post
+        case .deleteDeviceToken:
+            return .delete
         }
     }
     
@@ -57,6 +61,8 @@ extension NotiAPI: Router, URLRequestConvertible {
             return nil
         case .sendDeviceToken:
             return try? SendDeviceTokenRequest(deviceToken: KeychainWorker.shared.read(key: .fcm) ?? "").toDictionary()
+        case .deleteDeviceToken:
+            return nil
         }
     }
     
@@ -65,6 +71,7 @@ extension NotiAPI: Router, URLRequestConvertible {
         case .changeNoti, .changeNotiDetail: return URLEncoding.queryString
         case .sendDeviceToken: return JSONEncoding.default
         case .fetchNotiList: return nil
+        case .deleteDeviceToken: return nil
         }
     }
 }
