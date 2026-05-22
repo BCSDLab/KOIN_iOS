@@ -119,7 +119,7 @@ final class ServiceSelectViewController: UIViewController {
 extension ServiceSelectViewController {
     private func changeViewOption(profile: UserDto?) {
         if let profile = profile {
-            serviceSelectTableHeaderView.showName(name: profile.nickname ?? "익명")
+            serviceSelectTableHeaderView.showName(name: profile.name ?? profile.nickname ?? "익명")
         }
         else {
             serviceSelectTableHeaderView.hideName()
