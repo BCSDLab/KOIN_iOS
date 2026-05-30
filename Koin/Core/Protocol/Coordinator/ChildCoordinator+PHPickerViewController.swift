@@ -14,7 +14,7 @@ extension ChildCoordinator {
         selectionLimit: Int = 1,
         completion: @escaping (UIImage) -> Void
     ) {
-        parentCoordinator.presentPHPickerViewController(
+        parentCoordinator?.presentPHPickerViewController(
             filter: filter,
             selectionLimit: selectionLimit,
             completion: completion
