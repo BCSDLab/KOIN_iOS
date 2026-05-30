@@ -2681,6 +2681,32 @@
 			path = Coordinator;
 			sourceTree = "<group>";
 		};
+		7CEB3B522FC9769D00AF2B81 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				7CED8EE22EF2D1F900457128 /* ForceUpdate */,
+				7CEB3B542FCB05D700AF2B81 /* ForceModifyUser */,
+				7CEB3B532FCB05B800AF2B81 /* Error */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
+		7CEB3B532FCB05B800AF2B81 /* Error */ = {
+			isa = PBXGroup;
+			children = (
+				7C16AA382F3E9FBC0071ABE6 /* ErrorViewController.swift */,
+			);
+			path = Error;
+			sourceTree = "<group>";
+		};
+		7CEB3B542FCB05D700AF2B81 /* ForceModifyUser */ = {
+			isa = PBXGroup;
+			children = (
+				7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */,
+			);
+			path = ForceModifyUser;
+			sourceTree = "<group>";
+		};
 		7CED8EC22EF2D1F900457128 /* BannerCollectionView */ = {
 			isa = PBXGroup;
 			children = (
@@ -2746,10 +2772,8 @@
 				7CED8ED12EF2D1F900457128 /* MenuView */,
 				7CED8ED22EF2D1F900457128 /* LogoView.swift */,
 				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
-				7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */,
 				7CED8ED52EF2D1F900457128 /* BannerViewController.swift */,
 				7CA63A2D2F1B119200226F86 /* LostItemListView.swift */,
-				7C16AA382F3E9FBC0071ABE6 /* ErrorViewController.swift */,
 				7CC42B842F5D719C00940CE1 /* CallVanView.swift */,
 			);
 			path = SubViews;
@@ -2790,7 +2814,6 @@
 			children = (
 				7CED8EDB2EF2D1F900457128 /* Home */,
 				7CED8EDE2EF2D1F900457128 /* ServiceSelect */,
-				7CED8EE22EF2D1F900457128 /* ForceUpdate */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -3834,6 +3857,7 @@
 		7CED90BB2EF2D1F900457128 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				7CEB3B522FC9769D00AF2B81 /* App */,
 				7CED8EE32EF2D1F900457128 /* Home */,
 				7CED8EF42EF2D1F900457128 /* LostItem */,
 				7CED8F052EF2D1F900457128 /* Chat */,
