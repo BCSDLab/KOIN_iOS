@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
+		2B8FBA87599F051186A9A59E /* ChildCoordinator+ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = EB016493CF2EE435A5040B21 /* ChildCoordinator+ZoomedImageViewController.swift */; };
+		60CE938764B87BB09A30A368 /* ChildCoordinator+PHPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1102DB522B7545294762ADB7 /* ChildCoordinator+PHPickerViewController.swift */; };
 		7C04A47F2FB3380700214992 /* NotiSubscribeDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */; };
 		7C04A4802FB3380700214992 /* NotiSubscribeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */; };
 		7C04A4812FB3380700214992 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */; };
@@ -367,6 +369,7 @@
 		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
 		7CEB3B4D2FC95EED00AF2B81 /* ChildCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4C2FC95EED00AF2B81 /* ChildCoordinator.swift */; };
+		7CEB3B502FC9769D00AF2B81 /* RootCoordinator+PHPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4F2FC9769D00AF2B81 /* RootCoordinator+PHPickerViewController.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
 		7CED90C02EF2D1F900457128 /* DatePickerDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EEF2EF2D1F900457128 /* DatePickerDropdownView.swift */; };
@@ -966,6 +969,7 @@
 		D8F5C5542E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
+		F096412C3F54B12BEB08214A /* ChildCoordinator+BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA2C86884848575BE6228D96 /* ChildCoordinator+BottomSheetViewController.swift */; };
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -1010,6 +1014,7 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
+		1102DB522B7545294762ADB7 /* ChildCoordinator+PHPickerViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "ChildCoordinator+PHPickerViewController.swift"; sourceTree = "<group>"; };
 		7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeDetailRequest.swift; sourceTree = "<group>"; };
 		7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeRequest.swift; sourceTree = "<group>"; };
 		7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
@@ -1353,6 +1358,7 @@
 		7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailRequest.swift; sourceTree = "<group>"; };
 		7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeviceTokenUseCase.swift; sourceTree = "<group>"; };
 		7CEB3B4C2FC95EED00AF2B81 /* ChildCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildCoordinator.swift; sourceTree = "<group>"; };
+		7CEB3B4F2FC9769D00AF2B81 /* RootCoordinator+PHPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RootCoordinator+PHPickerViewController.swift"; sourceTree = "<group>"; };
 		7CED8EC02EF2D1F900457128 /* BannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EC12EF2D1F900457128 /* BannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
@@ -1686,6 +1692,7 @@
 		A001E2CE2845091F00D6C310 /* koinUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A001E2D22845091F00D6C310 /* koinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITests.swift; sourceTree = "<group>"; };
 		A001E2D42845091F00D6C310 /* koinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		AA2C86884848575BE6228D96 /* ChildCoordinator+BottomSheetViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "ChildCoordinator+BottomSheetViewController.swift"; sourceTree = "<group>"; };
 		B438AEE32E756AB600E889C4 /* OrderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderImage.swift; sourceTree = "<group>"; };
 		B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDTO.swift; sourceTree = "<group>"; };
 		B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopSummaryFromShopUseCase.swift; sourceTree = "<group>"; };
@@ -1958,6 +1965,7 @@
 		D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderFloatingButton.swift; sourceTree = "<group>"; };
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
+		EB016493CF2EE435A5040B21 /* ChildCoordinator+ZoomedImageViewController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = "ChildCoordinator+ZoomedImageViewController.swift"; sourceTree = "<group>"; };
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -3076,7 +3084,11 @@
 			isa = PBXGroup;
 			children = (
 				7CED923A2EF2D26000457128 /* RootCoordinator.swift */,
+				7CEB3B4F2FC9769D00AF2B81 /* RootCoordinator+PHPickerViewController.swift */,
 				7CEB3B4C2FC95EED00AF2B81 /* ChildCoordinator.swift */,
+				AA2C86884848575BE6228D96 /* ChildCoordinator+BottomSheetViewController.swift */,
+				EB016493CF2EE435A5040B21 /* ChildCoordinator+ZoomedImageViewController.swift */,
+				1102DB522B7545294762ADB7 /* ChildCoordinator+PHPickerViewController.swift */,
 			);
 			path = Coordinator;
 			sourceTree = "<group>";
@@ -6210,6 +6222,7 @@
 				7CED92022EF2D1F900457128 /* ShopSummaryMenuGroupCollectionViewCell.swift in Sources */,
 				7CED92042EF2D1F900457128 /* DeleteSemesterModalViewController.swift in Sources */,
 				7C04A47F2FB3380700214992 /* NotiSubscribeDetailRequest.swift in Sources */,
+				7CEB3B502FC9769D00AF2B81 /* RootCoordinator+PHPickerViewController.swift in Sources */,
 				7C04A4802FB3380700214992 /* NotiSubscribeRequest.swift in Sources */,
 				7C04A4812FB3380700214992 /* SendDeviceTokenRequest.swift in Sources */,
 				7CED92062EF2D1F900457128 /* ShopSearchTableViewShopNameCell.swift in Sources */,
@@ -6467,6 +6480,9 @@
 				831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */,
 				7C6790322FCC00150045E163 /* PopLoggable.swift in Sources */,
 				D249CD2C2C12E32F000813F9 /* DefaultDiningRepository.swift in Sources */,
+				F096412C3F54B12BEB08214A /* ChildCoordinator+BottomSheetViewController.swift in Sources */,
+				2B8FBA87599F051186A9A59E /* ChildCoordinator+ZoomedImageViewController.swift in Sources */,
+				60CE938764B87BB09A30A368 /* ChildCoordinator+PHPickerViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

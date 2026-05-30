@@ -10,7 +10,7 @@ import UIKit
 @MainActor
 protocol ChildCoordinator: AnyObject {
     associatedtype Route
-    var parentCoordinator: RootCoordinator { get set }
+    var parentCoordinator: RootCoordinator? { get set }
     var rootViewController: UIViewController? { get set }
     var navigationController: CustomNavigationController { get set }
     init(parentCoordinator: RootCoordinator, navigationController: CustomNavigationController)
