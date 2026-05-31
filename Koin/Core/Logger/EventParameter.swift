@@ -67,6 +67,9 @@ enum EventParameter {
             case benefitShopCategoriesEvent = "benefit_shop_categories_event"
             case benefitShopClick = "benefit_shop_click"
             case benefitShopCall = "benefit_shop_call"
+            case shopBenefitEntry = "shop_benefit_entry"
+            case shopBenefitBack = "shop_benefit_back"
+            case shopBenefitDetail = "shop_benefit_detail"
             
             case loginPrompt = "login_prompt"
             
