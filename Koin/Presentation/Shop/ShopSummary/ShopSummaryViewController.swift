@@ -14,6 +14,7 @@ final class ShopSummaryViewController: UIViewController {
     private let viewModel: ShopSummaryViewModel
     private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var hasLoggedInitialScroll = false
     
     var navigationBarAlpha: CGFloat = 0
     var navigationBarItemColor: UIColor = .white
@@ -85,7 +86,6 @@ final class ShopSummaryViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewBack))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
-    
     
     //FIXME: - API가 로딩되기전에 뒤로가기시 Value가 알 수 없음으로 찍힘
     override func viewWillDisappear(_ animated: Bool) {
@@ -161,6 +161,11 @@ extension ShopSummaryViewController {
             self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         }
         .store(in: &subscriptions)
+
+        tableHeaderView.didSwipePicturePublisher.sink { [weak self] in
+            guard let self else { return }
+            self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopPictureSwipe, .swipe, self.viewModel.shopName))
+        }.store(in: &subscriptions)
         
         tableHeaderView.shouldSetContentInsetPublisher.sink { [weak self] shouldSetContentInset in
             let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
@@ -244,7 +249,10 @@ extension ShopSummaryViewController {
         menuGroupTableView.didEndScrollPublisher
             .sink { [ weak self ] in
                 guard let self else { return }
-                self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, self.viewModel.shopName))
+                if !self.hasLoggedInitialScroll {
+                    self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, self.viewModel.shopName))
+                    self.hasLoggedInitialScroll = true
+                }
             }
             .store(in: &subscriptions)
 
