@@ -146,6 +146,11 @@
 		7C67909B2FCC48A60045E163 /* String+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C67906A2FCC48A60045E163 /* String+.swift */; };
 		7C67909C2FCC48A60045E163 /* UIColor+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790742FCC48A60045E163 /* UIColor+.swift */; };
 		7C67909E2FCC48BF0045E163 /* Bundle+APIKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C67909D2FCC48BF0045E163 /* Bundle+APIKey.swift */; };
+		7C6790AF2FCC5B160045E163 /* FontAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AD2FCC5B160045E163 /* FontAsset.swift */; };
+		7C6790B02FCC5B160045E163 /* ColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AC2FCC5B160045E163 /* ColorAsset.swift */; };
+		7C6790B12FCC5B160045E163 /* SFSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AE2FCC5B160045E163 /* SFSymbols.swift */; };
+		7C6790B32FCC5B2A0045E163 /* TimetableColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790B22FCC5B2A0045E163 /* TimetableColorAsset.swift */; };
+		7C6790B52FCC5B460045E163 /* ImageAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790B42FCC5B460045E163 /* ImageAsset.swift */; };
 		7C7CCE4A2F834D4B00E3A54B /* CallVanModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */; };
 		7C7CCE702F866E9400E3A54B /* AppPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE6F2F866E9400E3A54B /* AppPath.swift */; };
 		7C7CCE722F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */; };
@@ -1071,6 +1076,11 @@
 		7C6790812FCC48A60045E163 /* UIViewController+NavigationBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+NavigationBarStyle.swift"; sourceTree = "<group>"; };
 		7C6790822FCC48A60045E163 /* UIViewController+ToastMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+ToastMessage.swift"; sourceTree = "<group>"; };
 		7C67909D2FCC48BF0045E163 /* Bundle+APIKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle+APIKey.swift"; sourceTree = "<group>"; };
+		7C6790AC2FCC5B160045E163 /* ColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorAsset.swift; sourceTree = "<group>"; };
+		7C6790AD2FCC5B160045E163 /* FontAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAsset.swift; sourceTree = "<group>"; };
+		7C6790AE2FCC5B160045E163 /* SFSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbols.swift; sourceTree = "<group>"; };
+		7C6790B22FCC5B2A0045E163 /* TimetableColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableColorAsset.swift; sourceTree = "<group>"; };
+		7C6790B42FCC5B460045E163 /* ImageAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAsset.swift; sourceTree = "<group>"; };
 		7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanModalViewController.swift; sourceTree = "<group>"; };
 		7C7CCE6F2F866E9400E3A54B /* AppPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPath.swift; sourceTree = "<group>"; };
 		7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanRestrictionUseCase.swift; sourceTree = "<group>"; };
@@ -2250,6 +2260,11 @@
 		7C6790AB2FCC56FF0045E163 /* Asset */ = {
 			isa = PBXGroup;
 			children = (
+				7C6790AC2FCC5B160045E163 /* ColorAsset.swift */,
+				7C6790B22FCC5B2A0045E163 /* TimetableColorAsset.swift */,
+				7C6790AD2FCC5B160045E163 /* FontAsset.swift */,
+				7C6790B42FCC5B460045E163 /* ImageAsset.swift */,
+				7C6790AE2FCC5B160045E163 /* SFSymbols.swift */,
 			);
 			path = Asset;
 			sourceTree = "<group>";
@@ -5252,6 +5267,7 @@
 				7CC42B9C2F5E834E00940CE1 /* CallVanChatRightCell.swift in Sources */,
 				D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */,
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
+				7C6790B32FCC5B2A0045E163 /* TimetableColorAsset.swift in Sources */,
 				83DD0DB52C53773100278ABD /* SearchBusInfoRequest.swift in Sources */,
 				833D9C412C705F3E00982145 /* FetchNoticeArticlesUseCase.swift in Sources */,
 				B46B8D3A2E771A1300A8E797 /* ShopMenusCategoryDTO.swift in Sources */,
@@ -5628,6 +5644,9 @@
 				7CB061CE2F32312E00E83CA9 /* DPDConstants.swift in Sources */,
 				7C0C18932F67FA8D001781B3 /* CallVanReportRequestDto.swift in Sources */,
 				7CB061CF2F32312E00E83CA9 /* DropDown.swift in Sources */,
+				7C6790AF2FCC5B160045E163 /* FontAsset.swift in Sources */,
+				7C6790B02FCC5B160045E163 /* ColorAsset.swift in Sources */,
+				7C6790B12FCC5B160045E163 /* SFSymbols.swift in Sources */,
 				7CB061D02F32312E00E83CA9 /* DPDUIView+Extension.swift in Sources */,
 				7CED91A62EF2D1F900457128 /* PolicyContentCollectionView.swift in Sources */,
 				7C372F142F1CC79C00149729 /* LostItemPostOptionController.swift in Sources */,
@@ -5973,6 +5992,7 @@
 				833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */,
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
+				7C6790B52FCC5B460045E163 /* ImageAsset.swift in Sources */,
 				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
 				7CA60D772F663F7B007C08C1 /* PostNotificationReadUseCase.swift in Sources */,
 				7CC42B402F597B5B00940CE1 /* CallVanNotificationViewModel.swift in Sources */,
