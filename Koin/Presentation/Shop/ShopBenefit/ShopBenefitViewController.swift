@@ -16,7 +16,6 @@ final class ShopBenefitViewController: UIViewController {
     private let inputSubject = PassthroughSubject<ShopBenefitViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private let viewModel: ShopBenefitViewModel
-    private var didSwipeToPop = false
     
     // MARK: - UI Components
     private let benefitsTableView = ShopBenefitTableView()
@@ -66,22 +65,11 @@ final class ShopBenefitViewController: UIViewController {
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitDetail, EventParameter.EventCategory.click, self.viewModel.shopName))
         }.store(in: &subscriptions)
     }
+}
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        if let didSwipeToPop = (navigationController as? CustomNavigationController)?.didSwipeToPop {
-            self.didSwipeToPop = didSwipeToPop
-        }
-    }
-
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        
-        if isMovingFromParent || isBeingDismissed {
-            let category: EventParameter.EventCategory = didSwipeToPop ? .swipe : .click
-            
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitBack, category, viewModel.shopName))
-        }
+extension ShopBenefitViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitBack, category, viewModel.shopName))
     }
 }
 
