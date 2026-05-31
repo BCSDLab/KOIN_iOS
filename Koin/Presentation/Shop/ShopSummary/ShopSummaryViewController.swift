@@ -199,6 +199,7 @@ extension ShopSummaryViewController {
         
         tableHeaderView.benefitButtonTappedPublisher.sink { [weak self] in
             guard let self else { return }
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitEntry, .click, self.viewModel.shopName, nil, nil, nil, nil))
             navigateToShopBenefit()
         }.store(in: &subscriptions)
         
@@ -331,7 +332,13 @@ extension ShopSummaryViewController {
     private func navigateToShopBenefit() {
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
-        let viewModel = ShopBenefitViewModel(fetchShopEventListUseCase: fetchShopEventListUseCase, shopId: viewModel.shopId)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = ShopBenefitViewModel(
+            fetchShopEventListUseCase: fetchShopEventListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            shopId: viewModel.shopId,
+            shopName: viewModel.shopName
+        )
         let viewController = ShopBenefitViewController(viewModel: viewModel, title: title ?? "")
         navigationController?.pushViewController(viewController, animated: true)
     }
