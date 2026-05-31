@@ -87,21 +87,6 @@ final class ShopSummaryViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
     
-    //FIXME: - API가 로딩되기전에 뒤로가기시 Value가 알 수 없음으로 찍힘
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        guard self.isMovingFromParent || self.isBeingDismissed else { return }
-        let shopName = self.viewModel.shopName
-        let currentPage = self.viewModel.backCategoryName
-        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
-        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
-        
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewBack))
-        if currentPage != nil {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, eventCategory, shopName, nil, currentPage, nil, .shopDetailViewBack))
-        }
-    }
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return (navigationBarAlpha == 1 ? .darkContent : .lightContent)
     }
@@ -110,6 +95,15 @@ final class ShopSummaryViewController: UIViewController {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = gradientView.bounds
         menuGroupTableView.configure(safeAreaHeight: gradientView.frame.height)
+    }
+}
+
+extension ShopSummaryViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let shopName = self.viewModel.shopName
+        let currentPage = self.viewModel.backCategoryName
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewBack))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, category, shopName, nil, currentPage, nil, .shopDetailViewBack))
     }
 }
 

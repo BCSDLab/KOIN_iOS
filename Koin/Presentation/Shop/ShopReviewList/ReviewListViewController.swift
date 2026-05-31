@@ -117,24 +117,22 @@ final class ReviewListViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewReviewBack))
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        guard self.isMovingFromParent || self.isBeingDismissed else { return }
-        let shopName = self.viewModel.getShopName()
-        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
-        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
-        
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBack))
-        inputSubject.send(.logEventWithDuration(EventParameter.EventLabel.Business.shopDetailViewReviewBack, eventCategory, shopName, nil, nil, nil, .shopDetailViewReviewBack))
-        
-    }
-
-        
     private func bind() {
         bindViewModel()
         bindCollectionView()
         bindModalViewControllers()
     }
+}
+
+extension ReviewListViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let shopName = self.viewModel.getShopName()
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBack))
+        inputSubject.send(.logEventWithDuration(EventParameter.EventLabel.Business.shopDetailViewReviewBack, category, shopName, nil, nil, nil, .shopDetailViewReviewBack))
+    }
+}
+
+extension ReviewListViewController {
     
     private func bindViewModel() {
         let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
