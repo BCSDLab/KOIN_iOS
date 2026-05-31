@@ -15,7 +15,6 @@ final class ShopViewController: UIViewController {
     private let viewModel: ShopViewModel
     private let inputSubject = PassthroughSubject<ShopViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
-    private var didTapBack = false
     
     // MARK: - UI Components
     private let shopCollectionView = ShopInfoCollectionView()
@@ -44,7 +43,6 @@ final class ShopViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .order)
-        self.didTapBack = false
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))
@@ -53,16 +51,6 @@ final class ShopViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        guard !didTapBack, (self.parent?.isMovingFromParent ?? false) else { return }
-        didTapBack = true
-        
-        let previousPage = viewModel.selectedCategoryName
-        let currentPage = "메인"
-        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
-        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategoriesBack))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBack, eventCategory, currentPage, previousPage, nil, nil, .shopCategoriesBack))
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
         shopCollectionView.stopAutoScroll()
     }
     
@@ -157,6 +145,16 @@ final class ShopViewController: UIViewController {
         shopCollectionView.openShopToggleButtonPublisher.sink { [weak self] isSelected in
             self?.handleOpenShopToggle(isSelected: isSelected)
         }.store(in: &subscriptions)
+    }
+}
+
+extension ShopViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let previousPage = viewModel.selectedCategoryName
+        let currentPage = "메인"
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategoriesBack))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBack, category, currentPage, previousPage, nil, nil, .shopCategoriesBack))
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
     }
 }
 

@@ -234,7 +234,7 @@ extension CallVanListViewController {
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanSsearch, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanSearch, category: .click, value: ""))
         return true
     }
     

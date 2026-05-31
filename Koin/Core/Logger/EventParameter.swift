@@ -70,6 +70,7 @@ enum EventParameter {
             case shopBenefitEntry = "shop_benefit_entry"
             case shopBenefitBack = "shop_benefit_back"
             case shopBenefitDetail = "shop_benefit_detail"
+            case shopPictureSwipe = "shop_picture_swipe"
             
             case loginPrompt = "login_prompt"
             
@@ -114,7 +115,7 @@ enum EventParameter {
             
             case departureLocationConfirm = "departure_location_confirm"
             case arrivalLocationConfirm = "arrival_location_confirm"
-            case swapDestionation = "swap_destination"
+            case swapDestination = "swap_destination"
             case searchBus = "search_bus"
             case searchResultBack = "search_result_back"
             case searchResultClose = "search_result_close"
@@ -188,7 +189,7 @@ enum EventParameter {
             // CallVan
             case mainCallVanView = "main_callvan_view"
             case mainCallVanWrite = "main_callvan_write"
-            case callvanSsearch = "callvan_search"
+            case callvanSearch = "callvan_search"
             case callvanFilter = "callvan_filter"
             case callvanFilterApply = "callvan_filter_apply"
             case callvanJoin = "callvan_join"

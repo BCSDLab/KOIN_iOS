@@ -14,6 +14,7 @@ final class ShopSummaryViewController: UIViewController {
     private let viewModel: ShopSummaryViewModel
     private let inputSubject = PassthroughSubject<ShopSummaryViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var hasLoggedInitialScroll = false
     
     var navigationBarAlpha: CGFloat = 0
     var navigationBarItemColor: UIColor = .white
@@ -86,22 +87,6 @@ final class ShopSummaryViewController: UIViewController {
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCall))
     }
     
-    
-    //FIXME: - API가 로딩되기전에 뒤로가기시 Value가 알 수 없음으로 찍힘
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        guard self.isMovingFromParent || self.isBeingDismissed else { return }
-        let shopName = self.viewModel.shopName
-        let currentPage = self.viewModel.backCategoryName
-        let isSwipe = navigationController?.transitionCoordinator?.isInteractive ?? false
-        let eventCategory: EventParameter.EventCategory = isSwipe ? .swipe : .click
-        
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewBack))
-        if currentPage != nil {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, eventCategory, shopName, nil, currentPage, nil, .shopDetailViewBack))
-        }
-    }
-    
     override var preferredStatusBarStyle: UIStatusBarStyle {
         return (navigationBarAlpha == 1 ? .darkContent : .lightContent)
     }
@@ -110,6 +95,15 @@ final class ShopSummaryViewController: UIViewController {
         super.viewDidLayoutSubviews()
         gradientLayer.frame = gradientView.bounds
         menuGroupTableView.configure(safeAreaHeight: gradientView.frame.height)
+    }
+}
+
+extension ShopSummaryViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let shopName = self.viewModel.shopName
+        let currentPage = self.viewModel.backCategoryName
+        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewBack))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, category, shopName, nil, currentPage, nil, .shopDetailViewBack))
     }
 }
 
@@ -161,6 +155,11 @@ extension ShopSummaryViewController {
             self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
         }
         .store(in: &subscriptions)
+
+        tableHeaderView.didSwipePicturePublisher.sink { [weak self] in
+            guard let self else { return }
+            self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopPictureSwipe, .swipe, self.viewModel.shopName))
+        }.store(in: &subscriptions)
         
         tableHeaderView.shouldSetContentInsetPublisher.sink { [weak self] shouldSetContentInset in
             let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
@@ -244,7 +243,10 @@ extension ShopSummaryViewController {
         menuGroupTableView.didEndScrollPublisher
             .sink { [ weak self ] in
                 guard let self else { return }
-                self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, self.viewModel.shopName))
+                if !self.hasLoggedInitialScroll {
+                    self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, self.viewModel.shopName))
+                    self.hasLoggedInitialScroll = true
+                }
             }
             .store(in: &subscriptions)
 
