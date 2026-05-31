@@ -234,7 +234,6 @@
 		7CB061CF2F32312E00E83CA9 /* DropDown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061C42F32312E00E83CA9 /* DropDown.swift */; };
 		7CB061D02F32312E00E83CA9 /* DPDUIView+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061C02F32312E00E83CA9 /* DPDUIView+Extension.swift */; };
 		7CB061D22F32312E00E83CA9 /* DropDownCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7CB061C22F32312E00E83CA9 /* DropDownCell.xib */; };
-		7CB061F52F3242C200E83CA9 /* UIColor+Hex.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061F32F3242C200E83CA9 /* UIColor+Hex.swift */; };
 		7CB061F62F3242C200E83CA9 /* ColorSystem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB061F22F3242C200E83CA9 /* ColorSystem.swift */; };
 		7CB11C0A2FB1989B004E0C80 /* LostItemKeywordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C092FB1989B004E0C80 /* LostItemKeywordCollectionView.swift */; };
 		7CB11C0C2FB198A6004E0C80 /* LostItemKeywordCollectionViewKeywordCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C0B2FB198A6004E0C80 /* LostItemKeywordCollectionViewKeywordCell.swift */; };
@@ -1152,7 +1151,6 @@
 		7CB061C52F32312E00E83CA9 /* DropDown+Appearance.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DropDown+Appearance.swift"; sourceTree = "<group>"; };
 		7CB061C62F32312E00E83CA9 /* DropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DropDownCell.swift; sourceTree = "<group>"; };
 		7CB061F22F3242C200E83CA9 /* ColorSystem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorSystem.swift; sourceTree = "<group>"; };
-		7CB061F32F3242C200E83CA9 /* UIColor+Hex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+Hex.swift"; sourceTree = "<group>"; };
 		7CB11C092FB1989B004E0C80 /* LostItemKeywordCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordCollectionView.swift; sourceTree = "<group>"; };
 		7CB11C0B2FB198A6004E0C80 /* LostItemKeywordCollectionViewKeywordCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordCollectionViewKeywordCell.swift; sourceTree = "<group>"; };
 		7CB11C0D2FB198BC004E0C80 /* LostItemKeywordCollectionViewSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemKeywordCollectionViewSettingCell.swift; sourceTree = "<group>"; };
@@ -2473,7 +2471,6 @@
 			isa = PBXGroup;
 			children = (
 				7CB061F22F3242C200E83CA9 /* ColorSystem.swift */,
-				7CB061F32F3242C200E83CA9 /* UIColor+Hex.swift */,
 			);
 			path = Color;
 			sourceTree = "<group>";
@@ -5915,7 +5912,6 @@
 				D8B1A9EC2E321E7800943535 /* ShopSortType.swift in Sources */,
 				7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */,
 				7CA63A002F1AA5CC00226F86 /* ServiceSelectTableViewCell.swift in Sources */,
-				7CB061F52F3242C200E83CA9 /* UIColor+Hex.swift in Sources */,
 				7CB061F62F3242C200E83CA9 /* ColorSystem.swift in Sources */,
 				D21572682CEDDE0E0061E725 /* FetchLectureListUseCase.swift in Sources */,
 				D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */,
