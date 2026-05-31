@@ -154,6 +154,7 @@
 		7C6790B12FCC5B160045E163 /* SFSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AE2FCC5B160045E163 /* SFSymbols.swift */; };
 		7C6790B32FCC5B2A0045E163 /* TimetableColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790B22FCC5B2A0045E163 /* TimetableColorAsset.swift */; };
 		7C6790B52FCC5B460045E163 /* ImageAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790B42FCC5B460045E163 /* ImageAsset.swift */; };
+		7C6790B72FCC66D40045E163 /* TypographyModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790B62FCC66D40045E163 /* TypographyModifier.swift */; };
 		7C7CCE4A2F834D4B00E3A54B /* CallVanModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */; };
 		7C7CCE702F866E9400E3A54B /* AppPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE6F2F866E9400E3A54B /* AppPath.swift */; };
 		7C7CCE722F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */; };
@@ -1086,6 +1087,7 @@
 		7C6790AE2FCC5B160045E163 /* SFSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbols.swift; sourceTree = "<group>"; };
 		7C6790B22FCC5B2A0045E163 /* TimetableColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableColorAsset.swift; sourceTree = "<group>"; };
 		7C6790B42FCC5B460045E163 /* ImageAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAsset.swift; sourceTree = "<group>"; };
+		7C6790B62FCC66D40045E163 /* TypographyModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypographyModifier.swift; sourceTree = "<group>"; };
 		7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanModalViewController.swift; sourceTree = "<group>"; };
 		7C7CCE6F2F866E9400E3A54B /* AppPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPath.swift; sourceTree = "<group>"; };
 		7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanRestrictionUseCase.swift; sourceTree = "<group>"; };
@@ -4130,6 +4132,7 @@
 			isa = PBXGroup;
 			children = (
 				B61FAA162EA3A39D005BE539 /* Typography.swift */,
+				7C6790B62FCC66D40045E163 /* TypographyModifier.swift */,
 			);
 			path = Font;
 			sourceTree = "<group>";
@@ -5312,6 +5315,7 @@
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
 				7C0C189B2F68AAFA001781B3 /* CallVanChatRequestDto.swift in Sources */,
 				83EBB87A2D0FDFD700346018 /* KoinPickerView.swift in Sources */,
+				7C6790B72FCC66D40045E163 /* TypographyModifier.swift in Sources */,
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
 				7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */,
 				83DD0D7B2C4F8E6100278ABD /* FetchBusInformationListRequest.swift in Sources */,
