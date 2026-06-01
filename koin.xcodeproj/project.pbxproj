@@ -151,6 +151,7 @@
 		7C6790A92FCC4C600045E163 /* Font+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790A62FCC4C600045E163 /* Font+.swift */; };
 		7C6790AA2FCC4C600045E163 /* Image+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790A72FCC4C600045E163 /* Image+.swift */; };
 		7C0F4A822FEDE6410045E163 /* View+isHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A832FEDE6410045E163 /* View+isHidden.swift */; };
+		7C0F4A842FEDE6410045E163 /* View+loadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */; };
 		7C0F4A862FEDE6410045E163 /* View+onFirstAppear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */; };
 		7C6790AF2FCC5B160045E163 /* FontAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AD2FCC5B160045E163 /* FontAsset.swift */; };
 		7C6790B02FCC5B160045E163 /* ColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AC2FCC5B160045E163 /* ColorAsset.swift */; };
@@ -1088,6 +1089,7 @@
 		7C6790A62FCC4C600045E163 /* Font+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+.swift"; sourceTree = "<group>"; };
 		7C6790A72FCC4C600045E163 /* Image+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+.swift"; sourceTree = "<group>"; };
 		7C0F4A832FEDE6410045E163 /* View+isHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+isHidden.swift"; sourceTree = "<group>"; };
+		7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+loadingOverlay.swift"; sourceTree = "<group>"; };
 		7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+onFirstAppear.swift"; sourceTree = "<group>"; };
 		7C6790AC2FCC5B160045E163 /* ColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorAsset.swift; sourceTree = "<group>"; };
 		7C6790AD2FCC5B160045E163 /* FontAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAsset.swift; sourceTree = "<group>"; };
@@ -2243,6 +2245,7 @@
 				7C6790A62FCC4C600045E163 /* Font+.swift */,
 				7C6790A72FCC4C600045E163 /* Image+.swift */,
 				7C0F4A832FEDE6410045E163 /* View+isHidden.swift */,
+				7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */,
 				7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */,
 			);
 			path = SwiftUI;
@@ -6001,6 +6004,7 @@
 				7C6790A92FCC4C600045E163 /* Font+.swift in Sources */,
 				7C6790AA2FCC4C600045E163 /* Image+.swift in Sources */,
 				7C0F4A822FEDE6410045E163 /* View+isHidden.swift in Sources */,
+				7C0F4A842FEDE6410045E163 /* View+loadingOverlay.swift in Sources */,
 				7C0F4A862FEDE6410045E163 /* View+onFirstAppear.swift in Sources */,
 				7C7CCE742F86866B00E3A54B /* CallVanRestriction.swift in Sources */,
 				D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */,
