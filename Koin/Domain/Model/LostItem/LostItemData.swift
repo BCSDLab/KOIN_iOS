@@ -19,6 +19,6 @@ struct LostItemData {
     let organization: Organization?
     let isMine: Bool
     let isFound: Bool
-    let images: [Image]
+    let images: [AppImage]
     let registeredAt: String
 }
