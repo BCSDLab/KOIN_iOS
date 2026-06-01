@@ -1,14 +1,13 @@
 //
-//  UIImage+.swift
+//  ImageAsset.swift
 //  Koin
 //
-//  Created by 김나훈 on 1/15/24.
+//  Created by 홍기정 on 5/31/26.
 //
 
-import UIKit.UIImage
+import Foundation
 
-enum ImageAsset: String {
-    
+public enum ImageAsset: String {
     // MARK: - Bus
     case bus
     case busStop
@@ -240,33 +239,4 @@ enum ImageAsset: String {
     case shoppingCartShadowOval
     case shoppingCartShadowSquare
     case shoppingCartWhite
-}
-
-enum SFSymbols: String {
-    case line3horizontal = "line.3.horizontal"
-    case chevronLeft = "chevron.left"
-    case chevronRight = "chevron.right"
-    case person = "person"
-    case square
-    case checkmarkSquare = "checkmark.square"
-    case chevronDown = "chevron.down"
-    case chevronUp = "chevron.up"
-    case phone
-    case magnifyingGlass = "magnifyingglass"
-}
-
-extension UIImage {
-    static func appImage(asset: ImageAsset) -> UIImage? {
-        return UIImage(named: asset.rawValue)
-    }
-    
-    static func appImage(symbol: SFSymbols) -> UIImage? {
-        return UIImage(systemName: symbol.rawValue)
-    }
-    
-    func resize(to size: CGSize) -> UIImage? {
-        return UIGraphicsImageRenderer(size: size).image { _ in
-            self.draw(in: CGRect(origin: .zero, size: size))
-        }
-    }
 }
