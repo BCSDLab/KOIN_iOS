@@ -153,6 +153,7 @@
 		7C0F4A822FEDE6410045E163 /* View+isHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A832FEDE6410045E163 /* View+isHidden.swift */; };
 		7C0F4A842FEDE6410045E163 /* View+loadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */; };
 		7C0F4A862FEDE6410045E163 /* View+onFirstAppear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */; };
+		7C0F4A882FEE0AE80045E163 /* View+applySketchShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A892FEE0AE80045E163 /* View+applySketchShadow.swift */; };
 		7C6790AF2FCC5B160045E163 /* FontAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AD2FCC5B160045E163 /* FontAsset.swift */; };
 		7C6790B02FCC5B160045E163 /* ColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AC2FCC5B160045E163 /* ColorAsset.swift */; };
 		7C6790B12FCC5B160045E163 /* SFSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AE2FCC5B160045E163 /* SFSymbols.swift */; };
@@ -1091,6 +1092,7 @@
 		7C0F4A832FEDE6410045E163 /* View+isHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+isHidden.swift"; sourceTree = "<group>"; };
 		7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+loadingOverlay.swift"; sourceTree = "<group>"; };
 		7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+onFirstAppear.swift"; sourceTree = "<group>"; };
+		7C0F4A892FEE0AE80045E163 /* View+applySketchShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+applySketchShadow.swift"; sourceTree = "<group>"; };
 		7C6790AC2FCC5B160045E163 /* ColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorAsset.swift; sourceTree = "<group>"; };
 		7C6790AD2FCC5B160045E163 /* FontAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAsset.swift; sourceTree = "<group>"; };
 		7C6790AE2FCC5B160045E163 /* SFSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbols.swift; sourceTree = "<group>"; };
@@ -2247,6 +2249,7 @@
 				7C0F4A832FEDE6410045E163 /* View+isHidden.swift */,
 				7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */,
 				7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */,
+				7C0F4A892FEE0AE80045E163 /* View+applySketchShadow.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -6006,6 +6009,7 @@
 				7C0F4A822FEDE6410045E163 /* View+isHidden.swift in Sources */,
 				7C0F4A842FEDE6410045E163 /* View+loadingOverlay.swift in Sources */,
 				7C0F4A862FEDE6410045E163 /* View+onFirstAppear.swift in Sources */,
+				7C0F4A882FEE0AE80045E163 /* View+applySketchShadow.swift in Sources */,
 				7C7CCE742F86866B00E3A54B /* CallVanRestriction.swift in Sources */,
 				D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */,
 				83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */,
