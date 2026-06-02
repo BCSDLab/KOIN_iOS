@@ -189,6 +189,7 @@ public enum ImageAsset: String {
     case mainLogo
     case newLogo
     case sleepBcsdSymbol
+    case koinTextLogo
     
     // MARK: - LostItem
     case lostItem
@@ -239,4 +240,37 @@ public enum ImageAsset: String {
     case shoppingCartShadowOval
     case shoppingCartShadowSquare
     case shoppingCartWhite
+    
+    // MARK: - Home
+    case categoryBusiness
+    case categoryBusSearch
+    case categoryBusTimetable
+    case categoryCallVan
+    case categoryDining
+    case categoryFacility
+    case categoryLand
+    case categoryLostitem
+    case categoryShop
+    case categoryTimetable
+    case chevronRightRounded
+    case homeBell
+    case homeBellDot
+    case homeCallVan
+    case homeQR
+    case homeShop
+    case notificationBowl
+    case notificationBusQR
+    case notificationCallVan
+    case notificationNotice
+    case tabbarCategory
+    case tabbarHome
+    case tabbarNotice
+    case tabbarProfile
+    case weatherCloudy
+    case weatherMostlyCloudy
+    case weatherRain
+    case weatherShower
+    case weatherSleet
+    case weatherSnow
+    case weatherSunny
 }
