@@ -59,9 +59,14 @@
 		7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */; };
 		7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B092FCE1BA80011D338 /* DiningView.swift */; };
 		7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
+		7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B062FCE1BA80011D338 /* CategoryView.swift */; };
 		7C457B342FCE1BA80011D338 /* ShuttleTicketButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0F2FCE1BA80011D338 /* ShuttleTicketButton.swift */; };
+		7C457B362FCE1BA80011D338 /* CategoryHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B052FCE1BA80011D338 /* CategoryHostingController.swift */; };
 		7C457B382FCE1BA80011D338 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B152FCE1BA80011D338 /* HomeHeaderView.swift */; };
 		7C457B3C2FCE1BA80011D338 /* MobilitySmallButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0E2FCE1BA80011D338 /* MobilitySmallButton.swift */; };
+		7C457B3D2FCE1BA80011D338 /* CategoryFeaturedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AFE2FCE1BA80011D338 /* CategoryFeaturedButton.swift */; };
+		7C457B3E2FCE1BA80011D338 /* CategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B012FCE1BA80011D338 /* CategoryRow.swift */; };
+		7C457B3F2FCE1BA80011D338 /* CategorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B022FCE1BA80011D338 /* CategorySection.swift */; };
 		7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B112FCE1BA80011D338 /* MobilityView.swift */; };
 		7C457B442FCE1BA80011D338 /* CallVanRecruitmentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */; };
 		7C457B452FCE1BA80011D338 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B192FCE1BA80011D338 /* HomeView.swift */; };
@@ -203,6 +208,7 @@
 		7C8BFCD62FD032A000963679 /* View+linespacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCD52FD032A000963679 /* View+linespacing.swift */; };
 		7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */; };
 		7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */; };
+		7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDC2FD04B8000963679 /* CategoryModels.swift */; };
 		7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */; };
 		7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */; };
 		7C8BFCEF2FD04BA000963679 /* FetchNewHomeCountsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */; };
@@ -1022,6 +1028,11 @@
 		7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewControllerB.swift; sourceTree = "<group>"; };
 		7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 		7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewModelProtocol.swift; sourceTree = "<group>"; };
+		7C457AFE2FCE1BA80011D338 /* CategoryFeaturedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFeaturedButton.swift; sourceTree = "<group>"; };
+		7C457B012FCE1BA80011D338 /* CategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryRow.swift; sourceTree = "<group>"; };
+		7C457B022FCE1BA80011D338 /* CategorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySection.swift; sourceTree = "<group>"; };
+		7C457B052FCE1BA80011D338 /* CategoryHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHostingController.swift; sourceTree = "<group>"; };
+		7C457B062FCE1BA80011D338 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
 		7C457B092FCE1BA80011D338 /* DiningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningView.swift; sourceTree = "<group>"; };
 		7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRecruitmentButton.swift; sourceTree = "<group>"; };
 		7C457B0E2FCE1BA80011D338 /* MobilitySmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilitySmallButton.swift; sourceTree = "<group>"; };
@@ -1166,6 +1177,7 @@
 		7C8BFCC22FCFF47600963679 /* ActionBindableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBindableView.swift; sourceTree = "<group>"; };
 		7C8BFCD22FD0272900963679 /* View+border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+border.swift"; sourceTree = "<group>"; };
 		7C8BFCD52FD032A000963679 /* View+linespacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+linespacing.swift"; sourceTree = "<group>"; };
+		7C8BFCDC2FD04B8000963679 /* CategoryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModels.swift; sourceTree = "<group>"; };
 		7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDiningItem.swift; sourceTree = "<group>"; };
 		7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeader.swift; sourceTree = "<group>"; };
 		7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHomeDiningListUseCase.swift; sourceTree = "<group>"; };
@@ -2047,6 +2059,26 @@
 			path = LostItemImagesCollectionView;
 			sourceTree = "<group>";
 		};
+		7C457B042FCE1BA80011D338 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C457AFE2FCE1BA80011D338 /* CategoryFeaturedButton.swift */,
+				7C457B022FCE1BA80011D338 /* CategorySection.swift */,
+				7C457B012FCE1BA80011D338 /* CategoryRow.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C457B072FCE1BA80011D338 /* Category */ = {
+			isa = PBXGroup;
+			children = (
+				7C457B042FCE1BA80011D338 /* Subviews */,
+				7C457B052FCE1BA80011D338 /* CategoryHostingController.swift */,
+				7C457B062FCE1BA80011D338 /* CategoryView.swift */,
+			);
+			path = Category;
+			sourceTree = "<group>";
+		};
 		7C457B082FCE1BA80011D338 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
@@ -2113,6 +2145,7 @@
 			isa = PBXGroup;
 			children = (
 				7C457B1A2FCE1BA80011D338 /* Home */,
+				7C457B072FCE1BA80011D338 /* Category */,
 			);
 			path = NewHome;
 			sourceTree = "<group>";
@@ -2433,6 +2466,7 @@
 		7C8A00362FD400000011D338 /* NewHome */ = {
 			isa = PBXGroup;
 			children = (
+				7C8BFCDC2FD04B8000963679 /* CategoryModels.swift */,
 				7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */,
 				7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */,
 				7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */,
@@ -5775,9 +5809,14 @@
 				7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */,
 				7C8BFCEF2FD04BA000963679 /* FetchNewHomeCountsUseCase.swift in Sources */,
 				7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */,
+				7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */,
 				7C457B342FCE1BA80011D338 /* ShuttleTicketButton.swift in Sources */,
+				7C457B362FCE1BA80011D338 /* CategoryHostingController.swift in Sources */,
 				7C457B382FCE1BA80011D338 /* HomeHeaderView.swift in Sources */,
 				7C457B3C2FCE1BA80011D338 /* MobilitySmallButton.swift in Sources */,
+				7C457B3D2FCE1BA80011D338 /* CategoryFeaturedButton.swift in Sources */,
+				7C457B3E2FCE1BA80011D338 /* CategoryRow.swift in Sources */,
+				7C457B3F2FCE1BA80011D338 /* CategorySection.swift in Sources */,
 				7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */,
 				7C457B442FCE1BA80011D338 /* CallVanRecruitmentButton.swift in Sources */,
 				7C457B452FCE1BA80011D338 /* HomeView.swift in Sources */,
@@ -6080,6 +6119,7 @@
 				7CC42B362F58283500940CE1 /* CallVanNotificationViewController.swift in Sources */,
 				7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */,
 				7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */,
+				7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */,
 				7C8BFCF12FD04B800963679 /* NewHomeCounts.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,

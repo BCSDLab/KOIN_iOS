@@ -31,7 +31,7 @@ struct HomeView: View, ActionBindableView {
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {
-                HeaderView(header: viewModel.header)
+                HomeHeaderView(header: viewModel.header)
 
                 DiningView(
                     diningItems: viewModel.diningItems,

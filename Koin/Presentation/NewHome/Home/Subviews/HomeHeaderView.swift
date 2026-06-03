@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct HeaderView: View {
+struct HomeHeaderView: View {
     private let header: HomeHeader
 
     init(header: HomeHeader) {
