@@ -57,6 +57,15 @@
 		7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */; };
 		7C3ECC7A2F41505000EE8F13 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */; };
 		7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */; };
+		7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B092FCE1BA80011D338 /* DiningView.swift */; };
+		7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
+		7C457B342FCE1BA80011D338 /* ShuttleTicketButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0F2FCE1BA80011D338 /* ShuttleTicketButton.swift */; };
+		7C457B382FCE1BA80011D338 /* HomeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B152FCE1BA80011D338 /* HomeHeaderView.swift */; };
+		7C457B3C2FCE1BA80011D338 /* MobilitySmallButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0E2FCE1BA80011D338 /* MobilitySmallButton.swift */; };
+		7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B112FCE1BA80011D338 /* MobilityView.swift */; };
+		7C457B442FCE1BA80011D338 /* CallVanRecruitmentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */; };
+		7C457B452FCE1BA80011D338 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B192FCE1BA80011D338 /* HomeView.swift */; };
+		7C457B492FCE1BA80011D338 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B132FCE1BA80011D338 /* ShopView.swift */; };
 		7C4C714E2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */; };
 		7C4D5A3C2F01638800B40128 /* BusSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A122F01638800B40128 /* BusSearchViewController.swift */; };
 		7C4D5A3D2F01638800B40128 /* BusSearchResultViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A1D2F01638800B40128 /* BusSearchResultViewModel.swift */; };
@@ -175,6 +184,12 @@
 		7C7F432A2F65F42300CC5860 /* CallVanRecruitmentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F43292F65F42300CC5860 /* CallVanRecruitmentState.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
+		7C8A00012FD000000011D338 /* NewHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A00022FD000000011D338 /* NewHomeViewModel.swift */; };
+		7C8A00072FD200000011D338 /* DiningHeaderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A00082FD200000011D338 /* DiningHeaderButton.swift */; };
+		7C8A00092FD200000011D338 /* DiningCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A000A2FD200000011D338 /* DiningCarousel.swift */; };
+		7C8A000B2FD200000011D338 /* DiningMenuCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A000C2FD200000011D338 /* DiningMenuCard.swift */; };
+		7C8A000D2FD200000011D338 /* EmptyDiningCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A000E2FD200000011D338 /* EmptyDiningCard.swift */; };
+		7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A00102FD200000011D338 /* DiningIndicatorChip.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
 		7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD322F20BEC200F85BDE /* LostItemService.swift */; };
 		7C8ADD352F20BF4600F85BDE /* LostItemAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */; };
@@ -186,6 +201,12 @@
 		7C8BFCC32FCFF47600963679 /* ActionBindableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCC22FCFF47600963679 /* ActionBindableView.swift */; };
 		7C8BFCD32FD0272900963679 /* View+border.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCD22FD0272900963679 /* View+border.swift */; };
 		7C8BFCD62FD032A000963679 /* View+linespacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCD52FD032A000963679 /* View+linespacing.swift */; };
+		7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */; };
+		7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */; };
+		7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */; };
+		7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */; };
+		7C8BFCEF2FD04BA000963679 /* FetchNewHomeCountsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */; };
+		7C8BFCF12FD04B800963679 /* NewHomeCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
 		7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */; };
 		7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */; };
@@ -1001,6 +1022,15 @@
 		7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewControllerB.swift; sourceTree = "<group>"; };
 		7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 		7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewModelProtocol.swift; sourceTree = "<group>"; };
+		7C457B092FCE1BA80011D338 /* DiningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningView.swift; sourceTree = "<group>"; };
+		7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRecruitmentButton.swift; sourceTree = "<group>"; };
+		7C457B0E2FCE1BA80011D338 /* MobilitySmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilitySmallButton.swift; sourceTree = "<group>"; };
+		7C457B0F2FCE1BA80011D338 /* ShuttleTicketButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTicketButton.swift; sourceTree = "<group>"; };
+		7C457B112FCE1BA80011D338 /* MobilityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilityView.swift; sourceTree = "<group>"; };
+		7C457B132FCE1BA80011D338 /* ShopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopView.swift; sourceTree = "<group>"; };
+		7C457B152FCE1BA80011D338 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
+		7C457B182FCE1BA80011D338 /* HomeHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHostingController.swift; sourceTree = "<group>"; };
+		7C457B192FCE1BA80011D338 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenIfNeededUseCase.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
@@ -1119,6 +1149,12 @@
 		7C7F43292F65F42300CC5860 /* CallVanRecruitmentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRecruitmentState.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
+		7C8A00022FD000000011D338 /* NewHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomeViewModel.swift; sourceTree = "<group>"; };
+		7C8A00082FD200000011D338 /* DiningHeaderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningHeaderButton.swift; sourceTree = "<group>"; };
+		7C8A000A2FD200000011D338 /* DiningCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningCarousel.swift; sourceTree = "<group>"; };
+		7C8A000C2FD200000011D338 /* DiningMenuCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningMenuCard.swift; sourceTree = "<group>"; };
+		7C8A000E2FD200000011D338 /* EmptyDiningCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDiningCard.swift; sourceTree = "<group>"; };
+		7C8A00102FD200000011D338 /* DiningIndicatorChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningIndicatorChip.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
 		7C8ADD322F20BEC200F85BDE /* LostItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemService.swift; sourceTree = "<group>"; };
 		7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemAPI.swift; sourceTree = "<group>"; };
@@ -1130,6 +1166,12 @@
 		7C8BFCC22FCFF47600963679 /* ActionBindableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBindableView.swift; sourceTree = "<group>"; };
 		7C8BFCD22FD0272900963679 /* View+border.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+border.swift"; sourceTree = "<group>"; };
 		7C8BFCD52FD032A000963679 /* View+linespacing.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+linespacing.swift"; sourceTree = "<group>"; };
+		7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDiningItem.swift; sourceTree = "<group>"; };
+		7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeader.swift; sourceTree = "<group>"; };
+		7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHomeDiningListUseCase.swift; sourceTree = "<group>"; };
+		7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHomeHeaderUseCase.swift; sourceTree = "<group>"; };
+		7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNewHomeCountsUseCase.swift; sourceTree = "<group>"; };
+		7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomeCounts.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
 		7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionView.swift; sourceTree = "<group>"; };
 		7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -2005,6 +2047,76 @@
 			path = LostItemImagesCollectionView;
 			sourceTree = "<group>";
 		};
+		7C457B082FCE1BA80011D338 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C8A00082FD200000011D338 /* DiningHeaderButton.swift */,
+				7C8A000A2FD200000011D338 /* DiningCarousel.swift */,
+				7C8A000C2FD200000011D338 /* DiningMenuCard.swift */,
+				7C8A000E2FD200000011D338 /* EmptyDiningCard.swift */,
+				7C8A00102FD200000011D338 /* DiningIndicatorChip.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C457B0A2FCE1BA80011D338 /* DiningView */ = {
+			isa = PBXGroup;
+			children = (
+				7C457B082FCE1BA80011D338 /* Subviews */,
+				7C457B092FCE1BA80011D338 /* DiningView.swift */,
+			);
+			path = DiningView;
+			sourceTree = "<group>";
+		};
+		7C457B102FCE1BA80011D338 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C457B0F2FCE1BA80011D338 /* ShuttleTicketButton.swift */,
+				7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */,
+				7C457B0E2FCE1BA80011D338 /* MobilitySmallButton.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C457B122FCE1BA80011D338 /* MobilityView */ = {
+			isa = PBXGroup;
+			children = (
+				7C457B102FCE1BA80011D338 /* Subviews */,
+				7C457B112FCE1BA80011D338 /* MobilityView.swift */,
+			);
+			path = MobilityView;
+			sourceTree = "<group>";
+		};
+		7C457B172FCE1BA80011D338 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C457B152FCE1BA80011D338 /* HomeHeaderView.swift */,
+				7C457B0A2FCE1BA80011D338 /* DiningView */,
+				7C457B122FCE1BA80011D338 /* MobilityView */,
+				7C457B132FCE1BA80011D338 /* ShopView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C457B1A2FCE1BA80011D338 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				7C457B172FCE1BA80011D338 /* Subviews */,
+				7C457B182FCE1BA80011D338 /* HomeHostingController.swift */,
+				7C457B192FCE1BA80011D338 /* HomeView.swift */,
+				7C8A00022FD000000011D338 /* NewHomeViewModel.swift */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		7C457B2A2FCE1BA80011D338 /* NewHome */ = {
+			isa = PBXGroup;
+			children = (
+				7C457B1A2FCE1BA80011D338 /* Home */,
+			);
+			path = NewHome;
+			sourceTree = "<group>";
+		};
 		7C4D5A102F01638800B40128 /* BusAreaSelected */ = {
 			isa = PBXGroup;
 			children = (
@@ -2318,6 +2430,26 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		7C8A00362FD400000011D338 /* NewHome */ = {
+			isa = PBXGroup;
+			children = (
+				7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */,
+				7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */,
+				7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */,
+			);
+			path = NewHome;
+			sourceTree = "<group>";
+		};
+		7C8A00372FD400000011D338 /* NewHome */ = {
+			isa = PBXGroup;
+			children = (
+				7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */,
+				7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */,
+				7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */,
+			);
+			path = NewHome;
+			sourceTree = "<group>";
+		};
 		7C8ADD362F20C0A500F85BDE /* LostItem */ = {
 			isa = PBXGroup;
 			children = (
@@ -2444,13 +2576,6 @@
 				7CA63A2B2F1AF80F00226F86 /* LostItemListTableViewCell.swift */,
 			);
 			path = LostItemListTableView;
-			sourceTree = "<group>";
-		};
-		7CB0619F2F321B9300E83CA9 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		7CB061C12F32312E00E83CA9 /* helpers */ = {
@@ -3920,6 +4045,7 @@
 		7CED90BB2EF2D1F900457128 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
+				7C457B2A2FCE1BA80011D338 /* NewHome */,
 				7CED8EE32EF2D1F900457128 /* Home */,
 				7CED8EF42EF2D1F900457128 /* LostItem */,
 				7CED8F052EF2D1F900457128 /* Chat */,
@@ -4100,7 +4226,6 @@
 				D27DD0202BA608310081FD36 /* Koin */,
 				A001E2D12845091F00D6C310 /* koinUITests */,
 				839D71172BEB1570001BC7F7 /* NotificationService */,
-				7CB0619F2F321B9300E83CA9 /* Frameworks */,
 				A001E2B52845091D00D6C310 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -4801,6 +4926,7 @@
 		D2FB23482BFD45180098BA2B /* UseCase */ = {
 			isa = PBXGroup;
 			children = (
+				7C8A00372FD400000011D338 /* NewHome */,
 				7CC42B452F5993DF00940CE1 /* CallVan */,
 				7C8ADD412F20C3CE00F85BDE /* LostItem */,
 				D2D462642D63B97600C60864 /* Chat */,
@@ -4822,6 +4948,7 @@
 		D2FB23492BFD451F0098BA2B /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				7C8A00362FD400000011D338 /* NewHome */,
 				7C7CCE6E2F866E8900E3A54B /* Core */,
 				7CA63A1F2F1AF73500226F86 /* LostItem */,
 				D815DD972E08216B004A72BE /* Order */,
@@ -5638,6 +5765,24 @@
 				7CED91752EF2D1F900457128 /* ShopReviewReportViewController.swift in Sources */,
 				7CED91772EF2D1F900457128 /* MenuCollectionView.swift in Sources */,
 				7CED91782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift in Sources */,
+				7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */,
+				7C8A00072FD200000011D338 /* DiningHeaderButton.swift in Sources */,
+				7C8A00092FD200000011D338 /* DiningCarousel.swift in Sources */,
+				7C8A000B2FD200000011D338 /* DiningMenuCard.swift in Sources */,
+				7C8A000D2FD200000011D338 /* EmptyDiningCard.swift in Sources */,
+				7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */,
+				7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */,
+				7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */,
+				7C8BFCEF2FD04BA000963679 /* FetchNewHomeCountsUseCase.swift in Sources */,
+				7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */,
+				7C457B342FCE1BA80011D338 /* ShuttleTicketButton.swift in Sources */,
+				7C457B382FCE1BA80011D338 /* HomeHeaderView.swift in Sources */,
+				7C457B3C2FCE1BA80011D338 /* MobilitySmallButton.swift in Sources */,
+				7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */,
+				7C457B442FCE1BA80011D338 /* CallVanRecruitmentButton.swift in Sources */,
+				7C457B452FCE1BA80011D338 /* HomeView.swift in Sources */,
+				7C457B492FCE1BA80011D338 /* ShopView.swift in Sources */,
+				7C8A00012FD000000011D338 /* NewHomeViewModel.swift in Sources */,
 				7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */,
 				7CED917B2EF2D1F900457128 /* WriteTypeModalViewController.swift in Sources */,
 				7C61D34B2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift in Sources */,
@@ -5933,6 +6078,9 @@
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
 				7CC42B362F58283500940CE1 /* CallVanNotificationViewController.swift in Sources */,
+				7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */,
+				7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */,
+				7C8BFCF12FD04B800963679 /* NewHomeCounts.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				7CA60D672F6619F4007C08C1 /* CallVanService.swift in Sources */,
