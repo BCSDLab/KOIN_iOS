@@ -27,6 +27,11 @@
 		7C0C189F2F68AB33001781B3 /* CallVanChatRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C189E2F68AB33001781B3 /* CallVanChatRequest.swift */; };
 		7C0C18A12F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C18A02F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift */; };
 		7C0C18A32F68FD3D001781B3 /* CallVanSummaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0C18A22F68FD3D001781B3 /* CallVanSummaryDto.swift */; };
+		7C0F4A822FEDE6410045E163 /* View+isHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A832FEDE6410045E163 /* View+isHidden.swift */; };
+		7C0F4A842FEDE6410045E163 /* View+loadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */; };
+		7C0F4A862FEDE6410045E163 /* View+onFirstAppear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */; };
+		7C0F4A882FEE0AE80045E163 /* View+applySketchShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A892FEE0AE80045E163 /* View+applySketchShadow.swift */; };
+		7C0F4A8A2FEE0AE80045E163 /* View+hideKeyboardWhenTapAround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A8B2FEE0AE80045E163 /* View+hideKeyboardWhenTapAround.swift */; };
 		7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C16AA362F3E0DBE0071ABE6 /* Interceptor.swift */; };
 		7C16AA392F3E9FBC0071ABE6 /* ErrorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C16AA382F3E9FBC0071ABE6 /* ErrorViewController.swift */; };
 		7C17EEA82EBF4F25008BCA89 /* ShopSearch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */; };
@@ -150,11 +155,6 @@
 		7C6790A82FCC4C600045E163 /* Color+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790A52FCC4C600045E163 /* Color+.swift */; };
 		7C6790A92FCC4C600045E163 /* Font+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790A62FCC4C600045E163 /* Font+.swift */; };
 		7C6790AA2FCC4C600045E163 /* Image+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790A72FCC4C600045E163 /* Image+.swift */; };
-		7C0F4A822FEDE6410045E163 /* View+isHidden.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A832FEDE6410045E163 /* View+isHidden.swift */; };
-		7C0F4A842FEDE6410045E163 /* View+loadingOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */; };
-		7C0F4A862FEDE6410045E163 /* View+onFirstAppear.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */; };
-		7C0F4A882FEE0AE80045E163 /* View+applySketchShadow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A892FEE0AE80045E163 /* View+applySketchShadow.swift */; };
-		7C0F4A8A2FEE0AE80045E163 /* View+hideKeyboardWhenTapAround.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C0F4A8B2FEE0AE80045E163 /* View+hideKeyboardWhenTapAround.swift */; };
 		7C6790AF2FCC5B160045E163 /* FontAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AD2FCC5B160045E163 /* FontAsset.swift */; };
 		7C6790B02FCC5B160045E163 /* ColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AC2FCC5B160045E163 /* ColorAsset.swift */; };
 		7C6790B12FCC5B160045E163 /* SFSymbols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790AE2FCC5B160045E163 /* SFSymbols.swift */; };
@@ -182,6 +182,7 @@
 		7C8ADD3E2F20C2C400F85BDE /* LostItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD3D2F20C2C400F85BDE /* LostItemRepository.swift */; };
 		7C8ADD402F20C30700F85BDE /* DefaultLostItemRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD3F2F20C30700F85BDE /* DefaultLostItemRepository.swift */; };
 		7C8ADD452F20C3FB00F85BDE /* FetchLostItemListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */; };
+		7C8BFCC32FCFF47600963679 /* ActionBindableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCC22FCFF47600963679 /* ActionBindableView.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
 		7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */; };
 		7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */; };
@@ -967,6 +968,11 @@
 		7C0C189E2F68AB33001781B3 /* CallVanChatRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatRequest.swift; sourceTree = "<group>"; };
 		7C0C18A02F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanSummaryUseCase.swift; sourceTree = "<group>"; };
 		7C0C18A22F68FD3D001781B3 /* CallVanSummaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanSummaryDto.swift; sourceTree = "<group>"; };
+		7C0F4A832FEDE6410045E163 /* View+isHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+isHidden.swift"; sourceTree = "<group>"; };
+		7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+loadingOverlay.swift"; sourceTree = "<group>"; };
+		7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+onFirstAppear.swift"; sourceTree = "<group>"; };
+		7C0F4A892FEE0AE80045E163 /* View+applySketchShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+applySketchShadow.swift"; sourceTree = "<group>"; };
+		7C0F4A8B2FEE0AE80045E163 /* View+hideKeyboardWhenTapAround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+hideKeyboardWhenTapAround.swift"; sourceTree = "<group>"; };
 		7C16AA362F3E0DBE0071ABE6 /* Interceptor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interceptor.swift; sourceTree = "<group>"; };
 		7C16AA382F3E9FBC0071ABE6 /* ErrorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorViewController.swift; sourceTree = "<group>"; };
 		7C17EEA72EBF4F25008BCA89 /* ShopSearch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearch.swift; sourceTree = "<group>"; };
@@ -1090,11 +1096,6 @@
 		7C6790A52FCC4C600045E163 /* Color+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+.swift"; sourceTree = "<group>"; };
 		7C6790A62FCC4C600045E163 /* Font+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Font+.swift"; sourceTree = "<group>"; };
 		7C6790A72FCC4C600045E163 /* Image+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Image+.swift"; sourceTree = "<group>"; };
-		7C0F4A832FEDE6410045E163 /* View+isHidden.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+isHidden.swift"; sourceTree = "<group>"; };
-		7C0F4A852FEDE6410045E163 /* View+loadingOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+loadingOverlay.swift"; sourceTree = "<group>"; };
-		7C0F4A872FEDE6410045E163 /* View+onFirstAppear.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+onFirstAppear.swift"; sourceTree = "<group>"; };
-		7C0F4A892FEE0AE80045E163 /* View+applySketchShadow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+applySketchShadow.swift"; sourceTree = "<group>"; };
-		7C0F4A8B2FEE0AE80045E163 /* View+hideKeyboardWhenTapAround.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+hideKeyboardWhenTapAround.swift"; sourceTree = "<group>"; };
 		7C6790AC2FCC5B160045E163 /* ColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorAsset.swift; sourceTree = "<group>"; };
 		7C6790AD2FCC5B160045E163 /* FontAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontAsset.swift; sourceTree = "<group>"; };
 		7C6790AE2FCC5B160045E163 /* SFSymbols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbols.swift; sourceTree = "<group>"; };
@@ -1122,6 +1123,7 @@
 		7C8ADD3D2F20C2C400F85BDE /* LostItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemRepository.swift; sourceTree = "<group>"; };
 		7C8ADD3F2F20C30700F85BDE /* DefaultLostItemRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultLostItemRepository.swift; sourceTree = "<group>"; };
 		7C8ADD442F20C3FB00F85BDE /* FetchLostItemListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemListUseCase.swift; sourceTree = "<group>"; };
+		7C8BFCC22FCFF47600963679 /* ActionBindableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionBindableView.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
 		7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionView.swift; sourceTree = "<group>"; };
 		7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -5380,6 +5382,7 @@
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				7C0C18972F68A91A001781B3 /* PostCallVanChatUseCase.swift in Sources */,
 				7C372F272F1D644A00149729 /* LostItemData.swift in Sources */,
+				7C8BFCC32FCFF47600963679 /* ActionBindableView.swift in Sources */,
 				D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */,
 				83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */,
 				D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */,
