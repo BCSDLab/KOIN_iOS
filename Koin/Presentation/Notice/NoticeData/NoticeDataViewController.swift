@@ -389,17 +389,26 @@ extension NoticeDataViewController {
     @objc private func tapInventoryButton() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.inventory, .click, "목록"))
         guard let navigationController = navigationController else { return }
-        if let index = navigationController.viewControllers.lastIndex(where: { $0 is NoticeListViewController }) {
-            let viewControllersToKeep = Array(navigationController.viewControllers[0...index])
-            navigationController.setViewControllers(viewControllersToKeep, animated: false)
+        if let noticeListViewController = navigationController.viewControllers.last(where: { $0 is NoticeListViewController }) {
+            navigationController.popToViewController(noticeListViewController, animated: true)
         } else {
-            if let index = navigationController.viewControllers.lastIndex(where: { $0 is HomeViewController }) {
-                let viewControllersToKeep = Array(navigationController.viewControllers[0...index])
-                navigationController.setViewControllers(viewControllersToKeep, animated: false)
-                let noticeRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
-                let viewController = NoticeListViewController(viewModel: NoticeListViewModel(fetchNoticeArticlesUseCase: DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository), fetchMyKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
-                navigationController.pushViewController(viewController, animated: false)
+            guard let noticeDataIndex = navigationController.viewControllers.firstIndex(where: { $0 is NoticeDataViewController }) else {
+                return
             }
+            let viewControllersToKeep = Array(navigationController.viewControllers.prefix(upTo: noticeDataIndex))
+            let noticeRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
+            let noticeListViewController = NoticeListViewController(
+                viewModel: NoticeListViewModel(
+                    fetchNoticeArticlesUseCase: DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository),
+                    fetchMyKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository),
+                    logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                )
+            )
+            navigationController.setViewControllers(
+                viewControllersToKeep + [noticeListViewController, self],
+                animated: false
+            )
+            navigationController.popViewController(animated: false)
         }
     }
     

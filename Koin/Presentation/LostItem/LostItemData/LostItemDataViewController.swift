@@ -212,25 +212,32 @@ extension LostItemDataViewController {
         }
         
         else {
-            guard let homeViewController = navigationController?.viewControllers.first(where: {
-                $0 is HomeViewController
+            guard let lostItemDataIndex = navigationController?.viewControllers.firstIndex(where: {
+                $0 is LostItemDataViewController
             }) else {
                 return
             }
+            guard let navigationController else { return }
+            let viewControllersToKeep = Array(navigationController.viewControllers.prefix(upTo: lostItemDataIndex))
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-            let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+            let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
-            let viewModel = LostItemListViewModel(
-                checkLoginUseCase: checkLoginUseCase,
-                fetchLostItemListUseCase: fetchLostItemItemUseCase,
-                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                fetchMyKeywordUseCase: fetchMyKeywordUseCase
+            let lostItemListViewController = LostItemListViewController(
+                viewModel: LostItemListViewModel(
+                    checkLoginUseCase: checkLoginUseCase,
+                    fetchLostItemListUseCase: fetchLostItemListUseCase,
+                    logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                    fetchMyKeywordUseCase: fetchMyKeywordUseCase
+                )
             )
-            let lostItemListViewController = LostItemListViewController(viewModel: viewModel)
-            navigationController?.setViewControllers([homeViewController, lostItemListViewController], animated: true)
+            navigationController.setViewControllers(
+                viewControllersToKeep + [lostItemListViewController, self],
+                animated: false
+            )
+            navigationController.popViewController(animated: false)
         }
     }
     

@@ -65,11 +65,7 @@ extension RegisterCompletionViewController {
     }
 
     @objc private func homeButtonTapped() {
-        if let navigationController = self.navigationController {
-            if let homeVC = navigationController.viewControllers.first(where: { $0 is HomeViewController }) {
-                navigationController.popToViewController(homeVC, animated: true)
-            }
-        }
+        navigationController?.popToRootViewController(animated: true)
     }
 }
 
@@ -113,4 +109,3 @@ extension RegisterCompletionViewController {
         self.view.backgroundColor = .white
     }
 }
-
