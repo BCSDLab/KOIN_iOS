@@ -195,6 +195,12 @@
 		7C8A000B2FD200000011D338 /* DiningMenuCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A000C2FD200000011D338 /* DiningMenuCard.swift */; };
 		7C8A000D2FD200000011D338 /* EmptyDiningCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A000E2FD200000011D338 /* EmptyDiningCard.swift */; };
 		7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A00102FD200000011D338 /* DiningIndicatorChip.swift */; };
+		7C8A941E2FD0A94F00DEA6F5 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */; };
+		7C8A941F2FD0A94F00DEA6F5 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */; };
+		7C8A94222FD0A96400DEA6F5 /* NotificationEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94212FD0A96400DEA6F5 /* NotificationEmptyView.swift */; };
+		7C8A94272FD0A97400DEA6F5 /* NotificationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94242FD0A97400DEA6F5 /* NotificationFooterView.swift */; };
+		7C8A94282FD0A97400DEA6F5 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94262FD0A97400DEA6F5 /* NotificationTableViewCell.swift */; };
+		7C8A94292FD0A97400DEA6F5 /* NotificationTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94252FD0A97400DEA6F5 /* NotificationTableView.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
 		7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD322F20BEC200F85BDE /* LostItemService.swift */; };
 		7C8ADD352F20BF4600F85BDE /* LostItemAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */; };
@@ -207,10 +213,13 @@
 		7C8BFCD32FD0272900963679 /* View+border.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCD22FD0272900963679 /* View+border.swift */; };
 		7C8BFCD62FD032A000963679 /* View+linespacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCD52FD032A000963679 /* View+linespacing.swift */; };
 		7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */; };
+		7C8BFCE22FD04B8000963679 /* NotificationIconType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDF2FD04B8000963679 /* NotificationIconType.swift */; };
 		7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */; };
+		7C8BFCE42FD04B8000963679 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE02FD04B8000963679 /* NotificationItem.swift */; };
 		7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDC2FD04B8000963679 /* CategoryModels.swift */; };
 		7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */; };
 		7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */; };
+		7C8BFCED2FD04BA000963679 /* FetchNotificationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */; };
 		7C8BFCEF2FD04BA000963679 /* FetchNewHomeCountsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */; };
 		7C8BFCF12FD04B800963679 /* NewHomeCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
@@ -1166,6 +1175,12 @@
 		7C8A000C2FD200000011D338 /* DiningMenuCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningMenuCard.swift; sourceTree = "<group>"; };
 		7C8A000E2FD200000011D338 /* EmptyDiningCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyDiningCard.swift; sourceTree = "<group>"; };
 		7C8A00102FD200000011D338 /* DiningIndicatorChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningIndicatorChip.swift; sourceTree = "<group>"; };
+		7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
+		7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
+		7C8A94212FD0A96400DEA6F5 /* NotificationEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEmptyView.swift; sourceTree = "<group>"; };
+		7C8A94242FD0A97400DEA6F5 /* NotificationFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFooterView.swift; sourceTree = "<group>"; };
+		7C8A94252FD0A97400DEA6F5 /* NotificationTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableView.swift; sourceTree = "<group>"; };
+		7C8A94262FD0A97400DEA6F5 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
 		7C8ADD322F20BEC200F85BDE /* LostItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemService.swift; sourceTree = "<group>"; };
 		7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemAPI.swift; sourceTree = "<group>"; };
@@ -1180,9 +1195,12 @@
 		7C8BFCDC2FD04B8000963679 /* CategoryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModels.swift; sourceTree = "<group>"; };
 		7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDiningItem.swift; sourceTree = "<group>"; };
 		7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeader.swift; sourceTree = "<group>"; };
+		7C8BFCDF2FD04B8000963679 /* NotificationIconType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationIconType.swift; sourceTree = "<group>"; };
+		7C8BFCE02FD04B8000963679 /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItem.swift; sourceTree = "<group>"; };
 		7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHomeDiningListUseCase.swift; sourceTree = "<group>"; };
 		7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHomeHeaderUseCase.swift; sourceTree = "<group>"; };
 		7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNewHomeCountsUseCase.swift; sourceTree = "<group>"; };
+		7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationListUseCase.swift; sourceTree = "<group>"; };
 		7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomeCounts.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
 		7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionView.swift; sourceTree = "<group>"; };
@@ -2141,11 +2159,22 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		7C457B282FCE1BA80011D338 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				7C8A94202FD0A95100DEA6F5 /* Subviews */,
+				7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */,
+				7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
 		7C457B2A2FCE1BA80011D338 /* NewHome */ = {
 			isa = PBXGroup;
 			children = (
 				7C457B1A2FCE1BA80011D338 /* Home */,
 				7C457B072FCE1BA80011D338 /* Category */,
+				7C457B282FCE1BA80011D338 /* Notification */,
 			);
 			path = NewHome;
 			sourceTree = "<group>";
@@ -2470,6 +2499,8 @@
 				7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */,
 				7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */,
 				7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */,
+				7C8BFCDF2FD04B8000963679 /* NotificationIconType.swift */,
+				7C8BFCE02FD04B8000963679 /* NotificationItem.swift */,
 			);
 			path = NewHome;
 			sourceTree = "<group>";
@@ -2480,8 +2511,28 @@
 				7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */,
 				7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */,
 				7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */,
+				7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */,
 			);
 			path = NewHome;
+			sourceTree = "<group>";
+		};
+		7C8A94202FD0A95100DEA6F5 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C8A94232FD0A96700DEA6F5 /* NotificationTableView */,
+				7C8A94212FD0A96400DEA6F5 /* NotificationEmptyView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C8A94232FD0A96700DEA6F5 /* NotificationTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7C8A94252FD0A97400DEA6F5 /* NotificationTableView.swift */,
+				7C8A94262FD0A97400DEA6F5 /* NotificationTableViewCell.swift */,
+				7C8A94242FD0A97400DEA6F5 /* NotificationFooterView.swift */,
+			);
+			path = NotificationTableView;
 			sourceTree = "<group>";
 		};
 		7C8ADD362F20C0A500F85BDE /* LostItem */ = {
@@ -5807,6 +5858,7 @@
 				7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */,
 				7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */,
 				7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */,
+				7C8BFCED2FD04BA000963679 /* FetchNotificationListUseCase.swift in Sources */,
 				7C8BFCEF2FD04BA000963679 /* FetchNewHomeCountsUseCase.swift in Sources */,
 				7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */,
 				7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */,
@@ -5957,6 +6009,9 @@
 				7C6790932FCC48A60045E163 /* UICollectionView+.swift in Sources */,
 				7C6790942FCC48A60045E163 /* UIViewcontroller+Alert.swift in Sources */,
 				7C6790952FCC48A60045E163 /* UIButton+.swift in Sources */,
+				7C8A94272FD0A97400DEA6F5 /* NotificationFooterView.swift in Sources */,
+				7C8A94282FD0A97400DEA6F5 /* NotificationTableViewCell.swift in Sources */,
+				7C8A94292FD0A97400DEA6F5 /* NotificationTableView.swift in Sources */,
 				7C6790962FCC48A60045E163 /* UIImageView+.swift in Sources */,
 				7C6790972FCC48A60045E163 /* CALayer+.swift in Sources */,
 				7C6790982FCC48A60045E163 /* UITextFiled+Publisher.swift in Sources */,
@@ -6118,7 +6173,9 @@
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
 				7CC42B362F58283500940CE1 /* CallVanNotificationViewController.swift in Sources */,
 				7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */,
+				7C8BFCE22FD04B8000963679 /* NotificationIconType.swift in Sources */,
 				7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */,
+				7C8BFCE42FD04B8000963679 /* NotificationItem.swift in Sources */,
 				7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */,
 				7C8BFCF12FD04B800963679 /* NewHomeCounts.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
@@ -6185,6 +6242,7 @@
 				7CC42B3C2F58284D00940CE1 /* CallVanNotificationTableViewCell.swift in Sources */,
 				D20AD6F52E029F8D0067760A /* CheckVerificationEmailUseCase.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
+				7C8A94222FD0A96400DEA6F5 /* NotificationEmptyView.swift in Sources */,
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */,
@@ -6239,6 +6297,8 @@
 				7C6790B52FCC5B460045E163 /* ImageAsset.swift in Sources */,
 				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
 				7CA60D772F663F7B007C08C1 /* PostNotificationReadUseCase.swift in Sources */,
+				7C8A941E2FD0A94F00DEA6F5 /* NotificationViewModel.swift in Sources */,
+				7C8A941F2FD0A94F00DEA6F5 /* NotificationViewController.swift in Sources */,
 				7CC42B402F597B5B00940CE1 /* CallVanNotificationViewModel.swift in Sources */,
 				7CB11C232FB24AAC004E0C80 /* LostItemKeywordLeftAlignedCollectionViewCell.swift in Sources */,
 				7C372EDD2F1B8DC900149729 /* LostItemListFilterButton.swift in Sources */,
