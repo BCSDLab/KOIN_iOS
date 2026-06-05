@@ -65,7 +65,7 @@ final class ChangePasswordSuccessViewController: UIViewController {
 
 extension ChangePasswordSuccessViewController {
     @objc private func goLoginButtonTapped() {
-        let homeViewController = makeHomeViewController()
+        let homeViewController = makeHomeTabbarController()
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
@@ -86,41 +86,63 @@ extension ChangePasswordSuccessViewController {
         let viewControllers = [homeViewController, loginViewController]
         navigationController?.setViewControllers(viewControllers, animated: true)
     }
-    private func makeHomeViewController() -> UIViewController {
+    
+    private func makeHomeTabbarController() -> HomeTabbarController {
+        let homeViewModel = makeNewHomeViewModel()
+        let homeRootView = HomeView(viewModel: homeViewModel)
+        let homeViewController = HomeHostingController(rootView: homeRootView)
+
+        let categoryRootView = CategoryView()
+        let categoryViewController = CategoryHostingController(rootView: categoryRootView)
+
+        let noticeViewController = makeNoticeListViewController()
+        let profileViewController = UIViewController()
+
+        return HomeTabbarController(
+            homeViewController: homeViewController,
+            categoryViewController: categoryViewController,
+            noticeViewController: noticeViewController,
+            profileViewController: profileViewController
+        )
+    }
+
+    private func makeNewHomeViewModel() -> NewHomeViewModel {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let dateProvider = DefaultDateProvider()
-        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
-        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
-        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
-            userRepository: userRepository,
-            notiRepository: notiRepository)
-        let homeViewModel = HomeViewModel(
-            fetchDiningListUseCase: fetchDiningListUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
-            dateProvider: dateProvider,
+
+        return NewHomeViewModel(
+            fetchHomeHeaderUseCase: MockFetchHomeHeaderUseCase(),
+            fetchHomeDiningListUseCase: DefaultFetchHomeDiningListUseCase(
+                fetchDiningListUseCase: DefaultFetchDiningListUseCase(diningRepository: diningRepository),
+                dateProvider: DefaultDateProvider()
+            ),
+            fetchCountsUseCase: MockFetchNewHomeCountsUseCase(),
             checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
-            fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
-            checkLoginUseCase: checkLoginUseCase,
-            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
-            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
-            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
+            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: userRepository),
+            sendDeviceTokenIfNeededUseCase: DefaultSendDeviceTokenIfNeededUseCase(
+                userRepository: userRepository,
+                notiRepository: notiRepository
+            )
         )
-        let viewController = HomeViewController(viewModel: homeViewModel)
-        return viewController
     }
+    
+    private func makeNoticeListViewController() -> UIViewController {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
+            repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+        )
+        let viewModel = NoticeListViewModel(
+            fetchNoticeArticlesUseCase: fetchArticleListUseCase,
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        return NoticeListViewController(viewModel: viewModel)
+    }
+
 }
 
 extension ChangePasswordSuccessViewController {

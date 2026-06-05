@@ -7,12 +7,12 @@
 
 import SwiftUI
 
-extension SwiftUI.Image {
-    static func appImage(asset: ImageAsset) -> SwiftUI.Image {
-        return SwiftUI.Image(asset.rawValue)
+extension Image {
+    static func appImage(asset: ImageAsset) -> Image {
+        return Image(asset.rawValue)
     }
 
-    static func appImage(symbol: SFSymbols) -> SwiftUI.Image {
-        return SwiftUI.Image(systemName: symbol.rawValue)
+    static func appImage(symbol: SFSymbols) -> Image {
+        return Image(systemName: symbol.rawValue)
     }
 }

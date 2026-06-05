@@ -37,7 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // cold start
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        let navigationController = CustomNavigationController(rootViewController: makeHomeViewController())
+        let navigationController = CustomNavigationController(rootViewController: makeHomeTabbarController())
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
@@ -116,13 +116,13 @@ extension SceneDelegate {
         case .home, .login, .club:
             break
         case .shop:
-            let shopViewController = createShopViewController()
+            let shopViewController = makeShopViewController()
             navigationController?.pushViewController(shopViewController, animated: true)
         case .dining:
-            let diningViewController = createDiningViewController()
+            let diningViewController = makeDiningViewController()
             navigationController?.pushViewController(diningViewController, animated: true)
         case .timeTable:
-            let timeTableViewController = createTimeTableViewController()
+            let timeTableViewController = makeTimeTableViewController()
             navigationController?.pushViewController(timeTableViewController, animated: true)
         case .keyword:
             guard let id = extractValue(from: schemeUri, value: "id"), let intId = Int(id) else {
@@ -130,7 +130,7 @@ extension SceneDelegate {
                 return
             }
             
-            let noticeDataViewController = createNoticeDataViewController(noticeId: intId)
+            let noticeDataViewController = makeNoticeDataViewController(noticeId: intId)
             navigationController?.pushViewController(noticeDataViewController, animated: true)
             
             if let keyword = extractValue(from: schemeUri, value: "keyword") {
@@ -159,14 +159,14 @@ extension SceneDelegate {
                 print("postId : Invalid or missing")
                 return
             }
-            let callVanDataViewController = createCallVanDataViewController(postId: intPostId)
+            let callVanDataViewController = makeCallVanDataViewController(postId: intPostId)
             navigationController?.pushViewController(callVanDataViewController, animated: true)
         case .callvanChat:
             guard let postId = extractValue(from: schemeUri, value: "postId"), let intPostId = Int(postId) else {
                 print("postId : Invalid or missing")
                 return
             }
-            let callVanChatViewController = createCallVanChatViewController(postId: intPostId)
+            let callVanChatViewController = makeCallVanChatViewController(postId: intPostId)
             navigationController?.pushViewController(callVanChatViewController, animated: true)
         }
     }
@@ -174,42 +174,63 @@ extension SceneDelegate {
 
 extension SceneDelegate {
     
-    private func makeHomeViewController() -> UIViewController {
+    @MainActor
+    private func makeHomeTabbarController() -> HomeTabbarController {
+        let homeViewModel = makeNewHomeViewModel()
+        let homeRootView = HomeView(viewModel: homeViewModel)
+        let homeHostingController = HomeHostingController(rootView: homeRootView)
+
+        let categoryRootView = CategoryView()
+        let categoryViewController = CategoryHostingController(rootView: categoryRootView)
+
+        let noticeViewController = makeNoticeListViewController()
+        let profileViewController = UIViewController()
+
+        return HomeTabbarController(
+            homeViewController: homeHostingController,
+            categoryViewController: categoryViewController,
+            noticeViewController: noticeViewController,
+            profileViewController: profileViewController
+        )
+    }
+
+    private func makeNewHomeViewModel() -> NewHomeViewModel {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let dateProvider = DefaultDateProvider()
-        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
-        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
-        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
-            userRepository: userRepository,
-            notiRepository: notiRepository)
-        let homeViewModel = HomeViewModel(
-            fetchDiningListUseCase: fetchDiningListUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
-            dateProvider: dateProvider,
+
+        return NewHomeViewModel(
+            fetchHomeHeaderUseCase: MockFetchHomeHeaderUseCase(),
+            fetchHomeDiningListUseCase: DefaultFetchHomeDiningListUseCase(
+                fetchDiningListUseCase: DefaultFetchDiningListUseCase(diningRepository: diningRepository),
+                dateProvider: DefaultDateProvider()
+            ),
+            fetchCountsUseCase: MockFetchNewHomeCountsUseCase(),
             checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
-            fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
-            checkLoginUseCase: checkLoginUseCase,
-            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
-            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
-            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
+            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: userRepository),
+            sendDeviceTokenIfNeededUseCase: DefaultSendDeviceTokenIfNeededUseCase(
+                userRepository: userRepository,
+                notiRepository: notiRepository
+            )
         )
-        let viewController = HomeViewController(viewModel: homeViewModel)
-        return viewController
     }
     
+    private func makeNoticeListViewController() -> UIViewController {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
+            repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+        )
+        let viewModel = NoticeListViewModel(
+            fetchNoticeArticlesUseCase: fetchArticleListUseCase,
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        return NoticeListViewController(viewModel: viewModel)
+    }
+
     @objc private func presentErrorViewController() {
         
         guard isPresentingErrorViewController == false else {
@@ -218,9 +239,9 @@ extension SceneDelegate {
         
         if let navigationController = window?.rootViewController as? CustomNavigationController {
             
-            let homeViewController = makeHomeViewController()
+            let homeTabbarController = makeHomeTabbarController()
             let completion: ()->Void = { [weak self] in
-                navigationController.setViewControllers([homeViewController], animated: false)
+                navigationController.setViewControllers([homeTabbarController], animated: false)
                 navigationController.dismiss(animated: true) {
                     self?.isPresentingErrorViewController = false
                 }
@@ -272,7 +293,7 @@ extension SceneDelegate {
         navigationController?.pushViewController(diningViewController, animated: true)
     }
     
-    private func createCallVanDataViewController(postId: Int) -> CallVanDataViewController {
+    private func makeCallVanDataViewController(postId: Int) -> CallVanDataViewController {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
         let fetchCallVanNotificationListUseCase = DefaultFetchCallVanNotificationListUseCase(repository: callVanRepository)
@@ -286,7 +307,7 @@ extension SceneDelegate {
         return callVanDataViewController
     }
     
-    private func createCallVanChatViewController(postId: Int) -> CallVanChatViewController {
+    private func makeCallVanChatViewController(postId: Int) -> CallVanChatViewController {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
         let fetchCallVanChatUseCase = DefaultFetchCallVanChatUseCase(repository: callVanRepository)
@@ -305,7 +326,7 @@ extension SceneDelegate {
         return callVanChatViewController
     }
 
-    private func createNoticeDataViewController(noticeId: Int) -> NoticeDataViewController {
+    private func makeNoticeDataViewController(noticeId: Int) -> NoticeDataViewController {
         let service = DefaultNoticeService()
         let repository = DefaultNoticeListRepository(service: service)
         let viewModel = NoticeDataViewModel(
@@ -319,7 +340,7 @@ extension SceneDelegate {
         return viewController
     }
     
-    private func createDiningViewController() -> DiningViewController {
+    private func makeDiningViewController() -> DiningViewController {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
         let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
@@ -338,7 +359,7 @@ extension SceneDelegate {
         return diningViewController
     }
     
-    private func createShopViewController() -> ShopViewController {
+    private func makeShopViewController() -> ShopViewController {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
@@ -361,7 +382,7 @@ extension SceneDelegate {
         return shopViewController
     }
     
-    private func createTimeTableViewController() -> TimetableViewController {
+    private func makeTimeTableViewController() -> TimetableViewController {
         let viewController = TimetableViewController(viewModel: TimetableViewModel())
         return viewController
     }
@@ -370,12 +391,12 @@ extension SceneDelegate {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let fetchLostItemItemUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+        let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let fetchMyKeywordUseCase = DefaultFetchLostItemMyKeywordUseCase(repository: lostItemRepository)
         let viewModel = LostItemListViewModel(
             checkLoginUseCase: checkLoginUseCase,
-            fetchLostItemListUseCase: fetchLostItemItemUseCase,
+            fetchLostItemListUseCase: fetchLostItemListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             fetchMyKeywordUseCase: fetchMyKeywordUseCase
         )

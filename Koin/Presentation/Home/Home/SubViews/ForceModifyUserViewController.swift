@@ -66,39 +66,9 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
 
 extension ForceModifyUserViewController {
     @objc private func navigateButtonTapped() {
-        let userRepository = DefaultUserRepository(service: DefaultUserService())
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())        
-        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
+        let homeViewController = makeHomeTabbarController()
+
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let dateProvider = DefaultDateProvider()
-        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
-        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
-        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
-            userRepository: userRepository,
-            notiRepository: notiRepository)
-        let homeViewModel = HomeViewModel(
-            fetchDiningListUseCase: fetchDiningListUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
-            dateProvider: dateProvider,
-            checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
-            fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
-            checkLoginUseCase: checkLoginUseCase,
-            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
-            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
-            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
-        )
-        let homeViewController = HomeViewController(viewModel: homeViewModel)
-        
         let modifyUseCase = DefaultModifyUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
         let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
         let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
@@ -108,6 +78,63 @@ extension ForceModifyUserViewController {
         navigationController?.setViewControllers([homeViewController, changeMyProfileViewController], animated: true)
         
     }
+    
+    private func makeHomeTabbarController() -> HomeTabbarController {
+        let homeViewModel = makeNewHomeViewModel()
+        let homeRootView = HomeView(viewModel: homeViewModel)
+        let homeViewController = HomeHostingController(rootView: homeRootView)
+
+        let categoryRootView = CategoryView()
+        let categoryViewController = CategoryHostingController(rootView: categoryRootView)
+
+        let noticeViewController = makeNoticeListViewController()
+        let profileViewController = UIViewController()
+
+        return HomeTabbarController(
+            homeViewController: homeViewController,
+            categoryViewController: categoryViewController,
+            noticeViewController: noticeViewController,
+            profileViewController: profileViewController
+        )
+    }
+
+    private func makeNewHomeViewModel() -> NewHomeViewModel {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
+
+        return NewHomeViewModel(
+            fetchHomeHeaderUseCase: MockFetchHomeHeaderUseCase(),
+            fetchHomeDiningListUseCase: DefaultFetchHomeDiningListUseCase(
+                fetchDiningListUseCase: DefaultFetchDiningListUseCase(diningRepository: diningRepository),
+                dateProvider: DefaultDateProvider()
+            ),
+            fetchCountsUseCase: MockFetchNewHomeCountsUseCase(),
+            checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
+            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: userRepository),
+            sendDeviceTokenIfNeededUseCase: DefaultSendDeviceTokenIfNeededUseCase(
+                userRepository: userRepository,
+                notiRepository: notiRepository
+            )
+        )
+    }
+    
+    private func makeNoticeListViewController() -> UIViewController {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
+            repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+        )
+        let viewModel = NoticeListViewModel(
+            fetchNoticeArticlesUseCase: fetchArticleListUseCase,
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        return NoticeListViewController(viewModel: viewModel)
+    }
+
 }
 
 extension ForceModifyUserViewController {
@@ -162,4 +189,3 @@ extension ForceModifyUserViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-
