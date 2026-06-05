@@ -30,7 +30,7 @@ final class FoundIdViewController: UIViewController {
         $0.layer.cornerRadius = 8
     }
     
-    private let registerButton = UIButton().then {
+    private let findPasswordButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.primary500)
         $0.setTitle("비밀번호 찾기", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
@@ -57,7 +57,7 @@ final class FoundIdViewController: UIViewController {
         bind()
         updateSubMessageLabel(with: viewModel.loginId ?? "")
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
-        registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+        findPasswordButton.addTarget(self, action: #selector(findPasswordButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,12 +80,16 @@ extension FoundIdViewController {
         }
         navigationController.popToViewController(loginViewController, animated: true)
     }
-    @objc private func registerButtonTapped() {
-        guard let navigationController else { return }
-        guard let loginViewController = navigationController.viewControllers.last(where: { $0 is LoginViewController }) else {
+    @objc private func findPasswordButtonTapped() {
+        guard var viewControllers = navigationController?.viewControllers,
+              let loginViewController = viewControllers.last(where: { $0 is LoginViewController }) else {
             return
         }
-        navigationController.popToViewController(loginViewController, animated: true)
+        viewControllers = viewControllers.split(separator: loginViewController).map(Array.init).first ?? []
+        viewControllers.append(loginViewController)
+        viewControllers.append(FindPasswordCertViewController(viewModel: FindPasswordViewModel()))
+        print(viewControllers)
+        navigationController?.setViewControllers(viewControllers, animated: true)
     }
     
     func updateSubMessageLabel(with id: String) {
@@ -171,7 +175,7 @@ extension FoundIdViewController {
 extension FoundIdViewController {
     
     private func setupLayOuts() {
-        [messageLabel, subMessageLabel, loginButton, registerButton].forEach {
+        [messageLabel, subMessageLabel, loginButton, findPasswordButton].forEach {
             view.addSubview($0)
         }
     }
@@ -191,7 +195,7 @@ extension FoundIdViewController {
             $0.horizontalEdges.equalToSuperview().inset(48)
             $0.height.equalTo(48)
         }
-        registerButton.snp.makeConstraints {
+        findPasswordButton.snp.makeConstraints {
             $0.top.equalTo(loginButton.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(48)

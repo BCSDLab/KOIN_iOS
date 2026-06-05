@@ -22,13 +22,10 @@ struct HomeHeaderView: View {
                     .foregroundStyle(Color.ColorSystem.Primary.purple700)
 
                 Image.appImage(asset: header.weatherImage)
-                    .renderingMode(.template)
                     .resizable()
-                    .scaledToFit()
                     .frame(width: 16, height: 16)
-                    .foregroundStyle(Color.ColorSystem.Primary.purple800)
-
-                Text(verbatim: " \(header.weatherText)")
+                
+                Text(verbatim: "\(header.weatherText)")
                     .Typography(.caption)
                     .foregroundStyle(Color.ColorSystem.Neutral.gray600)
             }

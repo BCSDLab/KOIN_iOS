@@ -101,7 +101,6 @@ struct ShopView: View {
                         .frame(height: 21)
                     }
                 }
-                .buttonStyle(.plain)
 
                 Spacer()
 
@@ -114,6 +113,7 @@ struct ShopView: View {
             .background(Color.ColorSystem.Neutral.gray0)
             .clipShape(.rect(cornerRadius: 16))
             .border(Color.ColorSystem.Neutral.gray300, width: 0.5, radius: 16)
+            .buttonStyle(.plain)
         }
         .padding(.top, 16)
         .padding(.horizontal, 24)

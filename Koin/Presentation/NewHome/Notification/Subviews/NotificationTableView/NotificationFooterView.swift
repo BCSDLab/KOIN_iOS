@@ -34,7 +34,7 @@ private extension NotificationFooterView {
         backgroundColor = UIColor.ColorSystem.Neutral.gray0
         
         label.do {
-            $0.text = "최근 14일동안 받은 알림을 모두 확인했어요."
+            $0.text = "최근 14일 동안 받은 알림을 모두 확인했어요."
             $0.font = UIFont.appFont(.pretendardRegular, size: 14)
             $0.textColor = UIColor.appColor(.neutral400)
             $0.textAlignment = .center

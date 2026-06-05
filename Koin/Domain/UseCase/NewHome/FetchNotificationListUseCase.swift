@@ -35,7 +35,7 @@ final class MockFetchNotificationListUseCase: FetchNotificationListUseCase {
             NotificationItem(
                 id: 3,
                 iconType: .callvanpot,
-                title: "콜벤팟",
+                title: "콜밴팟",
                 content: "4명 모집 완료 | 한기대 → 천안역",
                 secondaryContent: "같이 탈 사람 모집이 끝났어요. 출발 시간과 장소를 확인해주세요.",
                 dateText: "2시간 전",

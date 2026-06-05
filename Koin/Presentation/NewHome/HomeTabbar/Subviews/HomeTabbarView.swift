@@ -13,7 +13,6 @@ final class HomeTabbarView: UIView {
     enum Layout {
         static let horizontalPadding: CGFloat = 24
         static let itemTopPadding: CGFloat = 12
-        static let itemBottomInset: CGFloat = 0
         static let barHeight: CGFloat = 52
         static let cornerRadius: CGFloat = 16
     }
@@ -77,7 +76,6 @@ extension HomeTabbarView {
             $0.top.equalToSuperview().offset(Layout.itemTopPadding)
             $0.leading.equalToSuperview().offset(Layout.horizontalPadding)
             $0.trailing.equalToSuperview().inset(Layout.horizontalPadding)
-            $0.bottom.equalTo(safeAreaLayoutGuide.snp.bottom).inset(Layout.itemBottomInset)
         }
     }
 

@@ -41,7 +41,7 @@ struct CallVanRecruitmentButton: View {
                     }
                     .frame(height:24)
 
-                    Text("같이 콜벤 탈 사람을 찾아요")
+                    Text("같이 콜밴 탈 사람을 찾아요")
                         .font(.appFont(.pretendardRegular, size: 12))
                         .foregroundStyle(Color.ColorSystem.Neutral.gray500)
                         .frame(height: 19)

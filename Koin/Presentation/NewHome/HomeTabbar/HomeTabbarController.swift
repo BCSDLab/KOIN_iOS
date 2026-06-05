@@ -52,7 +52,7 @@ final class HomeTabbarController: UITabBarController {
     private lazy var customTabBarView = HomeTabbarView(items: Tab.allCases.map(\.item))
     private var customTabBarHeightConstraint: Constraint?
     private var customTabBarHeight: CGFloat {
-        HomeTabbarView.Layout.barHeight + view.safeAreaInsets.bottom
+        HomeTabbarView.Layout.barHeight + (view.safeAreaInsets.bottom < 0.5 ? HomeTabbarView.Layout.itemTopPadding : view.safeAreaInsets.bottom)
     }
     
     // MARK: - Initializer
