@@ -122,6 +122,7 @@ extension NewHomeViewModel {
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
                     self?.toastMessage = error.message
+                    self?.isLoading = false
                 }
             },
             receiveValue: { [weak self] header, diningItems, counts in
