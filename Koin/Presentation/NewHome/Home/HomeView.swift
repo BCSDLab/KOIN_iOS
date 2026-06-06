@@ -50,6 +50,7 @@ struct HomeView: View, ActionBindableView {
                 MobilityView(
                     callVanRecruitingCount: viewModel.callVanRecruitingCount,
                     onTapShuttleTicket: {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.shuttleTicket, .click, "셔틀 탑승권"))
                         sendAction(.showQRCode)
                     },
                     onTapCallVan: {
