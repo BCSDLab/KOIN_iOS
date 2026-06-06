@@ -10,6 +10,7 @@ import SwiftUI
 struct DiningCarousel: View {
     let diningItems: [HomeDiningItem]
     @Binding var selectedID: Int?
+    let onTapCorner: (HomeDiningItem) -> Void
     let onTapMenu: (HomeDiningItem) -> Void
 
     var body: some View {
@@ -42,6 +43,7 @@ struct DiningCarousel: View {
                         withAnimation(.easeInOut(duration: 0.2)) {
                             selectedID = item.id
                         }
+                        onTapCorner(item)
                     }
                 }
             }

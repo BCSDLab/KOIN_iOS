@@ -86,6 +86,7 @@ enum EventParameter {
             // Dining
             case mainScroll = "main_scroll"
             case todayMeal = "today_meal"
+            case menuCorner = "menu_corner"
             case mainMenuMoveDetailView = "main_menu_moveDetailView"
             case mainMenuCorner = "main_menu_corner"
             case hamburger = "hamburger"

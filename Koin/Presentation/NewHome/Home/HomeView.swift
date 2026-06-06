@@ -39,6 +39,9 @@ struct HomeView: View, ActionBindableView {
                         viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.todayMeal, .click, "전체보기"))
                         sendAction(.showDining)
                     },
+                    onTapCorner: { item in
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.menuCorner, .click, item.placeName))
+                    },
                     onTapMenu: { _ in
                         sendAction(.showDining)
                     }
