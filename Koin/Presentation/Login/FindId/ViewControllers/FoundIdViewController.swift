@@ -113,28 +113,6 @@ extension FoundIdViewController {
         
         subMessageLabel.attributedText = attributed
     }
-    
-    private func makeHomeTabbarController() -> HomeTabbarController {
-        let homeViewModel = makeNewHomeViewModel()
-        let homeRootView = HomeView(viewModel: homeViewModel)
-        let homeViewController = HomeHostingController(rootView: homeRootView)
-
-        let categoryRootView = CategoryView()
-        let categoryViewController = CategoryHostingController(rootView: categoryRootView)
-
-        let noticeViewController = makeNoticeListViewController()
-        let profileViewController = UIViewController()
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = HomeTabbarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-
-        return HomeTabbarController(
-            homeViewController: homeViewController,
-            categoryViewController: categoryViewController,
-            noticeViewController: noticeViewController,
-            profileViewController: profileViewController,
-            viewModel: viewModel
-        )
-    }
 
     private func makeNewHomeViewModel() -> NewHomeViewModel {
         let userRepository = DefaultUserRepository(service: DefaultUserService())

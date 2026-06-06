@@ -59,9 +59,10 @@
 		7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */; };
 		7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B092FCE1BA80011D338 /* DiningView.swift */; };
 		7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */; };
-		7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */; };
-		7C457B2F2FCE1BA80011D338 /* HomeTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */; };
-		7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
+        7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */; };
+        7C457B2F2FCE1BA80011D338 /* HomeTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */; };
+        7C457B432FCE1BA80011D338 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */; };
+        7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
 		7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B062FCE1BA80011D338 /* CategoryView.swift */; };
 		7C457B342FCE1BA80011D338 /* ShuttleTicketButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0F2FCE1BA80011D338 /* ShuttleTicketButton.swift */; };
 		7C457B362FCE1BA80011D338 /* CategoryHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B052FCE1BA80011D338 /* CategoryHostingController.swift */; };
@@ -1047,6 +1048,7 @@
 		7C457B022FCE1BA80011D338 /* CategorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySection.swift; sourceTree = "<group>"; };
 		7C457B052FCE1BA80011D338 /* CategoryHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHostingController.swift; sourceTree = "<group>"; };
 		7C457B062FCE1BA80011D338 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
+		7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		7C457B092FCE1BA80011D338 /* DiningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningView.swift; sourceTree = "<group>"; };
 		7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRecruitmentButton.swift; sourceTree = "<group>"; };
 		7C457B0E2FCE1BA80011D338 /* MobilitySmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilitySmallButton.swift; sourceTree = "<group>"; };
@@ -2103,6 +2105,7 @@
 				7C457B042FCE1BA80011D338 /* Subviews */,
 				7C457B052FCE1BA80011D338 /* CategoryHostingController.swift */,
 				7C457B062FCE1BA80011D338 /* CategoryView.swift */,
+				7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -5898,6 +5901,7 @@
 				7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */,
 				7C457B342FCE1BA80011D338 /* ShuttleTicketButton.swift in Sources */,
 				7C457B362FCE1BA80011D338 /* CategoryHostingController.swift in Sources */,
+				7C457B432FCE1BA80011D338 /* CategoryViewModel.swift in Sources */,
 				7C457B382FCE1BA80011D338 /* HomeHeaderView.swift in Sources */,
 				7C457B3C2FCE1BA80011D338 /* MobilitySmallButton.swift in Sources */,
 				7C457B3D2FCE1BA80011D338 /* CategoryFeaturedButton.swift in Sources */,

@@ -22,13 +22,14 @@ struct CategoryView: View, ActionBindableView {
         case showBusiness
     }
 
+    @State private var viewModel: CategoryViewModel
     var sendAction: ((Action) -> Void) = { _ in }
-    
+
     private let featuredItems: [NewHomeCategoryItem] = [
         .timetable,
         .lostItem
     ]
-    
+
     private let sections: [CategorySectionContent] = [
         CategorySectionContent(
             title: "캠퍼스",
@@ -55,14 +56,18 @@ struct CategoryView: View, ActionBindableView {
         )
     ]
 
+    @MainActor
+    init(viewModel: CategoryViewModel) {
+        _viewModel = State(initialValue: viewModel)
+    }
+
     var body: some View {
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: 16) {
-                
                 HStack(spacing: 12) {
                     ForEach(featuredItems) { item in
                         CategoryFeaturedButton(item: item) {
-                            sendAction(Action(item))
+                            didTapItem(item)
                         }
                     }
                 }
@@ -72,7 +77,7 @@ struct CategoryView: View, ActionBindableView {
                         title: section.title,
                         items: section.items,
                         action: { item in
-                            sendAction(Action(item))
+                            didTapItem(item)
                         }
                     )
                 }
@@ -87,29 +92,62 @@ struct CategoryView: View, ActionBindableView {
     }
 }
 
-private extension CategoryView.Action {
-    init(_ item: NewHomeCategoryItem) {
+private extension CategoryView {
+    private func didTapItem(_ item: NewHomeCategoryItem) {
+        let action = action(for: item)
+        sendAction(action)
+        
+        let loggingInfo = loggingInfo(for: action)
+        viewModel.execute(.logEvent(loggingInfo.label, .click, loggingInfo.value))
+    }
+
+    private func action(for item: NewHomeCategoryItem) -> Action {
         switch item {
         case .timetable:
-            self = .showTimetable
+            return .showTimetable
         case .lostItem:
-            self = .showLostItem
+            return .showLostItem
         case .facility:
-            self = .showFacility
+            return .showFacility
         case .dining:
-            self = .showDining
+            return .showDining
         case .shop:
-            self = .showShop
+            return .showShop
         case .busTimetable:
-            self = .showBusTimetable
+            return .showBusTimetable
         case .busRoute:
-            self = .showBusRoute
+            return .showBusRoute
         case .callVan:
-            self = .showCallVan
+            return .showCallVan
         case .land:
-            self = .showLand
+            return .showLand
         case .business:
-            self = .showBusiness
+            return .showBusiness
+        }
+    }
+
+    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus, value: String) {
+        switch action {
+        case .showTimetable:
+            return (.categoryTimetable, "시간표")
+        case .showLostItem:
+            return (.categoryLostProperty, "분실물")
+        case .showFacility:
+            return (.categoryCampus, "교내 시설물 정보")
+        case .showDining:
+            return (.categoryCampus, "식단")
+        case .showShop:
+            return (.categoryCampus, "주변상점")
+        case .showBusTimetable:
+            return (.categoryTransportation, "버스 시간표")
+        case .showBusRoute:
+            return (.categoryTransportation, "교통편 조회하기")
+        case .showCallVan:
+            return (.categoryTransportation, "콜밴팟 모집")
+        case .showLand:
+            return (.categoryEtc, "복덕방")
+        case .showBusiness:
+            return (.categoryEtc, "코인 for Business")
         }
     }
 }

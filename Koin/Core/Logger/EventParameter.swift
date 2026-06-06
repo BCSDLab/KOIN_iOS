@@ -117,6 +117,11 @@ enum EventParameter {
             case navCategory = "nav_category"
             case navBulletin = "nav_bulletin"
             case navProfile = "nav_profile"
+            case categoryTimetable = "category_timetable"
+            case categoryLostProperty = "category_lost_property"
+            case categoryCampus = "category_campus"
+            case categoryTransportation = "category_transportation"
+            case categoryEtc = "category_etc"
             case mainBusTimetable = "main_bus_timetable"
             case mainBusSearch = "main_bus_search"
             

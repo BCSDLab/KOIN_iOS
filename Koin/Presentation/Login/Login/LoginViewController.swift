@@ -344,16 +344,18 @@ extension LoginViewController {
 
 extension LoginViewController {
     private func makeHomeTabbarController() -> HomeTabbarController {
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        
         let homeViewModel = makeNewHomeViewModel()
         let homeRootView = HomeView(viewModel: homeViewModel)
         let homeViewController = HomeHostingController(rootView: homeRootView)
 
-        let categoryRootView = CategoryView()
+        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
         let categoryViewController = CategoryHostingController(rootView: categoryRootView)
 
         let noticeViewController = makeNoticeListViewController()
         let profileViewController = UIViewController()
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        
         let viewModel = HomeTabbarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
 
         return HomeTabbarController(
