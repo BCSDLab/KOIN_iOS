@@ -58,6 +58,7 @@ struct HomeView: View, ActionBindableView {
                         sendAction(.showCallVan)
                     },
                     onTapBusTimetable: {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.busTimetable, .click, "버스 시간표 조회하기"))
                         sendAction(.showBusTimetable)
                     },
                     onTapBusRoute: {
