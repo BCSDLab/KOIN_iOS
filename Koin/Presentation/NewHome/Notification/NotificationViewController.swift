@@ -81,6 +81,12 @@ private extension NotificationViewController {
                 self.updateStateViews(isEmpty: self.notificationTableView.isEmpty)
             }
             .store(in: &subscriptions)
+        
+        notificationTableView.tapNotificationPublisher
+            .sink { [weak self] item in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, item.title))
+            }
+            .store(in: &subscriptions)
     }
 
     func updateLoadingState(_ isLoading: Bool) {

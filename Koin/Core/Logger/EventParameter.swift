@@ -148,6 +148,7 @@ enum EventParameter {
             
             // Noti
             case notification = "notification"
+            case notificationList = "notification_list"
             case notificationSoldOut = "notification_sold_out"
             case notificationBreakfastSoldOut = "notification_breakfast_sold_out"
             case notificationLunchSoldOut = "notification_lunch_sold_out"

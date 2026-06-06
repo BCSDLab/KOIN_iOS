@@ -167,8 +167,10 @@ extension HomeTabbarController {
 
     @objc private func navigateToNotification() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notification, .click, "알림 아이콘"))
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = NotificationViewModel(
-            fetchNotificationListUseCase: MockFetchNotificationListUseCase()
+            fetchNotificationListUseCase: MockFetchNotificationListUseCase(),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = NotificationViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
