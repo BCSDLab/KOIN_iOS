@@ -191,6 +191,7 @@ enum EventParameter {
             case loginPrompt = "login_prompt"
             
             // CallVan
+            case callvanpot = "callvanpot"
             case mainCallVanView = "main_callvan_view"
             case mainCallVanWrite = "main_callvan_write"
             case callvanSearch = "callvan_search"

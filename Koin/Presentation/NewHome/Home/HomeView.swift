@@ -54,6 +54,7 @@ struct HomeView: View, ActionBindableView {
                         sendAction(.showQRCode)
                     },
                     onTapCallVan: {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.callvanpot, .click, "콜밴팟 모집보기"))
                         sendAction(.showCallVan)
                     },
                     onTapBusTimetable: {
