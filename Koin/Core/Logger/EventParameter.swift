@@ -85,6 +85,7 @@ enum EventParameter {
         enum Campus: String, EventLabelType {
             // Dining
             case mainScroll = "main_scroll"
+            case todayMeal = "today_meal"
             case mainMenuMoveDetailView = "main_menu_moveDetailView"
             case mainMenuCorner = "main_menu_corner"
             case hamburger = "hamburger"

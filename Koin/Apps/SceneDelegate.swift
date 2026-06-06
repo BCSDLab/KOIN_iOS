@@ -201,6 +201,7 @@ extension SceneDelegate {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
 
         return NewHomeViewModel(
             fetchHomeHeaderUseCase: MockFetchHomeHeaderUseCase(),
@@ -214,7 +215,8 @@ extension SceneDelegate {
             sendDeviceTokenIfNeededUseCase: DefaultSendDeviceTokenIfNeededUseCase(
                 userRepository: userRepository,
                 notiRepository: notiRepository
-            )
+            ),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
     }
     
