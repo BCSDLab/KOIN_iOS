@@ -18,13 +18,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
         case markToastPresented
     }
 
-    var header: HomeHeader = HomeHeader(
-        dateText: "",
-        weatherText: "",
-        weatherImage: .weatherSunny,
-        userName: "",
-        message: ""
-    )
+    var header: HomeHeader = HomeHeader.empty()
     var diningItems: [HomeDiningItem] = []
     var callVanRecruitingCount: Int = 0
     var eventCount: Int = 0
@@ -75,7 +69,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
 }
 
 extension NewHomeViewModel {
-
+    
     private func checkVersion() {
         checkVersionUseCase.execute()
             .sink(
@@ -88,10 +82,10 @@ extension NewHomeViewModel {
             )
             .store(in: &subscriptions)
     }
-
+    
     private func checkForceModifyUser() {
         guard UserDefaults.standard.bool(forKey: "forceModal") == false else { return }
-
+        
         fetchUserDataUseCase.execute()
             .sink(
                 receiveCompletion: { _ in },
@@ -104,35 +98,42 @@ extension NewHomeViewModel {
                             userData.major == nil ||
                             userData.studentNumber == nil
                     else { return }
-
+                    
                     UserDefaults.standard.set(true, forKey: "forceModal")
                     self?.forceModifyUserRequired = true
                 }
             )
             .store(in: &subscriptions)
     }
-
+    
     private func sendDeviceTokenIfNeeded() {
         sendDeviceTokenIfNeededUseCase.execute()
     }
-
+    
     private func loadHomeContent() {
         isLoading = true
-
+        
         Publishers.Zip3(
             fetchHomeHeaderUseCase.execute(),
             fetchHomeDiningListUseCase.execute(),
             fetchCountsUseCase.execute()
         )
-        .sink { [weak self] header, diningItems, counts in
-            self?.header = header
-            self?.diningItems = diningItems
-            self?.callVanRecruitingCount = counts.callVanRecruitingCount
-            self?.eventCount = counts.eventCount
-            self?.openShopCount = counts.openShopCount
-            self?.totalShopCount = counts.totalShopCount
-            self?.isLoading = false
-        }
+        .sink(
+            receiveCompletion: { [weak self] completion in
+                if case .failure(let error) = completion {
+                    self?.toastMessage = error.message
+                }
+            },
+            receiveValue: { [weak self] header, diningItems, counts in
+                self?.header = header
+                self?.diningItems = diningItems
+                self?.callVanRecruitingCount = counts.callVanRecruitingCount
+                self?.eventCount = counts.eventCount
+                self?.openShopCount = counts.openShopCount
+                self?.totalShopCount = counts.totalShopCount
+                self?.isLoading = false
+            }
+        )
         .store(in: &subscriptions)
     }
 }

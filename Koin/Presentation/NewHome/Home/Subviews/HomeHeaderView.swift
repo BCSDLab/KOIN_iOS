@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Kingfisher
 
 struct HomeHeaderView: View {
     private let header: HomeHeader
@@ -21,11 +22,11 @@ struct HomeHeaderView: View {
                     .Typography(.caption)
                     .foregroundStyle(Color.ColorSystem.Primary.purple700)
 
-                Image.appImage(asset: header.weatherImage)
+                KFImage(URL(string: header.weather.imageUrl))
                     .resizable()
                     .frame(width: 16, height: 16)
                 
-                Text(verbatim: "\(header.weatherText)")
+                Text(verbatim: "\(header.weather.weatherText) \(header.weather.temperature)°")
                     .Typography(.caption)
                     .foregroundStyle(Color.ColorSystem.Neutral.gray600)
             }

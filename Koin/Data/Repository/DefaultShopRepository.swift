@@ -42,6 +42,18 @@ final class DefaultShopRepository: ShopRepository {
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, ErrorResponse> {
         return service.fetchShopCategoryList()
     }
+
+    func fetchEventCount() -> AnyPublisher<Int, ErrorResponse> {
+        return service.fetchEventCount()
+            .map(\.count)
+            .eraseToAnyPublisher()
+    }
+
+    func fetchShopCount() -> AnyPublisher<ShopCount, ErrorResponse> {
+        return service.fetchShopCount()
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
+    }
     
     func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, ErrorResponse> {
         return service.fetchShopData(requestModel: requestModel)

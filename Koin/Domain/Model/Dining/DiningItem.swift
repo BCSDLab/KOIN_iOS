@@ -47,3 +47,10 @@ struct DiningItem {
     }
     
 }
+
+extension DiningItem {
+    var newHomeDiningPriceText: String? {
+        guard let price = priceCash ?? priceCard, price > 0 else { return nil }
+        return "₩\(price.formatted(.number))"
+    }
+}
