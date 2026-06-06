@@ -76,6 +76,7 @@ struct HomeView: View, ActionBindableView {
                         sendAction(.showShop)
                     },
                     onTapShopCard: {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Business.popularShop, .click, "많이 찾는 상점 둘러보기"))
                         sendAction(.showShop)
                     }
                 )
