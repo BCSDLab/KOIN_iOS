@@ -110,6 +110,7 @@ enum EventParameter {
             
             case shuttleTicket = "shuttle_ticket"
             case busTimetable = "bus_timetable"
+            case busRoute = "bus_route"
             case mainBusTimetable = "main_bus_timetable"
             case mainBusSearch = "main_bus_search"
             
