@@ -72,6 +72,7 @@ struct HomeView: View, ActionBindableView {
                     openShopCount: viewModel.openShopCount,
                     totalShopCount: viewModel.totalShopCount,
                     onTapAll: {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Business.shop, .click, "전체보기"))
                         sendAction(.showShop)
                     },
                     onTapShopCard: {

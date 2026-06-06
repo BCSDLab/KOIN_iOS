@@ -33,6 +33,7 @@ enum EventParameter {
         
         enum Business: String, EventLabelType {
             // Shop
+            case shop = "shop"
             case mainShopCategories = "main_shop_categories"
             case shopCategories = "shop_categories"
             case shopClick = "shop_click"
