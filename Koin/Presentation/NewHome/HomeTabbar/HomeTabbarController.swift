@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import SnapKit
 import UIKit
 
@@ -51,6 +52,9 @@ final class HomeTabbarController: UITabBarController {
     
     private lazy var customTabBarView = HomeTabbarView(items: Tab.allCases.map(\.item))
     private var customTabBarHeightConstraint: Constraint?
+    private let viewModel: HomeTabbarViewModel
+    private let inputSubject = PassthroughSubject<HomeTabbarViewModel.Input, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     private var customTabBarHeight: CGFloat {
         HomeTabbarView.Layout.barHeight + (view.safeAreaInsets.bottom < 0.5 ? HomeTabbarView.Layout.itemTopPadding : view.safeAreaInsets.bottom)
     }
@@ -60,8 +64,10 @@ final class HomeTabbarController: UITabBarController {
         homeViewController: UIViewController,
         categoryViewController: UIViewController,
         noticeViewController: UIViewController,
-        profileViewController: UIViewController
+        profileViewController: UIViewController,
+        viewModel: HomeTabbarViewModel
     ) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         
         let viewControllers = [homeViewController, categoryViewController, noticeViewController, profileViewController]
@@ -82,6 +88,7 @@ final class HomeTabbarController: UITabBarController {
         view.backgroundColor = .appColor(.newBackground)
         configureCustomTabBar()
         configureNavigationBar()
+        bind()
         selectTab(index: Tab.home.rawValue)
     }
     
@@ -115,6 +122,12 @@ extension HomeTabbarController {
     
     private func updateCustomTabBarHeight() {
         customTabBarHeightConstraint?.update(offset: customTabBarHeight)
+    }
+    
+    private func bind() {
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+            .sink { _ in }
+            .store(in: &subscriptions)
     }
     
     private func selectTab(index: Int) {
@@ -153,6 +166,7 @@ extension HomeTabbarController {
     }
 
     @objc private func navigateToNotification() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notification, .click, "알림 아이콘"))
         let viewModel = NotificationViewModel(
             fetchNotificationListUseCase: MockFetchNotificationListUseCase()
         )

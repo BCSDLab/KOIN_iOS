@@ -147,6 +147,7 @@ enum EventParameter {
             case toManageKeyword = "to_manage_keyword"
             
             // Noti
+            case notification = "notification"
             case notificationSoldOut = "notification_sold_out"
             case notificationBreakfastSoldOut = "notification_breakfast_sold_out"
             case notificationLunchSoldOut = "notification_lunch_sold_out"

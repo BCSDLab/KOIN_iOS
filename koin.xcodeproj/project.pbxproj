@@ -59,6 +59,7 @@
 		7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */; };
 		7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B092FCE1BA80011D338 /* DiningView.swift */; };
 		7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */; };
+		7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */; };
 		7C457B2F2FCE1BA80011D338 /* HomeTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */; };
 		7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
 		7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B062FCE1BA80011D338 /* CategoryView.swift */; };
@@ -1058,6 +1059,7 @@
 		7C457B1B2FCE1BA80011D338 /* HomeTabbarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarItemView.swift; sourceTree = "<group>"; };
 		7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarView.swift; sourceTree = "<group>"; };
 		7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarController.swift; sourceTree = "<group>"; };
+		7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarViewModel.swift; sourceTree = "<group>"; };
 		7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenIfNeededUseCase.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
@@ -2181,6 +2183,7 @@
 			children = (
 				7C457B1D2FCE1BA80011D338 /* Subviews */,
 				7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */,
+				7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */,
 			);
 			path = HomeTabbar;
 			sourceTree = "<group>";
@@ -5885,6 +5888,7 @@
 				7C8A000D2FD200000011D338 /* EmptyDiningCard.swift in Sources */,
 				7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */,
 				7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */,
+				7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */,
 				7C457B2F2FCE1BA80011D338 /* HomeTabbarView.swift in Sources */,
 				7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */,
 				7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */,
