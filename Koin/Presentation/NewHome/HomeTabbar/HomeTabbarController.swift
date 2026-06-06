@@ -48,6 +48,19 @@ final class HomeTabbarController: UITabBarController {
         var item: HomeTabbarItem {
             HomeTabbarItem(title: title, imageAsset: imageAsset)
         }
+
+        var logLabel: EventParameter.EventLabel.Campus {
+            switch self {
+            case .home:
+                return .navHome
+            case .category:
+                return .navCategory
+            case .board:
+                return .navBulletin
+            case .profile:
+                return .navProfile
+            }
+        }
     }
     
     private lazy var customTabBarView = HomeTabbarView(items: Tab.allCases.map(\.item))
@@ -110,6 +123,8 @@ extension HomeTabbarController {
         tabBar.isHidden = true
         
         customTabBarView.onTapItem = { [weak self] index in
+            guard let tab = Tab(rawValue: index) else { return }
+            self?.inputSubject.send(.logEvent(tab.logLabel, .click, tab.title))
             self?.selectTab(index: index)
         }
         
@@ -119,17 +134,17 @@ extension HomeTabbarController {
             customTabBarHeightConstraint = $0.height.equalTo(customTabBarHeight).constraint
         }
     }
-    
+
     private func updateCustomTabBarHeight() {
         customTabBarHeightConstraint?.update(offset: customTabBarHeight)
     }
-    
+
     private func bind() {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher())
             .sink { _ in }
             .store(in: &subscriptions)
     }
-    
+
     private func selectTab(index: Int) {
         guard Tab(rawValue: index) != nil else { return }
         selectedIndex = index
