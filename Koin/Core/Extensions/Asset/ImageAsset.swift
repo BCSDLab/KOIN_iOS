@@ -266,11 +266,4 @@ public enum ImageAsset: String {
     case tabbarHome
     case tabbarNotice
     case tabbarProfile
-    case weatherCloudy
-    case weatherMostlyCloudy
-    case weatherRain
-    case weatherShower
-    case weatherSleet
-    case weatherSnow
-    case weatherSunny
 }

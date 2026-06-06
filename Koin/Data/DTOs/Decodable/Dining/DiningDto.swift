@@ -73,3 +73,16 @@ enum DiningPlace: String, Decodable {
         self = DiningPlace(rawValue: rawValue) ?? .cornerA
     }
 }
+
+extension DiningType {
+    var newHomeDiningTimeText: String {
+        switch self {
+        case .breakfast:
+            return "08:30 – 09:30"
+        case .lunch:
+            return "11:30 – 13:30"
+        case .dinner:
+            return "17:30 – 18:30"
+        }
+    }
+}

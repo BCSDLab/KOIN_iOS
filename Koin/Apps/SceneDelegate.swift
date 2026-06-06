@@ -176,8 +176,7 @@ extension SceneDelegate {
     
     @MainActor
     private func makeHomeTabbarController() -> HomeTabbarController {
-        let homeViewModel = makeNewHomeViewModel()
-        let homeRootView = HomeView(viewModel: homeViewModel)
+        let homeRootView = makeHomeView()
         let homeHostingController = HomeHostingController(rootView: homeRootView)
 
         let categoryRootView = CategoryView()
@@ -194,25 +193,40 @@ extension SceneDelegate {
         )
     }
 
-    private func makeNewHomeViewModel() -> NewHomeViewModel {
+    private func makeHomeView() -> HomeView {
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
+        let homeRepository = DefaultHomeRepository(service: DefaultHomeService())
 
-        return NewHomeViewModel(
-            fetchHomeHeaderUseCase: MockFetchHomeHeaderUseCase(),
-            fetchHomeDiningListUseCase: DefaultFetchHomeDiningListUseCase(
-                fetchDiningListUseCase: DefaultFetchDiningListUseCase(diningRepository: diningRepository),
-                dateProvider: DefaultDateProvider()
-            ),
-            fetchCountsUseCase: MockFetchNewHomeCountsUseCase(),
-            checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
-            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: userRepository),
-            sendDeviceTokenIfNeededUseCase: DefaultSendDeviceTokenIfNeededUseCase(
-                userRepository: userRepository,
-                notiRepository: notiRepository
-            )
+        let fetchHomeHeaderUseCase = DefaultFetchHomeHeaderUseCase(homeRepository: homeRepository, userRepository: userRepository)
+        let fetchHomeDiningListUseCase = DefaultFetchHomeDiningListUseCase(
+            fetchDiningListUseCase: DefaultFetchDiningListUseCase(diningRepository: diningRepository),
+            dateProvider: DefaultDateProvider()
         )
+        let fetchCountsUseCase = DefaultFetchNewHomeCountsUseCase(
+            shopRepository: shopRepository,
+            callvanRepository: callVanRepository
+        )
+        let checkVersionUseCase = DefaultCheckVersionUseCase(coreRepository: coreRepository)
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
+        let SendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+            userRepository: userRepository,
+            notiRepository: notiRepository
+        )
+            
+        let viewModel = NewHomeViewModel(
+            fetchHomeHeaderUseCase: fetchHomeHeaderUseCase,
+            fetchHomeDiningListUseCase: fetchHomeDiningListUseCase,
+            fetchCountsUseCase: fetchCountsUseCase,
+            checkVersionUseCase: checkVersionUseCase,
+            fetchUserDataUseCase: fetchUserDataUseCase,
+            sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
+        )
+        return HomeView(viewModel: viewModel)
     }
     
     private func makeNoticeListViewController() -> UIViewController {
