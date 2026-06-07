@@ -28,6 +28,7 @@ final class DefaultFetchHomeDiningListUseCase: FetchHomeDiningListUseCase {
             .map { diningItems in
                 diningItems
                     .map(HomeDiningItem.init)
+                    .filter { $0.placeName != "2캠퍼스" }
             }
             .eraseToAnyPublisher()
     }
