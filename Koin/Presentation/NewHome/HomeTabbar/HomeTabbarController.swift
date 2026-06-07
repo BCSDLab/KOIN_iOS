@@ -176,12 +176,16 @@ extension HomeTabbarController {
             image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
             style: .plain,
             target: self,
-            action: #selector(navigateToNotification)
+            action: #selector(rightBarButtonTapped)
         )
     }
 
-    @objc private func navigateToNotification() {
+    @objc private func rightBarButtonTapped() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notification, .click, "알림 아이콘"))
+        navigateToNotification()
+    }
+     
+    private func navigateToNotification() {
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = NotificationViewModel(
             fetchNotificationListUseCase: MockFetchNotificationListUseCase(),
