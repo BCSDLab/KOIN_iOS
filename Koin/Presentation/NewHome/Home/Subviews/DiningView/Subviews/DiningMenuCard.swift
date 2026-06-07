@@ -18,11 +18,11 @@ struct DiningMenuCard: View {
         Button(action: action) {
             VStack(alignment: .leading, spacing: 11) {
                 HStack {
-                    Text(item.timeText)
+                    Text(item.timeText ?? "")
                         .font(.appFont(.pretendardMedium, size: 12))
                         .foregroundStyle(Color.ColorSystem.Neutral.gray600)
                         .frame(height: 19.2)
-                    
+                        .isHidden(item.timeText == nil)
                     Spacer(minLength: 8)
                     
                     HStack(spacing: 2) {

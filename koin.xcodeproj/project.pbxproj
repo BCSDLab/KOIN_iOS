@@ -59,10 +59,9 @@
 		7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */; };
 		7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B092FCE1BA80011D338 /* DiningView.swift */; };
 		7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */; };
-        7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */; };
-        7C457B2F2FCE1BA80011D338 /* HomeTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */; };
-        7C457B432FCE1BA80011D338 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */; };
-        7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
+		7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */; };
+		7C457B2F2FCE1BA80011D338 /* HomeTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */; };
+		7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
 		7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B062FCE1BA80011D338 /* CategoryView.swift */; };
 		7C457B342FCE1BA80011D338 /* ShuttleTicketButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0F2FCE1BA80011D338 /* ShuttleTicketButton.swift */; };
 		7C457B362FCE1BA80011D338 /* CategoryHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B052FCE1BA80011D338 /* CategoryHostingController.swift */; };
@@ -73,6 +72,7 @@
 		7C457B3F2FCE1BA80011D338 /* CategorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B022FCE1BA80011D338 /* CategorySection.swift */; };
 		7C457B402FCE1BA80011D338 /* HomeTabbarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1B2FCE1BA80011D338 /* HomeTabbarItemView.swift */; };
 		7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B112FCE1BA80011D338 /* MobilityView.swift */; };
+		7C457B432FCE1BA80011D338 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */; };
 		7C457B442FCE1BA80011D338 /* CallVanRecruitmentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */; };
 		7C457B452FCE1BA80011D338 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B192FCE1BA80011D338 /* HomeView.swift */; };
 		7C457B492FCE1BA80011D338 /* ShopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B132FCE1BA80011D338 /* ShopView.swift */; };
@@ -216,6 +216,7 @@
 		7C8A94402FD426B400DEA6F5 /* HomeRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A943F2FD426B400DEA6F5 /* HomeRepository.swift */; };
 		7C8A94422FD4278800DEA6F5 /* HomeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94412FD4278800DEA6F5 /* HomeService.swift */; };
 		7C8A94442FD4279B00DEA6F5 /* HomeAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94432FD4279B00DEA6F5 /* HomeAPI.swift */; };
+		7C8A94462FD50E8400DEA6F5 /* String+byCharWrapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94452FD50E8400DEA6F5 /* String+byCharWrapping.swift */; };
 		7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */; };
 		7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD322F20BEC200F85BDE /* LostItemService.swift */; };
 		7C8ADD352F20BF4600F85BDE /* LostItemAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */; };
@@ -1058,7 +1059,6 @@
 		7C457B022FCE1BA80011D338 /* CategorySection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategorySection.swift; sourceTree = "<group>"; };
 		7C457B052FCE1BA80011D338 /* CategoryHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryHostingController.swift; sourceTree = "<group>"; };
 		7C457B062FCE1BA80011D338 /* CategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryView.swift; sourceTree = "<group>"; };
-		7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		7C457B092FCE1BA80011D338 /* DiningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningView.swift; sourceTree = "<group>"; };
 		7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRecruitmentButton.swift; sourceTree = "<group>"; };
 		7C457B0E2FCE1BA80011D338 /* MobilitySmallButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MobilitySmallButton.swift; sourceTree = "<group>"; };
@@ -1072,6 +1072,7 @@
 		7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarView.swift; sourceTree = "<group>"; };
 		7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarController.swift; sourceTree = "<group>"; };
 		7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarViewModel.swift; sourceTree = "<group>"; };
+		7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenIfNeededUseCase.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
@@ -1212,6 +1213,7 @@
 		7C8A943F2FD426B400DEA6F5 /* HomeRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeRepository.swift; sourceTree = "<group>"; };
 		7C8A94412FD4278800DEA6F5 /* HomeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeService.swift; sourceTree = "<group>"; };
 		7C8A94432FD4279B00DEA6F5 /* HomeAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeAPI.swift; sourceTree = "<group>"; };
+		7C8A94452FD50E8400DEA6F5 /* String+byCharWrapping.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+byCharWrapping.swift"; sourceTree = "<group>"; };
 		7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateLostItemRequest.swift; sourceTree = "<group>"; };
 		7C8ADD322F20BEC200F85BDE /* LostItemService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemService.swift; sourceTree = "<group>"; };
 		7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemAPI.swift; sourceTree = "<group>"; };
@@ -2471,6 +2473,7 @@
 				7C6790682FCC48A60045E163 /* Date+.swift */,
 				7C6790692FCC48A60045E163 /* Int+.swift */,
 				7C67906A2FCC48A60045E163 /* String+.swift */,
+				7C8A94452FD50E8400DEA6F5 /* String+byCharWrapping.swift */,
 				7C67906B2FCC48A60045E163 /* TimeInterval+.swift */,
 				7C67909D2FCC48BF0045E163 /* Bundle+APIKey.swift */,
 			);
@@ -5728,6 +5731,7 @@
 				B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */,
 				7C61D3532F22E686005FAC3A /* DeleteLostItemUseCase.swift in Sources */,
 				8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */,
+				7C8A94462FD50E8400DEA6F5 /* String+byCharWrapping.swift in Sources */,
 				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
 				7CC42B0E2F56AB7900940CE1 /* CallVanListViewController.swift in Sources */,
 				835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */,
