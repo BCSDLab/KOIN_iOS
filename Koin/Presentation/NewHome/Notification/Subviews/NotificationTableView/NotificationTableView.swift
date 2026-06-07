@@ -14,6 +14,7 @@ final class NotificationTableView: UITableView {
     
     // MARK: - Publisher
     let deletePublisher = PassthroughSubject<Int, Never>()
+    let tapNotificationPublisher = PassthroughSubject<NotificationItem, Never>()
     
     // MARK: - UI Components
     private let dummyFooterView = UIView().then {
@@ -179,6 +180,14 @@ extension NotificationTableView: UITableViewDelegate {
 
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         updateFooterPosition()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard notifications.indices.contains(indexPath.row) else {
+            return
+        }
+        
+        tapNotificationPublisher.send(notifications[indexPath.row])
     }
 
     func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {

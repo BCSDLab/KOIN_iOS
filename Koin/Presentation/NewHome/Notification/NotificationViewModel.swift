@@ -14,6 +14,7 @@ final class NotificationViewModel: ViewModelProtocol {
         case viewDidLoad
         case reload
         case deleteNotification(id: Int)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     enum Output {
@@ -25,12 +26,17 @@ final class NotificationViewModel: ViewModelProtocol {
     // MARK: - Properties
     
     private let fetchNotificationListUseCase: FetchNotificationListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - Initializer
-    init(fetchNotificationListUseCase: FetchNotificationListUseCase) {
+    init(
+        fetchNotificationListUseCase: FetchNotificationListUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    ) {
         self.fetchNotificationListUseCase = fetchNotificationListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Transform
@@ -42,6 +48,8 @@ final class NotificationViewModel: ViewModelProtocol {
                 self?.loadNotifications()
             case .deleteNotification(let id):
                 self?.deleteNotification(id: id)
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }
         .store(in: &subscriptions)
@@ -74,5 +82,13 @@ private extension NotificationViewModel {
 
     private func deleteNotification(id: Int) {
         // TODO: API 연결 시 성공/실패와 관계없이 화면 상태는 되돌리지 않는다.
+    }
+    
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

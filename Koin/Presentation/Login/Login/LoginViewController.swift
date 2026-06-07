@@ -347,17 +347,21 @@ extension LoginViewController {
         let homeRootView = makeHomeView()
         let homeViewController = HomeHostingController(rootView: homeRootView)
 
-        let categoryRootView = CategoryView()
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
         let categoryViewController = CategoryHostingController(rootView: categoryRootView)
 
         let noticeViewController = makeNoticeListViewController()
         let profileViewController = UIViewController()
+        
+        let viewModel = HomeTabbarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
 
         return HomeTabbarController(
             homeViewController: homeViewController,
             categoryViewController: categoryViewController,
             noticeViewController: noticeViewController,
-            profileViewController: profileViewController
+            profileViewController: profileViewController,
+            viewModel: viewModel
         )
     }
 
@@ -369,7 +373,7 @@ extension LoginViewController {
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
         let homeRepository = DefaultHomeRepository(service: DefaultHomeService())
-        
+
         let fetchHomeHeaderUseCase = DefaultFetchHomeHeaderUseCase(homeRepository: homeRepository, userRepository: userRepository)
         let fetchHomeDiningListUseCase = DefaultFetchHomeDiningListUseCase(
             fetchDiningListUseCase: DefaultFetchDiningListUseCase(diningRepository: diningRepository),
@@ -385,6 +389,7 @@ extension LoginViewController {
             userRepository: userRepository,
             notiRepository: notiRepository
         )
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         
         let viewModel = NewHomeViewModel(
             fetchHomeHeaderUseCase: fetchHomeHeaderUseCase,
@@ -392,7 +397,8 @@ extension LoginViewController {
             fetchCountsUseCase: fetchCountsUseCase,
             checkVersionUseCase: checkVersionUseCase,
             fetchUserDataUseCase: fetchUserDataUseCase,
-            sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
+            sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         return HomeView(viewModel: viewModel)
     }

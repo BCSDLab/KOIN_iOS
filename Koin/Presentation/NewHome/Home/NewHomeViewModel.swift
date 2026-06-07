@@ -16,6 +16,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
         case viewDidLoad
         case refresh
         case markToastPresented
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     var header: HomeHeader = HomeHeader.empty()
@@ -35,6 +36,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     private let checkVersionUseCase: CheckVersionUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private let sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private var subscriptions: Set<AnyCancellable> = []
 
     init(
@@ -43,7 +45,8 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
         fetchCountsUseCase: FetchNewHomeCountsUseCase,
         checkVersionUseCase: CheckVersionUseCase,
         fetchUserDataUseCase: FetchUserDataUseCase,
-        sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
+        sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.fetchHomeHeaderUseCase = fetchHomeHeaderUseCase
         self.fetchHomeDiningListUseCase = fetchHomeDiningListUseCase
@@ -51,6 +54,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
         self.checkVersionUseCase = checkVersionUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.sendDeviceTokenIfNeededUseCase = sendDeviceTokenIfNeededUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 
     func execute(_ input: Input) {
@@ -64,6 +68,8 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
             loadHomeContent()
         case .markToastPresented:
             toastMessage = nil
+        case let .logEvent(label, category, value):
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
 }
@@ -136,5 +142,13 @@ extension NewHomeViewModel {
             }
         )
         .store(in: &subscriptions)
+    }
+    
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

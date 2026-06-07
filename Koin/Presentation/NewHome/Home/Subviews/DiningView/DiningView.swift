@@ -10,16 +10,19 @@ import SwiftUI
 struct DiningView: View {
     private let diningItems: [HomeDiningItem]
     private let onTapAll: () -> Void
+    private let onTapCorner: (HomeDiningItem) -> Void
     private let onTapMenu: (HomeDiningItem) -> Void
     @State private var selectedID: Int?
 
     init(
         diningItems: [HomeDiningItem],
         onTapAll: @escaping () -> Void,
+        onTapCorner: @escaping (HomeDiningItem) -> Void,
         onTapMenu: @escaping (HomeDiningItem) -> Void
     ) {
         self.diningItems = diningItems
         self.onTapAll = onTapAll
+        self.onTapCorner = onTapCorner
         self.onTapMenu = onTapMenu
     }
 
@@ -30,6 +33,7 @@ struct DiningView: View {
             DiningCarousel(
                 diningItems: diningItems,
                 selectedID: $selectedID,
+                onTapCorner: onTapCorner,
                 onTapMenu: onTapMenu
             )
             .padding(.bottom, 16)

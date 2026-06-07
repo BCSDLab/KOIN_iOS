@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Combine
 import SnapKit
 import UIKit
 
@@ -47,10 +48,26 @@ final class HomeTabbarController: UITabBarController {
         var item: HomeTabbarItem {
             HomeTabbarItem(title: title, imageAsset: imageAsset)
         }
+
+        var logLabel: EventParameter.EventLabel.Campus {
+            switch self {
+            case .home:
+                return .navHome
+            case .category:
+                return .navCategory
+            case .board:
+                return .navBulletin
+            case .profile:
+                return .navProfile
+            }
+        }
     }
     
     private lazy var customTabBarView = HomeTabbarView(items: Tab.allCases.map(\.item))
     private var customTabBarHeightConstraint: Constraint?
+    private let viewModel: HomeTabbarViewModel
+    private let inputSubject = PassthroughSubject<HomeTabbarViewModel.Input, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
     private var customTabBarHeight: CGFloat {
         HomeTabbarView.Layout.barHeight + (view.safeAreaInsets.bottom < 0.5 ? HomeTabbarView.Layout.itemTopPadding : view.safeAreaInsets.bottom)
     }
@@ -60,8 +77,10 @@ final class HomeTabbarController: UITabBarController {
         homeViewController: UIViewController,
         categoryViewController: UIViewController,
         noticeViewController: UIViewController,
-        profileViewController: UIViewController
+        profileViewController: UIViewController,
+        viewModel: HomeTabbarViewModel
     ) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         
         let viewControllers = [homeViewController, categoryViewController, noticeViewController, profileViewController]
@@ -82,6 +101,7 @@ final class HomeTabbarController: UITabBarController {
         view.backgroundColor = .appColor(.newBackground)
         configureCustomTabBar()
         configureNavigationBar()
+        bind()
         selectTab(index: Tab.home.rawValue)
     }
     
@@ -103,6 +123,8 @@ extension HomeTabbarController {
         tabBar.isHidden = true
         
         customTabBarView.onTapItem = { [weak self] index in
+            guard let tab = Tab(rawValue: index) else { return }
+            self?.inputSubject.send(.logEvent(tab.logLabel, .click, tab.title))
             self?.selectTab(index: index)
         }
         
@@ -112,11 +134,17 @@ extension HomeTabbarController {
             customTabBarHeightConstraint = $0.height.equalTo(customTabBarHeight).constraint
         }
     }
-    
+
     private func updateCustomTabBarHeight() {
         customTabBarHeightConstraint?.update(offset: customTabBarHeight)
     }
-    
+
+    private func bind() {
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+            .sink { _ in }
+            .store(in: &subscriptions)
+    }
+
     private func selectTab(index: Int) {
         guard Tab(rawValue: index) != nil else { return }
         selectedIndex = index
@@ -148,13 +176,20 @@ extension HomeTabbarController {
             image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
             style: .plain,
             target: self,
-            action: #selector(navigateToNotification)
+            action: #selector(rightBarButtonTapped)
         )
     }
 
-    @objc private func navigateToNotification() {
+    @objc private func rightBarButtonTapped() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notification, .click, "알림 아이콘"))
+        navigateToNotification()
+    }
+     
+    private func navigateToNotification() {
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = NotificationViewModel(
-            fetchNotificationListUseCase: MockFetchNotificationListUseCase()
+            fetchNotificationListUseCase: MockFetchNotificationListUseCase(),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = NotificationViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

@@ -33,6 +33,8 @@ enum EventParameter {
         
         enum Business: String, EventLabelType {
             // Shop
+            case shop = "shop"
+            case popularShop = "popular_shop"
             case mainShopCategories = "main_shop_categories"
             case shopCategories = "shop_categories"
             case shopClick = "shop_click"
@@ -85,6 +87,8 @@ enum EventParameter {
         enum Campus: String, EventLabelType {
             // Dining
             case mainScroll = "main_scroll"
+            case todayMeal = "today_meal"
+            case menuCorner = "menu_corner"
             case mainMenuMoveDetailView = "main_menu_moveDetailView"
             case mainMenuCorner = "main_menu_corner"
             case hamburger = "hamburger"
@@ -107,6 +111,17 @@ enum EventParameter {
             case timetableBusTypeTab = "timetable_bus_type_tab"
             
             case shuttleTicket = "shuttle_ticket"
+            case busTimetable = "bus_timetable"
+            case busRoute = "bus_route"
+            case navHome = "nav_home"
+            case navCategory = "nav_category"
+            case navBulletin = "nav_bulletin"
+            case navProfile = "nav_profile"
+            case categoryTimetable = "category_timetable"
+            case categoryLostProperty = "category_lost_property"
+            case categoryCampus = "category_campus"
+            case categoryTransportation = "category_transportation"
+            case categoryEtc = "category_etc"
             case mainBusTimetable = "main_bus_timetable"
             case mainBusSearch = "main_bus_search"
             
@@ -147,6 +162,8 @@ enum EventParameter {
             case toManageKeyword = "to_manage_keyword"
             
             // Noti
+            case notification = "notification"
+            case notificationList = "notification_list"
             case notificationSoldOut = "notification_sold_out"
             case notificationBreakfastSoldOut = "notification_breakfast_sold_out"
             case notificationLunchSoldOut = "notification_lunch_sold_out"
@@ -187,6 +204,7 @@ enum EventParameter {
             case loginPrompt = "login_prompt"
             
             // CallVan
+            case callvanpot = "callvanpot"
             case mainCallVanView = "main_callvan_view"
             case mainCallVanWrite = "main_callvan_write"
             case callvanSearch = "callvan_search"
