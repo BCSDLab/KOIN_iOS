@@ -10,21 +10,21 @@ import Foundation
 struct HomeDiningItem: Equatable, Identifiable {
     let id: Int
     let placeName: String
-    let timeText: String
+    let timeText: String?
     let priceText: String?
     let kcalText: String?
-    let menu: [String]
+    let menu: String
 }
 
 extension HomeDiningItem {
-    init(_ diningItem: DiningItem) {
+    init(_ diningItem: DiningItem, timeText: String?) {
         self.init(
             id: diningItem.id,
             placeName: diningItem.place.rawValue,
-            timeText: diningItem.type.newHomeDiningTimeText,
+            timeText: timeText,
             priceText: diningItem.newHomeDiningPriceText,
             kcalText: "\(diningItem.kcal)kcal",
-            menu: diningItem.menu
+            menu: diningItem.menu.joined(separator: " · ")
         )
     }
 }

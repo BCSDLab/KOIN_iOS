@@ -67,6 +67,11 @@ final class DefaultUserService: UserService {
     }
     
     func checkLogin() -> AnyPublisher<Bool, Never> {
+        guard let accessToken = KeychainWorker.shared.read(key: .access),
+              !accessToken.isEmpty else {
+            return Just(false).eraseToAnyPublisher()
+        }
+
         return (networkService.request(api: UserAPI.checkLogin) as AnyPublisher<Void, ErrorResponse>)
             .map { _ in true }
             .replaceError(with: false)

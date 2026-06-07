@@ -377,6 +377,7 @@ extension LoginViewController {
         let fetchHomeHeaderUseCase = DefaultFetchHomeHeaderUseCase(homeRepository: homeRepository, userRepository: userRepository)
         let fetchHomeDiningListUseCase = DefaultFetchHomeDiningListUseCase(
             fetchDiningListUseCase: DefaultFetchDiningListUseCase(diningRepository: diningRepository),
+            fetchCoopShopListUseCase: DefaultFetchCoopShopListUseCase(diningRepository: diningRepository),
             dateProvider: DefaultDateProvider()
         )
         let fetchCountsUseCase = DefaultFetchNewHomeCountsUseCase(

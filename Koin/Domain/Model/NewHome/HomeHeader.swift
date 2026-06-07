@@ -10,7 +10,7 @@ import Foundation
 struct HomeHeader: Equatable {
     let dateText: String
     let weather: Weather
-    let userName: String
+    let userName: String?
     let message: String
 }
 
@@ -22,6 +22,6 @@ struct Weather: Equatable {
 
 extension HomeHeader {
     static func empty() -> HomeHeader {
-        return HomeHeader(dateText: "", weather: Weather(temperature: 0, weatherText: "", imageUrl: ""), userName: "", message: "")
+        return HomeHeader(dateText: "", weather: Weather(temperature: 0, weatherText: "", imageUrl: ""), userName: nil, message: "")
     }
 }
