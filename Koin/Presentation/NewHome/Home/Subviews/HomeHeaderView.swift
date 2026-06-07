@@ -32,7 +32,7 @@ struct HomeHeaderView: View {
             }
 
             VStack(alignment: .leading, spacing: 0) {
-                Text(verbatim: "\(header.userName)님,")
+                Text(verbatim: "\(header.userName ?? "익명")님,")
                     .font(.appFont(.pretendardBold, size: 24))
                     .foregroundStyle(Color(hex: "0B0B0D"))
 

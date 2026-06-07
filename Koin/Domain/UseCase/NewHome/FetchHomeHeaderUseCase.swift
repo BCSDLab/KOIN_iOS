@@ -26,13 +26,17 @@ final class DefaultFetchHomeHeaderUseCase: FetchHomeHeaderUseCase {
         let dateText = dateText(from: Date())
         let message = "오늘도 잘 챙겨먹어요"
         
-        return homeRepository.fetchWeather()
-            .zip(userRepository.fetchUserData())
+        let weather = homeRepository.fetchWeather()
+        let userDto = userRepository.fetchUserData()
+            .map(Optional.some)
+            .catch { _ in Just(nil).setFailureType(to: ErrorResponse.self) }
+        
+        return weather.zip(userDto)
             .map { (weather, userDto) in
                 HomeHeader(
                     dateText: dateText,
                     weather: weather,
-                    userName: userDto.nickname ?? userDto.name ?? "익명",
+                    userName: userDto?.nickname ?? userDto?.name,
                     message: message
                 )
             }
