@@ -27,7 +27,12 @@ class CustomNavigationController: UINavigationController, UIGestureRecognizerDel
             interactivePopGestureRecognizer.isEnabled = false
         }
     }
-    
+
+    func setViewControllers(_ viewControllers: [UIViewController], transition: CATransition) {
+        view.layer.add(transition, forKey: nil)
+        super.setViewControllers(viewControllers, animated: false)
+    }
+
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         navigationController.transitionCoordinator?.notifyWhenInteractionChanges { [weak self] context in
             if context.isCancelled {
