@@ -22,7 +22,12 @@ final class CustomNavigationController: UINavigationController, UIGestureRecogni
             interactivePopGestureRecognizer.isEnabled = false
         }
     }
-    
+
+    func setViewControllers(_ viewControllers: [UIViewController], transition: CATransition) {
+        view.layer.add(transition, forKey: nil)
+        super.setViewControllers(viewControllers, animated: false)
+    }
+
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         guard let transitionCoordinator = navigationController.transitionCoordinator,
               let fromVC = transitionCoordinator.viewController(forKey: .from),
