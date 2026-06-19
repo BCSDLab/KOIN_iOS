@@ -1,5 +1,5 @@
 //
-//  UpdateModalViewController.swift
+//  ForceUpdateModalViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 10/1/24.
@@ -9,11 +9,11 @@ import Combine
 import UIKit
 import SnapKit
 
-final class UpdateModalViewController: UIViewController {
+final class ForceUpdateModalViewController: UIViewController {
     
     // MARK: - Properties
-    let openStoreButtonPublisher = PassthroughSubject<Void, Never>()
-    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
+    let onOpenStoreButtonTapped: ()->Void
+    let onCancelButtonTapped: ()->Void
     
     // MARK: - UI Components
     private let messageLabel = UILabel().then {
@@ -60,6 +60,19 @@ final class UpdateModalViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
+    // MARK: - Initializer
+    init(
+        onOpenStoreButtonTapped: @escaping () -> Void,
+        onCancelButtonTapped: @escaping () -> Void
+    ) {
+        self.onOpenStoreButtonTapped = onOpenStoreButtonTapped
+        self.onCancelButtonTapped = onCancelButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,20 +87,20 @@ final class UpdateModalViewController: UIViewController {
 }
 
 // MARK: - @objc
-extension UpdateModalViewController {
+extension ForceUpdateModalViewController {
     @objc private func closeButtonTapped() {
         dismiss(animated: true, completion: nil)
-        cancelButtonPublisher.send()
+        onCancelButtonTapped()
     }
     
     @objc private func openStoreButtonTapped() {
         dismiss(animated: true, completion: nil)
-        openStoreButtonPublisher.send(())
+        onOpenStoreButtonTapped()
     }
 }
 
 // MARK: - UI Function
-extension UpdateModalViewController {
+extension ForceUpdateModalViewController {
     private func setUpLayOuts() {
         [containerView].forEach {
             view.addSubview($0)
