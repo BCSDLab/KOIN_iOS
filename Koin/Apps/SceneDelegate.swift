@@ -23,7 +23,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         let navigationController = CustomNavigationController()
-        self.coordinator = makeAppCooridnator(navigationController: navigationController)
+        self.coordinator = makeAppCoordinator(navigationController: navigationController)
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
@@ -163,7 +163,7 @@ extension SceneDelegate {
 
 extension SceneDelegate {
     
-    private func makeAppCooridnator(navigationController: CustomNavigationController) -> AppCoordinator {
+    private func makeAppCoordinator(navigationController: CustomNavigationController) -> AppCoordinator {
         let repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: repository)
         return AppCoordinator(
