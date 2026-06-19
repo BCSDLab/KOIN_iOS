@@ -10,6 +10,16 @@ import UIKit
 import SnapKit
 import Lottie
 
+@MainActor
+protocol ForceUpdateViewControllerCoordinator: AnyObject {
+    func updateButtonTapped()
+    func errorCheckButtonTapped(
+        presentOn presenter: UIViewController,
+        onOpenStoreButtonTapped: @escaping () -> Void,
+        onCancelButtonTapped: @escaping () -> Void
+    )
+}
+
 final class ForceUpdateViewController: UIViewController, LottieAnimationManageable {
     
     // MARK: - LottieAnimationManageable Protocol
@@ -21,6 +31,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
     private let viewModel: ForceUpdateViewModel
     private let inputSubject: PassthroughSubject<ForceUpdateViewModel.Input, Never> = .init()
     var subscriptions: Set<AnyCancellable> = []
+    weak var coordinator: ForceUpdateViewControllerCoordinator?
     
     // MARK: - UI Components
     private let logoAnimationView = LottieAnimationView().then {
@@ -86,14 +97,13 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         $0.backgroundColor = .clear
     }
     
-    private let updateModalViewController = UpdateModalViewController().then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
     // MARK: - Initialization
-    init(viewModel: ForceUpdateViewModel) {
+    init(
+        viewModel: ForceUpdateViewModel,
+        coordinator: ForceUpdateViewControllerCoordinator
+    ) {
         self.viewModel = viewModel
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -130,29 +140,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
     }
     
     private func bind() {
-        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            switch output {
-            case let.isLowVersion(isLow):
-                if !isLow {
-                    self?.dismiss()
-                }
-            }
-        }.store(in: &subscriptions)
-        
-        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
-            self?.openStore()
-        }.store(in: &subscriptions)
-        
-        setupCustomNotificationObservers()
-        
-        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
-        }.store(in: &subscriptions)
-        
-        updateModalViewController.cancelButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
-        }.store(in: &subscriptions)
+        let _ = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
     }
     
     private func setAddTarget() {
@@ -166,38 +154,23 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
             .sink { [weak self] _ in
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
             }.store(in: &subscriptions)
-        
-        // 포그라운드 복귀 시
-        NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification)
-            .sink { [weak self] _ in
-                self?.inputSubject.send(.checkVersion)
-            }.store(in: &subscriptions)
     }
 }
 
 extension ForceUpdateViewController {
-    private func dismiss() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc private func closeButtonTapped() {
-        navigationController?.popViewController(animated: false)
-    }
-    
     @objc private func updateButtonTapped() {
-        openStore()
+        coordinator?.updateButtonTapped()
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateConfirm, .update, "업데이트하기"))
     }
     
-    private func openStore() {
-        if let url = URL(string: "https://itunes.apple.com/app/id1500848622"),
-           UIApplication.shared.canOpenURL(url) {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
-    }
-    
     @objc private func errorCheckButtonTapped() {
-        present(updateModalViewController, animated: true, completion: nil)
+        coordinator?.errorCheckButtonTapped(presentOn: self) { [weak self] in
+            self?.coordinator?.updateButtonTapped()
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
+        } onCancelButtonTapped: { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
+        }
+        
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }
 }
