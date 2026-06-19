@@ -151,6 +151,7 @@ final class HomeViewController: UIViewController {
         inputSubject.send(.getNoticeBanner(Date()))
         inputSubject.send(.getLostItemStat)
         inputSubject.send(.sendDeviceTokenIfNeeded)
+        inputSubject.send(.checkAndFetchBanner)
         configureView()
         configureSwipeGestures()
         configureTapGesture()
@@ -158,7 +159,6 @@ final class HomeViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
         cornerSegmentControl.addTarget(self, action: #selector(segmentDidChange), for: .valueChanged)
         checkAndShowTooltip()
-        checkAndShowBanner()
         scrollView.delegate = self
     }
     
@@ -210,10 +210,6 @@ final class HomeViewController: UIViewController {
                 self?.putImage(data: response)
             case let .updateNoticeBanners(hotNoticeArticlesInfo, keywordNoticePhrases):
                 self?.updateHotArticles(articles: hotNoticeArticlesInfo, phrases: keywordNoticePhrases)
-            case let .showForceUpdate(version):
-                self?.navigateToForceUpdate(version: version)
-            case .showForceModal:
-                self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .updateBanner(let banner):
                 self?.showBanner(banner: banner)
             case .updateLostItem(let lostLostStats):
@@ -465,16 +461,6 @@ extension HomeViewController {
         self.present(viewController, animated: true)
     }
     
-    private func checkAndShowBanner() {
-        if let noShowDate = UserDefaults.standard.object(forKey: "noShowBanner") as? Date {
-            if let thresholdDate = Calendar.current.date(byAdding: .day, value: 7, to: noShowDate),
-               Date() < thresholdDate {
-                return
-            }
-        }
-        inputSubject.send(.fetchBanner)
-    }
-    
     @objc private func tapBusQrCode() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.shuttleTicket, .click, "셔틀 탑승권"))
         if let url = URL(string: "https://koreatech.unibus.kr/#!/qrcode") {
@@ -673,13 +659,6 @@ extension HomeViewController {
             deleteDeviceTokenUseCase: DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService())))
         let serviceSelectViewController = ServiceSelectViewController(viewModel: viewModel)
         navigationController?.pushViewController(serviceSelectViewController, animated: true)
-    }
-    
-    private func navigateToForceUpdate(version: String) {
-        let viewController = ForceUpdateViewController(viewModel: ForceUpdateViewModel(logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))))
-        viewController.modalPresentationStyle = .fullScreen
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdatePageView, .pageView, version))
-        self.present(viewController, animated: true, completion: nil)
     }
     
     private func navigateToCallVanList() {

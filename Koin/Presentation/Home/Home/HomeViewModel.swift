@@ -21,7 +21,7 @@ final class HomeViewModel: ViewModelProtocol {
         case logEventDirect(name: String, label: String, value: String, category: String)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case getNoticeBanner(Date?)
-        case fetchBanner
+        case checkAndFetchBanner
         case checkLogin
         case checkRestriction
         case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
@@ -34,8 +34,6 @@ final class HomeViewModel: ViewModelProtocol {
         case updateDining(DiningItem?, DiningType, Bool)
         case updateNoticeBanners([NoticeArticleDto], ((String, String), Int)?)
         case putImage(ShopCategoryDto)
-        case showForceUpdate(String)
-        case showForceModal
         case updateBanner(BannerDto)
         case updateLostItem(LostItemStats)
         case checkRestrictionCompleted(restriction: CallVanRestriction)
@@ -49,12 +47,10 @@ final class HomeViewModel: ViewModelProtocol {
     let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
     private let dateProvider: DateProvider
-    private let checkVersionUseCase: CheckVersionUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
     private let fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase
     private let fetchLostItemStatsUseCase: FetchLostItemStatsUseCase
-    private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private let fetchBannerUseCase = DefaultFetchBannerUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
     private let checkLoginUseCase: CheckLoginUseCase
@@ -63,6 +59,7 @@ final class HomeViewModel: ViewModelProtocol {
     private(set) var moved = false
     private var shopCategories: [ShopCategory] = []
     private(set) var isLoggedIn: Bool = false
+    private let shouldPresentBanner: Bool
     
     // MARK: - Initialization
     init(fetchDiningListUseCase: FetchDiningListUseCase,
@@ -71,12 +68,12 @@ final class HomeViewModel: ViewModelProtocol {
          fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
          dateProvider: DateProvider,
-         checkVersionUseCase: CheckVersionUseCase,
          fetchKeywordNoticePhraseUseCase: FetchKeywordNoticePhraseUseCase,
          checkLoginUseCase: CheckLoginUseCase,
          fetchLostItemStatsUseCase: FetchLostItemStatsUseCase,
          fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase,
-         sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
+         sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase,
+         shouldPresentBanner: Bool
     ) {
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
@@ -84,12 +81,12 @@ final class HomeViewModel: ViewModelProtocol {
         self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
         self.dateProvider = dateProvider
-        self.checkVersionUseCase = checkVersionUseCase
         self.fetchKeywordNoticePhraseUseCase = fetchKeywordNoticePhraseUseCase
         self.checkLoginUseCase = checkLoginUseCase
         self.fetchLostItemStatsUseCase = fetchLostItemStatsUseCase
         self.fetchCallVanRestrictionUseCase = fetchCallVanRestrictionUseCase
         self.sendDeviceTokenIfNeededUseCase = sendDeviceTokenIfNeededUseCase
+        self.shouldPresentBanner = shouldPresentBanner
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -98,8 +95,6 @@ final class HomeViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad:
                 getShopCategory()
-                checkVersion()
-                fetchUserData()
             case let .categorySelected(place):
                 getDiningInformation(diningPlace: place)
             case .getDiningInfo:
@@ -112,8 +107,8 @@ final class HomeViewModel: ViewModelProtocol {
                 getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
             case let .getNoticeBanner(date):
                 getNoticeBanners(date: date)
-            case .fetchBanner:
-                fetchBanner()
+            case .checkAndFetchBanner:
+                checkAndFetchBanner()
             case .checkLogin:
                 checkLogin()
             case let .logEventDirect(name, label, value, category):
@@ -133,42 +128,23 @@ final class HomeViewModel: ViewModelProtocol {
 
 extension HomeViewModel {
     
-    private func fetchBanner() {
+    private func checkAndFetchBanner() {
+        
+        guard shouldPresentBanner else {
+            return
+        }
+        
+        if let noShowDate = UserDefaults.standard.object(forKey: "noShowBanner") as? Date {
+            if let thresholdDate = Calendar.current.date(byAdding: .day, value: 7, to: noShowDate),
+               Date() < thresholdDate {
+                return
+            }
+        }
+        
         fetchBannerUseCase.execute().sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] response in
                 self?.outputSubject.send(.updateBanner(response))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchUserData() {
-        fetchUserDataUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                UserDataManager.shared.setUserData(userData: response)
-                if !UserDefaults.standard.bool(forKey: "forceModal") {
-                    if response.userType == "STUDENT" {
-                        if response.name == nil ||
-                            response.phoneNumber == nil ||
-                            response.gender == nil ||
-                            response.major == nil ||
-                            response.studentNumber == nil {
-                            self?.outputSubject.send(.showForceModal)
-                            UserDefaults.standard.set(true, forKey: "forceModal")
-                        }
-                    }
-                }
-            }
-        ).store(in: &subscriptions)
-    }
-    private func checkVersion() {
-        checkVersionUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                if response.0 {
-                    self?.outputSubject.send(.showForceUpdate(response.1))
-                }
             }
         ).store(in: &subscriptions)
     }
