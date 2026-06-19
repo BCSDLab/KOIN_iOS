@@ -22,7 +22,15 @@ final class DefaultAppLaunchPresentationUseCase: AppLaunchPresentationUseCase {
            shouldUpdate {
             return .forceUpdate(requiredVersion: version)
         }
-        let shouldModifyUser = await checkModifyUserNeededUseCase.execute().async()
+        
+        let shouldModifyUser: Bool
+        
+        do {
+            shouldModifyUser = try await checkModifyUserNeededUseCase.execute().async()
+        } catch {
+            shouldModifyUser = false
+        }
+        
         return shouldModifyUser ? .forceModifyUser : .none
     }
 }

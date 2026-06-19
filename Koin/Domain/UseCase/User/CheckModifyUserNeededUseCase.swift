@@ -2,7 +2,7 @@ import Foundation
 import Combine
 
 protocol CheckModifyUserNeededUseCase {
-    func execute() -> AnyPublisher<Bool, Never>
+    func execute() -> AnyPublisher<Bool, ErrorResponse>
 }
 
 final class DefaultCheckModifyUserNeededUseCase: CheckModifyUserNeededUseCase {
@@ -13,7 +13,7 @@ final class DefaultCheckModifyUserNeededUseCase: CheckModifyUserNeededUseCase {
         self.userRepository = userRepository
     }
 
-    func execute() -> AnyPublisher<Bool, Never> {
+    func execute() -> AnyPublisher<Bool, ErrorResponse> {
         userRepository.fetchUserData()
             .handleEvents(receiveOutput: { userData in
                 UserDataManager.shared.setUserData(userData: userData)
@@ -37,7 +37,6 @@ final class DefaultCheckModifyUserNeededUseCase: CheckModifyUserNeededUseCase {
 
                 return needsModify
             }
-            .replaceError(with: false)
             .eraseToAnyPublisher()
     }
 }

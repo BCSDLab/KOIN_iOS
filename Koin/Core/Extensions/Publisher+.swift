@@ -18,12 +18,16 @@ extension Publisher where Failure: Error {
                 receiveCompletion: { completion in
                     guard !didResume else { return }
                     
-                    if case let .failure(error) = completion {
-                        didResume = true
+                    switch completion {
+                    case let .failure(error):
                         continuation.resume(throwing: error)
-                        cancellable?.cancel()
-                        cancellable = nil
+                    case .finished:
+                        continuation.resume(throwing: ErrorResponse.finishedWithoutValue)
                     }
+                    
+                    didResume = true
+                    cancellable?.cancel()
+                    cancellable = nil
                 },
                 receiveValue: { output in
                     guard !didResume else { return }
@@ -34,25 +38,6 @@ extension Publisher where Failure: Error {
                     cancellable = nil
                 }
             )
-        }
-    }
-}
-
-extension Publisher where Failure == Never {
-    func async() async -> Output {
-        var cancellable: AnyCancellable?
-
-        return await withCheckedContinuation { continuation in
-            var didResume = false
-
-            cancellable = sink { output in
-                guard !didResume else { return }
-
-                didResume = true
-                continuation.resume(returning: output)
-                cancellable?.cancel()
-                cancellable = nil
-            }
         }
     }
 }
