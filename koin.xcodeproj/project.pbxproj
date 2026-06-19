@@ -147,12 +147,12 @@
 		7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */; };
 		7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */; };
 		7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */; };
+		7C65FDB12FE22F2A007831CE /* Publisher+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDB02FE22F2A007831CE /* Publisher+.swift */; };
 		7C65FDB52FE23432007831CE /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDB32FE23432007831CE /* SplashViewController.swift */; };
 		7C65FDB92FE5082C007831CE /* CATransition+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDB82FE5082C007831CE /* CATransition+.swift */; };
 		7C65FDC32FE69262007831CE /* NewBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC22FE69262007831CE /* NewBannerViewController.swift */; };
 		7C65FDC52FE69279007831CE /* NewBannerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC42FE69279007831CE /* NewBannerCollectionView.swift */; };
 		7C65FDC72FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC62FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift */; };
-		7C65FDC82FE6C0F9007831CE /* CATransition+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC72FE6C0F9007831CE /* CATransition+.swift */; };
 		7C65FDC92FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC82FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift */; };
 		7C6790322FCC00150045E163 /* PopLoggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790312FCC00150045E163 /* PopLoggable.swift */; };
 		7C6790842FCC48A60045E163 /* UIViewController+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C67907E2FCC48A60045E163 /* UIViewController+.swift */; };
@@ -1155,12 +1155,12 @@
 		7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemStats.swift; sourceTree = "<group>"; };
 		7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataButtonsView.swift; sourceTree = "<group>"; };
 		7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemHeaderView.swift; sourceTree = "<group>"; };
+		7C65FDB02FE22F2A007831CE /* Publisher+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+.swift"; sourceTree = "<group>"; };
 		7C65FDB32FE23432007831CE /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		7C65FDB82FE5082C007831CE /* CATransition+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CATransition+.swift"; sourceTree = "<group>"; };
 		7C65FDC22FE69262007831CE /* NewBannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBannerViewController.swift; sourceTree = "<group>"; };
 		7C65FDC42FE69279007831CE /* NewBannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBannerCollectionView.swift; sourceTree = "<group>"; };
 		7C65FDC62FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollableInfiniteCarouselCollectionViewProtocol.swift; sourceTree = "<group>"; };
-		7C65FDC72FE6C0F9007831CE /* CATransition+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CATransition+.swift"; sourceTree = "<group>"; };
 		7C65FDC82FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollableInfiniteCarouselCollectionView.swift; sourceTree = "<group>"; };
 		7C6790312FCC00150045E163 /* PopLoggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopLoggable.swift; sourceTree = "<group>"; };
 		7C6790682FCC48A60045E163 /* Date+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+.swift"; sourceTree = "<group>"; };
@@ -2512,7 +2512,6 @@
 		7C65FDC62FE6C0BC007831CE /* Recovered References */ = {
 			isa = PBXGroup;
 			children = (
-				7C65FDB82FE5082C007831CE /* CATransition+.swift */,
 			);
 			name = "Recovered References";
 			sourceTree = "<group>";
@@ -2535,6 +2534,7 @@
 				7C8A94452FD50E8400DEA6F5 /* String+byCharWrapping.swift */,
 				7C67906B2FCC48A60045E163 /* TimeInterval+.swift */,
 				7C67909D2FCC48BF0045E163 /* Bundle+APIKey.swift */,
+				7C65FDB02FE22F2A007831CE /* Publisher+.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -2561,7 +2561,7 @@
 			isa = PBXGroup;
 			children = (
 				7C67906E2FCC48A60045E163 /* CALayer+.swift */,
-				7C65FDC72FE6C0F9007831CE /* CATransition+.swift */,
+				7C65FDB82FE5082C007831CE /* CATransition+.swift */,
 				7C67906F2FCC48A60045E163 /* UIApplication+.swift */,
 				7C6790702FCC48A60045E163 /* UIButton+.swift */,
 				7C6790712FCC48A60045E163 /* UICollectionView+.swift */,
@@ -5692,7 +5692,6 @@
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
 				D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */,
 				D20AB9632C554B4E006BC684 /* DiningLikeUseCase.swift in Sources */,
-				7C65FDC82FE6C0F9007831CE /* CATransition+.swift in Sources */,
 				D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */,
 				7CC42B622F59D0EF00940CE1 /* CallVanPostPlaceView.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
@@ -5809,6 +5808,7 @@
 				7CB11C0A2FB1989B004E0C80 /* LostItemKeywordCollectionView.swift in Sources */,
 				D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
+				7C65FDB12FE22F2A007831CE /* Publisher+.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
