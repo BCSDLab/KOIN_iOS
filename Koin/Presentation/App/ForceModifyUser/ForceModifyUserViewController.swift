@@ -9,6 +9,11 @@ import Combine
 import UIKit
 import Lottie
 
+@MainActor
+protocol ForceModifyUserViewControllerCoordinator: AnyObject {
+    func modifyUserButtonTapped()
+}
+
 final class ForceModifyUserViewController: UIViewController, LottieAnimationManageable {
     
     // MARK: - LottieAnimationManageable Protocol
@@ -17,7 +22,7 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
     }
     
     // MARK: - Properties
-    var subscriptions: Set<AnyCancellable> = []
+    weak var coordinator: ForceModifyUserViewControllerCoordinator?
     
     // MARK: - UI Components
     private let logoAnimationView = LottieAnimationView().then {
@@ -40,6 +45,15 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
         $0.setTitle("정보 입력하러 가기", for: .normal)
     }
     
+    // MARK: - Initializer
+    init(coordinator: ForceModifyUserViewControllerCoordinator) {
+        self.coordinator = coordinator
+        super.init(nibName: nil, bundle: nil)
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     // MARK: - deinit
     deinit {
         clearLottieAnimation()
@@ -50,33 +64,15 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
-        bind()
         navigateButton.addTarget(self, action: #selector(navigateButtonTapped), for: .touchUpInside)
         setupLottie()
         startLottieAnimation()
-    }
-    
-    
-    // MARK: - Bind
-    
-    private func bind() {
-        
     }
 }
 
 extension ForceModifyUserViewController {
     @objc private func navigateButtonTapped() {
-        let homeViewController = makeHomeTabbarController()
-
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let modifyUseCase = DefaultModifyUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-        let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
-        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-        let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-
-        let changeMyProfileViewController = ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase), userType: .student)
-        navigationController?.setViewControllers([homeViewController, changeMyProfileViewController], animated: true)
-        
+        coordinator?.modifyUserButtonTapped()
     }
     
     private func makeHomeTabbarController() -> HomeTabbarController {
