@@ -25,6 +25,10 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
     weak var coordinator: ForceModifyUserViewControllerCoordinator?
     
     // MARK: - UI Components
+    private let contentViewLayoutGuide = UILayoutGuide()
+    
+    private let contentView = UIView()
+    
     private let logoAnimationView = LottieAnimationView().then {
         $0.animation = LottieAnimation.named("waveLogo")
         $0.loopMode = .loop
@@ -38,7 +42,18 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
     }
     
     private let subMessageLabel = UILabel().then {
-        $0.text = "몇 가지 정보만 더 입력해주시면\n더 편하고 똑똑하게 이용하실 수 있어요!"
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineSpacing = 14 * 0.6
+        $0.attributedText = NSAttributedString(
+            string: "몇 가지 정보만 더 입력해주시면\n더 편하고 똑똑하게 이용하실 수 있어요!",
+            attributes: [
+                .font : UIFont.appFont(.pretendardRegular, size: 14),
+                .foregroundColor : UIColor.appColor(.gray),
+                .paragraphStyle : paragraphStyle
+            ]
+        )
+        $0.numberOfLines = 2
+        $0.textAlignment = .center
     }
     
     private let navigateButton = UIButton().then {
@@ -59,7 +74,6 @@ final class ForceModifyUserViewController: UIViewController, LottieAnimationMana
         clearLottieAnimation()
     }
 
-    
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,26 +93,38 @@ extension ForceModifyUserViewController {
 extension ForceModifyUserViewController {
     
     private func setupLayOuts() {
-        [logoAnimationView, messageLabel, subMessageLabel, navigateButton].forEach {
+        [contentView, logoAnimationView, messageLabel, subMessageLabel, navigateButton].forEach {
             view.addSubview($0)
         }
         
+        [contentViewLayoutGuide].forEach {
+            view.addLayoutGuide($0)
+        }
     }
     
     private func setupConstraints() {
+        contentViewLayoutGuide.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(navigateButton.snp.top)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.center.equalTo(contentViewLayoutGuide)
+        }
+        
         logoAnimationView.snp.makeConstraints {
-            $0.centerY.equalToSuperview().offset(-50)
-            $0.centerX.equalToSuperview()
+            $0.top.centerX.equalTo(contentView)
             $0.width.equalTo(240)
             $0.height.equalTo(140)
         }
         messageLabel.snp.makeConstraints {
             $0.top.equalTo(logoAnimationView.snp.bottom).offset(27)
-            $0.centerX.equalToSuperview()
+            $0.centerX.equalTo(contentView)
+            $0.height.equalTo(32)
         }
         subMessageLabel.snp.makeConstraints {
             $0.top.equalTo(messageLabel.snp.bottom).offset(16)
-            $0.centerX.equalToSuperview()
+            $0.bottom.centerX.equalTo(contentView)
         }
         navigateButton.snp.makeConstraints {
             $0.horizontalEdges.equalToSuperview().inset(24)
@@ -110,11 +136,7 @@ extension ForceModifyUserViewController {
     private func setupComponents() {
         messageLabel.font = UIFont.appFont(.pretendardBold, size: 20)
         messageLabel.textColor = .black
-        subMessageLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
-        subMessageLabel.textColor = UIColor.appColor(.gray)
-        subMessageLabel.numberOfLines = 2
-        subMessageLabel.textAlignment = .center
-        navigateButton.backgroundColor = UIColor(hexCode: "#B611F5")
+        navigateButton.backgroundColor = UIColor.appColor(.new500)
         navigateButton.layer.cornerRadius = 8
         navigateButton.layer.masksToBounds = true
         navigateButton.setTitleColor(UIColor.white, for: .normal)
@@ -128,4 +150,3 @@ extension ForceModifyUserViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-

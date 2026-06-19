@@ -34,6 +34,10 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
     weak var coordinator: ForceUpdateViewControllerCoordinator?
     
     // MARK: - UI Components
+    private let contentViewLayoutGuide = UILayoutGuide()
+    
+    private let contentView = UIView()
+    
     private let logoAnimationView = LottieAnimationView().then {
         $0.animation = LottieAnimation.named("waveLogo")
         $0.loopMode = .loop
@@ -177,27 +181,39 @@ extension ForceUpdateViewController {
 
 extension ForceUpdateViewController {
     private func setUpLayOuts() {
-        [logoAnimationView, titleLabel, descriptionLabel, errorCheckButton, updateButton].forEach {
+        [contentView, logoAnimationView, titleLabel, descriptionLabel, errorCheckButton, updateButton].forEach {
             view.addSubview($0)
+        }
+        
+        [contentViewLayoutGuide].forEach {
+            view.addLayoutGuide($0)
         }
     }
     
     private func setUpConstraints() {
+        contentViewLayoutGuide.snp.makeConstraints {
+            $0.top.leading.trailing.equalTo(view.safeAreaLayoutGuide)
+            $0.bottom.equalTo(updateButton.snp.top)
+        }
+        
+        contentView.snp.makeConstraints {
+            $0.center.equalTo(contentViewLayoutGuide)
+        }
+        
         logoAnimationView.snp.makeConstraints {
-            $0.top.lessThanOrEqualTo(view.snp.top).offset(230.5)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.top.centerX.equalTo(contentView)
             $0.width.equalTo(237)
             $0.height.equalTo(100)
         }
         
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(logoAnimationView.snp.bottom).offset(16)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.centerX.equalTo(contentView)
         }
         
         descriptionLabel.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(32)
-            $0.centerX.equalTo(view.snp.centerX)
+            $0.centerX.bottom.equalTo(contentView)
         }
         
         updateButton.snp.makeConstraints {
