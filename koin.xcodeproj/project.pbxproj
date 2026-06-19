@@ -121,6 +121,7 @@
 		7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */; };
 		7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */; };
 		7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */; };
+		7C65FDB12FE22F2A007831CE /* Publisher+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDB02FE22F2A007831CE /* Publisher+.swift */; };
 		7C65FDB52FE23432007831CE /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDB32FE23432007831CE /* SplashViewController.swift */; };
 		7C65FDB92FE5082C007831CE /* CATransition+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDB82FE5082C007831CE /* CATransition+.swift */; };
 		7C7CCE4A2F834D4B00E3A54B /* CallVanModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */; };
@@ -1051,6 +1052,7 @@
 		7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemStats.swift; sourceTree = "<group>"; };
 		7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataButtonsView.swift; sourceTree = "<group>"; };
 		7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemHeaderView.swift; sourceTree = "<group>"; };
+		7C65FDB02FE22F2A007831CE /* Publisher+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+.swift"; sourceTree = "<group>"; };
 		7C65FDB32FE23432007831CE /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
 		7C65FDB82FE5082C007831CE /* CATransition+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CATransition+.swift"; sourceTree = "<group>"; };
 		7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanModalViewController.swift; sourceTree = "<group>"; };
@@ -4363,6 +4365,7 @@
 				83EBB87F2D0FE86100346018 /* TimeInterval+.swift */,
 				D85939702DC0FF6F00CE4CB2 /* UITextField+.swift */,
 				D85939722DC1037200CE4CB2 /* UIButton+.swift */,
+				7C65FDB02FE22F2A007831CE /* Publisher+.swift */,
 				7C65FDB82FE5082C007831CE /* CATransition+.swift */,
 			);
 			path = Extensions;
@@ -5395,6 +5398,7 @@
 				7CB11C0A2FB1989B004E0C80 /* LostItemKeywordCollectionView.swift in Sources */,
 				D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
+				7C65FDB12FE22F2A007831CE /* Publisher+.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
