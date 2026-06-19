@@ -7,11 +7,16 @@
 
 import UIKit
 
+@MainActor
+protocol ErrorViewControllerCoordinator: AnyObject {
+    func homeButtonTapped()
+}
+
 final class ErrorViewController: UIViewController {
     
     // MARK: - Properties
-    private let completion: ()->Void
-    
+    weak var coordinator: ErrorViewControllerCoordinator?
+
     // MARK: - UI Components
     private let wrapperViewLayoutGuide = UILayoutGuide()
     
@@ -56,8 +61,8 @@ final class ErrorViewController: UIViewController {
     }
     
     // MARK: - Initializer
-    init(completion: @escaping () -> Void) {
-        self.completion = completion
+    init(coordinator: ErrorViewControllerCoordinator) {
+        self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -75,7 +80,7 @@ final class ErrorViewController: UIViewController {
 extension ErrorViewController {
     
     @objc private func navigateButtonTapped() {
-        completion()
+        coordinator?.homeButtonTapped()
     }
 }
 
