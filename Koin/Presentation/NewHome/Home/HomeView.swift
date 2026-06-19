@@ -16,8 +16,6 @@ struct HomeView: View, ActionBindableView {
         case showBusSearch
         case showQRCode
         case showShop
-        case showForceUpdate(String)
-        case showForceModifyUser
         case showToast(String)
         case showBanner(BannerDto, isLoggedIn: Bool)
     }
@@ -89,14 +87,6 @@ struct HomeView: View, ActionBindableView {
         .background(Color.appColor(.newBackground))
         .onFirstAppear {
             viewModel.execute(.viewDidLoad)
-        }
-        .onChange(of: viewModel.forceUpdateVersion) { _, version in
-            guard let version else { return }
-            sendAction(.showForceUpdate(version))
-        }
-        .onChange(of: viewModel.forceModifyUserRequired) { _, isRequired in
-            guard isRequired else { return }
-            sendAction(.showForceModifyUser)
         }
         .onChange(of: viewModel.toastMessage) { _, message in
             guard let message else { return }

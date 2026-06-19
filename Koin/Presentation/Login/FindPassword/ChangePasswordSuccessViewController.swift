@@ -140,12 +140,11 @@ extension ChangePasswordSuccessViewController {
             fetchHomeHeaderUseCase: fetchHomeHeaderUseCase,
             fetchHomeDiningListUseCase: fetchHomeDiningListUseCase,
             fetchCountsUseCase: fetchCountsUseCase,
-            checkVersionUseCase: checkVersionUseCase,
             checkLoginUseCase: DefaultCheckLoginUseCase(userRepository: userRepository),
-            fetchUserDataUseCase: fetchUserDataUseCase,
             sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            fetchBannerUseCase: DefaultFetchBannerUseCase(coreRepository: coreRepository)
+            fetchBannerUseCase: DefaultFetchBannerUseCase(coreRepository: coreRepository),
+            shouldPresentBanner: true
         )
         return HomeView(viewModel: viewModel)
     }

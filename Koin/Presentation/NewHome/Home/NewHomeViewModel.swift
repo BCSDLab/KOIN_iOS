@@ -21,24 +21,21 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     }
 
     private(set) var header: HomeHeader = HomeHeader.empty()
-    private(set) var  diningItems: [HomeDiningItem] = []
-    private(set) var  callVanRecruitingCount: Int = 0
-    private(set) var  eventCount: Int = 0
-    private(set) var  openShopCount: Int = 0
-    private(set) var  totalShopCount: Int = 0
-    private(set) var  isLoading: Bool = false
-    private(set) var  toastMessage: String?
-    private(set) var  forceUpdateVersion: String?
-    private(set) var  forceModifyUserRequired = false
-    private(set) var  bannerToPresent: BannerDto?
-    private(set) var  isLoggedIn = false
+    private(set) var diningItems: [HomeDiningItem] = []
+    private(set) var callVanRecruitingCount: Int = 0
+    private(set) var eventCount: Int = 0
+    private(set) var openShopCount: Int = 0
+    private(set) var totalShopCount: Int = 0
+    private(set) var isLoading: Bool = false
+    private(set) var toastMessage: String?
+    private(set) var shouldPresentBanner: Bool
+    private(set) var bannerToPresent: BannerDto?
+    private(set) var isLoggedIn = false
 
     private let fetchHomeHeaderUseCase: FetchHomeHeaderUseCase
     private let fetchHomeDiningListUseCase: FetchHomeDiningListUseCase
     private let fetchCountsUseCase: FetchNewHomeCountsUseCase
-    private let checkVersionUseCase: CheckVersionUseCase
     private let checkLoginUseCase: CheckLoginUseCase
-    private let fetchUserDataUseCase: FetchUserDataUseCase
     private let sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchBannerUseCase: FetchBannerUseCase
@@ -48,22 +45,20 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
         fetchHomeHeaderUseCase: FetchHomeHeaderUseCase,
         fetchHomeDiningListUseCase: FetchHomeDiningListUseCase,
         fetchCountsUseCase: FetchNewHomeCountsUseCase,
-        checkVersionUseCase: CheckVersionUseCase,
         checkLoginUseCase: CheckLoginUseCase,
-        fetchUserDataUseCase: FetchUserDataUseCase,
         sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase,
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-        fetchBannerUseCase: FetchBannerUseCase
+        fetchBannerUseCase: FetchBannerUseCase,
+        shouldPresentBanner: Bool
     ) {
         self.fetchHomeHeaderUseCase = fetchHomeHeaderUseCase
         self.fetchHomeDiningListUseCase = fetchHomeDiningListUseCase
         self.fetchCountsUseCase = fetchCountsUseCase
-        self.checkVersionUseCase = checkVersionUseCase
         self.checkLoginUseCase = checkLoginUseCase
-        self.fetchUserDataUseCase = fetchUserDataUseCase
         self.sendDeviceTokenIfNeededUseCase = sendDeviceTokenIfNeededUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.fetchBannerUseCase = fetchBannerUseCase
+        self.shouldPresentBanner = shouldPresentBanner
     }
 
     func execute(_ input: Input) {
@@ -72,8 +67,6 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
             checkLogin { [weak self] in
                 self?.checkAndFetchBanner()
             }
-            checkVersion()
-            checkForceModifyUser()
             sendDeviceTokenIfNeeded()
             loadHomeContent()
         case .refresh:
@@ -90,48 +83,12 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
 
 extension NewHomeViewModel {
 
-    private func checkVersion() {
-        checkVersionUseCase.execute()
-            .sink(
-                receiveCompletion: { _ in },
-                receiveValue: { [weak self] response in
-                    if response.0 {
-                        self?.forceUpdateVersion = response.1
-                    }
-                }
-            )
-            .store(in: &subscriptions)
-    }
-
     private func checkLogin(completion: @escaping (() -> Void)) {
         checkLoginUseCase.execute()
             .sink { [weak self] isLoggedIn in
                 self?.isLoggedIn = isLoggedIn
                 completion()
             }
-            .store(in: &subscriptions)
-    }
-
-    private func checkForceModifyUser() {
-        guard UserDefaults.standard.bool(forKey: "forceModal") == false else { return }
-
-        fetchUserDataUseCase.execute()
-            .sink(
-                receiveCompletion: { _ in },
-                receiveValue: { [weak self] userData in
-                    UserDataManager.shared.setUserData(userData: userData)
-                    guard userData.userType == "STUDENT" else { return }
-                    guard userData.name == nil ||
-                            userData.phoneNumber == nil ||
-                            userData.gender == nil ||
-                            userData.major == nil ||
-                            userData.studentNumber == nil
-                    else { return }
-
-                    UserDefaults.standard.set(true, forKey: "forceModal")
-                    self?.forceModifyUserRequired = true
-                }
-            )
             .store(in: &subscriptions)
     }
 
@@ -168,6 +125,10 @@ extension NewHomeViewModel {
     }
 
     private func checkAndFetchBanner() {
+        guard shouldPresentBanner else {
+            return
+        }
+        
         if let noShowDate = UserDefaults.standard.object(forKey: "noShowBanner") as? Date,
            let thresholdDate = Calendar.current.date(byAdding: .day, value: 7, to: noShowDate),
            Date() < thresholdDate {

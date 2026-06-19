@@ -6,15 +6,26 @@
 //
 
 import UIKit
+import Combine
 
 final class CustomNavigationController: UINavigationController, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
+    var didSwipeToPop = false
+    let didPopViewControllerPublisher = PassthroughSubject<UIViewController, Never>()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
     }
     
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
+        didSwipeToPop = false
+
+        if let fromVC = navigationController.transitionCoordinator?.viewController(forKey: .from),
+           !navigationController.viewControllers.contains(fromVC) {
+            didPopViewControllerPublisher.send(fromVC)
+        }
+
         guard let interactivePopGestureRecognizer = self.interactivePopGestureRecognizer else { return }
         if viewControllers.count > 1 {
             interactivePopGestureRecognizer.isEnabled = true
@@ -50,5 +61,14 @@ final class CustomNavigationController: UINavigationController, UIGestureRecogni
 
     override var childForStatusBarStyle: UIViewController? {
         return topViewController
+    }
+
+    @objc private func didRecognizePopGesture() {
+        switch interactivePopGestureRecognizer?.state {
+        case .began:
+            didSwipeToPop = true
+        default:
+            break
+        }
     }
 }

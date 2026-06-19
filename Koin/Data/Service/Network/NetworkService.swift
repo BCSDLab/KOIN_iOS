@@ -11,11 +11,15 @@ import Combine
 
 final class NetworkService {
     
-    static let shared = NetworkService()
+    // MARK: - Properties
+    let serverErrorPublisher = PassthroughSubject<Void, Never>()
     private let interceptor = Interceptor()
-    private init() {
-    }
     
+    // MARK: - Singleton
+    static let shared = NetworkService()
+    private init() {}
+    
+    // MARK: - Public
     func request(api: URLRequestConvertible) -> AnyPublisher<Void, ErrorResponse> {
         return AF.request(api, interceptor: interceptor)
             .validate()
@@ -153,7 +157,7 @@ extension NetworkService {
             
             if let statusCode = errorResponse.statusCode,
                500..<600 ~= statusCode {
-                NotificationCenter.default.post(name: NSNotification.Name("ServerError"), object: nil)
+                serverErrorPublisher.send()
             }
             
             Log.make().error("\(errorResponse)")

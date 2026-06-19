@@ -38,10 +38,6 @@ final class HomeHostingController: UIHostingController<HomeView>, HostingControl
             showQRCode()
         case .showShop:
             navigationController?.pushViewController(makeShopViewController(), animated: true)
-        case let .showForceUpdate(version):
-            navigationController?.present(makeForceUpdateViewController(), animated: true)
-        case .showForceModifyUser:
-            navigationController?.present(makeForceModifyUserViewController(), animated: true)
         case let .showToast(message):
             showToastMessage(message: message)
         case let .showBanner(banner, isLoggedIn):
@@ -142,23 +138,6 @@ extension HomeHostingController {
         if let url = URL(string: "https://koreatech.unibus.kr/#!/qrcode") {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
-    }
-
-    private func makeForceUpdateViewController() -> UIViewController {
-        let viewController = ForceUpdateViewController(
-            viewModel: ForceUpdateViewModel(
-                logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
-                    repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-                ),
-                checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-            )
-        )
-        viewController.modalPresentationStyle = .fullScreen
-        return viewController
-    }
-
-    private func makeForceModifyUserViewController() -> UIViewController {
-        return ForceModifyUserViewController()
     }
 }
 
