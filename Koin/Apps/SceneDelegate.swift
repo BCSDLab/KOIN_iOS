@@ -11,22 +11,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     // MARK: - Properties
     var window: UIWindow?
-    private var isPresentingErrorViewController = false
-    
-    // MARK: - Initializer
-    override init() {
-        super.init()
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(presentErrorViewController),
-            name: NSNotification.Name("ServerError"),
-            object: nil
-        )
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
+    var coordinator: RootCoordinator?
     
     // MARK: - cold start & 딥링크
     func scene(
@@ -37,10 +22,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // cold start
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        let navigationController = CustomNavigationController(rootViewController: makeHomeViewController())
+        let navigationController = CustomNavigationController()
+        self.coordinator = makeAppCooridnator(navigationController: navigationController)
         window.rootViewController = navigationController
         self.window = window
         window.makeKeyAndVisible()
+        Task {
+            await coordinator?.start()
+        }
         
         // 딥링크
         if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
@@ -174,6 +163,27 @@ extension SceneDelegate {
 
 extension SceneDelegate {
     
+    private func makeAppCooridnator(navigationController: CustomNavigationController) -> AppCoordinator {
+        let repository = GA4AnalyticsRepository(service: GA4AnalyticsService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: repository)
+        return AppCoordinator(
+            navigationController: navigationController,
+            appLaunchPresentationUseCase: makeAppLaunchPresentationUseCase(),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+    }
+    
+    private func makeAppLaunchPresentationUseCase() -> AppLaunchPresentationUseCase {
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let checkVersionUseCase = DefaultCheckVersionUseCase(coreRepository: coreRepository)
+        let checkModifyUserNeededUseCase = DefaultCheckModifyUserNeededUseCase(userRepository: userRepository)
+        return DefaultAppLaunchPresentationUseCase(
+            checkVersionUseCase: checkVersionUseCase,
+            checkModifyUserNeededUseCase: checkModifyUserNeededUseCase
+        )
+    }
+    
     private func makeHomeViewController() -> UIViewController {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
@@ -208,38 +218,6 @@ extension SceneDelegate {
         )
         let viewController = HomeViewController(viewModel: homeViewModel)
         return viewController
-    }
-    
-    @objc private func presentErrorViewController() {
-        
-        guard isPresentingErrorViewController == false else {
-            return
-        }
-        
-        if let navigationController = window?.rootViewController as? CustomNavigationController {
-            
-            let homeViewController = makeHomeViewController()
-            let completion: ()->Void = { [weak self] in
-                navigationController.setViewControllers([homeViewController], animated: false)
-                navigationController.dismiss(animated: true) {
-                    self?.isPresentingErrorViewController = false
-                }
-            }
-            let errorViewController = ErrorViewController(completion: completion).then {
-                $0.modalPresentationStyle = .fullScreen
-            }
-            
-            DispatchQueue.main.async {
-                if let _ = navigationController.presentedViewController {
-                    navigationController.dismiss(animated: true) {
-                        navigationController.present(errorViewController, animated: true)
-                    }
-                } else {
-                    navigationController.present(errorViewController, animated: true)
-                }
-            }
-            isPresentingErrorViewController = true
-        }
     }
     
     private func handleDiningNavigation(date: String, type: String, place: String, navigationController: UINavigationController?) {
@@ -395,3 +373,4 @@ extension SceneDelegate {
         return components?.queryItems?.first(where: { $0.name == value })?.value
     }
 }
+

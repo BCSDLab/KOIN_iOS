@@ -13,6 +13,7 @@ protocol RootCoordinator: AnyObject, PHPickerViewControllerDelegate {
     var children: [any ChildCoordinator] { get set }
     var navigationController: CustomNavigationController { get set }
     var pickerCompletion: ((UIImage) -> Void)? { get set }
+    func start() async
     func start<C: ChildCoordinator>(_ type: C.Type, route: C.Route)
 }
 
