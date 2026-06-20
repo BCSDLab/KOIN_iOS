@@ -145,6 +145,8 @@
 		7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */; };
 		7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */; };
 		7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */; };
+		7C65FDC32FE69262007831CE /* NewBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC22FE69262007831CE /* NewBannerViewController.swift */; };
+		7C65FDC52FE69279007831CE /* NewBannerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC42FE69279007831CE /* NewBannerCollectionView.swift */; };
 		7C65FDC72FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC62FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift */; };
 		7C65FDC92FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC82FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift */; };
 		7C6790322FCC00150045E163 /* PopLoggable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790312FCC00150045E163 /* PopLoggable.swift */; };
@@ -1144,6 +1146,8 @@
 		7C61D35A2F23CF1A005FAC3A /* FetchLostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemStats.swift; sourceTree = "<group>"; };
 		7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataButtonsView.swift; sourceTree = "<group>"; };
 		7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemHeaderView.swift; sourceTree = "<group>"; };
+		7C65FDC22FE69262007831CE /* NewBannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBannerViewController.swift; sourceTree = "<group>"; };
+		7C65FDC42FE69279007831CE /* NewBannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBannerCollectionView.swift; sourceTree = "<group>"; };
 		7C65FDC62FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollableInfiniteCarouselCollectionViewProtocol.swift; sourceTree = "<group>"; };
 		7C65FDC82FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollableInfiniteCarouselCollectionView.swift; sourceTree = "<group>"; };
 		7C6790312FCC00150045E163 /* PopLoggable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopLoggable.swift; sourceTree = "<group>"; };
@@ -2179,6 +2183,7 @@
 		7C457B172FCE1BA80011D338 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				7C65FDC12FE69250007831CE /* BannerView */,
 				7C457B152FCE1BA80011D338 /* HomeHeaderView.swift */,
 				7C457B0A2FCE1BA80011D338 /* DiningView */,
 				7C457B122FCE1BA80011D338 /* MobilityView */,
@@ -2469,6 +2474,15 @@
 				7C61D3362F21FADF005FAC3A /* EditLostItemViewController.swift */,
 			);
 			path = EditLostItem;
+			sourceTree = "<group>";
+		};
+		7C65FDC12FE69250007831CE /* BannerView */ = {
+			isa = PBXGroup;
+			children = (
+				7C65FDC22FE69262007831CE /* NewBannerViewController.swift */,
+				7C65FDC42FE69279007831CE /* NewBannerCollectionView.swift */,
+			);
+			path = BannerView;
 			sourceTree = "<group>";
 		};
 		7C65FDCA2FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView */ = {
@@ -5770,6 +5784,7 @@
 				D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */,
 				D215725E2CEDD2BD0061E725 /* FetchLectureUseCase.swift in Sources */,
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
+				7C65FDC32FE69262007831CE /* NewBannerViewController.swift in Sources */,
 				7C65FDC72FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift in Sources */,
 				D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */,
 				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
@@ -6196,6 +6211,7 @@
 				7CED920F2EF2D1F900457128 /* NoticeKeywordCollectionViewCell.swift in Sources */,
 				7CED92102EF2D1F900457128 /* RegisterFormViewModel.swift in Sources */,
 				7CED92112EF2D1F900457128 /* AddDirectCollectionView.swift in Sources */,
+				7C65FDC52FE69279007831CE /* NewBannerCollectionView.swift in Sources */,
 				7C65FDC92FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift in Sources */,
 				7CED92122EF2D1F900457128 /* SortTypeBottomSheetCell.swift in Sources */,
 				7CED92132EF2D1F900457128 /* SettingsViewController.swift in Sources */,

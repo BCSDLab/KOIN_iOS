@@ -124,6 +124,9 @@ enum EventParameter {
             case categoryEtc = "category_etc"
             case mainBusTimetable = "main_bus_timetable"
             case mainBusSearch = "main_bus_search"
+            case mainNextModal = "main_next_modal"
+            case mainModalHide7d = "main_modal_hide_7d"
+            case mainModalClose = "main_modal_close"
             
             case departureBox = "departure_box"
             case arrivalBox = "arrival_box"

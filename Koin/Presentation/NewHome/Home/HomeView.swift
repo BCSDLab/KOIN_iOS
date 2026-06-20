@@ -19,6 +19,7 @@ struct HomeView: View, ActionBindableView {
         case showForceUpdate(String)
         case showForceModifyUser
         case showToast(String)
+        case showBanner(BannerDto, isLoggedIn: Bool)
     }
 
     @State private var viewModel: NewHomeViewModel
@@ -100,7 +101,12 @@ struct HomeView: View, ActionBindableView {
         .onChange(of: viewModel.toastMessage) { _, message in
             guard let message else { return }
             sendAction(.showToast(message))
-            viewModel.execute(.markToastPresented)
+            viewModel.execute(.didShowToast)
+        }
+        .onChange(of: viewModel.bannerToPresent?.banners.first?.id) { _, _ in
+            guard let banner = viewModel.bannerToPresent else { return }
+            sendAction(.showBanner(banner, isLoggedIn: viewModel.isLoggedIn))
+            viewModel.execute(.didShowBanner)
         }
         .refreshable {
 

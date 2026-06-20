@@ -228,9 +228,11 @@ extension SceneDelegate {
             fetchHomeDiningListUseCase: fetchHomeDiningListUseCase,
             fetchCountsUseCase: fetchCountsUseCase,
             checkVersionUseCase: checkVersionUseCase,
+            checkLoginUseCase: DefaultCheckLoginUseCase(userRepository: userRepository),
             fetchUserDataUseCase: fetchUserDataUseCase,
             sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchBannerUseCase: DefaultFetchBannerUseCase(coreRepository: coreRepository)
         )
         return HomeView(viewModel: viewModel)
     }
