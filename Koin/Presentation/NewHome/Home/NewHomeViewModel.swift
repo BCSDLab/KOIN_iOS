@@ -15,28 +15,33 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     enum Input {
         case viewDidLoad
         case refresh
-        case markToastPresented
+        case didShowToast
+        case didShowBanner
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
-    var header: HomeHeader = HomeHeader.empty()
-    var diningItems: [HomeDiningItem] = []
-    var callVanRecruitingCount: Int = 0
-    var eventCount: Int = 0
-    var openShopCount: Int = 0
-    var totalShopCount: Int = 0
-    var isLoading: Bool = false
-    var toastMessage: String?
-    var forceUpdateVersion: String?
-    var forceModifyUserRequired = false
+    private(set) var header: HomeHeader = HomeHeader.empty()
+    private(set) var  diningItems: [HomeDiningItem] = []
+    private(set) var  callVanRecruitingCount: Int = 0
+    private(set) var  eventCount: Int = 0
+    private(set) var  openShopCount: Int = 0
+    private(set) var  totalShopCount: Int = 0
+    private(set) var  isLoading: Bool = false
+    private(set) var  toastMessage: String?
+    private(set) var  forceUpdateVersion: String?
+    private(set) var  forceModifyUserRequired = false
+    private(set) var  bannerToPresent: BannerDto?
+    private(set) var  isLoggedIn = false
 
     private let fetchHomeHeaderUseCase: FetchHomeHeaderUseCase
     private let fetchHomeDiningListUseCase: FetchHomeDiningListUseCase
     private let fetchCountsUseCase: FetchNewHomeCountsUseCase
     private let checkVersionUseCase: CheckVersionUseCase
+    private let checkLoginUseCase: CheckLoginUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private let sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    private let fetchBannerUseCase: FetchBannerUseCase
     private var subscriptions: Set<AnyCancellable> = []
 
     init(
@@ -44,30 +49,39 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
         fetchHomeDiningListUseCase: FetchHomeDiningListUseCase,
         fetchCountsUseCase: FetchNewHomeCountsUseCase,
         checkVersionUseCase: CheckVersionUseCase,
+        checkLoginUseCase: CheckLoginUseCase,
         fetchUserDataUseCase: FetchUserDataUseCase,
         sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase,
-        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+        fetchBannerUseCase: FetchBannerUseCase
     ) {
         self.fetchHomeHeaderUseCase = fetchHomeHeaderUseCase
         self.fetchHomeDiningListUseCase = fetchHomeDiningListUseCase
         self.fetchCountsUseCase = fetchCountsUseCase
         self.checkVersionUseCase = checkVersionUseCase
+        self.checkLoginUseCase = checkLoginUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.sendDeviceTokenIfNeededUseCase = sendDeviceTokenIfNeededUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        self.fetchBannerUseCase = fetchBannerUseCase
     }
 
     func execute(_ input: Input) {
         switch input {
         case .viewDidLoad:
+            checkLogin { [weak self] in
+                self?.checkAndFetchBanner()
+            }
             checkVersion()
             checkForceModifyUser()
             sendDeviceTokenIfNeeded()
             loadHomeContent()
         case .refresh:
             loadHomeContent()
-        case .markToastPresented:
+        case .didShowToast:
             toastMessage = nil
+        case .didShowBanner:
+            bannerToPresent = nil
         case let .logEvent(label, category, value):
             makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
@@ -75,7 +89,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
 }
 
 extension NewHomeViewModel {
-    
+
     private func checkVersion() {
         checkVersionUseCase.execute()
             .sink(
@@ -88,10 +102,19 @@ extension NewHomeViewModel {
             )
             .store(in: &subscriptions)
     }
-    
+
+    private func checkLogin(completion: @escaping (() -> Void)) {
+        checkLoginUseCase.execute()
+            .sink { [weak self] isLoggedIn in
+                self?.isLoggedIn = isLoggedIn
+                completion()
+            }
+            .store(in: &subscriptions)
+    }
+
     private func checkForceModifyUser() {
         guard UserDefaults.standard.bool(forKey: "forceModal") == false else { return }
-        
+
         fetchUserDataUseCase.execute()
             .sink(
                 receiveCompletion: { _ in },
@@ -104,21 +127,21 @@ extension NewHomeViewModel {
                             userData.major == nil ||
                             userData.studentNumber == nil
                     else { return }
-                    
+
                     UserDefaults.standard.set(true, forKey: "forceModal")
                     self?.forceModifyUserRequired = true
                 }
             )
             .store(in: &subscriptions)
     }
-    
+
     private func sendDeviceTokenIfNeeded() {
         sendDeviceTokenIfNeededUseCase.execute()
     }
-    
+
     private func loadHomeContent() {
         isLoading = true
-        
+
         Publishers.Zip3(
             fetchHomeHeaderUseCase.execute(),
             fetchHomeDiningListUseCase.execute(),
@@ -143,7 +166,25 @@ extension NewHomeViewModel {
         )
         .store(in: &subscriptions)
     }
-    
+
+    private func checkAndFetchBanner() {
+        if let noShowDate = UserDefaults.standard.object(forKey: "noShowBanner") as? Date,
+           let thresholdDate = Calendar.current.date(byAdding: .day, value: 7, to: noShowDate),
+           Date() < thresholdDate {
+            return
+        }
+
+        fetchBannerUseCase.execute()
+            .sink(
+                receiveCompletion: { _ in },
+                receiveValue: { [weak self] banner in
+                    guard banner.count > 0, !banner.banners.isEmpty else { return }
+                    self?.bannerToPresent = banner
+                }
+            )
+            .store(in: &subscriptions)
+    }
+
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
         category: EventParameter.EventCategory,
