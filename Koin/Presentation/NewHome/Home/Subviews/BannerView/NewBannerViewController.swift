@@ -50,6 +50,7 @@ final class NewBannerViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
+        setAddTargets()
     }
 
     // MARK: - Public
