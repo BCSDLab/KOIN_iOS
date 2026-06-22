@@ -85,7 +85,8 @@ final class HomeTabbarController: UITabBarController {
         
         let viewControllers = [homeViewController, categoryViewController, noticeViewController, profileViewController]
         let configuredViewControllers = zip(viewControllers, Tab.allCases).map { viewController, tab in
-            viewController.tabBarItem = UITabBarItem(title: tab.title, image: nil, selectedImage: nil)
+            let navigationController = CustomNavigationController(rootViewController: viewController)
+            navigationController.tabBarItem = UITabBarItem(title: tab.title, image: nil, selectedImage: nil)
             viewController.additionalSafeAreaInsets.bottom = HomeTabbarView.Layout.barHeight
             return viewController
         }

@@ -24,6 +24,11 @@ final class CategoryHostingController: UIHostingController<CategoryView>, Hostin
     required dynamic init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar()
+    }
 
     func execute(action: RootView.Action) {
         switch action {
@@ -48,6 +53,58 @@ final class CategoryHostingController: UIHostingController<CategoryView>, Hostin
         case .showBusiness:
             presentBusiness()
         }
+    }
+}
+
+extension CategoryHostingController {
+    
+    private func configureNavigationBar() {
+        configureNavigationBar(style: .order)
+        configureLeftBarItem()
+        configureRightBarButton()
+    }
+
+    private func configureLeftBarItem() {
+        let leftBarButtonStackView = UIStackView().then {
+            $0.axis = .horizontal
+            $0.alignment = .center
+            $0.spacing = 0
+        }
+        leftBarButtonStackView.addArrangedSubview(UIImageView(image: .appImage(asset: .bcsdSymbolLogo)?.resize(to: .init(width: 46, height: 37))))
+        leftBarButtonStackView.addArrangedSubview(UIImageView(image: .appImage(asset: .koinTextLogo)?.resize(to: .init(width: 51, height: 30))))
+        leftBarButtonStackView.snp.makeConstraints {
+            $0.height.equalTo(37)
+        }
+        
+        let leftBarButtonItem = UIBarButtonItem(customView: leftBarButtonStackView)
+        navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+
+    private func configureRightBarButton(hasDot: Bool = false) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(rightBarButtonTapped)
+        )
+    }
+
+    @objc private func rightBarButtonTapped() {
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.notification,
+            category: .click,
+            value: "알림 아이콘")
+        navigateToNotification()
+    }
+     
+    private func navigateToNotification() {
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NotificationViewModel(
+            fetchNotificationListUseCase: MockFetchNotificationListUseCase(),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let viewController = NotificationViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

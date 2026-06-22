@@ -37,12 +37,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // cold start
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        let navigationController = CustomNavigationController(rootViewController: makeHomeTabbarController())
-        window.rootViewController = navigationController
+        window.rootViewController = makeHomeTabbarController()
         self.window = window
         window.makeKeyAndVisible()
         
         // 딥링크
+        let navigationController = (window.rootViewController as? HomeTabbarController)?.selectedViewController as? UINavigationController
+        
         if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
            let incomingURL = userActivity.webpageURL {
             handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
@@ -59,7 +60,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
               let incomingURL = userActivity.webpageURL else { return }
         
-        handleIncomingDeepLink(url: incomingURL, navigationController: window?.rootViewController as? UINavigationController)
+        let navigationController = (window?.rootViewController as? HomeTabbarController)?.selectedViewController as? UINavigationController
+        handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
     }
     
     // MARK: - 딥링크 (URI Scheme) warm start
@@ -68,12 +70,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         guard let urlContext = URLContexts.first else { return }
-        handleIncomingDeepLink(url: urlContext.url, navigationController: window?.rootViewController as? UINavigationController)
+        let navigationController = (window?.rootViewController as? HomeTabbarController)?.selectedViewController as? UINavigationController
+        handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
     }
     
     // MARK: - 푸시알림 처리 (AppDelegate에 의해 호출)
     func handleNotificationData(userInfo: [AnyHashable: Any]) {
-        handleNotificationData(userInfo: userInfo, navigationController: window?.rootViewController as? UINavigationController)
+        let navigationController = (window?.rootViewController as? HomeTabbarController)?.selectedViewController as? UINavigationController
+        handleNotificationData(userInfo: userInfo, navigationController: navigationController)
     }
 }
 

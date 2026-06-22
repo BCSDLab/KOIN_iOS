@@ -55,6 +55,14 @@ struct CategoryView: View, ActionBindableView {
             ]
         )
     ]
+    
+    func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        viewModel.execute(.logEvent(label, category, value))
+    }
 
     @MainActor
     init(viewModel: CategoryViewModel) {
