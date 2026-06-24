@@ -114,7 +114,7 @@ extension FoundIdViewController {
         subMessageLabel.attributedText = attributed
     }
     
-    private func makeHomeTabbarController() -> HomeTabbarController {
+    private func makeHomeTabBarController() -> HomeTabBarController {
         let homeRootView = makeHomeView()
         let homeViewController = HomeHostingController(rootView: homeRootView)
 
@@ -125,13 +125,15 @@ extension FoundIdViewController {
         let noticeViewController = makeNoticeListViewController()
         let profileViewController = UIViewController()
         
-        let viewModel = HomeTabbarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let viewModel = HomeTabBarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
 
-        return HomeTabbarController(
-            homeViewController: homeViewController,
-            categoryViewController: categoryViewController,
-            noticeViewController: noticeViewController,
-            profileViewController: profileViewController,
+        return HomeTabBarController(
+            items: [
+                .init(viewController: homeViewController, tab: .home),
+                .init(viewController: categoryViewController, tab: .category),
+                .init(viewController: noticeViewController, tab: .board),
+                .init(viewController: profileViewController, tab: .profile)
+            ],
             viewModel: viewModel
         )
     }

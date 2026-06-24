@@ -65,7 +65,7 @@ final class ChangePasswordSuccessViewController: UIViewController {
 
 extension ChangePasswordSuccessViewController {
     @objc private func goLoginButtonTapped() {
-        let homeViewController = makeHomeTabbarController()
+        let homeViewController = makeHomeTabBarController()
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
@@ -87,7 +87,7 @@ extension ChangePasswordSuccessViewController {
         navigationController?.setViewControllers(viewControllers, animated: true)
     }
     
-    private func makeHomeTabbarController() -> HomeTabbarController {
+    private func makeHomeTabBarController() -> HomeTabBarController {
         let homeRootView = makeHomeView()
         let homeViewController = HomeHostingController(rootView: homeRootView)
 
@@ -98,13 +98,15 @@ extension ChangePasswordSuccessViewController {
         let noticeViewController = makeNoticeListViewController()
         let profileViewController = UIViewController()
         
-        let viewModel = HomeTabbarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let viewModel = HomeTabBarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
 
-        return HomeTabbarController(
-            homeViewController: homeViewController,
-            categoryViewController: categoryViewController,
-            noticeViewController: noticeViewController,
-            profileViewController: profileViewController,
+        return HomeTabBarController(
+            items: [
+                .init(viewController: homeViewController, tab: .home),
+                .init(viewController: categoryViewController, tab: .category),
+                .init(viewController: noticeViewController, tab: .board),
+                .init(viewController: profileViewController, tab: .profile)
+            ],
             viewModel: viewModel
         )
     }

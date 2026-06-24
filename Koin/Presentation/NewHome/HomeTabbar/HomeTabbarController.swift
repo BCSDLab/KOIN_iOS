@@ -1,96 +1,47 @@
 //
-//  HomeTabbarController.swift
+//  HomeTabBarController.swift
 //  koin
 //
 //  Created by 홍기정 on 6/2/26.
 //
 
-import SwiftUI
 import Combine
 import SnapKit
 import UIKit
 
 @MainActor
-final class HomeTabbarController: UITabBarController {
+final class HomeTabBarController: UITabBarController {
     
-    private enum Tab: Int, CaseIterable {
-        case home
-        case category
-        case board
-        case profile
-        
-        var title: String {
-            switch self {
-            case .home:
-                return "홈"
-            case .category:
-                return "카테고리"
-            case .board:
-                return "게시판"
-            case .profile:
-                return "프로필"
-            }
-        }
-        
-        var imageAsset: ImageAsset {
-            switch self {
-            case .home:
-                return .tabbarHome
-            case .category:
-                return .tabbarCategory
-            case .board:
-                return .tabbarNotice
-            case .profile:
-                return .tabbarProfile
-            }
-        }
-        
-        var item: HomeTabbarItem {
-            HomeTabbarItem(title: title, imageAsset: imageAsset)
-        }
-
-        var logLabel: EventParameter.EventLabel.Campus {
-            switch self {
-            case .home:
-                return .navHome
-            case .category:
-                return .navCategory
-            case .board:
-                return .navBulletin
-            case .profile:
-                return .navProfile
-            }
-        }
+    // MARK: - Layout
+    private enum Layout {
+        static let TabBarBaseHeight: CGFloat = 52
+        static let TabBarCornerRadius: CGFloat = 16
+    }
+    private var additionalBottomInset: CGFloat {
+        Layout.TabBarBaseHeight + TabBarAdditionalHeight - Layout.TabBarCornerRadius
+    }
+    private var TabBarAdditionalHeight: CGFloat {
+        view.safeAreaInsets.bottom < 0.5 ? 6 : 0
+    }
+    private var TabBarBottomPadding: CGFloat {
+        view.safeAreaInsets.bottom < 0.5 ? 6 : view.safeAreaInsets.bottom
     }
     
-    private lazy var customTabBarView = HomeTabbarView(items: Tab.allCases.map(\.item))
-    private var customTabBarHeightConstraint: Constraint?
-    private let viewModel: HomeTabbarViewModel
-    private let inputSubject = PassthroughSubject<HomeTabbarViewModel.Input, Never>()
+    // MARK: - Properties
+    private let viewModel: HomeTabBarViewModel
+    private let inputSubject = PassthroughSubject<HomeTabBarViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private var customTabBarHeight: CGFloat {
-        HomeTabbarView.Layout.barHeight + (view.safeAreaInsets.bottom < 0.5 ? HomeTabbarView.Layout.itemTopPadding : view.safeAreaInsets.bottom)
-    }
+    
+    private let items: [HomeTabBarItem]
     
     // MARK: - Initializer
     init(
-        homeViewController: UIViewController,
-        categoryViewController: UIViewController,
-        noticeViewController: UIViewController,
-        profileViewController: UIViewController,
-        viewModel: HomeTabbarViewModel
+        items: [HomeTabBarItem],
+        viewModel: HomeTabBarViewModel
     ) {
+        self.items = items
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        
-        let viewControllers = [homeViewController, categoryViewController, noticeViewController, profileViewController]
-        let configuredViewControllers = zip(viewControllers, Tab.allCases).map { viewController, tab in
-            let navigationController = CustomNavigationController(rootViewController: viewController)
-            navigationController.tabBarItem = UITabBarItem(title: tab.title, image: nil, selectedImage: nil)
-            viewController.additionalSafeAreaInsets.bottom = HomeTabbarView.Layout.barHeight
-            return viewController
-        }
-        setViewControllers(configuredViewControllers, animated: false)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -99,100 +50,82 @@ final class HomeTabbarController: UITabBarController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .appColor(.newBackground)
-        configureCustomTabBar()
-        configureNavigationBar()
+        tabBar.isHidden = true
         bind()
-        selectTab(index: Tab.home.rawValue)
+        setUpViewControllers()
+        if let firstTab = items.first?.tab {
+            selectTab(index: firstTab.rawValue)
+        }
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        updateCustomTabBarHeight()
-        view.bringSubviewToFront(customTabBarView)
+        updateAdditionalBottomInset()
+        updateTabBarLayout()
     }
     
     override func viewSafeAreaInsetsDidChange() {
         super.viewSafeAreaInsetsDidChange()
-        updateCustomTabBarHeight()
+        updateAdditionalBottomInset()
+        updateTabBarLayout()
     }
 }
 
-extension HomeTabbarController {
+extension HomeTabBarController {
+    private func setUpViewControllers() {
+        let configuredViewControllers = items.map { configuration in
+            let tabBar = HomeTabBar(tabs: items.map(\.tab), selectedTab: configuration.tab, onTapItem: self.handleTabSelection)
+            let rootViewController = configuration.viewController.then {
+                $0.view?.addSubview(tabBar)
+                tabBar.snp.makeConstraints {
+                    $0.leading.trailing.bottom.equalToSuperview()
+                    $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
+                }
+            }
+            return CustomNavigationController(rootViewController: rootViewController)
+        }
+        viewControllers = configuredViewControllers
+    }
+}
+
+extension HomeTabBarController {
+    private func updateAdditionalBottomInset() {
+        items.map(\.viewController).forEach {
+            $0.additionalSafeAreaInsets.bottom = additionalBottomInset
+        }
+    }
     
-    private func configureCustomTabBar() {
-        tabBar.isHidden = true
-        
-        customTabBarView.onTapItem = { [weak self] index in
-            guard let tab = Tab(rawValue: index) else { return }
-            self?.inputSubject.send(.logEvent(tab.logLabel, .click, tab.title))
-            self?.selectTab(index: index)
-        }
-        
-        view.addSubview(customTabBarView)
-        customTabBarView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-            customTabBarHeightConstraint = $0.height.equalTo(customTabBarHeight).constraint
+    private func updateTabBarLayout() {
+        items.map(\.viewController).forEach {
+            $0.view.viewWithTag(HomeTabBar.viewTag)?.snp.remakeConstraints {
+                $0.leading.trailing.bottom.equalToSuperview()
+                $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
+            }
         }
     }
+}
 
-    private func updateCustomTabBarHeight() {
-        customTabBarHeightConstraint?.update(offset: customTabBarHeight)
-    }
-
+extension HomeTabBarController {
     private func bind() {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher())
             .sink { _ in }
             .store(in: &subscriptions)
     }
 
-    private func selectTab(index: Int) {
-        guard Tab(rawValue: index) != nil else { return }
-        selectedIndex = index
-        customTabBarView.updateSelectedIndex(index)
-    }
-}
-
-extension HomeTabbarController {
-
-    private func configureNavigationBar() {
-        configureNavigationBar(style: .order)
-        configureLeftBarItem()
-        configureRightBarButton()
-    }
-
-    private func configureLeftBarItem() {
-        let leftBarButtonStackView = UIStackView().then {
-            $0.axis = .horizontal
-            $0.alignment = .center
+    private func handleTabSelection(index: Int) {
+        if let homeTab = HomeTab(rawValue: index) {
+            inputSubject.send(.logEvent(homeTab.logLabel, .click, homeTab.title))
         }
-        leftBarButtonStackView.addArrangedSubview(UIImageView(image: .appImage(asset: .bcsdSymbolLogo)?.resize(to: .init(width: 46, height: 37))))
-        leftBarButtonStackView.addArrangedSubview(UIImageView(image: .appImage(asset: .koinTextLogo)?.resize(to: .init(width: 51, height: 30))))
-        let leftBarButtonItem = UIBarButtonItem(customView: leftBarButtonStackView)
-        navigationItem.leftBarButtonItem = leftBarButtonItem
+        selectTab(index: index)
     }
 
-    private func configureRightBarButton(hasDot: Bool = false) {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(rightBarButtonTapped)
-        )
-    }
-
-    @objc private func rightBarButtonTapped() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notification, .click, "알림 아이콘"))
-        navigateToNotification()
-    }
-     
-    private func navigateToNotification() {
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = NotificationViewModel(
-            fetchNotificationListUseCase: MockFetchNotificationListUseCase(),
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
-        )
-        let viewController = NotificationViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
+    private func selectTab(index: Int) {
+        UIView.performWithoutAnimation {
+            CATransaction.begin()
+            CATransaction.setDisableActions(true)
+            selectedIndex = index
+            view.layoutIfNeeded()
+            CATransaction.commit()
+        }
     }
 }

@@ -37,12 +37,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // cold start
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = makeHomeTabbarController()
+        window.rootViewController = makeHomeTabBarController()
         self.window = window
         window.makeKeyAndVisible()
         
         // 딥링크
-        let navigationController = (window.rootViewController as? HomeTabbarController)?.selectedViewController as? UINavigationController
+        let navigationController = (window.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
         
         if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
            let incomingURL = userActivity.webpageURL {
@@ -60,7 +60,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
               let incomingURL = userActivity.webpageURL else { return }
         
-        let navigationController = (window?.rootViewController as? HomeTabbarController)?.selectedViewController as? UINavigationController
+        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
         handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
     }
     
@@ -70,13 +70,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         guard let urlContext = URLContexts.first else { return }
-        let navigationController = (window?.rootViewController as? HomeTabbarController)?.selectedViewController as? UINavigationController
+        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
         handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
     }
     
     // MARK: - 푸시알림 처리 (AppDelegate에 의해 호출)
     func handleNotificationData(userInfo: [AnyHashable: Any]) {
-        let navigationController = (window?.rootViewController as? HomeTabbarController)?.selectedViewController as? UINavigationController
+        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
         handleNotificationData(userInfo: userInfo, navigationController: navigationController)
     }
 }
@@ -178,7 +178,7 @@ extension SceneDelegate {
 
 extension SceneDelegate {
     
-    private func makeHomeTabbarController() -> HomeTabbarController {
+    private func makeHomeTabBarController() -> HomeTabBarController {
         let homeRootView = makeHomeView()
         let homeViewController = HomeHostingController(rootView: homeRootView)
 
@@ -189,13 +189,15 @@ extension SceneDelegate {
         let noticeViewController = makeNoticeListViewController()
         let profileViewController = UIViewController()
         
-        let viewModel = HomeTabbarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let viewModel = HomeTabBarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
 
-        return HomeTabbarController(
-            homeViewController: homeViewController,
-            categoryViewController: categoryViewController,
-            noticeViewController: noticeViewController,
-            profileViewController: profileViewController,
+        return HomeTabBarController(
+            items: [
+                .init(viewController: homeViewController, tab: .home),
+                .init(viewController: categoryViewController, tab: .category),
+                .init(viewController: noticeViewController, tab: .board),
+                .init(viewController: profileViewController, tab: .profile)
+            ],
             viewModel: viewModel
         )
     }
@@ -265,9 +267,9 @@ extension SceneDelegate {
         
         if let navigationController = window?.rootViewController as? CustomNavigationController {
             
-            let homeTabbarController = makeHomeTabbarController()
+            let homeTabBarController = makeHomeTabBarController()
             let completion: ()->Void = { [weak self] in
-                navigationController.setViewControllers([homeTabbarController], animated: false)
+                navigationController.setViewControllers([homeTabBarController], animated: false)
                 navigationController.dismiss(animated: true) {
                     self?.isPresentingErrorViewController = false
                 }
