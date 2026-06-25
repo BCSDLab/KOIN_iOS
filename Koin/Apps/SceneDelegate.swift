@@ -37,12 +37,13 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // cold start
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        let navigationController = CustomNavigationController(rootViewController: makeHomeTabbarController())
-        window.rootViewController = navigationController
+        window.rootViewController = makeHomeTabBarController()
         self.window = window
         window.makeKeyAndVisible()
         
         // 딥링크
+        let navigationController = (window.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
+        
         if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
            let incomingURL = userActivity.webpageURL {
             handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
@@ -59,7 +60,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
               let incomingURL = userActivity.webpageURL else { return }
         
-        handleIncomingDeepLink(url: incomingURL, navigationController: window?.rootViewController as? UINavigationController)
+        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
+        handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
     }
     
     // MARK: - 딥링크 (URI Scheme) warm start
@@ -68,12 +70,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         guard let urlContext = URLContexts.first else { return }
-        handleIncomingDeepLink(url: urlContext.url, navigationController: window?.rootViewController as? UINavigationController)
+        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
+        handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
     }
     
     // MARK: - 푸시알림 처리 (AppDelegate에 의해 호출)
     func handleNotificationData(userInfo: [AnyHashable: Any]) {
-        handleNotificationData(userInfo: userInfo, navigationController: window?.rootViewController as? UINavigationController)
+        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
+        handleNotificationData(userInfo: userInfo, navigationController: navigationController)
     }
 }
 
@@ -174,7 +178,7 @@ extension SceneDelegate {
 
 extension SceneDelegate {
     
-    private func makeHomeTabbarController() -> HomeTabbarController {
+    private func makeHomeTabBarController() -> HomeTabBarController {
         let homeRootView = makeHomeView()
         let homeViewController = HomeHostingController(rootView: homeRootView)
 
@@ -185,13 +189,15 @@ extension SceneDelegate {
         let noticeViewController = makeNoticeListViewController()
         let profileViewController = UIViewController()
         
-        let viewModel = HomeTabbarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let viewModel = HomeTabBarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
 
-        return HomeTabbarController(
-            homeViewController: homeViewController,
-            categoryViewController: categoryViewController,
-            noticeViewController: noticeViewController,
-            profileViewController: profileViewController,
+        return HomeTabBarController(
+            items: [
+                .init(viewController: homeViewController, tab: .home),
+                .init(viewController: categoryViewController, tab: .category),
+                .init(viewController: noticeViewController, tab: .board),
+                .init(viewController: profileViewController, tab: .profile)
+            ],
             viewModel: viewModel
         )
     }
@@ -255,34 +261,31 @@ extension SceneDelegate {
 
     @objc private func presentErrorViewController() {
         
-        guard isPresentingErrorViewController == false else {
+        guard isPresentingErrorViewController == false,
+              let navigationController = (window?.rootViewController as? UITabBarController)?.selectedViewController as? UINavigationController else {
             return
         }
         
-        if let navigationController = window?.rootViewController as? CustomNavigationController {
-            
-            let homeTabbarController = makeHomeTabbarController()
-            let completion: ()->Void = { [weak self] in
-                navigationController.setViewControllers([homeTabbarController], animated: false)
+        let completion: ()->Void = { [weak self] in
+            self?.window?.rootViewController = self?.makeHomeTabBarController()
+            self?.window?.rootViewController?.dismiss(animated: true) {
+                self?.isPresentingErrorViewController = false
+            }
+        }
+        let errorViewController = ErrorViewController(completion: completion).then {
+            $0.modalPresentationStyle = .fullScreen
+        }
+        
+        DispatchQueue.main.async {
+            if let _ = navigationController.presentedViewController {
                 navigationController.dismiss(animated: true) {
-                    self?.isPresentingErrorViewController = false
-                }
-            }
-            let errorViewController = ErrorViewController(completion: completion).then {
-                $0.modalPresentationStyle = .fullScreen
-            }
-            
-            DispatchQueue.main.async {
-                if let _ = navigationController.presentedViewController {
-                    navigationController.dismiss(animated: true) {
-                        navigationController.present(errorViewController, animated: true)
-                    }
-                } else {
                     navigationController.present(errorViewController, animated: true)
                 }
+            } else {
+                navigationController.present(errorViewController, animated: true)
             }
-            isPresentingErrorViewController = true
         }
+        isPresentingErrorViewController = true
     }
     
     private func handleDiningNavigation(date: String, type: String, place: String, navigationController: UINavigationController?) {

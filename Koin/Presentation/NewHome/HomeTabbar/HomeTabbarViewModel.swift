@@ -1,13 +1,13 @@
 //
-//  HomeTabbarViewModel.swift
+//  HomeTabBarViewModel.swift
 //  koin
 //
-//  Created by Codex on 6/7/26.
+//  Created by 홍기정 on 6/7/26.
 //
 
 import Combine
 
-final class HomeTabbarViewModel: ViewModelProtocol {
+final class HomeTabBarViewModel: ViewModelProtocol {
     enum Input {
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
@@ -37,7 +37,7 @@ final class HomeTabbarViewModel: ViewModelProtocol {
     }
 }
 
-extension HomeTabbarViewModel {
+extension HomeTabBarViewModel {
     
     private func makeLogAnalyticsEvent(
         label: EventLabelType,

@@ -150,7 +150,7 @@ final class LoginViewController: UIViewController {
         
         modifyUserModalViewController.navigateButtonPublisher.sink { [weak self] in
             guard let self = self else { return }
-            let homeViewController = makeHomeTabbarController()
+            let homeViewController = makeHomeTabBarController()
 
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let modifyUseCase = DefaultModifyUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
@@ -343,7 +343,7 @@ extension LoginViewController {
 }
 
 extension LoginViewController {
-    private func makeHomeTabbarController() -> HomeTabbarController {
+    private func makeHomeTabBarController() -> HomeTabBarController {
         let homeRootView = makeHomeView()
         let homeViewController = HomeHostingController(rootView: homeRootView)
 
@@ -354,13 +354,15 @@ extension LoginViewController {
         let noticeViewController = makeNoticeListViewController()
         let profileViewController = UIViewController()
         
-        let viewModel = HomeTabbarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let viewModel = HomeTabBarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
 
-        return HomeTabbarController(
-            homeViewController: homeViewController,
-            categoryViewController: categoryViewController,
-            noticeViewController: noticeViewController,
-            profileViewController: profileViewController,
+        return HomeTabBarController(
+            items: [
+                .init(viewController: homeViewController, tab: .home),
+                .init(viewController: categoryViewController, tab: .category),
+                .init(viewController: noticeViewController, tab: .board),
+                .init(viewController: profileViewController, tab: .profile)
+            ],
             viewModel: viewModel
         )
     }

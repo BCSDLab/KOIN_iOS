@@ -58,9 +58,9 @@
 		7C3ECC7A2F41505000EE8F13 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */; };
 		7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */; };
 		7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B092FCE1BA80011D338 /* DiningView.swift */; };
-		7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */; };
-		7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */; };
-		7C457B2F2FCE1BA80011D338 /* HomeTabbarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */; };
+		7C457B2C2FCE1BA80011D338 /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1E2FCE1BA80011D338 /* HomeTabBarController.swift */; };
+		7C457B2D2FCE1BA80011D338 /* HomeTabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabBarViewModel.swift */; };
+		7C457B2F2FCE1BA80011D338 /* HomeTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1C2FCE1BA80011D338 /* HomeTabBar.swift */; };
 		7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
 		7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B062FCE1BA80011D338 /* CategoryView.swift */; };
 		7C457B342FCE1BA80011D338 /* ShuttleTicketButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0F2FCE1BA80011D338 /* ShuttleTicketButton.swift */; };
@@ -70,7 +70,7 @@
 		7C457B3D2FCE1BA80011D338 /* CategoryFeaturedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AFE2FCE1BA80011D338 /* CategoryFeaturedButton.swift */; };
 		7C457B3E2FCE1BA80011D338 /* CategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B012FCE1BA80011D338 /* CategoryRow.swift */; };
 		7C457B3F2FCE1BA80011D338 /* CategorySection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B022FCE1BA80011D338 /* CategorySection.swift */; };
-		7C457B402FCE1BA80011D338 /* HomeTabbarItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1B2FCE1BA80011D338 /* HomeTabbarItemView.swift */; };
+		7C457B402FCE1BA80011D338 /* HomeTabBarButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1B2FCE1BA80011D338 /* HomeTabBarButton.swift */; };
 		7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B112FCE1BA80011D338 /* MobilityView.swift */; };
 		7C457B432FCE1BA80011D338 /* CategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */; };
 		7C457B442FCE1BA80011D338 /* CallVanRecruitmentButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B0D2FCE1BA80011D338 /* CallVanRecruitmentButton.swift */; };
@@ -242,7 +242,6 @@
 		7C8BFCED2FD04BA000963679 /* FetchNotificationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */; };
 		7C8BFCEF2FD04BA000963679 /* FetchNewHomeCountsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */; };
 		7C8BFCF12FD04B800963679 /* NewHomeCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */; };
-		7C8BFCF52FD16C6100963679 /* HomeTabbarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCF42FD16C6100963679 /* HomeTabbarItem.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
 		7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */; };
 		7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */; };
@@ -365,6 +364,7 @@
 		7CC42B9C2F5E834E00940CE1 /* CallVanChatRightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */; };
 		7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* PostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */; };
+		7CD411EA2FEB92280079467B /* HomeTabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD411E92FEB92280079467B /* HomeTabBarItem.swift */; };
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
@@ -1072,10 +1072,10 @@
 		7C457B152FCE1BA80011D338 /* HomeHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeaderView.swift; sourceTree = "<group>"; };
 		7C457B182FCE1BA80011D338 /* HomeHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHostingController.swift; sourceTree = "<group>"; };
 		7C457B192FCE1BA80011D338 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		7C457B1B2FCE1BA80011D338 /* HomeTabbarItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarItemView.swift; sourceTree = "<group>"; };
-		7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarView.swift; sourceTree = "<group>"; };
-		7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarController.swift; sourceTree = "<group>"; };
-		7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarViewModel.swift; sourceTree = "<group>"; };
+		7C457B1B2FCE1BA80011D338 /* HomeTabBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarButton.swift; sourceTree = "<group>"; };
+		7C457B1C2FCE1BA80011D338 /* HomeTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBar.swift; sourceTree = "<group>"; };
+		7C457B1E2FCE1BA80011D338 /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
+		7C457B202FCE1BA80011D338 /* HomeTabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarViewModel.swift; sourceTree = "<group>"; };
 		7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenIfNeededUseCase.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
@@ -1243,7 +1243,6 @@
 		7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNewHomeCountsUseCase.swift; sourceTree = "<group>"; };
 		7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationListUseCase.swift; sourceTree = "<group>"; };
 		7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomeCounts.swift; sourceTree = "<group>"; };
-		7C8BFCF42FD16C6100963679 /* HomeTabbarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarItem.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
 		7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionView.swift; sourceTree = "<group>"; };
 		7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1350,6 +1349,7 @@
 		7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatRightCell.swift; sourceTree = "<group>"; };
 		7CCB1E4A2F29D87C00472669 /* PostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4D2F29DB3200472669 /* PostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostChatDetailRequest.swift; sourceTree = "<group>"; };
+		7CD411E92FEB92280079467B /* HomeTabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarItem.swift; sourceTree = "<group>"; };
 		7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeviceTokenUseCase.swift; sourceTree = "<group>"; };
 		7CED8EC02EF2D1F900457128 /* BannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EC12EF2D1F900457128 /* BannerCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -2206,20 +2206,21 @@
 		7C457B1D2FCE1BA80011D338 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
-				7C457B1B2FCE1BA80011D338 /* HomeTabbarItemView.swift */,
-				7C457B1C2FCE1BA80011D338 /* HomeTabbarView.swift */,
+				7C457B1B2FCE1BA80011D338 /* HomeTabBarButton.swift */,
+				7C457B1C2FCE1BA80011D338 /* HomeTabBar.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
 		};
-		7C457B1F2FCE1BA80011D338 /* HomeTabbar */ = {
+		7C457B1F2FCE1BA80011D338 /* HomeTabBar */ = {
 			isa = PBXGroup;
 			children = (
 				7C457B1D2FCE1BA80011D338 /* Subviews */,
-				7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */,
-				7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */,
+				7C457B1E2FCE1BA80011D338 /* HomeTabBarController.swift */,
+				7C457B202FCE1BA80011D338 /* HomeTabBarViewModel.swift */,
+				7CD411E92FEB92280079467B /* HomeTabBarItem.swift */,
 			);
-			path = HomeTabbar;
+			path = HomeTabBar;
 			sourceTree = "<group>";
 		};
 		7C457B282FCE1BA80011D338 /* Notification */ = {
@@ -2235,7 +2236,7 @@
 		7C457B2A2FCE1BA80011D338 /* NewHome */ = {
 			isa = PBXGroup;
 			children = (
-				7C457B1F2FCE1BA80011D338 /* HomeTabbar */,
+				7C457B1F2FCE1BA80011D338 /* HomeTabBar */,
 				7C457B1A2FCE1BA80011D338 /* Home */,
 				7C457B072FCE1BA80011D338 /* Category */,
 				7C457B282FCE1BA80011D338 /* Notification */,
@@ -2581,7 +2582,6 @@
 				7C8BFCDC2FD04B8000963679 /* CategoryModels.swift */,
 				7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */,
 				7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */,
-				7C8BFCF42FD16C6100963679 /* HomeTabbarItem.swift */,
 				7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */,
 				7C8BFCDF2FD04B8000963679 /* NotificationIconType.swift */,
 				7C8BFCE02FD04B8000963679 /* NotificationItem.swift */,
@@ -5965,9 +5965,9 @@
 				7C8A000B2FD200000011D338 /* DiningMenuCard.swift in Sources */,
 				7C8A000D2FD200000011D338 /* EmptyDiningCard.swift in Sources */,
 				7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */,
-				7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */,
-				7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */,
-				7C457B2F2FCE1BA80011D338 /* HomeTabbarView.swift in Sources */,
+				7C457B2C2FCE1BA80011D338 /* HomeTabBarController.swift in Sources */,
+				7C457B2D2FCE1BA80011D338 /* HomeTabBarViewModel.swift in Sources */,
+				7C457B2F2FCE1BA80011D338 /* HomeTabBar.swift in Sources */,
 				7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */,
 				7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */,
 				7C8BFCED2FD04BA000963679 /* FetchNotificationListUseCase.swift in Sources */,
@@ -5982,7 +5982,7 @@
 				7C457B3D2FCE1BA80011D338 /* CategoryFeaturedButton.swift in Sources */,
 				7C457B3E2FCE1BA80011D338 /* CategoryRow.swift in Sources */,
 				7C457B3F2FCE1BA80011D338 /* CategorySection.swift in Sources */,
-				7C457B402FCE1BA80011D338 /* HomeTabbarItemView.swift in Sources */,
+				7C457B402FCE1BA80011D338 /* HomeTabBarButton.swift in Sources */,
 				7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */,
 				7C457B442FCE1BA80011D338 /* CallVanRecruitmentButton.swift in Sources */,
 				7C457B452FCE1BA80011D338 /* HomeView.swift in Sources */,
@@ -6297,7 +6297,6 @@
 				7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */,
 				7C8BFCE42FD04B8000963679 /* NotificationItem.swift in Sources */,
 				7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */,
-				7C8BFCF52FD16C6100963679 /* HomeTabbarItem.swift in Sources */,
 				7C8BFCF12FD04B800963679 /* NewHomeCounts.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
@@ -6330,6 +6329,7 @@
 				7CA60D7B2F664C0C007C08C1 /* DeleteAllNotificationsUseCase.swift in Sources */,
 				7CA60D972F667AE9007C08C1 /* CompleteCallVanUseCase.swift in Sources */,
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
+				7CD411EA2FEB92280079467B /* HomeTabBarItem.swift in Sources */,
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
 				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
 				D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */,

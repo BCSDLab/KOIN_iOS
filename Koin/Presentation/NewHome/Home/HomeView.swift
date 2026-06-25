@@ -28,6 +28,14 @@ struct HomeView: View, ActionBindableView {
     init(viewModel: NewHomeViewModel) {
         _viewModel = State(initialValue: viewModel)
     }
+    
+    func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        viewModel.execute(.logEvent(label, category, value))
+    }
 
     var body: some View {
         ScrollView(.vertical) {
