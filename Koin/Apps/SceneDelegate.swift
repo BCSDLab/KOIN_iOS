@@ -261,34 +261,31 @@ extension SceneDelegate {
 
     @objc private func presentErrorViewController() {
         
-        guard isPresentingErrorViewController == false else {
+        guard isPresentingErrorViewController == false,
+              let navigationController = (window?.rootViewController as? UITabBarController)?.selectedViewController as? UINavigationController else {
             return
         }
         
-        if let navigationController = window?.rootViewController as? CustomNavigationController {
-            
-            let homeTabBarController = makeHomeTabBarController()
-            let completion: ()->Void = { [weak self] in
-                navigationController.setViewControllers([homeTabBarController], animated: false)
+        let completion: ()->Void = { [weak self] in
+            self?.window?.rootViewController = self?.makeHomeTabBarController()
+            self?.window?.rootViewController?.dismiss(animated: true) {
+                self?.isPresentingErrorViewController = false
+            }
+        }
+        let errorViewController = ErrorViewController(completion: completion).then {
+            $0.modalPresentationStyle = .fullScreen
+        }
+        
+        DispatchQueue.main.async {
+            if let _ = navigationController.presentedViewController {
                 navigationController.dismiss(animated: true) {
-                    self?.isPresentingErrorViewController = false
-                }
-            }
-            let errorViewController = ErrorViewController(completion: completion).then {
-                $0.modalPresentationStyle = .fullScreen
-            }
-            
-            DispatchQueue.main.async {
-                if let _ = navigationController.presentedViewController {
-                    navigationController.dismiss(animated: true) {
-                        navigationController.present(errorViewController, animated: true)
-                    }
-                } else {
                     navigationController.present(errorViewController, animated: true)
                 }
+            } else {
+                navigationController.present(errorViewController, animated: true)
             }
-            isPresentingErrorViewController = true
         }
+        isPresentingErrorViewController = true
     }
     
     private func handleDiningNavigation(date: String, type: String, place: String, navigationController: UINavigationController?) {

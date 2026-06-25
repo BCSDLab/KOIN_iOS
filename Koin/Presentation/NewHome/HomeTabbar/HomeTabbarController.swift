@@ -33,6 +33,7 @@ final class HomeTabBarController: UITabBarController {
     private var subscriptions: Set<AnyCancellable> = []
     
     private let items: [HomeTabBarItem]
+    private var tabBars: [HomeTabBar] = []
     
     // MARK: - Initializer
     init(
@@ -74,7 +75,13 @@ final class HomeTabBarController: UITabBarController {
 extension HomeTabBarController {
     private func setUpViewControllers() {
         let configuredViewControllers = items.map { configuration in
-            let tabBar = HomeTabBar(tabs: items.map(\.tab), selectedTab: configuration.tab, onTapItem: self.handleTabSelection)
+            let tabBar = HomeTabBar(
+                tabs: items.map(\.tab),
+                selectedTab: configuration.tab
+            ) { [weak self] tag in
+                self?.handleTabSelection(tag: tag)
+            }
+            tabBars.append(tabBar)
             let rootViewController = configuration.viewController.then {
                 $0.view?.addSubview(tabBar)
                 tabBar.snp.makeConstraints {
@@ -96,8 +103,8 @@ extension HomeTabBarController {
     }
     
     private func updateTabBarLayout() {
-        items.map(\.viewController).forEach {
-            $0.view.viewWithTag(HomeTabBar.viewTag)?.snp.remakeConstraints {
+        tabBars.forEach {
+            $0.snp.remakeConstraints {
                 $0.leading.trailing.bottom.equalToSuperview()
                 $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
             }
@@ -112,8 +119,12 @@ extension HomeTabBarController {
             .store(in: &subscriptions)
     }
 
-    private func handleTabSelection(index: Int) {
-        if let homeTab = HomeTab(rawValue: index) {
+    private func handleTabSelection(tag: Int) {
+        guard let index = items.firstIndex(where: { $0.tab.rawValue == tag }) else {
+            return
+        }
+        
+        if let homeTab = HomeTab(rawValue: tag) {
             inputSubject.send(.logEvent(homeTab.logLabel, .click, homeTab.title))
         }
         selectTab(index: index)

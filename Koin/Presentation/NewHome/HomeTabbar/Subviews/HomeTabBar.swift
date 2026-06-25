@@ -33,7 +33,7 @@ final class HomeTabBar: UIView {
     
     // MARK: - Properties
     static let viewTag = 2143534265
-    private let onTapItem: ((Int) -> Void)?
+    private let onTapItem: (Int) -> Void
     
     // MARK: - UI Components
     private var TabBarButtons: [HomeTabBarButton] = []
@@ -76,7 +76,7 @@ extension HomeTabBar {
 
 extension HomeTabBar {
     @objc private func handleTap(_ sender: UIControl) {
-        onTapItem?(sender.tag)
+        onTapItem(sender.tag)
     }
 }
 
