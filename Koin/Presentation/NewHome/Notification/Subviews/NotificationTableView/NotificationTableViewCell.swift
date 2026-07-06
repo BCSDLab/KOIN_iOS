@@ -57,7 +57,7 @@ extension NotificationTableViewCell {
         titleLabel.do {
             $0.font = UIFont.appFont(.pretendardSemiBold, size: 13)
             $0.numberOfLines = 1
-            $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
+            $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
         
         dateLabel.do {
@@ -89,12 +89,12 @@ extension NotificationTableViewCell {
         titleLabel.snp.makeConstraints {
             $0.height.equalTo(21)
             $0.leading.equalTo(iconImageView.snp.trailing).offset(20)
+            $0.trailing.lessThanOrEqualTo(dateLabel.snp.leading).offset(-16)
             $0.top.equalToSuperview().offset(8 + 10)
         }
         
         dateLabel.snp.makeConstraints {
             $0.centerY.equalTo(titleLabel)
-            $0.leading.equalTo(titleLabel.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().offset(-20)
         }
         
@@ -103,7 +103,7 @@ extension NotificationTableViewCell {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
             $0.leading.equalTo(titleLabel)
             $0.trailing.equalTo(dateLabel)
-            $0.bottom.equalToSuperview().offset(-(8 + 10))
+            $0.bottom.equalToSuperview().offset(-(8 + 10)).priority(.high)
         }
     }
 }
