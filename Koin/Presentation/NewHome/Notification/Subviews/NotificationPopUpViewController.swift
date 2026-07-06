@@ -98,7 +98,7 @@ extension NotificationPopUpViewController {
         
         markAllAsReadButton.do {
             var configuration = UIButton.Configuration.plain()
-            configuration.attributedSubtitle = AttributedString(
+            configuration.attributedTitle = AttributedString(
                 "모두 읽음으로 표시",
                 attributes: AttributeContainer([
                     .foregroundColor : UIColor.appColor(.neutral800),
