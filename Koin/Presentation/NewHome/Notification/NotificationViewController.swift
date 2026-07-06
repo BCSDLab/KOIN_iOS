@@ -13,7 +13,6 @@ import Then
 final class NotificationViewController: UIViewController {
     
     // MARK: - Properties
-    
     private let viewModel: NotificationViewModel
     private let inputSubject = PassthroughSubject<NotificationViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
@@ -47,6 +46,12 @@ final class NotificationViewController: UIViewController {
         setAddTargets()
         bind()
         inputSubject.send(.viewDidLoad)
+        title = "알림"
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        configureNavigationBar(style: .empty)
     }
 }
 
@@ -63,7 +68,6 @@ private extension NotificationViewController {
                 case .updateNotifications(let notifications):
                     self.notificationTableView.update(notifications: notifications)
                     self.updateStateViews(isEmpty: notifications.isEmpty)
-                    self.notificationTableView.updateFooterPosition()
 
                 case .updateLoading(let isLoading):
                     self.updateLoadingState(isLoading)
@@ -113,38 +117,31 @@ private extension NotificationViewController {
             self?.emptyView.isHidden = !shouldShowEmpty
             self?.notificationTableView.isHidden = shouldShowEmpty
         }
-
-        if !shouldShowEmpty {
-            notificationTableView.updateFooterPosition()
-        }
     }
 }
 
 // MARK: - Action
 
 private extension NotificationViewController {
-    @objc func didTapManageNoticeKeyword() {
-        navigationController?.pushViewController(makeManageNoticeKeywordViewController(), animated: true)
+    @objc func rightBarButtonItemTapped() {
+        showPopUpView()
     }
     
     @objc func didPullToRefresh() {
         inputSubject.send(.reload)
     }
 
-    private func makeManageNoticeKeywordViewController() -> UIViewController {
-        let noticeListRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = ManageNoticeKeywordViewModel(
-            addNotificationKeywordUseCase: DefaultAddNotificationKeywordUseCase(noticeListRepository: noticeListRepository),
-            deleteNotificationKeywordUseCase: DefaultDeleteNotificationKeywordUseCase(noticeListRepository: noticeListRepository),
-            fetchNotificationKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository),
-            fetchRecommendedKeywordUseCase: DefaultFetchRecommendedKeywordUseCase(noticeListRepository: noticeListRepository),
-            changeNotiUseCase: DefaultChangeNotiUseCase(notiRepository: notiRepository),
-            fetchNotiListUseCase: DefaultFetchNotiListUseCase(notiRepository: notiRepository),
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+    private func showPopUpView() {
+        let popUpViewController = NotificationPopUpViewController(
+            markAllAsRead: {}, // TODO: -
+            deleteAll: {} // TODO: -
         )
-        return ManageNoticeKeywordViewController(viewModel: viewModel)
+        popUpViewController.modalTransitionStyle = .crossDissolve
+        popUpViewController.modalPresentationStyle = .overFullScreen
+        navigationController?.present(
+            popUpViewController,
+            animated: true
+        )
     }
 }
 
@@ -157,27 +154,14 @@ private extension NotificationViewController {
     }
     
     private func configureNavigationBar() {
-        title = "알림"
-        configureNavigationBar(style: .empty)
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "알림설정")
-        
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: "알림설정",
+        let rightBarButtonItem = UIBarButtonItem(
+            image: .appImage(asset: .threeCircle),
             style: .plain,
             target: self,
-            action: #selector(didTapManageNoticeKeyword)
+            action: #selector(rightBarButtonItemTapped)
         )
-        
-        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
-            .font: UIFont.appFont(.pretendardMedium, size: 13),
-            .foregroundColor: UIColor.ColorSystem.Neutral.gray600
-        ], for: .normal)
-        
-        navigationItem.rightBarButtonItem?.setTitleTextAttributes([
-            .font: UIFont.appFont(.pretendardMedium, size: 13),
-            .foregroundColor: UIColor.ColorSystem.Neutral.gray600
-        ], for: .selected)
+        navigationItem.rightBarButtonItem = rightBarButtonItem
     }
     
     private func configureView() {
