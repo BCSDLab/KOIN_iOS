@@ -41,6 +41,7 @@ final class NotificationTableView: UITableView {
         setUpStyles()
         setUpLayouts()
         setUpContentSizeObserver()
+        contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -60,8 +61,10 @@ final class NotificationTableView: UITableView {
             self?.updateFooterPosition()
         }
     }
-    
-    func deleteNotification(id: Int, completion: (() -> Void)? = nil) {
+}
+
+extension NotificationTableView {
+    private func deleteNotification(id: Int, completion: (() -> Void)? = nil) {
         guard let index = notifications.firstIndex(where: { $0.id == id }) else {
             return
         }
@@ -196,20 +199,21 @@ extension NotificationTableView: UITableViewDelegate {
         }
 
         let item = notifications[indexPath.row]
-
-        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, _, completion in
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
             guard let self else {
                 completion(false)
                 return
             }
-            self.deleteNotification(id: item.id) { [weak self] in
-                self?.deletePublisher.send(item.id)
-            }
+            self.deleteNotification(id: item.id)
+            self.deletePublisher.send(item.id)
             completion(true)
         }
+        deleteAction.image = .appImage(asset: .notificationTrash)
+        deleteAction.backgroundColor = .appColor(.danger600)
+        
         let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
         configuration.performsFirstActionWithFullSwipe = true
-
         return configuration
     }
 }
@@ -218,7 +222,7 @@ extension NotificationTableView: UITableViewDelegate {
 
 extension NotificationTableView {
 
-    func setUpStyles() {
+    private func setUpStyles() {
         backgroundColor = UIColor.ColorSystem.Neutral.gray0
         separatorStyle = .none
         showsVerticalScrollIndicator = false
@@ -235,7 +239,7 @@ extension NotificationTableView {
         )
     }
 
-    func setUpLayouts() {
+    private func setUpLayouts() {
         dummyFooterView.frame = CGRect(
             x: 0,
             y: 0,
@@ -248,7 +252,7 @@ extension NotificationTableView {
         bringSubviewToFront(realFooterView)
     }
 
-    func setUpContentSizeObserver() {
+    private func setUpContentSizeObserver() {
         contentSizeObserver = observe(\.contentSize, options: [.new]) { [weak self] _, _ in
             guard let self else { return }
             self.updateDummyFooterHeightIfNeeded()

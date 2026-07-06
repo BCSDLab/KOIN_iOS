@@ -258,6 +258,7 @@ public enum ImageAsset: String {
     case homeCallVan
     case homeQR
     case homeShop
+    case notificationTrash
     case notificationCallVan
     case notificationChat
     case notificationDining

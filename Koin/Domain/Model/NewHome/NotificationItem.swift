@@ -9,28 +9,31 @@ import Foundation
 
 struct NotificationItem {
     let id: Int
-    let iconType: NotificationIconType
+    let isRead: Bool
+    let icon: ImageAsset
+    let appPath: AppPath
+    let uri: String?
     let title: String
     let content: String
-    let secondaryContent: String?
     let dateText: String
-    let badgeText: String?
-
+    
     init(
         id: Int,
-        iconType: NotificationIconType,
+        isRead: Bool,
+        icon: ImageAsset,
+        appPath: AppPath,
+        uri: String?,
         title: String,
         content: String,
-        secondaryContent: String? = nil,
-        dateText: String,
-        badgeText: String?
+        dateText: String
     ) {
         self.id = id
-        self.iconType = iconType
+        self.isRead = isRead
+        self.icon = icon
+        self.appPath = appPath
+        self.uri = uri
         self.title = title
         self.content = content
-        self.secondaryContent = secondaryContent
         self.dateText = dateText
-        self.badgeText = badgeText
     }
 }
