@@ -12,54 +12,44 @@ import Then
 
 final class NotificationTableView: UITableView {
     
+    private enum Layout {
+        static let topInset: CGFloat = 12
+        static let rowHeight: CGFloat = 80
+        static let footerMinHeight: CGFloat = 55
+        static let zeroTolerance: CGFloat = 0.5
+    }
+    
     // MARK: - Publisher
     let deletePublisher = PassthroughSubject<Int, Never>()
     let tapNotificationPublisher = PassthroughSubject<NotificationItem, Never>()
     
     // MARK: - UI Components
-    private let dummyFooterView = UIView().then {
-        $0.backgroundColor = .clear
-        $0.isUserInteractionEnabled = false
-    }
     private let realFooterView = NotificationFooterView()
     
     // MARK: - Properties
+    private var notifications: [NotificationItem] = []
     var isEmpty: Bool {
         notifications.isEmpty
     }
-    
-    private var notifications: [NotificationItem] = []
-    
-    private var contentSizeObserver: NSKeyValueObservation?
     private var lastBoundsSize: CGSize = .zero
     private var lastFooterHeight: CGFloat = 0
-    private var isUpdatingFooterPosition = false
+    private var isRecalculatingFooterHeight = false
     
     // MARK: - Initialization
     init() {
         super.init(frame: .zero, style: .grouped)
         setUpStyles()
-        setUpLayouts()
-        setUpContentSizeObserver()
-        contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 0, right: 0)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        contentSizeObserver?.invalidate()
-    }
-    
     // MARK: - Public
     func update(notifications: [NotificationItem]) {
         self.notifications = notifications
+        updateFooterHeightCacheIfPossible()
         reloadData()
-        
-        DispatchQueue.main.async { [weak self] in
-            self?.updateDummyFooterHeightIfNeeded()
-            self?.updateFooterPosition()
-        }
+        setNeedsLayout()
     }
 }
 
@@ -74,96 +64,75 @@ extension NotificationTableView {
         notifications.remove(at: index)
         
         performBatchUpdates { [weak self] in
+            self?.updateFooterHeightCacheIfPossible()
             self?.deleteRows(at: [indexPath], with: .automatic)
         } completion: { [weak self] _ in
-            self?.updateDummyFooterHeightIfNeeded()
-            self?.updateFooterPosition()
+            self?.setNeedsLayout()
             completion?()
         }
     }
 }
 
-// MARK: - Footer Layout
+// MARK: - Layout
 
 extension NotificationTableView {
-    
-    private func updateDummyFooterHeightIfNeeded() {
-        guard bounds.width > 0 else { return }
+    override func layoutSubviews() {
+        super.layoutSubviews()
 
-        let footerHeight = measuredRealFooterHeight()
-        let didHeightChange = abs(lastFooterHeight - footerHeight) > 0.5
-        let didWidthChange = abs(dummyFooterView.frame.width - bounds.width) > 0.5
+        let didBoundsChange = abs(lastBoundsSize.width - bounds.width) > Layout.zeroTolerance
+            || abs(lastBoundsSize.height - bounds.height) > Layout.zeroTolerance
+        lastBoundsSize = bounds.size
 
-        guard didHeightChange || didWidthChange else { return }
+        guard didBoundsChange || abs(lastFooterHeight) <= Layout.zeroTolerance else { return }
+        recalculateFooterHeightIfNeeded()
+    }
 
-        lastFooterHeight = footerHeight
+    private func recalculateFooterHeightIfNeeded() {
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        guard !isRecalculatingFooterHeight else { return }
 
-        dummyFooterView.frame = CGRect(
-            x: 0,
-            y: 0,
-            width: bounds.width,
-            height: footerHeight
-        )
+        let desiredHeight = desiredFooterHeight(for: notifications.count)
+        guard abs(lastFooterHeight - desiredHeight) > Layout.zeroTolerance else { return }
+
+        isRecalculatingFooterHeight = true
+        lastFooterHeight = desiredHeight
 
         UIView.performWithoutAnimation {
-            tableFooterView = dummyFooterView
+            beginUpdates()
+            endUpdates()
             layoutIfNeeded()
         }
+
+        isRecalculatingFooterHeight = false
     }
-    
-    func updateFooterPosition() {
+
+    private func updateFooterHeightCacheIfPossible() {
         guard bounds.width > 0, bounds.height > 0 else { return }
-        guard !isUpdatingFooterPosition else { return }
-        
-        isUpdatingFooterPosition = true
-        defer { isUpdatingFooterPosition = false }
-        
-        layoutIfNeeded()
-        
-        let footerHeight = measuredRealFooterHeight()
-        let visibleHeight = bounds.height - adjustedContentInset.top - adjustedContentInset.bottom
-        
-        let contentHeight = contentSize.height
-        
-        realFooterView.frame.size = CGSize(
-            width: bounds.width,
-            height: footerHeight
-        )
-        
-        if contentHeight < visibleHeight {
-            realFooterView.frame.origin = CGPoint(x: 0, y: visibleHeight - footerHeight)
-        } else {
-            realFooterView.frame.origin = CGPoint(x: 0, y: contentHeight - footerHeight)
-        }
-        
-        bringSubviewToFront(realFooterView)
+        lastFooterHeight = desiredFooterHeight(for: notifications.count)
     }
-    
-    private func measuredRealFooterHeight() -> CGFloat {
-        let targetSize = CGSize(
-            width: bounds.width > 0 ? bounds.width : UIScreen.main.bounds.width,
-            height: UIView.layoutFittingCompressedSize.height
-        )
 
-        let size = realFooterView.systemLayoutSizeFitting(
-            targetSize,
-            withHorizontalFittingPriority: .required,
-            verticalFittingPriority: .fittingSizeLevel
-        )
+    private func desiredFooterHeight(for rowCount: Int) -> CGFloat {
+        guard rowCount > 0 else { return 0 }
 
-        return max(1, size.height)
+        let visibleHeight = bounds.height - adjustedContentInset.top - adjustedContentInset.bottom
+        let rowsHeight = CGFloat(rowCount) * Layout.rowHeight
+        let manualInsetHeight = contentInset.top + contentInset.bottom
+        let occupiedHeight = rowsHeight + manualInsetHeight
+
+        return max(Layout.footerMinHeight, visibleHeight - occupiedHeight)
     }
 }
 
 extension NotificationTableView: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        1
+    }
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         notifications.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard notifications.indices.contains(indexPath.row) else {
-            return UITableViewCell()
-        }
         guard let cell = dequeueReusableCell(withIdentifier: NotificationTableViewCell.identifier, for: indexPath) as? NotificationTableViewCell else {
             return UITableViewCell()
         }
@@ -181,19 +150,30 @@ extension NotificationTableView: UITableViewDelegate {
         UIView()
     }
 
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        updateFooterPosition()
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        notifications.isEmpty ? .leastNormalMagnitude : lastFooterHeight
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+        max(lastFooterHeight, Layout.footerMinHeight)
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard !notifications.isEmpty else { return nil }
+        return realFooterView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard notifications.indices.contains(indexPath.row) else {
             return
         }
-        
         tapNotificationPublisher.send(notifications[indexPath.row])
     }
 
-    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+    func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
         guard notifications.indices.contains(indexPath.row) else {
             return nil
         }
@@ -226,10 +206,10 @@ extension NotificationTableView {
         backgroundColor = UIColor.ColorSystem.Neutral.gray0
         separatorStyle = .none
         showsVerticalScrollIndicator = false
-
-        rowHeight = UITableView.automaticDimension
-        estimatedRowHeight = 72
-
+        contentInset = UIEdgeInsets(top: Layout.topInset, left: 0, bottom: 0, right: 0)
+        
+        rowHeight = Layout.rowHeight
+    
         dataSource = self
         delegate = self
 
@@ -237,26 +217,5 @@ extension NotificationTableView {
             NotificationTableViewCell.self,
             forCellReuseIdentifier: NotificationTableViewCell.identifier
         )
-    }
-
-    private func setUpLayouts() {
-        dummyFooterView.frame = CGRect(
-            x: 0,
-            y: 0,
-            width: UIScreen.main.bounds.width,
-            height: 1
-        )
-        tableFooterView = dummyFooterView
-
-        addSubview(realFooterView)
-        bringSubviewToFront(realFooterView)
-    }
-
-    private func setUpContentSizeObserver() {
-        contentSizeObserver = observe(\.contentSize, options: [.new]) { [weak self] _, _ in
-            guard let self else { return }
-            self.updateDummyFooterHeightIfNeeded()
-            self.updateFooterPosition()
-        }
     }
 }

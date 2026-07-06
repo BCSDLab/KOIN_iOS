@@ -13,7 +13,6 @@ import Then
 final class NotificationViewController: UIViewController {
     
     // MARK: - Properties
-    
     private let viewModel: NotificationViewModel
     private let inputSubject = PassthroughSubject<NotificationViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
@@ -69,7 +68,6 @@ private extension NotificationViewController {
                 case .updateNotifications(let notifications):
                     self.notificationTableView.update(notifications: notifications)
                     self.updateStateViews(isEmpty: notifications.isEmpty)
-                    self.notificationTableView.updateFooterPosition()
 
                 case .updateLoading(let isLoading):
                     self.updateLoadingState(isLoading)
@@ -118,10 +116,6 @@ private extension NotificationViewController {
         } completion: { [weak self] _ in
             self?.emptyView.isHidden = !shouldShowEmpty
             self?.notificationTableView.isHidden = shouldShowEmpty
-        }
-
-        if !shouldShowEmpty {
-            notificationTableView.updateFooterPosition()
         }
     }
 }
