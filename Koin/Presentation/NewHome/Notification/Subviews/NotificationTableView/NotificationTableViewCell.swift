@@ -93,7 +93,7 @@ extension NotificationTableViewCell {
         }
         
         dateLabel.snp.makeConstraints {
-            $0.centerY.equalTo(21)
+            $0.centerY.equalTo(titleLabel)
             $0.leading.equalTo(titleLabel.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().offset(-20)
         }
