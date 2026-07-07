@@ -86,8 +86,9 @@ private extension NotificationViewController {
             }
             .store(in: &subscriptions)
         
-        notificationTableView.tapNotificationPublisher
+        notificationTableView.tapNotificationPublisher // TODO: Navigation
             .sink { [weak self] item in
+                self?.inputSubject.send(.markAsRead(id: item.id))
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, item.title))
             }
             .store(in: &subscriptions)
@@ -98,6 +99,7 @@ private extension NotificationViewController {
             loadingIndicator.startAnimating()
         } else {
             loadingIndicator.stopAnimating()
+            refreshControl.endRefreshing()
         }
 
         updateStateViews(isEmpty: notificationTableView.isEmpty)
@@ -133,14 +135,20 @@ private extension NotificationViewController {
 
     private func showPopUpView() {
         let popUpViewController = NotificationPopUpViewController(
-            markAllAsRead: {}, // TODO: -
-            deleteAll: {} // TODO: -
+            markAllAsRead: { [weak self] in
+                self?.inputSubject.send(.markAllAsRead)
+                self?.notificationTableView.markAllAsRead()
+            },
+            deleteAll: { [weak self] in
+                self?.inputSubject.send(.deleteAllNotifications)
+                self?.notificationTableView.deleteAll()
+                self?.updateStateViews(isEmpty: true)
+            }
         )
-        popUpViewController.modalTransitionStyle = .crossDissolve
         popUpViewController.modalPresentationStyle = .overFullScreen
         navigationController?.present(
             popUpViewController,
-            animated: true
+            animated: false
         )
     }
 }

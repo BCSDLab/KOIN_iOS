@@ -57,17 +57,17 @@ extension NotificationPopUpViewController {
     }
     
     @objc private func didTapMarkAllAsReadButton() {
-        dismissView()
+        dismiss(animated: false)
         markAllAsRead()
     }
     
     @objc private func didTapDeleteAllButton() {
-        dismissView()
+        dismiss(animated: false)
         deleteAll()
     }
     
     @objc private func didTapAround() {
-        dismissView()
+        dismiss(animated: false)
     }
 }
 

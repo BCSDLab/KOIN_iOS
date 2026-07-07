@@ -9,7 +9,7 @@ import Foundation
 
 struct NotificationItem {
     let id: String
-    let isRead: Bool
+    var isRead: Bool
     let icon: ImageAsset
     let appPath: AppPath
     let uri: String?

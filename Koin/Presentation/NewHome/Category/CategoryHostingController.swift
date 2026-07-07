@@ -98,9 +98,16 @@ extension CategoryHostingController {
     }
      
     private func navigateToNotification() {
+        let notificatioHistoryRepository = DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService())
+        let fetchNotificationHistoryUseCase = DefaultFetchNotificationHistoryUseCase(notificationHistoryRepository: notificatioHistoryRepository)
+        let deleteNotificationHistoryUseCase = DefaultDeleteNotificationHistoryUseCase(repository: notificatioHistoryRepository)
+        let updateNotificationHistoryUseCase = DefaultUpdateNotificationHistoryUseCase(repository: notificatioHistoryRepository)
+        
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = NotificationViewModel(
-            fetchNotificationListUseCase: MockFetchNotificationListUseCase(),
+            fetchNotificationHistoryUseCase: fetchNotificationHistoryUseCase,
+            deleteNotificationHistoryUseCase: deleteNotificationHistoryUseCase,
+            updateNotificationHistoryUseCase: updateNotificationHistoryUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = NotificationViewController(viewModel: viewModel)

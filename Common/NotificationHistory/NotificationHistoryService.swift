@@ -38,12 +38,12 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         
         switch record.category {
         case .shop, .dining, .keyword, .chat, .callvan, .callvanChat:
-            try await MainActor.run { [weak container] in
+            try? await MainActor.run { [weak container] in
                 container?.mainContext.insert(record)
                 try container?.mainContext.save()
             }
         default:
-            throw SwiftDataError.modelValidationFailure
+            break
         }
     }
     

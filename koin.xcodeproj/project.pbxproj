@@ -283,6 +283,12 @@
 		7CA63A2E2F1B119200226F86 /* LostItemListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A2D2F1B119200226F86 /* LostItemListView.swift */; };
 		7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */; };
 		7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */; };
+		7CA686692FFC3242007937E9 /* NotificationHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA686682FFC3242007937E9 /* NotificationHistoryRepository.swift */; };
+		7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA686792FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift */; };
+		7CA6868B2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868A2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift */; };
+		7CA6868D2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868C2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift */; };
+		7CA6868F2FFCF42E007937E9 /* NotificationHistoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */; };
+		7CA686902FFCF42E007937E9 /* NotificationHistoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */; };
 		7CB0618F2F320F3A00E83CA9 /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB0618E2F320F3A00E83CA9 /* NMapsMap */; };
 		7CB061932F32100900E83CA9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061922F32100900E83CA9 /* Alamofire */; };
 		7CB061992F32186800E83CA9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061982F32186800E83CA9 /* SnapKit */; };
@@ -1287,6 +1293,11 @@
 		7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemStats.swift; sourceTree = "<group>"; };
 		7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListFilterViewController.swift; sourceTree = "<group>"; };
 		7CA686672FFC1FAF007937E9 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
+		7CA686682FFC3242007937E9 /* NotificationHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryRepository.swift; sourceTree = "<group>"; };
+		7CA686792FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNotificationHistoryRepository.swift; sourceTree = "<group>"; };
+		7CA6868A2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationHistoryUseCase.swift; sourceTree = "<group>"; };
+		7CA6868C2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNotificationHistoryUseCase.swift; sourceTree = "<group>"; };
+		7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryError.swift; sourceTree = "<group>"; };
 		7CB061BE2F32312E00E83CA9 /* DPDConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPDConstants.swift; sourceTree = "<group>"; };
 		7CB061BF2F32312E00E83CA9 /* DPDKeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPDKeyboardListener.swift; sourceTree = "<group>"; };
 		7CB061C02F32312E00E83CA9 /* DPDUIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DPDUIView+Extension.swift"; sourceTree = "<group>"; };
@@ -2611,6 +2622,8 @@
 				7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */,
 				7C8BFCE82FD04BA000963679 /* FetchNewHomeCountsUseCase.swift */,
 				7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */,
+				7CA6868A2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift */,
+				7CA6868C2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift */,
 			);
 			path = NewHome;
 			sourceTree = "<group>";
@@ -2784,6 +2797,7 @@
 			isa = PBXGroup;
 			children = (
 				7C7CCE6F2F866E9400E3A54B /* AppPath.swift */,
+				7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -5201,6 +5215,7 @@
 				D208A7C52CABB426007040E7 /* CoreRepository.swift */,
 				7CA60D622F66197C007C08C1 /* CallVanRepository.swift */,
 				7C8A943F2FD426B400DEA6F5 /* HomeRepository.swift */,
+				7CA686682FFC3242007937E9 /* NotificationHistoryRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -5222,6 +5237,7 @@
 				D208A7CE2CABB85B007040E7 /* DefaultCoreRepository.swift */,
 				D2D4626D2D63BD1400C60864 /* DefaultChatRepository.swift */,
 				7CA60D642F6619B7007C08C1 /* DefaultCallVanRepository.swift */,
+				7CA686792FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift */,
 			);
 			path = Repository;
 			sourceTree = "<group>";
@@ -5559,6 +5575,7 @@
 			files = (
 				7C7F56BC2FFBA18100847151 /* NotificationHistoryService.swift in Sources */,
 				839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */,
+				7CA686902FFCF42E007937E9 /* NotificationHistoryError.swift in Sources */,
 				7C7F56B92FFBA0A700847151 /* AppPath.swift in Sources */,
 				7C7F56B82FFBA06200847151 /* NotificationRecord.swift in Sources */,
 			);
@@ -5569,6 +5586,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
+				7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */,
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
 				D22C54582C68B033000826DA /* ReportReviewRequest.swift in Sources */,
@@ -5629,6 +5647,7 @@
 				D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */,
 				7C61D3392F21FADF005FAC3A /* EditLostItemViewModel.swift in Sources */,
 				7CB11C7A2FB32716004E0C80 /* LostItemKeywordDto.swift in Sources */,
+				7CA6868D2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift in Sources */,
 				833D9C5C2C7371D900982145 /* FetchNoticeDataRequest.swift in Sources */,
 				7CED922B2EF2D25900457128 /* DIContainer+Notice.swift in Sources */,
 				7CED922C2EF2D25900457128 /* DIContainer+Dining.swift in Sources */,
@@ -5938,6 +5957,7 @@
 				7CB11C182FB1D017004E0C80 /* LostItemKeywordViewController.swift in Sources */,
 				7C372F322F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift in Sources */,
 				7C372F332F1DB4C300149729 /* LostItemImagesCollectionView.swift in Sources */,
+				7CA6868F2FFCF42E007937E9 /* NotificationHistoryError.swift in Sources */,
 				7CED91302EF2D1F900457128 /* NoticeListSearchTableViewFooter.swift in Sources */,
 				7CED91312EF2D1F900457128 /* ShopSummaryTableViewTableHeaderView.swift in Sources */,
 				7C8BFCD32FD0272900963679 /* View+border.swift in Sources */,
@@ -6380,6 +6400,7 @@
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
 				B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */,
 				D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */,
+				7CA6868B2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
 				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
@@ -6488,6 +6509,7 @@
 				7CC42B152F56ABC000940CE1 /* CallVanListCollectionViewCell.swift in Sources */,
 				D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,
+				7CA686692FFC3242007937E9 /* NotificationHistoryRepository.swift in Sources */,
 				D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */,
 				7CC42B1E2F56F3B200940CE1 /* CallVanButton.swift in Sources */,
 				7C61D33E2F21FADF005FAC3A /* EditLostItemViewController.swift in Sources */,

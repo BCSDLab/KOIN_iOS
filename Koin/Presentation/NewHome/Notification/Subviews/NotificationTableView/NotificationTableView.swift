@@ -51,10 +51,22 @@ final class NotificationTableView: UITableView {
         reloadData()
         setNeedsLayout()
     }
+    
+    func markAllAsRead() {
+        for index in notifications.indices {
+            notifications[index].isRead = true
+        }
+        reloadSections([0], with: .fade)
+    }
+    
+    func deleteAll() {
+        notifications.removeAll()
+        reloadSections([0], with: .fade)
+    }
 }
 
 extension NotificationTableView {
-    private func deleteNotification(id: String, completion: (() -> Void)? = nil) {
+    private func didDeleteNotification(id: String, completion: (() -> Void)? = nil) {
         guard let index = notifications.firstIndex(where: { $0.id == id }) else {
             return
         }
@@ -70,6 +82,19 @@ extension NotificationTableView {
             self?.setNeedsLayout()
             completion?()
         }
+    }
+    
+    private func didSelectNotification(id: String) {
+        guard let index = notifications.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+
+        self.notifications[index].isRead = true
+        
+        reloadRows(
+            at: [IndexPath(row: index, section: 0)],
+            with: .fade
+        )
     }
 }
 
@@ -168,6 +193,7 @@ extension NotificationTableView: UITableViewDelegate {
             return
         }
         tapNotificationPublisher.send(notifications[indexPath.row])
+        didSelectNotification(id: notifications[indexPath.row].id)
     }
 
     func tableView(
@@ -185,7 +211,7 @@ extension NotificationTableView: UITableViewDelegate {
                 completion(false)
                 return
             }
-            self.deleteNotification(id: item.id)
+            self.didDeleteNotification(id: item.id)
             self.deletePublisher.send(item.id)
             completion(true)
         }
