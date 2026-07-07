@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum AppPath: String {
+enum AppPath: String, Codable {
     case home
     case login
     case shop

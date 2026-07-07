@@ -12,7 +12,7 @@ import Foundation
 final class NotificationRecord: Sendable {
     var body: String
     var title: String
-    var category: String
+    var category: AppPath
     var schemeUri: String
     var messageId: String
     
@@ -28,7 +28,7 @@ final class NotificationRecord: Sendable {
     ) {
         self.body = body
         self.title = title
-        self.category = category.rawValue
+        self.category = category
         self.schemeUri = schemeUri
         self.messageId = messageId
     }

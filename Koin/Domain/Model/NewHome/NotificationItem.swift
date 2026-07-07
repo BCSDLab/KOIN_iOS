@@ -41,14 +41,13 @@ struct NotificationItem {
 extension NotificationItem {
     
     init?(from record: NotificationRecord) {
-        guard let appPath = AppPath(rawValue: record.category),
-              let icon = NotificationItem.icon(for: appPath) else {
+        guard let icon = NotificationItem.icon(for: record.category) else {
             return nil
         }
         self.id = record.messageId
         self.isRead = record.isRead
         self.icon = icon
-        self.appPath = appPath
+        self.appPath = record.category
         self.uri = record.schemeUri
         self.title = record.title
         self.content = record.body

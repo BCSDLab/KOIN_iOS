@@ -36,12 +36,7 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         }
         
         switch record.category {
-        case AppPath.shop.rawValue,
-            AppPath.dining.rawValue,
-            AppPath.keyword.rawValue,
-            AppPath.chat.rawValue,
-            AppPath.callvan.rawValue,
-            AppPath.callvanChat.rawValue:
+        case .shop, .dining, .keyword, .chat, .callvan, .callvanChat:
             try await MainActor.run { [weak container] in
                 container?.mainContext.insert(record)
                 try container?.mainContext.save()
