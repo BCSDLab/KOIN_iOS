@@ -234,7 +234,6 @@
 		7C8BFCD32FD0272900963679 /* View+border.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCD22FD0272900963679 /* View+border.swift */; };
 		7C8BFCD62FD032A000963679 /* View+linespacing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCD52FD032A000963679 /* View+linespacing.swift */; };
 		7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */; };
-		7C8BFCE22FD04B8000963679 /* NotificationIconType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDF2FD04B8000963679 /* NotificationIconType.swift */; };
 		7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */; };
 		7C8BFCE42FD04B8000963679 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE02FD04B8000963679 /* NotificationItem.swift */; };
 		7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCDC2FD04B8000963679 /* CategoryModels.swift */; };
@@ -1238,7 +1237,6 @@
 		7C8BFCDC2FD04B8000963679 /* CategoryModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryModels.swift; sourceTree = "<group>"; };
 		7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeDiningItem.swift; sourceTree = "<group>"; };
 		7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeHeader.swift; sourceTree = "<group>"; };
-		7C8BFCDF2FD04B8000963679 /* NotificationIconType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationIconType.swift; sourceTree = "<group>"; };
 		7C8BFCE02FD04B8000963679 /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItem.swift; sourceTree = "<group>"; };
 		7C8BFCE62FD04BA000963679 /* FetchHomeDiningListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHomeDiningListUseCase.swift; sourceTree = "<group>"; };
 		7C8BFCE72FD04BA000963679 /* FetchHomeHeaderUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHomeHeaderUseCase.swift; sourceTree = "<group>"; };
@@ -2586,7 +2584,6 @@
 				7C8BFCDD2FD04B8000963679 /* HomeDiningItem.swift */,
 				7C8BFCDE2FD04B8000963679 /* HomeHeader.swift */,
 				7C8BFCF02FD04B800963679 /* NewHomeCounts.swift */,
-				7C8BFCDF2FD04B8000963679 /* NotificationIconType.swift */,
 				7C8BFCE02FD04B8000963679 /* NotificationItem.swift */,
 			);
 			path = NewHome;
@@ -6299,7 +6296,6 @@
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
 				7CC42B362F58283500940CE1 /* CallVanNotificationViewController.swift in Sources */,
 				7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */,
-				7C8BFCE22FD04B8000963679 /* NotificationIconType.swift in Sources */,
 				7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */,
 				7C8BFCE42FD04B8000963679 /* NotificationItem.swift in Sources */,
 				7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */,
