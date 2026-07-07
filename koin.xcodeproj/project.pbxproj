@@ -1281,6 +1281,7 @@
 		7CA63A2D2F1B119200226F86 /* LostItemListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListView.swift; sourceTree = "<group>"; };
 		7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemStats.swift; sourceTree = "<group>"; };
 		7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListFilterViewController.swift; sourceTree = "<group>"; };
+		7CA686672FFC1FAF007937E9 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 		7CB061BE2F32312E00E83CA9 /* DPDConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPDConstants.swift; sourceTree = "<group>"; };
 		7CB061BF2F32312E00E83CA9 /* DPDKeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPDKeyboardListener.swift; sourceTree = "<group>"; };
 		7CB061C02F32312E00E83CA9 /* DPDUIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DPDUIView+Extension.swift"; sourceTree = "<group>"; };
@@ -4355,6 +4356,7 @@
 		839D71172BEB1570001BC7F7 /* NotificationService */ = {
 			isa = PBXGroup;
 			children = (
+				7CA686672FFC1FAF007937E9 /* NotificationService.entitlements */,
 				839D71182BEB1570001BC7F7 /* NotificationService.swift */,
 				839D711A2BEB1570001BC7F7 /* Info.plist */,
 			);
@@ -6502,6 +6504,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 317;
 				DEVELOPMENT_TEAM = K626UYGR25;
@@ -6511,7 +6514,7 @@
 				INFOPLIST_FILE = NotificationService/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationService;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -6534,6 +6537,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CODE_SIGN_ENTITLEMENTS = NotificationService/NotificationService.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 317;
 				DEVELOPMENT_TEAM = K626UYGR25;
@@ -6543,7 +6547,7 @@
 				INFOPLIST_FILE = NotificationService/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = NotificationService;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
