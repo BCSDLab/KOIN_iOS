@@ -20,7 +20,7 @@ final class NotificationTableView: UITableView {
     }
     
     // MARK: - Publisher
-    let deletePublisher = PassthroughSubject<Int, Never>()
+    let deletePublisher = PassthroughSubject<String, Never>()
     let tapNotificationPublisher = PassthroughSubject<NotificationItem, Never>()
     
     // MARK: - UI Components
@@ -54,7 +54,7 @@ final class NotificationTableView: UITableView {
 }
 
 extension NotificationTableView {
-    private func deleteNotification(id: Int, completion: (() -> Void)? = nil) {
+    private func deleteNotification(id: String, completion: (() -> Void)? = nil) {
         guard let index = notifications.firstIndex(where: { $0.id == id }) else {
             return
         }

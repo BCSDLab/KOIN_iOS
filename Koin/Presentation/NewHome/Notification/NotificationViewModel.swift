@@ -13,7 +13,7 @@ final class NotificationViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case reload
-        case deleteNotification(id: Int)
+        case deleteNotification(id: String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
