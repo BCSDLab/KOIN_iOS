@@ -19,6 +19,7 @@ protocol NotificationHistoryService {
 
 final class DefaultNotificationHistoryService: NotificationHistoryService {
     
+    // MARK: - Properties
     private let container: ModelContainer?
     
     // MARK: - Initializer
@@ -51,6 +52,8 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         guard let container else {
             throw SwiftDataError.loadIssueModelContainer
         }
+        
+        try await deleteExpiredNotifications()
         
         return try await MainActor.run {
             var descriptor = FetchDescriptor<NotificationRecord>(
@@ -118,6 +121,25 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         
         try await MainActor.run {
             try container.mainContext.delete(model: NotificationRecord.self)
+        }
+    }
+}
+
+extension DefaultNotificationHistoryService {
+    private func deleteExpiredNotifications() async throws {
+        guard let container else {
+            throw SwiftDataError.loadIssueModelContainer
+        }
+        
+        guard let expirationDate = Calendar.current.date(byAdding: .day, value: -7, to: Date()) else {
+            throw NotificationHistoryError.calendarDidFail
+        }
+        
+        try await MainActor.run {
+            try container.mainContext.delete(model: NotificationRecord.self, where: #Predicate { notification in
+                notification.createdAt < expirationDate
+            })
+            try container.mainContext.save()
         }
     }
 }
