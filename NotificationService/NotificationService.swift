@@ -21,30 +21,21 @@ class NotificationService: UNNotificationServiceExtension {
             
             return
         }
-
-        // ✅payload에 따라서 키 값이 달라진다.
+        
+        // MARK: - SwiftData에 Notification 데이터를 기록한다.
+        saveNotificationIfAvailable(userInfo: bestAttemptContent.userInfo)
+        
+        // MARK: - 푸시알림이 이미지를 포함하는 경우 처리
         if let fcmOptionsUserInfo = bestAttemptContent.userInfo["fcm_options"] as? [String: Any],
            let imageURLString = fcmOptionsUserInfo["image"] as? String,
-           let imageURL = URL(string: imageURLString) {
-            
-            // 이미지 다운로드
-            if let imageData = try? Data(contentsOf: imageURL) {
-                // UNNotificationAttachment 설정
-                if let attachment = UNNotificationAttachment.saveImageToDisk(identifier: "certificationImage.jpg", data: imageData, options: nil) {
-                    bestAttemptContent.attachments = [attachment]
-                    contentHandler(bestAttemptContent)
-                } else {
-                    contentHandler(bestAttemptContent)
-                }
-            } else {
-                contentHandler(bestAttemptContent)
-            }
-        } else {
-            contentHandler(bestAttemptContent)
+           let imageURL = URL(string: imageURLString),
+           let imageData = try? Data(contentsOf: imageURL),
+           let attachment = UNNotificationAttachment.saveImageToDisk(identifier: "certificationImage.jpg", data: imageData, options: nil) {
+            bestAttemptContent.attachments = [attachment]
         }
+        
+        contentHandler(bestAttemptContent)
     }
-
-
     
     override func serviceExtensionTimeWillExpire() {
         // Called just before the extension will be terminated by the system.
@@ -53,8 +44,37 @@ class NotificationService: UNNotificationServiceExtension {
             contentHandler(bestAttemptContent)
         }
     }
-    
+}
 
+extension NotificationService {
+    private func saveNotificationIfAvailable(userInfo: [AnyHashable: Any]) {
+        guard let aps = userInfo["aps"] as? [String: Any],
+              let alert = aps["alert"] as? [String: Any],
+              let body = alert["body"] as? String,
+              let title = alert["title"] as? String,
+              let category = aps["category"] as? String,
+              let appPath = AppPath(rawValue: category),
+              let schemeUri = userInfo["schemeUri"] as? String,
+              let messageId = userInfo["gcm.message_id"] as? String else {
+            print("found nil parsing userInfo")
+            return
+        }
+        
+        let notificationRecord = NotificationRecord(
+            body: body,
+            title: title,
+            category: appPath,
+            schemeUri: schemeUri,
+            messageId: messageId
+        )
+        Task {
+            do {
+                try await DefaultNotificationHistoryService().insert(record: notificationRecord)
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
 extension UNNotificationAttachment {

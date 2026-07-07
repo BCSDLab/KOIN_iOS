@@ -197,6 +197,10 @@
 		7C7F43282F65F31500CC5860 /* CallVanReportRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F43272F65F31500CC5860 /* CallVanReportRequest.swift */; };
 		7C7F432A2F65F42300CC5860 /* CallVanRecruitmentState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F43292F65F42300CC5860 /* CallVanRecruitmentState.swift */; };
 		7C7F56B42FFB6A6400847151 /* NotificationPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F56B32FFB6A6400847151 /* NotificationPopUpViewController.swift */; };
+		7C7F56B72FFB9FE000847151 /* NotificationRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F56B62FFB9FE000847151 /* NotificationRecord.swift */; };
+		7C7F56B82FFBA06200847151 /* NotificationRecord.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F56B62FFB9FE000847151 /* NotificationRecord.swift */; };
+		7C7F56BB2FFBA18100847151 /* NotificationHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F56BA2FFBA18100847151 /* NotificationHistoryService.swift */; };
+		7C7F56BC2FFBA18100847151 /* NotificationHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F56BA2FFBA18100847151 /* NotificationHistoryService.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C8A00012FD000000011D338 /* NewHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A00022FD000000011D338 /* NewHomeViewModel.swift */; };
@@ -1198,6 +1202,8 @@
 		7C7F43272F65F31500CC5860 /* CallVanReportRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanReportRequest.swift; sourceTree = "<group>"; };
 		7C7F43292F65F42300CC5860 /* CallVanRecruitmentState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRecruitmentState.swift; sourceTree = "<group>"; };
 		7C7F56B32FFB6A6400847151 /* NotificationPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPopUpViewController.swift; sourceTree = "<group>"; };
+		7C7F56B62FFB9FE000847151 /* NotificationRecord.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRecord.swift; sourceTree = "<group>"; };
+		7C7F56BA2FFBA18100847151 /* NotificationHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryService.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C8A00022FD000000011D338 /* NewHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomeViewModel.swift; sourceTree = "<group>"; };
@@ -2577,6 +2583,14 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
+		7C7F56B52FFB9F4A00847151 /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				7CA686732FFCB6BE007937E9 /* NotificationHistory */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
 		7C8A00362FD400000011D338 /* NewHome */ = {
 			isa = PBXGroup;
 			children = (
@@ -2754,6 +2768,15 @@
 				7CA63A2B2F1AF80F00226F86 /* LostItemListTableViewCell.swift */,
 			);
 			path = LostItemListTableView;
+			sourceTree = "<group>";
+		};
+		7CA686732FFCB6BE007937E9 /* NotificationHistory */ = {
+			isa = PBXGroup;
+			children = (
+				7C7F56BA2FFBA18100847151 /* NotificationHistoryService.swift */,
+				7C7F56B62FFB9FE000847151 /* NotificationRecord.swift */,
+			);
+			path = NotificationHistory;
 			sourceTree = "<group>";
 		};
 		7CB061C12F32312E00E83CA9 /* helpers */ = {
@@ -4406,6 +4429,7 @@
 				D27DD0202BA608310081FD36 /* Koin */,
 				A001E2D12845091F00D6C310 /* koinUITests */,
 				839D71172BEB1570001BC7F7 /* NotificationService */,
+				7C7F56B52FFB9F4A00847151 /* Common */,
 				A001E2B52845091D00D6C310 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -5524,7 +5548,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7C7F56BC2FFBA18100847151 /* NotificationHistoryService.swift in Sources */,
 				839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */,
+				7C7F56B82FFBA06200847151 /* NotificationRecord.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5693,6 +5719,7 @@
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
 				7C05D0782FBC29ED00F4D825 /* ShopBenefitViewModel.swift in Sources */,
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
+				7C7F56B72FFB9FE000847151 /* NotificationRecord.swift in Sources */,
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
 				7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */,
 				833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */,
@@ -5947,6 +5974,7 @@
 				7CED91632EF2D1F900457128 /* HouseInfoView.swift in Sources */,
 				7CED91642EF2D1F900457128 /* ShopSummaryViewModel.swift in Sources */,
 				7CED91652EF2D1F900457128 /* NoticeListHeaderView.swift in Sources */,
+				7C7F56BB2FFBA18100847151 /* NotificationHistoryService.swift in Sources */,
 				7CED91662EF2D1F900457128 /* CertificationFormViewController.swift in Sources */,
 				7CA60D832F66605E007C08C1 /* CallVanPlaceDto.swift in Sources */,
 				7CED91672EF2D1F900457128 /* DiningCollecitonFooterView.swift in Sources */,
