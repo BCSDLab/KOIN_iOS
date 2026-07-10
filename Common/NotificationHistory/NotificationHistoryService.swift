@@ -125,6 +125,7 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         
         try await MainActor.run {
             try container.mainContext.delete(model: NotificationRecord.self)
+            try container.mainContext.save()
         }
     }
 }
