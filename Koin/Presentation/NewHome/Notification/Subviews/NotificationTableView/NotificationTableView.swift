@@ -47,7 +47,6 @@ final class NotificationTableView: UITableView {
     // MARK: - Public
     func update(notifications: [NotificationItem]) {
         self.notifications = notifications
-        updateFooterHeightCacheIfPossible()
         reloadSections([0], with: .top)
         setNeedsLayout()
     }
@@ -76,7 +75,6 @@ extension NotificationTableView {
         notifications.remove(at: index)
         
         performBatchUpdates { [weak self] in
-            self?.updateFooterHeightCacheIfPossible()
             self?.deleteRows(at: [indexPath], with: .automatic)
         } completion: { [weak self] _ in
             self?.setNeedsLayout()
@@ -129,11 +127,6 @@ extension NotificationTableView {
         }
 
         isRecalculatingFooterHeight = false
-    }
-
-    private func updateFooterHeightCacheIfPossible() {
-        guard bounds.width > 0, bounds.height > 0 else { return }
-        lastFooterHeight = desiredFooterHeight(for: notifications.count)
     }
 
     private func desiredFooterHeight(for rowCount: Int) -> CGFloat {
