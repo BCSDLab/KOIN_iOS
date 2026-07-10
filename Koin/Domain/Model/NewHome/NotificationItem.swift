@@ -16,26 +16,6 @@ struct NotificationItem {
     let title: String
     let content: String
     let dateText: String
-    
-    init(
-        id: String,
-        isRead: Bool,
-        icon: ImageAsset,
-        appPath: AppPath,
-        uri: String?,
-        title: String,
-        content: String,
-        dateText: String
-    ) {
-        self.id = id
-        self.isRead = isRead
-        self.icon = icon
-        self.appPath = appPath
-        self.uri = uri
-        self.title = title
-        self.content = content
-        self.dateText = dateText
-    }
 }
 
 extension NotificationItem {
