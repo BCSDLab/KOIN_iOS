@@ -9,11 +9,13 @@ import SwiftData
 import Foundation
 
 @Model
-final class NotificationRecord: Sendable {
+final class NotificationRecord {
     var body: String
     var title: String
     var category: AppPath
     var schemeUri: String
+    
+    @Attribute(.unique)
     var messageId: String
     
     var isRead: Bool = false
