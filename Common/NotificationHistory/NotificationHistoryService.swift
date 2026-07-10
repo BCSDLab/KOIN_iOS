@@ -136,7 +136,7 @@ extension DefaultNotificationHistoryService {
             throw SwiftDataError.loadIssueModelContainer
         }
         
-        guard let expirationDate = Calendar.current.date(byAdding: .day, value: -7, to: Date()) else {
+        guard let expirationDate = Calendar.current.date(byAdding: .day, value: -14, to: Date()) else {
             throw NotificationHistoryError.calendarDidFail
         }
         
