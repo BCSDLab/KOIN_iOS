@@ -51,7 +51,9 @@ final class NotificationViewModel: ViewModelProtocol {
     // MARK: - Transform
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { [weak self] input in
+        input
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] input in
             switch input {
             case .viewDidLoad, .reload:
                 self?.loadNotifications()
