@@ -12,5 +12,5 @@ protocol NotificationHistoryRepository {
     func deleteAll() async throws
     func delete(id: String) async throws
     func markAsRead(id: String) async throws
-    func makrAllAsRead() async throws
+    func markAllAsRead() async throws
 }

@@ -25,6 +25,6 @@ final class DefaultUpdateNotificationHistoryUseCase: UpdateNotificationHistoryUs
     }
     
     func markAllAsRead() async throws {
-        try await repository.makrAllAsRead()
+        try await repository.markAllAsRead()
     }
 }

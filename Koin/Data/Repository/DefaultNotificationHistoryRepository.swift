@@ -34,7 +34,7 @@ final class DefaultNotificationHistoryRepository: NotificationHistoryRepository 
         try await service.markAsRead(messageId: id)
     }
     
-    func makrAllAsRead() async throws {
+    func markAllAsRead() async throws {
         try await service.markAllAsRead()
     }
 }
