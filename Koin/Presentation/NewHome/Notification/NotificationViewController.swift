@@ -22,7 +22,7 @@ final class NotificationViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     
     private let emptyView = NotificationEmptyView().then {
-        $0.isHidden = true
+        $0.alpha = 0
     }
     
     private let loadingIndicator = UIActivityIndicatorView(style: .medium).then {
@@ -46,6 +46,7 @@ final class NotificationViewController: UIViewController {
         setAddTargets()
         bind()
         inputSubject.send(.viewDidLoad)
+        loadingIndicator.startAnimating()
         title = "알림"
     }
     
@@ -63,21 +64,17 @@ private extension NotificationViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] event in
                 guard let self else { return }
-
+                
                 switch event {
                 case .updateNotifications(let notifications):
                     self.notificationTableView.update(notifications: notifications)
                     self.updateStateViews(isEmpty: notifications.isEmpty)
-
-                case .updateLoading(let isLoading):
-                    self.updateLoadingState(isLoading)
-
                 case .showToast(let message):
                     showToastMessage(message: message)
                 }
             }
             .store(in: &subscriptions)
-            
+        
         notificationTableView.deletePublisher
             .sink { [weak self] id in
                 guard let self else { return }
@@ -94,20 +91,16 @@ private extension NotificationViewController {
             }
             .store(in: &subscriptions)
     }
+}
 
-    func updateLoadingState(_ isLoading: Bool) {
-        if isLoading {
-            loadingIndicator.startAnimating()
-        } else {
-            loadingIndicator.stopAnimating()
-            refreshControl.endRefreshing()
-        }
-
-        updateStateViews(isEmpty: notificationTableView.isEmpty)
-    }
-
-    func updateStateViews(isEmpty: Bool) {
+extension NotificationViewController {
+    private func updateStateViews(isEmpty: Bool) {
+        loadingIndicator.stopAnimating()
+        
         let shouldShowEmpty = isEmpty && !loadingIndicator.isAnimating
+        
+        emptyView.isHidden = false
+        notificationTableView.isHidden = false
         
         UIView.animate(
             withDuration: 0.2,

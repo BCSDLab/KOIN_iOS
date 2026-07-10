@@ -22,7 +22,6 @@ final class NotificationViewModel: ViewModelProtocol {
     
     enum Output {
         case updateNotifications([NotificationItem])
-        case updateLoading(Bool)
         case showToast(String)
     }
     
@@ -81,11 +80,6 @@ private extension NotificationViewModel {
     
     private func loadNotifications() {
         Task {
-            outputSubject.send(.updateLoading(true))
-            defer {
-                outputSubject.send(.updateLoading(false))
-            }
-            
             do {
                 let notifications = try await fetchNotificationHistoryUseCase.execute()
                 outputSubject.send(.updateNotifications(notifications))

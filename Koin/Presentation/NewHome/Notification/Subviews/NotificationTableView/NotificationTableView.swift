@@ -48,7 +48,7 @@ final class NotificationTableView: UITableView {
     func update(notifications: [NotificationItem]) {
         self.notifications = notifications
         updateFooterHeightCacheIfPossible()
-        reloadData()
+        reloadSections([0], with: .top)
         setNeedsLayout()
     }
     
