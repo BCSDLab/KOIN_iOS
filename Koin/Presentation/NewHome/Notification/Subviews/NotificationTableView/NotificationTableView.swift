@@ -139,12 +139,12 @@ extension NotificationTableView {
     private func desiredFooterHeight(for rowCount: Int) -> CGFloat {
         guard rowCount > 0 else { return 0 }
 
-        let visibleHeight = bounds.height - adjustedContentInset.top - adjustedContentInset.bottom
+        let visibleHeight = bounds.height
+        - adjustedContentInset.top
+        - adjustedContentInset.bottom
+        
         let rowsHeight = CGFloat(rowCount) * Layout.rowHeight
-        let manualInsetHeight = contentInset.top + contentInset.bottom
-        let occupiedHeight = rowsHeight + manualInsetHeight
-
-        return max(Layout.footerMinHeight, visibleHeight - occupiedHeight)
+        return max(Layout.footerMinHeight, visibleHeight - rowsHeight)
     }
 }
 
@@ -180,7 +180,7 @@ extension NotificationTableView: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
-        max(lastFooterHeight, Layout.footerMinHeight)
+        notifications.isEmpty ? .leastNormalMagnitude : lastFooterHeight
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -239,6 +239,16 @@ extension NotificationTableView {
         dataSource = self
         delegate = self
 
+        tableFooterView = UIView(
+            frame: .init(
+                origin: .zero,
+                size: .init(
+                    width: CGFloat.leastNormalMagnitude,
+                    height: CGFloat.leastNormalMagnitude
+                )
+            )
+        )
+        
         register(
             NotificationTableViewCell.self,
             forCellReuseIdentifier: NotificationTableViewCell.identifier
