@@ -51,7 +51,7 @@ private extension NotificationFooterView {
             $0.top.greaterThanOrEqualToSuperview().offset(20)
             $0.leading.equalToSuperview().offset(16)
             $0.trailing.equalToSuperview().offset(-16)
-            $0.bottom.equalToSuperview().offset(-20)
+            $0.bottom.equalToSuperview().offset(-20).priority(.low)
             $0.height.equalTo(15)
         }
     }
