@@ -78,12 +78,12 @@ final class NotificationViewModel: ViewModelProtocol {
 private extension NotificationViewModel {
     
     private func loadNotifications() {
-        outputSubject.send(.updateLoading(true))
-        defer {
-            outputSubject.send(.updateLoading(false))
-        }
-        
         Task {
+            outputSubject.send(.updateLoading(true))
+            defer {
+                outputSubject.send(.updateLoading(false))
+            }
+            
             do {
                 let notifications = try await fetchNotificationHistoryUseCase.execute()
                 outputSubject.send(.updateNotifications(notifications))
