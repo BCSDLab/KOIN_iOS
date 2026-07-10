@@ -21,10 +21,6 @@ final class NotificationViewController: UIViewController {
     private let notificationTableView = NotificationTableView()
     private let refreshControl = UIRefreshControl()
     
-    private let emptyView = NotificationEmptyView().then {
-        $0.alpha = 0
-    }
-    
     private let loadingIndicator = UIActivityIndicatorView(style: .medium).then {
         $0.hidesWhenStopped = true
     }
@@ -96,22 +92,14 @@ private extension NotificationViewController {
 extension NotificationViewController {
     private func updateStateViews(isEmpty: Bool) {
         loadingIndicator.stopAnimating()
-        
-        let shouldShowEmpty = isEmpty && !loadingIndicator.isAnimating
-        
-        emptyView.isHidden = false
-        notificationTableView.isHidden = false
+        refreshControl.endRefreshing()
         
         UIView.animate(
             withDuration: 0.2,
             delay: 0,
             options: [.curveEaseInOut, .beginFromCurrentState]
         ) { [weak self] in
-            self?.emptyView.alpha = shouldShowEmpty ? 1 : 0
-            self?.notificationTableView.alpha = shouldShowEmpty ? 0 : 1
-        } completion: { [weak self] _ in
-            self?.emptyView.isHidden = !shouldShowEmpty
-            self?.notificationTableView.isHidden = shouldShowEmpty
+            self?.notificationTableView.backgroundView?.alpha = isEmpty ? 1 : 0
         }
     }
 }
@@ -366,10 +354,14 @@ private extension NotificationViewController {
         view.backgroundColor = UIColor.ColorSystem.Neutral.gray0
         
         notificationTableView.refreshControl = refreshControl
+        
+        notificationTableView.backgroundView = NotificationEmptyBackgroundView().then {
+            $0.alpha = 0
+        }
     }
     
     private func setUpLayouts() {
-        [notificationTableView, emptyView, loadingIndicator].forEach {
+        [notificationTableView, loadingIndicator].forEach {
             view.addSubview($0)
         }
     }
@@ -377,10 +369,6 @@ private extension NotificationViewController {
     private func setUpConstraints() {
         notificationTableView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-        }
-        
-        emptyView.snp.makeConstraints {
-            $0.center.equalToSuperview()
         }
         
         loadingIndicator.snp.makeConstraints {
