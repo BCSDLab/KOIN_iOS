@@ -1,5 +1,5 @@
 //
-//  FetchHomeDiningListUseCase.swift
+//  FetchNotificationHistoryUseCase.swift
 //  koin
 //
 //  Created by 홍기정 on 6/3/26.
