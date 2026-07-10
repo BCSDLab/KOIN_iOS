@@ -13,7 +13,6 @@ import Then
 final class NotificationTableView: UITableView {
     
     private enum Layout {
-        static let topInset: CGFloat = 12
         static let rowHeight: CGFloat = 80
         static let footerMinHeight: CGFloat = 55
         static let zeroTolerance: CGFloat = 0.5
@@ -225,7 +224,6 @@ extension NotificationTableView {
         backgroundColor = UIColor.ColorSystem.Neutral.gray0
         separatorStyle = .none
         showsVerticalScrollIndicator = false
-        contentInset = UIEdgeInsets(top: Layout.topInset, left: 0, bottom: 0, right: 0)
         
         rowHeight = Layout.rowHeight
     
