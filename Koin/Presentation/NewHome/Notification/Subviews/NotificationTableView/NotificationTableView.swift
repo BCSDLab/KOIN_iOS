@@ -46,7 +46,7 @@ final class NotificationTableView: UITableView {
     // MARK: - Public
     func update(notifications: [NotificationItem]) {
         self.notifications = notifications
-        reloadSections([0], with: .top)
+        reloadSections([0], with: refreshControl?.isRefreshing == true ? .fade : .top)
         setNeedsLayout()
     }
     
