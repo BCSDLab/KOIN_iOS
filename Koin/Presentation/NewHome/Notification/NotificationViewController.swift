@@ -76,6 +76,7 @@ private extension NotificationViewController {
                 guard let self else { return }
                 self.inputSubject.send(.deleteNotification(id: id))
                 self.updateStateViews(isEmpty: self.notificationTableView.isEmpty)
+                self.showToastMessage(message: "알림이 삭제되었습니다.")
             }
             .store(in: &subscriptions)
         
@@ -315,6 +316,7 @@ private extension NotificationViewController {
                 self?.inputSubject.send(.deleteAllNotifications)
                 self?.notificationTableView.deleteAll()
                 self?.updateStateViews(isEmpty: true)
+                self?.showToastMessage(message: "알림이 삭제되었습니다.")
             }
         )
         popUpViewController.modalPresentationStyle = .overFullScreen
