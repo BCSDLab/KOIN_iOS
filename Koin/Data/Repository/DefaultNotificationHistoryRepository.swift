@@ -14,11 +14,7 @@ final class DefaultNotificationHistoryRepository: NotificationHistoryRepository 
     init(service: NotificationHistoryService) {
         self.service = service
     }
-    
-    func insert(record: NotificationRecord) async throws {
-        try await service.insert(record: record)
-    }
-    
+       
     func fetchAll() async throws -> [NotificationItem] {
         try await service.fetchAll()
             .compactMap {

@@ -53,7 +53,11 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
             throw SwiftDataError.loadIssueModelContainer
         }
         
-        try await deleteExpiredNotifications()
+        do {
+            try await deleteExpiredNotifications()
+        } catch {
+            print(error.localizedDescription)
+        }
         
         return try await MainActor.run {
             var descriptor = FetchDescriptor<NotificationRecord>(

@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct NotificationHistoryError: Error {
-    let message: String
+struct NotificationHistoryError: LocalizedError {
+    let errorDescription: String
     
-    static let calendarDidFail = Self.init(message: "캘린더 오류 발생")
+    static let calendarDidFail = Self.init(errorDescription: "캘린더 오류 발생")
 }
