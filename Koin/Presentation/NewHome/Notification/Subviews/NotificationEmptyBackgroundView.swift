@@ -1,5 +1,5 @@
 //
-//  NotificationEmptyView.swift
+//  NotificationEmptyBackgroundView.swift
 //  koin
 //
 //  Created by 홍기정 on 6/3/26.
@@ -9,9 +9,11 @@ import UIKit
 import SnapKit
 import Then
 
-final class NotificationEmptyView: UIView {
+final class NotificationEmptyBackgroundView: UIView {
     
     // MARK: - UI Components
+    private let layoutGuide = UILayoutGuide()
+    
     private let sleepImageView = UIImageView()
     private let emptyLabel = UILabel()
     
@@ -25,7 +27,7 @@ final class NotificationEmptyView: UIView {
     }
 }
 
-private extension NotificationEmptyView {
+extension NotificationEmptyBackgroundView {
     
     private func configureView() {
         setUpStyles()
@@ -48,18 +50,25 @@ private extension NotificationEmptyView {
         [sleepImageView, emptyLabel].forEach {
             addSubview($0)
         }
+        [layoutGuide].forEach {
+            addLayoutGuide($0)
+        }
     }
     
     private func setUpConstraints() {
+        layoutGuide.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+        
         sleepImageView.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.centerX.equalToSuperview()
+            $0.top.equalTo(layoutGuide)
+            $0.centerX.equalTo(layoutGuide)
         }
         emptyLabel.snp.makeConstraints {
             $0.height.equalTo(29)
             $0.top.equalTo(sleepImageView.snp.bottom)
-            $0.bottom.equalToSuperview()
-            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(layoutGuide)
+            $0.leading.trailing.equalTo(layoutGuide)
         }
     }
 }

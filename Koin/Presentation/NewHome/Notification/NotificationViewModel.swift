@@ -13,41 +13,57 @@ final class NotificationViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case reload
-        case deleteNotification(id: Int)
+        case deleteNotification(id: String)
+        case deleteAllNotifications
+        case markAsRead(id: String)
+        case markAllAsRead
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     enum Output {
         case updateNotifications([NotificationItem])
-        case updateLoading(Bool)
         case showToast(String)
     }
     
     // MARK: - Properties
     
-    private let fetchNotificationListUseCase: FetchNotificationListUseCase
+    private let fetchNotificationHistoryUseCase: FetchNotificationHistoryUseCase
+    private let deleteNotificationHistoryUseCase: DeleteNotificationHistoryUseCase
+    private let updateNotificationHistoryUseCase: UpdateNotificationHistoryUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - Initializer
     init(
-        fetchNotificationListUseCase: FetchNotificationListUseCase,
+        fetchNotificationHistoryUseCase: FetchNotificationHistoryUseCase,
+        deleteNotificationHistoryUseCase: DeleteNotificationHistoryUseCase,
+        updateNotificationHistoryUseCase: UpdateNotificationHistoryUseCase,
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
-        self.fetchNotificationListUseCase = fetchNotificationListUseCase
+        self.fetchNotificationHistoryUseCase = fetchNotificationHistoryUseCase
+        self.deleteNotificationHistoryUseCase = deleteNotificationHistoryUseCase
+        self.updateNotificationHistoryUseCase = updateNotificationHistoryUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Transform
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { [weak self] input in
+        input
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] input in
             switch input {
             case .viewDidLoad, .reload:
                 self?.loadNotifications()
             case .deleteNotification(let id):
                 self?.deleteNotification(id: id)
+            case .deleteAllNotifications:
+                self?.deleteAllNotifications()
+            case .markAsRead(let id):
+                self?.markAsRead(id: id)
+            case .markAllAsRead:
+                self?.markAllAsRead()
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
@@ -63,25 +79,38 @@ final class NotificationViewModel: ViewModelProtocol {
 private extension NotificationViewModel {
     
     private func loadNotifications() {
-        outputSubject.send(.updateLoading(true))
-        fetchNotificationListUseCase.execute().sink(
-                receiveCompletion: { [weak self] completion in
-                    self?.outputSubject.send(.updateLoading(false))
-                    if case .failure(let error) = completion {
-                        self?.outputSubject.send(.showToast(error.message))
-                    }
-                },
-                receiveValue: { [weak self] notifications in
-                    guard let self else { return }
-                    self.outputSubject.send(.updateNotifications(notifications))
-                    self.outputSubject.send(.updateLoading(false))
-                }
-            )
-            .store(in: &subscriptions)
+        Task {
+            do {
+                let notifications = try await fetchNotificationHistoryUseCase.execute()
+                outputSubject.send(.updateNotifications(notifications))
+            } catch {
+                outputSubject.send(.showToast(error.localizedDescription))
+            }
+        }
     }
 
-    private func deleteNotification(id: Int) {
-        // TODO: API 연결 시 성공/실패와 관계없이 화면 상태는 되돌리지 않는다.
+    private func deleteNotification(id: String) {
+        Task {
+            try? await deleteNotificationHistoryUseCase.delete(id: id)
+        }
+    }
+    
+    private func deleteAllNotifications() {
+        Task {
+            try? await deleteNotificationHistoryUseCase.deleteAll()
+        }
+    }
+    
+    private func markAsRead(id: String) {
+        Task {
+            try? await updateNotificationHistoryUseCase.markAsRead(id: id)
+        }
+    }
+    
+    private func markAllAsRead() {
+        Task {
+            try? await updateNotificationHistoryUseCase.markAllAsRead()
+        }
     }
     
     private func makeLogAnalyticsEvent(

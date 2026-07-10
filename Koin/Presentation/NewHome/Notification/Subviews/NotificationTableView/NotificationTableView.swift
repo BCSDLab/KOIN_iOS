@@ -13,14 +13,13 @@ import Then
 final class NotificationTableView: UITableView {
     
     private enum Layout {
-        static let topInset: CGFloat = 12
         static let rowHeight: CGFloat = 80
         static let footerMinHeight: CGFloat = 55
         static let zeroTolerance: CGFloat = 0.5
     }
     
     // MARK: - Publisher
-    let deletePublisher = PassthroughSubject<Int, Never>()
+    let deletePublisher = PassthroughSubject<String, Never>()
     let tapNotificationPublisher = PassthroughSubject<NotificationItem, Never>()
     
     // MARK: - UI Components
@@ -47,14 +46,25 @@ final class NotificationTableView: UITableView {
     // MARK: - Public
     func update(notifications: [NotificationItem]) {
         self.notifications = notifications
-        updateFooterHeightCacheIfPossible()
-        reloadData()
+        reloadSections([0], with: refreshControl?.isRefreshing == true ? .fade : .top)
         setNeedsLayout()
+    }
+    
+    func markAllAsRead() {
+        for index in notifications.indices {
+            notifications[index].isRead = true
+        }
+        reloadSections([0], with: .fade)
+    }
+    
+    func deleteAll() {
+        notifications.removeAll()
+        reloadSections([0], with: .fade)
     }
 }
 
 extension NotificationTableView {
-    private func deleteNotification(id: Int, completion: (() -> Void)? = nil) {
+    private func didDeleteNotification(id: String, completion: (() -> Void)? = nil) {
         guard let index = notifications.firstIndex(where: { $0.id == id }) else {
             return
         }
@@ -64,12 +74,24 @@ extension NotificationTableView {
         notifications.remove(at: index)
         
         performBatchUpdates { [weak self] in
-            self?.updateFooterHeightCacheIfPossible()
             self?.deleteRows(at: [indexPath], with: .automatic)
         } completion: { [weak self] _ in
             self?.setNeedsLayout()
             completion?()
         }
+    }
+    
+    private func didSelectNotification(id: String) {
+        guard let index = notifications.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+
+        self.notifications[index].isRead = true
+        
+        reloadRows(
+            at: [IndexPath(row: index, section: 0)],
+            with: .fade
+        )
     }
 }
 
@@ -106,20 +128,15 @@ extension NotificationTableView {
         isRecalculatingFooterHeight = false
     }
 
-    private func updateFooterHeightCacheIfPossible() {
-        guard bounds.width > 0, bounds.height > 0 else { return }
-        lastFooterHeight = desiredFooterHeight(for: notifications.count)
-    }
-
     private func desiredFooterHeight(for rowCount: Int) -> CGFloat {
         guard rowCount > 0 else { return 0 }
 
-        let visibleHeight = bounds.height - adjustedContentInset.top - adjustedContentInset.bottom
+        let visibleHeight = bounds.height
+        - adjustedContentInset.top
+        - adjustedContentInset.bottom
+        
         let rowsHeight = CGFloat(rowCount) * Layout.rowHeight
-        let manualInsetHeight = contentInset.top + contentInset.bottom
-        let occupiedHeight = rowsHeight + manualInsetHeight
-
-        return max(Layout.footerMinHeight, visibleHeight - occupiedHeight)
+        return max(Layout.footerMinHeight, visibleHeight - rowsHeight)
     }
 }
 
@@ -155,7 +172,7 @@ extension NotificationTableView: UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
-        max(lastFooterHeight, Layout.footerMinHeight)
+        notifications.isEmpty ? .leastNormalMagnitude : lastFooterHeight
     }
 
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
@@ -168,6 +185,7 @@ extension NotificationTableView: UITableViewDelegate {
             return
         }
         tapNotificationPublisher.send(notifications[indexPath.row])
+        didSelectNotification(id: notifications[indexPath.row].id)
     }
 
     func tableView(
@@ -185,7 +203,7 @@ extension NotificationTableView: UITableViewDelegate {
                 completion(false)
                 return
             }
-            self.deleteNotification(id: item.id)
+            self.didDeleteNotification(id: item.id)
             self.deletePublisher.send(item.id)
             completion(true)
         }
@@ -206,13 +224,22 @@ extension NotificationTableView {
         backgroundColor = UIColor.ColorSystem.Neutral.gray0
         separatorStyle = .none
         showsVerticalScrollIndicator = false
-        contentInset = UIEdgeInsets(top: Layout.topInset, left: 0, bottom: 0, right: 0)
         
         rowHeight = Layout.rowHeight
     
         dataSource = self
         delegate = self
 
+        tableFooterView = UIView(
+            frame: .init(
+                origin: .zero,
+                size: .init(
+                    width: CGFloat.leastNormalMagnitude,
+                    height: CGFloat.leastNormalMagnitude
+                )
+            )
+        )
+        
         register(
             NotificationTableViewCell.self,
             forCellReuseIdentifier: NotificationTableViewCell.identifier
