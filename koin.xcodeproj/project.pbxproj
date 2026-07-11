@@ -628,6 +628,12 @@
 		7CED923B2EF2D26000457128 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED923A2EF2D26000457128 /* Coordinator.swift */; };
 		7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */; };
 		7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */; };
+		7CF77B4430027321003642C1 /* TimeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4330027321003642C1 /* TimeTableView.swift */; };
+		7CF77B473002752A003642C1 /* TimeTableDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B463002752A003642C1 /* TimeTableDayView.swift */; };
+		7CF77B4930027539003642C1 /* TimeTableHourView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4830027539003642C1 /* TimeTableHourView.swift */; };
+		7CF77B4B30027569003642C1 /* TimeTableLectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4A30027569003642C1 /* TimeTableLectureView.swift */; };
+		7CF77B4D30028719003642C1 /* TimeTableEmptyLectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4C30028719003642C1 /* TimeTableEmptyLectureView.swift */; };
+		7CF77B4F30028737003642C1 /* TimeTableLectureContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4E30028737003642C1 /* TimeTableLectureContainerView.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
@@ -1621,6 +1627,12 @@
 		7CED923A2EF2D26000457128 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionView.swift; sourceTree = "<group>"; };
 		7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		7CF77B4330027321003642C1 /* TimeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableView.swift; sourceTree = "<group>"; };
+		7CF77B463002752A003642C1 /* TimeTableDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableDayView.swift; sourceTree = "<group>"; };
+		7CF77B4830027539003642C1 /* TimeTableHourView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableHourView.swift; sourceTree = "<group>"; };
+		7CF77B4A30027569003642C1 /* TimeTableLectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableLectureView.swift; sourceTree = "<group>"; };
+		7CF77B4C30028719003642C1 /* TimeTableEmptyLectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableEmptyLectureView.swift; sourceTree = "<group>"; };
+		7CF77B4E30028737003642C1 /* TimeTableLectureContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableLectureContainerView.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
@@ -2259,6 +2271,7 @@
 				7C457B1A2FCE1BA80011D338 /* Home */,
 				7C457B072FCE1BA80011D338 /* Category */,
 				7C457B282FCE1BA80011D338 /* Notification */,
+				7CF77B38300254AA003642C1 /* Profile */,
 			);
 			path = NewHome;
 			sourceTree = "<group>";
@@ -4317,6 +4330,43 @@
 			path = OrderCategoryCollectionView;
 			sourceTree = "<group>";
 		};
+		7CF77B38300254AA003642C1 /* Profile */ = {
+			isa = PBXGroup;
+			children = (
+				7CF77B3F300254CF003642C1 /* Subviews */,
+			);
+			path = Profile;
+			sourceTree = "<group>";
+		};
+		7CF77B3F300254CF003642C1 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CF77B4230027319003642C1 /* TimeTableView */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CF77B4230027319003642C1 /* TimeTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7CF77B453002751E003642C1 /* Subviews */,
+				7CF77B4330027321003642C1 /* TimeTableView.swift */,
+			);
+			path = TimeTableView;
+			sourceTree = "<group>";
+		};
+		7CF77B453002751E003642C1 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CF77B463002752A003642C1 /* TimeTableDayView.swift */,
+				7CF77B4830027539003642C1 /* TimeTableHourView.swift */,
+				7CF77B4E30028737003642C1 /* TimeTableLectureContainerView.swift */,
+				7CF77B4A30027569003642C1 /* TimeTableLectureView.swift */,
+				7CF77B4C30028719003642C1 /* TimeTableEmptyLectureView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		833D9C102C6B269000982145 /* NoticeList */ = {
 			isa = PBXGroup;
 			children = (
@@ -5736,6 +5786,7 @@
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
 				7C58FE902F5FA4D600A2737B /* CallVanDataTableViewCell.swift in Sources */,
 				835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */,
+				7CF77B4930027539003642C1 /* TimeTableHourView.swift in Sources */,
 				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
 				D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */,
 				B60D25462ED72017000E57B7 /* RadioButtonState.swift in Sources */,
@@ -5963,6 +6014,7 @@
 				7C8BFCD32FD0272900963679 /* View+border.swift in Sources */,
 				7CED91322EF2D1F900457128 /* FrameListViewController.swift in Sources */,
 				7CED91332EF2D1F900457128 /* ShopDetailViewController.swift in Sources */,
+				7CF77B473002752A003642C1 /* TimeTableDayView.swift in Sources */,
 				7CED91352EF2D1F900457128 /* ShopDetailTableViewIntroductionCell.swift in Sources */,
 				7CA60D752F663807007C08C1 /* CallVanNotificationDto.swift in Sources */,
 				7CED91362EF2D1F900457128 /* DiningNoticeViewModel.swift in Sources */,
@@ -5974,6 +6026,7 @@
 				7CED913A2EF2D1F900457128 /* CalendarCollectionViewCell.swift in Sources */,
 				7CED913B2EF2D1F900457128 /* AddLostItemFooterView.swift in Sources */,
 				7CED913F2EF2D1F900457128 /* EventShopCollectionViewCell.swift in Sources */,
+				7CF77B4F30028737003642C1 /* TimeTableLectureContainerView.swift in Sources */,
 				7CBFAF112FBC44CA001D64E3 /* ShopBenefitPageControl.swift in Sources */,
 				7CED91402EF2D1F900457128 /* BannerCollectionViewCell.swift in Sources */,
 				7CED91412EF2D1F900457128 /* ShopSummaryPopUpView.swift in Sources */,
@@ -5986,6 +6039,7 @@
 				7CED914D2EF2D1F900457128 /* NoticeListCollectionView.swift in Sources */,
 				7CC42B2A2F575F4D00940CE1 /* CallVanFilterButton.swift in Sources */,
 				7CED914E2EF2D1F900457128 /* ModifySemesterModalViewController.swift in Sources */,
+				7CF77B4B30027569003642C1 /* TimeTableLectureView.swift in Sources */,
 				7CED914F2EF2D1F900457128 /* AddClassHeaderView.swift in Sources */,
 				7CED91522EF2D1F900457128 /* ChangeMyProfileViewController.swift in Sources */,
 				7CB11C7E2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift in Sources */,
@@ -6031,6 +6085,7 @@
 				7C457B2F2FCE1BA80011D338 /* HomeTabBar.swift in Sources */,
 				7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */,
 				7C8BFCEC2FD04BA000963679 /* FetchHomeHeaderUseCase.swift in Sources */,
+				7CF77B4D30028719003642C1 /* TimeTableEmptyLectureView.swift in Sources */,
 				7C8BFCED2FD04BA000963679 /* FetchNotificationListUseCase.swift in Sources */,
 				7C8BFCEF2FD04BA000963679 /* FetchNewHomeCountsUseCase.swift in Sources */,
 				7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */,
@@ -6355,6 +6410,7 @@
 				7CC42B362F58283500940CE1 /* CallVanNotificationViewController.swift in Sources */,
 				7C8BFCE12FD04B8000963679 /* HomeDiningItem.swift in Sources */,
 				7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */,
+				7CF77B4430027321003642C1 /* TimeTableView.swift in Sources */,
 				7C8BFCE42FD04B8000963679 /* NotificationItem.swift in Sources */,
 				7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */,
 				7C8BFCF12FD04B800963679 /* NewHomeCounts.swift in Sources */,
