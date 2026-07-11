@@ -34,31 +34,6 @@ struct CategoryView: ActionBindableView {
     }
 
     // MARK: - Public
-        CategorySectionContent(
-            title: "캠퍼스",
-            items: [
-                .facility,
-                .dining,
-                .shop
-            ]
-        ),
-        CategorySectionContent(
-            title: "교통",
-            items: [
-                .busTimetable,
-                .busRoute,
-                .callVan
-            ]
-        ),
-        CategorySectionContent(
-            title: "기타",
-            items: [
-                .land,
-                .business
-            ]
-        )
-    ]
-    
     func makeLogAnalyticsEvent(
         label: EventLabelType,
         category: EventParameter.EventCategory,
@@ -72,22 +47,45 @@ struct CategoryView: ActionBindableView {
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 12) {
-                    ForEach(featuredItems) { item in
-                        CategoryFeaturedButton(item: item) {
-                            didTapItem(item)
-                        }
+                    CategoryFeaturedButton(item: .timetable) {
+                        didTapItem(.timetable)
+                    }
+                    CategoryFeaturedButton(item: .lostItem) {
+                        didTapItem(.lostItem)
                     }
                 }
-
-                ForEach(sections) { section in
-                    CategorySection(
-                        title: section.title,
-                        items: section.items,
-                        action: { item in
-                            didTapItem(item)
-                        }
-                    )
-                }
+                CategorySection(
+                    title: "캠퍼스",
+                    items: [
+                        .facility,
+                        .dining,
+                        .shop
+                    ],
+                    action: { item in
+                        didTapItem(item)
+                    }
+                )
+                CategorySection(
+                    title: "교통",
+                    items: [
+                        .busTimetable,
+                        .busRoute,
+                        .callVan
+                    ],
+                    action: { item in
+                        didTapItem(item)
+                    }
+                )
+                CategorySection(
+                    title: "기타",
+                    items: [
+                        .land,
+                        .business,
+                    ],
+                    action: { item in
+                        didTapItem(item)
+                    }
+                )
             }
             .padding(.top, 23)
             .padding(.horizontal, 22)
@@ -158,10 +156,4 @@ private extension CategoryView {
             return (.categoryEtc, "코인 for Business")
         }
     }
-}
-
-private struct CategorySectionContent: Identifiable {
-    var id: String { title }
-    let title: String
-    let items: [NewHomeCategoryItem]
 }
