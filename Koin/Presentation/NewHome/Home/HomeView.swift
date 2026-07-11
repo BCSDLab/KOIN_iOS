@@ -8,7 +8,7 @@
 import SwiftUI
 
 @MainActor
-struct HomeView: View, ActionBindableView {
+struct HomeView: ActionBindableView {
     enum Action {
         case showDining
         case showBusTimetable

@@ -8,7 +8,7 @@
 import SwiftUI
 
 @MainActor
-struct CategoryView: View, ActionBindableView {
+struct CategoryView: ActionBindableView {
     enum Action {
         case showTimetable
         case showLostItem

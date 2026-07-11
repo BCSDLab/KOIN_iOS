@@ -21,17 +21,17 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     }
 
     private(set) var header: HomeHeader = HomeHeader.empty()
-    private(set) var  diningItems: [HomeDiningItem] = []
-    private(set) var  callVanRecruitingCount: Int = 0
-    private(set) var  eventCount: Int = 0
-    private(set) var  openShopCount: Int = 0
-    private(set) var  totalShopCount: Int = 0
-    private(set) var  isLoading: Bool = false
-    private(set) var  toastMessage: String?
-    private(set) var  forceUpdateVersion: String?
-    private(set) var  forceModifyUserRequired = false
-    private(set) var  bannerToPresent: BannerDto?
-    private(set) var  isLoggedIn = false
+    private(set) var diningItems: [HomeDiningItem] = []
+    private(set) var callVanRecruitingCount: Int = 0
+    private(set) var eventCount: Int = 0
+    private(set) var openShopCount: Int = 0
+    private(set) var totalShopCount: Int = 0
+    private(set) var isLoading: Bool = false
+    private(set) var toastMessage: String?
+    private(set) var forceUpdateVersion: String?
+    private(set) var forceModifyUserRequired = false
+    private(set) var bannerToPresent: BannerDto?
+    private(set) var isLoggedIn = false
 
     private let fetchHomeHeaderUseCase: FetchHomeHeaderUseCase
     private let fetchHomeDiningListUseCase: FetchHomeDiningListUseCase
