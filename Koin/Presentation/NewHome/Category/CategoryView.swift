@@ -8,7 +8,9 @@
 import SwiftUI
 
 @MainActor
-struct CategoryView: View, ActionBindableView {
+struct CategoryView: ActionBindableView {
+    
+    // MARK: - Action
     enum Action {
         case showTimetable
         case showLostItem
@@ -22,40 +24,16 @@ struct CategoryView: View, ActionBindableView {
         case showBusiness
     }
 
+    // MARK: - Properties
     @State private var viewModel: CategoryViewModel
     var sendAction: ((Action) -> Void) = { _ in }
 
-    private let featuredItems: [NewHomeCategoryItem] = [
-        .timetable,
-        .lostItem
-    ]
+    // MARK: - Initializer
+    init(viewModel: CategoryViewModel) {
+        self.viewModel = viewModel
+    }
 
-    private let sections: [CategorySectionContent] = [
-        CategorySectionContent(
-            title: "캠퍼스",
-            items: [
-                .facility,
-                .dining,
-                .shop
-            ]
-        ),
-        CategorySectionContent(
-            title: "교통",
-            items: [
-                .busTimetable,
-                .busRoute,
-                .callVan
-            ]
-        ),
-        CategorySectionContent(
-            title: "기타",
-            items: [
-                .land,
-                .business
-            ]
-        )
-    ]
-    
+    // MARK: - Public
     func makeLogAnalyticsEvent(
         label: EventLabelType,
         category: EventParameter.EventCategory,
@@ -64,31 +42,50 @@ struct CategoryView: View, ActionBindableView {
         viewModel.execute(.logEvent(label, category, value))
     }
 
-    @MainActor
-    init(viewModel: CategoryViewModel) {
-        _viewModel = State(initialValue: viewModel)
-    }
-
+    // MARK: - Body
     var body: some View {
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 12) {
-                    ForEach(featuredItems) { item in
-                        CategoryFeaturedButton(item: item) {
-                            didTapItem(item)
-                        }
+                    CategoryFeaturedButton(item: .timetable) {
+                        didTapItem(.timetable)
+                    }
+                    CategoryFeaturedButton(item: .lostItem) {
+                        didTapItem(.lostItem)
                     }
                 }
-
-                ForEach(sections) { section in
-                    CategorySection(
-                        title: section.title,
-                        items: section.items,
-                        action: { item in
-                            didTapItem(item)
-                        }
-                    )
-                }
+                CategorySection(
+                    title: "캠퍼스",
+                    items: [
+                        .facility,
+                        .dining,
+                        .shop
+                    ],
+                    action: { item in
+                        didTapItem(item)
+                    }
+                )
+                CategorySection(
+                    title: "교통",
+                    items: [
+                        .busTimetable,
+                        .busRoute,
+                        .callVan
+                    ],
+                    action: { item in
+                        didTapItem(item)
+                    }
+                )
+                CategorySection(
+                    title: "기타",
+                    items: [
+                        .land,
+                        .business,
+                    ],
+                    action: { item in
+                        didTapItem(item)
+                    }
+                )
             }
             .padding(.top, 23)
             .padding(.horizontal, 22)
@@ -101,6 +98,7 @@ struct CategoryView: View, ActionBindableView {
 }
 
 private extension CategoryView {
+    
     private func didTapItem(_ item: NewHomeCategoryItem) {
         let action = action(for: item)
         sendAction(action)
@@ -158,10 +156,4 @@ private extension CategoryView {
             return (.categoryEtc, "코인 for Business")
         }
     }
-}
-
-private struct CategorySectionContent: Identifiable {
-    var id: String { title }
-    let title: String
-    let items: [NewHomeCategoryItem]
 }

@@ -8,7 +8,9 @@
 import SwiftUI
 
 @MainActor
-struct HomeView: View, ActionBindableView {
+struct HomeView: ActionBindableView {
+    
+    // MARK: - Action
     enum Action {
         case showDining
         case showBusTimetable
@@ -21,14 +23,17 @@ struct HomeView: View, ActionBindableView {
         case showToast(String)
         case showBanner(BannerDto, isLoggedIn: Bool)
     }
-
+    
+    // MARK: - Properties
     @State private var viewModel: NewHomeViewModel
     var sendAction: (Action) -> Void = { _ in }
-
+    
+    // MARK: - Initializer
     init(viewModel: NewHomeViewModel) {
-        _viewModel = State(initialValue: viewModel)
+        self.viewModel = viewModel
     }
     
+    // MARK: - Public
     func makeLogAnalyticsEvent(
         label: EventLabelType,
         category: EventParameter.EventCategory,
@@ -36,7 +41,8 @@ struct HomeView: View, ActionBindableView {
     ) {
         viewModel.execute(.logEvent(label, category, value))
     }
-
+    
+    // MARK: - Body
     var body: some View {
         ScrollView(.vertical) {
             VStack(spacing: 0) {

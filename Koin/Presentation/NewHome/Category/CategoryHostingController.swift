@@ -11,25 +11,25 @@ import SafariServices
 
 @MainActor
 final class CategoryHostingController: UIHostingController<CategoryView>, HostingControllerProtocol {
-    typealias RootView = CategoryView
-
+    
+    // MARK: - Initializer
     override init(rootView: CategoryView) {
         super.init(rootView: rootView)
         view.backgroundColor = .appColor(.newBackground)
         view.isOpaque = true
         bindAction(to: rootView)
     }
-
-    @available(*, unavailable)
-    required dynamic init?(coder aDecoder: NSCoder) {
+    @MainActor @preconcurrency required dynamic init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar()
     }
 
+    // MARK: - Public
     func execute(action: RootView.Action) {
         switch action {
         case .showTimetable:
