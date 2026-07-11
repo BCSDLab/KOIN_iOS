@@ -9,6 +9,8 @@ import SwiftUI
 
 @MainActor
 struct CategoryView: ActionBindableView {
+    
+    // MARK: - Action
     enum Action {
         case showTimetable
         case showLostItem
@@ -22,15 +24,16 @@ struct CategoryView: ActionBindableView {
         case showBusiness
     }
 
+    // MARK: - Properties
     @State private var viewModel: CategoryViewModel
     var sendAction: ((Action) -> Void) = { _ in }
 
-    private let featuredItems: [NewHomeCategoryItem] = [
-        .timetable,
-        .lostItem
-    ]
+    // MARK: - Initializer
+    init(viewModel: CategoryViewModel) {
+        self.viewModel = viewModel
+    }
 
-    private let sections: [CategorySectionContent] = [
+    // MARK: - Public
         CategorySectionContent(
             title: "캠퍼스",
             items: [
@@ -64,11 +67,7 @@ struct CategoryView: ActionBindableView {
         viewModel.execute(.logEvent(label, category, value))
     }
 
-    @MainActor
-    init(viewModel: CategoryViewModel) {
-        _viewModel = State(initialValue: viewModel)
-    }
-
+    // MARK: - Body
     var body: some View {
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: 16) {
@@ -101,6 +100,7 @@ struct CategoryView: ActionBindableView {
 }
 
 private extension CategoryView {
+    
     private func didTapItem(_ item: NewHomeCategoryItem) {
         let action = action(for: item)
         sendAction(action)

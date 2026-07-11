@@ -12,6 +12,8 @@ import Observation
 @Observable
 @MainActor
 final class NewHomeViewModel: SwiftUIViewModelProtocol {
+    
+    // MARK: - Input
     enum Input {
         case viewDidLoad
         case refresh
@@ -20,6 +22,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
+    // MARK: - State
     private(set) var header: HomeHeader = HomeHeader.empty()
     private(set) var diningItems: [HomeDiningItem] = []
     private(set) var callVanRecruitingCount: Int = 0
@@ -33,6 +36,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     private(set) var bannerToPresent: BannerDto?
     private(set) var isLoggedIn = false
 
+    // MARK: - Properties
     private let fetchHomeHeaderUseCase: FetchHomeHeaderUseCase
     private let fetchHomeDiningListUseCase: FetchHomeDiningListUseCase
     private let fetchCountsUseCase: FetchNewHomeCountsUseCase
@@ -44,6 +48,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     private let fetchBannerUseCase: FetchBannerUseCase
     private var subscriptions: Set<AnyCancellable> = []
 
+    // MARK: - Initializer
     init(
         fetchHomeHeaderUseCase: FetchHomeHeaderUseCase,
         fetchHomeDiningListUseCase: FetchHomeDiningListUseCase,
@@ -66,6 +71,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
         self.fetchBannerUseCase = fetchBannerUseCase
     }
 
+    // MARK: - Public
     func execute(_ input: Input) {
         switch input {
         case .viewDidLoad:
