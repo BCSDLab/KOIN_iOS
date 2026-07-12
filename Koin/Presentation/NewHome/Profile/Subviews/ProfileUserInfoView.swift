@@ -9,6 +9,9 @@ import SwiftUI
 
 struct ProfileUserInfoView: View {
     
+    let loginButtonTapped: ()->Void
+    let logoutButtonTapped: ()->Void
+    let settingButtonTapped: ()->Void
     let userInfo: UserDto?
     
     var body: some View {
@@ -19,7 +22,7 @@ struct ProfileUserInfoView: View {
                     .frame(width: 44, height: 44, alignment: .center)
                     .background(Color.appColor(.neutral0))
                     .clipShape(.circle)
-                    .border(.appColor(.neutral100), width: 0.5, radius: 22)
+                    .border(.appColor(.neutral300), width: 0.5, radius: 22)
                 
                 if let userInfo {
                     VStack(alignment: .leading, spacing: 0) {
@@ -46,7 +49,7 @@ struct ProfileUserInfoView: View {
             .padding(EdgeInsets(top: 20, leading: 20, bottom: 20, trailing: 20))
             
             
-            Button(action: { }) {
+            Button(action: userInfo == nil ? loginButtonTapped : logoutButtonTapped) {
                 HStack(spacing: 16) {
                     Image.appImage(asset: userInfo == nil ? .profileLogin : .profileLogout)
                         .frame(width: 40, height: 40, alignment: .center)
@@ -65,7 +68,7 @@ struct ProfileUserInfoView: View {
             }
             .buttonStyle(.plain)
             
-            Button(action: { }) {
+            Button(action: settingButtonTapped) {
                 HStack(spacing: 16) {
                     Image.appImage(asset: .profileSetting)
                         .frame(width: 40, height: 40, alignment: .center)
@@ -84,6 +87,7 @@ struct ProfileUserInfoView: View {
             }
             .buttonStyle(.plain)
         }
+        .background(Color.appColor(.neutral0))
         .clipShape(RoundedRectangle(cornerRadius: 20))
     }
 }

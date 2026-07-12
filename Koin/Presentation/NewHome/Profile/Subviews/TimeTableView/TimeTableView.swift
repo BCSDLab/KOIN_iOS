@@ -31,6 +31,7 @@ struct LectureDataWrapper: Identifiable {
 
 struct TimeTableView: View {
     
+    // MARK: - Layout
     enum Layout {
         static let topInset: CGFloat = 9
         static let dayHeight: CGFloat = 16
@@ -43,6 +44,7 @@ struct TimeTableView: View {
         }
     }
     
+    // MARK: - Properties
     private let timetableColors: [(body: TimetableColorAsset, header: TimetableColorAsset)] = [
         (.body1, .header1),
         (.body2, .header2),
@@ -61,52 +63,60 @@ struct TimeTableView: View {
         (.body15, .header15)
     ]
     
-    var wrappers: [[LectureDataWrapper]] = []
+    private var wrappers: [[LectureDataWrapper]] = [[], [], [], [], []]
+    private let timeTableTapped: ()->Void
     
-    init(lectures: [LectureData]) {
+    // MARK: - Initializer
+    init(
+        lectures: [LectureData],
+        timeTableTapped: @escaping ()->Void
+    ) {
+        self.timeTableTapped = timeTableTapped
         self.wrappers = splitInDays(makeWrapper(lectures))
     }
     
+    // MARK: - Body
     var body: some View {
         VStack(spacing: 12) {
             Text("내 시간표")
                 .font(.appFont(.pretendardSemiBold, size: 18))
                 .foregroundStyle(Color.ColorSystem.Neutral.gray800)
-                .frame(height: 29, alignment: .leading)
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, idealHeight: 29, alignment: .leading)
             
-            VStack(spacing: 0) {
-                Spacer(minLength: Layout.topInset)
-                
-                TimeTableDayView()
-                
-                HStack(spacing: 0) {
-                    TimeTableHourView()
-                        .border(.appColor(.neutral100), width: Layout.Separator.bold, edges: [.trailing])
-                    Group {
-                        TimeTableLectureContainerView(lectureWrappers: wrappers[0])
-                        TimeTableLectureContainerView(lectureWrappers: wrappers[1])
-                        TimeTableLectureContainerView(lectureWrappers: wrappers[2])
-                        TimeTableLectureContainerView(lectureWrappers: wrappers[3])
-                        TimeTableLectureContainerView(lectureWrappers: wrappers[4])
+            Button(action: timeTableTapped) {
+                VStack(spacing: 0) {
+                    Spacer(minLength: Layout.topInset)
+                    
+                    TimeTableDayView()
+                    
+                    HStack(spacing: 0) {
+                        TimeTableHourView()
+                            .border(.appColor(.neutral100), width: Layout.Separator.bold, edges: [.trailing])
+                        Group {
+                            TimeTableLectureContainerView(lectureWrappers: wrappers[0])
+                            TimeTableLectureContainerView(lectureWrappers: wrappers[1])
+                            TimeTableLectureContainerView(lectureWrappers: wrappers[2])
+                            TimeTableLectureContainerView(lectureWrappers: wrappers[3])
+                            TimeTableLectureContainerView(lectureWrappers: wrappers[4])
+                        }
+                        .frame(maxWidth: .infinity)
+                        .border(.appColor(.neutral100), width: Layout.Separator.thin, edges: [.trailing])
                     }
-                    .frame(maxWidth: .infinity)
-                    .border(.appColor(.neutral100), width: Layout.Separator.thin, edges: [.trailing])
                 }
+                .background {
+                    Color.appColor(.neutral0)
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 20))
             }
-            .background {
-                Color.appColor(.neutral0)
-            }
-            .clipShape(RoundedRectangle(cornerRadius: 20))
+            .buttonStyle(.plain)
         }
     }
 }
 
 extension TimeTableView {
     
-    
-    
     private func makeWrapper(_ lectures: [LectureData]) -> [LectureDataWrapper] {
+        // lecture(classTime: [0, 1, 5, 6]) 를 lecture(classTime: [0, 1]), lecture(classTime: [5, 6]) 으로 나눔
         func splitLecture() -> [LectureData] {
             lectures.flatMap { lecture in
                 let classTimes = lecture.classTime
@@ -128,10 +138,12 @@ extension TimeTableView {
             }
         }
         
+        // lecture id 마다 고유한 colors 인덱스를 지정
         let colorIndex = lectures.reduce(into: [Int: Int]()) { (result, lecture) in
             result[lecture.id] = min(result[lecture.id] ?? result.count, timetableColors.count - 1)
         }
         
+        // wrapper로 변환
         return splitLecture().map { lecture in
             LectureDataWrapper(
                 lecture: lecture,
