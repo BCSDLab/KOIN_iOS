@@ -55,30 +55,34 @@ final class ProfileViewModel: SwiftUIViewModelProtocol {
 extension ProfileViewModel {
     
     private func fetchUserInfo() {
-        fetchUserDataUseCase.execute().sink(
-            receiveCompletion: { [weak self] completion in
-                if case .failure = completion {
-                    self?.userInfo = nil
-                    self?.lectures.removeAll()
+        fetchUserDataUseCase.execute()
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    if case .failure = completion {
+                        self?.userInfo = nil
+                        self?.lectures.removeAll()
+                    }
+                },
+                receiveValue: { [weak self] response in
+                    self?.userInfo = response
                 }
-            },
-            receiveValue: { [weak self] response in
-                self?.userInfo = response
-            }
-        ).store(in: &subscriptions)
+            ).store(in: &subscriptions)
     }
     
     private func fetchTimeTable() {} // TODO: - API
     
     private func logout() {
-        deleteDeviceTokenUseCase.execute().replaceError(with: ()).sink { [weak self] in
-            guard let self else { return }
-            KeychainWorker.shared.delete(key: .access)
-            KeychainWorker.shared.delete(key: .refresh)
-            UserDataManager.shared.resetUserData()
-            userInfo = nil
-            lectures.removeAll()
-        }.store(in: &subscriptions)
+        deleteDeviceTokenUseCase.execute().replaceError(with: ())
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self else { return }
+                KeychainWorker.shared.delete(key: .access)
+                KeychainWorker.shared.delete(key: .refresh)
+                UserDataManager.shared.resetUserData()
+                userInfo = nil
+                lectures.removeAll()
+            }.store(in: &subscriptions)
     }
 }
 

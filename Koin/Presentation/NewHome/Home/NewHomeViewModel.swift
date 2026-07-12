@@ -98,6 +98,7 @@ extension NewHomeViewModel {
 
     private func checkVersion() {
         checkVersionUseCase.execute()
+            .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { [weak self] response in
@@ -111,6 +112,7 @@ extension NewHomeViewModel {
 
     private func checkLogin(completion: @escaping (() -> Void)) {
         checkLoginUseCase.execute()
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] isLoggedIn in
                 self?.isLoggedIn = isLoggedIn
                 completion()
@@ -122,6 +124,7 @@ extension NewHomeViewModel {
         guard UserDefaults.standard.bool(forKey: "forceModal") == false else { return }
 
         fetchUserDataUseCase.execute()
+            .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { [weak self] userData in
@@ -153,6 +156,7 @@ extension NewHomeViewModel {
             fetchHomeDiningListUseCase.execute(),
             fetchCountsUseCase.execute()
         )
+        .receive(on: DispatchQueue.main)
         .sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
@@ -181,6 +185,7 @@ extension NewHomeViewModel {
         }
 
         fetchBannerUseCase.execute()
+            .receive(on: DispatchQueue.main)
             .sink(
                 receiveCompletion: { _ in },
                 receiveValue: { [weak self] banner in
