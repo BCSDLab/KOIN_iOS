@@ -157,8 +157,15 @@ extension TimeTableView {
         var result: [[LectureDataWrapper]] = [[], [], [], [], []]
         
         for wrapper in wrappers {
-            guard let classTime = wrapper.lecture.classTime.first else { continue }
+            guard let classTime = wrapper.lecture.classTime.first else {
+                print("classTime 배열이 비어있음")
+                continue
+            }
             let day = classTime / 100
+            guard result.indices.contains(day) else {
+                print("index 범위 오류")
+                continue
+            }
             result[day].append(wrapper)
         }
         
