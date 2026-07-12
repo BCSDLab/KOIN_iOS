@@ -628,6 +628,9 @@
 		7CED923B2EF2D26000457128 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED923A2EF2D26000457128 /* Coordinator.swift */; };
 		7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */; };
 		7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */; };
+		7CF77B3A300254BE003642C1 /* ProfileHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B39300254BE003642C1 /* ProfileHostingController.swift */; };
+		7CF77B3C300254C8003642C1 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B3B300254C8003642C1 /* ProfileView.swift */; };
+		7CF77B3E300254CD003642C1 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B3D300254CD003642C1 /* ProfileViewModel.swift */; };
 		7CF77B4130027314003642C1 /* ProfileUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4030027314003642C1 /* ProfileUserInfoView.swift */; };
 		7CF77B4430027321003642C1 /* TimeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4330027321003642C1 /* TimeTableView.swift */; };
 		7CF77B473002752A003642C1 /* TimeTableDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B463002752A003642C1 /* TimeTableDayView.swift */; };
@@ -1628,6 +1631,9 @@
 		7CED923A2EF2D26000457128 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionView.swift; sourceTree = "<group>"; };
 		7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		7CF77B39300254BE003642C1 /* ProfileHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHostingController.swift; sourceTree = "<group>"; };
+		7CF77B3B300254C8003642C1 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
+		7CF77B3D300254CD003642C1 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		7CF77B4030027314003642C1 /* ProfileUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserInfoView.swift; sourceTree = "<group>"; };
 		7CF77B4330027321003642C1 /* TimeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableView.swift; sourceTree = "<group>"; };
 		7CF77B463002752A003642C1 /* TimeTableDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableDayView.swift; sourceTree = "<group>"; };
@@ -4336,6 +4342,9 @@
 			isa = PBXGroup;
 			children = (
 				7CF77B3F300254CF003642C1 /* Subviews */,
+				7CF77B39300254BE003642C1 /* ProfileHostingController.swift */,
+				7CF77B3B300254C8003642C1 /* ProfileView.swift */,
+				7CF77B3D300254CD003642C1 /* ProfileViewModel.swift */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -6388,6 +6397,7 @@
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */,
 				7CA60D702F661B37007C08C1 /* CallVanListRequestDto.swift in Sources */,
+				7CF77B3E300254CD003642C1 /* ProfileViewModel.swift in Sources */,
 				D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */,
 				7CC42B4B2F59941200940CE1 /* FetchCallVanListUseCase.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
@@ -6505,6 +6515,7 @@
 				835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
 				D29F21F82C5085B900994554 /* RefreshTokenRequest.swift in Sources */,
+				7CF77B3A300254BE003642C1 /* ProfileHostingController.swift in Sources */,
 				7CA63A272F1AF80000226F86 /* LostItemListViewModel.swift in Sources */,
 				D2FB23712C0412C70098BA2B /* EventParameter.swift in Sources */,
 				D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */,
@@ -6522,6 +6533,7 @@
 				7C0F4A8A2FEE0AE80045E163 /* View+hideKeyboardWhenTapAround.swift in Sources */,
 				7C7CCE742F86866B00E3A54B /* CallVanRestriction.swift in Sources */,
 				D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */,
+				7CF77B3C300254C8003642C1 /* ProfileView.swift in Sources */,
 				83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */,
 				D2D4627E2D64835B00C60864 /* CreateChatRoomUseCase.swift in Sources */,
 				D2D4626C2D63BAC600C60864 /* ChatAPI.swift in Sources */,

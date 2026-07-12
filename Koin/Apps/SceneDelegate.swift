@@ -38,6 +38,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
         window.rootViewController = makeHomeTabBarController()
+        
         self.window = window
         window.makeKeyAndVisible()
         
@@ -179,16 +180,12 @@ extension SceneDelegate {
 extension SceneDelegate {
     
     private func makeHomeTabBarController() -> HomeTabBarController {
-        let homeRootView = makeHomeView()
-        let homeViewController = HomeHostingController(rootView: homeRootView)
-
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
-        let categoryViewController = CategoryHostingController(rootView: categoryRootView)
-
+        let homeViewController = makeHomeHostingController()
+        let categoryViewController = makeCategoryHostingController()
         let noticeViewController = makeNoticeListViewController()
-        let profileViewController = UIViewController()
+        let profileViewController = makeProfileHostingController()
         
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = HomeTabBarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
 
         return HomeTabBarController(
@@ -202,7 +199,7 @@ extension SceneDelegate {
         )
     }
 
-    private func makeHomeView() -> HomeView {
+    private func makeHomeHostingController() -> UIViewController {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
@@ -240,7 +237,14 @@ extension SceneDelegate {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             fetchBannerUseCase: DefaultFetchBannerUseCase(coreRepository: coreRepository)
         )
-        return HomeView(viewModel: viewModel)
+        let homeView = HomeView(viewModel: viewModel)
+        return HomeHostingController(rootView: homeView)
+    }
+    
+    private func makeCategoryHostingController() -> UIViewController {
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
+        return CategoryHostingController(rootView: categoryRootView)
     }
     
     private func makeNoticeListViewController() -> UIViewController {
@@ -257,6 +261,19 @@ extension SceneDelegate {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         return NoticeListViewController(viewModel: viewModel)
+    }
+    
+    private func makeProfileHostingController() -> UIViewController {
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let deleteDeviceTokenUseCase = DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService()))
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let profileViewModel = ProfileViewModel(
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            deleteDeviceTokenUseCase: deleteDeviceTokenUseCase,
+            fetchUserDataUseCase: fetchUserDataUseCase
+        )
+        let profileView = ProfileView(viewModel: profileViewModel)
+        return ProfileHostingController(rootView: profileView)
     }
 
     @objc private func presentErrorViewController() {
