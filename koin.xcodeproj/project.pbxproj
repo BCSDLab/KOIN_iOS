@@ -628,6 +628,7 @@
 		7CED923B2EF2D26000457128 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED923A2EF2D26000457128 /* Coordinator.swift */; };
 		7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */; };
 		7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */; };
+		7CF77B4130027314003642C1 /* ProfileUserInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4030027314003642C1 /* ProfileUserInfoView.swift */; };
 		7CF77B4430027321003642C1 /* TimeTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4330027321003642C1 /* TimeTableView.swift */; };
 		7CF77B473002752A003642C1 /* TimeTableDayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B463002752A003642C1 /* TimeTableDayView.swift */; };
 		7CF77B4930027539003642C1 /* TimeTableHourView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4830027539003642C1 /* TimeTableHourView.swift */; };
@@ -1627,6 +1628,7 @@
 		7CED923A2EF2D26000457128 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionView.swift; sourceTree = "<group>"; };
 		7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		7CF77B4030027314003642C1 /* ProfileUserInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileUserInfoView.swift; sourceTree = "<group>"; };
 		7CF77B4330027321003642C1 /* TimeTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableView.swift; sourceTree = "<group>"; };
 		7CF77B463002752A003642C1 /* TimeTableDayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableDayView.swift; sourceTree = "<group>"; };
 		7CF77B4830027539003642C1 /* TimeTableHourView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableHourView.swift; sourceTree = "<group>"; };
@@ -4341,6 +4343,7 @@
 		7CF77B3F300254CF003642C1 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				7CF77B4030027314003642C1 /* ProfileUserInfoView.swift */,
 				7CF77B4230027319003642C1 /* TimeTableView */,
 			);
 			path = Subviews;
@@ -6257,6 +6260,7 @@
 				7CBFAF192FBD393D001D64E3 /* ShopBenefitEmptyThumbnailView.swift in Sources */,
 				7CED91BA2EF2D1F900457128 /* CertificationView.swift in Sources */,
 				7CED91BB2EF2D1F900457128 /* EnterFormViewController.swift in Sources */,
+				7CF77B4130027314003642C1 /* ProfileUserInfoView.swift in Sources */,
 				7CED91BD2EF2D1F900457128 /* RecommendedSearchCollectionViewCell.swift in Sources */,
 				7CED91C02EF2D1F900457128 /* ChatTextTableViewCell.swift in Sources */,
 				7CED91C12EF2D1F900457128 /* ShopViewModel.swift in Sources */,
