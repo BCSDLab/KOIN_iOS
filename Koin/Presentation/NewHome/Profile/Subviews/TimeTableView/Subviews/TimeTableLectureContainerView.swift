@@ -9,14 +9,14 @@ import SwiftUI
 
 enum TimeTableRow: Identifiable {
     case empty(at: Int)
-    case some(LectureDataWrapper)
+    case some(at: Int, LectureDataWrapper)
     
     var id: Int {
         switch self {
         case .empty(let row):
             return row
-        case .some(let wrapper):
-            return wrapper.id
+        case .some(let row, _):
+            return row
         }
     }
 }
@@ -40,7 +40,7 @@ struct TimeTableLectureContainerView: View {
                 case .empty:
                     TimeTableEmptyLectureView()
                         .frame(height: TimeTableView.Layout.timeHeight)
-                case .some(let wrapper):
+                case .some(_, let wrapper):
                     TimeTableLectureView(
                         headerColor: wrapper.header,
                         bodyColor: wrapper.body,
@@ -56,10 +56,10 @@ struct TimeTableLectureContainerView: View {
 extension TimeTableLectureContainerView {
     
     private func makeRows(wrappers: [LectureDataWrapper]) -> [TimeTableRow] {
-        func findLecture(at time: Int) -> LectureDataWrapper? {
+        func findLecture(at row: Int) -> LectureDataWrapper? {
             return wrappers.first(where: {
                 if let _ = $0.lecture.classTime.first(where: {
-                    $0 % 10 == time
+                    $0 % 10 == row
                 }) {
                     return true
                 } else {
@@ -70,11 +70,11 @@ extension TimeTableLectureContainerView {
         
         var result: [TimeTableRow] = []
         
-        for time in 0..<numberOfRows {
-            if let wrapper = findLecture(at: time) {
-                result.append(TimeTableRow.some(wrapper))
+        for row in 0..<numberOfRows {
+            if let wrapper = findLecture(at: row) {
+                result.append(TimeTableRow.some(at: row, wrapper))
             } else {
-                result.append(TimeTableRow.empty(at: time))
+                result.append(TimeTableRow.empty(at: row))
             }
         }
         
@@ -82,12 +82,12 @@ extension TimeTableLectureContainerView {
     }
     
     private func mergeConsecutiveRows(_ wrappers: [TimeTableRow]) -> [TimeTableRow] {
-        wrappers.reduce(into: [TimeTableRow]()) { (result, row) in
-            switch (result.last, row) {
-            case let (.some(previous), .some(current)) where previous.id == current.id:
-                break
-            default:
-                result.append(row)
+        wrappers.reduce(into: [TimeTableRow]()) { (result, newRow) in
+            if let lastRow = result.last,
+               case .some(_, let lastWrapper) = lastRow,
+               case .some(_, let newWrapper) = newRow,
+               lastWrapper.lecture.id != newWrapper.lecture.id {
+                result.append(newRow)
             }
         }
     }
