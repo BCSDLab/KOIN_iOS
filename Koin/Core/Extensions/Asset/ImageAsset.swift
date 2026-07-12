@@ -264,6 +264,10 @@ public enum ImageAsset: String {
     case notificationDining
     case notificationLostItem
     case notificationShop
+    case profileHuman
+    case profileLogin
+    case profileLogout
+    case profileSetting
     case tabbarCategory
     case tabbarHome
     case tabbarNotice
