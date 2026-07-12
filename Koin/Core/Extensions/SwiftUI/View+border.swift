@@ -21,12 +21,72 @@ private struct BorderModifier: ViewModifier {
     }
 }
 
+private struct EdgeBorder: Shape {
+    var borderWidth: CGFloat
+    var edges: Set<Edge>
+    
+    init(width borderWidth: CGFloat, edges: Set<Edge>) {
+        self.borderWidth = borderWidth
+        self.edges = edges
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        for edge in edges {
+            var x: CGFloat
+            var y: CGFloat
+            var width: CGFloat
+            var height: CGFloat
+            
+            switch edge {
+            case .top:
+                x = 0
+                y = 0
+                width = rect.width
+                height = borderWidth
+            case .bottom:
+                x = 0
+                y = rect.height - borderWidth
+                width = rect.width
+                height = borderWidth
+            case .leading:
+                x = 0
+                y = 0
+                width = borderWidth
+                height = rect.height
+            case .trailing:
+                x = rect.width - borderWidth
+                y = 0
+                width = borderWidth
+                height = rect.height
+            }
+            path.addRect(CGRect(x: x, y: y, width: width, height: height))
+        }
+        return path
+    }
+}
+
 extension View {
     public func border(
         _ color: Color,
         width: CGFloat,
-        radius: CGFloat
+        radius: CGFloat = 0
     ) -> some View {
         modifier(BorderModifier(color: color, width: width, radius: radius))
+    }
+    
+    public func border(
+        _ color: Color,
+        width: CGFloat,
+        edges: Set<Edge>
+    ) -> some View {
+        self
+            .overlay(
+                EdgeBorder(
+                    width: width,
+                    edges: edges
+                )
+            .fill(color)
+        )
     }
 }
