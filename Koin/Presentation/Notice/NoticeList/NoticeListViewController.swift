@@ -70,7 +70,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     init(viewModel: NoticeListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = "게시판"
     }
     
     required init?(coder: NSCoder) {
@@ -86,8 +85,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
         inputSubject.send(.checkAuth)
-        let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
-        navigationItem.rightBarButtonItem = rightBarButton
         inputSubject.send(.changeBoard(viewModel.noticeListType))
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
     }
@@ -95,13 +92,10 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getUserKeywordList())
-        configureNavigationBar(style: .empty)
+        configureNavigationBar()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
+    // MARK: - Bind
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
@@ -193,6 +187,50 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             }
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostType, .click, text))
         }.store(in: &subscriptions)
+    }
+}
+
+extension NoticeListViewController {
+    private func configureNavigationBar() {
+        configureNavigationBar(style: .empty)
+        configureLeftBarItem()
+        configureRightBarButton()
+    }
+
+    private func configureLeftBarItem() {
+        let leftBarButtonItem = UIBarButtonItem(customView: HomeLogoView())
+        navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+
+    private func configureRightBarButton(hasDot: Bool = false) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(rightBarButtonTapped)
+        )
+    }
+
+    @objc private func rightBarButtonTapped() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notification, .click, "알림 아이콘"))
+        navigateToNotification()
+    }
+     
+    private func navigateToNotification() {
+        let notificatioHistoryRepository = DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService())
+        let fetchNotificationHistoryUseCase = DefaultFetchNotificationHistoryUseCase(notificationHistoryRepository: notificatioHistoryRepository)
+        let deleteNotificationHistoryUseCase = DefaultDeleteNotificationHistoryUseCase(repository: notificatioHistoryRepository)
+        let updateNotificationHistoryUseCase = DefaultUpdateNotificationHistoryUseCase(repository: notificatioHistoryRepository)
+        
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NotificationViewModel(
+            fetchNotificationHistoryUseCase: fetchNotificationHistoryUseCase,
+            deleteNotificationHistoryUseCase: deleteNotificationHistoryUseCase,
+            updateNotificationHistoryUseCase: updateNotificationHistoryUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let viewController = NotificationViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
