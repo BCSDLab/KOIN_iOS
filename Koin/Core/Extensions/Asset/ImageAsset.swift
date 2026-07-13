@@ -199,7 +199,9 @@ public enum ImageAsset: String {
     
     // MARK: - Notice
     case noticeLoginToolTip
+    case noticeManageKeyword
     case noticeNotLoginToolTip
+    case noticeSearch
     
     // MARK: - Shop
     case call
