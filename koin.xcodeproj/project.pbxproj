@@ -639,6 +639,20 @@
 		7CF77B4D30028719003642C1 /* TimeTableEmptyLectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4C30028719003642C1 /* TimeTableEmptyLectureView.swift */; };
 		7CF77B4F30028737003642C1 /* TimeTableLectureContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4E30028737003642C1 /* TimeTableLectureContainerView.swift */; };
 		7CF77B543003B276003642C1 /* HomeLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B533003B276003642C1 /* HomeLogoView.swift */; };
+		7CF77B6330056E85003642C1 /* NoticeKeywordScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B6230056E85003642C1 /* NoticeKeywordScrollView.swift */; };
+		7CF77B6530056EB9003642C1 /* NoticeKeywordSearchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B6430056EB9003642C1 /* NoticeKeywordSearchButton.swift */; };
+		7CF77B6730056EC1003642C1 /* NoticeKeywordManageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B6630056EC1003642C1 /* NoticeKeywordManageButton.swift */; };
+		7CF77B6930056EC9003642C1 /* NoticeKeywordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B6830056EC9003642C1 /* NoticeKeywordButton.swift */; };
+		7CF77B6B30056ED4003642C1 /* NoticeKeywordAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B6A30056ED4003642C1 /* NoticeKeywordAddButton.swift */; };
+		7CF77B6D30057468003642C1 /* NoticeKeywordAllButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B6C30057468003642C1 /* NoticeKeywordAllButton.swift */; };
+		7CF77B7430058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B7330058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift */; };
+		7CF77B7D30058F3E003642C1 /* NoticeKeywordAllButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B7930058F3E003642C1 /* NoticeKeywordAllButton.swift */; };
+		7CF77B7E30058F3E003642C1 /* NoticeKeywordScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B7630058F3E003642C1 /* NoticeKeywordScrollView.swift */; };
+		7CF77B7F30058F3E003642C1 /* NoticeKeywordButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B7A30058F3E003642C1 /* NoticeKeywordButton.swift */; };
+		7CF77B8030058F3E003642C1 /* NoticeKeywordManageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B7830058F3E003642C1 /* NoticeKeywordManageButton.swift */; };
+		7CF77B8130058F3E003642C1 /* NoticeKeywordScrollViewHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B7530058F3E003642C1 /* NoticeKeywordScrollViewHostingController.swift */; };
+		7CF77B8230058F3E003642C1 /* NoticeKeywordSearchButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B7730058F3E003642C1 /* NoticeKeywordSearchButton.swift */; };
+		7CF77B8330058F3E003642C1 /* NoticeKeywordAddButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B7B30058F3E003642C1 /* NoticeKeywordAddButton.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
@@ -1643,6 +1657,20 @@
 		7CF77B4C30028719003642C1 /* TimeTableEmptyLectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableEmptyLectureView.swift; sourceTree = "<group>"; };
 		7CF77B4E30028737003642C1 /* TimeTableLectureContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableLectureContainerView.swift; sourceTree = "<group>"; };
 		7CF77B533003B276003642C1 /* HomeLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLogoView.swift; sourceTree = "<group>"; };
+		7CF77B6230056E85003642C1 /* NoticeKeywordScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordScrollView.swift; sourceTree = "<group>"; };
+		7CF77B6430056EB9003642C1 /* NoticeKeywordSearchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordSearchButton.swift; sourceTree = "<group>"; };
+		7CF77B6630056EC1003642C1 /* NoticeKeywordManageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordManageButton.swift; sourceTree = "<group>"; };
+		7CF77B6830056EC9003642C1 /* NoticeKeywordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordButton.swift; sourceTree = "<group>"; };
+		7CF77B6A30056ED4003642C1 /* NoticeKeywordAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordAddButton.swift; sourceTree = "<group>"; };
+		7CF77B6C30057468003642C1 /* NoticeKeywordAllButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordAllButton.swift; sourceTree = "<group>"; };
+		7CF77B7330058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordScrollViewHostingController.swift; sourceTree = "<group>"; };
+		7CF77B7530058F3E003642C1 /* NoticeKeywordScrollViewHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordScrollViewHostingController.swift; sourceTree = "<group>"; };
+		7CF77B7630058F3E003642C1 /* NoticeKeywordScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordScrollView.swift; sourceTree = "<group>"; };
+		7CF77B7730058F3E003642C1 /* NoticeKeywordSearchButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordSearchButton.swift; sourceTree = "<group>"; };
+		7CF77B7830058F3E003642C1 /* NoticeKeywordManageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordManageButton.swift; sourceTree = "<group>"; };
+		7CF77B7930058F3E003642C1 /* NoticeKeywordAllButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordAllButton.swift; sourceTree = "<group>"; };
+		7CF77B7A30058F3E003642C1 /* NoticeKeywordButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordButton.swift; sourceTree = "<group>"; };
+		7CF77B7B30058F3E003642C1 /* NoticeKeywordAddButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordAddButton.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
@@ -3572,6 +3600,7 @@
 				7CED8F472EF2D1F900457128 /* NoticeListTableView */,
 				7CED8F4A2EF2D1F900457128 /* NoticeKeywordCollectionView */,
 				7CED8F4B2EF2D1F900457128 /* WriteTypeModalViewController.swift */,
+				7CF77B5930056D87003642C1 /* NoticeKeywordScrollView */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -4380,6 +4409,27 @@
 				7CF77B4C30028719003642C1 /* TimeTableEmptyLectureView.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CF77B5930056D87003642C1 /* NoticeKeywordScrollView */ = {
+			isa = PBXGroup;
+			children = (
+				7CF77B7330058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift */,
+				7CF77B6230056E85003642C1 /* NoticeKeywordScrollView.swift */,
+				7CF77B6430056EB9003642C1 /* NoticeKeywordSearchButton.swift */,
+				7CF77B6630056EC1003642C1 /* NoticeKeywordManageButton.swift */,
+				7CF77B6C30057468003642C1 /* NoticeKeywordAllButton.swift */,
+				7CF77B6830056EC9003642C1 /* NoticeKeywordButton.swift */,
+				7CF77B6A30056ED4003642C1 /* NoticeKeywordAddButton.swift */,
+			);
+			path = NoticeKeywordScrollView;
+			sourceTree = "<group>";
+		};
+		7CF77B7C30058F3E003642C1 /* NoticeKeywordScrollView 2 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "NoticeKeywordScrollView 2";
 			sourceTree = "<group>";
 		};
 		833D9C102C6B269000982145 /* NoticeList */ = {
@@ -5767,6 +5817,7 @@
 				7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */,
 				7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
+				7CF77B6D30057468003642C1 /* NoticeKeywordAllButton.swift in Sources */,
 				7C7F43222F65F1F100CC5860 /* CallVanListRequest.swift in Sources */,
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,
 				7CA0D6252EC75FFA00E9A282 /* ZoomedImageViewControllerB.swift in Sources */,
@@ -5784,6 +5835,7 @@
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
+				7CF77B6330056E85003642C1 /* NoticeKeywordScrollView.swift in Sources */,
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
 				7C0C189B2F68AAFA001781B3 /* CallVanChatRequestDto.swift in Sources */,
 				83EBB87A2D0FDFD700346018 /* KoinPickerView.swift in Sources */,
@@ -5971,6 +6023,7 @@
 				7CED90F82EF2D1F900457128 /* MenuBackgronudView.swift in Sources */,
 				7CED90FA2EF2D1F900457128 /* LandDetailViewController.swift in Sources */,
 				7CED90FB2EF2D1F900457128 /* TabBarCollectionViewCell.swift in Sources */,
+				7CF77B6930056EC9003642C1 /* NoticeKeywordButton.swift in Sources */,
 				7CED90FD2EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift in Sources */,
 				7CED90FE2EF2D1F900457128 /* SelectTimeView.swift in Sources */,
 				7CED90FF2EF2D1F900457128 /* PolicyViewController.swift in Sources */,
@@ -6072,6 +6125,7 @@
 				7CED915E2EF2D1F900457128 /* SettingsViewModel.swift in Sources */,
 				7CED91602EF2D1F900457128 /* CategoryCollectionViewCell.swift in Sources */,
 				7CED91632EF2D1F900457128 /* HouseInfoView.swift in Sources */,
+				7CF77B6730056EC1003642C1 /* NoticeKeywordManageButton.swift in Sources */,
 				7CED91642EF2D1F900457128 /* ShopSummaryViewModel.swift in Sources */,
 				7CED91652EF2D1F900457128 /* NoticeListHeaderView.swift in Sources */,
 				7C7F56BB2FFBA18100847151 /* NotificationHistoryService.swift in Sources */,
@@ -6149,6 +6203,7 @@
 				7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */,
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,
 				7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */,
+				7CF77B7430058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift in Sources */,
 				7CED91922EF2D1F900457128 /* ShopSummaryViewController.swift in Sources */,
 				7CED91932EF2D1F900457128 /* ReviewListCollectionView.swift in Sources */,
 				7C05D07F2FBC2A0E00F4D825 /* ShopBenefitTableViewCell.swift in Sources */,
@@ -6362,6 +6417,7 @@
 				7CC42B852F5D719C00940CE1 /* CallVanView.swift in Sources */,
 				7C7F43262F65F2F900CC5860 /* CallVanPostRequest.swift in Sources */,
 				D20AB9582C553621006BC684 /* NotiService.swift in Sources */,
+				7CF77B6530056EB9003642C1 /* NoticeKeywordSearchButton.swift in Sources */,
 				D29F21DF2C4F2E3000994554 /* FetchShopDataRequest.swift in Sources */,
 				D2D4627A2D63D4D400C60864 /* BlockUserUseCase.swift in Sources */,
 				D20AB9652C554B95006BC684 /* DiningLikeRequest.swift in Sources */,
@@ -6470,6 +6526,7 @@
 				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
 				7C16AA392F3E9FBC0071ABE6 /* ErrorViewController.swift in Sources */,
+				7CF77B6B30056ED4003642C1 /* NoticeKeywordAddButton.swift in Sources */,
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
 				B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */,
