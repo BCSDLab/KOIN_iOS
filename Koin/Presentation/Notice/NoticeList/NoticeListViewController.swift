@@ -12,7 +12,7 @@ import UIKit
 
 final class NoticeListViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
-    
+    private var hasAppeared = false
     private let viewModel: NoticeListViewModel
     private let inputSubject: PassthroughSubject<NoticeListViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -91,8 +91,11 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        inputSubject.send(.getUserKeywordList())
         configureNavigationBar()
+        if !hasAppeared {
+            inputSubject.send(.getUserKeywordList())
+            hasAppeared = true
+        }
     }
     
     // MARK: - Bind
@@ -103,8 +106,8 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
-            case let .updateUserKeywordList(noticeKeywordList, keywordIdx):
-                self?.updateUserKeywordList(keywords: noticeKeywordList, keywordIdx: keywordIdx)
+            case let .updateUserKeywordList(noticeKeywordList, selectedKeyword):
+                self?.updateUserKeywordList(keywords: noticeKeywordList, selectedKeyword: selectedKeyword)
             case let .isLogined(isLogined):
                 self?.checkAndShowToolTip(isLogined: isLogined)
             case let .showIsLogined(isLogined):
@@ -130,17 +133,24 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             self?.navigateToNoticeData(noticeId: item.0, boardId: item.1)
         }.store(in: &subscriptions)
         
+        noticeTableView.searchButtonTappedPublisher
+            .sink { [weak self] in
+                self?.searchButtonTapped()
+            }.store(in: &subscriptions)
         noticeTableView.keywordAddBtnTapPublisher
             .sink { [weak self] in
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.addKeyword, .click, "키워드추가"))
                 self?.navigateToManageKeywordVC()
             }.store(in: &subscriptions)
         
+        noticeTableView.keywordAllButtonTappedPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
+                self?.inputSubject.send(.getUserKeywordList(nil))
+            }
+            .store(in: &subscriptions)
         noticeTableView.keywordTapPublisher
             .sink { [weak self] keyword in
-                if keyword.id == -1 {
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
-                }
                 self?.inputSubject.send(.getUserKeywordList(keyword))
             }.store(in: &subscriptions)
         
@@ -296,8 +306,6 @@ extension NoticeListViewController {
                 }
             }
     }
-
-
     
     private func navigateToManageKeywordVC() {
         let noticeListService = DefaultNoticeService()
@@ -345,8 +353,8 @@ extension NoticeListViewController {
         }
     }
     
-    private func updateUserKeywordList(keywords: [NoticeKeywordDto], keywordIdx: Int) {
-        noticeTableView.updateKeywordList(keywordList: keywords, keywordIdx: keywordIdx)
+    private func updateUserKeywordList(keywords: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
+        noticeTableView.updateKeywordList(keywordList: keywords, selectedKeyword: selectedKeyword)
     }
     
     private func configureSwipeGestures() {

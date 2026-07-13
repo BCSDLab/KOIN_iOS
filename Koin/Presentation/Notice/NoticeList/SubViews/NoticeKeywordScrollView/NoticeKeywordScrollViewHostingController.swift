@@ -37,8 +37,8 @@ final class NoticeKeywordScrollViewHostingController: UIHostingController<Notice
     }
     
     // MARK: - Public
-    func updateKeyWordsList(keywordList: [NoticeKeywordDto], keywordIdx: Int) {
+    func updateKeyWordsList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
         store.noticeKeywordList = keywordList
-        store.keywordIdx = keywordIdx
+        store.selectedKeyword = selectedKeyword
     }
 }

@@ -9,11 +9,11 @@ import SwiftUI
 
 final class NoticeKeywordStore: ObservableObject {
     @Published var noticeKeywordList: [NoticeKeywordDto] = []
-    @Published var keywordIdx: Int = 0
+    @Published var selectedKeyword: NoticeKeywordDto?
     
-    func updateKeyWordsList(keywordList: [NoticeKeywordDto], keywordIdx: Int) {
+    func updateKeyWordsList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
         self.noticeKeywordList = keywordList
-        self.keywordIdx = keywordIdx
+        self.selectedKeyword = selectedKeyword
     }
 }
 
@@ -21,7 +21,6 @@ struct NoticeKeywordScrollView: View {
     
     // MARK: - Properties
     @ObservedObject private var store: NoticeKeywordStore
-    @State private var selectedKeyword: NoticeKeywordDto? = nil
     
     private let searchButtonTapped: ()->Void
     private let manageButtonTapped: ()->Void
@@ -57,9 +56,9 @@ struct NoticeKeywordScrollView: View {
                 NoticeKeywordAllButton(
                     action: {
                         keywordAllButtonTapped()
-                        selectedKeyword = nil
+                        store.selectedKeyword = nil
                     },
-                    isSelected: selectedKeyword == nil
+                    isSelected: store.selectedKeyword == nil
                 )
                 
                 switch store.noticeKeywordList.isEmpty {
@@ -68,9 +67,9 @@ struct NoticeKeywordScrollView: View {
                         NoticeKeywordButton(
                             action: {
                                 keywordButtonTapped(keyword)
-                                selectedKeyword = keyword
+                                store.selectedKeyword = keyword
                             },
-                            isSelected: selectedKeyword == keyword,
+                            isSelected: store.selectedKeyword == keyword,
                             keyword: keyword.keyword
                         )
                     }
