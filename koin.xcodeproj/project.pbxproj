@@ -638,6 +638,7 @@
 		7CF77B4B30027569003642C1 /* TimeTableLectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4A30027569003642C1 /* TimeTableLectureView.swift */; };
 		7CF77B4D30028719003642C1 /* TimeTableEmptyLectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4C30028719003642C1 /* TimeTableEmptyLectureView.swift */; };
 		7CF77B4F30028737003642C1 /* TimeTableLectureContainerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B4E30028737003642C1 /* TimeTableLectureContainerView.swift */; };
+		7CF77B543003B276003642C1 /* HomeLogoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B533003B276003642C1 /* HomeLogoView.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
@@ -1641,6 +1642,7 @@
 		7CF77B4A30027569003642C1 /* TimeTableLectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableLectureView.swift; sourceTree = "<group>"; };
 		7CF77B4C30028719003642C1 /* TimeTableEmptyLectureView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableEmptyLectureView.swift; sourceTree = "<group>"; };
 		7CF77B4E30028737003642C1 /* TimeTableLectureContainerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimeTableLectureContainerView.swift; sourceTree = "<group>"; };
+		7CF77B533003B276003642C1 /* HomeLogoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeLogoView.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
@@ -2223,6 +2225,7 @@
 			isa = PBXGroup;
 			children = (
 				7C65FDC12FE69250007831CE /* BannerView */,
+				7CF77B533003B276003642C1 /* HomeLogoView.swift */,
 				7C457B152FCE1BA80011D338 /* HomeHeaderView.swift */,
 				7C457B0A2FCE1BA80011D338 /* DiningView */,
 				7C457B122FCE1BA80011D338 /* MobilityView */,
@@ -5933,6 +5936,7 @@
 				7CED90CF2EF2D1F900457128 /* ChangeMyProfileViewModel.swift in Sources */,
 				7C0C18912F67FA58001781B3 /* ReportCallVanUserUseCase.swift in Sources */,
 				7CED90D02EF2D1F900457128 /* ChatHistoryTableView.swift in Sources */,
+				7CF77B543003B276003642C1 /* HomeLogoView.swift in Sources */,
 				7CED90D12EF2D1F900457128 /* NoticeSearchViewController.swift in Sources */,
 				7CED90D22EF2D1F900457128 /* TagCollectionViewCell.swift in Sources */,
 				7CED90D32EF2D1F900457128 /* LandCollectionView.swift in Sources */,

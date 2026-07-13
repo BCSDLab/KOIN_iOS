@@ -48,18 +48,7 @@ extension ProfileHostingController {
     }
 
     private func configureLeftBarItem() {
-        let leftBarButtonStackView = UIStackView().then {
-            $0.axis = .horizontal
-            $0.alignment = .center
-            $0.spacing = 0
-        }
-        leftBarButtonStackView.addArrangedSubview(UIImageView(image: .appImage(asset: .bcsdSymbolLogo)?.resize(to: .init(width: 46, height: 37))))
-        leftBarButtonStackView.addArrangedSubview(UIImageView(image: .appImage(asset: .koinTextLogo)?.resize(to: .init(width: 51, height: 30))))
-        leftBarButtonStackView.snp.makeConstraints {
-            $0.height.equalTo(37)
-        }
-        
-        let leftBarButtonItem = UIBarButtonItem(customView: leftBarButtonStackView)
+        let leftBarButtonItem = UIBarButtonItem(customView: HomeLogoView())
         navigationItem.leftBarButtonItem = leftBarButtonItem
     }
 
