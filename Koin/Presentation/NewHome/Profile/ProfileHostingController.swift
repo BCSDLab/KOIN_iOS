@@ -19,12 +19,6 @@ final class ProfileHostingController: UIHostingController<ProfileView>, HostingC
         fatalError("init(coder:) has not been implemented")
     }
     
-    // MARK: - Life Cycle
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        configureNavigationBar()
-    }
-    
     // MARK: - Public
     func execute(action: ProfileView.Action) {
         switch action {
@@ -37,53 +31,6 @@ final class ProfileHostingController: UIHostingController<ProfileView>, HostingC
         case .showTimeTable:
             navigationController?.pushViewController(makeTimeTableViewController(), animated: true)
         }
-    }
-}
-
-extension ProfileHostingController {
-    private func configureNavigationBar() {
-        configureNavigationBar(style: .order)
-        configureLeftBarItem()
-        configureRightBarButton()
-    }
-
-    private func configureLeftBarItem() {
-        let leftBarButtonItem = UIBarButtonItem(customView: HomeLogoView())
-        navigationItem.leftBarButtonItem = leftBarButtonItem
-    }
-
-    private func configureRightBarButton(hasDot: Bool = false) {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(rightBarButtonTapped)
-        )
-    }
-
-    @objc private func rightBarButtonTapped() {
-        rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.notification,
-            category: .click,
-            value: "알림 아이콘")
-        navigateToNotification()
-    }
-     
-    private func navigateToNotification() {
-        let notificatioHistoryRepository = DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService())
-        let fetchNotificationHistoryUseCase = DefaultFetchNotificationHistoryUseCase(notificationHistoryRepository: notificatioHistoryRepository)
-        let deleteNotificationHistoryUseCase = DefaultDeleteNotificationHistoryUseCase(repository: notificatioHistoryRepository)
-        let updateNotificationHistoryUseCase = DefaultUpdateNotificationHistoryUseCase(repository: notificatioHistoryRepository)
-        
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = NotificationViewModel(
-            fetchNotificationHistoryUseCase: fetchNotificationHistoryUseCase,
-            deleteNotificationHistoryUseCase: deleteNotificationHistoryUseCase,
-            updateNotificationHistoryUseCase: updateNotificationHistoryUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
-        )
-        let viewController = NotificationViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

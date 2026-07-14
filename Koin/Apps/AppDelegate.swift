@@ -70,6 +70,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
+        // 푸시 알림 도착 전역에 알림 (HomeTabbar에서 관찰)
+        NotificationCenter.default.post(
+            name: NSNotification.Name("Notification Sent"),
+            object: nil
+        )
         // 푸시 알림 옵션 반환
         return [[.banner, .list, .sound]]
     }

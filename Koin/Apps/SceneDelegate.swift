@@ -186,7 +186,11 @@ extension SceneDelegate {
         let profileViewController = makeProfileHostingController()
         
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = HomeTabBarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let checkHasUnreadNotificationHistoryUseCase = DefaultCheckHasUnreadNotificationHistoryUseCase(repository: DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService()))
+        let viewModel = HomeTabBarViewModel(
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            checkHasUnreadNotificationHistoryUseCase: checkHasUnreadNotificationHistoryUseCase
+        )
 
         return HomeTabBarController(
             items: [

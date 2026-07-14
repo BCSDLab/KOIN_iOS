@@ -87,6 +87,8 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
             }
             try container.mainContext.save()
         }
+        
+        postNotificationRead()
     }
     
     func markAllAsRead() async throws {
@@ -102,6 +104,8 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
             }
             try container.mainContext.save()
         }
+        
+        postNotificationRead()
     }
     
     // MARK: - Delete
@@ -116,6 +120,8 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
             })
             try container.mainContext.save()
         }
+        
+        postNotificationRead()
     }
     
     func deleteAll() async throws {
@@ -127,6 +133,8 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
             try container.mainContext.delete(model: NotificationRecord.self)
             try container.mainContext.save()
         }
+        
+        postNotificationRead()
     }
 }
 
@@ -146,5 +154,14 @@ extension DefaultNotificationHistoryService {
             })
             try container.mainContext.save()
         }
+    }
+}
+
+extension DefaultNotificationHistoryService {
+    private func postNotificationRead() {
+        NotificationCenter.default.post(
+            name: NSNotification.Name("Notification Read"),
+            object: nil
+        )
     }
 }
