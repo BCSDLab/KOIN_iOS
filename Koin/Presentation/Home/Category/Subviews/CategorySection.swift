@@ -9,8 +9,8 @@ import SwiftUI
 
 struct CategorySection: View {
     let title: String
-    let items: [NewHomeCategoryItem]
-    let action: (NewHomeCategoryItem) -> Void
+    let items: [HomeCategoryItem]
+    let action: (HomeCategoryItem) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {

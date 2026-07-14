@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct CategoryRow: View {
-    let item: NewHomeCategoryItem
+    let item: HomeCategoryItem
     let action: () -> Void
 
     var body: some View {

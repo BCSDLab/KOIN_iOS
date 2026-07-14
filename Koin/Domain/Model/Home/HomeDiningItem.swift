@@ -22,7 +22,7 @@ extension HomeDiningItem {
             id: diningItem.id,
             placeName: diningItem.place.rawValue,
             timeText: timeText,
-            priceText: diningItem.newHomeDiningPriceText,
+            priceText: diningItem.diningPriceText,
             kcalText: "\(diningItem.kcal)kcal",
             menu: diningItem.menu.joined(separator: " · ")
         )

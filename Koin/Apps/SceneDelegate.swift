@@ -218,7 +218,7 @@ extension SceneDelegate {
             fetchCoopShopListUseCase: DefaultFetchCoopShopListUseCase(diningRepository: diningRepository),
             dateProvider: DefaultDateProvider()
         )
-        let fetchCountsUseCase = DefaultFetchNewHomeCountsUseCase(
+        let fetchCountsUseCase = DefaultFetchHomeCountsUseCase(
             shopRepository: shopRepository,
             callvanRepository: callVanRepository
         )
@@ -230,7 +230,7 @@ extension SceneDelegate {
         )
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         
-        let viewModel = NewHomeViewModel(
+        let viewModel = HomeViewModel(
             fetchHomeHeaderUseCase: fetchHomeHeaderUseCase,
             fetchHomeDiningListUseCase: fetchHomeDiningListUseCase,
             fetchCountsUseCase: fetchCountsUseCase,
