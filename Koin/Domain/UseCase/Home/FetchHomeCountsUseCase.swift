@@ -1,5 +1,5 @@
 //
-//  FetchNewHomeCountsUseCase.swift
+//  FetchHomeCountsUseCase.swift
 //  koin
 //
 //  Created by 홍기정 on 6/2/26.
@@ -8,11 +8,11 @@
 import Combine
 import Foundation
 
-protocol FetchNewHomeCountsUseCase {
-    func execute() -> AnyPublisher<NewHomeCounts, ErrorResponse>
+protocol FetchHomeCountsUseCase {
+    func execute() -> AnyPublisher<HomeCounts, ErrorResponse>
 }
 
-final class DefaultFetchNewHomeCountsUseCase: FetchNewHomeCountsUseCase {
+final class DefaultFetchHomeCountsUseCase: FetchHomeCountsUseCase {
     
     private let shopRepository: ShopRepository
     private let callvanRepository: CallVanRepository
@@ -22,11 +22,11 @@ final class DefaultFetchNewHomeCountsUseCase: FetchNewHomeCountsUseCase {
         self.callvanRepository = callvanRepository
     }
     
-    func execute() -> AnyPublisher<NewHomeCounts, ErrorResponse> {
+    func execute() -> AnyPublisher<HomeCounts, ErrorResponse> {
         callvanRepository.fetchCallVanList(request: .init(state: .recruiting, limit: 0))
             .zip(shopRepository.fetchEventCount(), shopRepository.fetchShopCount())
             .map { (callVanList, eventShopCount, shopCount) in
-                NewHomeCounts(
+                HomeCounts(
                     callVanRecruitingCount: callVanList.totalCount,
                     eventCount: eventShopCount,
                     openShopCount: shopCount.openCount,

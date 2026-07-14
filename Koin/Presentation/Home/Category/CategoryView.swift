@@ -99,7 +99,7 @@ struct CategoryView: ActionBindableView {
 
 private extension CategoryView {
     
-    private func didTapItem(_ item: NewHomeCategoryItem) {
+    private func didTapItem(_ item: HomeCategoryItem) {
         let action = action(for: item)
         sendAction(action)
         
@@ -107,7 +107,7 @@ private extension CategoryView {
         viewModel.execute(.logEvent(loggingInfo.label, .click, loggingInfo.value))
     }
 
-    private func action(for item: NewHomeCategoryItem) -> Action {
+    private func action(for item: HomeCategoryItem) -> Action {
         switch item {
         case .timetable:
             return .showTimetable

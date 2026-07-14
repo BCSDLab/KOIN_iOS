@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NewHomeCategoryItem: Identifiable {
+enum HomeCategoryItem: Identifiable {
     case timetable
     case lostItem
     case facility

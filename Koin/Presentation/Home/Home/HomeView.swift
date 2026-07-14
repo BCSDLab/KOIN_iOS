@@ -25,11 +25,11 @@ struct HomeView: ActionBindableView {
     }
     
     // MARK: - Properties
-    @State private var viewModel: NewHomeViewModel
+    @State private var viewModel: HomeViewModel
     var sendAction: (Action) -> Void = { _ in }
     
     // MARK: - Initializer
-    init(viewModel: NewHomeViewModel) {
+    init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
     }
     

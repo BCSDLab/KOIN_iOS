@@ -1,5 +1,5 @@
 //
-//  NewHomeViewModel.swift
+//  HomeViewModel.swift
 //  koin
 //
 //  Created by 홍기정 on 6/2/26.
@@ -11,7 +11,7 @@ import Observation
 
 @Observable
 @MainActor
-final class NewHomeViewModel: SwiftUIViewModelProtocol {
+final class HomeViewModel: SwiftUIViewModelProtocol {
     
     // MARK: - Input
     enum Input {
@@ -39,7 +39,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     // MARK: - Properties
     private let fetchHomeHeaderUseCase: FetchHomeHeaderUseCase
     private let fetchHomeDiningListUseCase: FetchHomeDiningListUseCase
-    private let fetchCountsUseCase: FetchNewHomeCountsUseCase
+    private let fetchCountsUseCase: FetchHomeCountsUseCase
     private let checkVersionUseCase: CheckVersionUseCase
     private let checkLoginUseCase: CheckLoginUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
@@ -52,7 +52,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     init(
         fetchHomeHeaderUseCase: FetchHomeHeaderUseCase,
         fetchHomeDiningListUseCase: FetchHomeDiningListUseCase,
-        fetchCountsUseCase: FetchNewHomeCountsUseCase,
+        fetchCountsUseCase: FetchHomeCountsUseCase,
         checkVersionUseCase: CheckVersionUseCase,
         checkLoginUseCase: CheckLoginUseCase,
         fetchUserDataUseCase: FetchUserDataUseCase,
@@ -94,7 +94,7 @@ final class NewHomeViewModel: SwiftUIViewModelProtocol {
     }
 }
 
-extension NewHomeViewModel {
+extension HomeViewModel {
 
     private func checkVersion() {
         checkVersionUseCase.execute()
