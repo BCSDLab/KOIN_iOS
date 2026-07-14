@@ -18,6 +18,12 @@ struct NoticeKeywordSearchButton: View {
     var body: some View {
         Button(action: searchButtonTapped) {
             Image.appImage(asset: .noticeSearch)
+                .renderingMode(.template)
+                .foregroundStyle(Color.appColor(.neutral500))
+                .frame(alignment: .center)
+                .frame(width: 32, height: 32)
+                .background(Color.appColor(.neutral100))
+                .clipShape(.circle)
         }
         .buttonStyle(.plain)
     }
