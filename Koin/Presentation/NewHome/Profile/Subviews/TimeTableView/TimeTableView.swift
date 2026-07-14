@@ -11,7 +11,6 @@ struct LectureDataWrapper: Identifiable {
     let lecture: LectureData
     let header: TimetableColorAsset
     let body: TimetableColorAsset
-    let hours: CGFloat
     
     let id: Int
     
@@ -25,7 +24,6 @@ struct LectureDataWrapper: Identifiable {
         self.body = body
         
         self.id = lecture.id
-        self.hours = CGFloat(lecture.classTime.count)
     }
 }
 
@@ -73,6 +71,7 @@ struct TimeTableView: View {
     ) {
         self.timeTableTapped = timeTableTapped
         self.wrappers = splitInDays(makeWrapper(lectures))
+        print(wrappers)
     }
     
     // MARK: - Body
