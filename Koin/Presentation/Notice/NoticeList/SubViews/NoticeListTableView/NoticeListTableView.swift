@@ -87,9 +87,7 @@ final class NoticeListTableView: UITableView {
     }
     
     func updateKeywordList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
-        if let headerView = self.headerView(forSection: 0) as? NoticeListHeaderView {
-            headerView.updateKeyWordsList(keywordList: keywordList, selectedKeyword: selectedKeyword)
-        }
+        headerView.updateKeyWordsList(keywordList: keywordList, selectedKeyword: selectedKeyword)
         reloadData()
     }
 }

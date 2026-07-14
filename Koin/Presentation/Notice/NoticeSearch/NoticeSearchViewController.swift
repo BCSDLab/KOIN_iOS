@@ -270,7 +270,7 @@ extension NoticeSearchViewController {
         emptyNoticeView.snp.makeConstraints {
             $0.top.equalTo(textField.snp.bottom)
             $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
-            $0.centerX.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
         }
         
         noticeListTableView.snp.makeConstraints {
