@@ -53,6 +53,7 @@ final class HomeTabBarController: UITabBarController {
         super.viewDidLoad()
         tabBar.isHidden = true
         bind()
+        setUpObserver()
         setUpViewControllers()
         if let firstTab = items.first?.tab {
             selectTab(index: firstTab.rawValue)
@@ -85,6 +86,33 @@ final class HomeTabBarController: UITabBarController {
                 case .hasUnreadNotifications(let hasUnreadNotifications):
                     self?.configureRightBarButton(hasUnreadNotifications: hasUnreadNotifications)
                 }
+            }
+            .store(in: &subscriptions)
+    }
+}
+
+extension HomeTabBarController {
+    private func setUpObserver() {
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("Notification Read"),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.inputSubject.send(.checkNotification)
+        }
+        
+        NotificationCenter.default.addObserver(
+            forName: NSNotification.Name("Notification Sent"),
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.configureRightBarButton(hasUnreadNotifications: true)
+        }
+        
+        NotificationCenter.default.publisher(for: UIApplication.didBecomeActiveNotification)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.inputSubject.send(.checkNotification)
             }
             .store(in: &subscriptions)
     }
