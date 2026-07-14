@@ -77,16 +77,40 @@ private extension NotificationViewController {
                 self.inputSubject.send(.deleteNotification(id: id))
                 self.updateStateViews(isEmpty: self.notificationTableView.isEmpty)
                 self.showToastMessage(message: "알림이 삭제되었습니다.")
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListDelete, .click, "알림 삭제"))
             }
             .store(in: &subscriptions)
         
         notificationTableView.tapNotificationPublisher
             .sink { [weak self] item in
                 self?.inputSubject.send(.markAsRead(id: item.id))
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, item.title))
+                self?.makeLogEvent(notification: item)
                 self?.handleNavigation(item)
             }
             .store(in: &subscriptions)
+    }
+}
+
+extension NotificationViewController {
+    private func makeLogEvent(notification: NotificationItem) {
+        let logValue: String
+        switch notification.appPath {
+        case .shop:
+            logValue = "주변상점"
+        case .dining:
+            logValue = "식단"
+        case .keyword:
+            logValue = "키워드알림"
+        case .chat:
+            logValue = "분실물 채팅"
+        case .callvan:
+            logValue = "콜밴팟"
+        case .callvanChat:
+            logValue = "콜밴팟 채팅"
+        default:
+            return
+        }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, logValue))
     }
 }
 
@@ -311,12 +335,14 @@ private extension NotificationViewController {
             markAllAsRead: { [weak self] in
                 self?.inputSubject.send(.markAllAsRead)
                 self?.notificationTableView.markAllAsRead()
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListReadAll, .click, "모두 읽음으로 표시"))
             },
             deleteAll: { [weak self] in
                 self?.inputSubject.send(.deleteAllNotifications)
                 self?.notificationTableView.deleteAll()
                 self?.updateStateViews(isEmpty: true)
                 self?.showToastMessage(message: "알림이 삭제되었습니다.")
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListDeleteAll, .click, "알림 전체 삭제"))
             }
         )
         popUpViewController.modalPresentationStyle = .overFullScreen

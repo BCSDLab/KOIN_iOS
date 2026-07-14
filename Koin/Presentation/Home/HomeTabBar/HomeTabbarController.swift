@@ -132,6 +132,7 @@ extension HomeTabBarController {
                 selectedTab: configuration.tab
             ) { [weak self] tag in
                 self?.handleTabSelection(tag: tag)
+                self?.makeLogEvent(tag: tag)
             }
             
             tabBars.append(tabBar)
@@ -242,10 +243,6 @@ extension HomeTabBarController {
         guard let index = items.firstIndex(where: { $0.tab.rawValue == tag }) else {
             return
         }
-        
-        if let homeTab = HomeTab(rawValue: tag) {
-            inputSubject.send(.logEvent(homeTab.logLabel, .click, homeTab.title))
-        }
         selectTab(index: index)
     }
 
@@ -256,6 +253,12 @@ extension HomeTabBarController {
             selectedIndex = index
             view.layoutIfNeeded()
             CATransaction.commit()
+        }
+    }
+    
+    private func makeLogEvent(tag: Int) {
+        if let tab = HomeTab.init(rawValue: tag) {
+            inputSubject.send(.logEvent(tab.logLabel, .click, tab.title))
         }
     }
 }
