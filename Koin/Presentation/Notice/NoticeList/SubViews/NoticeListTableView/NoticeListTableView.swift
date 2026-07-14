@@ -14,7 +14,9 @@ final class NoticeListTableView: UITableView {
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
     let tapNoticePublisher = PassthroughSubject<(Int, Int), Never>()
+    let searchButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
+    let keywordAllButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let keywordTapPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
@@ -84,10 +86,8 @@ final class NoticeListTableView: UITableView {
         headerView.toggleButton(isHidden: noticeArticleList.first?.boardId != 14)
     }
     
-    func updateKeywordList(keywordList: [NoticeKeywordDto], keywordIdx: Int) {
-        if let headerView = self.headerView(forSection: 0) as? NoticeListHeaderView {
-            headerView.updateKeyWordsList(keywordList: keywordList, keywordIdx: keywordIdx)
-        }
+    func updateKeywordList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
+        headerView.updateKeyWordsList(keywordList: keywordList, selectedKeyword: selectedKeyword)
         reloadData()
     }
 }
@@ -126,10 +126,17 @@ extension NoticeListTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         headerCancellables.removeAll()
+        headerView.searchButtonTappedPublisher.sink { [weak self] in
+            self?.searchButtonTappedPublisher.send()
+        }.store(in: &headerCancellables)
         headerView.keywordAddBtnTapPublisher.sink { [weak self] in
             self?.keywordAddBtnTapPublisher.send()
         }.store(in: &headerCancellables)
-        headerView.keywordTapPublisher.sink { [weak self] keyword in                self?.keywordTapPublisher.send(keyword)
+        headerView.keywordAllButtonTappedPublisher.sink { [weak self] in
+            self?.keywordAllButtonTappedPublisher.send()
+        }.store(in: &headerCancellables)
+        headerView.keywordTapPublisher.sink { [weak self] keyword in
+            self?.keywordTapPublisher.send(keyword)
         }.store(in: &headerCancellables)
         headerView.manageKeyWordBtnTapPublisher.sink { [weak self] in
             self?.manageKeyWordBtnTapPublisher.send()

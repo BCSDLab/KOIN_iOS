@@ -20,7 +20,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     }
     enum Output {
         case updateBoard([NoticeArticleDto], NoticeListPages, NoticeListType)
-        case updateUserKeywordList([NoticeKeywordDto], Int)
+        case updateUserKeywordList([NoticeKeywordDto], NoticeKeywordDto?)
         case isLogined(Bool)
         case showIsLogined(Bool)
     }
@@ -104,24 +104,21 @@ extension NoticeListViewModel {
     }
     
     private func getUserKeywordList(keyword: NoticeKeywordDto? = nil) {
-        var keywordIndex = 0
         if let keyword = keyword {
-            if keyword.id != -1 {
-                self.keyword = keyword.keyword
-            }
-            else {
-                self.keyword = nil
-            }
+            self.keyword = keyword.keyword
+        } else {
+            self.keyword = nil
         }
+        
+        var selectedKeyword: NoticeKeywordDto?
         
         fetchUserKeyword(completion: { [weak self] keywords in
             for (index, value) in keywords.enumerated() {
                 if value.keyword == self?.keyword {
-                    keywordIndex = index + 1
-                    break
+                    selectedKeyword = value
                 }
             }
-            self?.outputSubject.send(.updateUserKeywordList(keywords, keywordIndex))
+            self?.outputSubject.send(.updateUserKeywordList(keywords, selectedKeyword))
         })
     }
     

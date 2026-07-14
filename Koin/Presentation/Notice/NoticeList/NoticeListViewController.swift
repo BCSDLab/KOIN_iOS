@@ -12,7 +12,7 @@ import UIKit
 
 final class NoticeListViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
-    
+    private var hasAppeared = false
     private let viewModel: NoticeListViewModel
     private let inputSubject: PassthroughSubject<NoticeListViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -70,7 +70,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     init(viewModel: NoticeListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
-        navigationItem.title = "게시판"
     }
     
     required init?(coder: NSCoder) {
@@ -86,22 +85,20 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
         inputSubject.send(.checkAuth)
-        let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
-        navigationItem.rightBarButtonItem = rightBarButton
         inputSubject.send(.changeBoard(viewModel.noticeListType))
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        inputSubject.send(.getUserKeywordList())
-        configureNavigationBar(style: .empty)
+        configureNavigationBar()
+        if !hasAppeared {
+            inputSubject.send(.getUserKeywordList())
+            hasAppeared = true
+        }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
+    // MARK: - Bind
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
@@ -109,8 +106,8 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
-            case let .updateUserKeywordList(noticeKeywordList, keywordIdx):
-                self?.updateUserKeywordList(keywords: noticeKeywordList, keywordIdx: keywordIdx)
+            case let .updateUserKeywordList(noticeKeywordList, selectedKeyword):
+                self?.updateUserKeywordList(keywords: noticeKeywordList, selectedKeyword: selectedKeyword)
             case let .isLogined(isLogined):
                 self?.checkAndShowToolTip(isLogined: isLogined)
             case let .showIsLogined(isLogined):
@@ -136,17 +133,24 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             self?.navigateToNoticeData(noticeId: item.0, boardId: item.1)
         }.store(in: &subscriptions)
         
+        noticeTableView.searchButtonTappedPublisher
+            .sink { [weak self] in
+                self?.searchButtonTapped()
+            }.store(in: &subscriptions)
         noticeTableView.keywordAddBtnTapPublisher
             .sink { [weak self] in
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.addKeyword, .click, "키워드추가"))
                 self?.navigateToManageKeywordVC()
             }.store(in: &subscriptions)
         
+        noticeTableView.keywordAllButtonTappedPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
+                self?.inputSubject.send(.getUserKeywordList(nil))
+            }
+            .store(in: &subscriptions)
         noticeTableView.keywordTapPublisher
             .sink { [weak self] keyword in
-                if keyword.id == -1 {
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
-                }
                 self?.inputSubject.send(.getUserKeywordList(keyword))
             }.store(in: &subscriptions)
         
@@ -193,6 +197,50 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             }
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostType, .click, text))
         }.store(in: &subscriptions)
+    }
+}
+
+extension NoticeListViewController {
+    private func configureNavigationBar() {
+        configureNavigationBar(style: .empty)
+        configureLeftBarItem()
+        configureRightBarButton()
+    }
+
+    private func configureLeftBarItem() {
+        let leftBarButtonItem = UIBarButtonItem(customView: HomeLogoView())
+        navigationItem.leftBarButtonItem = leftBarButtonItem
+    }
+
+    private func configureRightBarButton(hasDot: Bool = false) {
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(rightBarButtonTapped)
+        )
+    }
+
+    @objc private func rightBarButtonTapped() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notification, .click, "알림 아이콘"))
+        navigateToNotification()
+    }
+     
+    private func navigateToNotification() {
+        let notificatioHistoryRepository = DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService())
+        let fetchNotificationHistoryUseCase = DefaultFetchNotificationHistoryUseCase(notificationHistoryRepository: notificatioHistoryRepository)
+        let deleteNotificationHistoryUseCase = DefaultDeleteNotificationHistoryUseCase(repository: notificatioHistoryRepository)
+        let updateNotificationHistoryUseCase = DefaultUpdateNotificationHistoryUseCase(repository: notificatioHistoryRepository)
+        
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NotificationViewModel(
+            fetchNotificationHistoryUseCase: fetchNotificationHistoryUseCase,
+            deleteNotificationHistoryUseCase: deleteNotificationHistoryUseCase,
+            updateNotificationHistoryUseCase: updateNotificationHistoryUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let viewController = NotificationViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
@@ -258,8 +306,6 @@ extension NoticeListViewController {
                 }
             }
     }
-
-
     
     private func navigateToManageKeywordVC() {
         let noticeListService = DefaultNoticeService()
@@ -307,8 +353,8 @@ extension NoticeListViewController {
         }
     }
     
-    private func updateUserKeywordList(keywords: [NoticeKeywordDto], keywordIdx: Int) {
-        noticeTableView.updateKeywordList(keywordList: keywords, keywordIdx: keywordIdx)
+    private func updateUserKeywordList(keywords: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
+        noticeTableView.updateKeywordList(keywordList: keywords, selectedKeyword: selectedKeyword)
     }
     
     private func configureSwipeGestures() {

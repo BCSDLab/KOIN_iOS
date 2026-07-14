@@ -41,16 +41,18 @@ final class ManageNoticeKeywordViewController: UIViewController {
         let leftMarginView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
         $0.leftView = leftMarginView
         $0.leftViewMode = .always
-        $0.attributedPlaceholder = NSAttributedString(string: "알림받을 키워드를 추가해주세요.", attributes: [.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.gray)])
-        $0.layer.cornerRadius = 4
+        $0.attributedPlaceholder = NSAttributedString(string: "키워드를 입력해주세요.", attributes: [.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.neutral400)])
+        $0.layer.cornerRadius = 19
+        $0.layer.borderColor = UIColor.appColor(.neutral400).cgColor
+        $0.layer.borderWidth = 1
     }
     
     private let addKeywordButton = UIButton().then {
         $0.setTitle("추가", for: .normal)
         $0.titleLabel?.font = .appFont(.pretendardMedium, size: 13)
-        $0.setTitleColor(.appColor(.neutral600), for: .normal)
+        $0.setTitleColor(.appColor(.neutral0), for: .normal)
         $0.backgroundColor = .appColor(.neutral300)
-        $0.layer.cornerRadius = 4
+        $0.layer.cornerRadius = 19
     }
     
     private let separatorView = UIView().then {
@@ -77,6 +79,7 @@ final class ManageNoticeKeywordViewController: UIViewController {
     
     private let keywordNotificationSwtich = UISwitch().then {
         $0.preferredStyle = .automatic
+        $0.onTintColor = .appColor(.new600)
     }
     
     private let recommendedKeywordGuideLabel = UILabel().then {
@@ -152,6 +155,11 @@ final class ManageNoticeKeywordViewController: UIViewController {
             self?.inputSubject.send(.deleteKeyword(keyword: keyword))
         }.store(in: &subscriptions)
         
+        myKeywordCollectionView.numberOfMyKeywords
+            .sink { [weak self] numberOfMyKeywords in
+                self?.numberOfKeywordLabel.text = "\(numberOfMyKeywords)/10"
+            }.store(in: &subscriptions)
+        
         myKeywordCollectionView.myKeywordsContentsSizePublisher.sink { [weak self] height in
             DispatchQueue.main.async {
                 self?.myKeywordCollectionView.snp.updateConstraints {
@@ -197,15 +205,14 @@ final class ManageNoticeKeywordViewController: UIViewController {
 extension ManageNoticeKeywordViewController {
     @objc private func textFieldValueChanged(sender: UITextField) {
         if sender.isEditing {
-            textField.layer.borderColor = UIColor.appColor(.primary400).cgColor
-            textField.layer.borderWidth = 1
-            addKeywordButton.backgroundColor = .appColor(.primary500)
+            textField.layer.borderColor = UIColor.appColor(.new300).cgColor
+            addKeywordButton.backgroundColor = .appColor(.new600)
             addKeywordButton.setTitleColor(.appColor(.neutral0), for: .normal)
         }
         else {
-            textField.layer.borderWidth = 0
+            textField.layer.borderColor = UIColor.appColor(.neutral400).cgColor
             addKeywordButton.backgroundColor = .appColor(.neutral300)
-            addKeywordButton.setTitleColor(.appColor(.neutral600), for: .normal)
+            addKeywordButton.setTitleColor(.appColor(.neutral0), for: .normal)
         }
     }
     
@@ -224,6 +231,7 @@ extension ManageNoticeKeywordViewController {
     
     private func updateMyKeywords(keywords: [NoticeKeywordDto]) {
         myKeywordCollectionView.updateMyKeywords(keywords: keywords)
+        numberOfKeywordLabel.text = "\(keywords.count)/10"
     }
     
     private func updateRecommendedKeywords(keywords: [String]) {
@@ -253,19 +261,20 @@ extension ManageNoticeKeywordViewController {
     private func setUpConstraints() {
         
         myKeywordGuideLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(50)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(29)
         }
         
         numberOfKeywordLabel.snp.makeConstraints {
-            $0.leading.equalTo(myKeywordGuideLabel.snp.trailing)
-            $0.top.equalTo(myKeywordGuideLabel)
+            $0.leading.equalTo(myKeywordGuideLabel.snp.trailing).offset(4)
+            $0.centerY.equalTo(myKeywordGuideLabel)
         }
         
         addKeywordDescriptionLabel.snp.makeConstraints {
             $0.leading.equalTo(myKeywordGuideLabel)
             $0.top.equalTo(myKeywordGuideLabel.snp.bottom)
+            $0.height.equalTo(19)
         }
         
         textField.snp.makeConstraints {
@@ -277,9 +286,9 @@ extension ManageNoticeKeywordViewController {
         
         addKeywordButton.snp.makeConstraints {
             $0.top.equalTo(textField)
-            $0.trailing.equalToSuperview().inset(36)
+            $0.trailing.equalToSuperview().offset(-24)
             $0.height.equalTo(38)
-            $0.width.equalTo(47)
+            $0.width.equalTo(51)
         }
         
         myKeywordCollectionView.snp.makeConstraints {

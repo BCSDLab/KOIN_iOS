@@ -10,10 +10,14 @@ import UIKit
 
 final class MyKeywordCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
-    
+    let numberOfMyKeywords = PassthroughSubject<Int, Never>()
     let tapDeleteButtonPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
     let myKeywordsContentsSizePublisher = PassthroughSubject<CGFloat, Never>()
-    private var myKeywordList: [NoticeKeywordDto] = []
+    private var myKeywordList: [NoticeKeywordDto] = [] {
+        didSet {
+            numberOfMyKeywords.send(myKeywordList.count)
+        }
+    }
     
     //MARK: - Initialization
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
