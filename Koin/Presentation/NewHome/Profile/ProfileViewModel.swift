@@ -25,17 +25,20 @@ final class ProfileViewModel: SwiftUIViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
+    private let fetchMainFrameUseCase: FetchMainFrameUseCase
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Initiailizer
     init(
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase,
-        fetchUserDataUseCase: FetchUserDataUseCase
+        fetchUserDataUseCase: FetchUserDataUseCase,
+        fetchMainFrameUseCase: FetchMainFrameUseCase
     ) {
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.deleteDeviceTokenUseCase = deleteDeviceTokenUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
+        self.fetchMainFrameUseCase = fetchMainFrameUseCase
     }
     
     // MARK: - Public
@@ -70,7 +73,22 @@ extension ProfileViewModel {
             ).store(in: &subscriptions)
     }
     
-    private func fetchTimeTable() {} // TODO: - API
+    private func fetchTimeTable() {
+        fetchMainFrameUseCase.execute()
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { completion in
+                    if case .failure(let error) = completion {
+                        print(error.message)
+                    }
+                },
+                receiveValue: { [weak self] lectures in
+                    print(lectures)
+                    self?.lectures = lectures
+                }
+            )
+            .store(in: &subscriptions)
+    }
     
     private func logout() {
         deleteDeviceTokenUseCase.execute().replaceError(with: ())
