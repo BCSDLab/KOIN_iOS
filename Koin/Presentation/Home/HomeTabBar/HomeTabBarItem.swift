@@ -12,7 +12,7 @@ struct HomeTabBarItem {
     let tab: HomeTab
 }
 
-enum HomeTab: Int {
+enum HomeTab: Int, CaseIterable {
     case home
     case category
     case board
