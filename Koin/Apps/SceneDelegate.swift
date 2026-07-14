@@ -264,13 +264,20 @@ extension SceneDelegate {
     }
     
     private func makeProfileHostingController() -> UIViewController {
+        let timeTableRepository = DefaultTimetableRepository(service: DefaultTimetableService())
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let deleteDeviceTokenUseCase = DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService()))
         let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let fetchMainFrameUseCase = DefaultFetchMainFrameUseCase(
+            fetchFramesUseCase: DefaultFetchFramesUseCase(timetableRepository: timeTableRepository),
+            fetchFrameUseCase: DefaultFetchFrameUseCase(timetableRepository: timeTableRepository),
+            fetchLectureUseCase: DefaultFetchLectureUseCase(timetableRepository: timeTableRepository)
+        )
         let profileViewModel = ProfileViewModel(
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             deleteDeviceTokenUseCase: deleteDeviceTokenUseCase,
-            fetchUserDataUseCase: fetchUserDataUseCase
+            fetchUserDataUseCase: fetchUserDataUseCase,
+            fetchMainFrameUseCase: fetchMainFrameUseCase
         )
         let profileView = ProfileView(viewModel: profileViewModel)
         return ProfileHostingController(rootView: profileView)
