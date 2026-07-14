@@ -91,7 +91,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar()
         if !hasAppeared {
             inputSubject.send(.getUserKeywordList())
             hasAppeared = true
@@ -197,50 +196,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             }
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostType, .click, text))
         }.store(in: &subscriptions)
-    }
-}
-
-extension NoticeListViewController {
-    private func configureNavigationBar() {
-        configureNavigationBar(style: .empty)
-        configureLeftBarItem()
-        configureRightBarButton()
-    }
-
-    private func configureLeftBarItem() {
-        let leftBarButtonItem = UIBarButtonItem(customView: HomeLogoView())
-        navigationItem.leftBarButtonItem = leftBarButtonItem
-    }
-
-    private func configureRightBarButton(hasDot: Bool = false) {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
-            style: .plain,
-            target: self,
-            action: #selector(rightBarButtonTapped)
-        )
-    }
-
-    @objc private func rightBarButtonTapped() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notification, .click, "알림 아이콘"))
-        navigateToNotification()
-    }
-     
-    private func navigateToNotification() {
-        let notificatioHistoryRepository = DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService())
-        let fetchNotificationHistoryUseCase = DefaultFetchNotificationHistoryUseCase(notificationHistoryRepository: notificatioHistoryRepository)
-        let deleteNotificationHistoryUseCase = DefaultDeleteNotificationHistoryUseCase(repository: notificatioHistoryRepository)
-        let updateNotificationHistoryUseCase = DefaultUpdateNotificationHistoryUseCase(repository: notificatioHistoryRepository)
-        
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = NotificationViewModel(
-            fetchNotificationHistoryUseCase: fetchNotificationHistoryUseCase,
-            deleteNotificationHistoryUseCase: deleteNotificationHistoryUseCase,
-            updateNotificationHistoryUseCase: updateNotificationHistoryUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase
-        )
-        let viewController = NotificationViewController(viewModel: viewModel)
-        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
