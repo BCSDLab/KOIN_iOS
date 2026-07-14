@@ -59,6 +59,11 @@ final class HomeTabBarController: UITabBarController {
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        inputSubject.send(.checkNotification)
+    }
+    
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         updateAdditionalBottomInset()
@@ -69,6 +74,19 @@ final class HomeTabBarController: UITabBarController {
         super.viewSafeAreaInsetsDidChange()
         updateAdditionalBottomInset()
         updateTabBarLayout()
+    }
+    
+    // MARK: - Bind
+    private func bind() {
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] output in
+                switch output {
+                case .hasUnreadNotifications(let hasUnreadNotifications):
+                    self?.configureRightBarButton(hasUnreadNotifications: hasUnreadNotifications)
+                }
+            }
+            .store(in: &subscriptions)
     }
 }
 
@@ -193,11 +211,6 @@ extension HomeTabBarController {
 }
 
 extension HomeTabBarController {
-    private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-            .sink { _ in }
-            .store(in: &subscriptions)
-    }
 
     private func handleTabSelection(tag: Int) {
         guard let index = items.firstIndex(where: { $0.tab.rawValue == tag }) else {

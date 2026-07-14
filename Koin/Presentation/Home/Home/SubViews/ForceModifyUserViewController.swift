@@ -80,17 +80,17 @@ extension ForceModifyUserViewController {
     }
     
     private func makeHomeTabBarController() -> HomeTabBarController {
-        let homeRootView = makeHomeView()
-        let homeViewController = HomeHostingController(rootView: homeRootView)
-
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
-        let categoryViewController = CategoryHostingController(rootView: categoryRootView)
-
+        let homeViewController = makeHomeHostingController()
+        let categoryViewController = makeCategoryHostingController()
         let noticeViewController = makeNoticeListViewController()
-        let profileViewController = UIViewController()
+        let profileViewController = makeProfileHostingController()
         
-        let viewModel = HomeTabBarViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let fetchNotificationHistoryUseCase = DefaultFetchNotificationHistoryUseCase(notificationHistoryRepository: DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService()))
+        let viewModel = HomeTabBarViewModel(
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchNotificationHistoryUseCase: fetchNotificationHistoryUseCase
+        )
 
         return HomeTabBarController(
             items: [
@@ -103,7 +103,7 @@ extension ForceModifyUserViewController {
         )
     }
 
-    private func makeHomeView() -> HomeView {
+    private func makeHomeHostingController() -> UIViewController {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let shopRepository = DefaultShopRepository(service: DefaultShopService())
         let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
@@ -141,7 +141,14 @@ extension ForceModifyUserViewController {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             fetchBannerUseCase: DefaultFetchBannerUseCase(coreRepository: coreRepository)
         )
-        return HomeView(viewModel: viewModel)
+        let homeView = HomeView(viewModel: viewModel)
+        return HomeHostingController(rootView: homeView)
+    }
+    
+    private func makeCategoryHostingController() -> UIViewController {
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
+        return CategoryHostingController(rootView: categoryRootView)
     }
     
     private func makeNoticeListViewController() -> UIViewController {
@@ -159,7 +166,26 @@ extension ForceModifyUserViewController {
         )
         return NoticeListViewController(viewModel: viewModel)
     }
-
+    
+    private func makeProfileHostingController() -> UIViewController {
+        let timeTableRepository = DefaultTimetableRepository(service: DefaultTimetableService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let deleteDeviceTokenUseCase = DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService()))
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let fetchMainFrameUseCase = DefaultFetchMainFrameUseCase(
+            fetchFramesUseCase: DefaultFetchFramesUseCase(timetableRepository: timeTableRepository),
+            fetchFrameUseCase: DefaultFetchFrameUseCase(timetableRepository: timeTableRepository),
+            fetchLectureUseCase: DefaultFetchLectureUseCase(timetableRepository: timeTableRepository)
+        )
+        let profileViewModel = ProfileViewModel(
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            deleteDeviceTokenUseCase: deleteDeviceTokenUseCase,
+            fetchUserDataUseCase: fetchUserDataUseCase,
+            fetchMainFrameUseCase: fetchMainFrameUseCase
+        )
+        let profileView = ProfileView(viewModel: profileViewModel)
+        return ProfileHostingController(rootView: profileView)
+    }
 }
 
 extension ForceModifyUserViewController {

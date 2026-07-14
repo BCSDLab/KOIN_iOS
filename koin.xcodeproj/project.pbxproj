@@ -204,6 +204,7 @@
 		7C7F56BC2FFBA18100847151 /* NotificationHistoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7F56BA2FFBA18100847151 /* NotificationHistoryService.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
+		7C86750E30061AA0003CB942 /* CheckUnreadNotificationHistoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C86750D30061AA0003CB942 /* CheckUnreadNotificationHistoryUseCase.swift */; };
 		7C8A00012FD000000011D338 /* NewHomeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A00022FD000000011D338 /* NewHomeViewModel.swift */; };
 		7C8A00072FD200000011D338 /* DiningHeaderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A00082FD200000011D338 /* DiningHeaderButton.swift */; };
 		7C8A00092FD200000011D338 /* DiningCarousel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A000A2FD200000011D338 /* DiningCarousel.swift */; };
@@ -1231,6 +1232,7 @@
 		7C7F56BA2FFBA18100847151 /* NotificationHistoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryService.swift; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
+		7C86750D30061AA0003CB942 /* CheckUnreadNotificationHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckUnreadNotificationHistoryUseCase.swift; sourceTree = "<group>"; };
 		7C8A00022FD000000011D338 /* NewHomeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewHomeViewModel.swift; sourceTree = "<group>"; };
 		7C8A00082FD200000011D338 /* DiningHeaderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningHeaderButton.swift; sourceTree = "<group>"; };
 		7C8A000A2FD200000011D338 /* DiningCarousel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningCarousel.swift; sourceTree = "<group>"; };
@@ -2662,6 +2664,7 @@
 				7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */,
 				7CA6868A2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift */,
 				7CA6868C2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift */,
+				7C86750D30061AA0003CB942 /* CheckUnreadNotificationHistoryUseCase.swift */,
 			);
 			path = NewHome;
 			sourceTree = "<group>";
@@ -5982,6 +5985,7 @@
 				7CED90E62EF2D1F900457128 /* DeleteReviewModalViewController.swift in Sources */,
 				7CED90E72EF2D1F900457128 /* ForceUpdateViewController.swift in Sources */,
 				7CED90E92EF2D1F900457128 /* DiningCollectionView.swift in Sources */,
+				7C86750E30061AA0003CB942 /* CheckUnreadNotificationHistoryUseCase.swift in Sources */,
 				7CED90EB2EF2D1F900457128 /* LandViewController.swift in Sources */,
 				7CED90ED2EF2D1F900457128 /* HomeViewModel.swift in Sources */,
 				7CED90EF2EF2D1F900457128 /* ShopReviewReportViewModel.swift in Sources */,
