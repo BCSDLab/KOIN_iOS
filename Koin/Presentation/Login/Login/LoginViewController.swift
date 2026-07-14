@@ -350,10 +350,10 @@ extension LoginViewController {
         let profileViewController = makeProfileHostingController()
         
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let fetchNotificationHistoryUseCase = DefaultFetchNotificationHistoryUseCase(notificationHistoryRepository: DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService()))
+        let checkHasUnreadNotificationHistoryUseCase = DefaultCheckHasUnreadNotificationHistoryUseCase(repository: DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService()))
         let viewModel = HomeTabBarViewModel(
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            fetchNotificationHistoryUseCase: fetchNotificationHistoryUseCase
+            checkHasUnreadNotificationHistoryUseCase: checkHasUnreadNotificationHistoryUseCase
         )
 
         return HomeTabBarController(

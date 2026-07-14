@@ -1,5 +1,5 @@
 //
-//  CheckUnreadNotificationHistoryUseCase.swift
+//  CheckHasUnreadNotificationHistoryUseCase.swift
 //  koin
 //
 //  Created by 홍기정 on 7/14/26.

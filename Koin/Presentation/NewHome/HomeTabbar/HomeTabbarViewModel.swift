@@ -19,17 +19,17 @@ final class HomeTabBarViewModel: ViewModelProtocol {
 
     // MARK: - Properties
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let fetchNotificationHistoryUseCase: FetchNotificationHistoryUseCase
+    private let checkHasUnreadNotificationHistoryUseCase: CheckHasUnreadNotificationHistoryUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
 
     // MARK: - Initializer
     init(
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-        fetchNotificationHistoryUseCase: FetchNotificationHistoryUseCase
+        checkHasUnreadNotificationHistoryUseCase: CheckHasUnreadNotificationHistoryUseCase
     ) {
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.fetchNotificationHistoryUseCase = fetchNotificationHistoryUseCase
+        self.checkHasUnreadNotificationHistoryUseCase = checkHasUnreadNotificationHistoryUseCase
     }
 
     // MARK: - Transform
@@ -39,7 +39,7 @@ final class HomeTabBarViewModel: ViewModelProtocol {
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case .checkNotification:
-                self?.checkNotification()
+                self?.checkUnreadNotifications()
             }
         }.store(in: &subscriptions)
         
@@ -57,11 +57,15 @@ extension HomeTabBarViewModel {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     
-    private func checkNotification() {
+    private func checkUnreadNotifications() {
         Task {
-            let notifications = try? await fetchNotificationHistoryUseCase.execute()
-            let unreadNotifications = notifications?.filter { !$0.isRead }
-            outputSubject.send(.hasUnreadNotifications(unreadNotifications?.isEmpty == false))
+            do {
+                let hasUnreadNotifications = try await checkHasUnreadNotificationHistoryUseCase.execute()
+                outputSubject.send(.hasUnreadNotifications(hasUnreadNotifications))
+            } catch {
+                print(#function, "failed")
+                print(error)
+            }
         }
     }
 }

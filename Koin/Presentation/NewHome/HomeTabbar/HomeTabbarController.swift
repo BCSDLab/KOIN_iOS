@@ -199,8 +199,6 @@ extension HomeTabBarController {
             "알림 아이콘"
         ))
         navigateToNotification()
-        
-        print(KeychainWorker.shared.read(key: .fcm))
     }
     
     private func navigateToNotification() {
