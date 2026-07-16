@@ -33,7 +33,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     
     private let titleGuideLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 14)
-        $0.textColor = .appColor(.primary600)
+        $0.textColor = .appColor(.new800)
     }
     
     private let titleLabel = UILabel().then {

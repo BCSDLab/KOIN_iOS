@@ -10,6 +10,7 @@ import UIKit
 final class CancelableImageView: UIView {
     private let imageView = UIImageView().then {
         $0.isUserInteractionEnabled = true
+        $0.contentMode = .scaleAspectFit
     }
     
     private var xButtonWidth: CGFloat = 30

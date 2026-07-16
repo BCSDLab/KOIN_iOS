@@ -19,10 +19,9 @@ final class NoticeListHeaderView: UITableViewHeaderFooterView {
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     
     let typeButtonPublisher = PassthroughSubject<Void, Never>()
-    var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
-    private lazy var noticeKeywordScrollView = NoticeKeywordScrollViewHostingController(
+    private(set) lazy var noticeKeywordScrollView = NoticeKeywordScrollViewHostingController(
         searchButtonTapped: { [weak self] in
             self?.searchButtonTappedPublisher.send()
         },
@@ -66,24 +65,17 @@ final class NoticeListHeaderView: UITableViewHeaderFooterView {
         typeButton.addTarget(self, action: #selector(typeButtonTapped), for: .touchUpInside)
     }
     
-    override func prepareForReuse() {
-        super.prepareForReuse()
-        subscriptions.removeAll()
-    }
-    
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         configureView()
     }
+}
     
+extension NoticeListHeaderView {
     @objc private func typeButtonTapped() {
         typeButtonPublisher.send()
     }
-    
-    
-}
 
-extension NoticeListHeaderView {
     func setText(type: LostItemType?) {
         let buttonText: String
         switch type {

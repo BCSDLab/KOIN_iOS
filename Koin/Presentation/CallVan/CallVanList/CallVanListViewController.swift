@@ -520,6 +520,8 @@ extension CallVanListViewController {
             $0.backgroundColor = UIColor.appColor(.new100)
             $0.layer.cornerRadius = 17
             $0.layer.applySketchShadow(color: .black, alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
+            
+            $0.setContentCompressionResistancePriority(.required, for: .horizontal)
         }
         
         writeButton.do {
