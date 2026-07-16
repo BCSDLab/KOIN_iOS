@@ -127,8 +127,8 @@ extension NoticeListViewModel {
         fetchMyKeywordUseCase.execute().sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] fetchResult in
+                self?.isLoggedIn = fetchResult.1
                 if fetchResult.0.isEmpty {
-                    self?.isLoggedIn = fetchResult.1
                     self?.outputSubject.send(.showToolTip)
                 }
                 completion(fetchResult.0)

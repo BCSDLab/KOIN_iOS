@@ -97,16 +97,15 @@ extension NotificationTableView {
 
 extension NotificationTableView {
     override func layoutSubviews() {
-        super.layoutSubviews()
-
         let didBoundsChange = abs(lastBoundsSize.width - bounds.width) > Layout.zeroTolerance
             || abs(lastBoundsSize.height - bounds.height) > Layout.zeroTolerance
         
         if didBoundsChange {
             lastBoundsSize = bounds.size
             recalculateFooterHeightIfNeeded()
-            setNeedsLayout()
         }
+
+        super.layoutSubviews()
     }
 
     private func recalculateFooterHeightIfNeeded() {

@@ -85,14 +85,18 @@ struct NoticeKeywordScrollView: View {
                         )
                     }
                 case true:
-                    GeometryReader { proxy in
-                        let addButtonMinX = proxy.frame(in: .named(NamedCoordinateSpace.NoticeKeywordScrollView)).minX
-                    
-                        NoticeKeywordAddButton(action: addButtonTapped)
-                            .preference(
-                                key: NoticeKeywordAddButtonOffsetXPreferenceKey.self,
-                                value: addButtonMinX)
-                    }
+                    NoticeKeywordAddButton(action: addButtonTapped)
+                        .background {
+                            GeometryReader { proxy in
+                                let addButtonMinX = proxy.frame(in: .named(NamedCoordinateSpace.NoticeKeywordScrollView)).minX
+                                Color.clear
+                                    .frame(width: 0, height: 0)
+                                    .preference(
+                                        key: NoticeKeywordAddButtonOffsetXPreferenceKey.self,
+                                        value: addButtonMinX
+                                    )
+                            }
+                        }
                 }
             }
             .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))

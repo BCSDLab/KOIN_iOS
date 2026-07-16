@@ -53,7 +53,9 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         $0.backgroundColor = .appColor(.neutral400)
     }
     
-    private let noticeToolTipImageView = CancelableImageView(frame: .zero)
+    private let noticeToolTipImageView = CancelableImageView(frame: .zero).then {
+        $0.isHidden = true
+    }
     
     private let postLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then { 
         $0.modalPresentationStyle = .overFullScreen
