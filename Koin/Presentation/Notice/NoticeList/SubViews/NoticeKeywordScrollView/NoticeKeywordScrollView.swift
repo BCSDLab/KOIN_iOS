@@ -116,6 +116,4 @@ struct NoticeKeywordScrollView: View {
             value = nextValue()
         }
     }
-    
-    
 }

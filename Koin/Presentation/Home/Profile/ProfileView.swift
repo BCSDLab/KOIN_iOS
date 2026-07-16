@@ -43,9 +43,18 @@ struct ProfileView: ActionBindableView {
                 Spacer(minLength: 20)
                 
                 ProfileUserInfoView(
-                    loginButtonTapped: { sendAction(.showLogin) },
-                    logoutButtonTapped: { sendAction(.showLogout) },
-                    settingButtonTapped: { sendAction(.showSetting) },
+                    loginButtonTapped: {
+                        sendAction(.showLogin)
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.homeLogin, .click, "로그인"))
+                    },
+                    logoutButtonTapped: {
+                        sendAction(.showLogout)
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.homeLogout, .click, "로그아웃"))
+                    },
+                    settingButtonTapped: {
+                        sendAction(.showSetting)
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.homeSettings, .click, "설정"))
+                    },
                     userInfo: viewModel.userInfo
                 )
                 
@@ -55,6 +64,7 @@ struct ProfileView: ActionBindableView {
                     lectures: viewModel.lectures,
                     timeTableTapped: {
                         sendAction(.showTimeTable)
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.homeTimetable, .click, "내 시간표"))
                     }
                 )
                 
