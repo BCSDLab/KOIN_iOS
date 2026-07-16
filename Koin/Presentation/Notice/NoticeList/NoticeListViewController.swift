@@ -12,7 +12,6 @@ import UIKit
 
 final class NoticeListViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
-    private var hasAppeared = false
     private let viewModel: NoticeListViewModel
     private let inputSubject: PassthroughSubject<NoticeListViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -91,10 +90,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        if !hasAppeared {
-            inputSubject.send(.getUserKeywordList())
-            hasAppeared = true
-        }
+        inputSubject.send(.getUserKeywordList())
     }
     
     // MARK: - Bind
@@ -107,8 +103,8 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
             case let .updateUserKeywordList(noticeKeywordList, selectedKeyword):
                 self?.updateUserKeywordList(keywords: noticeKeywordList, selectedKeyword: selectedKeyword)
-            case let .isLogined(isLogined):
-                self?.checkAndShowToolTip(isLogined: isLogined)
+            case .showToolTip:
+                self?.checkAndShowToolTip()
             case let .showIsLogined(isLogined):
                 if isLogined { strongSelf.present(strongSelf.writeTypeModalViewController, animated: true) }
                 else { strongSelf.present(strongSelf.postLostItemLoginModalViewController, animated: true) }
@@ -158,6 +154,14 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             self?.navigateToManageKeywordVC()
         }.store(in: &subscriptions)
         
+        noticeTableView.addButtonMinXPublisher.sink { [weak self] addButtonMinX in
+            self?.moveToolTip(addButtonMinX: addButtonMinX)
+        }.store(in: &subscriptions)
+        
+        noticeTableView.contentOffsetYPublisher.sink { [weak self] contentOffsetY in
+            self?.moveToolTip(contentOffsetY: contentOffsetY)
+        }.store(in: &subscriptions)
+        
         noticeToolTipImageView.onXButtonTapped = { [weak self] in
             self?.noticeToolTipImageView.isHidden = true
         }
@@ -196,6 +200,34 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             }
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostType, .click, text))
         }.store(in: &subscriptions)
+    }
+}
+
+extension NoticeListViewController {
+    
+    private func moveToolTip(addButtonMinX: CGFloat? = nil, contentOffsetY: CGFloat? = nil) {
+        let currentTranslationX = noticeToolTipImageView.transform.tx
+        let currenttranslationY = noticeToolTipImageView.transform.ty
+        
+        let targetTranslationX: CGFloat
+        let targetTranslationY: CGFloat
+        
+        if let addButtonMinX {
+            targetTranslationX = addButtonMinX
+                + 13
+                - (viewModel.isLoggedIn ? 246/2 : 223/2)
+                + 22
+        } else {
+            targetTranslationX = currentTranslationX
+        }
+        
+        if let contentOffsetY {
+            targetTranslationY = -contentOffsetY
+        } else {
+            targetTranslationY = currenttranslationY
+        }
+        
+        noticeToolTipImageView.transform = CGAffineTransform(translationX: targetTranslationX, y: targetTranslationY)
     }
 }
 
@@ -277,16 +309,22 @@ extension NoticeListViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func checkAndShowToolTip(isLogined: Bool) {
+    private func checkAndShowToolTip() {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownNoticeTooltip")
         if !hasShownImage {
+            noticeToolTipImageView.setUpImage(
+                image:
+                    viewModel.isLoggedIn ?
+                    .appImage(asset: .noticeLoginToolTip) ?? UIImage() :
+                        .appImage(asset: .noticeNotLoginToolTip) ?? UIImage()
+            )
+            noticeToolTipImageView.snp.remakeConstraints {
+                $0.height.equalTo(44)
+                $0.width.equalTo(viewModel.isLoggedIn ? 246 : 223)
+                $0.leading.equalToSuperview().offset(-24)
+                $0.top.equalTo(noticeTableView.snp.top).offset(44)
+            }
             noticeToolTipImageView.isHidden = false
-            if isLogined {
-                noticeToolTipImageView.setUpImage(image: .appImage(asset: .noticeLoginToolTip) ?? UIImage())
-            }
-            else {
-                noticeToolTipImageView.setUpImage(image: .appImage(asset: .noticeNotLoginToolTip) ?? UIImage())
-            }
             UserDefaults.standard.set(true, forKey: "hasShownNoticeTooltip")
         }
     }
@@ -324,7 +362,7 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [tabBarCollectionView, noticeTableView, noticeToolTipImageView, writeButton].forEach {
+        [noticeTableView, noticeToolTipImageView, tabBarCollectionView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -341,13 +379,6 @@ extension NoticeListViewController {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(1)
             $0.bottom.equalToSuperview()
-        }
-        
-        noticeToolTipImageView.snp.makeConstraints {
-            $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(56)
-            $0.height.equalTo(44)
-            $0.width.equalTo(248)
-            $0.trailing.equalToSuperview().inset(46)
         }
         
         writeButton.snp.makeConstraints { make in

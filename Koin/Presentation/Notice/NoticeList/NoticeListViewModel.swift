@@ -21,7 +21,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     enum Output {
         case updateBoard([NoticeArticleDto], NoticeListPages, NoticeListType)
         case updateUserKeywordList([NoticeKeywordDto], NoticeKeywordDto?)
-        case isLogined(Bool)
+        case showToolTip
         case showIsLogined(Bool)
     }
     
@@ -34,6 +34,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private(set) var auth: UserType = .student
     private(set) var noticeList: [NoticeArticleDto] = []
+    private(set) var isLoggedIn: Bool = false
     var fetchType: LostItemType? = nil
     private(set) var noticeListType: NoticeListType = .all {
         didSet {
@@ -127,7 +128,8 @@ extension NoticeListViewModel {
             receiveCompletion: { _ in },
             receiveValue: { [weak self] fetchResult in
                 if fetchResult.0.isEmpty {
-                    self?.outputSubject.send(.isLogined(fetchResult.1))
+                    self?.isLoggedIn = fetchResult.1
+                    self?.outputSubject.send(.showToolTip)
                 }
                 completion(fetchResult.0)
             }
