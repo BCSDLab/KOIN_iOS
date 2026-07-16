@@ -20,7 +20,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     private let noticeTableView = NoticeListTableView(frame: .zero, style: .grouped).then {
         $0.backgroundColor = .white
-        $0.separatorStyle = .singleLine
+        $0.separatorStyle = .none
     }
     
     private let writeButton = UIButton().then {
@@ -45,6 +45,12 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     private let tabBarCollectionView = TabBarCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
+    }.then {
+        $0.backgroundColor = .clear
+    }
+    
+    private let separatorView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral400)
     }
     
     private let noticeToolTipImageView = CancelableImageView(frame: .zero)
@@ -362,7 +368,7 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [noticeTableView, noticeToolTipImageView, tabBarCollectionView, writeButton].forEach {
+        [separatorView, noticeTableView, noticeToolTipImageView, tabBarCollectionView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -377,7 +383,7 @@ extension NoticeListViewController {
         
         noticeTableView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(1)
+            $0.top.equalTo(tabBarCollectionView.snp.bottom)
             $0.bottom.equalToSuperview()
         }
         
@@ -387,11 +393,16 @@ extension NoticeListViewController {
             make.width.equalTo(94)
             make.height.equalTo(42)
         }
+        
+        separatorView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalTo(tabBarCollectionView)
+            $0.height.equalTo(1)
+        }
     }
     
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        self.view.backgroundColor = .appColor(.neutral400)
+        self.view.backgroundColor = .appColor(.neutral0)
     }
 }

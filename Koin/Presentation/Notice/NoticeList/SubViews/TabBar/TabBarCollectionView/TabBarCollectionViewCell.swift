@@ -60,6 +60,8 @@ extension TabBarCollectionViewCell {
     }
     
     private func configureView() {
+        backgroundColor = nil
+        backgroundConfiguration = .clear()
         setUpLayouts()
         setUpConstraints()
     }
