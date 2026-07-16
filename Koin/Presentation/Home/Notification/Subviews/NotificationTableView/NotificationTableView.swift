@@ -32,7 +32,6 @@ final class NotificationTableView: UITableView {
     }
     private var lastBoundsSize: CGSize = .zero
     private var lastFooterHeight: CGFloat = 0
-    private var isRecalculatingFooterHeight = false
     
     // MARK: - Initialization
     init() {
@@ -45,16 +44,22 @@ final class NotificationTableView: UITableView {
     
     // MARK: - Public
     func update(notifications: [NotificationItem]) {
-        self.notifications = notifications
-        reloadSections([0], with: refreshControl?.isRefreshing == true ? .fade : .top)
-        setNeedsLayout()
+        performBatchUpdates {
+            self.notifications = notifications
+            recalculateFooterHeightIfNeeded()
+            reloadSections([0], with: refreshControl?.isRefreshing == true ? .fade : .top)
+        }
     }
     
     func markAllAsRead() {
         for index in notifications.indices {
             notifications[index].isRead = true
         }
-        reloadSections([0], with: .fade)
+        guard let visibleIndexPaths = indexPathsForVisibleRows,
+              !visibleIndexPaths.isEmpty else {
+            return
+        }
+        reloadRows(at: visibleIndexPaths, with: .fade)
     }
     
     func deleteAll() {
@@ -64,20 +69,15 @@ final class NotificationTableView: UITableView {
 }
 
 extension NotificationTableView {
-    private func didDeleteNotification(id: String, completion: (() -> Void)? = nil) {
+    private func didDeleteNotification(id: String) {
         guard let index = notifications.firstIndex(where: { $0.id == id }) else {
             return
         }
-        
         let indexPath = IndexPath(row: index, section: 0)
-        
-        notifications.remove(at: index)
-        
-        performBatchUpdates { [weak self] in
-            self?.deleteRows(at: [indexPath], with: .automatic)
-        } completion: { [weak self] _ in
-            self?.setNeedsLayout()
-            completion?()
+        performBatchUpdates {
+            notifications.remove(at: index)
+            recalculateFooterHeightIfNeeded()
+            deleteRows(at: [indexPath], with: .automatic)
         }
     }
     
@@ -85,9 +85,7 @@ extension NotificationTableView {
         guard let index = notifications.firstIndex(where: { $0.id == id }) else {
             return
         }
-
         self.notifications[index].isRead = true
-        
         reloadRows(
             at: [IndexPath(row: index, section: 0)],
             with: .fade
@@ -103,36 +101,28 @@ extension NotificationTableView {
 
         let didBoundsChange = abs(lastBoundsSize.width - bounds.width) > Layout.zeroTolerance
             || abs(lastBoundsSize.height - bounds.height) > Layout.zeroTolerance
-        lastBoundsSize = bounds.size
-
-        guard didBoundsChange || abs(lastFooterHeight) <= Layout.zeroTolerance else { return }
-        recalculateFooterHeightIfNeeded()
+        
+        if didBoundsChange {
+            lastBoundsSize = bounds.size
+            recalculateFooterHeightIfNeeded()
+            setNeedsLayout()
+        }
     }
 
     private func recalculateFooterHeightIfNeeded() {
         guard bounds.width > 0, bounds.height > 0 else { return }
-        guard !isRecalculatingFooterHeight else { return }
-
+        
         let desiredHeight = desiredFooterHeight(for: notifications.count)
         guard abs(lastFooterHeight - desiredHeight) > Layout.zeroTolerance else { return }
-
-        isRecalculatingFooterHeight = true
+        
         lastFooterHeight = desiredHeight
-
-        UIView.performWithoutAnimation {
-            beginUpdates()
-            endUpdates()
-            layoutIfNeeded()
-        }
-
-        isRecalculatingFooterHeight = false
     }
 
     private func desiredFooterHeight(for rowCount: Int) -> CGFloat {
         guard rowCount > 0 else { return 0 }
 
         let visibleHeight = bounds.height
-        - adjustedContentInset.top
+        - contentInset.top
         - adjustedContentInset.bottom
         
         let rowsHeight = CGFloat(rowCount) * Layout.rowHeight

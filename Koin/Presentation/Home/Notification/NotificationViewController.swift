@@ -396,7 +396,8 @@ private extension NotificationViewController {
     
     private func setUpConstraints() {
         notificationTableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
         
         loadingIndicator.snp.makeConstraints {
