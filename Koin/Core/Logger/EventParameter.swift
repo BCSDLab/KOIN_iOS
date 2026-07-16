@@ -110,6 +110,7 @@ enum EventParameter {
             case cityBusDirection = "city_bus_direction"
             case timetableBusTypeTab = "timetable_bus_type_tab"
             
+            // Home
             case shuttleTicket = "shuttle_ticket"
             case busTimetable = "bus_timetable"
             case busRoute = "bus_route"
@@ -127,6 +128,10 @@ enum EventParameter {
             case mainNextModal = "main_next_modal"
             case mainModalHide7d = "main_modal_hide_7d"
             case mainModalClose = "main_modal_close"
+            case homeTimetable = "home_timetable"
+            case homeLogin = "home_login"
+            case homeLogout = "home_logout"
+            case homeSettings = "home_settings"
             
             case departureBox = "departure_box"
             case arrivalBox = "arrival_box"
