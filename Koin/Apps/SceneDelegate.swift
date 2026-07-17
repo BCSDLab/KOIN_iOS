@@ -13,6 +13,10 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     private var isPresentingErrorViewController = false
     
+    var navigationController: UINavigationController? {
+        (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
+    }
+    
     // MARK: - Initializer
     override init() {
         super.init()
@@ -42,14 +46,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         self.window = window
         window.makeKeyAndVisible()
         
-        // 딥링크
-        let navigationController = (window.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
-        
+        // MARK: - 딥링크 Cold Start
         if let userActivity = connectionOptions.userActivities.first(where: { $0.activityType == NSUserActivityTypeBrowsingWeb }),
            let incomingURL = userActivity.webpageURL {
-            handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
+            handleIncomingDeepLink(url: incomingURL)
         } else if let urlContext = connectionOptions.urlContexts.first {
-            handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
+            handleIncomingDeepLink(url: urlContext.url)
         }
     }
     
@@ -60,9 +62,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard userActivity.activityType == NSUserActivityTypeBrowsingWeb,
               let incomingURL = userActivity.webpageURL else { return }
-        
-        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
-        handleIncomingDeepLink(url: incomingURL, navigationController: navigationController)
+        handleIncomingDeepLink(url: incomingURL)
     }
     
     // MARK: - 딥링크 (URI Scheme) warm start
@@ -71,22 +71,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         openURLContexts URLContexts: Set<UIOpenURLContext>
     ) {
         guard let urlContext = URLContexts.first else { return }
-        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
-        handleIncomingDeepLink(url: urlContext.url, navigationController: navigationController)
-    }
-    
-    // MARK: - 푸시알림 처리 (AppDelegate에 의해 호출)
-    func handleNotificationData(userInfo: [AnyHashable: Any]) {
-        let navigationController = (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
-        handleNotificationData(userInfo: userInfo, navigationController: navigationController)
+        handleIncomingDeepLink(url: urlContext.url)
     }
 }
 
 extension SceneDelegate {
     
     private func handleIncomingDeepLink(
-        url: URL,
-        navigationController: UINavigationController?
+        url: URL
     ) {
         // URL 경로가 "/articles/lost-item"인 경우에 처리
         if url.host == "lost-item" || (url.host == "articles" && url.path == "/lost-item") {
@@ -109,7 +101,8 @@ extension SceneDelegate {
         }
     }
     
-    private func handleNotificationData(userInfo: [AnyHashable: Any], navigationController: UINavigationController?) {
+    // MARK: - 푸시알림 처리
+    func handleNotificationData(userInfo: [AnyHashable: Any]) {
         guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String,
               let category = AppPath(rawValue: category) else {
             print("Invalid notification data")
@@ -284,8 +277,7 @@ extension SceneDelegate {
 
     @objc private func presentErrorViewController() {
         
-        guard isPresentingErrorViewController == false,
-              let navigationController = (window?.rootViewController as? UITabBarController)?.selectedViewController as? UINavigationController else {
+        guard isPresentingErrorViewController == false else {
             return
         }
         
@@ -299,13 +291,13 @@ extension SceneDelegate {
             $0.modalPresentationStyle = .fullScreen
         }
         
-        DispatchQueue.main.async {
-            if let _ = navigationController.presentedViewController {
-                navigationController.dismiss(animated: true) {
-                    navigationController.present(errorViewController, animated: true)
+        DispatchQueue.main.async { [weak self] in
+            if let _ = self?.navigationController?.presentedViewController {
+                self?.navigationController?.dismiss(animated: true) {
+                    self?.navigationController?.present(errorViewController, animated: true)
                 }
             } else {
-                navigationController.present(errorViewController, animated: true)
+                self?.navigationController?.present(errorViewController, animated: true)
             }
         }
         isPresentingErrorViewController = true
