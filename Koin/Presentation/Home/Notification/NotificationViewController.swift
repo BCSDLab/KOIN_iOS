@@ -165,11 +165,16 @@ extension NotificationViewController {
                 navigateToChat(postId: postIdInt, chatRoomId: chatRoomIdInt)
             }
         case .keyword:
-            if let noticeIdString = parsedQuery["id"],
-               let keyword = parsedQuery["keyword"],
-               let boardIdString = parsedQuery["board-id"],
-               let noticeIdInt = Int(noticeIdString),
-               let boardIdInt = Int(boardIdString) {
+            guard let noticeIdString = parsedQuery["id"],
+                  let keyword = parsedQuery["keyword"],
+                  let boardIdString = parsedQuery["board-id"],
+                  let noticeIdInt = Int(noticeIdString),
+                  let boardIdInt = Int(boardIdString) else {
+                return
+            }
+            if boardIdInt == 14 {
+                navigateToLostItemData(lostItemId: noticeIdInt)
+            } else {
                 navigateToKeyword(boardId: boardIdInt, noticeId: noticeIdInt)
             }
         default:
@@ -211,6 +216,30 @@ extension NotificationViewController {
     
     private func navigateToChat(postId: Int, chatRoomId: Int) {
         let viewController = makeCallVanChatViewController(postId: postId)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func navigateToLostItemData(lostItemId: Int) {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+        let chatRepository = DefaultChatRepository(service: DefaultChatService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
+        let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+        let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
+        let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
+        let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LostItemDataViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchLostItemDataUseCase: fetchLostItemDataUseCase,
+            fetchLostItemListUseCase: fetchLostItemListUseCase,
+            changeLostItemStateUseCase: changeLostItemStateUseCase,
+            deleteLostItemUseCase: deleteLostItemUseCase,
+            createChatRoomUseCase: createChatRoomUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            id: lostItemId)
+        let viewController = LostItemDataViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
