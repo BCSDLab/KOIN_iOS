@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
+		7C016540300A88940013DD7B /* ShuttleTicketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */; };
 		7C04A47F2FB3380700214992 /* NotiSubscribeDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */; };
 		7C04A4802FB3380700214992 /* NotiSubscribeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */; };
 		7C04A4812FB3380700214992 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */; };
@@ -1017,6 +1018,7 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
+		7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTicketViewController.swift; sourceTree = "<group>"; };
 		7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeDetailRequest.swift; sourceTree = "<group>"; };
 		7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeRequest.swift; sourceTree = "<group>"; };
 		7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
@@ -2202,6 +2204,7 @@
 				7C457B0A2FCE1BA80011D338 /* DiningView */,
 				7C457B122FCE1BA80011D338 /* MobilityView */,
 				7C457B132FCE1BA80011D338 /* ShopView.swift */,
+				7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -5943,6 +5946,7 @@
 				7CED914E2EF2D1F900457128 /* ModifySemesterModalViewController.swift in Sources */,
 				7CF77B4B30027569003642C1 /* TimeTableLectureView.swift in Sources */,
 				7CED914F2EF2D1F900457128 /* AddClassHeaderView.swift in Sources */,
+				7C016540300A88940013DD7B /* ShuttleTicketViewController.swift in Sources */,
 				7CED91522EF2D1F900457128 /* ChangeMyProfileViewController.swift in Sources */,
 				7CB11C7E2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift in Sources */,
 				7CED91532EF2D1F900457128 /* LoginViewController.swift in Sources */,
