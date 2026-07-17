@@ -153,7 +153,7 @@ extension NotificationViewController {
                 navigateToChat(articleId: articleIdInt, chatRoomId: chatRoomIdInt)
             }
         case .callvan:
-            if let postIdString = parsedQuery["postId"],
+            if let postIdString = parsedQuery["id"],
                let postIdInt = Int(postIdString) {
                 navigateToCallVanData(postId: postIdInt)
             }
