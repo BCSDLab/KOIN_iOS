@@ -8,14 +8,10 @@
 import Foundation
 
 enum AppPath: String, Codable {
-    case home
-    case login
     case shop
     case dining
     case keyword
     case chat
     case callvan
     case callvanChat = "callvan-chat"
-    case club
-    case timeTable = "timetable"
 }

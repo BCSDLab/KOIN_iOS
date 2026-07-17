@@ -177,8 +177,6 @@ extension NotificationViewController {
             } else {
                 navigateToKeyword(boardId: boardIdInt, noticeId: noticeIdInt)
             }
-        default:
-            break
         }
     }
     

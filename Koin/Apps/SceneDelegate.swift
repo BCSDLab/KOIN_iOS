@@ -118,17 +118,12 @@ extension SceneDelegate {
         let schemeUri = userInfo["schemeUri"] as? String
         
         switch category {
-        case .home, .login, .club:
-            break
         case .shop:
             let shopViewController = makeShopViewController()
             navigationController?.pushViewController(shopViewController, animated: true)
         case .dining:
             let diningViewController = makeDiningViewController()
             navigationController?.pushViewController(diningViewController, animated: true)
-        case .timeTable:
-            let timeTableViewController = makeTimeTableViewController()
-            navigationController?.pushViewController(timeTableViewController, animated: true)
         case .keyword:
             guard let id = extractValue(from: schemeUri, value: "id"), let intId = Int(id) else {
                 print("noticeId : Invalid or missing")
