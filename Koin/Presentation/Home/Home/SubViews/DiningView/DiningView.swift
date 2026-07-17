@@ -38,7 +38,7 @@ struct DiningView: View {
             )
             .padding(.bottom, 16)
             .emptyOverlay(diningItems.isEmpty) {
-                EmptyDiningCard()
+                EmptyDiningCard(action: onTapAll)
                     .padding(.horizontal, 22)
                     .padding(.bottom, 16)
             }
