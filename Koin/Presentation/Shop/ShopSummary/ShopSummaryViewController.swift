@@ -111,35 +111,38 @@ extension ShopSummaryViewController {
     
     // MARK: - bind
     private func bind() {
-        let output = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-        output.sink { [weak self] output in
-            guard let self else { return }
-            switch output {
-            case let .update1(images, name, rating, reviewCount):
-                self.viewModel.cachedImages = images
-                self.tableHeaderView.configure1(
-                    images: images,
-                    name: name,
-                    rating: rating,
-                    reviewCount: reviewCount
-                )
-                break
-            case let .update2(delivery, payBank, payCard, maxDeliveryTip, phonenumber):
-                self.tableHeaderView.configure2(
-                    delivery: delivery,
-                    payBank: payBank,
-                    payCard: payCard,
-                    maxDeliveryTip: maxDeliveryTip,
-                    phonenumber: phonenumber)
-            case let .update3(menusGroups, menus):
-                self.tableHeaderView.configure3(orderShopMenusGroups: menusGroups)
-                self.menuGroupNameCollectionViewSticky.configure(menuGroup: menusGroups.menuGroups)
-                self.menuGroupTableView.configure(menus)
-            case let .updateShopEvent(event):
-                self.tableHeaderView.configure(event: event ?? "아직 이벤트가 없어요.")
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] output in
+                guard let self else { return }
+                switch output {
+                case let .update1(images, name, rating, reviewCount):
+                    self.viewModel.cachedImages = images
+                    self.tableHeaderView.configure1(
+                        images: images,
+                        name: name,
+                        rating: rating,
+                        reviewCount: reviewCount
+                    )
+                    break
+                case let .update2(delivery, payBank, payCard, maxDeliveryTip, phonenumber):
+                    self.tableHeaderView.configure2(
+                        delivery: delivery,
+                        payBank: payBank,
+                        payCard: payCard,
+                        maxDeliveryTip: maxDeliveryTip,
+                        phonenumber: phonenumber)
+                case let .update3(menusGroups, menus):
+                    self.tableHeaderView.configure3(orderShopMenusGroups: menusGroups)
+                    self.menuGroupNameCollectionViewSticky.configure(menuGroup: menusGroups.menuGroups)
+                    self.menuGroupTableView.configure(menus)
+                case let .updateShopEvent(event):
+                    self.tableHeaderView.configure(event: event ?? "아직 이벤트가 없어요.")
+                case let .updateTitle(title):
+                    self.title = title
+                }
             }
-        }
-        .store(in: &subscriptions)
+            .store(in: &subscriptions)
         
         // MARK: - TableHeaderView
         tableHeaderView.didScrollPublisher.sink { [weak self] contentOffset in
