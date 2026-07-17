@@ -107,8 +107,6 @@ extension NotificationViewController {
             logValue = "콜밴팟"
         case .callvanChat:
             logValue = "콜밴팟 채팅"
-        default:
-            return
         }
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, logValue))
     }
@@ -139,47 +137,41 @@ extension NotificationViewController {
         }
         switch item.appPath {
         case .shop:
-            if let shopIdString = parsedQuery["id"],
-               let shopIdInt = Int(shopIdString) {
-                navigateToShop(shopId: shopIdInt)
+            if let shopId = Int(parsedQuery["id"]) {
+                navigateToShop(shopId: shopId)
             }
         case .dining:
             navigateToDining()
         case .chat:
-            if let articleIdString = parsedQuery["articleId"],
-               let chatRoomIdString = parsedQuery["chatRoomId"],
-               let articleIdInt = Int(articleIdString),
-               let chatRoomIdInt = Int(chatRoomIdString) {
-                navigateToChat(articleId: articleIdInt, chatRoomId: chatRoomIdInt)
+            if let articleId = Int(parsedQuery["articleId"]),
+               let chatRoomId = Int(parsedQuery["chatRoomId"]) {
+                navigateToChat(articleId: articleId, chatRoomId: chatRoomId)
             }
         case .callvan:
-            if let postIdString = parsedQuery["id"],
-               let postIdInt = Int(postIdString) {
-                navigateToCallVanData(postId: postIdInt)
+            if let postId = Int(parsedQuery["id"]) {
+                navigateToCallVanData(postId: postId)
             }
         case .callvanChat:
-            if let postIdString = parsedQuery["postId"],
-               let chatRoomIdString = parsedQuery["chatRoomId"],
-               let postIdInt = Int(postIdString),
-               let chatRoomIdInt = Int(chatRoomIdString) {
-                navigateToCallVanChat(postId: postIdInt, chatRoomId: chatRoomIdInt)
+            if let postId = Int(parsedQuery["postId"]),
+               let chatRoomId = Int(parsedQuery["chatRoomId"]) {
+                navigateToCallVanChat(postId: postId, chatRoomId: chatRoomId)
             }
         case .keyword:
-            guard let noticeIdString = parsedQuery["id"],
-                  let keyword = parsedQuery["keyword"],
-                  let boardIdString = parsedQuery["board-id"],
-                  let noticeIdInt = Int(noticeIdString),
-                  let boardIdInt = Int(boardIdString) else {
+            guard let noticeId = Int(parsedQuery["id"]),
+                  let boardId = Int(parsedQuery["board-id"]) else {
                 return
             }
-            if boardIdInt == 14 {
-                navigateToLostItemData(lostItemId: noticeIdInt)
+            if boardId == 14 {
+                navigateToLostItemData(lostItemId: noticeId)
             } else {
-                navigateToKeyword(boardId: boardIdInt, noticeId: noticeIdInt)
+                navigateToKeyword(boardId: boardId, noticeId: noticeId)
             }
         }
     }
-    
+}
+
+
+extension NotificationViewController {
     private func parseQuery(uri: String) -> [String: String]? {
         if let components = URLComponents(string: uri),
            let qureyItems = components.queryItems {
@@ -190,7 +182,9 @@ extension NotificationViewController {
             return nil
         }
     }
-    
+}
+
+extension NotificationViewController {
     private func navigateToShop(shopId: Int) {
         let shopDetailViewController = makeShopSummaryViewController(shopId: shopId)
         navigationController?.pushViewController(shopDetailViewController, animated: true)
