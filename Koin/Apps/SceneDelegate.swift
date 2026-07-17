@@ -147,11 +147,9 @@ extension SceneDelegate {
                 navigationController?.pushViewController(callVanDataViewController, animated: true)
             }
         case .callvanChat:
-            if let postId = Int(parsedQuery["postId"]),
-               let chatRoomId = Int(parsedQuery["chatRoomId"]) {
+            if let postId = Int(parsedQuery["postId"]) {
                 let callVanChatViewController = makeCallVanChatViewController(postId: postId)
                 navigationController?.pushViewController(callVanChatViewController, animated: true)
-                
             }
         case .keyword:
             guard let noticeId = Int(parsedQuery["id"]),

@@ -152,9 +152,8 @@ extension NotificationViewController {
                 navigateToCallVanData(postId: postId)
             }
         case .callvanChat:
-            if let postId = Int(parsedQuery["postId"]),
-               let chatRoomId = Int(parsedQuery["chatRoomId"]) {
-                navigateToCallVanChat(postId: postId, chatRoomId: chatRoomId)
+            if let postId = Int(parsedQuery["postId"]) {
+                navigateToCallVanChat(postId: postId)
             }
         case .keyword:
             guard let noticeId = Int(parsedQuery["id"]),
@@ -206,7 +205,7 @@ extension NotificationViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func navigateToCallVanChat(postId: Int, chatRoomId: Int) {
+    private func navigateToCallVanChat(postId: Int) {
         let viewController = makeCallVanChatViewController(postId: postId)
         navigationController?.pushViewController(viewController, animated: true)
     }
