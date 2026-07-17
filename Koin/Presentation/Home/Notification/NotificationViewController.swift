@@ -162,7 +162,7 @@ extension NotificationViewController {
                let chatRoomIdString = parsedQuery["chatRoomId"],
                let postIdInt = Int(postIdString),
                let chatRoomIdInt = Int(chatRoomIdString) {
-                navigateToChat(postId: postIdInt, chatRoomId: chatRoomIdInt)
+                navigateToCallVanChat(postId: postIdInt, chatRoomId: chatRoomIdInt)
             }
         case .keyword:
             guard let noticeIdString = parsedQuery["id"],
@@ -214,7 +214,7 @@ extension NotificationViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func navigateToChat(postId: Int, chatRoomId: Int) {
+    private func navigateToCallVanChat(postId: Int, chatRoomId: Int) {
         let viewController = makeCallVanChatViewController(postId: postId)
         navigationController?.pushViewController(viewController, animated: true)
     }
