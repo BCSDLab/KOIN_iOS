@@ -107,8 +107,6 @@ extension NotificationViewController {
             logValue = "콜밴팟"
         case .callvanChat:
             logValue = "콜밴팟 채팅"
-        default:
-            return
         }
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, logValue))
     }
@@ -139,44 +137,40 @@ extension NotificationViewController {
         }
         switch item.appPath {
         case .shop:
-            if let shopIdString = parsedQuery["id"],
-               let shopIdInt = Int(shopIdString) {
-                navigateToShop(shopId: shopIdInt)
+            if let shopId = Int(parsedQuery["id"]) {
+                navigateToShop(shopId: shopId)
             }
         case .dining:
             navigateToDining()
         case .chat:
-            if let articleIdString = parsedQuery["articleId"],
-               let chatRoomIdString = parsedQuery["chatRoomId"],
-               let articleIdInt = Int(articleIdString),
-               let chatRoomIdInt = Int(chatRoomIdString) {
-                navigateToChat(articleId: articleIdInt, chatRoomId: chatRoomIdInt)
+            if let articleId = Int(parsedQuery["articleId"]),
+               let chatRoomId = Int(parsedQuery["chatRoomId"]) {
+                navigateToChat(articleId: articleId, chatRoomId: chatRoomId)
             }
         case .callvan:
-            if let postIdString = parsedQuery["postId"],
-               let postIdInt = Int(postIdString) {
-                navigateToCallVanData(postId: postIdInt)
+            if let postId = Int(parsedQuery["id"]) {
+                navigateToCallVanData(postId: postId)
             }
         case .callvanChat:
-            if let postIdString = parsedQuery["postId"],
-               let chatRoomIdString = parsedQuery["chatRoomId"],
-               let postIdInt = Int(postIdString),
-               let chatRoomIdInt = Int(chatRoomIdString) {
-                navigateToChat(postId: postIdInt, chatRoomId: chatRoomIdInt)
+            if let postId = Int(parsedQuery["postId"]) {
+                navigateToCallVanChat(postId: postId)
             }
         case .keyword:
-            if let noticeIdString = parsedQuery["id"],
-               let keyword = parsedQuery["keyword"],
-               let boardIdString = parsedQuery["board-id"],
-               let noticeIdInt = Int(noticeIdString),
-               let boardIdInt = Int(boardIdString) {
-                navigateToKeyword(boardId: boardIdInt, noticeId: noticeIdInt)
+            guard let noticeId = Int(parsedQuery["id"]),
+                  let boardId = Int(parsedQuery["board-id"]) else {
+                return
             }
-        default:
-            break
+            if boardId == 14 {
+                navigateToLostItemData(lostItemId: noticeId)
+            } else {
+                navigateToKeyword(boardId: boardId, noticeId: noticeId)
+            }
         }
     }
-    
+}
+
+
+extension NotificationViewController {
     private func parseQuery(uri: String) -> [String: String]? {
         if let components = URLComponents(string: uri),
            let qureyItems = components.queryItems {
@@ -187,10 +181,12 @@ extension NotificationViewController {
             return nil
         }
     }
-    
+}
+
+extension NotificationViewController {
     private func navigateToShop(shopId: Int) {
-        let viewController = makeShopViewController()
-        navigationController?.pushViewController(viewController, animated: true)
+        let shopDetailViewController = makeShopSummaryViewController(shopId: shopId)
+        navigationController?.pushViewController(shopDetailViewController, animated: true)
     }
     
     private func navigateToDining() {
@@ -209,8 +205,32 @@ extension NotificationViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func navigateToChat(postId: Int, chatRoomId: Int) {
+    private func navigateToCallVanChat(postId: Int) {
         let viewController = makeCallVanChatViewController(postId: postId)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func navigateToLostItemData(lostItemId: Int) {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+        let chatRepository = DefaultChatRepository(service: DefaultChatService())
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
+        let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
+        let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
+        let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
+        let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
+        let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LostItemDataViewModel(
+            checkLoginUseCase: checkLoginUseCase,
+            fetchLostItemDataUseCase: fetchLostItemDataUseCase,
+            fetchLostItemListUseCase: fetchLostItemListUseCase,
+            changeLostItemStateUseCase: changeLostItemStateUseCase,
+            deleteLostItemUseCase: deleteLostItemUseCase,
+            createChatRoomUseCase: createChatRoomUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            id: lostItemId)
+        let viewController = LostItemDataViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -294,28 +314,25 @@ extension NotificationViewController {
         return viewController
     }
     
-    private func makeShopViewController() -> ShopViewController {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+    private func makeShopSummaryViewController(shopId: Int) -> UIViewController {
+        let repository = DefaultShopRepository(service: DefaultShopService())
+        let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
+        let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
+        let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
+        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: repository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+        let viewModel = ShopSummaryViewModel(
+            fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
+            fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
+            fetchShopDataUseCase: fetchShopDataUseCase,
+            fetchShopEventListUseCase: fetchShopEventListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            shopId: shopId,
+            shopName: nil
         )
-        let viewController = ShopViewController(viewModel: viewModel)
-        viewController.title = "주변상점"
-        return viewController
+        return ShopSummaryViewController(viewModel: viewModel)
     }
 }
 

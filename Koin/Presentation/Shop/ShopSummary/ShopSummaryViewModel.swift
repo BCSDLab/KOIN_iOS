@@ -24,6 +24,7 @@ final class ShopSummaryViewModel {
         case update2(delivery: Bool, payBank: Bool, payCard: Bool, maxDeliveryTip: Int = 0, phone: String)
         case update3(menusGroups: OrderShopMenusGroups, menus: [OrderShopMenus])
         case updateShopEvent(event: String?)
+        case updateTitle(String)
     }
     
     // MARK: - Properties
@@ -32,7 +33,7 @@ final class ShopSummaryViewModel {
     private(set) var shopId: Int
     private(set) var phonenumber: String = ""
     var cachedImages: [OrderImage] = []
-    let shopName: String
+    private(set) var shopName: String
     let backCategoryName: String?
 
     private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
@@ -51,14 +52,14 @@ final class ShopSummaryViewModel {
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int,
-         shopName: String,
+         shopName: String?,
          backCategoryName: String? = nil) {
         self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
         self.fetchOrderShopMenusAndGroupsFromShopUseCase = fetchOrderShopMenusAndGroupsFromShopUseCase
         self.fetchShopDataUseCase = fetchShopDataUseCase
         self.fetchShopEventListUseCase = fetchShopEventListUseCase
         self.shopId = shopId
-        self.shopName = shopName
+        self.shopName = shopName ?? ""
         self.backCategoryName = backCategoryName
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
@@ -122,6 +123,8 @@ extension ShopSummaryViewModel {
             receiveValue: { [weak self] in
                 guard let self else { return }
                 self.phonenumber = $0.phone
+                self.shopName = $0.name
+                self.outputSubject.send(.updateTitle($0.name))
                 self.outputSubject.send(.update2(
                     delivery: $0.delivery,
                     payBank: $0.payBank,

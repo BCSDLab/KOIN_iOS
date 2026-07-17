@@ -111,15 +111,16 @@ final class ShopViewController: UIViewController {
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
             let previousPage = self?.viewModel.selectedCategoryName ?? "알 수 없음" 
-            let viewModel = ShopSummaryViewModel(fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-                                                 fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-                                                 fetchShopDataUseCase: fetchShopDataUseCase,
-                                                 fetchShopEventListUseCase: fetchShopEventListUseCase,
-                                                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                                                 getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-                                                 shopId: shopId,
-                                                 shopName: shopName,
-                                                 backCategoryName: previousPage
+            let viewModel = ShopSummaryViewModel(
+                fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
+                fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
+                fetchShopDataUseCase: fetchShopDataUseCase,
+                fetchShopEventListUseCase: fetchShopEventListUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+                getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+                shopId: shopId,
+                shopName: shopName,
+                backCategoryName: previousPage
             )
             let viewController = ShopSummaryViewController(viewModel: viewModel)
             viewController.title = shopName
