@@ -123,6 +123,7 @@ extension ShopSummaryViewModel {
             receiveValue: { [weak self] in
                 guard let self else { return }
                 self.phonenumber = $0.phone
+                self.shopName = $0.name
                 self.outputSubject.send(.updateTitle($0.name))
                 self.outputSubject.send(.update2(
                     delivery: $0.delivery,
