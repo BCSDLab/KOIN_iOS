@@ -189,8 +189,8 @@ extension NotificationViewController {
     }
     
     private func navigateToShop(shopId: Int) {
-        let viewController = makeShopViewController()
-        navigationController?.pushViewController(viewController, animated: true)
+        let shopDetailViewController = makeShopSummaryViewController(shopId: shopId)
+        navigationController?.pushViewController(shopDetailViewController, animated: true)
     }
     
     private func navigateToDining() {
@@ -294,28 +294,25 @@ extension NotificationViewController {
         return viewController
     }
     
-    private func makeShopViewController() -> ShopViewController {
-        let shopService = DefaultShopService()
-        let shopRepository = DefaultShopRepository(service: shopService)
-        let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
-        let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
-        let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
+    private func makeShopSummaryViewController(shopId: Int) -> UIViewController {
+        let repository = DefaultShopRepository(service: DefaultShopService())
+        let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
+        let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
+        let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
+        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: repository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let viewModel = ShopViewModel(
-            fetchShopListUseCase: fetchShopListUseCase,
-            fetchEventListUseCase: fetchEventListUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
+        let viewModel = ShopSummaryViewModel(
+            fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
+            fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
+            fetchShopDataUseCase: fetchShopDataUseCase,
+            fetchShopEventListUseCase: fetchShopEventListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase
+            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
+            shopId: shopId,
+            shopName: nil
         )
-        let viewController = ShopViewController(viewModel: viewModel)
-        viewController.title = "주변상점"
-        return viewController
+        return ShopSummaryViewController(viewModel: viewModel)
     }
 }
 
