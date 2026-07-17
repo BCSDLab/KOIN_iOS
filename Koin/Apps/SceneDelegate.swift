@@ -12,6 +12,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     // MARK: - Properties
     var window: UIWindow?
     private var isPresentingErrorViewController = false
+    private var handledMessageIds: [String] = []
     
     var navigationController: UINavigationController? {
         (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
@@ -32,7 +33,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         NotificationCenter.default.removeObserver(self)
     }
     
-    // MARK: - cold start & 딥링크
+    // MARK: - cold start
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
@@ -52,6 +53,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             handleIncomingDeepLink(url: incomingURL)
         } else if let urlContext = connectionOptions.urlContexts.first {
             handleIncomingDeepLink(url: urlContext.url)
+        }
+        
+        // MARK: - 푸시알림 Cold Start
+        if let userInfo = connectionOptions.notificationResponse?.notification.request.content.userInfo {
+            handleNotificationData(userInfo: userInfo)
         }
     }
     
@@ -103,7 +109,15 @@ extension SceneDelegate {
     
     // MARK: - 푸시알림 처리
     func handleNotificationData(userInfo: [AnyHashable: Any]) {
-        guard let aps = userInfo["aps"] as? [String: AnyObject], let category = aps["category"] as? String,
+        // Cold Start 푸시알림 중복처리 방지
+        guard let messageId = userInfo["gcm.message_id"] as? String,
+              !handledMessageIds.contains(messageId) else {
+            return
+        }
+        handledMessageIds.append(messageId)
+        
+        guard let aps = userInfo["aps"] as? [String: AnyObject],
+              let category = aps["category"] as? String,
               let category = AppPath(rawValue: category) else {
             print("Invalid notification data")
             return
