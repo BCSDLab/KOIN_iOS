@@ -14,6 +14,18 @@ final class CallVanNotificationDropdownViewController: UIViewController {
     // MARK: - Properties
     private let onReadButtonTapped: ()->Void
     private let onDeleteButtonTapped: ()->Void
+    private var minimizedTransform: CGAffineTransform {
+        let scale = 0.4
+        
+        return CGAffineTransform(
+            a: scale,
+            b: 0,
+            c: 0,
+            d: scale,
+            tx: dropDownView.bounds.width * (1 - scale) / 2,
+            ty: -dropDownView.bounds.height * (1 - scale) / 2
+        )
+    }
     
     // MARK: - UI Components
     private let dropDownView = UIView()
@@ -33,6 +45,41 @@ final class CallVanNotificationDropdownViewController: UIViewController {
     }
     
     // MARK: - Life Cycle
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.layoutIfNeeded()
+        dropDownView.transform = minimizedTransform
+        dropDownView.alpha = 0
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animate(
+            springDuration: 0.2,
+            bounce: 0.2,
+            options: [.curveEaseInOut, .beginFromCurrentState]
+        ) { [weak self] in
+            self?.dropDownView.transform = .identity
+            self?.dropDownView.alpha = 1
+        }
+    }
+}
+
+extension CallVanNotificationDropdownViewController {
+    private func dismiss(completion: (()->Void)? = nil) {
+        UIView.animate(
+            springDuration: 0.2,
+            bounce: 0.2,
+            options: [.curveEaseInOut, .beginFromCurrentState]
+        ) { [weak self] in
+            guard let self else { return }
+            dropDownView.transform = minimizedTransform
+            dropDownView.alpha = 0
+        } completion: { [weak self] _ in
+            self?.dismiss(animated: false)
+            completion?()
+        }
+    }
 }
 
 extension CallVanNotificationDropdownViewController {
@@ -80,7 +127,10 @@ extension CallVanNotificationDropdownViewController {
     }
     
     private func setUpLayouts() {
-        [dropDownView, readButton, dropDownSeparatorView, deleteButton].forEach {
+        [readButton, dropDownSeparatorView, deleteButton].forEach {
+            dropDownView.addSubview($0)
+        }
+        [dropDownView].forEach {
             view.addSubview($0)
         }
     }
@@ -92,19 +142,19 @@ extension CallVanNotificationDropdownViewController {
         }
         readButton.snp.makeConstraints {
             $0.height.equalTo(35)
-            $0.top.equalTo(dropDownView)
-            $0.leading.trailing.equalTo(dropDownView).inset(4)
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(4)
         }
         dropDownSeparatorView.snp.makeConstraints {
             $0.height.equalTo(1)
             $0.top.equalTo(readButton.snp.bottom)
-            $0.leading.trailing.equalTo(dropDownView).inset(12)
+            $0.leading.trailing.equalToSuperview().inset(12)
         }
         deleteButton.snp.makeConstraints {
             $0.height.equalTo(35)
             $0.top.equalTo(dropDownSeparatorView.snp.bottom)
             $0.leading.equalTo(readButton)
-            $0.bottom.equalTo(dropDownView)
+            $0.bottom.equalToSuperview()
         }
     }
 }
@@ -117,13 +167,13 @@ extension CallVanNotificationDropdownViewController {
     }
     
     @objc private func readButtonTapped() {
-        dismiss(animated: true) { [weak self] in
+        dismiss { [weak self] in
             self?.onReadButtonTapped()
         }
     }
     
     @objc private func deleteButtonTapped() {
-        dismiss(animated: true) { [weak self] in
+        dismiss { [weak self] in
             self?.onDeleteButtonTapped()
         }
     }
@@ -137,6 +187,6 @@ extension CallVanNotificationDropdownViewController {
     }
     
     @objc private func didTapAround() {
-        dismiss(animated: true)
+        dismiss()
     }
 }
