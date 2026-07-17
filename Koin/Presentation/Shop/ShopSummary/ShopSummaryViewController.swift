@@ -145,73 +145,93 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         // MARK: - TableHeaderView
-        tableHeaderView.didScrollPublisher.sink { [weak self] contentOffset in
-            self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
-        }
-        .store(in: &subscriptions)
+        tableHeaderView.didScrollPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] contentOffset in
+                self?.menuGroupNameCollectionViewSticky.contentOffset = contentOffset
+            }
+            .store(in: &subscriptions)
         
-        tableHeaderView.didSelectCellPublisher.sink { [weak self] indexPath in
-            guard let self = self else { return }
-            let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
-            self.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
-            self.menuGroupNameCollectionViewSticky.configure(selectedIndexPath: indexPath)
-            self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
-        }
-        .store(in: &subscriptions)
+        tableHeaderView.didSelectCellPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] indexPath in
+                guard let self = self else { return }
+                let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
+                self.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
+                self.menuGroupNameCollectionViewSticky.configure(selectedIndexPath: indexPath)
+                self.menuGroupNameCollectionViewSticky.selectItem(at: indexPath, animated: true, scrollPosition: .centeredHorizontally)
+            }
+            .store(in: &subscriptions)
 
-        tableHeaderView.didSwipePicturePublisher.sink { [weak self] in
-            guard let self else { return }
-            self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopPictureSwipe, .swipe, self.viewModel.shopName))
-        }.store(in: &subscriptions)
+        tableHeaderView.didSwipePicturePublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self else { return }
+                self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopPictureSwipe, .swipe, self.viewModel.shopName))
+            }
+            .store(in: &subscriptions)
         
-        tableHeaderView.shouldSetContentInsetPublisher.sink { [weak self] shouldSetContentInset in
-            let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
-            self?.menuGroupTableView.contentInset = UIEdgeInsets(top: shouldSetContentInset ? topInset : 0, left: 0, bottom: 0, right: 0)
-        }
-        .store(in: &subscriptions)
+        tableHeaderView.shouldSetContentInsetPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] shouldSetContentInset in
+                let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
+                self?.menuGroupTableView.contentInset = UIEdgeInsets(top: shouldSetContentInset ? topInset : 0, left: 0, bottom: 0, right: 0)
+            }
+            .store(in: &subscriptions)
         
         tableHeaderView.reviewButtonTappedPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 self?.navigateToReviewListViewController()
             }
             .store(in: &subscriptions)
         
-        tableHeaderView.navigateToShopInfoPublisher.sink { [weak self] shouldHighlight in
-            guard let self else { return }
-            self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, self.viewModel.shopName))
-            let shopService = DefaultShopService()
-            let shopRepository = DefaultShopRepository(service: shopService)
-            let fetchOrderShopDetailFromShopUseCase = DefaultFetchOrderShopDetailFromShopUseCase(repository: shopRepository)
-            let viewModel = ShopDetailViewModel(fetchOrderShopDetailFromShopUseCase: fetchOrderShopDetailFromShopUseCase,
-                                                shopId: self.viewModel.shopId)
-            let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
-            viewController.title = "가게정보"
-            self.navigationController?.pushViewController(viewController, animated: true)
-        }
-        .store(in: &subscriptions)
+        tableHeaderView.navigateToShopInfoPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] shouldHighlight in
+                guard let self else { return }
+                self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, self.viewModel.shopName))
+                let shopService = DefaultShopService()
+                let shopRepository = DefaultShopRepository(service: shopService)
+                let fetchOrderShopDetailFromShopUseCase = DefaultFetchOrderShopDetailFromShopUseCase(repository: shopRepository)
+                let viewModel = ShopDetailViewModel(fetchOrderShopDetailFromShopUseCase: fetchOrderShopDetailFromShopUseCase,
+                                                    shopId: self.viewModel.shopId)
+                let viewController = ShopDetailViewController(viewModel: viewModel, shouldHighlight: shouldHighlight)
+                viewController.title = "가게정보"
+                self.navigationController?.pushViewController(viewController, animated: true)
+            }
+            .store(in: &subscriptions)
         
-        tableHeaderView.phoneButtonTappedPublisher.sink { [weak self] in
-            self?.makePhonecall()
-            
-            guard let self else { return }
-            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, self.viewModel.shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
-        }
-        .store(in: &subscriptions)
+        tableHeaderView.phoneButtonTappedPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                self?.makePhonecall()
+                
+                guard let self else { return }
+                self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, self.viewModel.shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
+            }
+            .store(in: &subscriptions)
         
-        tableHeaderView.benefitButtonTappedPublisher.sink { [weak self] in
-            guard let self else { return }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitEntry, .click, self.viewModel.shopName, nil, nil, nil, nil))
-            navigateToShopBenefit()
-        }.store(in: &subscriptions)
+        tableHeaderView.benefitButtonTappedPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] in
+                guard let self else { return }
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitEntry, .click, self.viewModel.shopName, nil, nil, nil, nil))
+                navigateToShopBenefit()
+            }
+            .store(in: &subscriptions)
         
         // MARK: - GroupNameCollectionView
-        menuGroupNameCollectionViewSticky.didScrollPublisher.sink { [weak self] contentOffset in
-            self?.tableHeaderView.update(contentOffset: contentOffset)
-        }
-        .store(in: &subscriptions)
+        menuGroupNameCollectionViewSticky.didScrollPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] contentOffset in
+                self?.tableHeaderView.update(contentOffset: contentOffset)
+            }
+            .store(in: &subscriptions)
         
         menuGroupNameCollectionViewSticky.didSelectCellPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] indexPath in
                 guard let self = self else { return }
                 let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
@@ -224,6 +244,7 @@ extension ShopSummaryViewController {
         
         // MARK: - tableView
         menuGroupTableView.updateNavigationBarPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] navigationBarItemColor, navigationBarAlpha in
                 self?.navigationBarItemColor = navigationBarItemColor
                 self?.navigationBarAlpha = navigationBarAlpha
@@ -231,12 +252,14 @@ extension ShopSummaryViewController {
             }.store(in: &subscriptions)
         
         menuGroupTableView.shouldShowStickyPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] shouldShowSticky in
                 self?.menuGroupNameCollectionViewSticky.isHidden = !shouldShowSticky
             }
             .store(in: &subscriptions)
         
         menuGroupTableView.shouldSetContentInsetPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] shouldSetContentInset in
                 let topInset = UIApplication.topSafeAreaHeight() + (self?.navigationController?.navigationBar.frame.height ?? 0) + (self?.menuGroupNameCollectionViewSticky.frame.height ?? 0) - 3
                 self?.menuGroupTableView.contentInset = UIEdgeInsets(top: shouldSetContentInset ? topInset : 0, left: 0, bottom: 0, right: 0)
@@ -244,6 +267,7 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
         
         menuGroupTableView.didEndScrollPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [ weak self ] in
                 guard let self else { return }
                 if !self.hasLoggedInitialScroll {
@@ -254,6 +278,7 @@ extension ShopSummaryViewController {
             .store(in: &subscriptions)
 
         menuGroupTableView.didTapThumbnailPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] imageUrl in
                 guard let self else { return }
                 let zoomedViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
@@ -264,12 +289,14 @@ extension ShopSummaryViewController {
 
         // MARK: - PopUpView
         popUpView.leftButtonTappedPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 self?.hidePopUpView()
             }
             .store(in: &subscriptions)
         
         popUpView.rightButtonTappedPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] menuId in
                 self?.hidePopUpView()
                 self?.navigateToMenuDetail(menuId: menuId)
@@ -278,6 +305,7 @@ extension ShopSummaryViewController {
         
         // MARK: - ThumbnailImage
         tableHeaderView.didTapThumbnailPublisher
+            .receive(on: DispatchQueue.main)
             .sink { [weak self] indexPath in
                 guard let self,
                       0 < self.viewModel.cachedImages.count,
