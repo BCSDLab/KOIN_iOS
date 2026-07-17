@@ -14,6 +14,7 @@ extension UIViewController {
         case empty
         case order
         case transparentWhite
+        case shuttleTicket
         
         var backgroundColor: UIColor {
             switch self {
@@ -25,6 +26,8 @@ extension UIViewController {
                 return UIColor.appColor(.newBackground)
             case .transparentWhite:
                 return UIColor.clear
+            case .shuttleTicket:
+                return UIColor(hexCode: "F7F7F7")
             }
         }
         
@@ -32,7 +35,7 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty, .order:
+            case .empty, .order, .shuttleTicket:
                 return UIColor.appColor(.neutral800)
             }
         }
@@ -45,7 +48,7 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty, .order:
+            case .empty, .order, .shuttleTicket:
                 return UIColor.appColor(.neutral800)
             }
         }

@@ -137,10 +137,9 @@ extension HomeHostingController {
         return CallVanListViewController(viewModel: viewModel)
     }
 
+    // MARK: - 셔틀 탑승권 화면 표시
     private func showQRCode() {
-        if let url = URL(string: "https://koreatech.unibus.kr/#!/qrcode") {
-            UIApplication.shared.open(url, options: [:], completionHandler: nil)
-        }
+        navigationController?.pushViewController(ShuttleTicketViewController(), animated: true)
     }
 
     private func makeForceUpdateViewController() -> UIViewController {
