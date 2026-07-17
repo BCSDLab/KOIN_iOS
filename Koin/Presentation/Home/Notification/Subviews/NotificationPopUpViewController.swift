@@ -133,7 +133,7 @@ extension NotificationPopUpViewController {
             $0.backgroundColor = .appColor(.neutral50)
             $0.layer.applySketchShadow(
                 color: .black,
-                alpha: 0.4,
+                alpha: 0.04,
                 x: 0,
                 y: 2,
                 blur: 4,
@@ -141,6 +141,7 @@ extension NotificationPopUpViewController {
             )
             $0.layer.cornerRadius = 8
             $0.clipsToBounds = true
+            $0.layer.masksToBounds = false
         }
         
         markAllAsReadButton.do {
