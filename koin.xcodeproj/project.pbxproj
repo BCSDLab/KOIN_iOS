@@ -9,6 +9,14 @@
 /* Begin PBXBuildFile section */
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
 		7C016540300A88940013DD7B /* ShuttleTicketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */; };
+		7C016544300AA1450013DD7B /* DepartmentCategoryHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016543300AA1450013DD7B /* DepartmentCategoryHostingController.swift */; };
+		7C016546300AA14C0013DD7B /* DepartmentCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016545300AA14C0013DD7B /* DepartmentCategoryView.swift */; };
+		7C016548300AA1520013DD7B /* DepartmentCategoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016547300AA1520013DD7B /* DepartmentCategoryViewModel.swift */; };
+		7C016556300AA2E10013DD7B /* DepartmentCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016555300AA2E10013DD7B /* DepartmentCategory.swift */; };
+		7C01655D300AA4680013DD7B /* DepartmentCategoryRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C01655C300AA4680013DD7B /* DepartmentCategoryRow.swift */; };
+		7C016561300AAD810013DD7B /* DepartmentSearchView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016560300AAD810013DD7B /* DepartmentSearchView.swift */; };
+		7C01656B300ABE9E0013DD7B /* DepartmentFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C01656A300ABE9E0013DD7B /* DepartmentFooterView.swift */; };
+		7C016574300BD8AF0013DD7B /* FetchDepartmentCategoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016573300BD8AF0013DD7B /* FetchDepartmentCategoryUseCase.swift */; };
 		7C04A47F2FB3380700214992 /* NotiSubscribeDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */; };
 		7C04A4802FB3380700214992 /* NotiSubscribeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */; };
 		7C04A4812FB3380700214992 /* SendDeviceTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */; };
@@ -1020,6 +1028,14 @@
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTicketViewController.swift; sourceTree = "<group>"; };
+		7C016543300AA1450013DD7B /* DepartmentCategoryHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentCategoryHostingController.swift; sourceTree = "<group>"; };
+		7C016545300AA14C0013DD7B /* DepartmentCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentCategoryView.swift; sourceTree = "<group>"; };
+		7C016547300AA1520013DD7B /* DepartmentCategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentCategoryViewModel.swift; sourceTree = "<group>"; };
+		7C016555300AA2E10013DD7B /* DepartmentCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentCategory.swift; sourceTree = "<group>"; };
+		7C01655C300AA4680013DD7B /* DepartmentCategoryRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentCategoryRow.swift; sourceTree = "<group>"; };
+		7C016560300AAD810013DD7B /* DepartmentSearchView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentSearchView.swift; sourceTree = "<group>"; };
+		7C01656A300ABE9E0013DD7B /* DepartmentFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentFooterView.swift; sourceTree = "<group>"; };
+		7C016573300BD8AF0013DD7B /* FetchDepartmentCategoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDepartmentCategoryUseCase.swift; sourceTree = "<group>"; };
 		7C04A47B2FB3380700214992 /* NotiSubscribeDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeDetailRequest.swift; sourceTree = "<group>"; };
 		7C04A47C2FB3380700214992 /* NotiSubscribeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiSubscribeRequest.swift; sourceTree = "<group>"; };
 		7C04A47D2FB3380700214992 /* SendDeviceTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenRequest.swift; sourceTree = "<group>"; };
@@ -2025,6 +2041,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7C016541300A9FF80013DD7B /* Department */ = {
+			isa = PBXGroup;
+			children = (
+				7C016542300AA1380013DD7B /* DepartmentCategory */,
+			);
+			path = Department;
+			sourceTree = "<group>";
+		};
+		7C016542300AA1380013DD7B /* DepartmentCategory */ = {
+			isa = PBXGroup;
+			children = (
+				7C01655B300AA45D0013DD7B /* Subviews */,
+				7C016543300AA1450013DD7B /* DepartmentCategoryHostingController.swift */,
+				7C016545300AA14C0013DD7B /* DepartmentCategoryView.swift */,
+				7C016547300AA1520013DD7B /* DepartmentCategoryViewModel.swift */,
+			);
+			path = DepartmentCategory;
+			sourceTree = "<group>";
+		};
+		7C016552300AA2BE0013DD7B /* Department */ = {
+			isa = PBXGroup;
+			children = (
+				7C016555300AA2E10013DD7B /* DepartmentCategory.swift */,
+			);
+			path = Department;
+			sourceTree = "<group>";
+		};
+		7C01655B300AA45D0013DD7B /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C016560300AAD810013DD7B /* DepartmentSearchView.swift */,
+				7C01655C300AA4680013DD7B /* DepartmentCategoryRow.swift */,
+				7C01656A300ABE9E0013DD7B /* DepartmentFooterView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C016572300BD89E0013DD7B /* Department */ = {
+			isa = PBXGroup;
+			children = (
+				7C016573300BD8AF0013DD7B /* FetchDepartmentCategoryUseCase.swift */,
+			);
+			path = Department;
+			sourceTree = "<group>";
+		};
 		7C04A47E2FB3380700214992 /* Noti */ = {
 			isa = PBXGroup;
 			children = (
@@ -4171,6 +4232,7 @@
 			children = (
 				7C86751030062FF3003CB942 /* Core */,
 				7C457B2A2FCE1BA80011D338 /* Home */,
+				7C016541300A9FF80013DD7B /* Department */,
 				7CED8EF42EF2D1F900457128 /* LostItem */,
 				7CED8F052EF2D1F900457128 /* Chat */,
 				7CED8F202EF2D1F900457128 /* Setting */,
@@ -5129,6 +5191,7 @@
 				D2FB236A2C0409590098BA2B /* Analytics */,
 				D2FB234D2BFD45930098BA2B /* Shop */,
 				D249CD242C12DC16000813F9 /* Dining */,
+				7C016572300BD89E0013DD7B /* Department */,
 				D208A7A12CA11102007040E7 /* AbTest */,
 			);
 			path = UseCase;
@@ -5150,6 +5213,7 @@
 				D2CA2DCE2C1CAC4B0036F02C /* Shop */,
 				D249CD392C158EEC000813F9 /* Dining */,
 				7CC42B1A2F56F21A00940CE1 /* CallVan */,
+				7C016552300AA2BE0013DD7B /* Department */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -5667,6 +5731,7 @@
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,
 				7CA0D6252EC75FFA00E9A282 /* ZoomedImageViewControllerB.swift in Sources */,
 				D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */,
+				7C016544300AA1450013DD7B /* DepartmentCategoryHostingController.swift in Sources */,
 				D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */,
 				D2C163D62E252C1200DC68A8 /* ChangePasswordRequest.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
@@ -5709,6 +5774,7 @@
 				7C372F1A2F1CD8D600149729 /* LostItemDataRecentTableView.swift in Sources */,
 				D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */,
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
+				7C01656B300ABE9E0013DD7B /* DepartmentFooterView.swift in Sources */,
 				7C05D0782FBC29ED00F4D825 /* ShopBenefitViewModel.swift in Sources */,
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
 				7C7F56B72FFB9FE000847151 /* NotificationRecord.swift in Sources */,
@@ -5826,6 +5892,7 @@
 				7CED90C32EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift in Sources */,
 				7CB11C102FB1A5BA004E0C80 /* LostItemKeywordCollectionViewAllCell.swift in Sources */,
 				7CED90C62EF2D1F900457128 /* TimetableCollectionViewCell.swift in Sources */,
+				7C016556300AA2E10013DD7B /* DepartmentCategory.swift in Sources */,
 				7CED90C92EF2D1F900457128 /* ImageScrollCollectionViewCell.swift in Sources */,
 				7CED90CA2EF2D1F900457128 /* LandOptionCollectionViewCell.swift in Sources */,
 				7CED90CB2EF2D1F900457128 /* ChatListTableViewModel.swift in Sources */,
@@ -6009,6 +6076,7 @@
 				7C457B402FCE1BA80011D338 /* HomeTabBarButton.swift in Sources */,
 				7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */,
 				7C457B442FCE1BA80011D338 /* CallVanRecruitmentButton.swift in Sources */,
+				7C016561300AAD810013DD7B /* DepartmentSearchView.swift in Sources */,
 				7C457B452FCE1BA80011D338 /* HomeView.swift in Sources */,
 				7C457B492FCE1BA80011D338 /* ShopView.swift in Sources */,
 				7C8A00012FD000000011D338 /* HomeViewModel.swift in Sources */,
@@ -6141,6 +6209,7 @@
 				7C67908F2FCC48A60045E163 /* UITableViewHeaderFooterView+.swift in Sources */,
 				7C6790902FCC48A60045E163 /* UIImage+.swift in Sources */,
 				7C6790912FCC48A60045E163 /* Date+.swift in Sources */,
+				7C01655D300AA4680013DD7B /* DepartmentCategoryRow.swift in Sources */,
 				7C6790922FCC48A60045E163 /* UICollectionVIewFlowLayout.swift in Sources */,
 				7C6790932FCC48A60045E163 /* UICollectionView+.swift in Sources */,
 				7C6790942FCC48A60045E163 /* UIViewcontroller+Alert.swift in Sources */,
@@ -6280,6 +6349,7 @@
 				D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */,
+				7C016546300AA14C0013DD7B /* DepartmentCategoryView.swift in Sources */,
 				7CA60D702F661B37007C08C1 /* CallVanListRequestDto.swift in Sources */,
 				7CF77B3E300254CD003642C1 /* ProfileViewModel.swift in Sources */,
 				D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */,
@@ -6325,6 +6395,7 @@
 				D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
 				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
+				7C016574300BD8AF0013DD7B /* FetchDepartmentCategoryUseCase.swift in Sources */,
 				7C3ECC7A2F41505000EE8F13 /* ErrorResponse.swift in Sources */,
 				D2FB23552BFD49520098BA2B /* ShopRepository.swift in Sources */,
 				833D9C432C7061EC00982145 /* NoticeArticlesInfo.swift in Sources */,
@@ -6395,6 +6466,7 @@
 				7C58FE8E2F5FA4D200A2737B /* CallVanDataTableView.swift in Sources */,
 				B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */,
 				7C58FEAD2F6020AD00A2737B /* CallVanReportImagesCollectionViewCell.swift in Sources */,
+				7C016548300AA1520013DD7B /* DepartmentCategoryViewModel.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
 				835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
