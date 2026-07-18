@@ -13,7 +13,6 @@ struct DepartmentSearchView: View {
     enum Layout {
         static let topPadding: CGFloat = 20
         static let height: CGFloat = 45
-        static let bottomPadding: CGFloat = 40
     }
     
     // MARK: - Properties
@@ -77,6 +76,6 @@ struct DepartmentSearchView: View {
         .frame(maxWidth: .infinity)
         .background(Color.appColor(.neutral0))
         .clipShape(.capsule)
-        .padding(EdgeInsets(top: Layout.topPadding, leading: 0, bottom: Layout.bottomPadding, trailing: 0))
+        .padding(.top, Layout.topPadding)
     }
 }
