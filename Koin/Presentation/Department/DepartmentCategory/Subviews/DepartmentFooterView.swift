@@ -17,8 +17,18 @@ struct DepartmentFooterView: View {
     }
     
     // MARK: - Properties
-    let updatedAt: String
-    let reportButtonTapped: ()->Void
+    private let updatedAt: String
+    private let reportButtonTapped: ()->Void = {
+        if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
+           UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        }
+    }
+    
+    // MARK: - Initializer
+    init(updatedAt: String) {
+        self.updatedAt = updatedAt
+    }
     
     // MARK: - Body
     var body: some View {

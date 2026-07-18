@@ -114,9 +114,7 @@ struct DepartmentCategoryView: ActionBindableView {
                         
                         Spacer(minLength: spacerHeight(totalHeight: proxy.size.height))
                         
-                        DepartmentFooterView(updatedAt: viewModel.updatedAt) {
-                            // TODO: - 제보하기
-                        }
+                        DepartmentFooterView(updatedAt: viewModel.updatedAt)
                     }
                     .hideKeyboardWhenTapAround()
                     .overlay {

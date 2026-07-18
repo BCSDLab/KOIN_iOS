@@ -90,10 +90,7 @@ struct DepartmentView: ActionBindableView {
                         
                         Spacer(minLength: spacerHeight(totalHeight: proxy.size.height))
                         
-                        DepartmentFooterView(
-                            updatedAt: isSearching ? viewModel.searchingUpdatedAt : viewModel.updatedAt,
-                            reportButtonTapped: {}
-                        )
+                        DepartmentFooterView(updatedAt: isSearching ? viewModel.searchingUpdatedAt : viewModel.updatedAt)
                     }
                     .hideKeyboardWhenTapAround()
                     .containerShape(.rect)
