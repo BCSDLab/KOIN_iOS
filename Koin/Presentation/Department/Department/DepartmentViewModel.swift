@@ -22,10 +22,14 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
     private let fetchDepartmentUseCase: FetchDepartmentUseCase
     private let searchDepartmentUseCase: SearchDepartmentUseCase
     private let category: DepartmentCategory
+    
     private(set) var departments: [Department] = []
     private(set) var updatedAt: String = ""
+    
     private(set) var searchingDepartments: [Department] = []
     private(set) var searchingUpdatedAt: String = ""
+    
+    private(set) var isLoading: Bool = true
     
     // MARK: - Initializer
     init(
@@ -55,9 +59,11 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
 extension DepartmentViewModel {
     private func fetchDepartment() {
         Task {
+            isLoading = true
             let (departments, updatedAt) = await fetchDepartmentUseCase.execute(category: category)
             self.departments = departments
             self.updatedAt = updatedAt
+            isLoading = false
         }
     }
     
@@ -67,6 +73,7 @@ extension DepartmentViewModel {
             let (departments, updatedAt) = await searchDepartmentUseCase.execute(keyword: keyword)
             self.searchingDepartments = departments
             self.searchingUpdatedAt = updatedAt
+            isLoading = false
         }
     }
 }
