@@ -118,7 +118,7 @@ struct DepartmentCategoryView: ActionBindableView {
                     }
                     .hideKeyboardWhenTapAround()
                     .overlay {
-                        if isSearching && viewModel.searchingDepartments.isEmpty {
+                        if isSearching && viewModel.searchingDepartments.isEmpty && !viewModel.isLoading {
                             DepartmentEmptyView()
                         }
                     }
@@ -126,6 +126,7 @@ struct DepartmentCategoryView: ActionBindableView {
                 .padding(.horizontal, Layout.horizontalPadding)
             }
             .background(Color.appColor(.newBackground))
+            .loadingOverlay(viewModel.isLoading)
             .onAppear {
                 viewModel.execute(.viewDidAppear)
             }
