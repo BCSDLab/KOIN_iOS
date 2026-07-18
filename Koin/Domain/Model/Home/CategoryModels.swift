@@ -18,6 +18,7 @@ enum HomeCategoryItem: Identifiable {
     case callVan
     case land
     case business
+    case department
 
     var id: String { title }
 
@@ -29,6 +30,8 @@ enum HomeCategoryItem: Identifiable {
             return "분실물"
         case .facility:
             return "교내 시설물 정보"
+        case .department:
+            return "학교 부서정보"
         case .dining:
             return "식단"
         case .shop:
@@ -65,6 +68,8 @@ enum HomeCategoryItem: Identifiable {
             return .categoryLostitem
         case .facility:
             return .categoryFacility
+        case .department:
+            return .categoryDepartment
         case .dining:
             return .categoryDining
         case .shop:

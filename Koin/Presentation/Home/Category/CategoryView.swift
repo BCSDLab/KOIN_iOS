@@ -22,6 +22,7 @@ struct CategoryView: ActionBindableView {
         case showCallVan
         case showLand
         case showBusiness
+        case showDepartment
     }
 
     // MARK: - Properties
@@ -58,6 +59,7 @@ struct CategoryView: ActionBindableView {
                     title: "캠퍼스",
                     items: [
                         .facility,
+                        .department,
                         .dining,
                         .shop
                     ],
@@ -115,6 +117,8 @@ private extension CategoryView {
             return .showLostItem
         case .facility:
             return .showFacility
+        case .department:
+            return .showDepartment
         case .dining:
             return .showDining
         case .shop:
@@ -140,6 +144,8 @@ private extension CategoryView {
             return (.categoryLostProperty, "분실물")
         case .showFacility:
             return (.categoryCampus, "교내 시설물 정보")
+        case .showDepartment:
+            return (.categoryCampus, "학교 부서정보")
         case .showDining:
             return (.categoryCampus, "식단")
         case .showShop:
