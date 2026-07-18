@@ -21,12 +21,12 @@ struct DepartmentRow: View {
     
     // MARK: - Properties
     let department: Department
-    let copyButtonTapped: ()->Void
+    let copyButtonTapped: (String)->Void
     
     // MARK: - Initializer
     init(
         department: Department,
-        copyButtonTapped: @escaping () -> Void
+        copyButtonTapped: @escaping (String) -> Void
     ) {
         self.department = department
         self.copyButtonTapped = copyButtonTapped
@@ -49,8 +49,11 @@ struct DepartmentRow: View {
                 )
                 .padding(.top, Layout.titleBottomPadding.singleTask)
             } else {
-                DepartmentManyTasksView(tasks: department.tasks)
-                    .padding(.top, Layout.titleBottomPadding.manyTasks)
+                DepartmentManyTasksView(
+                    copyButtonTapped: copyButtonTapped,
+                    tasks: department.tasks
+                )
+                .padding(.top, Layout.titleBottomPadding.manyTasks)
             }
         }
         .padding(.all, Layout.allPadding)

@@ -17,7 +17,17 @@ struct DepartmentManyTasksView: View {
     }
     
     // MARK: - Properties
+    let copyButtonTapped: (String)->Void
     let tasks: [DepartmentTask]
+    
+    // MARK: - Initializer
+    init(
+        copyButtonTapped: @escaping (String) -> Void,
+        tasks: [DepartmentTask]
+    ) {
+        self.copyButtonTapped = copyButtonTapped
+        self.tasks = tasks
+    }
     
     // MARK: - Body
     var body: some View {
@@ -37,13 +47,20 @@ struct DepartmentManyTasksView: View {
             
             ForEach(tasks) { task in
                 HStack(alignment: .center) {
-                    Group {
-                        Text(task.name)
+                    Text(task.name)
+                        .font(.appFont(.pretendardMedium, size: 12))
+                        .foregroundStyle(Color.appColor(.neutral500))
+                        .frame(maxWidth: .infinity)
+                    
+                    Button {
+                        copyButtonTapped(task.phoneNumber)
+                    } label: {
                         Text(task.phoneNumber)
+                            .font(.appFont(.pretendardMedium, size: 12))
+                            .foregroundStyle(Color.appColor(.neutral500))
                     }
+                    .buttonStyle(.plain)
                     .frame(maxWidth: .infinity)
-                    .font(.appFont(.pretendardMedium, size: 12))
-                    .foregroundStyle(Color.appColor(.neutral500))
                 }
                 .frame(height: Layout.rowHeight)
                 .border(

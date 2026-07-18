@@ -26,6 +26,9 @@ final class DepartmentHostingController: UIHostingController<DepartmentView>, Ho
     
     // MARK: - Execute
     func execute(action: DepartmentView.Action) {
-        switch action {}
+        switch action {
+        case .showCopyToast:
+            showToastMessage(message: "클립보드에 복사되었습니다.")
+        }
     }
 }
