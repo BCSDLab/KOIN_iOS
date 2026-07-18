@@ -10,7 +10,9 @@ import SwiftUI
 struct DepartmentView: ActionBindableView {
 
     // MARK: - Action
-    enum Action {}
+    enum Action {
+        case showCopyToast
+    }
     var sendAction: ((Action) -> Void) = { _ in }
     
     // MARK: - Layout
@@ -70,6 +72,7 @@ struct DepartmentView: ActionBindableView {
                         },
                         resetSearchButtonTapped: {
                             isSearching = false
+                            viewModel.execute(.endSearching)
                         }
                     )
                     
@@ -78,8 +81,9 @@ struct DepartmentView: ActionBindableView {
                         
                         VStack(spacing: Layout.rowSpacing) {
                             ForEach(isSearching ? viewModel.searchingDepartments : viewModel.departments) { department in
-                                DepartmentRow(department: department) {
-                                    // TODO: - 전화번호 복사
+                                DepartmentRow(department: department) { phoneNumber in
+                                    UIPasteboard.general.string = phoneNumber
+                                    sendAction(.showCopyToast)
                                 }
                             }
                         }

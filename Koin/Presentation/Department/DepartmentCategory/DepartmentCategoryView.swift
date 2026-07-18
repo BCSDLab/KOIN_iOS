@@ -12,6 +12,7 @@ struct DepartmentCategoryView: ActionBindableView {
     // MARK: - Action
     enum Action {
         case showDepartment(category: DepartmentCategory)
+        case showCopyToast
     }
     
     // MARK: - Layout
@@ -93,8 +94,9 @@ struct DepartmentCategoryView: ActionBindableView {
                         if isSearching {
                             VStack(spacing: Layout.searchingRowSpacing) {
                                 ForEach(viewModel.searchingDepartments) { department in
-                                    DepartmentRow(department: department) {
-                                        // TODO: - 전화번호 복사
+                                    DepartmentRow(department: department) { phoneNumber in
+                                        UIPasteboard.general.string = phoneNumber
+                                        sendAction(.showCopyToast)
                                     }
                                 }
                             }

@@ -30,6 +30,8 @@ final class DepartmentCategoryHostingController: UIHostingController<DepartmentC
         switch action {
         case .showDepartment(let category):
             navigationController?.pushViewController(makeDepartmentHostingController(category: category), animated: true)
+        case .showCopyToast:
+            showToastMessage(message: "클립보드에 복사되었습니다.")
         }
     }
 }

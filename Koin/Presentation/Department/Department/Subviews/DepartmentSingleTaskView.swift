@@ -15,8 +15,17 @@ struct DepartmentSingleTaskView: View {
     }
     
     // MARK: - Properties
-    let copyButtonTapped: ()->Void
+    let copyButtonTapped: (String)->Void
     let task: DepartmentTask
+    
+    // MARK: - Initializer
+    init(
+        copyButtonTapped: @escaping (String) -> Void,
+        task: DepartmentTask
+    ) {
+        self.copyButtonTapped = copyButtonTapped
+        self.task = task
+    }
     
     // MARK: - Body
     var body: some View {
@@ -27,7 +36,9 @@ struct DepartmentSingleTaskView: View {
             
             Spacer()
             
-            Button(action: copyButtonTapped) {
+            Button {
+                copyButtonTapped(task.phoneNumber)
+            } label: {
                 HStack(
                     alignment: .center,
                     spacing: 4
