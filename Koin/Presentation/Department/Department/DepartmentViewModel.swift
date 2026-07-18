@@ -14,20 +14,27 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
     // MARK: - Input
     enum Input {
         case viewDidAppear
+        case search(String)
+        case endSearching
     }
     
     // MARK: - Properties
     private let fetchDepartmentUseCase: FetchDepartmentUseCase
+    private let searchDepartmentUseCase: SearchDepartmentUseCase
     private let category: DepartmentCategory
     private(set) var departments: [Department] = []
     private(set) var updatedAt: String = ""
+    private(set) var searchingDepartments: [Department] = []
+    private(set) var searchingUpdatedAt: String = ""
     
     // MARK: - Initializer
     init(
         fetchDepartmentUseCase: FetchDepartmentUseCase,
+        searchDepartmentUseCase: SearchDepartmentUseCase,
         category: DepartmentCategory
     ) {
         self.fetchDepartmentUseCase = fetchDepartmentUseCase
+        self.searchDepartmentUseCase = searchDepartmentUseCase
         self.category = category
     }
 
@@ -36,6 +43,11 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
         switch input {
         case .viewDidAppear:
             fetchDepartment()
+        case .search(let keyword):
+            search(keyword: keyword)
+        case .endSearching:
+            searchingDepartments.removeAll()
+            searchingUpdatedAt = ""
         }
     }
 }
@@ -46,6 +58,15 @@ extension DepartmentViewModel {
             let (departments, updatedAt) = await fetchDepartmentUseCase.execute(category: category)
             self.departments = departments
             self.updatedAt = updatedAt
+        }
+    }
+    
+    private func search(keyword: String) {
+        Task {
+            isLoading = true
+            let (departments, updatedAt) = await searchDepartmentUseCase.execute(keyword: keyword)
+            self.searchingDepartments = departments
+            self.searchingUpdatedAt = updatedAt
         }
     }
 }

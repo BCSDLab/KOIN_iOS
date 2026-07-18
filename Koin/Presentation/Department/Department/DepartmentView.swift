@@ -16,11 +16,13 @@ struct DepartmentView: ActionBindableView {
     // MARK: - Layout
     enum Layout {
         static let horizontalPadding: CGFloat = 22
+        static let textFieldBottomPadding: CGFloat = 40
         static let rowSpacing: CGFloat = 12
     }
     
     // MARK: - Properties
     @State var viewModel: DepartmentViewModel
+    @State var isSearching: Bool = false
     
     // MARK: - Initializer
     init(viewModel: DepartmentViewModel) {
@@ -29,10 +31,12 @@ struct DepartmentView: ActionBindableView {
     
     // MARK: - SpacerHeight
     private func spacerHeight(totalHeight: CGFloat) -> CGFloat {
+        let departments = isSearching ? viewModel.searchingDepartments : viewModel.departments
+        
         let searchViewHeight = DepartmentSearchView.Layout.topPadding
             + DepartmentSearchView.Layout.height
-            + DepartmentSearchView.Layout.bottomPadding
-        let rowsHeight: CGFloat = viewModel.departments.reduce(0) { result, department in
+            + Layout.textFieldBottomPadding
+        let rowsHeight: CGFloat = departments.reduce(0) { result, department in
             return result
             + DepartmentRow.Layout.allPadding * 2
             + DepartmentRow.Layout.titleHeight
@@ -43,7 +47,7 @@ struct DepartmentView: ActionBindableView {
                DepartmentSingleTaskView.Layout.rowHeight
                : (DepartmentManyTasksView.Layout.headerTopPadding + DepartmentManyTasksView.Layout.headerHeight + DepartmentManyTasksView.Layout.rowHeight * CGFloat(department.tasks.count)))
         }
-        let rowSpacings = Layout.rowSpacing * CGFloat(viewModel.departments.count - 1)
+        let rowSpacings = Layout.rowSpacing * CGFloat(departments.count - 1)
         let footerHeight = DepartmentFooterView.Layout.height
         
         let spacerHeight = totalHeight
@@ -58,20 +62,22 @@ struct DepartmentView: ActionBindableView {
     var body: some View {
         GeometryReader { proxy in
             ScrollView(.vertical) {
-                
                 VStack(spacing: 0) {
                     DepartmentSearchView(
                         searchButtonTapped: { keyword in
-                            // TODO: - 검색 시작
+                            isSearching = true
+                            viewModel.execute(.search(keyword))
                         },
                         resetSearchButtonTapped: {
-                            // TODO: - 검색 종료
+                            isSearching = false
                         }
                     )
                     
-                    Group {
+                    VStack(spacing: 0) {
+                        Spacer(minLength: Layout.textFieldBottomPadding)
+                        
                         VStack(spacing: Layout.rowSpacing) {
-                            ForEach(viewModel.departments) { department in
+                            ForEach(isSearching ? viewModel.searchingDepartments : viewModel.departments) { department in
                                 DepartmentRow(department: department) {
                                     // TODO: - 전화번호 복사
                                 }
@@ -81,11 +87,17 @@ struct DepartmentView: ActionBindableView {
                         Spacer(minLength: spacerHeight(totalHeight: proxy.size.height))
                         
                         DepartmentFooterView(
-                            updatedAt: viewModel.updatedAt,
+                            updatedAt: isSearching ? viewModel.searchingUpdatedAt : viewModel.updatedAt,
                             reportButtonTapped: {}
                         )
                     }
                     .hideKeyboardWhenTapAround()
+                    .containerShape(.rect)
+                    .overlay {
+                        if isSearching && viewModel.searchingDepartments.isEmpty {
+                            DepartmentEmptyView()
+                        }
+                    }
                 }
                 .padding(.horizontal, 22)
             }

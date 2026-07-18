@@ -38,6 +38,7 @@ extension DepartmentCategoryHostingController {
     private func makeDepartmentHostingController(category: DepartmentCategory) -> UIViewController {
         let viewModel = DepartmentViewModel(
             fetchDepartmentUseCase: MockFetchDepartmentUseCase(),
+            searchDepartmentUseCase: MockSearchDepartmentUseCase(),
             category: category
         )
         let rootView = DepartmentView(viewModel: viewModel)
