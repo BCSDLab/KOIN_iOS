@@ -28,6 +28,7 @@ final class DepartmentCategoryViewModel: SwiftUIViewModelProtocol {
     private(set) var searchingUpdatedAt: String = ""
     
     private(set) var isLoading: Bool = true
+    private var searchTask: Task<Void, Never>?
     
     // MARK: - Initializer
     init(
@@ -64,9 +65,11 @@ extension DepartmentCategoryViewModel {
     }
     
     private func search(keyword: String) {
-        Task {
+        searchTask?.cancel()
+        searchTask = Task {
             isLoading = true
             let (departments, updatedAt) = await searchDepartmentUseCase.execute(keyword: keyword)
+            guard !Task.isCancelled else { return }
             self.searchingDepartments = departments
             self.searchingUpdatedAt = updatedAt
             isLoading = false
