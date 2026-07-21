@@ -9,13 +9,13 @@ import Foundation
 
 struct FetchDepartmentByCategoryRequestDto: Encodable {
     let category: DepartmentCategoryRequestDto
-    let keyword: String?
+    let keyword: FetchDepartmentRequestDto?
 }
 
 extension FetchDepartmentByCategoryRequestDto {
     init(category: DepartmentCategory, keyword: String?) {
         self.category = DepartmentCategoryRequestDto(from: category)
-        self.keyword = keyword
+        self.keyword = FetchDepartmentRequestDto(keyword: keyword)
     }
 }
 
