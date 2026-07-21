@@ -32,15 +32,18 @@ final class DepartmentCategoryHostingController: UIHostingController<DepartmentC
             navigationController?.pushViewController(makeDepartmentHostingController(category: category), animated: true)
         case .showCopyToast:
             showToastMessage(message: "클립보드에 복사되었습니다.")
+        case .showToast(let message):
+            showToastMessage(message: message)
         }
     }
 }
 
 extension DepartmentCategoryHostingController {
     private func makeDepartmentHostingController(category: DepartmentCategory) -> UIViewController {
+        let searchDepartmentUseCase = DefaultSearchDepartmentUseCase(repository: DefaultDepartmentRepository(service: DefaultDepartmentService()))
         let viewModel = DepartmentViewModel(
             fetchDepartmentUseCase: MockFetchDepartmentUseCase(),
-            searchDepartmentUseCase: MockSearchDepartmentUseCase(),
+            searchDepartmentUseCase: searchDepartmentUseCase,
             category: category
         )
         let rootView = DepartmentView(viewModel: viewModel)

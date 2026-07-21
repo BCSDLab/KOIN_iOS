@@ -9,4 +9,11 @@ import Foundation
 
 protocol DepartmentRepository {
     func fetchCategories() async throws -> [DepartmentCategory]
+    
+    func fetchDepartments(
+        keyword: String
+    ) async throws -> (
+        departments: [Department],
+        updatedAt: String
+    )
 }
