@@ -25,6 +25,17 @@ final class DefaultDepartmentRepository: DepartmentRepository {
         updatedAt: String
     ) {
         let request = FetchDepartmentRequestDto(keyword: keyword)
-        return try await service.search(request).toDomain()
+        return try await service.fetchDepartment(request).toDomain()
+    }
+    
+    func fetchDepartmentsByCategory(
+        category: DepartmentCategory,
+        keyword: String?
+    ) async throws -> (
+        departments: [Department],
+        updatedAt: String
+    ) {
+        let request = FetchDepartmentByCategoryRequestDto(category: category, keyword: keyword)
+        return try await service.fetchDepartmentByCategory(request).toDomain()
     }
 }

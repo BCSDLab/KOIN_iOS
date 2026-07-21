@@ -16,4 +16,12 @@ protocol DepartmentRepository {
         departments: [Department],
         updatedAt: String
     )
+    
+    func fetchDepartmentsByCategory(
+        category: DepartmentCategory,
+        keyword: String?
+    ) async throws -> (
+        departments: [Department],
+        updatedAt: String
+    )
 }

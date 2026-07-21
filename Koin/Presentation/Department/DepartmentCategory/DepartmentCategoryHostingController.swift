@@ -40,10 +40,12 @@ final class DepartmentCategoryHostingController: UIHostingController<DepartmentC
 
 extension DepartmentCategoryHostingController {
     private func makeDepartmentHostingController(category: DepartmentCategory) -> UIViewController {
-        let searchDepartmentUseCase = DefaultSearchDepartmentUseCase(repository: DefaultDepartmentRepository(service: DefaultDepartmentService()))
+        let repository = DefaultDepartmentRepository(service: DefaultDepartmentService())
+        let fetchDepartmentByCategoryUseCase = DefaultFetchDepartmentByCategoryUseCase(repository: repository)
+        let searchDepartmentByCategoryUseCase = MockSearchDepartmentByCategoryUseCase()
         let viewModel = DepartmentViewModel(
-            fetchDepartmentUseCase: MockFetchDepartmentUseCase(),
-            searchDepartmentUseCase: searchDepartmentUseCase,
+            fetchDepartmentByCategoryUseCase: fetchDepartmentByCategoryUseCase,
+            searchDepartmentByCategoryUseCase: searchDepartmentByCategoryUseCase,
             category: category
         )
         let rootView = DepartmentView(viewModel: viewModel)

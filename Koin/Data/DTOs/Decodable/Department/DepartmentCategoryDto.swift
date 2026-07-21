@@ -28,11 +28,13 @@ struct DepartmentCategoriesDto: Decodable {
 }
 
 struct DepartmentCategoryDto: Decodable {
+    let updatedAt: String?
     let category: String
     let categoryName: String
     let departments: [DepartmentDto]
 
     enum CodingKeys: String, CodingKey {
+        case updatedAt = "updated_at"
         case category
         case categoryName = "category_name"
         case departments
@@ -40,6 +42,10 @@ struct DepartmentCategoryDto: Decodable {
     
     func toDomain() -> DepartmentCategory? {
         DepartmentCategory(rawValue: category)
+    }
+    
+    func toDomain() -> (departments: [Department], updatedAt: String) {
+        return (departments.map { $0.toDomain() }, updatedAt ?? "")
     }
 }
 
