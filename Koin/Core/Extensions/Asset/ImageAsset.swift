@@ -50,6 +50,7 @@ public enum ImageAsset: String {
     case departmentAlert
     case departmentCopy
     case departmentAcademic
+    case departmentEmployment
     case departmentFacility
     case departmentInternational
     case departmentOther
