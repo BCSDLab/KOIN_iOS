@@ -30,7 +30,7 @@ final class FoundIdViewController: UIViewController {
         $0.layer.cornerRadius = 8
     }
     
-    private let registerButton = UIButton().then {
+    private let findPasswordButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.primary500)
         $0.setTitle("비밀번호 찾기", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
@@ -57,7 +57,7 @@ final class FoundIdViewController: UIViewController {
         bind()
         updateSubMessageLabel(with: viewModel.loginId ?? "")
         loginButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
-        registerButton.addTarget(self, action: #selector(registerButtonTapped), for: .touchUpInside)
+        findPasswordButton.addTarget(self, action: #selector(findPasswordButtonTapped), for: .touchUpInside)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -74,82 +74,24 @@ final class FoundIdViewController: UIViewController {
 
 extension FoundIdViewController {
     @objc private func loginButtonTapped() {
-        let homeViewController = makeHomeViewController()
-        let serviceSelectViewModel = ServiceSelectViewModel(
-            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())),
-            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
-            deleteDeviceTokenUseCase: DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService()))
-        )
-        let serviceSelectViewController = ServiceSelectViewController(viewModel: serviceSelectViewModel)
-        
-        let userRepository = DefaultUserRepository(service: DefaultUserService())
-        let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
-        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
-        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
-            userRepository: userRepository,
-            notiRepository: notiRepository
-        )
-        let loginViewModel = LoginViewModel(
-            loginUseCase: loginUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            fetchUserDataUseCase: fetchUserDataUseCase,
-            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
-        )
-        let loginViewController = LoginViewController(viewModel: loginViewModel)
-        
-        let viewControllers = [homeViewController, serviceSelectViewController, loginViewController]
-        navigationController?.setViewControllers(viewControllers, animated: true)
+        guard let navigationController else { return }
+        guard let loginViewController = navigationController.viewControllers.last(where: { $0 is LoginViewController }) else {
+            return
+        }
+        navigationController.popToViewController(loginViewController, animated: true)
     }
-    @objc private func registerButtonTapped() {
-        let homeViewController = makeHomeViewController()
-        let viewModel = ServiceSelectViewModel(
-            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService())),
-            logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())),
-            deleteDeviceTokenUseCase: DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService())))
-        let serviceSelectViewController = ServiceSelectViewController(viewModel: viewModel)
-        let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
-        let viewControllers = [homeViewController, serviceSelectViewController, findPasswordViewController]
+    @objc private func findPasswordButtonTapped() {
+        guard var viewControllers = navigationController?.viewControllers,
+              let loginViewController = viewControllers.last(where: { $0 is LoginViewController }) else {
+            return
+        }
+        viewControllers = viewControllers.split(separator: loginViewController).map(Array.init).first ?? []
+        viewControllers.append(loginViewController)
+        viewControllers.append(FindPasswordCertViewController(viewModel: FindPasswordViewModel()))
+        print(viewControllers)
         navigationController?.setViewControllers(viewControllers, animated: true)
     }
     
-    private func makeHomeViewController() -> UIViewController {
-        let userRepository = DefaultUserRepository(service: DefaultUserService())
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
-        let shopRepository = DefaultShopRepository(service: DefaultShopService())
-        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let fetchShopCategoryUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-        let dateProvider = DefaultDateProvider()
-        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
-        let fetchLostItemStatsUseCase = DefaultFetchLostItemStatsUseCase(repository: DefaultLostItemRepository(service: DefaultLostItemService()))
-        let fetchCallVanRestrictionUseCase = DefaultFetchCallVanRestrictionUseCase(repository: callVanRepository)
-        let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
-            userRepository: userRepository,
-            notiRepository: notiRepository)
-        let homeViewModel = HomeViewModel(
-            fetchDiningListUseCase: fetchDiningListUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
-            fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
-            fetchShopCategoryListUseCase: fetchShopCategoryUseCase,
-            dateProvider: dateProvider,
-            checkVersionUseCase: DefaultCheckVersionUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService())),
-            fetchKeywordNoticePhraseUseCase: DefaultFetchKeywordNoticePhraseUseCase(),
-            checkLoginUseCase: checkLoginUseCase,
-            fetchLostItemStatsUseCase: fetchLostItemStatsUseCase,
-            fetchCallVanRestrictionUseCase: fetchCallVanRestrictionUseCase,
-            sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
-        )
-        let viewController = HomeViewController(viewModel: homeViewModel)
-        return viewController
-    }
     func updateSubMessageLabel(with id: String) {
         let baseText = "아이디는 \(id)입니다."
         let attributed = NSMutableAttributedString(string: baseText)
@@ -171,12 +113,120 @@ extension FoundIdViewController {
         
         subMessageLabel.attributedText = attributed
     }
+    
+    private func makeHomeTabBarController() -> HomeTabBarController {
+        let homeViewController = makeHomeHostingController()
+        let categoryViewController = makeCategoryHostingController()
+        let noticeViewController = makeNoticeListViewController()
+        let profileViewController = makeProfileHostingController()
+        
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let checkHasUnreadNotificationHistoryUseCase = DefaultCheckHasUnreadNotificationHistoryUseCase(repository: DefaultNotificationHistoryRepository(service: DefaultNotificationHistoryService()))
+        let viewModel = HomeTabBarViewModel(
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            checkHasUnreadNotificationHistoryUseCase: checkHasUnreadNotificationHistoryUseCase
+        )
+
+        return HomeTabBarController(
+            items: [
+                .init(viewController: homeViewController, tab: .home),
+                .init(viewController: categoryViewController, tab: .category),
+                .init(viewController: noticeViewController, tab: .board),
+                .init(viewController: profileViewController, tab: .profile)
+            ],
+            viewModel: viewModel
+        )
+    }
+
+    private func makeHomeHostingController() -> UIViewController {
+        let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
+        let shopRepository = DefaultShopRepository(service: DefaultShopService())
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let diningRepository = DefaultDiningRepository(diningService: DefaultDiningService(), shareService: KakaoShareService())
+        let homeRepository = DefaultHomeRepository(service: DefaultHomeService())
+
+        let fetchHomeHeaderUseCase = DefaultFetchHomeHeaderUseCase(homeRepository: homeRepository, userRepository: userRepository)
+        let fetchHomeDiningListUseCase = DefaultFetchHomeDiningListUseCase(
+            fetchDiningListUseCase: DefaultFetchDiningListUseCase(diningRepository: diningRepository),
+            fetchCoopShopListUseCase: DefaultFetchCoopShopListUseCase(diningRepository: diningRepository),
+            dateProvider: DefaultDateProvider()
+        )
+        let fetchCountsUseCase = DefaultFetchHomeCountsUseCase(
+            shopRepository: shopRepository,
+            callvanRepository: callVanRepository
+        )
+        let checkVersionUseCase = DefaultCheckVersionUseCase(coreRepository: coreRepository)
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
+        let SendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
+            userRepository: userRepository,
+            notiRepository: notiRepository
+        )
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        
+        let viewModel = HomeViewModel(
+            fetchHomeHeaderUseCase: fetchHomeHeaderUseCase,
+            fetchHomeDiningListUseCase: fetchHomeDiningListUseCase,
+            fetchCountsUseCase: fetchCountsUseCase,
+            checkVersionUseCase: checkVersionUseCase,
+            checkLoginUseCase: DefaultCheckLoginUseCase(userRepository: userRepository),
+            fetchUserDataUseCase: fetchUserDataUseCase,
+            sendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            fetchBannerUseCase: DefaultFetchBannerUseCase(coreRepository: coreRepository)
+        )
+        let homeView = HomeView(viewModel: viewModel)
+        return HomeHostingController(rootView: homeView)
+    }
+    
+    private func makeCategoryHostingController() -> UIViewController {
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
+        return CategoryHostingController(rootView: categoryRootView)
+    }
+    
+    private func makeNoticeListViewController() -> UIViewController {
+        let service = DefaultNoticeService()
+        let repository = DefaultNoticeListRepository(service: service)
+        let fetchArticleListUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
+            repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
+        )
+        let viewModel = NoticeListViewModel(
+            fetchNoticeArticlesUseCase: fetchArticleListUseCase,
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        return NoticeListViewController(viewModel: viewModel)
+    }
+    
+    private func makeProfileHostingController() -> UIViewController {
+        let timeTableRepository = DefaultTimetableRepository(service: DefaultTimetableService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let deleteDeviceTokenUseCase = DefaultDeleteDeviceTokenUseCase(repository: DefaultNotiRepository(service: DefaultNotiService()))
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let fetchMainFrameUseCase = DefaultFetchMainFrameUseCase(
+            fetchFramesUseCase: DefaultFetchFramesUseCase(timetableRepository: timeTableRepository),
+            fetchFrameUseCase: DefaultFetchFrameUseCase(timetableRepository: timeTableRepository),
+            fetchLectureUseCase: DefaultFetchLectureUseCase(timetableRepository: timeTableRepository)
+        )
+        let profileViewModel = ProfileViewModel(
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            deleteDeviceTokenUseCase: deleteDeviceTokenUseCase,
+            fetchUserDataUseCase: fetchUserDataUseCase,
+            fetchMainFrameUseCase: fetchMainFrameUseCase
+        )
+        let profileView = ProfileView(viewModel: profileViewModel)
+        return ProfileHostingController(rootView: profileView)
+    }
 }
 
 extension FoundIdViewController {
     
     private func setupLayOuts() {
-        [messageLabel, subMessageLabel, loginButton, registerButton].forEach {
+        [messageLabel, subMessageLabel, loginButton, findPasswordButton].forEach {
             view.addSubview($0)
         }
     }
@@ -196,7 +246,7 @@ extension FoundIdViewController {
             $0.horizontalEdges.equalToSuperview().inset(48)
             $0.height.equalTo(48)
         }
-        registerButton.snp.makeConstraints {
+        findPasswordButton.snp.makeConstraints {
             $0.top.equalTo(loginButton.snp.bottom).offset(24)
             $0.centerX.equalToSuperview()
             $0.horizontalEdges.equalToSuperview().inset(48)

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SwiftUI
 
 extension UIColor {
     
@@ -272,6 +273,92 @@ extension UIColor {
             static let magenta1200 = UIColor(hexCode: "700037")
             static let magenta1300 = UIColor(hexCode: "54032A")
             static let magenta1400 = UIColor(hexCode: "3C061D")
+        }
+    }
+}
+
+extension Color {
+    enum ColorSystem {
+        enum Neutral {
+            static let gray0 = Color(uiColor: UIColor.ColorSystem.Neutral.gray0)
+            static let gray50 = Color(uiColor: UIColor.ColorSystem.Neutral.gray50)
+            static let gray100 = Color(uiColor: UIColor.ColorSystem.Neutral.gray100)
+            static let gray200 = Color(uiColor: UIColor.ColorSystem.Neutral.gray200)
+            static let gray300 = Color(uiColor: UIColor.ColorSystem.Neutral.gray300)
+            static let gray400 = Color(uiColor: UIColor.ColorSystem.Neutral.gray400)
+            static let gray500 = Color(uiColor: UIColor.ColorSystem.Neutral.gray500)
+            static let gray600 = Color(uiColor: UIColor.ColorSystem.Neutral.gray600)
+            static let gray700 = Color(uiColor: UIColor.ColorSystem.Neutral.gray700)
+            static let gray800 = Color(uiColor: UIColor.ColorSystem.Neutral.gray800)
+            static let gray900 = Color(uiColor: UIColor.ColorSystem.Neutral.gray900)
+        }
+        
+        enum Danger {
+            static let red100 = Color(uiColor: UIColor.ColorSystem.Danger.red100)
+            static let red200 = Color(uiColor: UIColor.ColorSystem.Danger.red200)
+            static let red300 = Color(uiColor: UIColor.ColorSystem.Danger.red300)
+            static let red400 = Color(uiColor: UIColor.ColorSystem.Danger.red400)
+            static let red500 = Color(uiColor: UIColor.ColorSystem.Danger.red500)
+            static let red600 = Color(uiColor: UIColor.ColorSystem.Danger.red600)
+            static let red700 = Color(uiColor: UIColor.ColorSystem.Danger.red700)
+            static let red800 = Color(uiColor: UIColor.ColorSystem.Danger.red800)
+            static let red900 = Color(uiColor: UIColor.ColorSystem.Danger.red900)
+            static let red1000 = Color(uiColor: UIColor.ColorSystem.Danger.red1000)
+            static let red1100 = Color(uiColor: UIColor.ColorSystem.Danger.red1100)
+            static let red1200 = Color(uiColor: UIColor.ColorSystem.Danger.red1200)
+            static let red1300 = Color(uiColor: UIColor.ColorSystem.Danger.red1300)
+            static let red1400 = Color(uiColor: UIColor.ColorSystem.Danger.red1400)
+        }
+        
+        enum SubColor {
+            static let orange100 = Color(uiColor: UIColor.ColorSystem.SubColor.orange100)
+            static let orange200 = Color(uiColor: UIColor.ColorSystem.SubColor.orange200)
+            static let orange300 = Color(uiColor: UIColor.ColorSystem.SubColor.orange300)
+            static let orange400 = Color(uiColor: UIColor.ColorSystem.SubColor.orange400)
+            static let orange500 = Color(uiColor: UIColor.ColorSystem.SubColor.orange500)
+            static let orange600 = Color(uiColor: UIColor.ColorSystem.SubColor.orange600)
+            static let orange700 = Color(uiColor: UIColor.ColorSystem.SubColor.orange700)
+            static let orange800 = Color(uiColor: UIColor.ColorSystem.SubColor.orange800)
+            static let orange900 = Color(uiColor: UIColor.ColorSystem.SubColor.orange900)
+            static let orange1000 = Color(uiColor: UIColor.ColorSystem.SubColor.orange1000)
+            static let orange1100 = Color(uiColor: UIColor.ColorSystem.SubColor.orange1100)
+            static let orange1200 = Color(uiColor: UIColor.ColorSystem.SubColor.orange1200)
+            static let orange1300 = Color(uiColor: UIColor.ColorSystem.SubColor.orange1300)
+            static let orange1400 = Color(uiColor: UIColor.ColorSystem.SubColor.orange1400)
+        }
+        
+        enum Warning {
+            static let yellow100 = Color(uiColor: UIColor.ColorSystem.Warning.yellow100)
+            static let yellow200 = Color(uiColor: UIColor.ColorSystem.Warning.yellow200)
+            static let yellow300 = Color(uiColor: UIColor.ColorSystem.Warning.yellow300)
+            static let yellow400 = Color(uiColor: UIColor.ColorSystem.Warning.yellow400)
+            static let yellow500 = Color(uiColor: UIColor.ColorSystem.Warning.yellow500)
+            static let yellow600 = Color(uiColor: UIColor.ColorSystem.Warning.yellow600)
+            static let yellow700 = Color(uiColor: UIColor.ColorSystem.Warning.yellow700)
+            static let yellow800 = Color(uiColor: UIColor.ColorSystem.Warning.yellow800)
+            static let yellow900 = Color(uiColor: UIColor.ColorSystem.Warning.yellow900)
+            static let yellow1000 = Color(uiColor: UIColor.ColorSystem.Warning.yellow1000)
+            static let yellow1100 = Color(uiColor: UIColor.ColorSystem.Warning.yellow1100)
+            static let yellow1200 = Color(uiColor: UIColor.ColorSystem.Warning.yellow1200)
+            static let yellow1300 = Color(uiColor: UIColor.ColorSystem.Warning.yellow1300)
+            static let yellow1400 = Color(uiColor: UIColor.ColorSystem.Warning.yellow1400)
+        }
+
+        enum Primary {
+            static let purple100 = Color(uiColor: UIColor.ColorSystem.Primary.purple100)
+            static let purple200 = Color(uiColor: UIColor.ColorSystem.Primary.purple200)
+            static let purple300 = Color(uiColor: UIColor.ColorSystem.Primary.purple300)
+            static let purple400 = Color(uiColor: UIColor.ColorSystem.Primary.purple400)
+            static let purple500 = Color(uiColor: UIColor.ColorSystem.Primary.purple500)
+            static let purple600 = Color(uiColor: UIColor.ColorSystem.Primary.purple600)
+            static let purple700 = Color(uiColor: UIColor.ColorSystem.Primary.purple700)
+            static let purple800 = Color(uiColor: UIColor.ColorSystem.Primary.purple800)
+            static let purple900 = Color(uiColor: UIColor.ColorSystem.Primary.purple900)
+            static let purple1000 = Color(uiColor: UIColor.ColorSystem.Primary.purple1000)
+            static let purple1100 = Color(uiColor: UIColor.ColorSystem.Primary.purple1100)
+            static let purple1200 = Color(uiColor: UIColor.ColorSystem.Primary.purple1200)
+            static let purple1300 = Color(uiColor: UIColor.ColorSystem.Primary.purple1300)
+            static let purple1400 = Color(uiColor: UIColor.ColorSystem.Primary.purple1400)
         }
     }
 }

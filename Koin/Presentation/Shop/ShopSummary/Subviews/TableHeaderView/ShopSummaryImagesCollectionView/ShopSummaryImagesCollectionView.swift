@@ -29,7 +29,7 @@ final class ShopSummaryImagesCollectionView: UICollectionView {
         self.reloadData()
     }
     
-    func configure(images: [Image]) {
+    func configure(images: [AppImage]) {
         self.orderImages = images.map { OrderImage(imageUrl: $0.imageUrl, isThumbnail: false) }
         self.reloadData()
     }
