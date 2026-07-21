@@ -111,6 +111,7 @@
 		7C4D5A5A2F01638800B40128 /* BusAreaSelectdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */; };
 		7C4D5A5B2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A2E2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift */; };
 		7C4D5A5D2F0163BA00B40128 /* DIContainer+Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */; };
+		7C50F8DC300FC03B00A87BAE /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 7C50F8DB300FC03B00A87BAE /* AppIcon.icon */; };
 		7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */; };
 		7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */; };
 		7C58FE862F5F9CDD00A2737B /* CallVanDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE852F5F9CDD00A2737B /* CallVanDataViewController.swift */; };
@@ -1121,6 +1122,7 @@
 		7C4D5A382F01638800B40128 /* BusTimetableDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableDataViewController.swift; sourceTree = "<group>"; };
 		7C4D5A392F01638800B40128 /* BusTimetableDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableDataViewModel.swift; sourceTree = "<group>"; };
 		7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Bus.swift"; sourceTree = "<group>"; };
+		7C50F8DB300FC03B00A87BAE /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoHeaderView.swift; sourceTree = "<group>"; };
 		7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoFooterView.swift; sourceTree = "<group>"; };
 		7C58FE852F5F9CDD00A2737B /* CallVanDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanDataViewController.swift; sourceTree = "<group>"; };
@@ -4686,6 +4688,7 @@
 				B46B8D242E770A3100A8E797 /* Fonts */,
 				83D5E9BB2CCB6A2A00C6D4CD /* Gif */,
 				D27DD05C2BA608310081FD36 /* Assets.xcassets */,
+				7C50F8DB300FC03B00A87BAE /* AppIcon.icon */,
 			);
 			path = Resources;
 			sourceTree = "<group>";
@@ -5478,6 +5481,7 @@
 				D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */,
 				B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */,
 				D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */,
+				7C50F8DC300FC03B00A87BAE /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
