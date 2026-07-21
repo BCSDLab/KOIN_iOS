@@ -45,7 +45,7 @@ extension DepartmentCategoryHostingController {
         )
         let rootView = DepartmentView(viewModel: viewModel)
         let viewController = DepartmentHostingController(rootView: rootView)
-        viewController.title = category.name
+        viewController.title = category.rawValue
         return viewController
     }
 }

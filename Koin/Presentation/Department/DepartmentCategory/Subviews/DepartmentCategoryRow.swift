@@ -22,21 +22,13 @@ struct DepartmentCategoryRow: View {
     var body: some View {
         Button(action: { categoryTapped(category) }) {
             HStack(alignment: .center) {
-                if let icon = category.icon {
-                    Image.appImage(asset: icon)
-                        .frame(width: 40, height: 40, alignment: .center)
-                        .background(Color.ColorSystem.Neutral.gray100)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .padding(.trailing, 14)
-                } else {
-                    Color.clear
-                        .frame(width: 40, height: 40, alignment: .center)
-                        .background(Color.ColorSystem.Neutral.gray100)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                        .padding(.trailing, 14)
-                }
+                Image.appImage(asset: category.icon)
+                    .frame(width: 40, height: 40, alignment: .center)
+                    .background(Color.ColorSystem.Neutral.gray100)
+                    .clipShape(RoundedRectangle(cornerRadius: 10))
+                    .padding(.trailing, 14)
                 
-                Text(category.name)
+                Text(category.rawValue)
                     .font(.appFont(.pretendardSemiBold, size: 15))
                     .foregroundStyle(Color.appColor(.neutral800))
                 

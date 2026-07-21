@@ -70,8 +70,6 @@ struct DepartmentCategoryView: ActionBindableView {
                         }
                         
                         Spacer()
-                        
-                        DepartmentFooterView(updatedAt: viewModel.updatedAt)
                     }
                     .hideKeyboardWhenTapAround()
                     .overlay {
