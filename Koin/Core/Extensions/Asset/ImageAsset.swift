@@ -49,6 +49,11 @@ public enum ImageAsset: String {
     // MARK: - Department
     case departmentAlert
     case departmentCopy
+    case departmentAcademic
+    case departmentFacility
+    case departmentInternational
+    case departmentOther
+    case departmentStudentSupport
     
     // MARK: - Dining
     case coopInfo
