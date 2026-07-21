@@ -39,6 +39,7 @@ struct DepartmentCategoryRow: View {
             .padding(EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 20))
             .frame(maxWidth: .infinity, alignment: .leading)
             .frame(height: Layout.height)
+            .contentShape(.rect)
         }
         .buttonStyle(.plain)
     }
