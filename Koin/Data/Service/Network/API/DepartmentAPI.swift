@@ -10,6 +10,7 @@ import Alamofire
 
 enum DepartmentAPI {
     case fetchDepartment(FetchDepartmentRequestDto)
+    case fetchDepartmentByCategory(FetchDepartmentByCategoryRequestDto)
 }
 
 extension DepartmentAPI: Router, URLRequestConvertible {
@@ -21,19 +22,22 @@ extension DepartmentAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .fetchDepartment: return "/department-contacts"
+        case .fetchDepartmentByCategory(let request): return "/department-contacts/\(request.category.rawValue)"
         }
     }
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .fetchDepartment: .get
+        case .fetchDepartment, .fetchDepartmentByCategory: 
+            .get
         }
     }
     
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchDepartment: break
+        case .fetchDepartment, .fetchDepartmentByCategory: 
+            break
         }
         return baseHeaders
     }
@@ -43,12 +47,15 @@ extension DepartmentAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchDepartment(let keyword):
             return try? keyword.toDictionary()
+        case .fetchDepartmentByCategory(let request):
+            return try? request.keyword?.toDictionary()
         }
     }
     
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchDepartment: return URLEncoding.default
+        case .fetchDepartment, .fetchDepartmentByCategory: 
+            return URLEncoding.default
         }
     }
  

@@ -16,11 +16,12 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
         case viewDidAppear
         case search(String)
         case endSearching
+        case didShowToast
     }
     
     // MARK: - Properties
-    private let fetchDepartmentUseCase: FetchDepartmentUseCase
-    private let searchDepartmentUseCase: SearchDepartmentUseCase
+    private let fetchDepartmentByCategoryUseCase: FetchDepartmentByCategoryUseCase
+    private let searchDepartmentByCategoryUseCase: SearchDepartmentByCategoryUseCase
     private let category: DepartmentCategory
     
     private(set) var departments: [Department] = []
@@ -32,14 +33,16 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
     private(set) var isLoading: Bool = true
     private var searchTask: Task<Void, Never>?
     
+    private(set) var toastMessage: String?
+    
     // MARK: - Initializer
     init(
-        fetchDepartmentUseCase: FetchDepartmentUseCase,
-        searchDepartmentUseCase: SearchDepartmentUseCase,
+        fetchDepartmentByCategoryUseCase: FetchDepartmentByCategoryUseCase,
+        searchDepartmentByCategoryUseCase: SearchDepartmentByCategoryUseCase,
         category: DepartmentCategory
     ) {
-        self.fetchDepartmentUseCase = fetchDepartmentUseCase
-        self.searchDepartmentUseCase = searchDepartmentUseCase
+        self.fetchDepartmentByCategoryUseCase = fetchDepartmentByCategoryUseCase
+        self.searchDepartmentByCategoryUseCase = searchDepartmentByCategoryUseCase
         self.category = category
     }
 
@@ -53,6 +56,8 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
         case .endSearching:
             searchingDepartments.removeAll()
             searchingUpdatedAt = ""
+        case .didShowToast:
+            toastMessage = nil
         }
     }
 }
@@ -61,9 +66,13 @@ extension DepartmentViewModel {
     private func fetchDepartment() {
         Task {
             isLoading = true
-            let (departments, updatedAt) = await fetchDepartmentUseCase.execute(category: category)
-            self.departments = departments
-            self.updatedAt = updatedAt
+            do {
+                let (departments, updatedAt) = try await fetchDepartmentByCategoryUseCase.execute(category: category)
+                self.departments = departments
+                self.updatedAt = updatedAt
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message
+            }
             isLoading = false
         }
     }
@@ -72,10 +81,14 @@ extension DepartmentViewModel {
         searchTask?.cancel()
         searchTask = Task {
             isLoading = true
-            let (departments, updatedAt) = await searchDepartmentUseCase.execute(keyword: keyword)
-            guard !Task.isCancelled else { return }
-            self.searchingDepartments = departments
-            self.searchingUpdatedAt = updatedAt
+            do {
+                let (departments, updatedAt) = try await searchDepartmentByCategoryUseCase.execute(category: category, keyword: keyword)
+                guard !Task.isCancelled else { return }
+                self.searchingDepartments = departments
+                self.searchingUpdatedAt = updatedAt
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message
+            }
             isLoading = false
         }
     }
