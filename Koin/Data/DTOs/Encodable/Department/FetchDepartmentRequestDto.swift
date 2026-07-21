@@ -8,5 +8,5 @@
 import Foundation
 
 struct FetchDepartmentRequestDto: Encodable {
-    let keyword: String
+    let keyword: String?
 }

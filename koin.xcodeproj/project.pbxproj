@@ -164,7 +164,7 @@
 		7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */; };
 		7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */; };
 		7C6403D3300BE8A100A9589F /* DepartmentEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403D2300BE8A100A9589F /* DepartmentEmptyView.swift */; };
-		7C6403D6300BF12500A9589F /* SearchDepartmentUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403D5300BF12500A9589F /* SearchDepartmentUseCase.swift */; };
+		7C6403D6300BF12500A9589F /* SearchDepartmentByCategoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403D5300BF12500A9589F /* SearchDepartmentByCategoryUseCase.swift */; };
 		7C6403FE300F36F200A9589F /* DepartmentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403FD300F36F200A9589F /* DepartmentAPI.swift */; };
 		7C640400300F395300A9589F /* DepartmentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403FF300F395300A9589F /* DepartmentRepository.swift */; };
 		7C640402300F39BB00A9589F /* DefaultDepartmentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C640401300F39BB00A9589F /* DefaultDepartmentRepository.swift */; };
@@ -1201,7 +1201,7 @@
 		7C61D35E2F24000C005FAC3A /* LostItemDataButtonsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataButtonsView.swift; sourceTree = "<group>"; };
 		7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemHeaderView.swift; sourceTree = "<group>"; };
 		7C6403D2300BE8A100A9589F /* DepartmentEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentEmptyView.swift; sourceTree = "<group>"; };
-		7C6403D5300BF12500A9589F /* SearchDepartmentUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDepartmentUseCase.swift; sourceTree = "<group>"; };
+		7C6403D5300BF12500A9589F /* SearchDepartmentByCategoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDepartmentByCategoryUseCase.swift; sourceTree = "<group>"; };
 		7C6403FD300F36F200A9589F /* DepartmentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentAPI.swift; sourceTree = "<group>"; };
 		7C6403FF300F395300A9589F /* DepartmentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentRepository.swift; sourceTree = "<group>"; };
 		7C640401300F39BB00A9589F /* DefaultDepartmentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultDepartmentRepository.swift; sourceTree = "<group>"; };
@@ -5993,7 +5993,7 @@
 				7CED90D12EF2D1F900457128 /* NoticeSearchViewController.swift in Sources */,
 				7CED90D22EF2D1F900457128 /* TagCollectionViewCell.swift in Sources */,
 				7CED90D32EF2D1F900457128 /* LandCollectionView.swift in Sources */,
-				7C6403D6300BF12500A9589F /* SearchDepartmentUseCase.swift in Sources */,
+				7C6403D6300BF12500A9589F /* SearchDepartmentByCategoryUseCase.swift in Sources */,
 				7CED90D52EF2D1F900457128 /* SelectDeptModalViewController.swift in Sources */,
 				7CED90D72EF2D1F900457128 /* RecommendedKeywordCollectionView.swift in Sources */,
 				7CED90D92EF2D1F900457128 /* DiningViewController.swift in Sources */,
