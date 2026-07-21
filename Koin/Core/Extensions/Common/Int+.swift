@@ -16,3 +16,9 @@ extension Int {
         return numberFormatter.string(from: NSNumber(value: self)) ?? "\(self)"
     }
 }
+
+extension Int {
+    init?(_ string: String?) {
+        self.init(string ?? "")
+    }
+}

@@ -1,0 +1,237 @@
+//
+//  NotificationTableView.swift
+//  koin
+//
+//  Created by 홍기정 on 6/3/26.
+//
+
+import UIKit
+import Combine
+import SnapKit
+import Then
+
+final class NotificationTableView: UITableView {
+    
+    private enum Layout {
+        static let rowHeight: CGFloat = 80
+        static let footerMinHeight: CGFloat = 55
+        static let zeroTolerance: CGFloat = 0.5
+    }
+    
+    // MARK: - Publisher
+    let deletePublisher = PassthroughSubject<String, Never>()
+    let tapNotificationPublisher = PassthroughSubject<NotificationItem, Never>()
+    
+    // MARK: - UI Components
+    private let realFooterView = NotificationFooterView()
+    
+    // MARK: - Properties
+    private var notifications: [NotificationItem] = []
+    var isEmpty: Bool {
+        notifications.isEmpty
+    }
+    private var lastBoundsSize: CGSize = .zero
+    private var lastFooterHeight: CGFloat = 0
+    
+    // MARK: - Initialization
+    init() {
+        super.init(frame: .zero, style: .grouped)
+        setUpStyles()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    // MARK: - Public
+    func update(notifications: [NotificationItem]) {
+        performBatchUpdates {
+            self.notifications = notifications
+            recalculateFooterHeightIfNeeded()
+            reloadSections([0], with: refreshControl?.isRefreshing == true ? .fade : .top)
+        }
+    }
+    
+    func markAllAsRead() {
+        for index in notifications.indices {
+            notifications[index].isRead = true
+        }
+        guard let visibleIndexPaths = indexPathsForVisibleRows,
+              !visibleIndexPaths.isEmpty else {
+            return
+        }
+        reloadRows(at: visibleIndexPaths, with: .fade)
+    }
+    
+    func deleteAll() {
+        notifications.removeAll()
+        reloadSections([0], with: .fade)
+    }
+}
+
+extension NotificationTableView {
+    private func didDeleteNotification(id: String) {
+        guard let index = notifications.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+        let indexPath = IndexPath(row: index, section: 0)
+        performBatchUpdates {
+            notifications.remove(at: index)
+            recalculateFooterHeightIfNeeded()
+            deleteRows(at: [indexPath], with: .automatic)
+        }
+    }
+    
+    private func didSelectNotification(id: String) {
+        guard let index = notifications.firstIndex(where: { $0.id == id }) else {
+            return
+        }
+        self.notifications[index].isRead = true
+        reloadRows(
+            at: [IndexPath(row: index, section: 0)],
+            with: .fade
+        )
+    }
+}
+
+// MARK: - Layout
+
+extension NotificationTableView {
+    override func layoutSubviews() {
+        let didBoundsChange = abs(lastBoundsSize.width - bounds.width) > Layout.zeroTolerance
+            || abs(lastBoundsSize.height - bounds.height) > Layout.zeroTolerance
+        
+        if didBoundsChange {
+            lastBoundsSize = bounds.size
+            recalculateFooterHeightIfNeeded()
+        }
+
+        super.layoutSubviews()
+    }
+
+    private func recalculateFooterHeightIfNeeded() {
+        guard bounds.width > 0, bounds.height > 0 else { return }
+        
+        let desiredHeight = desiredFooterHeight(for: notifications.count)
+        guard abs(lastFooterHeight - desiredHeight) > Layout.zeroTolerance else { return }
+        
+        lastFooterHeight = desiredHeight
+    }
+
+    private func desiredFooterHeight(for rowCount: Int) -> CGFloat {
+        guard rowCount > 0 else { return 0 }
+
+        let visibleHeight = bounds.height
+        - contentInset.top
+        - adjustedContentInset.bottom
+        
+        let rowsHeight = CGFloat(rowCount) * Layout.rowHeight
+        return max(Layout.footerMinHeight, visibleHeight - rowsHeight)
+    }
+}
+
+extension NotificationTableView: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        1
+    }
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        notifications.count
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = dequeueReusableCell(withIdentifier: NotificationTableViewCell.identifier, for: indexPath) as? NotificationTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.configure(item: notifications[indexPath.row])
+        return cell
+    }
+}
+
+extension NotificationTableView: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        .leastNormalMagnitude
+    }
+
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        UIView()
+    }
+
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        notifications.isEmpty ? .leastNormalMagnitude : lastFooterHeight
+    }
+
+    func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+        notifications.isEmpty ? .leastNormalMagnitude : lastFooterHeight
+    }
+
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        guard !notifications.isEmpty else { return nil }
+        return realFooterView
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard notifications.indices.contains(indexPath.row) else {
+            return
+        }
+        tapNotificationPublisher.send(notifications[indexPath.row])
+        didSelectNotification(id: notifications[indexPath.row].id)
+    }
+
+    func tableView(
+        _ tableView: UITableView,
+        trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
+    ) -> UISwipeActionsConfiguration? {
+        guard notifications.indices.contains(indexPath.row) else {
+            return nil
+        }
+
+        let item = notifications[indexPath.row]
+        
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
+            guard let self else {
+                completion(false)
+                return
+            }
+            self.didDeleteNotification(id: item.id)
+            self.deletePublisher.send(item.id)
+            completion(true)
+        }
+        deleteAction.image = .appImage(asset: .notificationTrash)
+        deleteAction.backgroundColor = .appColor(.danger600)
+        
+        let configuration = UISwipeActionsConfiguration(actions: [deleteAction])
+        configuration.performsFirstActionWithFullSwipe = true
+        return configuration
+    }
+}
+
+// MARK: - Configure
+
+extension NotificationTableView {
+
+    private func setUpStyles() {
+        backgroundColor = UIColor.ColorSystem.Neutral.gray0
+        separatorStyle = .none
+        showsVerticalScrollIndicator = false
+        
+        rowHeight = Layout.rowHeight
+    
+        dataSource = self
+        delegate = self
+
+        tableFooterView = UIView(
+            frame: .init(
+                origin: .zero,
+                size: .init(
+                    width: CGFloat.leastNormalMagnitude,
+                    height: CGFloat.leastNormalMagnitude
+                )
+            )
+        )
+        
+        register(
+            NotificationTableViewCell.self,
+            forCellReuseIdentifier: NotificationTableViewCell.identifier
+        )
+    }
+}

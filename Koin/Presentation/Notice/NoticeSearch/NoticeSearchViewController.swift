@@ -20,21 +20,33 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
     // MARK: - UI Components
 
     private let textField = UITextField().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        $0.placeholder = "검색어를 입력해주세요."
-        $0.backgroundColor = .appColor(.neutral100)
-        let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 40, height: $0.frame.height))
+        $0.attributedPlaceholder = NSAttributedString(
+            string: "검색어를 입력해주세요.",
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 12),
+                .foregroundColor: UIColor.appColor(.neutral500)
+            ]
+        )
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.backgroundColor = .appColor(.neutral0)
+        
+        let rightPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 50, height: $0.frame.height))
         $0.rightView = rightPaddingView
         $0.rightViewMode = .always
-        $0.layer.cornerRadius = 4
-        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
+        
+        let leftPaddingView = UIView(frame: CGRect(x: 0, y: 0, width: 20, height: $0.frame.height))
         $0.leftView = leftPaddingView
         $0.leftViewMode = .always
+        
+        $0.layer.cornerRadius = 22.5
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.layer.borderWidth = 0.5
     }
     
     private let textFieldButton = UIButton().then {
-        $0.setImage(UIImage.appImage(symbol: .magnifyingGlass), for: .normal)
-        $0.tintColor = .appColor(.neutral600)
+        $0.setImage(.appImage(asset: .noticeSearch)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.tintColor = .appColor(.new500)
     }
     
     private let popularKeyWordGuideLabel = UILabel().then {
@@ -68,13 +80,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         $0.separatorStyle = .singleLine
     }
     
-    private let emptyNoticeGuideLabel = UILabel().then {
-        $0.text = "일치하는 공지글이 없습니다.\n다른 키워드로 다시 시도해주세요"
-        $0.textAlignment = .center
-        $0.font = .appFont(.pretendardRegular, size: 14)
-        $0.textColor = .appColor(.neutral500)
-        $0.numberOfLines = 2
-    }
+    private let emptyNoticeView = NoticeSearchEmptyView()
     
     // MARK: - Initialization
     
@@ -106,10 +112,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         inputSubject.send(.fetchRecentSearchedWord)
         textField.delegate = self
         noticeListTableView.isHidden = true
-        emptyNoticeGuideLabel.isHidden = true
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        emptyNoticeView.isHidden = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -160,29 +163,6 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
 }
 
 extension NoticeSearchViewController {
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        if let userInfo = notification.userInfo, let _ = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect {
-            emptyNoticeGuideLabel.snp.remakeConstraints { make in
-                make.top.equalTo(view.safeAreaLayoutGuide.snp.top).inset(249)
-                make.centerX.equalToSuperview()
-            }
-            UIView.animate(withDuration: 0.3) { [weak self] in
-                self?.view.layoutIfNeeded()
-            }
-        }
-    }
-    
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        emptyNoticeGuideLabel.snp.remakeConstraints { make in
-            make.centerX.centerY.equalToSuperview()
-        }
-        
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            self?.view.layoutIfNeeded()
-        }
-    }
-   
-    
     @objc private func searchButtonTapped() {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
@@ -192,7 +172,6 @@ extension NoticeSearchViewController {
             IndicatorView.dismiss()
             textField.resignFirstResponder()
         }
-        textField.text = ""
     }
     
     @objc private func deleteAllButtonTapped() {
@@ -208,7 +187,6 @@ extension NoticeSearchViewController {
             IndicatorView.dismiss()
             textField.resignFirstResponder()
         }
-        textField.text = ""
         return true
     }
     
@@ -225,11 +203,11 @@ extension NoticeSearchViewController {
             $0.isHidden = true
         }
         if searchedResult.isEmpty {
-            emptyNoticeGuideLabel.isHidden = false
+            emptyNoticeView.isHidden = false
             noticeListTableView.isHidden = true
         }
         else {
-            emptyNoticeGuideLabel.isHidden = true
+            emptyNoticeView.isHidden = true
             noticeListTableView.isHidden = false
             noticeListTableView.updateSearchedResult(noticeArticleList: searchedResult, isLastPage: isLastPage, isNewKeyword: isNewPage)
         }
@@ -238,7 +216,7 @@ extension NoticeSearchViewController {
 
 extension NoticeSearchViewController {
     private func setUpLayouts() {
-        [textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeGuideLabel].forEach {
+        [textField, textFieldButton, popularKeyWordGuideLabel, recommendedSearchCollectionView, recentSearchDataGuideLabel, deleteRecentSearchDataButton, recentSearchTableView, noticeListTableView, emptyNoticeView].forEach {
             view.addSubview($0)
         }
     }
@@ -249,17 +227,17 @@ extension NoticeSearchViewController {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(20)
-            $0.height.equalTo(40)
+            $0.height.equalTo(45)
         }
         
         textFieldButton.snp.makeConstraints {
-            $0.trailing.equalTo(textField.snp.trailing).inset(16)
+            $0.trailing.equalTo(textField.snp.trailing).offset(-20)
             $0.centerY.equalTo(textField)
-            $0.width.equalTo(16)
-            $0.height.equalTo(16)
+            $0.size.equalTo(21)
         }
         
         popularKeyWordGuideLabel.snp.makeConstraints {
+            $0.height.equalTo(22)
             $0.leading.equalTo(textField)
             $0.top.equalTo(textField.snp.bottom).offset(20)
         }
@@ -271,6 +249,7 @@ extension NoticeSearchViewController {
         }
         
         recentSearchDataGuideLabel.snp.makeConstraints {
+            $0.height.equalTo(22)
             $0.leading.equalTo(popularKeyWordGuideLabel)
             $0.top.equalTo(recommendedSearchCollectionView.snp.bottom).offset(16)
         }
@@ -288,9 +267,10 @@ extension NoticeSearchViewController {
             $0.bottom.equalToSuperview()
         }
         
-        emptyNoticeGuideLabel.snp.makeConstraints {
-            $0.centerX.centerY.equalToSuperview()
-            $0.width.equalTo(184)
+        emptyNoticeView.snp.makeConstraints {
+            $0.top.equalTo(textField.snp.bottom)
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
         }
         
         noticeListTableView.snp.makeConstraints {

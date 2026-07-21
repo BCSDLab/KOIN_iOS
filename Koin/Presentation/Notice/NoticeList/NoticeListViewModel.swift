@@ -20,8 +20,8 @@ final class NoticeListViewModel: ViewModelProtocol {
     }
     enum Output {
         case updateBoard([NoticeArticleDto], NoticeListPages, NoticeListType)
-        case updateUserKeywordList([NoticeKeywordDto], Int)
-        case isLogined(Bool)
+        case updateUserKeywordList([NoticeKeywordDto], NoticeKeywordDto?)
+        case showToolTip
         case showIsLogined(Bool)
     }
     
@@ -34,6 +34,7 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private(set) var auth: UserType = .student
     private(set) var noticeList: [NoticeArticleDto] = []
+    private(set) var isLoggedIn: Bool = false
     var fetchType: LostItemType? = nil
     private(set) var noticeListType: NoticeListType = .all {
         didSet {
@@ -104,24 +105,21 @@ extension NoticeListViewModel {
     }
     
     private func getUserKeywordList(keyword: NoticeKeywordDto? = nil) {
-        var keywordIndex = 0
         if let keyword = keyword {
-            if keyword.id != -1 {
-                self.keyword = keyword.keyword
-            }
-            else {
-                self.keyword = nil
-            }
+            self.keyword = keyword.keyword
+        } else {
+            self.keyword = nil
         }
+        
+        var selectedKeyword: NoticeKeywordDto?
         
         fetchUserKeyword(completion: { [weak self] keywords in
             for (index, value) in keywords.enumerated() {
                 if value.keyword == self?.keyword {
-                    keywordIndex = index + 1
-                    break
+                    selectedKeyword = value
                 }
             }
-            self?.outputSubject.send(.updateUserKeywordList(keywords, keywordIndex))
+            self?.outputSubject.send(.updateUserKeywordList(keywords, selectedKeyword))
         })
     }
     
@@ -129,8 +127,9 @@ extension NoticeListViewModel {
         fetchMyKeywordUseCase.execute().sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] fetchResult in
+                self?.isLoggedIn = fetchResult.1
                 if fetchResult.0.isEmpty {
-                    self?.outputSubject.send(.isLogined(fetchResult.1))
+                    self?.outputSubject.send(.showToolTip)
                 }
                 completion(fetchResult.0)
             }

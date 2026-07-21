@@ -14,7 +14,7 @@ final class HotNoticeArticlesTableViewCell: UITableViewCell {
     private let boardTitleLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 12)
         $0.textAlignment = .left
-        $0.textColor = .appColor(.primary600)
+        $0.textColor = .appColor(.new800)
         $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     }
     

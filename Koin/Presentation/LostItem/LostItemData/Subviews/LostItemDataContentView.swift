@@ -69,7 +69,7 @@ final class LostItemDataContentView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
         
-    func configure(images: [Image], content: String?, organization: Organization?) {
+    func configure(images: [AppImage], content: String?, organization: Organization?) {
         imageCollectionView.configure(images: images)
         imageCollectionView.isHidden = images.isEmpty
         

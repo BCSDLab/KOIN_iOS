@@ -13,7 +13,7 @@ struct LostArticleDetailDto: Decodable {
     let category, foundPlace, foundDate: String
     let content: String
     let author: String?
-    let images: [Image]?
+    let images: [AppImage]?
     let isCouncil: Bool?
     let isMine: Bool?
     let prevId, nextId: Int?
@@ -46,7 +46,7 @@ struct LostArticleDetailDto: Decodable {
         foundDate = try container.decode(String.self, forKey: .foundDate)
         content = try container.decodeIfPresent(String.self, forKey: .content) ?? ""
         author = try container.decodeIfPresent(String.self, forKey: .author)
-        images = try container.decodeIfPresent([Image].self, forKey: .images)
+        images = try container.decodeIfPresent([AppImage].self, forKey: .images)
         isCouncil = try container.decodeIfPresent(Bool.self, forKey: .isCouncil)
         isMine = try container.decodeIfPresent(Bool.self, forKey: .isMine)
         prevId = try container.decodeIfPresent(Int.self, forKey: .prevId)
@@ -56,7 +56,7 @@ struct LostArticleDetailDto: Decodable {
     }
 }
 
-struct Image: Decodable {
+struct AppImage: Decodable {
     let id: Int?
     let imageUrl: String
 
