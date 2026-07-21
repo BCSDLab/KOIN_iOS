@@ -15,6 +15,7 @@ final class DepartmentCategoryViewModel: SwiftUIViewModelProtocol {
         case viewDidAppear
         case search(String)
         case endSearching
+        case didShowToast
     }
     
     // MARK: - Properties
@@ -22,13 +23,14 @@ final class DepartmentCategoryViewModel: SwiftUIViewModelProtocol {
     private let searchDepartmentUseCase: SearchDepartmentUseCase
     
     private(set) var categorys: [DepartmentCategory] = []
-    private(set) var updatedAt: String = ""
     
     private(set) var searchingDepartments: [Department] = []
     private(set) var searchingUpdatedAt: String = ""
     
     private(set) var isLoading: Bool = true
     private var searchTask: Task<Void, Never>?
+    
+    private(set) var toastMessage: String?
     
     // MARK: - Initializer
     init(
@@ -49,6 +51,8 @@ final class DepartmentCategoryViewModel: SwiftUIViewModelProtocol {
         case .endSearching:
             searchingDepartments.removeAll()
             searchingUpdatedAt = ""
+        case .didShowToast:
+            toastMessage = nil
         }
     }
 }
@@ -57,9 +61,8 @@ extension DepartmentCategoryViewModel {
     private func fetchCategory() {
         Task {
             isLoading = true
-            let (categories, updatedAt) = await fetchDepartmentCategoryUseCase.execute()
+            let categories = try await fetchDepartmentCategoryUseCase.execute()
             self.categorys = categories
-            self.updatedAt = updatedAt
             isLoading = false
         }
     }
@@ -68,10 +71,14 @@ extension DepartmentCategoryViewModel {
         searchTask?.cancel()
         searchTask = Task {
             isLoading = true
-            let (departments, updatedAt) = await searchDepartmentUseCase.execute(keyword: keyword)
-            guard !Task.isCancelled else { return }
-            self.searchingDepartments = departments
-            self.searchingUpdatedAt = updatedAt
+            do {
+                let (departments, updatedAt) = try await searchDepartmentUseCase.execute(keyword: keyword)
+                guard !Task.isCancelled else { return }
+                self.searchingDepartments = departments
+                self.searchingUpdatedAt = updatedAt
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message
+            }
             isLoading = false
         }
     }

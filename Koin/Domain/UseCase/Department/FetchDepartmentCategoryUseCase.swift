@@ -8,18 +8,17 @@
 import Foundation
 
 protocol FetchDepartmentCategoryUseCase {
-    func execute() async -> (categories: [DepartmentCategory], updatedAt: String)
+    func execute() async throws -> [DepartmentCategory]
 }
 
-final class MockFetchDepartmentCategoryUseCase: FetchDepartmentCategoryUseCase {
-    func execute() async -> (categories: [DepartmentCategory], updatedAt: String) {
-        let categories: [DepartmentCategory] = [
-            .init(id: 1, name: "종류1", icon: .filterIcon3),
-            .init(id: 2, name: "종류2", icon: .delete),
-            .init(id: 3, name: "종류3", icon: .notificationTrash),
-            .init(id: 4, name: "종류4", icon: nil),
-        ]
-        let updatedAt = "2022-02-22"
-        return (categories, updatedAt)
+final class DefaultFetchDepartmentCategoryUseCase: FetchDepartmentCategoryUseCase {
+    private let repository: DepartmentRepository
+    
+    init(repository: DepartmentRepository) {
+        self.repository = repository
+    }
+    
+    func execute() async throws -> [DepartmentCategory] {
+        try await repository.fetchCategories()
     }
 }
