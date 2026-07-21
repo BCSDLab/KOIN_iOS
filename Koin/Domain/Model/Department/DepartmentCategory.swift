@@ -10,5 +10,5 @@ import Foundation
 struct DepartmentCategory: Identifiable {
     var id: Int
     let name: String
-    let icon: ImageAsset
+    let icon: ImageAsset?
 }
