@@ -8,11 +8,27 @@
 import Foundation
 
 protocol SearchDepartmentUseCase {
-    func execute(keyword: String) async -> (departments: [Department], updatedAt: String)
+    func execute(
+        keyword: String
+    ) async throws -> (
+        departments: [Department],
+        updatedAt: String
+    )
 }
 
-final class MockSearchDepartmentUseCase: SearchDepartmentUseCase {
-    func execute(keyword: String) async -> (departments: [Department], updatedAt: String) {
-        return ([], "2022-02-22")
+final class DefaultSearchDepartmentUseCase: SearchDepartmentUseCase {
+    private let repository: DepartmentRepository
+    
+    init(repository: DepartmentRepository) {
+        self.repository = repository
+    }
+    
+    func execute(
+        keyword: String
+    ) async throws -> (
+        departments: [Department],
+        updatedAt: String
+    ) {
+        try await repository.fetchDepartments(keyword: keyword)
     }
 }

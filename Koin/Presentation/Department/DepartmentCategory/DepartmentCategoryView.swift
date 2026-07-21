@@ -13,6 +13,7 @@ struct DepartmentCategoryView: ActionBindableView {
     enum Action {
         case showDepartment(category: DepartmentCategory)
         case showCopyToast
+        case showToast(message: String)
     }
     
     // MARK: - Layout
@@ -85,6 +86,11 @@ struct DepartmentCategoryView: ActionBindableView {
             .loadingOverlay(viewModel.isLoading)
             .onAppear {
                 viewModel.execute(.viewDidAppear)
+            }
+            .onChange(of: viewModel.toastMessage) {
+                guard let message = viewModel.toastMessage else { return }
+                sendAction(.showToast(message: message))
+                viewModel.execute(.didShowToast)
             }
         }
     }

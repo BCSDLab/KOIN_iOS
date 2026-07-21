@@ -166,8 +166,13 @@
 		7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */; };
 		7C6403D3300BE8A100A9589F /* DepartmentEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403D2300BE8A100A9589F /* DepartmentEmptyView.swift */; };
 		7C6403D6300BF12500A9589F /* SearchDepartmentUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403D5300BF12500A9589F /* SearchDepartmentUseCase.swift */; };
+		7C6403FE300F36F200A9589F /* DepartmentAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403FD300F36F200A9589F /* DepartmentAPI.swift */; };
 		7C640400300F395300A9589F /* DepartmentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6403FF300F395300A9589F /* DepartmentRepository.swift */; };
 		7C640402300F39BB00A9589F /* DefaultDepartmentRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C640401300F39BB00A9589F /* DefaultDepartmentRepository.swift */; };
+		7C640409300F3F7700A9589F /* FetchDepartmentRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C640408300F3F7700A9589F /* FetchDepartmentRequestDto.swift */; };
+		7C64040D300F40E300A9589F /* SearchDepartmentUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C64040C300F40E300A9589F /* SearchDepartmentUseCase.swift */; };
+		7C64040F300F428200A9589F /* DepartmentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C64040E300F428200A9589F /* DepartmentService.swift */; };
+		7C640412300F435E00A9589F /* DepartmentCategoryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C640411300F435E00A9589F /* DepartmentCategoryDto.swift */; };
 		7C65FDC32FE69262007831CE /* NewBannerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC22FE69262007831CE /* NewBannerViewController.swift */; };
 		7C65FDC52FE69279007831CE /* NewBannerCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC42FE69279007831CE /* NewBannerCollectionView.swift */; };
 		7C65FDC72FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C65FDC62FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift */; };
@@ -1198,8 +1203,13 @@
 		7C61D3622F242D8D005FAC3A /* AddLostItemHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemHeaderView.swift; sourceTree = "<group>"; };
 		7C6403D2300BE8A100A9589F /* DepartmentEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentEmptyView.swift; sourceTree = "<group>"; };
 		7C6403D5300BF12500A9589F /* SearchDepartmentUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDepartmentUseCase.swift; sourceTree = "<group>"; };
+		7C6403FD300F36F200A9589F /* DepartmentAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentAPI.swift; sourceTree = "<group>"; };
 		7C6403FF300F395300A9589F /* DepartmentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentRepository.swift; sourceTree = "<group>"; };
 		7C640401300F39BB00A9589F /* DefaultDepartmentRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultDepartmentRepository.swift; sourceTree = "<group>"; };
+		7C640408300F3F7700A9589F /* FetchDepartmentRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDepartmentRequestDto.swift; sourceTree = "<group>"; };
+		7C64040C300F40E300A9589F /* SearchDepartmentUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDepartmentUseCase.swift; sourceTree = "<group>"; };
+		7C64040E300F428200A9589F /* DepartmentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentService.swift; sourceTree = "<group>"; };
+		7C640411300F435E00A9589F /* DepartmentCategoryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentCategoryDto.swift; sourceTree = "<group>"; };
 		7C65FDC22FE69262007831CE /* NewBannerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBannerViewController.swift; sourceTree = "<group>"; };
 		7C65FDC42FE69279007831CE /* NewBannerCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewBannerCollectionView.swift; sourceTree = "<group>"; };
 		7C65FDC62FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AutoScrollableInfiniteCarouselCollectionViewProtocol.swift; sourceTree = "<group>"; };
@@ -2133,6 +2143,7 @@
 			isa = PBXGroup;
 			children = (
 				7C016573300BD8AF0013DD7B /* FetchDepartmentCategoryUseCase.swift */,
+				7C64040C300F40E300A9589F /* SearchDepartmentUseCase.swift */,
 				7C016575300BD9610013DD7B /* FetchDepartmentUseCase.swift */,
 				7C6403D5300BF12500A9589F /* SearchDepartmentUseCase.swift */,
 			);
@@ -2609,6 +2620,22 @@
 				7C61D3362F21FADF005FAC3A /* EditLostItemViewController.swift */,
 			);
 			path = EditLostItem;
+			sourceTree = "<group>";
+		};
+		7C640405300F3EA000A9589F /* Department */ = {
+			isa = PBXGroup;
+			children = (
+				7C640408300F3F7700A9589F /* FetchDepartmentRequestDto.swift */,
+			);
+			path = Department;
+			sourceTree = "<group>";
+		};
+		7C640410300F433900A9589F /* Department */ = {
+			isa = PBXGroup;
+			children = (
+				7C640411300F435E00A9589F /* DepartmentCategoryDto.swift */,
+			);
+			path = Department;
 			sourceTree = "<group>";
 		};
 		7C65FDC12FE69250007831CE /* BannerView */ = {
@@ -4831,6 +4858,7 @@
 		D27DD0792BA608310081FD36 /* Decodable */ = {
 			isa = PBXGroup;
 			children = (
+				7C640410300F433900A9589F /* Department */,
 				D223D60E2D9BEC8100C29BE6 /* Core */,
 				7C8A943E2FD424E400DEA6F5 /* Home */,
 				7CA60D712F66217E007C08C1 /* CallVan */,
@@ -5140,6 +5168,7 @@
 		D2D380F72BA72F6A009AD5A9 /* Encodable */ = {
 			isa = PBXGroup;
 			children = (
+				7C640405300F3EA000A9589F /* Department */,
 				7CA60D6E2F661B29007C08C1 /* CallVan */,
 				7CCB1E4C2F29DB2500472669 /* Chat */,
 				7C372ED72F1B7F3100149729 /* LostItem */,
@@ -5377,6 +5406,7 @@
 				7C8ADD342F20BF4600F85BDE /* LostItemAPI.swift */,
 				7CA60D6C2F661A6D007C08C1 /* CallVanAPI.swift */,
 				7C8A94432FD4279B00DEA6F5 /* HomeAPI.swift */,
+				7C6403FD300F36F200A9589F /* DepartmentAPI.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -5409,6 +5439,7 @@
 				D208A7CA2CABB755007040E7 /* CoreService.swift */,
 				7CA60D662F6619F4007C08C1 /* CallVanService.swift */,
 				7C8A94412FD4278800DEA6F5 /* HomeService.swift */,
+				7C64040E300F428200A9589F /* DepartmentService.swift */,
 				D2FB23582BFD72C60098BA2B /* Network */,
 				7C16AA352F3DE8F50071ABE6 /* CoreData */,
 			);
@@ -6153,6 +6184,7 @@
 				7CED91832EF2D1F900457128 /* NoticeDataViewModel.swift in Sources */,
 				7CED91852EF2D1F900457128 /* DiningOperatingTimeCollectionView.swift in Sources */,
 				7CC42B762F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift in Sources */,
+				7C64040D300F40E300A9589F /* SearchDepartmentUseCase.swift in Sources */,
 				7CED91862EF2D1F900457128 /* ShopReviewViewController.swift in Sources */,
 				7CED91872EF2D1F900457128 /* ReviewListViewController.swift in Sources */,
 				7CED91882EF2D1F900457128 /* ReviewListCollectionViewCell.swift in Sources */,
@@ -6216,6 +6248,7 @@
 				7C4D5A472F01638800B40128 /* BusSearchViewModel.swift in Sources */,
 				7C4D5A482F01638800B40128 /* BusTimetableDataViewModel.swift in Sources */,
 				7C4D5A492F01638800B40128 /* BusSearchDatePickerViewController.swift in Sources */,
+				7C640412300F435E00A9589F /* DepartmentCategoryDto.swift in Sources */,
 				7C4D5A4A2F01638800B40128 /* BusTimetableRouteCollectionView.swift in Sources */,
 				7CC42B442F5991AE00940CE1 /* CallVanListViewModel.swift in Sources */,
 				7C61D34D2F220EBA005FAC3A /* EditLostItemContentView.swift in Sources */,
@@ -6313,6 +6346,7 @@
 				7CED91D82EF2D1F900457128 /* ClassComponentView.swift in Sources */,
 				7C372F222F1CD91200149729 /* LostItemDataRecentTableViewCell.swift in Sources */,
 				7CED91D92EF2D1F900457128 /* ImageScrollCollectionView.swift in Sources */,
+				7C6403FE300F36F200A9589F /* DepartmentAPI.swift in Sources */,
 				7CA60D632F66197C007C08C1 /* CallVanRepository.swift in Sources */,
 				7C0C188F2F67F8BA001781B3 /* CallVanDataDto.swift in Sources */,
 				7CC42B962F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift in Sources */,
@@ -6325,6 +6359,7 @@
 				7CC42B202F56F3C400940CE1 /* CallVanState.swift in Sources */,
 				7C8ADD382F20C0B200F85BDE /* LostItemListDto.swift in Sources */,
 				7CED91E52EF2D1F900457128 /* ModifyUserModalViewController.swift in Sources */,
+				7C640409300F3F7700A9589F /* FetchDepartmentRequestDto.swift in Sources */,
 				7CED91E62EF2D1F900457128 /* ShopSummaryInfoView.swift in Sources */,
 				7CED91E92EF2D1F900457128 /* ShopDetailTableViewDeliveryTipsCell.swift in Sources */,
 				7CED91EA2EF2D1F900457128 /* TimetableCollectionView.swift in Sources */,
@@ -6514,6 +6549,7 @@
 				D22421802C8ADE6200E8B480 /* PasswordValidator.swift in Sources */,
 				7CC42B3C2F58284D00940CE1 /* CallVanNotificationTableViewCell.swift in Sources */,
 				D20AD6F52E029F8D0067760A /* CheckVerificationEmailUseCase.swift in Sources */,
+				7C64040F300F428200A9589F /* DepartmentService.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				7C6403D3300BE8A100A9589F /* DepartmentEmptyView.swift in Sources */,
 				7C8A94222FD0A96400DEA6F5 /* NotificationEmptyBackgroundView.swift in Sources */,
