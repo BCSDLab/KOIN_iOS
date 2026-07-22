@@ -35,6 +35,11 @@ struct TimeTableView: View {
         static let dayHeight: CGFloat = 16
         static let timeWidth: CGFloat = 30
         static let timeHeight: CGFloat = 29
+        static let startHour: Int = 9
+        static let endHour: Int = 19
+        static let slotsPerHour: Int = 2
+        static let numberOfSlots: Int = (endHour - startHour) * slotsPerHour
+        static let slotHeight: CGFloat = timeHeight / CGFloat(slotsPerHour)
         static let headerWidth: CGFloat = 2
         enum Separator {
             static let bold: CGFloat = 1
