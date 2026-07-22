@@ -398,7 +398,7 @@ extension CertificationFormViewController {
         changeVerificationButtonStatus(textField.text ?? "")
     }
     
-    private func showVerificationHelpResult(_ message: String, _ color: SceneColorAsset) {
+    private func showVerificationHelpResult(_ message: String, _ color: ColorAsset) {
         verificationHelpLabel.isHidden = false
         verificationHelpLabel.setImageText(
             image: UIImage.appImage(asset: .warningOrange),
@@ -416,7 +416,7 @@ extension CertificationFormViewController {
         }
     }
     
-    private func showHttpResult(_ message: String, _ color: SceneColorAsset) {
+    private func showHttpResult(_ message: String, _ color: ColorAsset) {
         phoneNumberReponseLabel.isHidden = false
         
         if message == "이미 존재하는 전화번호입니다." {

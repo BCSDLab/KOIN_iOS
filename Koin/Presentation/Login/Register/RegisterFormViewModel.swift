@@ -38,9 +38,9 @@ final class RegisterFormViewModel: ViewModelProtocol {
     }
     
     enum Output {
-        case showHttpResult(String, SceneColorAsset)
-        case showIdHttpResult(String, SceneColorAsset)
-        case showNicknameHttpResult(String, SceneColorAsset)
+        case showHttpResult(String, ColorAsset)
+        case showIdHttpResult(String, ColorAsset)
+        case showNicknameHttpResult(String, ColorAsset)
         case changeSendVerificationButtonStatus
         case sendVerificationCodeSuccess(response: SendVerificationCodeDto)
         case correctVerificationCode

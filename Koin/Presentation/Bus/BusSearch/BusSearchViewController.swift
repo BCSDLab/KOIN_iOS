@@ -192,7 +192,7 @@ extension BusSearchViewController {
     @objc private func swapDepartureAndArrival(sender: UIButton) {
         guard departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 else { return }
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.swapDestionation, .click, "스왑 버튼"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.swapDestination, .click, "스왑 버튼"))
         let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
         changeBusAreaButton(sender: departAreaSelectedButton, title: arrival)

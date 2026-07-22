@@ -12,9 +12,9 @@ import UIKit
 final class NoticeListTableViewCell: UITableViewCell {
     //MARK: - UI Components
     private let boardTitleLabel = UILabel().then {
-        $0.font = .appFont(.pretendardBold, size: 12)
+        $0.font = .appFont(.pretendardSemiBold, size: 12)
         $0.textAlignment = .left
-        $0.textColor = .appColor(.primary600)
+        $0.textColor = .appColor(.new800)
     }
     
     private let noticeTitleLabel = UILabel().then {
@@ -70,7 +70,11 @@ final class NoticeListTableViewCell: UITableViewCell {
         $0.textColor = UIColor.appColor(.neutral500)
     }
     
-    //MARK: -Initialization
+    private let separatorView = UIView().then {
+        $0.backgroundColor = .appColor(.neutral100)
+    }
+    
+    //MARK: - Initialization
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configureView()
@@ -160,7 +164,7 @@ extension NoticeListTableViewCell {
     }
     
     private func setUpLayouts() {
-        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel, categoryLabel, contentLabel, reportedLabel].forEach {
+        [boardTitleLabel, noticeTitleLabel, nickNameLabel, separatorDotLabel, createdDateLabel, separatorDot2Label, eyeImageView, hitLabel, categoryLabel, contentLabel, reportedLabel, separatorView].forEach {
             contentView.addSubview($0)
         }
     }
@@ -223,6 +227,11 @@ extension NoticeListTableViewCell {
         reportedLabel.snp.makeConstraints { make in
             make.top.equalTo(boardTitleLabel.snp.bottom).offset(4)
             make.leading.equalTo(categoryLabel)
+        }
+        
+        separatorView.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
     

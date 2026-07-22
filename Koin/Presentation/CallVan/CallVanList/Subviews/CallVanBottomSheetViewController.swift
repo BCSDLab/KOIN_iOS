@@ -156,7 +156,7 @@ final class CallVanBottomSheetViewController: UIViewController {
         titleLabel.snp.makeConstraints {
             $0.height.equalTo(29)
             $0.top.equalToSuperview().offset(12)
-            $0.leading.equalToSuperview().offset(32)
+            $0.leading.trailing.equalToSuperview().inset(32)
         }
         topSeparatorView.snp.makeConstraints {
             $0.height.equalTo(1)

@@ -14,11 +14,10 @@ final class TabBarCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     private let tabTitleLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.font = .appFont(.pretendardMedium, size: 14)
     }
     
     private let indicatorView = UIView().then {
-        $0.backgroundColor = .appColor(.primary500)
+        $0.backgroundColor = .appColor(.new800)
     }
     
     // MARK: - Initialization
@@ -36,7 +35,8 @@ final class TabBarCollectionViewCell: UICollectionViewCell {
     }
     
     func selectTab(isSelected: Bool) {
-        tabTitleLabel.textColor = isSelected ? .appColor(.primary500) : .appColor(.neutral500)
+        tabTitleLabel.textColor = isSelected ? .appColor(.new600) : .appColor(.neutral500)
+        tabTitleLabel.font = isSelected ? .appFont(.pretendardSemiBold, size: 16) : .appFont(.pretendardRegular, size: 16)
         indicatorView.isHidden = isSelected ? false : true
     }
 }
@@ -55,11 +55,13 @@ extension TabBarCollectionViewCell {
         
         indicatorView.snp.makeConstraints {
             $0.bottom.leading.trailing.equalToSuperview()
-            $0.height.equalTo(1.5)
+            $0.height.equalTo(2)
         }
     }
     
     private func configureView() {
+        backgroundColor = nil
+        backgroundConfiguration = .clear()
         setUpLayouts()
         setUpConstraints()
     }

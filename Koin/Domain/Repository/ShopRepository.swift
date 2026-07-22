@@ -14,6 +14,8 @@ protocol ShopRepository {
     func fetchEventList() -> AnyPublisher<EventsDto, ErrorResponse>
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, ErrorResponse>
     func fetchShopMenusCategoryList(shopId: Int) -> AnyPublisher<ShopMenusCategoryDto, ErrorResponse>
+    func fetchEventCount() -> AnyPublisher<Int, ErrorResponse>
+    func fetchShopCount() -> AnyPublisher<ShopCount, ErrorResponse>
     
     func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, ErrorResponse>
     func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDto, ErrorResponse>
@@ -33,4 +35,3 @@ protocol ShopRepository {
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearch, ErrorResponse>
 }
-

@@ -33,6 +33,8 @@ enum EventParameter {
         
         enum Business: String, EventLabelType {
             // Shop
+            case shop = "shop"
+            case popularShop = "popular_shop"
             case mainShopCategories = "main_shop_categories"
             case shopCategories = "shop_categories"
             case shopClick = "shop_click"
@@ -67,6 +69,10 @@ enum EventParameter {
             case benefitShopCategoriesEvent = "benefit_shop_categories_event"
             case benefitShopClick = "benefit_shop_click"
             case benefitShopCall = "benefit_shop_call"
+            case shopBenefitEntry = "shop_benefit_entry"
+            case shopBenefitBack = "shop_benefit_back"
+            case shopBenefitDetail = "shop_benefit_detail"
+            case shopPictureSwipe = "shop_picture_swipe"
             
             case loginPrompt = "login_prompt"
             
@@ -81,6 +87,8 @@ enum EventParameter {
         enum Campus: String, EventLabelType {
             // Dining
             case mainScroll = "main_scroll"
+            case todayMeal = "today_meal"
+            case menuCorner = "menu_corner"
             case mainMenuMoveDetailView = "main_menu_moveDetailView"
             case mainMenuCorner = "main_menu_corner"
             case hamburger = "hamburger"
@@ -102,16 +110,35 @@ enum EventParameter {
             case cityBusDirection = "city_bus_direction"
             case timetableBusTypeTab = "timetable_bus_type_tab"
             
+            // Home
             case shuttleTicket = "shuttle_ticket"
+            case busTimetable = "bus_timetable"
+            case busRoute = "bus_route"
+            case navHome = "nav_home"
+            case navCategory = "nav_category"
+            case navBulletin = "nav_bulletin"
+            case navProfile = "nav_profile"
+            case categoryTimetable = "category_timetable"
+            case categoryLostProperty = "category_lost_property"
+            case categoryCampus = "category_campus"
+            case categoryTransportation = "category_transportation"
+            case categoryEtc = "category_etc"
             case mainBusTimetable = "main_bus_timetable"
             case mainBusSearch = "main_bus_search"
+            case mainNextModal = "main_next_modal"
+            case mainModalHide7d = "main_modal_hide_7d"
+            case mainModalClose = "main_modal_close"
+            case homeTimetable = "home_timetable"
+            case homeLogin = "home_login"
+            case homeLogout = "home_logout"
+            case homeSettings = "home_settings"
             
             case departureBox = "departure_box"
             case arrivalBox = "arrival_box"
             
             case departureLocationConfirm = "departure_location_confirm"
             case arrivalLocationConfirm = "arrival_location_confirm"
-            case swapDestionation = "swap_destination"
+            case swapDestination = "swap_destination"
             case searchBus = "search_bus"
             case searchResultBack = "search_result_back"
             case searchResultClose = "search_result_close"
@@ -143,6 +170,11 @@ enum EventParameter {
             case toManageKeyword = "to_manage_keyword"
             
             // Noti
+            case notification = "notification"
+            case notificationList = "notification_list"
+            case notificationListReadAll = "notification_list_read_all"
+            case notificationListDelete = "notification_list_delete"
+            case notificationListDeleteAll = "notification_list_delete_all"
             case notificationSoldOut = "notification_sold_out"
             case notificationBreakfastSoldOut = "notification_breakfast_sold_out"
             case notificationLunchSoldOut = "notification_lunch_sold_out"
@@ -183,9 +215,10 @@ enum EventParameter {
             case loginPrompt = "login_prompt"
             
             // CallVan
+            case callvanpot = "callvanpot"
             case mainCallVanView = "main_callvan_view"
             case mainCallVanWrite = "main_callvan_write"
-            case callvanSsearch = "callvan_search"
+            case callvanSearch = "callvan_search"
             case callvanFilter = "callvan_filter"
             case callvanFilterApply = "callvan_filter_apply"
             case callvanJoin = "callvan_join"
