@@ -23,8 +23,6 @@ enum TimeTableRow: Identifiable {
 
 struct TimeTableLectureContainerView: View {
 
-    let numberOfRows: Int = 10
-
     var rows: [TimeTableRow] = []
     
     init(
@@ -39,14 +37,14 @@ struct TimeTableLectureContainerView: View {
                 switch row {
                 case .empty:
                     TimeTableEmptyLectureView()
-                        .frame(height: TimeTableView.Layout.timeHeight)
+                        .frame(height: TimeTableView.Layout.slotHeight)
                 case .some(_, let wrapper, let times):
                     TimeTableLectureView(
                         headerColor: wrapper.header,
                         bodyColor: wrapper.body,
                         lecture: wrapper.lecture
                     )
-                    .frame(height: TimeTableView.Layout.timeHeight * times)
+                    .frame(height: TimeTableView.Layout.slotHeight * times)
                 }
             }
         }
@@ -56,10 +54,10 @@ struct TimeTableLectureContainerView: View {
 extension TimeTableLectureContainerView {
     
     private func makeRows(wrappers: [LectureDataWrapper]) -> [TimeTableRow] {
-        func findLecture(at row: Int) -> LectureDataWrapper? {
+        func findLecture(at slot: Int) -> LectureDataWrapper? {
             return wrappers.first(where: {
                 if let _ = $0.lecture.classTime.first(where: {
-                    $0 % 10 == row
+                    $0 % 100 == slot
                 }) {
                     return true
                 } else {
@@ -70,11 +68,11 @@ extension TimeTableLectureContainerView {
         
         var result: [TimeTableRow] = []
         
-        for row in 0..<numberOfRows {
-            if let wrapper = findLecture(at: row) {
-                result.append(TimeTableRow.some(at: row, wrapper))
+        for slot in 0..<TimeTableView.Layout.numberOfSlots {
+            if let wrapper = findLecture(at: slot) {
+                result.append(TimeTableRow.some(at: slot, wrapper))
             } else {
-                result.append(TimeTableRow.empty(at: row))
+                result.append(TimeTableRow.empty(at: slot))
             }
         }
         
@@ -95,4 +93,3 @@ extension TimeTableLectureContainerView {
         }
     }
 }
-
