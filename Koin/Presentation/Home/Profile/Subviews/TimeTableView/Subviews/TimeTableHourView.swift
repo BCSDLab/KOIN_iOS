@@ -9,7 +9,7 @@ import SwiftUI
 
 struct TimeTableHourView: View {
     
-    let hours: ClosedRange<Int> = 9...18
+    let hours: Range<Int> = TimeTableView.Layout.startHour..<TimeTableView.Layout.endHour
     
     var body: some View {
         VStack(spacing: 0) {
