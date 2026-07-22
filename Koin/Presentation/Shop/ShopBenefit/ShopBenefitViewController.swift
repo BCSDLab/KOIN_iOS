@@ -59,17 +59,6 @@ final class ShopBenefitViewController: UIViewController {
             zoomedImageViewController.modalPresentationStyle = .fullScreen
             present(zoomedImageViewController, animated: true)
         }.store(in: &subscriptions)
-
-        benefitsTableView.detailExpandedPublisher.sink { [weak self] in
-            guard let self else { return }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitDetail, EventParameter.EventCategory.click, self.viewModel.shopName))
-        }.store(in: &subscriptions)
-    }
-}
-
-extension ShopBenefitViewController: PopLoggable {
-    func sendPopLog(category: EventParameter.EventCategory) {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitBack, category, viewModel.shopName))
     }
 }
 

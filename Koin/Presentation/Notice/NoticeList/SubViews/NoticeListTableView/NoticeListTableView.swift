@@ -14,18 +14,12 @@ final class NoticeListTableView: UITableView {
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
     let pageBtnPublisher = PassthroughSubject<Int, Never>()
     let tapNoticePublisher = PassthroughSubject<(Int, Int), Never>()
-    let searchButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
-    let keywordAllButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let keywordTapPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     let isScrolledPublisher = PassthroughSubject<Void, Never>()
     let typeButtonPublisher = PassthroughSubject<Void, Never>()
-    
-    let addButtonMinXPublisher = PassthroughSubject<CGFloat, Never>()
-    let contentOffsetYPublisher = PassthroughSubject<CGFloat, Never>()
-    
     private var scrollDirection: ScrollLog = .scrollToDown
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
@@ -90,8 +84,10 @@ final class NoticeListTableView: UITableView {
         headerView.toggleButton(isHidden: noticeArticleList.first?.boardId != 14)
     }
     
-    func updateKeywordList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
-        headerView.updateKeyWordsList(keywordList: keywordList, selectedKeyword: selectedKeyword)
+    func updateKeywordList(keywordList: [NoticeKeywordDto], keywordIdx: Int) {
+        if let headerView = self.headerView(forSection: 0) as? NoticeListHeaderView {
+            headerView.updateKeyWordsList(keywordList: keywordList, keywordIdx: keywordIdx)
+        }
         reloadData()
     }
 }
@@ -117,10 +113,6 @@ extension NoticeListTableView: UIScrollViewDelegate {
             }
         }
     }
-    
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        contentOffsetYPublisher.send(scrollView.contentOffset.y)
-    }
 }
 
 extension NoticeListTableView: UITableViewDataSource {
@@ -134,26 +126,16 @@ extension NoticeListTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         headerCancellables.removeAll()
-        headerView.searchButtonTappedPublisher.sink { [weak self] in
-            self?.searchButtonTappedPublisher.send()
-        }.store(in: &headerCancellables)
         headerView.keywordAddBtnTapPublisher.sink { [weak self] in
             self?.keywordAddBtnTapPublisher.send()
         }.store(in: &headerCancellables)
-        headerView.keywordAllButtonTappedPublisher.sink { [weak self] in
-            self?.keywordAllButtonTappedPublisher.send()
-        }.store(in: &headerCancellables)
-        headerView.keywordTapPublisher.sink { [weak self] keyword in
-            self?.keywordTapPublisher.send(keyword)
+        headerView.keywordTapPublisher.sink { [weak self] keyword in                self?.keywordTapPublisher.send(keyword)
         }.store(in: &headerCancellables)
         headerView.manageKeyWordBtnTapPublisher.sink { [weak self] in
             self?.manageKeyWordBtnTapPublisher.send()
         }.store(in: &headerCancellables)
         headerView.typeButtonPublisher.sink { [weak self] in
             self?.typeButtonPublisher.send()
-        }.store(in: &headerCancellables)
-        headerView.noticeKeywordScrollView.addButtonMinXPublisher.sink { [weak self] addButtonMinX in
-            self?.addButtonMinXPublisher.send(addButtonMinX)
         }.store(in: &headerCancellables)
         return headerView
     }

@@ -15,16 +15,18 @@ import SwiftRater
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
     
     var window: UIWindow?
-    
-    // MARK: - 푸시알림 Warm Start & Cold Start (optional)
+    var sceneDelegate: SceneDelegate? {
+        let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene
+        return windowScene?.delegate as? SceneDelegate
+    }
+
+    // MARK: - 푸시알림을 탭했을 때의 동작 구현
     func userNotificationCenter(
         _ center: UNUserNotificationCenter,
         didReceive response: UNNotificationResponse,
         withCompletionHandler completionHandler: @escaping () -> Void
     ) {
-        let sceneDelegate = response.targetScene?.delegate as? SceneDelegate
         let userInfo = response.notification.request.content.userInfo
-        
         sceneDelegate?.handleNotificationData(userInfo: userInfo)
         completionHandler()
     }
@@ -55,7 +57,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         return true
     }
     
-    // MARK: - APNs 토큰 처리
+    // MARK: - APNS 토큰 처리
     func application(
         _ application: UIApplication,
         didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
@@ -68,11 +70,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         _ center: UNUserNotificationCenter,
         willPresent notification: UNNotification
     ) async -> UNNotificationPresentationOptions {
-        // 푸시 알림 도착 전역에 알림 (HomeTabbar에서 관찰)
-        NotificationCenter.default.post(
-            name: NSNotification.Name("Notification Sent"),
-            object: nil
-        )
         // 푸시 알림 옵션 반환
         return [[.banner, .list, .sound]]
     }

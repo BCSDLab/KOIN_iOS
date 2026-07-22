@@ -168,6 +168,7 @@ extension CallVanNotificationViewController {
             onReadButtonTapped: onReadButtonTapped,
             onDeleteButtonTapped: onDeleteButtonTapped
         )
+        dropdownViewController.modalTransitionStyle = .crossDissolve
         dropdownViewController.modalPresentationStyle = .overFullScreen
         present(dropdownViewController, animated: false)
     }

@@ -7,37 +7,24 @@
 
 import Combine
 import UIKit
-import SwiftUI
 
 final class NoticeListHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - Properties
-    let searchButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    
     let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
-    let keywordAllButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let keywordTapPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
-    
     let typeButtonPublisher = PassthroughSubject<Void, Never>()
+    var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
-    private(set) lazy var noticeKeywordScrollView = NoticeKeywordScrollViewHostingController(
-        searchButtonTapped: { [weak self] in
-            self?.searchButtonTappedPublisher.send()
-        },
-        manageButtonTapped: { [weak self] in
-            self?.manageKeyWordBtnTapPublisher.send()
-        },
-        keywordAllButtonTapped: { [weak self] in
-            self?.keywordAllButtonTappedPublisher.send()
-        },
-        keywordButtonTapped: { [weak self] keyword in
-            self?.keywordTapPublisher.send(keyword)
-        },
-        addButtonTapped: { [weak self] in
-            self?.keywordAddBtnTapPublisher.send()
-        }
-    )
+    
+    private let noticeKeywordCollectionView: NoticeKeywordCollectionView = {
+        let flowLayout = UICollectionViewFlowLayout()
+        flowLayout.scrollDirection = .horizontal
+        return NoticeKeywordCollectionView(frame: .zero, collectionViewLayout: flowLayout)
+    }()
     
     private let typeButton = UIButton().then {
         $0.isHidden = true
@@ -62,20 +49,36 @@ final class NoticeListHeaderView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         configureView()
+        noticeKeywordCollectionView.keywordAddBtnTapPublisher.sink { [weak self] in
+            self?.keywordAddBtnTapPublisher.send()
+        }.store(in: &noticeKeywordCollectionView.subscriptions)
+        noticeKeywordCollectionView.keywordTapPublisher.sink { [weak self] keyword in
+            self?.keywordTapPublisher.send(keyword)
+        }.store(in: &noticeKeywordCollectionView.subscriptions)
+        noticeKeywordCollectionView.manageKeyWordBtnTapPublisher.sink { [weak self] in
+            self?.manageKeyWordBtnTapPublisher.send()
+        }.store(in: &noticeKeywordCollectionView.subscriptions)
         typeButton.addTarget(self, action: #selector(typeButtonTapped), for: .touchUpInside)
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        subscriptions.removeAll()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
         configureView()
     }
-}
     
-extension NoticeListHeaderView {
     @objc private func typeButtonTapped() {
         typeButtonPublisher.send()
     }
+    
+    
+}
 
+extension NoticeListHeaderView {
     func setText(type: LostItemType?) {
         let buttonText: String
         switch type {
@@ -102,26 +105,26 @@ extension NoticeListHeaderView {
     }
 
     
-    func updateKeyWordsList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
-        noticeKeywordScrollView.updateKeyWordsList(keywordList: keywordList, selectedKeyword: selectedKeyword)
+    func updateKeyWordsList(keywordList: [NoticeKeywordDto], keywordIdx: Int) {
+        noticeKeywordCollectionView.updateUserKeywordList(keywordList: keywordList, keywordIdx: keywordIdx)
     }
 }
 
 extension NoticeListHeaderView {
     
     private func setUpLayouts() {
-        contentView.addSubview(noticeKeywordScrollView.view)
+        contentView.addSubview(noticeKeywordCollectionView)
         contentView.addSubview(typeButton)
     }
     
     private func setUpConstraints() {
-        noticeKeywordScrollView.view.snp.makeConstraints {
+        noticeKeywordCollectionView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(34)
         }
         typeButton.snp.makeConstraints {
-            $0.top.equalTo(noticeKeywordScrollView.view.snp.bottom).offset(16)
+            $0.top.equalTo(noticeKeywordCollectionView.snp.bottom).offset(16)
             $0.trailing.equalToSuperview().offset(-24)
             $0.width.equalTo(96)
             $0.height.equalTo(32)

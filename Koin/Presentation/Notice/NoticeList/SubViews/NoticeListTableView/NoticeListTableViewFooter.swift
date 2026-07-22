@@ -76,7 +76,7 @@ extension NoticeListTableViewFooter {
         if let selectedIndex = pageInfo.selectedIndex as Int?, selectedIndex > 0 {
             let selectedButton = buttons[(selectedIndex - 1) % 5]
             selectedButton.setTitleColor(.appColor(.neutral0), for: .normal)
-            selectedButton.backgroundColor = .appColor(.new600)
+            selectedButton.backgroundColor = .appColor(.primary500)
         }
         if let isNextPage = pageInfo.isNextPage {
             nextBtn.isHidden = false

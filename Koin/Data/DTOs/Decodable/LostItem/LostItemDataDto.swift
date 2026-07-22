@@ -19,7 +19,7 @@ struct LostItemDataDto: Decodable {
     let organization: Organization?
     let isMine: Bool
     let isFound: Bool
-    let images: [AppImage]
+    let images: [Image]
     let prevId: Int?
     let nextId: Int?
     let registeredAt: String

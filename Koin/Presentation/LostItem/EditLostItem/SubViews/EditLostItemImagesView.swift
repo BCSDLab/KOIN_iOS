@@ -12,7 +12,7 @@ final class EditLostItemImagesView: UIView {
     
     // MARK: - Properties
     private var type: LostItemType
-    private var images: [AppImage]
+    private var images: [Image]
     let dismissDropDownPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -59,7 +59,7 @@ final class EditLostItemImagesView: UIView {
     
     // MARK: - Initializer
     init(type: LostItemType,
-         images: [AppImage]
+         images: [Image]
     ) {
         self.type = type
         self.images = images

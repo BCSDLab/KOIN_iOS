@@ -15,7 +15,7 @@ struct NoticeKeywordsDto: Decodable {
     }
 }
 
-struct NoticeKeywordDto: Identifiable, Equatable, Codable {
+struct NoticeKeywordDto: Codable {
     let id: Int?
     let keyword: String
     

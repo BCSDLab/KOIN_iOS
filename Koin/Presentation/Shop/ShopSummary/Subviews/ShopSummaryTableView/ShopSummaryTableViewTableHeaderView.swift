@@ -19,9 +19,7 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     let reviewButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let phoneButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let didTapThumbnailPublisher = PassthroughSubject<IndexPath, Never>()
-    let didSwipePicturePublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private var currentImageIndex = 0
     
     // MARK: - UI Components
     private let imagesCollectionView = ShopSummaryImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
@@ -66,11 +64,8 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
     // MARK: - bind
     private func bind() {
         // MARK: - ImagesCollectionView
-        imagesCollectionView.didScrollOutputSubject.sink { [weak self] newPage in
-            guard let self = self, self.currentImageIndex != newPage else { return }
-            self.currentImageIndex = newPage
-            self.imagesPageControl.currentPage = newPage
-            self.didSwipePicturePublisher.send()
+        imagesCollectionView.didScrollOutputSubject.sink { [weak self] currentPage in
+            self?.imagesPageControl.currentPage = currentPage
         }
         .store(in: &subscriptions)
         

@@ -14,6 +14,7 @@ final class CallVanListViewController: UIViewController {
     private let viewModel: CallVanListViewModel
     private let inputSubject = PassthroughSubject<CallVanListViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var didSwipeToPop = false
     private var hasShownNotificationBottomSheet = false
     
     // MARK: - UI Components
@@ -55,6 +56,21 @@ final class CallVanListViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         checkNotification()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let didSwipeToPop = (navigationController as? CustomNavigationController)?.didSwipeToPop {
+            self.didSwipeToPop = didSwipeToPop
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isMovingFromParent {
+            let category: EventParameter.EventCategory = didSwipeToPop ? .swipe : .click
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanBack, category: category, value: ""))
+        }
     }
     
     private func bind() {
@@ -103,12 +119,6 @@ final class CallVanListViewController: UIViewController {
         callVanListCollectionView.didScrollPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
             self?.dismissKeyboard()
         }.store(in: &subscriptions)
-    }
-}
-
-extension CallVanListViewController: PopLoggable {
-    func sendPopLog(category: EventParameter.EventCategory) {
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanBack, category: category, value: ""))
     }
 }
 
@@ -234,7 +244,7 @@ extension CallVanListViewController {
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanSearch, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanSsearch, category: .click, value: ""))
         return true
     }
     
@@ -520,8 +530,6 @@ extension CallVanListViewController {
             $0.backgroundColor = UIColor.appColor(.new100)
             $0.layer.cornerRadius = 17
             $0.layer.applySketchShadow(color: .black, alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
-            
-            $0.setContentCompressionResistancePriority(.required, for: .horizontal)
         }
         
         writeButton.do {
