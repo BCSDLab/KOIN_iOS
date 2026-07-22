@@ -11,6 +11,6 @@ struct LectureData: Hashable {
     let id: Int
     let name: String
     let professor: String
-    let classTime: [Int]
+    var classTime: [Int]
     let grades: String
 }

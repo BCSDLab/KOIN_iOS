@@ -7,19 +7,14 @@
 
 import UIKit
 
-class CustomNavigationController: UINavigationController, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
-    
-    var didSwipeToPop = false
+final class CustomNavigationController: UINavigationController, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
-        interactivePopGestureRecognizer?.addTarget(self, action: #selector(didRecognizePopGesture))
     }
     
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        didSwipeToPop = false
-        
         guard let interactivePopGestureRecognizer = self.interactivePopGestureRecognizer else { return }
         if viewControllers.count > 1 {
             interactivePopGestureRecognizer.isEnabled = true
@@ -29,23 +24,26 @@ class CustomNavigationController: UINavigationController, UIGestureRecognizerDel
     }
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-        navigationController.transitionCoordinator?.notifyWhenInteractionChanges { [weak self] context in
-            if context.isCancelled {
-                self?.didSwipeToPop = false
+        guard let transitionCoordinator = navigationController.transitionCoordinator,
+              let fromVC = transitionCoordinator.viewController(forKey: .from),
+              let toVC = transitionCoordinator.viewController(forKey: .to) else {
+            return
+        }
+        let isPop = navigationController.viewControllers.contains(toVC)
+        let isSwipe = transitionCoordinator.isInteractive
+        
+        if isPop, let loggableVC = fromVC as? PopLoggable {
+            transitionCoordinator.animate(alongsideTransition: nil) { _ in
+                // 사용자가 스와이프를 취소하지 않고 화면이 완전히 사라졌을 때만 실행
+                if !transitionCoordinator.isCancelled {
+                    let category: EventParameter.EventCategory = isSwipe ? .swipe : .click
+                    loggableVC.sendPopLog(category: category)
+                }
             }
         }
     }
 
     override var childForStatusBarStyle: UIViewController? {
         return topViewController
-    }
-    
-    @objc private func didRecognizePopGesture() {
-        switch interactivePopGestureRecognizer?.state {
-        case .began:
-            didSwipeToPop = true
-        default:
-            break
-        }
     }
 }
