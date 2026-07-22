@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SwiftUI
 
 enum Typography {
     case display1
@@ -116,10 +115,6 @@ enum Typography {
     
     var lineSpacing: CGFloat {
         return lineHeight - font.lineHeight
-    }
-    
-    var swiftUIFont: SwiftUI.Font {
-        return SwiftUI.Font(font)
     }
 }
 

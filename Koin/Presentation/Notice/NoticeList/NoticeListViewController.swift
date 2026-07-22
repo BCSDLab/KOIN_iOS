@@ -10,8 +10,11 @@ import SnapKit
 import Then
 import UIKit
 
+var fetch = false
+
 final class NoticeListViewController: UIViewController, UIGestureRecognizerDelegate {
     // MARK: - Properties
+    
     private let viewModel: NoticeListViewModel
     private let inputSubject: PassthroughSubject<NoticeListViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
@@ -20,7 +23,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     
     private let noticeTableView = NoticeListTableView(frame: .zero, style: .grouped).then {
         $0.backgroundColor = .white
-        $0.separatorStyle = .none
+        $0.separatorStyle = .singleLine
     }
     
     private let writeButton = UIButton().then {
@@ -45,17 +48,9 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     private let tabBarCollectionView = TabBarCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
-    }.then {
-        $0.backgroundColor = .clear
     }
     
-    private let separatorView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral400)
-    }
-    
-    private let noticeToolTipImageView = CancelableImageView(frame: .zero).then {
-        $0.isHidden = true
-    }
+    private let noticeToolTipImageView = CancelableImageView(frame: .zero)
     
     private let postLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then { 
         $0.modalPresentationStyle = .overFullScreen
@@ -77,6 +72,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     init(viewModel: NoticeListViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        navigationItem.title = "게시판"
     }
     
     required init?(coder: NSCoder) {
@@ -92,6 +88,8 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         configureSwipeGestures()
         tabBarCollectionView.tag = 0
         inputSubject.send(.checkAuth)
+        let rightBarButton = UIBarButtonItem(image: .appImage(symbol: .magnifyingGlass), style: .plain, target: self, action: #selector(searchButtonTapped))
+        navigationItem.rightBarButtonItem = rightBarButton
         inputSubject.send(.changeBoard(viewModel.noticeListType))
         writeButton.addTarget(self, action: #selector(writeButtonTapped), for: .touchUpInside)
     }
@@ -99,9 +97,17 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         inputSubject.send(.getUserKeywordList())
+        configureNavigationBar(style: .empty)
+        if fetch {
+            inputSubject.send(.changeBoard(viewModel.noticeListType))
+            fetch = false
+        }
     }
     
-    // MARK: - Bind
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+    }
+    
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
@@ -109,10 +115,10 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             switch output {
             case let .updateBoard(noticeList, noticeListPages, noticeListType):
                 self?.updateBoard(noticeList: noticeList, pageInfos: noticeListPages, noticeListType: noticeListType)
-            case let .updateUserKeywordList(noticeKeywordList, selectedKeyword):
-                self?.updateUserKeywordList(keywords: noticeKeywordList, selectedKeyword: selectedKeyword)
-            case .showToolTip:
-                self?.checkAndShowToolTip()
+            case let .updateUserKeywordList(noticeKeywordList, keywordIdx):
+                self?.updateUserKeywordList(keywords: noticeKeywordList, keywordIdx: keywordIdx)
+            case let .isLogined(isLogined):
+                self?.checkAndShowToolTip(isLogined: isLogined)
             case let .showIsLogined(isLogined):
                 if isLogined { strongSelf.present(strongSelf.writeTypeModalViewController, animated: true) }
                 else { strongSelf.present(strongSelf.postLostItemLoginModalViewController, animated: true) }
@@ -136,38 +142,23 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             self?.navigateToNoticeData(noticeId: item.0, boardId: item.1)
         }.store(in: &subscriptions)
         
-        noticeTableView.searchButtonTappedPublisher
-            .sink { [weak self] in
-                self?.searchButtonTapped()
-            }.store(in: &subscriptions)
         noticeTableView.keywordAddBtnTapPublisher
             .sink { [weak self] in
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.addKeyword, .click, "키워드추가"))
                 self?.navigateToManageKeywordVC()
             }.store(in: &subscriptions)
         
-        noticeTableView.keywordAllButtonTappedPublisher
-            .sink { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
-                self?.inputSubject.send(.getUserKeywordList(nil))
-            }
-            .store(in: &subscriptions)
         noticeTableView.keywordTapPublisher
             .sink { [weak self] keyword in
+                if keyword.id == -1 {
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
+                }
                 self?.inputSubject.send(.getUserKeywordList(keyword))
             }.store(in: &subscriptions)
         
         noticeTableView.manageKeyWordBtnTapPublisher.sink { [weak self] in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.manageKeyword, .click, "키워드관리"))
             self?.navigateToManageKeywordVC()
-        }.store(in: &subscriptions)
-        
-        noticeTableView.addButtonMinXPublisher.sink { [weak self] addButtonMinX in
-            self?.moveToolTip(addButtonMinX: addButtonMinX)
-        }.store(in: &subscriptions)
-        
-        noticeTableView.contentOffsetYPublisher.sink { [weak self] contentOffsetY in
-            self?.moveToolTip(contentOffsetY: contentOffsetY)
         }.store(in: &subscriptions)
         
         noticeToolTipImageView.onXButtonTapped = { [weak self] in
@@ -208,34 +199,6 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             }
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostType, .click, text))
         }.store(in: &subscriptions)
-    }
-}
-
-extension NoticeListViewController {
-    
-    private func moveToolTip(addButtonMinX: CGFloat? = nil, contentOffsetY: CGFloat? = nil) {
-        let currentTranslationX = noticeToolTipImageView.transform.tx
-        let currenttranslationY = noticeToolTipImageView.transform.ty
-        
-        let targetTranslationX: CGFloat
-        let targetTranslationY: CGFloat
-        
-        if let addButtonMinX {
-            targetTranslationX = addButtonMinX
-                + 13
-                - (viewModel.isLoggedIn ? 246/2 : 223/2)
-                + 22
-        } else {
-            targetTranslationX = currentTranslationX
-        }
-        
-        if let contentOffsetY {
-            targetTranslationY = -contentOffsetY
-        } else {
-            targetTranslationY = currenttranslationY
-        }
-        
-        noticeToolTipImageView.transform = CGAffineTransform(translationX: targetTranslationX, y: targetTranslationY)
     }
 }
 
@@ -301,6 +264,8 @@ extension NoticeListViewController {
                 }
             }
     }
+
+
     
     private func navigateToManageKeywordVC() {
         let noticeListService = DefaultNoticeService()
@@ -317,22 +282,16 @@ extension NoticeListViewController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func checkAndShowToolTip() {
+    private func checkAndShowToolTip(isLogined: Bool) {
         let hasShownImage = UserDefaults.standard.bool(forKey: "hasShownNoticeTooltip")
         if !hasShownImage {
-            noticeToolTipImageView.setUpImage(
-                image:
-                    viewModel.isLoggedIn ?
-                    .appImage(asset: .noticeLoginToolTip) ?? UIImage() :
-                        .appImage(asset: .noticeNotLoginToolTip) ?? UIImage()
-            )
-            noticeToolTipImageView.snp.remakeConstraints {
-                $0.height.equalTo(44)
-                $0.width.equalTo(viewModel.isLoggedIn ? 246 : 223)
-                $0.leading.equalToSuperview().offset(-24)
-                $0.top.equalTo(noticeTableView.snp.top).offset(44)
-            }
             noticeToolTipImageView.isHidden = false
+            if isLogined {
+                noticeToolTipImageView.setUpImage(image: .appImage(asset: .noticeLoginToolTip) ?? UIImage())
+            }
+            else {
+                noticeToolTipImageView.setUpImage(image: .appImage(asset: .noticeNotLoginToolTip) ?? UIImage())
+            }
             UserDefaults.standard.set(true, forKey: "hasShownNoticeTooltip")
         }
     }
@@ -354,8 +313,8 @@ extension NoticeListViewController {
         }
     }
     
-    private func updateUserKeywordList(keywords: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
-        noticeTableView.updateKeywordList(keywordList: keywords, selectedKeyword: selectedKeyword)
+    private func updateUserKeywordList(keywords: [NoticeKeywordDto], keywordIdx: Int) {
+        noticeTableView.updateKeywordList(keywordList: keywords, keywordIdx: keywordIdx)
     }
     
     private func configureSwipeGestures() {
@@ -370,7 +329,7 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     private func setUpLayouts() {
-        [separatorView, noticeTableView, noticeToolTipImageView, tabBarCollectionView, writeButton].forEach {
+        [tabBarCollectionView, noticeTableView, noticeToolTipImageView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -385,8 +344,15 @@ extension NoticeListViewController {
         
         noticeTableView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(tabBarCollectionView.snp.bottom)
+            $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(1)
             $0.bottom.equalToSuperview()
+        }
+        
+        noticeToolTipImageView.snp.makeConstraints {
+            $0.top.equalTo(tabBarCollectionView.snp.bottom).offset(56)
+            $0.height.equalTo(44)
+            $0.width.equalTo(248)
+            $0.trailing.equalToSuperview().inset(46)
         }
         
         writeButton.snp.makeConstraints { make in
@@ -395,16 +361,11 @@ extension NoticeListViewController {
             make.width.equalTo(94)
             make.height.equalTo(42)
         }
-        
-        separatorView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalTo(tabBarCollectionView)
-            $0.height.equalTo(1)
-        }
     }
     
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        self.view.backgroundColor = .appColor(.neutral0)
+        self.view.backgroundColor = .appColor(.neutral400)
     }
 }

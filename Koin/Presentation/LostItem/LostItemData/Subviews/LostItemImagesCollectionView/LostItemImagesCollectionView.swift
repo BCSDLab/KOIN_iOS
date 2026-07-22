@@ -11,7 +11,7 @@ import Combine
 final class LostItemImagesCollectionView: UICollectionView {
     
     // MARK: - Properties
-    private var images: [AppImage] = []
+    private var images: [Image] = []
     let didScrollOutputSubject = PassthroughSubject<Int, Never>()
     let didTapThumbnailPublisher = PassthroughSubject<IndexPath, Never>()
     
@@ -24,7 +24,7 @@ final class LostItemImagesCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(images: [AppImage]){
+    func configure(images: [Image]){
         self.images = images
         self.reloadData()
     }

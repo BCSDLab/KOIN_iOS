@@ -28,9 +28,7 @@ final class RecommendedSearchCollectionView: UICollectionView, UICollectionViewD
         register(RecommendedSearchCollectionViewCell.self, forCellWithReuseIdentifier: RecommendedSearchCollectionViewCell.identifier)
         dataSource = self
         delegate = self
-        self.collectionViewLayout = LeftAlignedCollectionViewFlowLayout().then {
-            $0.minimumLineSpacing = 8
-        }
+        self.collectionViewLayout = LeftAlignedCollectionViewFlowLayout()
         contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
     }
     

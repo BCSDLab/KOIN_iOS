@@ -28,7 +28,8 @@ final class DefaultSendDeviceTokenIfNeededUseCase: SendDeviceTokenIfNeededUseCas
     func execute() {
         Task { [weak self] in
             guard let self,
-                  await self.checkLogin() else {
+                  await self.checkLogin(),
+                  await self.checkNotificationAgreement() else {
                 return
             }
             await self.sendDeviceToken()
@@ -42,6 +43,14 @@ extension DefaultSendDeviceTokenIfNeededUseCase {
         await userRepository.checkLogin()
             .values
             .first { _ in true } ?? false
+    }
+    
+    private func checkNotificationAgreement() async -> Bool {
+        let agreement = await notiRepository.fetchNotiList()
+            .replaceError(with: .init())
+            .values
+            .first { _ in true }
+        return agreement?.isPermit ?? false
     }
     
     private func sendDeviceToken() async {

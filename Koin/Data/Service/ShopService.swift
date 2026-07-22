@@ -15,8 +15,6 @@ protocol ShopService {
     func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, ErrorResponse>
     func fetchEventList() -> AnyPublisher<EventsDto, ErrorResponse>
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, ErrorResponse>
-    func fetchEventCount() -> AnyPublisher<ShopEventCountDto, ErrorResponse>
-    func fetchShopCount() -> AnyPublisher<ShopCountDto, ErrorResponse>
     func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, ErrorResponse>
     func fetchShopMenuList(requestModel: FetchShopDataRequest) -> AnyPublisher<MenuDto, ErrorResponse>
     func fetchShopEventList(requestModel: FetchShopDataRequest) -> AnyPublisher<EventsDto, ErrorResponse>
@@ -95,14 +93,6 @@ final class DefaultShopService: ShopService {
     
     func fetchShopCategoryList() -> AnyPublisher<ShopCategoryDto, ErrorResponse> {
         return networkService.requestWithResponse(api: ShopAPI.fetchShopCategoryList)
-    }
-
-    func fetchEventCount() -> AnyPublisher<ShopEventCountDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: ShopAPI.fetchEventCount)
-    }
-
-    func fetchShopCount() -> AnyPublisher<ShopCountDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: ShopAPI.fetchShopCount)
     }
     
     func fetchShopData(requestModel: FetchShopDataRequest) -> AnyPublisher<ShopDataDto, ErrorResponse> {

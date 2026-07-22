@@ -12,17 +12,6 @@ import UIKit
 final class PaddingLabel: UILabel {
     var textInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     
-    init(textInsets: UIEdgeInsets) {
-        self.textInsets = textInsets
-        super.init(frame: .zero)
-    }
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func drawText(in rect: CGRect) {
         super.drawText(in: rect.inset(by: textInsets))
     }

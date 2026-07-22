@@ -12,7 +12,6 @@ final class ShopBenefitViewModel: ViewModelProtocol {
     
     enum Input {
         case fetchEvents
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateEvents(events: [ShopEvent])
@@ -20,25 +19,19 @@ final class ShopBenefitViewModel: ViewModelProtocol {
     
     // MARK: - Properties
     private let fetchShopEventListUseCase: FetchShopEventListUseCase
-    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private let outputPublisher = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     private let shopId: Int
-    let shopName: String
     
     // MARK: - Initializer
     init(
         fetchShopEventListUseCase: FetchShopEventListUseCase,
-        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-        shopId: Int,
-        shopName: String
+        shopId: Int
     ) {
         self.fetchShopEventListUseCase = fetchShopEventListUseCase
-        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.shopId = shopId
-        self.shopName = shopName
     }
     
     // MARK: - Public
@@ -48,8 +41,6 @@ final class ShopBenefitViewModel: ViewModelProtocol {
             switch input {
             case .fetchEvents:
                 fetchEvents()
-            case let .logEvent(label, category, value):
-                makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         return outputPublisher.eraseToAnyPublisher()
@@ -65,13 +56,5 @@ extension ShopBenefitViewModel {
                 self?.outputPublisher.send(.updateEvents(events: events))
             }
         ).store(in: &subscriptions)
-    }
-
-    private func makeLogAnalyticsEvent(
-        label: EventLabelType,
-        category: EventParameter.EventCategory,
-        value: Any
-    ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

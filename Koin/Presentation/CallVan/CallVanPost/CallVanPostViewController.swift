@@ -21,6 +21,7 @@ final class CallVanPostViewController: UIViewController {
     private let inputSubject = PassthroughSubject<CallVanPostViewModel.Input, Never>()
     private let viewModel: CallVanPostViewModel
     private var subscriptions: Set<AnyCancellable> = []
+    private var didSwipeToPop = false
     
     // MARK: - UI Components
     private let placeView = CallVanPostPlaceView()
@@ -60,6 +61,21 @@ final class CallVanPostViewController: UIViewController {
         bind()
         dateView.update(Date())
         timeView.update(Date())
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let didSwipeToPop = (navigationController as? CustomNavigationController)?.didSwipeToPop {
+            self.didSwipeToPop = didSwipeToPop
+        }
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        if isMovingFromParent {
+            let category: EventParameter.EventCategory = didSwipeToPop ? .swipe : .click
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteBack, category: category, value: ""))
+        }
     }
     
     private func bind() {
@@ -129,12 +145,6 @@ final class CallVanPostViewController: UIViewController {
         participantsView.participantsChangedPublisher.sink { [weak self] participants in
             self?.inputSubject.send(.updateMaxParticipants(participants))
         }.store(in: &subscriptions)
-    }
-}
-
-extension CallVanPostViewController: PopLoggable {
-    func sendPopLog(category: EventParameter.EventCategory) {
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteBack, category: category, value: ""))
     }
 }
 

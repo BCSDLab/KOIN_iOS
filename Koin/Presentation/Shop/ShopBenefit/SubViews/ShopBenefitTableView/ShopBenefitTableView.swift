@@ -12,7 +12,6 @@ final class ShopBenefitTableView: UITableView {
     
     // MARK: - Properties
     let imageTapPublisher = PassthroughSubject<([String], IndexPath), Never>()
-    let detailExpandedPublisher = PassthroughSubject<Void, Never>()
     private var events: [ShopEvent] = []
     
     // MARK: - Initialzier
@@ -43,9 +42,6 @@ extension ShopBenefitTableView: UITableViewDelegate {
     
     private func toggleExpanded(at indexPath: IndexPath) {
         events[indexPath.row].isExpanded.toggle()
-        if events[indexPath.row].isExpanded {
-            detailExpandedPublisher.send()
-        }
         guard let cell = cellForRow(at: indexPath) as? ShopBenefitTableViewCell else {
             return
         }
