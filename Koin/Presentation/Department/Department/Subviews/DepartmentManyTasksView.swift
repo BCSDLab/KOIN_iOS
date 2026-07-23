@@ -50,6 +50,9 @@ struct DepartmentManyTasksView: View {
                     Text(task.name)
                         .font(.appFont(.pretendardMedium, size: 12))
                         .foregroundStyle(Color.appColor(.neutral500))
+                        .multilineTextAlignment(.center)
+                        .lineLimit(2)
+                        .padding(.horizontal, 10)
                         .frame(maxWidth: .infinity)
                     
                     Button {

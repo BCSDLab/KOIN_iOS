@@ -71,12 +71,16 @@ struct DepartmentCategoryView: ActionBindableView {
                         }
                         
                         Spacer()
+                        
+                        if isSearching && !viewModel.isLoading && !viewModel.searchingDepartments.isEmpty {
+                            DepartmentFooterView(updatedAt: viewModel.searchingUpdatedAt)
+                        }
                     }
                     .hideKeyboardWhenTapAround()
-                    .overlay {
-                        if isSearching && viewModel.searchingDepartments.isEmpty && !viewModel.isLoading {
-                            DepartmentEmptyView()
-                        }
+                }
+                .background {
+                    if isSearching && !viewModel.isLoading && viewModel.searchingDepartments.isEmpty {
+                        DepartmentEmptyView()
                     }
                 }
                 .padding(.horizontal, Layout.horizontalPadding)
