@@ -58,14 +58,17 @@ struct DepartmentView: ActionBindableView {
                         
                         Spacer()
                         
-                        DepartmentFooterView(updatedAt: isSearching ? viewModel.searchingUpdatedAt : viewModel.updatedAt)
+                        if !(isSearching && !viewModel.isLoading && viewModel.searchingDepartments.isEmpty) {
+                            DepartmentFooterView(updatedAt: isSearching ? viewModel.searchingUpdatedAt : viewModel.updatedAt)
+                        }
                     }
                     .hideKeyboardWhenTapAround()
                     .containerShape(.rect)
-                    .overlay {
-                        if isSearching && viewModel.searchingDepartments.isEmpty && !viewModel.isLoading {
-                            DepartmentEmptyView()
-                        }
+                }
+                .frame(minHeight: proxy.size.height)
+                .background {
+                    if isSearching && !viewModel.isLoading && viewModel.searchingDepartments.isEmpty {
+                        DepartmentEmptyView()
                     }
                 }
                 .padding(.horizontal, 22)
