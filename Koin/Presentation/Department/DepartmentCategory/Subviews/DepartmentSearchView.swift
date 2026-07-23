@@ -46,7 +46,9 @@ struct DepartmentSearchView: View {
             .padding(.leading, 20)
             .onSubmit {
                 keyword = keyword.trimmingCharacters(in: .whitespacesAndNewlines)
-                searchButtonTapped(keyword)
+                if !keyword.isEmpty {
+                    searchButtonTapped(keyword)
+                }
             }
             
             Spacer()
@@ -72,6 +74,7 @@ struct DepartmentSearchView: View {
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 20))
             }
             .buttonStyle(.plain)
+            .disabled(keyword.isEmpty)
         }
         .frame(height: Layout.height)
         .frame(maxWidth: .infinity)

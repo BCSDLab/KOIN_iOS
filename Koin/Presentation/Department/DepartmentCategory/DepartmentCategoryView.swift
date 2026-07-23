@@ -71,6 +71,10 @@ struct DepartmentCategoryView: ActionBindableView {
                         }
                         
                         Spacer()
+                        
+                        if isSearching {
+                            DepartmentFooterView(updatedAt: viewModel.searchingUpdatedAt)
+                        }
                     }
                     .hideKeyboardWhenTapAround()
                     .overlay {
