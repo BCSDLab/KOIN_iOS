@@ -17,11 +17,13 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
         case search(String)
         case endSearching
         case didShowToast
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Properties
     private let fetchDepartmentByCategoryUseCase: FetchDepartmentByCategoryUseCase
     private let searchDepartmentByCategoryUseCase: SearchDepartmentByCategoryUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let category: DepartmentCategory
     
     private(set) var departments: [Department] = []
@@ -39,10 +41,12 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
     init(
         fetchDepartmentByCategoryUseCase: FetchDepartmentByCategoryUseCase,
         searchDepartmentByCategoryUseCase: SearchDepartmentByCategoryUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         category: DepartmentCategory
     ) {
         self.fetchDepartmentByCategoryUseCase = fetchDepartmentByCategoryUseCase
         self.searchDepartmentByCategoryUseCase = searchDepartmentByCategoryUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.category = category
     }
 
@@ -58,6 +62,8 @@ final class DepartmentViewModel: SwiftUIViewModelProtocol {
             searchingUpdatedAt = ""
         case .didShowToast:
             toastMessage = nil
+        case let .logEvent(label, category, value):
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
         }
     }
 }

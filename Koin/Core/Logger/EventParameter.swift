@@ -52,7 +52,7 @@ enum EventParameter {
             case shopDetailViewBack = "shop_detail_view_back"
             case shopCategoriesBack = "shop_categories_back"
             case shopDetailViewInfo = "shop_detail_view_info"
-            
+
             case shopDetailViewReviewWrite = "shop_detail_view_review_write"
             case shopDetailViewReviewWriteDone = "shop_detail_view_review_write_done"
             case shopDetailViewReviewReport = "shop_detail_view_review_report"
@@ -123,6 +123,12 @@ enum EventParameter {
             case categoryCampus = "category_campus"
             case categoryTransportation = "category_transportation"
             case categoryEtc = "category_etc"
+
+            // Department
+            case departmentSearch = "department_search"
+            case departmentCategory = "department_category"
+            case departmentContactCopy = "department_contact_copy"
+
             case mainBusTimetable = "main_bus_timetable"
             case mainBusSearch = "main_bus_search"
             case mainNextModal = "main_next_modal"

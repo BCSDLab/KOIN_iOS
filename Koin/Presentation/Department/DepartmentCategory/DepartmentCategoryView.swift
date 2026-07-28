@@ -41,6 +41,7 @@ struct DepartmentCategoryView: ActionBindableView {
                         searchButtonTapped: { keyword in
                             isSearching = true
                             viewModel.execute(.search(keyword))
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.departmentSearch, .click, keyword))
                         },
                         resetSearchButtonTapped: {
                             isSearching = false
@@ -54,6 +55,7 @@ struct DepartmentCategoryView: ActionBindableView {
                                 ForEach(viewModel.searchingDepartments) { department in
                                     DepartmentRow(department: department) { phoneNumber in
                                         UIPasteboard.general.string = phoneNumber
+                                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.departmentContactCopy, .click, "전화번호 복사"))
                                         sendAction(.showCopyToast)
                                     }
                                 }
@@ -62,6 +64,7 @@ struct DepartmentCategoryView: ActionBindableView {
                             VStack(spacing: 0) {
                                 ForEach(viewModel.categorys) { category in
                                     DepartmentCategoryRow(category: category) { category in
+                                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.departmentCategory, .click, category.rawValue))
                                         sendAction(.showDepartment(category: category))
                                     }
                                 }

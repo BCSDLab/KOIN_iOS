@@ -81,9 +81,11 @@ extension CategoryHostingController {
         let repository = DefaultDepartmentRepository(service: DefaultDepartmentService())
         let searchDepartmentUseCase = DefaultSearchDepartmentUseCase(repository: repository)
         let fetchDepartmentCategoryUseCase = DefaultFetchDepartmentCategoryUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = DepartmentCategoryViewModel(
             fetchDepartmentCategoryUseCase: fetchDepartmentCategoryUseCase,
-            searchDepartmentUseCase: searchDepartmentUseCase
+            searchDepartmentUseCase: searchDepartmentUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let rootView = DepartmentCategoryView(viewModel: viewModel)
         return DepartmentCategoryHostingController(rootView: rootView)
