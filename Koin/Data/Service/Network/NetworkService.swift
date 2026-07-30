@@ -13,7 +13,60 @@ final class NetworkService {
     
     static let shared = NetworkService()
     private let interceptor = Interceptor()
-    private init() {
+    private init() { }
+    
+    func request(api: URLRequestConvertible) async throws -> Void {
+        let response = await AF.request(api, interceptor: interceptor)
+            .validate()
+            .serializingData()
+            .response
+        do {
+            guard let httpResponse = response.response else {
+                throw ErrorResponse.networkError
+            }
+            if 200..<300 ~= httpResponse.statusCode {
+                return ()
+            }
+            if let data = response.data {
+                if let errorResponse = try? JSONDecoder().decode(ErrorResponseDto.self, from: data) {
+                    throw errorResponse.toDomain(withStatusCode: httpResponse.statusCode)
+                }
+                throw ErrorResponse.decodingError(httpResponse.statusCode)
+            }
+            throw ErrorResponse.emptyDataError(httpResponse.statusCode)
+        } catch {
+            throw self.handleError(error)
+        }
+    }
+    
+    func requestWithResponse<T: Decodable>(api: URLRequestConvertible) async throws -> T {
+        let response = await AF.request(api, interceptor: interceptor)
+            .validate()
+            .serializingData()
+            .response
+        do {
+            guard let httpResponse = response.response else {
+                throw ErrorResponse.networkError
+            }
+            if 200..<300 ~= httpResponse.statusCode {
+                if let data = response.data {
+                    if let decodedResponse = try? JSONDecoder().decode(T.self, from: data) {
+                        return decodedResponse
+                    }
+                    throw ErrorResponse.decodingError(httpResponse.statusCode)
+                }
+                throw ErrorResponse.emptyDataError(httpResponse.statusCode)
+            }
+            if let data = response.data {
+                if let errorResponse = try? JSONDecoder().decode(ErrorResponseDto.self, from: data) {
+                    throw errorResponse.toDomain(withStatusCode: httpResponse.statusCode)
+                }
+                throw ErrorResponse.decodingError(httpResponse.statusCode)
+            }
+            throw ErrorResponse.emptyDataError(httpResponse.statusCode)
+        } catch {
+            throw self.handleError(error)
+        }
     }
     
     func request(api: URLRequestConvertible) -> AnyPublisher<Void, ErrorResponse> {
