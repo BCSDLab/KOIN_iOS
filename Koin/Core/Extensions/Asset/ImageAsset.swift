@@ -46,6 +46,16 @@ public enum ImageAsset: String {
     case basicPicture
     case block
     
+    // MARK: - Department
+    case departmentAlert
+    case departmentCopy
+    case departmentAcademic
+    case departmentEmployment
+    case departmentFacility
+    case departmentInternational
+    case departmentOther
+    case departmentStudentSupport
+    
     // MARK: - Dining
     case coopInfo
     case diningShare
@@ -248,6 +258,7 @@ public enum ImageAsset: String {
     case categoryBusSearch
     case categoryBusTimetable
     case categoryCallVan
+    case categoryDepartment
     case categoryDining
     case categoryFacility
     case categoryLand

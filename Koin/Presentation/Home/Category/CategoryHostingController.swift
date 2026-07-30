@@ -32,6 +32,8 @@ final class CategoryHostingController: UIHostingController<CategoryView>, Hostin
             navigationController?.pushViewController(makeLostItemListViewController(), animated: true)
         case .showFacility:
             navigationController?.pushViewController(makeFacilityViewController(), animated: true)
+        case .showDepartment:
+            navigationController?.pushViewController(makeDepartmentCategoryController(), animated: true)
         case .showDining:
             navigationController?.pushViewController(makeDiningViewController(), animated: true)
         case .showShop:
@@ -75,6 +77,18 @@ extension CategoryHostingController {
         return FacilityInfoViewController()
     }
 
+    private func makeDepartmentCategoryController() -> UIViewController {
+        let repository = DefaultDepartmentRepository(service: DefaultDepartmentService())
+        let searchDepartmentUseCase = DefaultSearchDepartmentUseCase(repository: repository)
+        let fetchDepartmentCategoryUseCase = DefaultFetchDepartmentCategoryUseCase(repository: repository)
+        let viewModel = DepartmentCategoryViewModel(
+            fetchDepartmentCategoryUseCase: fetchDepartmentCategoryUseCase,
+            searchDepartmentUseCase: searchDepartmentUseCase
+        )
+        let rootView = DepartmentCategoryView(viewModel: viewModel)
+        return DepartmentCategoryHostingController(rootView: rootView)
+    }
+    
     private func makeDiningViewController() -> UIViewController {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
