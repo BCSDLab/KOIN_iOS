@@ -20,6 +20,9 @@ struct DepartmentSearchView: View {
     let searchButtonTapped: (String)->Void
     let resetSearchButtonTapped: ()->Void
     @State private var keyword: String = ""
+    private var searchButtonColor: Color {
+        keyword.isEmpty ? .appColor(.neutral500) : .appColor(.new500)
+    }
     
     // MARK: - Initialzier
     init(
@@ -70,6 +73,8 @@ struct DepartmentSearchView: View {
             } label: {
                 Image.appImage(asset: .noticeSearch)
                     .resizable()
+                    .renderingMode(.template)
+                    .foregroundStyle(searchButtonColor)
                     .frame(width: 21, height: 21)
                     .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 20))
             }

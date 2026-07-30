@@ -10,6 +10,26 @@ import Foundation
 struct DepartmentCategoriesDto: Decodable {
     let updatedAt: String
     let categories: [DepartmentCategoryDto]
+    
+    private var displayUpdatedAt: String? {
+        let inputFormatter = ISO8601DateFormatter()
+        inputFormatter.formatOptions = [
+            .withYear,
+            .withMonth,
+            .withDay,
+            .withDashSeparatorInDate,
+            .withTime,
+            .withColonSeparatorInTime
+        ]
+        
+        if let date = inputFormatter.date(from: updatedAt) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "yyyy.MM.dd"
+            return outputFormatter.string(from: date)
+        } else {
+            return nil
+        }
+    }
 
     enum CodingKeys: String, CodingKey {
         case updatedAt = "updated_at"
@@ -23,7 +43,7 @@ struct DepartmentCategoriesDto: Decodable {
             }.compactMap {
                 $0.toDomain()
             }
-        return (departments, updatedAt)
+        return (departments, displayUpdatedAt ?? "")
     }
 }
 
@@ -32,6 +52,28 @@ struct DepartmentCategoryDto: Decodable {
     let category: String
     let categoryName: String
     let departments: [DepartmentDto]
+    
+    private var displayUpdatedAt: String? {
+        guard let updatedAt else { return nil}
+        
+        let inputFormatter = ISO8601DateFormatter()
+        inputFormatter.formatOptions = [
+            .withYear,
+            .withMonth,
+            .withDay,
+            .withDashSeparatorInDate,
+            .withTime,
+            .withColonSeparatorInTime
+        ]
+        
+        if let date = inputFormatter.date(from: updatedAt) {
+            let outputFormatter = DateFormatter()
+            outputFormatter.dateFormat = "yyyy.MM.dd"
+            return outputFormatter.string(from: date)
+        } else {
+            return nil
+        }
+    }
 
     enum CodingKeys: String, CodingKey {
         case updatedAt = "updated_at"
@@ -45,7 +87,10 @@ struct DepartmentCategoryDto: Decodable {
     }
     
     func toDomain() -> (departments: [Department], updatedAt: String) {
-        return (departments.map { $0.toDomain() }, updatedAt ?? "")
+        return (
+            departments.map { $0.toDomain() },
+            displayUpdatedAt ?? ""
+        )
     }
 }
 
@@ -87,67 +132,3 @@ struct DepartmentTaskDto: Decodable {
         )
     }
 }
-
-
-//struct CategoriesDto: Decodable {
-//    let updatedAt: String
-//    let categories: [CategoryDto]
-//
-//    enum CodingKeys: String, CodingKey {
-//        case updatedAt = "updated_at"
-//        case category
-//        case categoryName = "category_name"
-//        case departments
-//    }
-//}
-//
-//struct DepartmentDto: Decodable {
-//    let name: String
-//    let isSingleContact: Bool
-//    let contacts: [DepartmentTaskDto]
-//
-//    enum CodingKeys: String, CodingKey {
-//        case name
-//        case isSingleContact = "is_single_contact"
-//        case contacts
-//    }
-//}
-//
-//struct DepartmentTaskDto: Decodable {
-//    let task: String
-//    let phoneNumber: String
-//
-//    enum CodingKeys: String, CodingKey {
-//        case task
-//        case phoneNumber = "phone_number"
-//    }
-//}
-//
-//extension DepartmentCategoryDto {
-//    func toDomain() -> (departments: [Department], updatedAt: String) {
-//        return (
-//            departments: departments.map { $0.toDomain() },
-//            updatedAt: updatedAt
-//        )
-//    }
-//}
-//
-//extension DepartmentDto {
-//    func toDomain() -> Department {
-//        Department.init(
-//            id: name.hashValue,
-//            name: name,
-//            tasks: contacts.map { $0.toDomain(departmentName: name) }
-//        )
-//    }
-//}
-//
-//extension DepartmentTaskDto {
-//    func toDomain(departmentName: String) -> DepartmentTask {
-//        DepartmentTask.init(
-//            id: (departmentName + task + phoneNumber).hashValue,
-//            name: task,
-//            phoneNumber: phoneNumber
-//        )
-//    }
-//}
