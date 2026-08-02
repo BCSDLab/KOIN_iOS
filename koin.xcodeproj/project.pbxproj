@@ -76,8 +76,8 @@
 		7C3ECC7A2F41505000EE8F13 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */; };
 		7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */; };
 		7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B092FCE1BA80011D338 /* DiningView.swift */; };
-		7C457B2C2FCE1BA80011D338 /* HomeTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1E2FCE1BA80011D338 /* HomeTabBarController.swift */; };
-		7C457B2D2FCE1BA80011D338 /* HomeTabBarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabBarViewModel.swift */; };
+		7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */; };
+		7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */; };
 		7C457B2F2FCE1BA80011D338 /* HomeTabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B1C2FCE1BA80011D338 /* HomeTabBar.swift */; };
 		7C457B302FCE1BA80011D338 /* HomeHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B182FCE1BA80011D338 /* HomeHostingController.swift */; };
 		7C457B332FCE1BA80011D338 /* CategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B062FCE1BA80011D338 /* CategoryView.swift */; };
@@ -660,8 +660,8 @@
 		832FCC932CD667AC0044AF23 /* diningShare.gif in Resources */ = {isa = PBXBuildFile; fileRef = 832FCC912CD667940044AF23 /* diningShare.gif */; };
 		833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C042C68F8BA00982145 /* ScreenActionType.swift */; };
 		833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C112C6B26A900982145 /* NoticeListType.swift */; };
-		833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */; };
-		833D9C282C6B58ED00982145 /* NoticeKeywordDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C272C6B58ED00982145 /* NoticeKeywordDTO.swift */; };
+		833D9C222C6B4F6E00982145 /* NoticeListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C212C6B4F6E00982145 /* NoticeListDto.swift */; };
+		833D9C282C6B58ED00982145 /* NoticeKeywordDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C272C6B58ED00982145 /* NoticeKeywordDto.swift */; };
 		833D9C342C70418100982145 /* NoticeListPages.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C332C70418100982145 /* NoticeListPages.swift */; };
 		833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C382C7058C200982145 /* NoticeListRepository.swift */; };
 		833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C3D2C705E9300982145 /* FetchNoticeArticlesRequest.swift */; };
@@ -676,7 +676,7 @@
 		833D9C602C7457EE00982145 /* NoticeDataInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */; };
 		833D9C622C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */; };
 		8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8344D5C42C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift */; };
-		834E1CDA2BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CD92BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift */; };
+		834E1CDA2BBCDFBF003D4271 /* ExpressBusTimeTableDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 834E1CD92BBCDFBF003D4271 /* ExpressBusTimeTableDto.swift */; };
 		8354BE3D2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE3C2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift */; };
 		8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE452C79FCA0009D4D7A /* Model.xcdatamodeld */; };
 		8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE512C7A0566009D4D7A /* CoreDataService.swift */; };
@@ -688,7 +688,7 @@
 		835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */; };
 		835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */; };
 		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
-		8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */; };
+		8380FDC32BC1CBB800120036 /* BusCourseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDto.swift */; };
 		838F114E2CA51C6C00BF3B25 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */; };
 		839D71192BEB1570001BC7F7 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 839D71182BEB1570001BC7F7 /* NotificationService.swift */; };
@@ -717,28 +717,28 @@
 		83DD0DCA2C5651D900278ABD /* FetchExpressTimetableUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DC92C5651D900278ABD /* FetchExpressTimetableUseCase.swift */; };
 		83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DE52C57406600278ABD /* GetBusFiltersUseCase.swift */; };
 		83DD0DE82C57478200278ABD /* FetchCityBusTimetableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DE72C57478200278ABD /* FetchCityBusTimetableRequest.swift */; };
-		83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DE92C57486400278ABD /* CityBusTimetableDTO.swift */; };
+		83DD0DEA2C57486400278ABD /* CityBusTimetableDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DE92C57486400278ABD /* CityBusTimetableDto.swift */; };
 		83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */; };
 		83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0DED2C575C9300278ABD /* BusNumber.swift */; };
 		83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770B92CFB5BB500EB3F84 /* ShuttleRouteType.swift */; };
-		83E770F42D04A21500EB3F84 /* ShuttleRouteDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770F32D04A21500EB3F84 /* ShuttleRouteDTO.swift */; };
+		83E770F42D04A21500EB3F84 /* ShuttleRouteDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770F32D04A21500EB3F84 /* ShuttleRouteDto.swift */; };
 		83E770F82D05864800EB3F84 /* MockNetworkService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770F72D05864800EB3F84 /* MockNetworkService.swift */; };
-		83E770FA2D05B5EC00EB3F84 /* BusNoticeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770F92D05B5EC00EB3F84 /* BusNoticeDTO.swift */; };
+		83E770FA2D05B5EC00EB3F84 /* BusNoticeDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770F92D05B5EC00EB3F84 /* BusNoticeDto.swift */; };
 		83E770FC2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770FB2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift */; };
 		83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770FD2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift */; };
 		83E771002D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770FF2D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift */; };
-		83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E96DB72BBC6FBF00164914 /* BusSearchDTO.swift */; };
+		83E96DB82BBC6FBF00164914 /* BusSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E96DB72BBC6FBF00164914 /* BusSearchDto.swift */; };
 		83EBB87A2D0FDFD700346018 /* KoinPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8792D0FDFD700346018 /* KoinPickerView.swift */; };
 		83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */; };
 		B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* OrderImage.swift */; };
-		B46B8CC22E76CB7300A8E797 /* ShopSummaryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */; };
+		B46B8CC22E76CB7300A8E797 /* ShopSummaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */; };
 		B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */; };
-		B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC52E76CEAF00A8E797 /* ShopImageDTO.swift */; };
+		B46B8CC62E76CEAF00A8E797 /* ShopImageDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC52E76CEAF00A8E797 /* ShopImageDto.swift */; };
 		B46B8D252E770A3100A8E797 /* Pretendard-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = B46B8D232E770A3100A8E797 /* Pretendard-Regular.otf */; };
 		B46B8D262E770A3100A8E797 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B46B8D212E770A3100A8E797 /* Pretendard-Bold.otf */; };
 		B46B8D272E770A3100A8E797 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = B46B8D222E770A3100A8E797 /* Pretendard-Medium.otf */; };
 		B46B8D292E770A8A00A8E797 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = B46B8D282E770A8A00A8E797 /* Pretendard-SemiBold.otf */; };
-		B46B8D3A2E771A1300A8E797 /* ShopMenusCategoryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8D392E771A1300A8E797 /* ShopMenusCategoryDTO.swift */; };
+		B46B8D3A2E771A1300A8E797 /* ShopMenusCategoryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8D392E771A1300A8E797 /* ShopMenusCategoryDto.swift */; };
 		B47839052E70FAFE00D002E3 /* OrderShopSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */; };
 		B47839072E70FF2B00D002E3 /* OrderShopMenusGroups.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */; };
 		B4B3EB262E6E7CAD00F8A23A /* OrderShopMenus.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4B3EB252E6E7CAD00F8A23A /* OrderShopMenus.swift */; };
@@ -759,14 +759,14 @@
 		B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
 		D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */; };
-		D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078BF52BC4CCEB00A39861 /* EventDTO.swift */; };
+		D2078BF62BC4CCEB00A39861 /* EventDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078BF52BC4CCEB00A39861 /* EventDto.swift */; };
 		D208A7A02CA10F1A007040E7 /* AbTestRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A79F2CA10F1A007040E7 /* AbTestRepository.swift */; };
 		D208A7A62CA111EB007040E7 /* AssignAbTestRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7A52CA111EB007040E7 /* AssignAbTestRequest.swift */; };
 		D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7A72CA11221007040E7 /* AbTestService.swift */; };
 		D208A7AA2CA1123B007040E7 /* AssignAbTestUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7A92CA1123B007040E7 /* AssignAbTestUseCase.swift */; };
 		D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7AB2CA112D0007040E7 /* AssignAbTestResponse.swift */; };
 		D208A7AE2CA117AA007040E7 /* AbTestAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */; };
-		D208A7B72CA16577007040E7 /* ShopBenefitsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */; };
+		D208A7B72CA16577007040E7 /* ShopBenefitsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B62CA16577007040E7 /* ShopBenefitsDto.swift */; };
 		D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */; };
 		D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */; };
 		D208A7BF2CAB97A9007040E7 /* ForceUpdateResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */; };
@@ -804,7 +804,7 @@
 		D20AD7072E0367F10067760A /* ResetPasswordEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */; };
 		D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */; };
 		D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */; };
-		D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDTO.swift */; };
+		D215724E2CEDBEC60061E725 /* FrameDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724D2CEDBEC60061E725 /* FrameDto.swift */; };
 		D21572502CEDC1680061E725 /* CreateFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */; };
 		D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */; };
 		D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572532CEDC17A0061E725 /* DeleteFrameUseCase.swift */; };
@@ -821,7 +821,7 @@
 		D215726F2CEE28D70061E725 /* LectureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726E2CEE28D70061E725 /* LectureData.swift */; };
 		D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */; };
 		D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */; };
-		D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */; };
+		D223D6192D9C0EFC00C29BE6 /* BannerDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6182D9C0EFC00C29BE6 /* BannerDto.swift */; };
 		D223D61B2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */; };
 		D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */; };
 		D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */; };
@@ -839,7 +839,7 @@
 		D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54802C6A5957000826DA /* FileUploadResponse.swift */; };
 		D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
-		D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944812C3C24A200048F45 /* ReviewsDTO.swift */; };
+		D23944822C3C24A200048F45 /* ReviewsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944812C3C24A200048F45 /* ReviewsDto.swift */; };
 		D23944842C3C3ABC00048F45 /* ShopReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944832C3C3ABC00048F45 /* ShopReview.swift */; };
 		D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944852C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift */; };
 		D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D249CD222C12DB73000813F9 /* DiningRepository.swift */; };
@@ -856,24 +856,24 @@
 		D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */; };
 		D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D9D2C6BE8B700C4275F /* Shop.swift */; };
 		D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D27DD05C2BA608310081FD36 /* Assets.xcassets */; };
-		D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07A2BA608310081FD36 /* DiningDTO.swift */; };
-		D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07B2BA608310081FD36 /* ShopCategoryDTO.swift */; };
-		D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07C2BA608310081FD36 /* ShopsDTO.swift */; };
+		D27DD0CA2BA608310081FD36 /* DiningDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07A2BA608310081FD36 /* DiningDto.swift */; };
+		D27DD0CB2BA608310081FD36 /* ShopCategoryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07B2BA608310081FD36 /* ShopCategoryDto.swift */; };
+		D27DD0CC2BA608310081FD36 /* ShopsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07C2BA608310081FD36 /* ShopsDto.swift */; };
 		D27DD0CD2BA608310081FD36 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07F2BA608310081FD36 /* Log.swift */; };
 		D27DD0CE2BA608310081FD36 /* ViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0812BA608310081FD36 /* ViewModelProtocol.swift */; };
 		D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0822BA608310081FD36 /* CollectionViewDelegate.swift */; };
 		D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0852BA608310081FD36 /* ImageCacher.swift */; };
 		D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0872BA608310081FD36 /* AppDelegate.swift */; };
 		D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0882BA608310081FD36 /* SceneDelegate.swift */; };
-		D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0D72BA6089D0081FD36 /* LandDTO.swift */; };
-		D27DD0E22BA609740081FD36 /* MenuDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0E12BA609740081FD36 /* MenuDTO.swift */; };
-		D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0E32BA609F30081FD36 /* ShopDataDTO.swift */; };
-		D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0F52BA614400081FD36 /* LandDetailDTO.swift */; };
+		D27DD0D82BA6089D0081FD36 /* LandDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0D72BA6089D0081FD36 /* LandDto.swift */; };
+		D27DD0E22BA609740081FD36 /* MenuDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0E12BA609740081FD36 /* MenuDto.swift */; };
+		D27DD0E42BA609F30081FD36 /* ShopDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0E32BA609F30081FD36 /* ShopDataDto.swift */; };
+		D27DD0F62BA614400081FD36 /* LandDetailDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0F52BA614400081FD36 /* LandDetailDto.swift */; };
 		D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D289873D2D21B30D00AA7285 /* DebouncedButton.swift */; };
 		D28987422D22B31E00AA7285 /* AssignAbTestTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */; };
-		D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDTO.swift */; };
-		D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDTO.swift */; };
-		D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D2B2BB9D4150008F908 /* TimetablesDTO.swift */; };
+		D2908D262BB8D11A0008F908 /* SemesterDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D252BB8D11A0008F908 /* SemesterDto.swift */; };
+		D2908D282BB8D1580008F908 /* LectureDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D272BB8D1580008F908 /* LectureDto.swift */; };
+		D2908D2C2BB9D4150008F908 /* TimetablesDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D2B2BB9D4150008F908 /* TimetablesDto.swift */; };
 		D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D3D2BBD1E190008F908 /* TimetableRequest.swift */; };
 		D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2908D4F2BBE64B90008F908 /* Removetimetable.swift */; };
 		D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21C02C4DDF5300994554 /* DefaultUserRepository.swift */; };
@@ -900,21 +900,21 @@
 		D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A513402C59FE860064941A /* ShareDiningMenu.swift */; };
 		D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */; };
 		D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */; };
-		D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BB2C4A71420090C7A4 /* CoopShopDTO.swift */; };
+		D2A8F8BC2C4A71420090C7A4 /* CoopShopDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */; };
 		D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */; };
 		D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */; };
 		D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */; };
 		D2B2193B2D66626900EAF5B1 /* ChatHistoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */; };
 		D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */; };
 		D2B2193F2D66DDF900EAF5B1 /* ChatDateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193E2D66DDF900EAF5B1 /* ChatDateInfo.swift */; };
-		D2B7EBC62D37C5F000EE46B0 /* LostArticleDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */; };
-		D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */; };
+		D2B7EBC62D37C5F000EE46B0 /* LostArticleDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC52D37C5F000EE46B0 /* LostArticleDto.swift */; };
+		D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDto.swift */; };
 		D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */; };
 		D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */; };
 		D2B7EBD02D37E3CE00EE46B0 /* FetchLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */; };
 		D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */; };
 		D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */; };
-		D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */; };
+		D2BD36942BA9EE7A00FAE609 /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDto.swift */; };
 		D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */; };
 		D2BD36982BAA02E100FAE609 /* RefreshTokenResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */; };
 		D2C163D62E252C1200DC68A8 /* ChangePasswordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2C163D52E252C1200DC68A8 /* ChangePasswordRequest.swift */; };
@@ -922,23 +922,23 @@
 		D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA2DCF2C1CAC550036F02C /* ShopData.swift */; };
 		D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */; };
 		D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D380F82BA72F75009AD5A9 /* LoginRequest.swift */; };
-		D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D380FA2BA73162009AD5A9 /* TokenDTO.swift */; };
+		D2D380FB2BA73162009AD5A9 /* TokenDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D380FA2BA73162009AD5A9 /* TokenDto.swift */; };
 		D2D380FD2BA7415C009AD5A9 /* ErrorResponseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D380FC2BA7415C009AD5A9 /* ErrorResponseDto.swift */; };
-		D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4225C2BAAEE0900A8AF04 /* DeptDTO.swift */; };
+		D2D4225D2BAAEE0900A8AF04 /* DeptDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4225C2BAAEE0900A8AF04 /* DeptDto.swift */; };
 		D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4225E2BAC2AC600A8AF04 /* UserPutRequest.swift */; };
 		D2D422612BAC2D7300A8AF04 /* EncodingWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */; };
 		D2D422702BB1F04300A8AF04 /* UserRegisterRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4226F2BB1F04300A8AF04 /* UserRegisterRequest.swift */; };
 		D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422712BB2A7BE00A8AF04 /* Confirmable.swift */; };
 		D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422742BB2AB3A00A8AF04 /* PasswordConfirmer.swift */; };
 		D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D422762BB2EA3900A8AF04 /* FindPasswordRequest.swift */; };
-		D2D462602D63A81500C60864 /* ChatRoomDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4625F2D63A81500C60864 /* ChatRoomDTO.swift */; };
+		D2D462602D63A81500C60864 /* ChatRoomDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4625F2D63A81500C60864 /* ChatRoomDto.swift */; };
 		D2D462622D63B90100C60864 /* ChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462612D63B90100C60864 /* ChatRepository.swift */; };
 		D2D462662D63B98F00C60864 /* FetchChatRoomUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462652D63B98F00C60864 /* FetchChatRoomUseCase.swift */; };
 		D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462692D63BA5200C60864 /* ChatService.swift */; };
 		D2D4626C2D63BAC600C60864 /* ChatAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4626B2D63BAC600C60864 /* ChatAPI.swift */; };
 		D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4626D2D63BD1400C60864 /* DefaultChatRepository.swift */; };
 		D2D462712D63C5ED00C60864 /* ChatRoomItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462702D63C5ED00C60864 /* ChatRoomItem.swift */; };
-		D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */; };
+		D2D462732D63CACC00C60864 /* ChatDetailDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462722D63CACC00C60864 /* ChatDetailDto.swift */; };
 		D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */; };
 		D2D4627A2D63D4D400C60864 /* BlockUserUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D462792D63D4D400C60864 /* BlockUserUseCase.swift */; };
 		D2D4627C2D6482AA00C60864 /* CreateChatRoomResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2D4627B2D6482AA00C60864 /* CreateChatRoomResponse.swift */; };
@@ -953,8 +953,8 @@
 		D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */; };
 		D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */; };
 		D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */; };
-		D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDTO.swift */; };
-		D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */; };
+		D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDto.swift */; };
+		D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDto.swift */; };
 		D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */; };
 		D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB234E2BFD46DE0098BA2B /* FetchShopListUseCase.swift */; };
 		D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23502BFD47A40098BA2B /* FetchEventListUseCase.swift */; };
@@ -987,7 +987,7 @@
 		D874DB4B2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */; };
 		D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */; };
 		D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */; };
-		D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */; };
+		D874DB512DBF200C0098EED0 /* SendVerificationCodeDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D874DB502DBF200C0098EED0 /* SendVerificationCodeDto.swift */; };
 		D891F25F2E45DC9D006D1F41 /* TrackPaddedSlider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */; };
 		D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */; };
 		D89BAA3B2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */; };
@@ -1129,8 +1129,8 @@
 		7C457B192FCE1BA80011D338 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		7C457B1B2FCE1BA80011D338 /* HomeTabBarButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarButton.swift; sourceTree = "<group>"; };
 		7C457B1C2FCE1BA80011D338 /* HomeTabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBar.swift; sourceTree = "<group>"; };
-		7C457B1E2FCE1BA80011D338 /* HomeTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarController.swift; sourceTree = "<group>"; };
-		7C457B202FCE1BA80011D338 /* HomeTabBarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarViewModel.swift; sourceTree = "<group>"; };
+		7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarController.swift; sourceTree = "<group>"; };
+		7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarViewModel.swift; sourceTree = "<group>"; };
 		7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenIfNeededUseCase.swift; sourceTree = "<group>"; };
 		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
@@ -1679,8 +1679,8 @@
 		832FCC912CD667940044AF23 /* diningShare.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = diningShare.gif; sourceTree = "<group>"; };
 		833D9C042C68F8BA00982145 /* ScreenActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenActionType.swift; sourceTree = "<group>"; };
 		833D9C112C6B26A900982145 /* NoticeListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListType.swift; sourceTree = "<group>"; };
-		833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListDTO.swift; sourceTree = "<group>"; };
-		833D9C272C6B58ED00982145 /* NoticeKeywordDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordDTO.swift; sourceTree = "<group>"; };
+		833D9C212C6B4F6E00982145 /* NoticeListDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListDto.swift; sourceTree = "<group>"; };
+		833D9C272C6B58ED00982145 /* NoticeKeywordDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordDto.swift; sourceTree = "<group>"; };
 		833D9C332C70418100982145 /* NoticeListPages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListPages.swift; sourceTree = "<group>"; };
 		833D9C382C7058C200982145 /* NoticeListRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListRepository.swift; sourceTree = "<group>"; };
 		833D9C3D2C705E9300982145 /* FetchNoticeArticlesRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNoticeArticlesRequest.swift; sourceTree = "<group>"; };
@@ -1695,7 +1695,7 @@
 		833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataInfo.swift; sourceTree = "<group>"; };
 		833D9C612C74B9EF00982145 /* FetchHotNoticeArticlesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotNoticeArticlesUseCase.swift; sourceTree = "<group>"; };
 		8344D5C42C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchNoticeArticlesUseCase.swift; sourceTree = "<group>"; };
-		834E1CD92BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressBusTimeTableDTO.swift; sourceTree = "<group>"; };
+		834E1CD92BBCDFBF003D4271 /* ExpressBusTimeTableDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExpressBusTimeTableDto.swift; sourceTree = "<group>"; };
 		8354BE3C2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
 		8354BE462C79FCA0009D4D7A /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
 		8354BE512C7A0566009D4D7A /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
@@ -1709,7 +1709,7 @@
 		835DC2072C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		835DC2082C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
-		8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusCourseDTO.swift; sourceTree = "<group>"; };
+		8380FDC22BC1CBB800120036 /* BusCourseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusCourseDto.swift; sourceTree = "<group>"; };
 		838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoticeKeywordType.swift; sourceTree = "<group>"; };
 		839D71162BEB1570001BC7F7 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		839D71182BEB1570001BC7F7 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
@@ -1737,17 +1737,17 @@
 		83DD0DC92C5651D900278ABD /* FetchExpressTimetableUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchExpressTimetableUseCase.swift; sourceTree = "<group>"; };
 		83DD0DE52C57406600278ABD /* GetBusFiltersUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetBusFiltersUseCase.swift; sourceTree = "<group>"; };
 		83DD0DE72C57478200278ABD /* FetchCityBusTimetableRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCityBusTimetableRequest.swift; sourceTree = "<group>"; };
-		83DD0DE92C57486400278ABD /* CityBusTimetableDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityBusTimetableDTO.swift; sourceTree = "<group>"; };
+		83DD0DE92C57486400278ABD /* CityBusTimetableDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CityBusTimetableDto.swift; sourceTree = "<group>"; };
 		83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCityBusTimetableUseCase.swift; sourceTree = "<group>"; };
 		83DD0DED2C575C9300278ABD /* BusNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusNumber.swift; sourceTree = "<group>"; };
 		83E770B92CFB5BB500EB3F84 /* ShuttleRouteType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleRouteType.swift; sourceTree = "<group>"; };
-		83E770F32D04A21500EB3F84 /* ShuttleRouteDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleRouteDTO.swift; sourceTree = "<group>"; };
+		83E770F32D04A21500EB3F84 /* ShuttleRouteDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleRouteDto.swift; sourceTree = "<group>"; };
 		83E770F72D05864800EB3F84 /* MockNetworkService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNetworkService.swift; sourceTree = "<group>"; };
-		83E770F92D05B5EC00EB3F84 /* BusNoticeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusNoticeDTO.swift; sourceTree = "<group>"; };
+		83E770F92D05B5EC00EB3F84 /* BusNoticeDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusNoticeDto.swift; sourceTree = "<group>"; };
 		83E770FB2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchEmergencyNoticeUseCase.swift; sourceTree = "<group>"; };
 		83E770FD2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleBusTimetableDto.swift; sourceTree = "<group>"; };
 		83E770FF2D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShuttleBusTimetableUseCase.swift; sourceTree = "<group>"; };
-		83E96DB72BBC6FBF00164914 /* BusSearchDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDTO.swift; sourceTree = "<group>"; };
+		83E96DB72BBC6FBF00164914 /* BusSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDto.swift; sourceTree = "<group>"; };
 		83EBB8792D0FDFD700346018 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
 		A001E2B42845091D00D6C310 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -1756,14 +1756,14 @@
 		A001E2D22845091F00D6C310 /* koinUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITests.swift; sourceTree = "<group>"; };
 		A001E2D42845091F00D6C310 /* koinUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		B438AEE32E756AB600E889C4 /* OrderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderImage.swift; sourceTree = "<group>"; };
-		B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDTO.swift; sourceTree = "<group>"; };
+		B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDto.swift; sourceTree = "<group>"; };
 		B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopSummaryFromShopUseCase.swift; sourceTree = "<group>"; };
-		B46B8CC52E76CEAF00A8E797 /* ShopImageDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopImageDTO.swift; sourceTree = "<group>"; };
+		B46B8CC52E76CEAF00A8E797 /* ShopImageDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopImageDto.swift; sourceTree = "<group>"; };
 		B46B8D212E770A3100A8E797 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		B46B8D222E770A3100A8E797 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
 		B46B8D232E770A3100A8E797 /* Pretendard-Regular.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Regular.otf"; sourceTree = "<group>"; };
 		B46B8D282E770A8A00A8E797 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
-		B46B8D392E771A1300A8E797 /* ShopMenusCategoryDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopMenusCategoryDTO.swift; sourceTree = "<group>"; };
+		B46B8D392E771A1300A8E797 /* ShopMenusCategoryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopMenusCategoryDto.swift; sourceTree = "<group>"; };
 		B47839042E70FAFE00D002E3 /* OrderShopSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopSummary.swift; sourceTree = "<group>"; };
 		B47839062E70FF2B00D002E3 /* OrderShopMenusGroups.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopMenusGroups.swift; sourceTree = "<group>"; };
 		B4B3EB252E6E7CAD00F8A23A /* OrderShopMenus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopMenus.swift; sourceTree = "<group>"; };
@@ -1785,14 +1785,14 @@
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		D2009F752C17270F00211D1B /* CalendarDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDate.swift; sourceTree = "<group>"; };
 		D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnalyticsService.swift; sourceTree = "<group>"; };
-		D2078BF52BC4CCEB00A39861 /* EventDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDTO.swift; sourceTree = "<group>"; };
+		D2078BF52BC4CCEB00A39861 /* EventDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDto.swift; sourceTree = "<group>"; };
 		D208A79F2CA10F1A007040E7 /* AbTestRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbTestRepository.swift; sourceTree = "<group>"; };
 		D208A7A52CA111EB007040E7 /* AssignAbTestRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestRequest.swift; sourceTree = "<group>"; };
 		D208A7A72CA11221007040E7 /* AbTestService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbTestService.swift; sourceTree = "<group>"; };
 		D208A7A92CA1123B007040E7 /* AssignAbTestUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestUseCase.swift; sourceTree = "<group>"; };
 		D208A7AB2CA112D0007040E7 /* AssignAbTestResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestResponse.swift; sourceTree = "<group>"; };
 		D208A7AD2CA117AA007040E7 /* AbTestAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AbTestAPI.swift; sourceTree = "<group>"; };
-		D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBenefitsDTO.swift; sourceTree = "<group>"; };
+		D208A7B62CA16577007040E7 /* ShopBenefitsDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBenefitsDto.swift; sourceTree = "<group>"; };
 		D208A7B82CA1661F007040E7 /* FetchShopBenefitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopBenefitUseCase.swift; sourceTree = "<group>"; };
 		D208A7BA2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBeneficialShopUseCase.swift; sourceTree = "<group>"; };
 		D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateResponse.swift; sourceTree = "<group>"; };
@@ -1830,7 +1830,7 @@
 		D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailRequest.swift; sourceTree = "<group>"; };
 		D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailUseCase.swift; sourceTree = "<group>"; };
-		D215724D2CEDBEC60061E725 /* FrameDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDTO.swift; sourceTree = "<group>"; };
+		D215724D2CEDBEC60061E725 /* FrameDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FrameDto.swift; sourceTree = "<group>"; };
 		D215724F2CEDC1680061E725 /* CreateFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572512CEDC1720061E725 /* FetchFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFrameUseCase.swift; sourceTree = "<group>"; };
 		D21572532CEDC17A0061E725 /* DeleteFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteFrameUseCase.swift; sourceTree = "<group>"; };
@@ -1847,7 +1847,7 @@
 		D215726E2CEE28D70061E725 /* LectureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureData.swift; sourceTree = "<group>"; };
 		D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterUseCase.swift; sourceTree = "<group>"; };
 		D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DeleteLectureUseCase.swift; sourceTree = "<group>"; };
-		D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerDTO.swift; sourceTree = "<group>"; };
+		D223D6182D9C0EFC00C29BE6 /* BannerDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerDto.swift; sourceTree = "<group>"; };
 		D223D61A2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchBannerUseCase.swift; sourceTree = "<group>"; };
 		D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PolicyModel.swift; sourceTree = "<group>"; };
 		D224217D2C8AA0F300E8B480 /* CheckPasswordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPasswordUseCase.swift; sourceTree = "<group>"; };
@@ -1865,7 +1865,7 @@
 		D22C54802C6A5957000826DA /* FileUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadResponse.swift; sourceTree = "<group>"; };
 		D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileUseCase.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
-		D23944812C3C24A200048F45 /* ReviewsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsDTO.swift; sourceTree = "<group>"; };
+		D23944812C3C24A200048F45 /* ReviewsDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsDto.swift; sourceTree = "<group>"; };
 		D23944832C3C3ABC00048F45 /* ShopReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReview.swift; sourceTree = "<group>"; };
 		D23944852C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewListUseCase.swift; sourceTree = "<group>"; };
 		D249CD222C12DB73000813F9 /* DiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningRepository.swift; sourceTree = "<group>"; };
@@ -1882,26 +1882,26 @@
 		D27A5D992C6B97D200C4275F /* InsetLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsetLabel.swift; sourceTree = "<group>"; };
 		D27A5D9B2C6BE56500C4275F /* FetchShopListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopListRequest.swift; sourceTree = "<group>"; };
 		D27A5D9D2C6BE8B700C4275F /* Shop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shop.swift; sourceTree = "<group>"; };
-		D27DCD682BA5BADC0081FD36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = koin/Info.plist; sourceTree = "<group>"; };
+		D27DCD682BA5BADC0081FD36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Koin/Info.plist; sourceTree = "<group>"; };
 		D27DD05C2BA608310081FD36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		D27DD07A2BA608310081FD36 /* DiningDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningDTO.swift; sourceTree = "<group>"; };
-		D27DD07B2BA608310081FD36 /* ShopCategoryDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopCategoryDTO.swift; sourceTree = "<group>"; };
-		D27DD07C2BA608310081FD36 /* ShopsDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopsDTO.swift; sourceTree = "<group>"; };
+		D27DD07A2BA608310081FD36 /* DiningDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningDto.swift; sourceTree = "<group>"; };
+		D27DD07B2BA608310081FD36 /* ShopCategoryDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopCategoryDto.swift; sourceTree = "<group>"; };
+		D27DD07C2BA608310081FD36 /* ShopsDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopsDto.swift; sourceTree = "<group>"; };
 		D27DD07F2BA608310081FD36 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
 		D27DD0812BA608310081FD36 /* ViewModelProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ViewModelProtocol.swift; sourceTree = "<group>"; };
 		D27DD0822BA608310081FD36 /* CollectionViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionViewDelegate.swift; sourceTree = "<group>"; };
 		D27DD0852BA608310081FD36 /* ImageCacher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacher.swift; sourceTree = "<group>"; };
 		D27DD0872BA608310081FD36 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D27DD0882BA608310081FD36 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D27DD0D72BA6089D0081FD36 /* LandDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandDTO.swift; sourceTree = "<group>"; };
-		D27DD0E12BA609740081FD36 /* MenuDTO.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDTO.swift; sourceTree = "<group>"; };
-		D27DD0E32BA609F30081FD36 /* ShopDataDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataDTO.swift; sourceTree = "<group>"; };
-		D27DD0F52BA614400081FD36 /* LandDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailDTO.swift; sourceTree = "<group>"; };
+		D27DD0D72BA6089D0081FD36 /* LandDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandDto.swift; sourceTree = "<group>"; };
+		D27DD0E12BA609740081FD36 /* MenuDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDto.swift; sourceTree = "<group>"; };
+		D27DD0E32BA609F30081FD36 /* ShopDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataDto.swift; sourceTree = "<group>"; };
+		D27DD0F52BA614400081FD36 /* LandDetailDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailDto.swift; sourceTree = "<group>"; };
 		D289873D2D21B30D00AA7285 /* DebouncedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebouncedButton.swift; sourceTree = "<group>"; };
 		D28987412D22B31E00AA7285 /* AssignAbTestTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssignAbTestTokenResponse.swift; sourceTree = "<group>"; };
-		D2908D252BB8D11A0008F908 /* SemesterDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDTO.swift; sourceTree = "<group>"; };
-		D2908D272BB8D1580008F908 /* LectureDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDTO.swift; sourceTree = "<group>"; };
-		D2908D2B2BB9D4150008F908 /* TimetablesDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetablesDTO.swift; sourceTree = "<group>"; };
+		D2908D252BB8D11A0008F908 /* SemesterDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SemesterDto.swift; sourceTree = "<group>"; };
+		D2908D272BB8D1580008F908 /* LectureDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureDto.swift; sourceTree = "<group>"; };
+		D2908D2B2BB9D4150008F908 /* TimetablesDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetablesDto.swift; sourceTree = "<group>"; };
 		D2908D3D2BBD1E190008F908 /* TimetableRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableRequest.swift; sourceTree = "<group>"; };
 		D2908D4F2BBE64B90008F908 /* Removetimetable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Removetimetable.swift; sourceTree = "<group>"; };
 		D29F21C02C4DDF5300994554 /* DefaultUserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultUserRepository.swift; sourceTree = "<group>"; };
@@ -1928,46 +1928,46 @@
 		D2A513402C59FE860064941A /* ShareDiningMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareDiningMenu.swift; sourceTree = "<group>"; };
 		D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCoopShopListUseCase.swift; sourceTree = "<group>"; };
-		D2A8F8BB2C4A71420090C7A4 /* CoopShopDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopDTO.swift; sourceTree = "<group>"; };
+		D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopDto.swift; sourceTree = "<group>"; };
 		D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopData.swift; sourceTree = "<group>"; };
 		D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
 		D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryData.swift; sourceTree = "<group>"; };
 		D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		D2B2193E2D66DDF900EAF5B1 /* ChatDateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateInfo.swift; sourceTree = "<group>"; };
-		D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDTO.swift; sourceTree = "<group>"; };
-		D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDetailDTO.swift; sourceTree = "<group>"; };
+		D2B7EBC52D37C5F000EE46B0 /* LostArticleDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDto.swift; sourceTree = "<group>"; };
+		D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDetailDto.swift; sourceTree = "<group>"; };
 		D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemRequest.swift; sourceTree = "<group>"; };
 		D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTypeResponse.swift; sourceTree = "<group>"; };
 		D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAuthUseCase.swift; sourceTree = "<group>"; };
-		D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDTO.swift; sourceTree = "<group>"; };
+		D2BD36932BA9EE7A00FAE609 /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
 		D2BD36952BAA027A00FAE609 /* TokenRefreshRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenRefreshRequest.swift; sourceTree = "<group>"; };
 		D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenResponse.swift; sourceTree = "<group>"; };
 		D2C163D52E252C1200DC68A8 /* ChangePasswordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordRequest.swift; sourceTree = "<group>"; };
 		D2C163D72E252DB500DC68A8 /* ChangePasswordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordUseCase.swift; sourceTree = "<group>"; };
 		D2CA2DCF2C1CAC550036F02C /* ShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopData.swift; sourceTree = "<group>"; };
 		D2CA2DD12C1CAE4E0036F02C /* ShopEvent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopEvent.swift; sourceTree = "<group>"; };
-		D2D380E02BA6AC50009AD5A9 /* koin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = koin.entitlements; path = koin/koin.entitlements; sourceTree = "<group>"; };
+		D2D380E02BA6AC50009AD5A9 /* koin.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = koin.entitlements; path = Koin/koin.entitlements; sourceTree = "<group>"; };
 		D2D380F82BA72F75009AD5A9 /* LoginRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginRequest.swift; sourceTree = "<group>"; };
-		D2D380FA2BA73162009AD5A9 /* TokenDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDTO.swift; sourceTree = "<group>"; };
+		D2D380FA2BA73162009AD5A9 /* TokenDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TokenDto.swift; sourceTree = "<group>"; };
 		D2D380FC2BA7415C009AD5A9 /* ErrorResponseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponseDto.swift; sourceTree = "<group>"; };
-		D2D4225C2BAAEE0900A8AF04 /* DeptDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeptDTO.swift; sourceTree = "<group>"; };
+		D2D4225C2BAAEE0900A8AF04 /* DeptDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeptDto.swift; sourceTree = "<group>"; };
 		D2D4225E2BAC2AC600A8AF04 /* UserPutRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPutRequest.swift; sourceTree = "<group>"; };
 		D2D422602BAC2D7300A8AF04 /* EncodingWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EncodingWorker.swift; sourceTree = "<group>"; };
 		D2D4226F2BB1F04300A8AF04 /* UserRegisterRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRegisterRequest.swift; sourceTree = "<group>"; };
 		D2D422712BB2A7BE00A8AF04 /* Confirmable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Confirmable.swift; sourceTree = "<group>"; };
 		D2D422742BB2AB3A00A8AF04 /* PasswordConfirmer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordConfirmer.swift; sourceTree = "<group>"; };
 		D2D422762BB2EA3900A8AF04 /* FindPasswordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordRequest.swift; sourceTree = "<group>"; };
-		D2D4625F2D63A81500C60864 /* ChatRoomDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomDTO.swift; sourceTree = "<group>"; };
+		D2D4625F2D63A81500C60864 /* ChatRoomDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomDto.swift; sourceTree = "<group>"; };
 		D2D462612D63B90100C60864 /* ChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRepository.swift; sourceTree = "<group>"; };
 		D2D462652D63B98F00C60864 /* FetchChatRoomUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatRoomUseCase.swift; sourceTree = "<group>"; };
 		D2D462692D63BA5200C60864 /* ChatService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatService.swift; sourceTree = "<group>"; };
 		D2D4626B2D63BAC600C60864 /* ChatAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatAPI.swift; sourceTree = "<group>"; };
 		D2D4626D2D63BD1400C60864 /* DefaultChatRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultChatRepository.swift; sourceTree = "<group>"; };
 		D2D462702D63C5ED00C60864 /* ChatRoomItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomItem.swift; sourceTree = "<group>"; };
-		D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailDTO.swift; sourceTree = "<group>"; };
+		D2D462722D63CACC00C60864 /* ChatDetailDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailDto.swift; sourceTree = "<group>"; };
 		D2D462742D63CB3E00C60864 /* FetchChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchChatDetailUseCase.swift; sourceTree = "<group>"; };
 		D2D462792D63D4D400C60864 /* BlockUserUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserUseCase.swift; sourceTree = "<group>"; };
 		D2D4627B2D6482AA00C60864 /* CreateChatRoomResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateChatRoomResponse.swift; sourceTree = "<group>"; };
@@ -1982,8 +1982,8 @@
 		D2DA83922C181A2100A2F156 /* FetchShopMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2DA83942C181A3B00A2F156 /* FetchShopEventListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopEventListUseCase.swift; sourceTree = "<group>"; };
 		D2DCB2912CE5D638005CABEE /* PostCallNotificationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCallNotificationUseCase.swift; sourceTree = "<group>"; };
-		D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedKeywordsDTO.swift; sourceTree = "<group>"; };
-		D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAgreementDTO.swift; sourceTree = "<group>"; };
+		D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RelatedKeywordsDto.swift; sourceTree = "<group>"; };
+		D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAgreementDto.swift; sourceTree = "<group>"; };
 		D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomNavigationController.swift; sourceTree = "<group>"; };
 		D2FB234E2BFD46DE0098BA2B /* FetchShopListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopListUseCase.swift; sourceTree = "<group>"; };
 		D2FB23502BFD47A40098BA2B /* FetchEventListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchEventListUseCase.swift; sourceTree = "<group>"; };
@@ -2014,7 +2014,7 @@
 		D874DB4A2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedPhoneNumberRequest.swift; sourceTree = "<group>"; };
 		D874DB4C2DBF1A6B0098EED0 /* SendVerificationCodeUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeUsecase.swift; sourceTree = "<group>"; };
 		D874DB4E2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeRequest.swift; sourceTree = "<group>"; };
-		D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDTO.swift; sourceTree = "<group>"; };
+		D874DB502DBF200C0098EED0 /* SendVerificationCodeDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendVerificationCodeDto.swift; sourceTree = "<group>"; };
 		D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackPaddedSlider.swift; sourceTree = "<group>"; };
 		D89BAA382DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralRegisterFormRequest.swift; sourceTree = "<group>"; };
 		D89BAA3A2DCA5B47006D3BB7 /* StudentRegisterFormRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StudentRegisterFormRequest.swift; sourceTree = "<group>"; };
@@ -2362,8 +2362,8 @@
 			isa = PBXGroup;
 			children = (
 				7C457B1D2FCE1BA80011D338 /* Subviews */,
-				7C457B1E2FCE1BA80011D338 /* HomeTabBarController.swift */,
-				7C457B202FCE1BA80011D338 /* HomeTabBarViewModel.swift */,
+				7C457B1E2FCE1BA80011D338 /* HomeTabbarController.swift */,
+				7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */,
 				7CD411E92FEB92280079467B /* HomeTabBarItem.swift */,
 			);
 			path = HomeTabBar;
@@ -4433,10 +4433,10 @@
 		833D9C202C6B4F4C00982145 /* NoticeList */ = {
 			isa = PBXGroup;
 			children = (
-				833D9C212C6B4F6E00982145 /* NoticeListDTO.swift */,
-				833D9C272C6B58ED00982145 /* NoticeKeywordDTO.swift */,
-				D2B7EBC52D37C5F000EE46B0 /* LostArticleDTO.swift */,
-				D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDTO.swift */,
+				833D9C212C6B4F6E00982145 /* NoticeListDto.swift */,
+				833D9C272C6B58ED00982145 /* NoticeKeywordDto.swift */,
+				D2B7EBC52D37C5F000EE46B0 /* LostArticleDto.swift */,
+				D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDto.swift */,
 				D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */,
 			);
 			path = NoticeList;
@@ -4716,7 +4716,7 @@
 		D223D60E2D9BEC8100C29BE6 /* Core */ = {
 			isa = PBXGroup;
 			children = (
-				D223D6182D9C0EFC00C29BE6 /* BannerDTO.swift */,
+				D223D6182D9C0EFC00C29BE6 /* BannerDto.swift */,
 				D2D380FC2BA7415C009AD5A9 /* ErrorResponseDto.swift */,
 				D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */,
 			);
@@ -4726,8 +4726,8 @@
 		D23479D82BDB5EEF00FA91BD /* Land */ = {
 			isa = PBXGroup;
 			children = (
-				D27DD0D72BA6089D0081FD36 /* LandDTO.swift */,
-				D27DD0F52BA614400081FD36 /* LandDetailDTO.swift */,
+				D27DD0D72BA6089D0081FD36 /* LandDto.swift */,
+				D27DD0F52BA614400081FD36 /* LandDetailDto.swift */,
 			);
 			path = Land;
 			sourceTree = "<group>";
@@ -4735,8 +4735,8 @@
 		D23479D92BDB67AE00FA91BD /* Dining */ = {
 			isa = PBXGroup;
 			children = (
-				D27DD07A2BA608310081FD36 /* DiningDTO.swift */,
-				D2A8F8BB2C4A71420090C7A4 /* CoopShopDTO.swift */,
+				D27DD07A2BA608310081FD36 /* DiningDto.swift */,
+				D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -4744,18 +4744,18 @@
 		D23479DA2BDB70CC00FA91BD /* Shop */ = {
 			isa = PBXGroup;
 			children = (
-				D2078BF52BC4CCEB00A39861 /* EventDTO.swift */,
-				D27DD0E32BA609F30081FD36 /* ShopDataDTO.swift */,
-				D27DD07C2BA608310081FD36 /* ShopsDTO.swift */,
-				D27DD0E12BA609740081FD36 /* MenuDTO.swift */,
-				D27DD07B2BA608310081FD36 /* ShopCategoryDTO.swift */,
-				D23944812C3C24A200048F45 /* ReviewsDTO.swift */,
+				D2078BF52BC4CCEB00A39861 /* EventDto.swift */,
+				D27DD0E32BA609F30081FD36 /* ShopDataDto.swift */,
+				D27DD07C2BA608310081FD36 /* ShopsDto.swift */,
+				D27DD0E12BA609740081FD36 /* MenuDto.swift */,
+				D27DD07B2BA608310081FD36 /* ShopCategoryDto.swift */,
+				D23944812C3C24A200048F45 /* ReviewsDto.swift */,
 				D22C54802C6A5957000826DA /* FileUploadResponse.swift */,
-				D208A7B62CA16577007040E7 /* ShopBenefitsDTO.swift */,
-				D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDTO.swift */,
-				B46B8CC12E76CB7300A8E797 /* ShopSummaryDTO.swift */,
-				B46B8CC52E76CEAF00A8E797 /* ShopImageDTO.swift */,
-				B46B8D392E771A1300A8E797 /* ShopMenusCategoryDTO.swift */,
+				D208A7B62CA16577007040E7 /* ShopBenefitsDto.swift */,
+				D2DCB2932CE5E2A6005CABEE /* RelatedKeywordsDto.swift */,
+				B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */,
+				B46B8CC52E76CEAF00A8E797 /* ShopImageDto.swift */,
+				B46B8D392E771A1300A8E797 /* ShopMenusCategoryDto.swift */,
 				7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */,
 				7C8A942E2FD2C15400DEA6F5 /* ShopEventCountDto.swift */,
 				7C8A94382FD2C45200DEA6F5 /* ShopCountDto.swift */,
@@ -4766,12 +4766,12 @@
 		D23479DC2BDB713E00FA91BD /* Bus */ = {
 			isa = PBXGroup;
 			children = (
-				8380FDC22BC1CBB800120036 /* BusCourseDTO.swift */,
-				834E1CD92BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift */,
-				83E770F32D04A21500EB3F84 /* ShuttleRouteDTO.swift */,
-				83DD0DE92C57486400278ABD /* CityBusTimetableDTO.swift */,
-				83E96DB72BBC6FBF00164914 /* BusSearchDTO.swift */,
-				83E770F92D05B5EC00EB3F84 /* BusNoticeDTO.swift */,
+				8380FDC22BC1CBB800120036 /* BusCourseDto.swift */,
+				834E1CD92BBCDFBF003D4271 /* ExpressBusTimeTableDto.swift */,
+				83E770F32D04A21500EB3F84 /* ShuttleRouteDto.swift */,
+				83DD0DE92C57486400278ABD /* CityBusTimetableDto.swift */,
+				83E96DB72BBC6FBF00164914 /* BusSearchDto.swift */,
+				83E770F92D05B5EC00EB3F84 /* BusNoticeDto.swift */,
 				83E770FD2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift */,
 			);
 			path = Bus;
@@ -4780,11 +4780,11 @@
 		D23479DD2BDB715700FA91BD /* Timetable */ = {
 			isa = PBXGroup;
 			children = (
-				D2908D2B2BB9D4150008F908 /* TimetablesDTO.swift */,
-				D2D4225C2BAAEE0900A8AF04 /* DeptDTO.swift */,
-				D2908D272BB8D1580008F908 /* LectureDTO.swift */,
-				D2908D252BB8D11A0008F908 /* SemesterDTO.swift */,
-				D215724D2CEDBEC60061E725 /* FrameDTO.swift */,
+				D2908D2B2BB9D4150008F908 /* TimetablesDto.swift */,
+				D2D4225C2BAAEE0900A8AF04 /* DeptDto.swift */,
+				D2908D272BB8D1580008F908 /* LectureDto.swift */,
+				D2908D252BB8D11A0008F908 /* SemesterDto.swift */,
+				D215724D2CEDBEC60061E725 /* FrameDto.swift */,
 				D21572632CEDDCA80061E725 /* SemesterLecture.swift */,
 			);
 			path = Timetable;
@@ -5047,10 +5047,10 @@
 			isa = PBXGroup;
 			children = (
 				D2BD36972BAA02E100FAE609 /* RefreshTokenResponse.swift */,
-				D2BD36932BA9EE7A00FAE609 /* UserDTO.swift */,
-				D2D380FA2BA73162009AD5A9 /* TokenDTO.swift */,
+				D2BD36932BA9EE7A00FAE609 /* UserDto.swift */,
+				D2D380FA2BA73162009AD5A9 /* TokenDto.swift */,
 				D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */,
-				D874DB502DBF200C0098EED0 /* SendVerificationCodeDTO.swift */,
+				D874DB502DBF200C0098EED0 /* SendVerificationCodeDto.swift */,
 				D20AD6F82E02A11D0067760A /* FindIdSmsResponse.swift */,
 				D20AD6FA2E02A1280067760A /* FindIdEmailResponse.swift */,
 			);
@@ -5060,7 +5060,7 @@
 		D29F21EE2C4F611F00994554 /* Noti */ = {
 			isa = PBXGroup;
 			children = (
-				D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDTO.swift */,
+				D2F13E5C2BD0BA2B00172A9D /* NotiAgreementDto.swift */,
 			);
 			path = Noti;
 			sourceTree = "<group>";
@@ -5200,8 +5200,8 @@
 		D2D4625E2D63A78000C60864 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				D2D4625F2D63A81500C60864 /* ChatRoomDTO.swift */,
-				D2D462722D63CACC00C60864 /* ChatDetailDTO.swift */,
+				D2D4625F2D63A81500C60864 /* ChatRoomDto.swift */,
+				D2D462722D63CACC00C60864 /* ChatDetailDto.swift */,
 				D2D4627B2D6482AA00C60864 /* CreateChatRoomResponse.swift */,
 			);
 			path = Chat;
@@ -5713,7 +5713,7 @@
 				D2FB23642BFDB53C0098BA2B /* ShopService.swift in Sources */,
 				7C58FEA62F60068B00A2737B /* CallVanReportViewModel.swift in Sources */,
 				7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */,
-				D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDTO.swift in Sources */,
+				D2DCB2942CE5E2A7005CABEE /* RelatedKeywordsDto.swift in Sources */,
 				7CA60D8B2F667AB6007C08C1 /* ParticipateCallVanUseCase.swift in Sources */,
 				83DD0D8A2C50DA9300278ABD /* SelectDepartAndArrivalUseCase.swift in Sources */,
 				838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */,
@@ -5785,7 +5785,7 @@
 				D89F8FD92DF0A8A4000265DC /* DefaultTextField.swift in Sources */,
 				7CC42B392F58284100940CE1 /* CallVanNotificationTableView.swift in Sources */,
 				7CC42B332F58247D00940CE1 /* CallVanNotification.swift in Sources */,
-				B46B8CC22E76CB7300A8E797 /* ShopSummaryDTO.swift in Sources */,
+				B46B8CC22E76CB7300A8E797 /* ShopSummaryDto.swift in Sources */,
 				D2D462662D63B98F00C60864 /* FetchChatRoomUseCase.swift in Sources */,
 				7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */,
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
@@ -5793,14 +5793,14 @@
 				D20AB9632C554B4E006BC684 /* DiningLikeUseCase.swift in Sources */,
 				D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */,
 				7CC42B622F59D0EF00940CE1 /* CallVanPostPlaceView.swift in Sources */,
-				D27DD0E42BA609F30081FD36 /* ShopDataDTO.swift in Sources */,
+				D27DD0E42BA609F30081FD36 /* ShopDataDto.swift in Sources */,
 				7CC42B9C2F5E834E00940CE1 /* CallVanChatRightCell.swift in Sources */,
 				D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */,
-				D27DD0CB2BA608310081FD36 /* ShopCategoryDTO.swift in Sources */,
+				D27DD0CB2BA608310081FD36 /* ShopCategoryDto.swift in Sources */,
 				7C6790B32FCC5B2A0045E163 /* TimetableColorAsset.swift in Sources */,
 				83DD0DB52C53773100278ABD /* SearchBusInfoRequest.swift in Sources */,
 				833D9C412C705F3E00982145 /* FetchNoticeArticlesUseCase.swift in Sources */,
-				B46B8D3A2E771A1300A8E797 /* ShopMenusCategoryDTO.swift in Sources */,
+				B46B8D3A2E771A1300A8E797 /* ShopMenusCategoryDto.swift in Sources */,
 				D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */,
 				83DD0D7D2C4F91AD00278ABD /* BusRepository.swift in Sources */,
 				7C61D35B2F23CF1A005FAC3A /* FetchLostItemStats.swift in Sources */,
@@ -5810,13 +5810,13 @@
 				7C016567300AB6730013DD7B /* DepartmentSingleTaskView.swift in Sources */,
 				7C05D08E2FBC2F4A00F4D825 /* ThumbnailImagesCollectionViewCell.swift in Sources */,
 				833D9C492C7068CB00982145 /* DefaultNoticeListRepository.swift in Sources */,
-				834E1CDA2BBCDFBF003D4271 /* ExpressBusTimeTableDTO.swift in Sources */,
+				834E1CDA2BBCDFBF003D4271 /* ExpressBusTimeTableDto.swift in Sources */,
 				D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */,
 				7CA63A212F1AF73F00226F86 /* LostItemList.swift in Sources */,
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
 				7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */,
 				7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */,
-				D2A8F8BC2C4A71420090C7A4 /* CoopShopDTO.swift in Sources */,
+				D2A8F8BC2C4A71420090C7A4 /* CoopShopDto.swift in Sources */,
 				7CF77B6D30057468003642C1 /* NoticeKeywordAllButton.swift in Sources */,
 				7C7F43222F65F1F100CC5860 /* CallVanListRequest.swift in Sources */,
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,
@@ -5827,7 +5827,7 @@
 				D2C163D62E252C1200DC68A8 /* ChangePasswordRequest.swift in Sources */,
 				D20AB93B2C51DCFC006BC684 /* FetchUserDataUseCase.swift in Sources */,
 				D2D7C0D92C282A7400C85A85 /* LandService.swift in Sources */,
-				D27DD0CC2BA608310081FD36 /* ShopsDTO.swift in Sources */,
+				D27DD0CC2BA608310081FD36 /* ShopsDto.swift in Sources */,
 				7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */,
 				D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */,
 				7CC42B982F5E812F00940CE1 /* CallVanChatLeftCell.swift in Sources */,
@@ -5855,7 +5855,7 @@
 				7C58FE902F5FA4D600A2737B /* CallVanDataTableViewCell.swift in Sources */,
 				835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */,
 				7CF77B4930027539003642C1 /* TimeTableHourView.swift in Sources */,
-				D23944822C3C24A200048F45 /* ReviewsDTO.swift in Sources */,
+				D23944822C3C24A200048F45 /* ReviewsDto.swift in Sources */,
 				D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */,
 				B60D25462ED72017000E57B7 /* RadioButtonState.swift in Sources */,
 				7C4D5A5D2F0163BA00B40128 /* DIContainer+Bus.swift in Sources */,
@@ -5872,7 +5872,7 @@
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
 				7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */,
 				833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */,
-				D27DD0E22BA609740081FD36 /* MenuDTO.swift in Sources */,
+				D27DD0E22BA609740081FD36 /* MenuDto.swift in Sources */,
 				D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */,
 				B608F0E62EB5DC2D0006F355 /* OrderHistoryCustomSearchBar.swift in Sources */,
 				B608F0E72EB5DC2D0006F355 /* FilteringButton.swift in Sources */,
@@ -5899,12 +5899,12 @@
 				7C05D0762FBC29E800F4D825 /* ShopBenefitViewController.swift in Sources */,
 				D224216E2C8A3E2D00E8B480 /* PolicyModel.swift in Sources */,
 				D2D7C0DB2C282B5600C85A85 /* LandAPI.swift in Sources */,
-				D208A7B72CA16577007040E7 /* ShopBenefitsDTO.swift in Sources */,
+				D208A7B72CA16577007040E7 /* ShopBenefitsDto.swift in Sources */,
 				D20AB9472C552E68006BC684 /* NetworkService.swift in Sources */,
 				D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */,
 				833D9C452C70672C00982145 /* NoticeListService.swift in Sources */,
 				7CA60D652F6619B7007C08C1 /* DefaultCallVanRepository.swift in Sources */,
-				D2D462602D63A81500C60864 /* ChatRoomDTO.swift in Sources */,
+				D2D462602D63A81500C60864 /* ChatRoomDto.swift in Sources */,
 				D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */,
 				7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */,
 				831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */,
@@ -5915,7 +5915,7 @@
 				D224217E2C8AA0F300E8B480 /* CheckPasswordUseCase.swift in Sources */,
 				83DD0DEC2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift in Sources */,
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
-				D27DD0F62BA614400081FD36 /* LandDetailDTO.swift in Sources */,
+				D27DD0F62BA614400081FD36 /* LandDetailDto.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
 				7C58FE962F5FC80F00A2737B /* FetchCallVanDataUseCase.swift in Sources */,
 				7C61D3552F22FC7B005FAC3A /* EditLostItemUseCase.swift in Sources */,
@@ -5927,30 +5927,30 @@
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
 				D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */,
 				7C0C18A32F68FD3D001781B3 /* CallVanSummaryDto.swift in Sources */,
-				D2D4225D2BAAEE0900A8AF04 /* DeptDTO.swift in Sources */,
-				D2D380FB2BA73162009AD5A9 /* TokenDTO.swift in Sources */,
+				D2D4225D2BAAEE0900A8AF04 /* DeptDto.swift in Sources */,
+				D2D380FB2BA73162009AD5A9 /* TokenDto.swift in Sources */,
 				83E770BA2CFB5BB500EB3F84 /* ShuttleRouteType.swift in Sources */,
 				83DD0D822C4FA6F300278ABD /* BusAPI.swift in Sources */,
 				7CA60D732F66218C007C08C1 /* CallVanListDto.swift in Sources */,
 				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
-				833D9C282C6B58ED00982145 /* NoticeKeywordDTO.swift in Sources */,
+				833D9C282C6B58ED00982145 /* NoticeKeywordDto.swift in Sources */,
 				83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */,
 				B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */,
 				7C61D3532F22E686005FAC3A /* DeleteLostItemUseCase.swift in Sources */,
 				8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */,
 				7C8A94462FD50E8400DEA6F5 /* String+byCharWrapping.swift in Sources */,
-				83E96DB82BBC6FBF00164914 /* BusSearchDTO.swift in Sources */,
+				83E96DB82BBC6FBF00164914 /* BusSearchDto.swift in Sources */,
 				7CC42B0E2F56AB7900940CE1 /* CallVanListViewController.swift in Sources */,
 				835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */,
 				7CB11C132FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift in Sources */,
 				7CB11C782FB32656004E0C80 /* SubscribeKeywordRequest.swift in Sources */,
 				836242362BD9522400845499 /* FirebaseLog.swift in Sources */,
-				83DD0DEA2C57486400278ABD /* CityBusTimetableDTO.swift in Sources */,
+				83DD0DEA2C57486400278ABD /* CityBusTimetableDto.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */,
-				D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDTO.swift in Sources */,
+				D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDto.swift in Sources */,
 				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
 				7C8A942F2FD2C15400DEA6F5 /* ShopEventCountDto.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
@@ -5965,8 +5965,8 @@
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
 				7C65FDC32FE69262007831CE /* NewBannerViewController.swift in Sources */,
 				7C65FDC72FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift in Sources */,
-				D223D6192D9C0EFC00C29BE6 /* BannerDTO.swift in Sources */,
-				833D9C222C6B4F6E00982145 /* NoticeListDTO.swift in Sources */,
+				D223D6192D9C0EFC00C29BE6 /* BannerDto.swift in Sources */,
+				833D9C222C6B4F6E00982145 /* NoticeListDto.swift in Sources */,
 				7C372F1E2F1CD8FB00149729 /* LostItemDataHeaderView.swift in Sources */,
 				835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */,
 				83DD0D862C4FA84900278ABD /* BusService.swift in Sources */,
@@ -6150,8 +6150,8 @@
 				7C8A000B2FD200000011D338 /* DiningMenuCard.swift in Sources */,
 				7C8A000D2FD200000011D338 /* EmptyDiningCard.swift in Sources */,
 				7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */,
-				7C457B2C2FCE1BA80011D338 /* HomeTabBarController.swift in Sources */,
-				7C457B2D2FCE1BA80011D338 /* HomeTabBarViewModel.swift in Sources */,
+				7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */,
+				7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */,
 				7C457B2F2FCE1BA80011D338 /* HomeTabBar.swift in Sources */,
 				7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */,
 				7C8BFCEC2FD04BA000963679 /* FetchHeaderUseCase.swift in Sources */,
@@ -6445,7 +6445,7 @@
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
 				F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */,
 				F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */,
-				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDTO.swift in Sources */,
+				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDto.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */,
 				7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */,
@@ -6462,7 +6462,7 @@
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				7CB11C0C2FB198A6004E0C80 /* LostItemKeywordCollectionViewKeywordCell.swift in Sources */,
 				7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */,
-				D2B7EBC62D37C5F000EE46B0 /* LostArticleDTO.swift in Sources */,
+				D2B7EBC62D37C5F000EE46B0 /* LostArticleDto.swift in Sources */,
 				833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */,
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
@@ -6476,7 +6476,7 @@
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponseDto.swift in Sources */,
 				D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */,
 				D2FB23512BFD47A40098BA2B /* FetchEventListUseCase.swift in Sources */,
-				83E770F42D04A21500EB3F84 /* ShuttleRouteDTO.swift in Sources */,
+				83E770F42D04A21500EB3F84 /* ShuttleRouteDto.swift in Sources */,
 				B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */,
 				D2908D3E2BBD1E190008F908 /* TimetableRequest.swift in Sources */,
 				D208A7D32CAD7436007040E7 /* DefaultAbTestRepository.swift in Sources */,
@@ -6487,7 +6487,7 @@
 				7C8BFCE42FD04B8000963679 /* NotificationItem.swift in Sources */,
 				7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */,
 				7C8BFCF12FD04B800963679 /* HomeCounts.swift in Sources */,
-				D2908D262BB8D11A0008F908 /* SemesterDTO.swift in Sources */,
+				D2908D262BB8D11A0008F908 /* SemesterDto.swift in Sources */,
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				7CA60D672F6619F4007C08C1 /* CallVanService.swift in Sources */,
 				7CC42B8F2F5DCE7400940CE1 /* CallVanChatViewController.swift in Sources */,
@@ -6497,7 +6497,7 @@
 				D208A7CF2CABB85B007040E7 /* DefaultCoreRepository.swift in Sources */,
 				83DD0DB92C5378E600278ABD /* SearchBusInfoResult.swift in Sources */,
 				7C58FE922F5FAC0100A2737B /* CallVanDataView.swift in Sources */,
-				D27DD0CA2BA608310081FD36 /* DiningDTO.swift in Sources */,
+				D27DD0CA2BA608310081FD36 /* DiningDto.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
 				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
 				7C016574300BD8AF0013DD7B /* FetchDepartmentCategoryUseCase.swift in Sources */,
@@ -6520,9 +6520,9 @@
 				D2DA83912C181A1400A2F156 /* FetchShopDataUseCase.swift in Sources */,
 				7CD411EA2FEB92280079467B /* HomeTabBarItem.swift in Sources */,
 				D208A7AC2CA112D0007040E7 /* AssignAbTestResponse.swift in Sources */,
-				D2D462732D63CACC00C60864 /* ChatDetailDTO.swift in Sources */,
+				D2D462732D63CACC00C60864 /* ChatDetailDto.swift in Sources */,
 				D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */,
-				D215724E2CEDBEC60061E725 /* FrameDTO.swift in Sources */,
+				D215724E2CEDBEC60061E725 /* FrameDto.swift in Sources */,
 				83DD0D842C4FA7FF00278ABD /* DefaultBusRepository.swift in Sources */,
 				7C16AA392F3E9FBC0071ABE6 /* ErrorViewController.swift in Sources */,
 				7CF77B6B30056ED4003642C1 /* NoticeKeywordAddButton.swift in Sources */,
@@ -6532,21 +6532,21 @@
 				D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */,
 				7CA6868B2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift in Sources */,
 				D27A5D9A2C6B97D200C4275F /* InsetLabel.swift in Sources */,
-				8380FDC32BC1CBB800120036 /* BusCourseDTO.swift in Sources */,
+				8380FDC32BC1CBB800120036 /* BusCourseDto.swift in Sources */,
 				83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */,
 				7C372F242F1CDB4400149729 /* LostItemDataContentView.swift in Sources */,
 				D2D4626E2D63BD1400C60864 /* DefaultChatRepository.swift in Sources */,
 				D2D462752D63CB3E00C60864 /* FetchChatDetailUseCase.swift in Sources */,
 				83DD0DBF2C55258200278ABD /* FetchShuttleBusRoutesUseCase.swift in Sources */,
-				D2078BF62BC4CCEB00A39861 /* EventDTO.swift in Sources */,
+				D2078BF62BC4CCEB00A39861 /* EventDto.swift in Sources */,
 				D20AD6F32E029F7F0067760A /* SendVerificationEmailUseCase.swift in Sources */,
 				D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */,
 				B4B3EB262E6E7CAD00F8A23A /* OrderShopMenus.swift in Sources */,
 				7C17EEB02EBF708B008BCA89 /* ShopSearchDto.swift in Sources */,
 				D891F25F2E45DC9D006D1F41 /* TrackPaddedSlider.swift in Sources */,
 				D21572522CEDC1720061E725 /* FetchFrameUseCase.swift in Sources */,
-				D2908D282BB8D1580008F908 /* LectureDTO.swift in Sources */,
-				D2908D2C2BB9D4150008F908 /* TimetablesDTO.swift in Sources */,
+				D2908D282BB8D1580008F908 /* LectureDto.swift in Sources */,
+				D2908D2C2BB9D4150008F908 /* TimetablesDto.swift in Sources */,
 				7CA63A2A2F1AF80B00226F86 /* LostItemListTableView.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,
@@ -6571,7 +6571,7 @@
 				7C8ADD332F20BEC200F85BDE /* LostItemService.swift in Sources */,
 				7C8A94372FD2C42D00DEA6F5 /* ShopCount.swift in Sources */,
 				7C58FE8E2F5FA4D200A2737B /* CallVanDataTableView.swift in Sources */,
-				B46B8CC62E76CEAF00A8E797 /* ShopImageDTO.swift in Sources */,
+				B46B8CC62E76CEAF00A8E797 /* ShopImageDto.swift in Sources */,
 				7C58FEAD2F6020AD00A2737B /* CallVanReportImagesCollectionViewCell.swift in Sources */,
 				7C016548300AA1520013DD7B /* DepartmentCategoryViewModel.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
@@ -6626,19 +6626,19 @@
 				D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */,
 				D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */,
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
-				D27DD0D82BA6089D0081FD36 /* LandDTO.swift in Sources */,
+				D27DD0D82BA6089D0081FD36 /* LandDto.swift in Sources */,
 				7C8A94392FD2C45200DEA6F5 /* ShopCountDto.swift in Sources */,
 				7C58FEA02F5FE4C900A2737B /* CallVanReportReasonButton.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
 				7C8ADD452F20C3FB00F85BDE /* FetchLostItemListUseCase.swift in Sources */,
 				B68D2CE72EA505B000F3B479 /* ToastMessageView.swift in Sources */,
 				D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */,
-				83E770FA2D05B5EC00EB3F84 /* BusNoticeDTO.swift in Sources */,
+				83E770FA2D05B5EC00EB3F84 /* BusNoticeDto.swift in Sources */,
 				D2FB23742C0432CD0098BA2B /* GA4AnalyticsRepository.swift in Sources */,
 				83DD0DBD2C551FDB00278ABD /* FetchBusTimetableRequest.swift in Sources */,
 				D20AD6F12E029B560067760A /* SendVerificationEmailRequest.swift in Sources */,
 				D20AB9432C550751006BC684 /* ModifyUseCase.swift in Sources */,
-				D2BD36942BA9EE7A00FAE609 /* UserDTO.swift in Sources */,
+				D2BD36942BA9EE7A00FAE609 /* UserDto.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,
 				7CB11C212FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift in Sources */,
 				D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */,
@@ -6646,7 +6646,7 @@
 				D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,
 				7CA686692FFC3242007937E9 /* NotificationHistoryRepository.swift in Sources */,
-				D874DB512DBF200C0098EED0 /* SendVerificationCodeDTO.swift in Sources */,
+				D874DB512DBF200C0098EED0 /* SendVerificationCodeDto.swift in Sources */,
 				7CC42B1E2F56F3B200940CE1 /* CallVanButton.swift in Sources */,
 				7C61D33E2F21FADF005FAC3A /* EditLostItemViewController.swift in Sources */,
 				D20AD7052E0367E00067760A /* ResetPasswordSmsRequest.swift in Sources */,
