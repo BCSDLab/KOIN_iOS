@@ -102,7 +102,7 @@ final class ShopSummaryTableViewCell: UITableViewCell {
             thumbnailImageView.isUserInteractionEnabled = true
             thumbnailImageView.loadImageWithSpinner(from: url)
             stackView.snp.updateConstraints {
-                $0.trailing.equalToSuperview().offset(-(12+88+12))
+                $0.trailing.equalToSuperview().offset(-112)
             }
         } else {
             thumbnailImageUrl = nil
