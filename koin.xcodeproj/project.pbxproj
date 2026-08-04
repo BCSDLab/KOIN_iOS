@@ -4793,11 +4793,8 @@
 		D249CD242C12DC16000813F9 /* Dining */ = {
 			isa = PBXGroup;
 			children = (
-				D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */,
-				D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */,
-				D249CD3C2C159350000813F9 /* DateProvider.swift */,
-				D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */,
-				D20AB9622C554B4E006BC684 /* DiningLikeUseCase.swift */,
+				EC35BBB630221F2D00DE3C84 /* Dining */,
+				EC35BBB530221F1800DE3C84 /* DiningNotice */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -5468,6 +5465,25 @@
 				7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */,
 			);
 			path = Order;
+			sourceTree = "<group>";
+		};
+		EC35BBB530221F1800DE3C84 /* DiningNotice */ = {
+			isa = PBXGroup;
+			children = (
+				D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */,
+			);
+			path = DiningNotice;
+			sourceTree = "<group>";
+		};
+		EC35BBB630221F2D00DE3C84 /* Dining */ = {
+			isa = PBXGroup;
+			children = (
+				D249CD3C2C159350000813F9 /* DateProvider.swift */,
+				D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */,
+				D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */,
+				D20AB9622C554B4E006BC684 /* DiningLikeUseCase.swift */,
+			);
+			path = Dining;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
