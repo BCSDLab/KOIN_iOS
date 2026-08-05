@@ -91,7 +91,6 @@ final class DiningViewModel: ViewModelProtocol {
 }
 
 extension DiningViewModel {
-
     private func fetchNotiList() {
         fetchNotiListUseCase.execute().sink(
             receiveCompletion: { _ in },
