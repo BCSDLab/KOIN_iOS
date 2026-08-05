@@ -292,7 +292,6 @@ extension NotificationViewController {
         let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let diningLikeUseCase = DefaultDiningLikeUseCase(diningRepository: diningRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let dateProvider = DefaultDateProvider()
         let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
@@ -304,7 +303,6 @@ extension NotificationViewController {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             dateProvder: dateProvider,
             shareMenuListUseCase: shareMenuListUseCase,
-            diningLikeUseCase: diningLikeUseCase,
             changeNotiUseCase: changeNotiUseCase,
             fetchNotiListUsecase: fetchNotiListUseCase,
             changeNotiDetailUseCase: changeNotiDetailUseCase

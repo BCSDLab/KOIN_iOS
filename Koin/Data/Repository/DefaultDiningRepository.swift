@@ -24,10 +24,6 @@ final class DefaultDiningRepository: DiningRepository {
         return diningService.fetchCoopShopList()
     }
     
-    func diningLike(requestModel: DiningLikeRequest, isLiked: Bool) -> AnyPublisher<Void, ErrorResponse> {
-        return diningService.diningLike(requestModel: requestModel, isLiked: isLiked)
-    }
-    
     func shareMenuList(shareModel: ShareDiningMenu) {
         shareService.shareMenuList(shareModel: shareModel)
     }

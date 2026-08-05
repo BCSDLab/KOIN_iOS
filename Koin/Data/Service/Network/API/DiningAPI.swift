@@ -11,7 +11,6 @@ import Alamofire
 enum DiningAPI {
     case fetchDiningList(FetchDiningListRequest)
     case fetchCoopShopList
-    case diningLike(DiningLikeRequest, Bool)
 }
 
 extension DiningAPI: Router, URLRequestConvertible {
@@ -24,7 +23,6 @@ extension DiningAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchDiningList: return "/dinings"
         case .fetchCoopShopList: return "/coopshop/1"
-        case let .diningLike(_, isLiked): return isLiked ? "/dining/like/cancel" : "/dining/like"
         }
     }
     
@@ -32,8 +30,6 @@ extension DiningAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchDiningList, .fetchCoopShopList:
             return .get
-        case .diningLike:
-            return .patch
         }
     }
     
@@ -45,7 +41,6 @@ extension DiningAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchDiningList(let request): return try? request.toDictionary()
         case .fetchCoopShopList: return nil
-        case let .diningLike(request, _): return try? request.toDictionary()
         }
     }
     
@@ -53,8 +48,6 @@ extension DiningAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchDiningList, .fetchCoopShopList:
             return URLEncoding.default
-        case .diningLike:
-            return URLEncoding.queryString
         }
     }
 }
