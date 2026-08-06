@@ -19,10 +19,6 @@ final class DiningViewController: UIViewController {
     private let refreshControl = UIRefreshControl()
     private var viewDidAppeared = false
     
-    // FIXME: - AB 테스트 식단 세션 아이디 프로퍼티
-    private var customSessionId: String?
-    private var isHidingBySwipe = false
-    
     // MARK: - UI Components
     
     private let dateCalendarCollectionView: CalendarCollectionView = {
@@ -97,29 +93,6 @@ final class DiningViewController: UIViewController {
     private let diningLikeLoginModalViewController = ModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "더 맛있는 학식을 먹는 방법,\n로그인하고 좋아요를 남겨주세요!", subTitle: "여러분의 좋아요가 영양사님이 더 나은,\n식단을 제공할 수 있도록 도와줍니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray)).then {
         $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
-    }
-    
-    private func configureSwipeGestures() {
-        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        swipeLeftGesture.direction = .left
-        diningListCollectionView.addGestureRecognizer(swipeLeftGesture)
-        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        swipeRightGesture.direction = .right
-        diningListCollectionView.addGestureRecognizer(swipeRightGesture)
-    }
-    
-    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        let currentSegmentIndex = diningTypeSegmentControl.selectedSegmentIndex
-        if gesture.direction == .left {
-            if currentSegmentIndex < diningTypeSegmentControl.numberOfSegments - 1 {
-                diningTypeSegmentControl.selectedSegmentIndex = currentSegmentIndex + 1
-            }
-        } else if gesture.direction == .right {
-            if currentSegmentIndex > 0 {
-                diningTypeSegmentControl.selectedSegmentIndex = currentSegmentIndex - 1
-            }
-        }
-        segmentDidChange(diningTypeSegmentControl)
     }
     
     // MARK: - Initialization
@@ -256,7 +229,31 @@ final class DiningViewController: UIViewController {
     }
 }
 
+// MARK: - Functions
+
 extension DiningViewController {
+    private func configureSwipeGestures() {
+        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeLeftGesture.direction = .left
+        diningListCollectionView.addGestureRecognizer(swipeLeftGesture)
+        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
+        swipeRightGesture.direction = .right
+        diningListCollectionView.addGestureRecognizer(swipeRightGesture)
+    }
+    
+    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        let currentSegmentIndex = diningTypeSegmentControl.selectedSegmentIndex
+        if gesture.direction == .left {
+            if currentSegmentIndex < diningTypeSegmentControl.numberOfSegments - 1 {
+                diningTypeSegmentControl.selectedSegmentIndex = currentSegmentIndex + 1
+            }
+        } else if gesture.direction == .right {
+            if currentSegmentIndex > 0 {
+                diningTypeSegmentControl.selectedSegmentIndex = currentSegmentIndex - 1
+            }
+        }
+        segmentDidChange(diningTypeSegmentControl)
+    }
     
     @objc private func refresh() {
         switch diningTypeSegmentControl.selectedSegmentIndex {
@@ -359,14 +356,25 @@ extension DiningViewController {
     }
 }
 
+// MARK: - UI Functions
+
 extension DiningViewController {
-    
     private func setUpLayOuts() {
-        [dateCalendarCollectionView, diningListCollectionView, warningLabel, warningImageView, stackView, tabBarView].forEach {
+        [
+            dateCalendarCollectionView,
+            diningListCollectionView,
+            warningLabel,
+            warningImageView,
+            stackView,
+            tabBarView
+        ].forEach {
             view.addSubview($0)
         }
 
-        [diningTypeSegmentControl, underlineView].forEach {
+        [
+            diningTypeSegmentControl,
+            underlineView
+        ].forEach {
             tabBarView.addSubview($0)
         }
         
@@ -381,37 +389,44 @@ extension DiningViewController {
             $0.top.equalTo(dateCalendarCollectionView.snp.bottom)
             $0.height.equalTo(45)
         }
+        
         stackView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(tabBarView.snp.bottom)
             $0.height.equalTo(1)
         }
+        
         warningImageView.snp.makeConstraints {
             $0.centerX.centerY.equalToSuperview()
             $0.height.equalTo(52)
             $0.width.equalTo(52)
         }
+        
         warningLabel.snp.makeConstraints {
             $0.top.equalTo(warningImageView.snp.bottom).offset(8.28)
             $0.centerX.equalToSuperview()
         }
+        
         dateCalendarCollectionView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.equalTo(24)
             $0.trailing.equalTo(24)
             $0.height.equalTo(99)
         }
+        
         diningTypeSegmentControl.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(43)
         }
+        
         underlineView.snp.makeConstraints {
             $0.leading.equalToSuperview()
             $0.trailing.equalToSuperview().dividedBy(diningTypeSegmentControl.numberOfSegments)
             $0.top.equalTo(diningTypeSegmentControl.snp.bottom)
             $0.height.equalTo(2)
         }
+        
         diningListCollectionView.snp.makeConstraints {
             $0.top.equalTo(tabBarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
