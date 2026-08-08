@@ -31,6 +31,8 @@
   - UI(View) / 비즈니스 로직(ViewModel) / 데이터 계층(Model) 분리.  
   - 의존성 역전을 통해 유지보수성과 테스트 용이성 확보.
   - Presentation, Domain, Data 영역으로 구분
+### 🧪 테스트 코드
+- Swift Testing
 ### 📦 의존성 관리
 - SPM
   - Alamofire, Firebase 등 서드파티 라이브러리 관리.  
@@ -157,9 +159,7 @@ Koin
 │
 ├── NotificationService             # 알림 확장 서비스
 │
-├── koinUITests                     # UI 테스트 모듈
-│   ├── koinUITests.swift
-│   └── koinUITestsLaunchTests.swift
+├── koinUnitTests                   # Unit 테스트 모듈
 │
 ├── Products                        # Xcode 기본 Products
 └── Frameworks                      # 외부 프레임워크
@@ -172,13 +172,13 @@ Koin
 | <img src="https://avatars.githubusercontent.com/u/118811606?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/74389635?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/139556438?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/183201303?v=4" width="130"> | <img src="https://avatars.githubusercontent.com/u/202774410?v=4" width="130"> |
 | :--: | :--: | :--: | :--: | :--: |
 | [나훈](https://github.com/KimNahun) | [민경](https://github.com/Ju-Min-Kyung) | [은지](https://github.com/oeunji) | [기정](https://github.com/hgjwilly-koreatech) | [성민](https://github.com/xp65241) |
-| 2024.3 ~ 2025.5 | 2024.4 ~ 2024.12 | 2025.3 ~ 2025.12 | 2025.9 ~ ing | 2025.9 ~ 2026.02 |
-   
+| 2024.3 ~ 2025.5 | 2024.4 ~ 2024.12 | 2025.3 ~ 2025.12<br>2026.08 ~ ing | 2025.9 ~ ing | 2025.9 ~ 2026.02 |
+
 --- 
 
 > [!TIP]   
 > #### BCSD 동아리 정보와 App 설치는 아래에서 확인할 수 있습니다.   
 > 📝 [BCSD 블로그](https://blog.bcsdlab.com/introduce)   
 > 🤖 [Koin App(Android) 설치하기](https://play.google.com/store/apps/details?id=in.koreatech.koin&hl=ko)   
-> 🍎 [Koin App(IOS) 설치하기](https://apps.apple.com/bh/app/%EC%BD%94%EC%9D%B8-koreatech-in-%ED%95%9C%EA%B8%B0%EB%8C%80-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0/id1500848622)   
+> 🍎 [Koin App(iOS) 설치하기](https://apps.apple.com/bh/app/%EC%BD%94%EC%9D%B8-koreatech-in-%ED%95%9C%EA%B8%B0%EB%8C%80-%EC%BB%A4%EB%AE%A4%EB%8B%88%ED%8B%B0/id1500848622)   
 > 👉 [Koin Web 바로가기](https://koreatech.in/)
