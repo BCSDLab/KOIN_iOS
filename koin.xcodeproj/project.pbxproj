@@ -975,7 +975,6 @@
 		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
 		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
 		D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
-		D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */; };
 		D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */; };
 		D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939762DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift */; };
@@ -996,7 +995,6 @@
 		D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8B4E0032DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift */; };
 		D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */; };
 		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
-		D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
@@ -1009,13 +1007,6 @@
 			proxyType = 1;
 			remoteGlobalIDString = 839D71152BEB1570001BC7F7;
 			remoteInfo = NotificationService;
-		};
-		A001E2C52845091F00D6C310 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = A001E2AC2845091D00D6C310 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = A001E2B32845091D00D6C310;
-			remoteInfo = koin;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -1740,7 +1731,6 @@
 		83EBB8792D0FDFD700346018 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
 		A001E2B42845091D00D6C310 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A001E2C42845091F00D6C310 /* koinTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B438AEE32E756AB600E889C4 /* OrderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderImage.swift; sourceTree = "<group>"; };
 		B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDto.swift; sourceTree = "<group>"; };
 		B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopSummaryFromShopUseCase.swift; sourceTree = "<group>"; };
@@ -2043,13 +2033,6 @@
 				7CB061AD2F321C7800E83CA9 /* KakaoSDKShare in Frameworks */,
 				7CB0619C2F321A5300E83CA9 /* FirebaseAnalytics in Frameworks */,
 				7CB061932F32100900E83CA9 /* Alamofire in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A001E2C12845091F00D6C310 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4536,7 +4519,6 @@
 			isa = PBXGroup;
 			children = (
 				A001E2B42845091D00D6C310 /* koin.app */,
-				A001E2C42845091F00D6C310 /* koinTests.xctest */,
 				839D71162BEB1570001BC7F7 /* NotificationService.appex */,
 			);
 			name = Products;
@@ -5490,24 +5472,6 @@
 			productReference = A001E2B42845091D00D6C310 /* koin.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A001E2C32845091F00D6C310 /* koinTests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A001E2DB2845091F00D6C310 /* Build configuration list for PBXNativeTarget "koinTests" */;
-			buildPhases = (
-				A001E2C02845091F00D6C310 /* Sources */,
-				A001E2C12845091F00D6C310 /* Frameworks */,
-				A001E2C22845091F00D6C310 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A001E2C62845091F00D6C310 /* PBXTargetDependency */,
-			);
-			name = koinTests;
-			productName = koinTests;
-			productReference = A001E2C42845091F00D6C310 /* koinTests.xctest */;
-			productType = "com.apple.product-type.bundle.unit-test";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -5563,7 +5527,6 @@
 			projectRoot = "";
 			targets = (
 				A001E2B32845091D00D6C310 /* koin */,
-				A001E2C32845091F00D6C310 /* koinTests */,
 				839D71152BEB1570001BC7F7 /* NotificationService */,
 			);
 		};
@@ -5596,15 +5559,6 @@
 				B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */,
 				D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */,
 				7C50F8DC300FC03B00A87BAE /* AppIcon.icon in Resources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A001E2C22845091F00D6C310 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */,
-				D8F5C5552E6F144300FB6708 /* floatingLogo.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6606,13 +6560,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A001E2C02845091F00D6C310 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -6620,11 +6567,6 @@
 			isa = PBXTargetDependency;
 			target = 839D71152BEB1570001BC7F7 /* NotificationService */;
 			targetProxy = 839D711B2BEB1570001BC7F7 /* PBXContainerItemProxy */;
-		};
-		A001E2C62845091F00D6C310 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = A001E2B32845091D00D6C310 /* koin */;
-			targetProxy = A001E2C52845091F00D6C310 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -6884,46 +6826,6 @@
 			};
 			name = Release;
 		};
-		A001E2DC2845091F00D6C310 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K626UYGR25;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "코인(stage)";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koinTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/koin.app/koin";
-			};
-			name = Debug;
-		};
-		A001E2DD2845091F00D6C310 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = K626UYGR25;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "코인(stage)";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.4;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.bcsdlab.koinTests;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/koin.app/koin";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -6950,15 +6852,6 @@
 			buildConfigurations = (
 				A001E2D92845091F00D6C310 /* Debug */,
 				A001E2DA2845091F00D6C310 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A001E2DB2845091F00D6C310 /* Build configuration list for PBXNativeTarget "koinTests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A001E2DC2845091F00D6C310 /* Debug */,
-				A001E2DD2845091F00D6C310 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
