@@ -67,7 +67,6 @@ struct DateProviderTests {
         #expect(result.diningType == .dinner)
     }
 
-    /// 18:31과 23:59는 "다음 날 breakfast"라는 동일한 결과를 기대하므로 매개변수화한다.
     @Test("18:30 이후면 다음 날 breakfast를 반환한다", arguments: [(18, 31), (23, 59)])
     func 열여덟시_삼십분_이후면_다음_날_breakfast를_반환한다(hour: Int, minute: Int) throws {
         let input = try date(hour: hour, minute: minute)

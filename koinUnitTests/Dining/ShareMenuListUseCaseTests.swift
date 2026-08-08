@@ -38,8 +38,6 @@ struct ShareMenuListUseCaseTests {
         #expect(shareModel.date == "260803")
     }
 
-    /// `DateFormatter`는 구분자가 달라도 관대하게 파싱하기 때문에 "2026/08/03"은 fallback 경로를 타지 않는다.
-    /// (실제로 "260803"으로 변환된다.) 그래서 파싱이 확실히 실패하는 입력만 검증한다.
     @Test(
         "날짜 변환에 실패하면 원본 문자열을 사용한다",
         arguments: ["", "날짜없음", "2026-13-45"]
