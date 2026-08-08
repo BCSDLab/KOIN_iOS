@@ -997,6 +997,12 @@
 		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		EC692290302700E800EE26ED /* koinUnitTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = EC69228E302700E800EE26ED /* koinUnitTests.swift */; };
+		AA20000000000000000001 /* PublisherTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* PublisherTestSupport.swift */; };
+		AA20000000000000000002 /* DiningFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000002 /* DiningFixtures.swift */; };
+		AA20000000000000000003 /* SpyDiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000003 /* SpyDiningRepository.swift */; };
+		AA20000000000000000004 /* DateProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000004 /* DateProviderTests.swift */; };
+		AA20000000000000000005 /* FetchDiningListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000005 /* FetchDiningListUseCaseTests.swift */; };
+		AA20000000000000000006 /* ShareMenuListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000006 /* ShareMenuListUseCaseTests.swift */; };
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
@@ -2011,6 +2017,12 @@
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		EC692285302700A400EE26ED /* koinUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		EC69228E302700E800EE26ED /* koinUnitTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = koinUnitTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000001 /* PublisherTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherTestSupport.swift; sourceTree = "<group>"; };
+		AA10000000000000000002 /* DiningFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningFixtures.swift; sourceTree = "<group>"; };
+		AA10000000000000000003 /* SpyDiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyDiningRepository.swift; sourceTree = "<group>"; };
+		AA10000000000000000004 /* DateProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateProviderTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000005 /* FetchDiningListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListUseCaseTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000006 /* ShareMenuListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCaseTests.swift; sourceTree = "<group>"; };
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -5454,9 +5466,39 @@
 		EC69228F302700E800EE26ED /* koinUnitTests */ = {
 			isa = PBXGroup;
 			children = (
+				AA30000000000000000001 /* Support */,
+				AA30000000000000000002 /* Doubles */,
+				AA30000000000000000003 /* Dining */,
 				EC69228E302700E800EE26ED /* koinUnitTests.swift */,
 			);
 			path = koinUnitTests;
+			sourceTree = "<group>";
+		};
+		AA30000000000000000001 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				AA10000000000000000001 /* PublisherTestSupport.swift */,
+				AA10000000000000000002 /* DiningFixtures.swift */,
+			);
+			path = Support;
+			sourceTree = "<group>";
+		};
+		AA30000000000000000002 /* Doubles */ = {
+			isa = PBXGroup;
+			children = (
+				AA10000000000000000003 /* SpyDiningRepository.swift */,
+			);
+			path = Doubles;
+			sourceTree = "<group>";
+		};
+		AA30000000000000000003 /* Dining */ = {
+			isa = PBXGroup;
+			children = (
+				AA10000000000000000004 /* DateProviderTests.swift */,
+				AA10000000000000000005 /* FetchDiningListUseCaseTests.swift */,
+				AA10000000000000000006 /* ShareMenuListUseCaseTests.swift */,
+			);
+			path = Dining;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -6616,6 +6658,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				EC692290302700E800EE26ED /* koinUnitTests.swift in Sources */,
+				AA20000000000000000001 /* PublisherTestSupport.swift in Sources */,
+				AA20000000000000000002 /* DiningFixtures.swift in Sources */,
+				AA20000000000000000003 /* SpyDiningRepository.swift in Sources */,
+				AA20000000000000000004 /* DateProviderTests.swift in Sources */,
+				AA20000000000000000005 /* FetchDiningListUseCaseTests.swift in Sources */,
+				AA20000000000000000006 /* ShareMenuListUseCaseTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
