@@ -40,16 +40,6 @@
                ReferencedContainer = "container:koin.xcodeproj">
             </BuildableReference>
          </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A001E2CD2845091F00D6C310"
-               BuildableName = "koinUITests.xctest"
-               BlueprintName = "koinUITests"
-               ReferencedContainer = "container:koin.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
    </TestAction>
    <LaunchAction
