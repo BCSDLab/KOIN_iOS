@@ -15,14 +15,11 @@ final class NoticeListViewModel: ViewModelProtocol {
         case changePage(Int)
         case getUserKeywordList(NoticeKeywordDto? = nil)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
-        case checkAuth
-        case checkLogin
     }
     enum Output {
         case updateBoard([NoticeArticleDto], NoticeListPages, NoticeListType)
         case updateUserKeywordList([NoticeKeywordDto], NoticeKeywordDto?)
         case showToolTip
-        case showIsLogined(Bool)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -30,12 +27,8 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
     private let fetchMyKeywordUseCase: FetchNotificationKeywordUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-    private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-    private(set) var auth: UserType = .student
     private(set) var noticeList: [NoticeArticleDto] = []
     private(set) var isLoggedIn: Bool = false
-    var fetchType: LostItemType? = nil
     private(set) var noticeListType: NoticeListType = .all {
         didSet {
             getNoticeInfo(page: 1)
@@ -65,10 +58,6 @@ final class NoticeListViewModel: ViewModelProtocol {
                 self?.getUserKeywordList(keyword: keyword)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
-            case .checkAuth:
-                self?.checkAuth()
-            case .checkLogin:
-                self?.checkLogin()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -76,25 +65,9 @@ final class NoticeListViewModel: ViewModelProtocol {
 }
 
 extension NoticeListViewModel {
-    
-    private func checkLogin() {
-        checkLoginUseCase.execute().sink { [weak self] in
-            self?.outputSubject.send(.showIsLogined($0))
-        }.store(in: &subscriptions)
-    }
-    
-    func checkAuth() {
-        
-        checkAuthUseCase.execute().sink(
-            receiveCompletion: { _ in},
-            receiveValue: { [weak self] response in
-                self?.auth = response.userType
-            }
-        ).store(in: &subscriptions)
-    }
-    
+
     private func getNoticeInfo(page: Int) {
-        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page, type: fetchType).sink(
+        fetchNoticeArticlesUseCase.execute(boardId: noticeListType.rawValue, keyWord: keyword, page: page).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] articleInfo in
                 guard let self = self else { return }

@@ -11,7 +11,6 @@ import Foundation
 protocol NoticeListRepository {
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, ErrorResponse>
     func searchNoticeArticle(requestModel: SearchNoticeArticleRequest) -> AnyPublisher<NoticeListDto, ErrorResponse>
-    func fetchLostItemArticles(requestModel: FetchLostItemsRequest) -> AnyPublisher<NoticeListDto, ErrorResponse>
     func fetchNoticeData(requestModel: FetchNoticeDataRequest) -> AnyPublisher<NoticeArticleDto, ErrorResponse>
     func fetchHotNoticeArticle() -> AnyPublisher<[NoticeArticleDto], ErrorResponse>
     func createNotificationKeyword(requestModel: NoticeKeywordDto) -> AnyPublisher<NoticeKeywordDto, ErrorResponse>
@@ -22,7 +21,5 @@ protocol NoticeListRepository {
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
     func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse>
-    func fetchLostItem(id: Int) -> AnyPublisher<LostArticleDetailDto, ErrorResponse>
-    func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
 }

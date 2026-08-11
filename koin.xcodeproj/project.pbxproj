@@ -214,6 +214,9 @@
 		7C6790B32FCC5B2A0045E163 /* TimetableColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790B22FCC5B2A0045E163 /* TimetableColorAsset.swift */; };
 		7C6790B52FCC5B460045E163 /* ImageAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790B42FCC5B460045E163 /* ImageAsset.swift */; };
 		7C6790B72FCC66D40045E163 /* TypographyModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C6790B62FCC66D40045E163 /* TypographyModifier.swift */; };
+		7C7BD71D302B2B0A003C5A15 /* AppImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7BD71C302B2B0A003C5A15 /* AppImage.swift */; };
+		7C7BD71F302B2B37003C5A15 /* PostLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7BD71E302B2B37003C5A15 /* PostLostItemUseCase.swift */; };
+		7C7BD721302B2C25003C5A15 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7BD720302B2C25003C5A15 /* ReportLostItemUseCase.swift */; };
 		7C7CCE4A2F834D4B00E3A54B /* CallVanModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */; };
 		7C7CCE702F866E9400E3A54B /* AppPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE6F2F866E9400E3A54B /* AppPath.swift */; };
 		7C7CCE722F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */; };
@@ -408,7 +411,6 @@
 		7CED90C12EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD32EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift */; };
 		7CED90C32EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCC2EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift */; };
 		7CED90C62EF2D1F900457128 /* TimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED909A2EF2D1F900457128 /* TimetableCollectionViewCell.swift */; };
-		7CED90C92EF2D1F900457128 /* ImageScrollCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6B2EF2D1F900457128 /* ImageScrollCollectionViewCell.swift */; };
 		7CED90CA2EF2D1F900457128 /* LandOptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B02EF2D1F900457128 /* LandOptionCollectionViewCell.swift */; };
 		7CED90CB2EF2D1F900457128 /* ChatListTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EF92EF2D1F900457128 /* ChatListTableViewModel.swift */; };
 		7CED90CE2EF2D1F900457128 /* ForceModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */; };
@@ -518,14 +520,12 @@
 		7CED91672EF2D1F900457128 /* DiningCollecitonFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED906F2EF2D1F900457128 /* DiningCollecitonFooterView.swift */; };
 		7CED91682EF2D1F900457128 /* PolicyListCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F1A2EF2D1F900457128 /* PolicyListCollectionViewCell.swift */; };
 		7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F5E2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift */; };
-		7CED916C2EF2D1F900457128 /* DeleteArticleModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6D2EF2D1F900457128 /* DeleteArticleModalViewController.swift */; };
 		7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90932EF2D1F900457128 /* AddDirectFooterView.swift */; };
 		7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90122EF2D1F900457128 /* DashedBorderButton.swift */; };
 		7CED91732EF2D1F900457128 /* LandOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B52EF2D1F900457128 /* LandOptionView.swift */; };
 		7CED91752EF2D1F900457128 /* ShopReviewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90222EF2D1F900457128 /* ShopReviewReportViewController.swift */; };
 		7CED91782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift */; };
 		7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCE2EF2D1F900457128 /* ShopSummaryTableView.swift */; };
-		7CED917B2EF2D1F900457128 /* WriteTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F4B2EF2D1F900457128 /* WriteTypeModalViewController.swift */; };
 		7CED917D2EF2D1F900457128 /* ReviewImageUploadCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90172EF2D1F900457128 /* ReviewImageUploadCollectionView.swift */; };
 		7CED917F2EF2D1F900457128 /* NoticeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F4D2EF2D1F900457128 /* NoticeListViewController.swift */; };
 		7CED91802EF2D1F900457128 /* ReviewLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED900C2EF2D1F900457128 /* ReviewLoginModalViewController.swift */; };
@@ -546,7 +546,6 @@
 		7CED91932EF2D1F900457128 /* ReviewListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90052EF2D1F900457128 /* ReviewListCollectionView.swift */; };
 		7CED91942EF2D1F900457128 /* DiningNoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED907C2EF2D1F900457128 /* DiningNoticeViewController.swift */; };
 		7CED91962EF2D1F900457128 /* ScoreChartCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FFF2EF2D1F900457128 /* ScoreChartCollectionView.swift */; };
-		7CED91972EF2D1F900457128 /* FetchTypeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F462EF2D1F900457128 /* FetchTypeModalViewController.swift */; };
 		7CED91982EF2D1F900457128 /* PolicyListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F1B2EF2D1F900457128 /* PolicyListTableView.swift */; };
 		7CED91992EF2D1F900457128 /* ShopSummaryPhoneButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FC62EF2D1F900457128 /* ShopSummaryPhoneButton.swift */; };
 		7CED919B2EF2D1F900457128 /* UpdateModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE12EF2D1F900457128 /* UpdateModalViewController.swift */; };
@@ -582,7 +581,6 @@
 		7CED91D52EF2D1F900457128 /* ImageDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90082EF2D1F900457128 /* ImageDropDownCell.swift */; };
 		7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE82EF2D1F900457128 /* ShopDetailViewModel.swift */; };
 		7CED91D82EF2D1F900457128 /* ClassComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908A2EF2D1F900457128 /* ClassComponentView.swift */; };
-		7CED91D92EF2D1F900457128 /* ImageScrollCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6A2EF2D1F900457128 /* ImageScrollCollectionView.swift */; };
 		7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE02EF2D1F900457128 /* ShopDetailTableViewNameCell.swift */; };
 		7CED91DF2EF2D1F900457128 /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F152EF2D1F900457128 /* NotiViewController.swift */; };
 		7CED91E32EF2D1F900457128 /* AddClassCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90962EF2D1F900457128 /* AddClassCollectionViewCell.swift */; };
@@ -905,11 +903,7 @@
 		D2B2193B2D66626900EAF5B1 /* ChatHistoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */; };
 		D2B2193D2D66828300EAF5B1 /* WebSocketManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */; };
 		D2B2193F2D66DDF900EAF5B1 /* ChatDateInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193E2D66DDF900EAF5B1 /* ChatDateInfo.swift */; };
-		D2B7EBC62D37C5F000EE46B0 /* LostArticleDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC52D37C5F000EE46B0 /* LostArticleDto.swift */; };
-		D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDto.swift */; };
 		D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */; };
-		D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */; };
-		D2B7EBD02D37E3CE00EE46B0 /* FetchLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */; };
 		D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */; };
 		D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */; };
 		D2BD36942BA9EE7A00FAE609 /* UserDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2BD36932BA9EE7A00FAE609 /* UserDto.swift */; };
@@ -972,8 +966,6 @@
 		D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */; };
 		D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */; };
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
-		D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */; };
-		D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */; };
 		D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D80AD4E52E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D80AD4E62E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
@@ -1250,6 +1242,9 @@
 		7C6790B22FCC5B2A0045E163 /* TimetableColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableColorAsset.swift; sourceTree = "<group>"; };
 		7C6790B42FCC5B460045E163 /* ImageAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAsset.swift; sourceTree = "<group>"; };
 		7C6790B62FCC66D40045E163 /* TypographyModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypographyModifier.swift; sourceTree = "<group>"; };
+		7C7BD71C302B2B0A003C5A15 /* AppImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImage.swift; sourceTree = "<group>"; };
+		7C7BD71E302B2B37003C5A15 /* PostLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemUseCase.swift; sourceTree = "<group>"; };
+		7C7BD720302B2C25003C5A15 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
 		7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanModalViewController.swift; sourceTree = "<group>"; };
 		7C7CCE6F2F866E9400E3A54B /* AppPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPath.swift; sourceTree = "<group>"; };
 		7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanRestrictionUseCase.swift; sourceTree = "<group>"; };
@@ -1486,8 +1481,6 @@
 		7CED8F432EF2D1F900457128 /* NoticeListTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewFooter.swift; sourceTree = "<group>"; };
 		7CED8F442EF2D1F900457128 /* NoticeListSearchTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListSearchTableViewFooter.swift; sourceTree = "<group>"; };
 		7CED8F452EF2D1F900457128 /* NoticeListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListHeaderView.swift; sourceTree = "<group>"; };
-		7CED8F462EF2D1F900457128 /* FetchTypeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchTypeModalViewController.swift; sourceTree = "<group>"; };
-		7CED8F4B2EF2D1F900457128 /* WriteTypeModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WriteTypeModalViewController.swift; sourceTree = "<group>"; };
 		7CED8F4D2EF2D1F900457128 /* NoticeListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewController.swift; sourceTree = "<group>"; };
 		7CED8F4E2EF2D1F900457128 /* NoticeListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListViewModel.swift; sourceTree = "<group>"; };
 		7CED8F502EF2D1F900457128 /* RecommendedSearchCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecommendedSearchCollectionView.swift; sourceTree = "<group>"; };
@@ -1506,9 +1499,6 @@
 		7CED8F652EF2D1F900457128 /* HotArticlesNoticeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HotArticlesNoticeTableViewCell.swift; sourceTree = "<group>"; };
 		7CED8F672EF2D1F900457128 /* NoticeAttachmentsTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeAttachmentsTableView.swift; sourceTree = "<group>"; };
 		7CED8F682EF2D1F900457128 /* NoticeAttachmentsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeAttachmentsTableViewCell.swift; sourceTree = "<group>"; };
-		7CED8F6A2EF2D1F900457128 /* ImageScrollCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollCollectionView.swift; sourceTree = "<group>"; };
-		7CED8F6B2EF2D1F900457128 /* ImageScrollCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageScrollCollectionViewCell.swift; sourceTree = "<group>"; };
-		7CED8F6D2EF2D1F900457128 /* DeleteArticleModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteArticleModalViewController.swift; sourceTree = "<group>"; };
 		7CED8F6F2EF2D1F900457128 /* NoticeDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataViewController.swift; sourceTree = "<group>"; };
 		7CED8F702EF2D1F900457128 /* NoticeDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeDataViewModel.swift; sourceTree = "<group>"; };
 		7CED8FAA2EF2D1F900457128 /* CategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1931,11 +1921,7 @@
 		D2B2193A2D66626900EAF5B1 /* ChatHistoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatHistoryData.swift; sourceTree = "<group>"; };
 		D2B2193C2D66828200EAF5B1 /* WebSocketManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebSocketManager.swift; sourceTree = "<group>"; };
 		D2B2193E2D66DDF900EAF5B1 /* ChatDateInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateInfo.swift; sourceTree = "<group>"; };
-		D2B7EBC52D37C5F000EE46B0 /* LostArticleDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDto.swift; sourceTree = "<group>"; };
-		D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostArticleDetailDto.swift; sourceTree = "<group>"; };
 		D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemRequest.swift; sourceTree = "<group>"; };
-		D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemUseCase.swift; sourceTree = "<group>"; };
-		D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemUseCase.swift; sourceTree = "<group>"; };
 		D2B7EBD92D382C8800EE46B0 /* UserTypeResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserTypeResponse.swift; sourceTree = "<group>"; };
 		D2B7EBDB2D382D5400EE46B0 /* CheckAuthUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckAuthUseCase.swift; sourceTree = "<group>"; };
 		D2BD36932BA9EE7A00FAE609 /* UserDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserDto.swift; sourceTree = "<group>"; };
@@ -1999,8 +1985,6 @@
 		D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchFramesUseCase.swift; sourceTree = "<group>"; };
 		D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckLoginUseCase.swift; sourceTree = "<group>"; };
 		D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemRequest.swift; sourceTree = "<group>"; };
-		D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
-		D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemsRequest.swift; sourceTree = "<group>"; };
 		D80AD4E32E6C6BC30061334B /* waveLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = waveLogo.json; sourceTree = "<group>"; };
 		D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManager.swift; sourceTree = "<group>"; };
 		D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckDuplicatedIdUsecase.swift; sourceTree = "<group>"; };
@@ -2834,6 +2818,8 @@
 				7CB11C142FB1BDA6004E0C80 /* FetchLostItemKeywordSuggestionUseCase.swift */,
 				7CB11C122FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift */,
 				7CB11C7F2FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift */,
+				7C7BD71E302B2B37003C5A15 /* PostLostItemUseCase.swift */,
+				7C7BD720302B2C25003C5A15 /* ReportLostItemUseCase.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -3573,7 +3559,6 @@
 				7CED8F432EF2D1F900457128 /* NoticeListTableViewFooter.swift */,
 				7CED8F442EF2D1F900457128 /* NoticeListSearchTableViewFooter.swift */,
 				7CED8F452EF2D1F900457128 /* NoticeListHeaderView.swift */,
-				7CED8F462EF2D1F900457128 /* FetchTypeModalViewController.swift */,
 			);
 			path = NoticeListTableView;
 			sourceTree = "<group>";
@@ -3583,7 +3568,6 @@
 			children = (
 				7CED8F402EF2D1F900457128 /* TabBar */,
 				7CED8F472EF2D1F900457128 /* NoticeListTableView */,
-				7CED8F4B2EF2D1F900457128 /* WriteTypeModalViewController.swift */,
 				7CF77B5930056D87003642C1 /* NoticeKeywordScrollView */,
 			);
 			path = SubViews;
@@ -3692,22 +3676,11 @@
 			path = NoticeAttachmentsTableView;
 			sourceTree = "<group>";
 		};
-		7CED8F6C2EF2D1F900457128 /* ImageScrollCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				7CED8F6A2EF2D1F900457128 /* ImageScrollCollectionView.swift */,
-				7CED8F6B2EF2D1F900457128 /* ImageScrollCollectionViewCell.swift */,
-			);
-			path = ImageScrollCollectionView;
-			sourceTree = "<group>";
-		};
 		7CED8F6E2EF2D1F900457128 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
-				7CED8F6C2EF2D1F900457128 /* ImageScrollCollectionView */,
 				7CED8F662EF2D1F900457128 /* HotNoticeArticlesTableView */,
 				7CED8F692EF2D1F900457128 /* NoticeAttachmentsTableView */,
-				7CED8F6D2EF2D1F900457128 /* DeleteArticleModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -4431,8 +4404,6 @@
 			children = (
 				833D9C212C6B4F6E00982145 /* NoticeListDto.swift */,
 				833D9C272C6B58ED00982145 /* NoticeKeywordDto.swift */,
-				D2B7EBC52D37C5F000EE46B0 /* LostArticleDto.swift */,
-				D2B7EBC72D37C6E700EE46B0 /* LostArticleDetailDto.swift */,
 				D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */,
 			);
 			path = NoticeList;
@@ -4445,7 +4416,6 @@
 				833D9C4A2C70D54E00982145 /* SearchArticleRequest.swift */,
 				833D9C5B2C7371D900982145 /* FetchNoticeDataRequest.swift */,
 				835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */,
-				D2FFA98A2D63654A00EF8E56 /* FetchLostItemsRequest.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -4466,9 +4436,6 @@
 				83B7457A2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift */,
 				8344D5C42C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift */,
 				83BB83122CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift */,
-				D2B7EBCB2D37D90B00EE46B0 /* PostLostItemUseCase.swift */,
-				D2B7EBCF2D37E3CE00EE46B0 /* FetchLostItemUseCase.swift */,
-				D2FFA9862D63343600EF8E56 /* ReportLostItemUseCase.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";
@@ -4715,6 +4682,7 @@
 				D223D6182D9C0EFC00C29BE6 /* BannerDto.swift */,
 				D2D380FC2BA7415C009AD5A9 /* ErrorResponseDto.swift */,
 				D208A7BE2CAB97A9007040E7 /* ForceUpdateResponse.swift */,
+				7C7BD71C302B2B0A003C5A15 /* AppImage.swift */,
 			);
 			path = Core;
 			sourceTree = "<group>";
@@ -5926,6 +5894,7 @@
 				D2D380F92BA72F75009AD5A9 /* LoginRequest.swift in Sources */,
 				D27DD0F62BA614400081FD36 /* LandDetailDto.swift in Sources */,
 				D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */,
+				7C7BD721302B2C25003C5A15 /* ReportLostItemUseCase.swift in Sources */,
 				7C58FE962F5FC80F00A2737B /* FetchCallVanDataUseCase.swift in Sources */,
 				7C61D3552F22FC7B005FAC3A /* EditLostItemUseCase.swift in Sources */,
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
@@ -5934,7 +5903,6 @@
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
 				83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
-				D2B7EBCC2D37D90B00EE46B0 /* PostLostItemUseCase.swift in Sources */,
 				7C0C18A32F68FD3D001781B3 /* CallVanSummaryDto.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDto.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDto.swift in Sources */,
@@ -5955,11 +5923,11 @@
 				7CB11C782FB32656004E0C80 /* SubscribeKeywordRequest.swift in Sources */,
 				836242362BD9522400845499 /* FirebaseLog.swift in Sources */,
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDto.swift in Sources */,
+				7C7BD71F302B2B37003C5A15 /* PostLostItemUseCase.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */,
-				D2B7EBC82D37C6E700EE46B0 /* LostArticleDetailDto.swift in Sources */,
 				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
 				7C8A942F2FD2C15400DEA6F5 /* ShopEventCountDto.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
@@ -5994,7 +5962,6 @@
 				7CB11C102FB1A5BA004E0C80 /* LostItemKeywordCollectionViewAllCell.swift in Sources */,
 				7CED90C62EF2D1F900457128 /* TimetableCollectionViewCell.swift in Sources */,
 				7C016556300AA2E10013DD7B /* DepartmentCategory.swift in Sources */,
-				7CED90C92EF2D1F900457128 /* ImageScrollCollectionViewCell.swift in Sources */,
 				7CED90CA2EF2D1F900457128 /* LandOptionCollectionViewCell.swift in Sources */,
 				7CED90CB2EF2D1F900457128 /* ChatListTableViewModel.swift in Sources */,
 				7CED90CE2EF2D1F900457128 /* ForceModifyUserViewController.swift in Sources */,
@@ -6146,7 +6113,6 @@
 				7CED91672EF2D1F900457128 /* DiningCollecitonFooterView.swift in Sources */,
 				7CED91682EF2D1F900457128 /* PolicyListCollectionViewCell.swift in Sources */,
 				7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */,
-				7CED916C2EF2D1F900457128 /* DeleteArticleModalViewController.swift in Sources */,
 				7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */,
 				7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */,
 				7CA63A2C2F1AF80F00226F86 /* LostItemListTableViewCell.swift in Sources */,
@@ -6186,7 +6152,6 @@
 				7C457B492FCE1BA80011D338 /* ShopView.swift in Sources */,
 				7C8A00012FD000000011D338 /* HomeViewModel.swift in Sources */,
 				7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */,
-				7CED917B2EF2D1F900457128 /* WriteTypeModalViewController.swift in Sources */,
 				7C61D34B2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift in Sources */,
 				7CC42B942F5DCEA600940CE1 /* CallVanChatTableView.swift in Sources */,
 				7CED917D2EF2D1F900457128 /* ReviewImageUploadCollectionView.swift in Sources */,
@@ -6222,7 +6187,6 @@
 				7CC42B512F59C5F200940CE1 /* CallVanPostViewController.swift in Sources */,
 				7C61D3512F22B344005FAC3A /* ExtendedTouchAreaView.swift in Sources */,
 				7CED91962EF2D1F900457128 /* ScoreChartCollectionView.swift in Sources */,
-				7CED91972EF2D1F900457128 /* FetchTypeModalViewController.swift in Sources */,
 				7CED91982EF2D1F900457128 /* PolicyListTableView.swift in Sources */,
 				7CED91992EF2D1F900457128 /* ShopSummaryPhoneButton.swift in Sources */,
 				7CED919B2EF2D1F900457128 /* UpdateModalViewController.swift in Sources */,
@@ -6358,7 +6322,6 @@
 				7C7F429B2F629B8800CC5860 /* UploadDomain.swift in Sources */,
 				7CED91D82EF2D1F900457128 /* ClassComponentView.swift in Sources */,
 				7C372F222F1CD91200149729 /* LostItemDataRecentTableViewCell.swift in Sources */,
-				7CED91D92EF2D1F900457128 /* ImageScrollCollectionView.swift in Sources */,
 				7C6403FE300F36F200A9589F /* DepartmentAPI.swift in Sources */,
 				7CA60D632F66197C007C08C1 /* CallVanRepository.swift in Sources */,
 				7C0C188F2F67F8BA001781B3 /* CallVanDataDto.swift in Sources */,
@@ -6458,11 +6421,11 @@
 				7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */,
 				7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */,
 				D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */,
-				D2B7EBD02D37E3CE00EE46B0 /* FetchLostItemUseCase.swift in Sources */,
 				D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				D29F21C12C4DDF5300994554 /* DefaultUserRepository.swift in Sources */,
 				7C016546300AA14C0013DD7B /* DepartmentCategoryView.swift in Sources */,
+				7C7BD71D302B2B0A003C5A15 /* AppImage.swift in Sources */,
 				7CA60D702F661B37007C08C1 /* CallVanListRequestDto.swift in Sources */,
 				7CF77B3E300254CD003642C1 /* ProfileViewModel.swift in Sources */,
 				D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */,
@@ -6470,7 +6433,6 @@
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				7CB11C0C2FB198A6004E0C80 /* LostItemKeywordCollectionViewKeywordCell.swift in Sources */,
 				7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */,
-				D2B7EBC62D37C5F000EE46B0 /* LostArticleDto.swift in Sources */,
 				833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */,
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
@@ -6572,7 +6534,6 @@
 				7C7CCE702F866E9400E3A54B /* AppPath.swift in Sources */,
 				D2D4626A2D63BA5200C60864 /* ChatService.swift in Sources */,
 				7C61D3472F220EA2005FAC3A /* EditLostItemCategoryView.swift in Sources */,
-				D2FFA98B2D63654A00EF8E56 /* FetchLostItemsRequest.swift in Sources */,
 				7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */,
 				7C8A94402FD426B400DEA6F5 /* HomeRepository.swift in Sources */,
 				7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */,
@@ -6649,7 +6610,6 @@
 				D2BD36942BA9EE7A00FAE609 /* UserDto.swift in Sources */,
 				83DD0D782C4F6FF000278ABD /* BusDirection.swift in Sources */,
 				7CB11C212FB24AA8004E0C80 /* LostItemKeywordLeftAlignedCollectionView.swift in Sources */,
-				D2FFA9872D63343600EF8E56 /* ReportLostItemUseCase.swift in Sources */,
 				7CC42B152F56ABC000940CE1 /* CallVanListCollectionViewCell.swift in Sources */,
 				D289873E2D21B30D00AA7285 /* DebouncedButton.swift in Sources */,
 				D249CD3F2C159426000813F9 /* CurrentDiningTime.swift in Sources */,

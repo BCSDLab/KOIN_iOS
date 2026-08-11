@@ -17,16 +17,9 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     private let inputSubject: PassthroughSubject<NoticeDataViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var noticeUrl = ""
-    weak var delegate: NoticeListViewController?
     
     // MARK: - UI Components
-    
-    private let deleteArticleModalViewController = DeleteArticleModalViewController(width: 301, height: 128).then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
 
-    
     private let titleWrappedView = UIView().then {
         $0.backgroundColor = .white
     }
@@ -40,15 +33,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.font = .appFont(.pretendardMedium, size: 16)
         $0.numberOfLines = 0
         $0.textColor = .appColor(.neutral800)
-    }
-    
-    private let categoryLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.neutral0)
-        $0.backgroundColor = UIColor.appColor(.primary500)
-        $0.layer.masksToBounds = true
-        $0.textAlignment = .center
-        $0.layer.cornerRadius = 10
-        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
     }
     
     private let nickNameLabel = UILabel()
@@ -119,97 +103,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     private let separateView2 = UIView().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
     }
-    private let imageCollectionView: ImageScrollCollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        let collectionView = ImageScrollCollectionView(frame: .zero, collectionViewLayout: layout)
-        return collectionView
-    }()
-    
-    private let pageControl: UIPageControl = {
-        let pageControl = UIPageControl()
-        pageControl.currentPage = 0
-        pageControl.pageIndicatorTintColor = UIColor.appColor(.neutral300)
-        pageControl.currentPageIndicatorTintColor = UIColor.appColor(.primary400)
-        pageControl.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
-        return pageControl
-    }()
-    private let contentLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 6
-        $0.textColor = UIColor.appColor(.neutral800)
-        $0.numberOfLines = 0
-    }
-    
-    private let sendChatLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
-    private let reportLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 15, title: "게시글을 신고 하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
-    private let councilLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 6
-        $0.textColor = UIColor.appColor(.neutral500)
-        $0.numberOfLines = 3
-        let text = "분실물 수령을 희망하시는 분은 재실 시간 내에\n학생회관 320호 총학생회 사무실로 방문해 주시기 바랍니다.\n재실 시간은 공지 사항을 참고해 주시기 바랍니다."
-        let attributedString = NSMutableAttributedString(string: text)
-        let range = (text as NSString).range(of: "학생회관 320호 총학생회 사무실")
-        attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral700), range: range)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: text.count))
-        $0.attributedText = attributedString
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.layer.cornerRadius = 12
-        $0.layer.masksToBounds = true
-        $0.textAlignment = .center
-    }
-    
-    private let deleteButton = DebouncedButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .trashcanSmall)
-        var text = AttributedString("삭제")
-        text.font = UIFont.appFont(.pretendardMedium, size: 12)
-        configuration.attributedTitle = text
-        configuration.imagePadding = 0
-        configuration.imagePlacement = .trailing
-        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
-        $0.backgroundColor = UIColor.appColor(.neutral300)
-        $0.configuration = configuration
-        $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 4
-        $0.contentHorizontalAlignment = .center
-        $0.isHidden = true
-    }
-    
-    private let chatButton = UIButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .chat)
-        var text = AttributedString("쪽지 보내기")
-        text.font = UIFont.appFont(.pretendardMedium, size: 12)
-        configuration.attributedTitle = text
-        configuration.imagePadding = 4
-        configuration.baseBackgroundColor = UIColor.appColor(.neutral300)
-        configuration.baseForegroundColor = UIColor.appColor(.neutral600)
-        $0.configuration = configuration
-        $0.backgroundColor = UIColor.appColor(.neutral300)
-        $0.clipsToBounds = true
-        $0.layer.cornerRadius = 4
-        $0.isHidden = true
-    }
-    
-    private let reportButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .siren), for: .normal)
-        $0.backgroundColor = UIColor.appColor(.neutral300)
-        $0.clipsToBounds = true
-        $0.layer.cornerRadius = 4
-        $0.isHidden = true
-    }
     
     private let noticeAttachmentsTableView = NoticeAttachmentsTableView(frame: .zero, style: .plain)
     
@@ -232,25 +125,14 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         super.viewDidLoad()
         inventoryButton.addTarget(self, action: #selector(tapInventoryButton), for: .touchUpInside)
         urlRedirectButton.addTarget(self, action: #selector(tapUrlRedirectButton), for: .touchUpInside)
-        chatButton.addTarget(self, action: #selector(chatButtonTapped), for: .touchUpInside)
-        reportButton.addTarget(self, action: #selector(reportButtonTapped), for: .touchUpInside)
         contentTextView.isUserInteractionEnabled = true
         contentTextView.isEditable = false
         contentTextView.delegate = self
         bind()
-        deleteButton.throttle(interval: .seconds(3)) { [weak self] in
-            guard let self = self else { return }
-            self.present(self.deleteArticleModalViewController, animated: false)
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDelete, .click, "삭제"))
-        }
         inputSubject.send(.getPopularNotices)
-        if viewModel.boardId == 14 {
-            lostItemConfigureView()
-            inputSubject.send(.fetchLostItem(viewModel.noticeId))
-        } else {
-            commonConfigureView()
-            inputSubject.send(.getNoticeData)
-        }
+        
+        commonConfigureView()
+        inputSubject.send(.getNoticeData)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -270,25 +152,8 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.updatePopularArticle(notices: notices)
             case let .updateActivityIndictor(isStarted, fileName, downloadedPath):
                 self?.updateActivityIndicator(isStarted: isStarted, fileName: fileName, downloadedPath: downloadedPath)
-            case let .updateLostItem(lostItem):
-                self?.updateLostItem(lostItem)
             case let .showToast(message):
                 self?.showToast(message: message)
-            case let .showAuth(userType):
-                self?.deleteButton.isHidden = userType.userType != .council
-            case let .showLoginModal(checkType):
-                self?.showLoginModal(checkType)
-            case let .navigateToScene(checkType, noticeId):
-                switch checkType {
-                case .report:
-                    break
-                    //self?.navigationController?.pushViewController(ReportLostItemViewController(viewModel: ReportLostItemViewModel(noticeId: noticeId)), animated: true)
-                case .chat: self?.inputSubject.send(.createChatRoom)
-                }
-            case .popViewController:
-                self?.navigationController?.popViewController(animated: true)
-            case let .navigateToChat(articleId, chatRoomId, articleTitle):
-                self?.navigationController?.pushViewController(ChatViewController(viewModel: ChatViewModel(articleId: articleId, chatRoomId: chatRoomId, articleTitle: articleTitle)), animated: true)
             }
         }.store(in: &subscriptions)
         
@@ -301,84 +166,11 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
             .sink { [weak self] url, title in
                 self?.inputSubject.send(.downloadFile(url, title))
             }.store(in: &subscriptions)
-        
-        imageCollectionView.currentPagePublisher.sink { [weak self] index in
-            guard let self = self else { return }
-            if index < self.pageControl.numberOfPages {
-                self.pageControl.currentPage = index
-            }
-            
-        }.store(in: &subscriptions)
-        
-        deleteArticleModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, .click, "확인"))
-        }).store(in: &subscriptions)
-        
-        reportLostItemLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
-            self?.navigateToLogin()
-        }.store(in: &subscriptions)
-        
-        sendChatLoginModalViewController.rightButtonPublisher.sink { [weak self] _ in
-            self?.navigateToLogin()
-        }.store(in: &subscriptions)
-        
-        imageCollectionView.imageTapPublisher.sink { [weak self] image in
-            let zoomedImageViewController = ZoomedImageViewController()
-            zoomedImageViewController.setImage(image)
-            self?.present(zoomedImageViewController, animated: true, completion: nil)
-        }.store(in: &subscriptions)
-
     }
 }
 
 extension NoticeDataViewController {
-    
-    private func showLoginModal(_ checkType: NoticeDataViewModel.CheckType) {
-        switch checkType {
-        case .report: present(reportLostItemLoginModalViewController, animated: false)
-        case .chat: present(sendChatLoginModalViewController, animated: false)
-        }
-    }
-    
-    @objc private func chatButtonTapped() {
-        inputSubject.send(.checkLogin(.chat))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemMessageSend, .click, "\(viewModel.type.description)물 쪽지 보내기"))
-    }
-    
-    @objc private func reportButtonTapped() {
-        inputSubject.send(.checkLogin(.report))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostReport, .click, "신고하기"))
-    }
-    
-    private func updateLostItem(_ item: LostArticleDetailDto) {
-        
-        titleGuideLabel.text = "\(item.type?.description ?? "")물"
-        categoryLabel.text = item.category
-        titleLabel.text = "\(item.foundPlace) | \(item.foundDate)"
-        categoryLabel.snp.remakeConstraints { make in
-            make.top.equalTo(titleGuideLabel.snp.bottom).offset(5)
-            make.leading.equalTo(titleGuideLabel)
-            make.width.equalTo(categoryLabel.intrinsicContentSize.width + 20)
-            make.height.equalTo(22)
-        }
-        nickNameLabel.text = item.author
-        createdDateLabel.text = item.registeredAt
-        let imageUrls = item.images?.map { $0.imageUrl } ?? []
-        imageCollectionView.setImageUrls(urls: imageUrls)
-        contentLabel.text = item.content
-        if imageUrls.isEmpty {
-            imageCollectionView.snp.updateConstraints { make in
-                make.height.equalTo(0)
-            }
-        }
-        imageCollectionView.isHidden = imageUrls.isEmpty
-        pageControl.currentPage = 0
-        pageControl.numberOfPages = imageUrls.count
-        councilLabel.isHidden = item.isCouncil == false
-        deleteButton.isHidden = item.isMine == false
-        chatButton.isHidden = item.isCouncil == true || item.isMine == true
-        reportButton.isHidden = /*item.isCouncil == true ||*/ item.isMine == true
-    }
+
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeOriginalShortcut, .click, "\(urlRedirectButton.currentTitle ?? "")"))
@@ -675,140 +467,5 @@ extension NoticeDataViewController {
         setUpLayOuts()
         setUpConstraints()
         self.view.backgroundColor = .systemBackground
-    }
-}
-extension NoticeDataViewController {
-    private func setUpLostItemLayouts() {
-        view.addSubview(scrollView)
-        scrollView.addSubview(contentView)
-        [titleWrappedView, popularNoticeWrappedView, separateView1, imageCollectionView, pageControl, contentLabel, councilLabel, inventoryButton, deleteButton, separateView2, chatButton, reportButton].forEach {
-            contentView.addSubview($0)
-        }
-        [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, categoryLabel].forEach {
-            titleWrappedView.addSubview($0)
-        }
-        [popularNoticeGuideLabel, hotNoticeArticlesTableView].forEach {
-            popularNoticeWrappedView.addSubview($0)
-        }
-    }
-    private func setUpLostItemConstraints() {
-        scrollView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalTo(scrollView)
-        }
-        titleWrappedView.snp.makeConstraints {
-            $0.leading.top.trailing.equalToSuperview()
-        }
-        titleGuideLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(24)
-            $0.top.equalToSuperview()
-        }
-        categoryLabel.snp.makeConstraints { make in
-            make.top.equalTo(titleGuideLabel.snp.bottom).offset(5)
-            make.leading.equalTo(titleGuideLabel)
-            make.width.equalTo(65)
-            make.height.equalTo(22)
-        }
-        titleLabel.snp.makeConstraints {
-            $0.centerY.equalTo(categoryLabel)
-            $0.leading.equalTo(categoryLabel.snp.trailing).offset(8)
-            $0.trailing.equalToSuperview().inset(24)
-        }
-        createdDateLabel.snp.makeConstraints {
-            $0.top.equalTo(titleLabel.snp.bottom).offset(4)
-            $0.leading.equalTo(categoryLabel)
-            $0.height.equalTo(19)
-        }
-        separatorDotLabel.snp.makeConstraints {
-            $0.leading.equalTo(createdDateLabel.snp.trailing).offset(3)
-            $0.top.equalTo(createdDateLabel)
-            $0.width.equalTo(7)
-            $0.height.equalTo(19)
-        }
-        nickNameLabel.snp.makeConstraints {
-            $0.leading.equalTo(separatorDotLabel.snp.trailing).offset(3)
-            $0.top.equalTo(createdDateLabel)
-            $0.bottom.equalToSuperview().inset(12)
-            $0.height.equalTo(19)
-        }
-        separateView1.snp.makeConstraints { make in
-            make.top.equalTo(titleWrappedView.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(6)
-        }
-        imageCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(separateView1.snp.bottom).offset(24)
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().offset(-24)
-            make.height.equalTo(278)
-        }
-        pageControl.snp.makeConstraints { make in
-            make.top.equalTo(imageCollectionView.snp.bottom)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(30)
-        }
-        contentLabel.snp.makeConstraints { make in
-            make.top.equalTo(pageControl.snp.bottom).offset(8)
-            make.leading.trailing.equalTo(imageCollectionView)
-        }
-        councilLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentLabel.snp.bottom).offset(40)
-            make.leading.trailing.equalTo(imageCollectionView)
-            make.height.equalTo(89)
-        }
-        inventoryButton.snp.makeConstraints { make in
-            make.top.equalTo(councilLabel.snp.bottom).offset(40)
-            make.leading.equalTo(imageCollectionView)
-            make.width.equalTo(45)
-            make.height.equalTo(31)
-        }
-        deleteButton.snp.makeConstraints { make in
-            make.top.equalTo(inventoryButton)
-            make.trailing.equalTo(imageCollectionView.snp.trailing)
-            make.width.equalTo(61)
-            make.height.equalTo(31)
-        }
-        reportButton.snp.makeConstraints { make in
-            make.top.equalTo(inventoryButton)
-            make.trailing.equalTo(imageCollectionView.snp.trailing)
-            make.width.equalTo(40)
-            make.height.equalTo(32)
-        }
-        chatButton.snp.makeConstraints { make in
-            make.top.equalTo(inventoryButton)
-            make.trailing.equalTo(reportButton.snp.leading).offset(-8)
-            make.width.equalTo(105)
-            make.height.equalTo(32)
-        }
-        separateView2.snp.makeConstraints { make in
-            make.top.equalTo(inventoryButton.snp.bottom).offset(16)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(6)
-        }
-        popularNoticeWrappedView.snp.makeConstraints {
-            $0.top.equalTo(separateView2.snp.bottom).offset(6)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview()
-        }
-        popularNoticeGuideLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(14)
-            $0.leading.equalToSuperview().offset(24)
-        }
-        hotNoticeArticlesTableView.snp.makeConstraints {
-            $0.top.equalTo(popularNoticeGuideLabel.snp.bottom).offset(14)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(184)
-            $0.bottom.equalToSuperview().inset(129)
-        }
-    }
-    private func lostItemConfigureView() {
-        setUpLabels()
-        setUpButtons()
-        setUpLostItemLayouts()
-        setUpLostItemConstraints()
-        self.view.backgroundColor = .white
     }
 }

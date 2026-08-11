@@ -15,46 +15,33 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case getPopularNotices
         case downloadFile(String, String)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
-        case fetchLostItem(Int)
-        case checkAuth
-        case checkLogin(CheckType)
-        case createChatRoom
     }
     enum Output {
         case updateNoticeData(NoticeDataInfo)
-        case updateLostItem(LostArticleDetailDto)
         case updatePopularArticles([NoticeArticleDto])
         case updateActivityIndictor(Bool, String?, URL?)
         case showToast(String)
-        case showAuth(UserTypeResponse)
-        case showLoginModal(CheckType)
-        case navigateToScene(CheckType, Int)
-        case navigateToChat(Int, Int, String)
-        case popViewController
     }
-    
-    enum CheckType {
-        case report
-        case chat
-    }
-    
+
     private let fetchNoticeDataUseCase: FetchNoticeDataUseCase
     private let fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase
     private let downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let fetchLostItemUseCase = DefaultFetchLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
-    private let checkAuthUseCase = DefaultCheckAuthUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-    private let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-    private let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: DefaultChatRepository(service: DefaultChatService()))
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private(set) var noticeId: Int = 0
     private(set) var boardId: Int = 0
     private(set) var previousNoticeId: Int?
     private(set) var nextNoticeId: Int?
-    private(set) var type: LostItemType = .lost
     
-    init(fetchNoticeDataUseCase: FetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase, noticeId: Int, boardId: Int) {
+    init(
+        fetchNoticeDataUseCase: FetchNoticeDataUseCase,
+        fetchHotNoticeArticlesUseCase: FetchHotNoticeArticlesUseCase,
+        downloadNoticeAttachmentUseCase: DownloadNoticeAttachmentsUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+        noticeId: Int,
+        boardId: Int
+    ) {
         self.fetchNoticeDataUseCase = fetchNoticeDataUseCase
         self.fetchHotNoticeArticlesUseCase = fetchHotNoticeArticlesUseCase
         self.downloadNoticeAttachmentUseCase = downloadNoticeAttachmentUseCase
@@ -74,14 +61,6 @@ final class NoticeDataViewModel: ViewModelProtocol {
                 self?.downloadFile(downloadUrl: downloadUrl, fileName: fileName)
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
-            case let .fetchLostItem(id):
-                self?.fetchLostItem(id: id)
-            case .checkAuth:
-                self?.checkAuth()
-            case let .checkLogin(checkType):
-                self?.checkLogin(checkType: checkType)
-            case .createChatRoom:
-                self?.createChatRoom()
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -89,48 +68,6 @@ final class NoticeDataViewModel: ViewModelProtocol {
 }
 
 extension NoticeDataViewModel {
-    
-    private func createChatRoom() {
-        createChatRoomUseCase.execute(articleId: noticeId).sink(
-            receiveCompletion: { [weak self] completion in
-                if case let .failure(error) = completion {
-                    self?.outputSubject.send(.showToast(error.message))
-                }
-            },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.navigateToChat(response.articleId, response.chatRoomId, response.articleTitle))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func checkLogin(checkType: CheckType) {
-        checkLoginUseCase.execute().sink { [weak self] isLogined in
-            if isLogined {
-                self?.outputSubject.send(.navigateToScene(checkType, self?.noticeId ?? 0))
-            } else {
-                self?.outputSubject.send(.showLoginModal(checkType))
-            }
-        }.store(in: &subscriptions)
-    }
-    func checkAuth() {
-        
-        checkAuthUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.showAuth(response))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchLostItem(id: Int) {
-        fetchLostItemUseCase.execute(id: id).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.type = response.type ?? .lost
-                self?.outputSubject.send(.updateLostItem(response))
-            }
-        ).store(in: &subscriptions)
-    }
     
     private func getNoticeData() {
         outputSubject.send(.updateActivityIndictor(true, nil, nil))

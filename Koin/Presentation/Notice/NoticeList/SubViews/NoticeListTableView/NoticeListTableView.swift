@@ -21,7 +21,6 @@ final class NoticeListTableView: UITableView {
     let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
     let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
     let isScrolledPublisher = PassthroughSubject<Void, Never>()
-    let typeButtonPublisher = PassthroughSubject<Void, Never>()
     
     let addButtonMinXPublisher = PassthroughSubject<CGFloat, Never>()
     let contentOffsetYPublisher = PassthroughSubject<CGFloat, Never>()
@@ -62,18 +61,13 @@ final class NoticeListTableView: UITableView {
         sectionHeaderTopPadding = 0
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
-    
-    func setType(type: LostItemType?) {
-        headerView.setText(type: type)
-    }
-    
+
     func updateNoticeList(noticeArticleList: [NoticeArticleDto], pageInfos: NoticeListPages) {
         self.noticeArticleList = noticeArticleList
         self.pageInfos = pageInfos
         isForSearch = false
         let indexSet = IndexSet(integer: 0)
         reloadSections(indexSet, with: .automatic)
-        headerView.toggleButton(isHidden: noticeArticleList.first?.boardId != 14)
     }
     
     func updateSearchedResult(noticeArticleList: [NoticeArticleDto], isLastPage: Bool, isNewKeyword: Bool) {
@@ -87,7 +81,6 @@ final class NoticeListTableView: UITableView {
         reloadSections(indexSet, with: .automatic)
         let IndexPath = IndexPath(row: self.noticeArticleList.count - 1, section: 0)
         scrollToRow(at: IndexPath, at: .bottom, animated: true)
-        headerView.toggleButton(isHidden: noticeArticleList.first?.boardId != 14)
     }
     
     func updateKeywordList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
@@ -148,9 +141,6 @@ extension NoticeListTableView: UITableViewDataSource {
         }.store(in: &headerCancellables)
         headerView.manageKeyWordBtnTapPublisher.sink { [weak self] in
             self?.manageKeyWordBtnTapPublisher.send()
-        }.store(in: &headerCancellables)
-        headerView.typeButtonPublisher.sink { [weak self] in
-            self?.typeButtonPublisher.send()
         }.store(in: &headerCancellables)
         headerView.noticeKeywordScrollView.addButtonMinXPublisher.sink { [weak self] addButtonMinX in
             self?.addButtonMinXPublisher.send(addButtonMinX)
