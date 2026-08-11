@@ -75,11 +75,6 @@ final class LostItemListViewController: UIViewController {
         $0.clipsToBounds = true
     }
     
-    private let postLostItemLoginModalViewController = ModalViewController(width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 분실물 주인을 찾아주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
     // MARK: - Initializer
     init(viewModel: LostItemListViewModel) {
         self.viewModel = viewModel
@@ -251,7 +246,7 @@ extension LostItemListViewController {
         let onLostButtonTapped = { [weak self] in
             guard let self else { return }
             dismissView()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserWrite, .click, "잃어버렸어요"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemWrite, .click, "잃어버렸어요"))
             let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
             viewController.delegate = self
             navigationController?.pushViewController(viewController, animated: true)

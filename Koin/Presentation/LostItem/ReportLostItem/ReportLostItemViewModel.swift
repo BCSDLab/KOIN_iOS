@@ -27,7 +27,7 @@ final class ReportLostItemViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let defaultReportLostItemUseCase: DefaultReportLostItemUseCase = DefaultReportLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+    private let defaultReportLostItemUseCase: DefaultReportLostItemUseCase = DefaultReportLostItemUseCase(lostItemRepository: DefaultLostItemRepository(service: DefaultLostItemService()))
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     let lostItemId: Int
     
