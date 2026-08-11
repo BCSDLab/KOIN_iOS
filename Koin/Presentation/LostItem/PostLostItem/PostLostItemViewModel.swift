@@ -33,7 +33,7 @@ final class PostLostItemViewModel: ViewModelProtocol {
     
     var selectedIndex = 0
     private lazy var uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-    private lazy var postLostItemUseCase: PostLostItemUseCase = DefaultPostLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+    private lazy var postLostItemUseCase: PostLostItemUseCase = DefaultPostLostItemUseCase(lostItemRepository: DefaultLostItemRepository(service: DefaultLostItemService()))
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     let type: LostItemType
     
@@ -79,7 +79,7 @@ extension PostLostItemViewModel {
                   }
               } receiveValue: { [weak self] response in
                   self?.outputSubject.send(.showToast("게시글 작성이 완료되었습니다."))
-                  self?.outputSubject.send(.navigateToLostItemData(response.toDomain()))
+                  self?.outputSubject.send(.navigateToLostItemData(response))
               }.store(in: &subscriptions)
     }
     

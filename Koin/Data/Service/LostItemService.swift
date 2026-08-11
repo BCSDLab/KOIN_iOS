@@ -16,6 +16,8 @@ protocol LostItemService {
     func deleteLostItem(id: Int) -> AnyPublisher<Void, ErrorResponse>
     func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemDataDto, ErrorResponse>
     func fetchLostItemStats() -> AnyPublisher<LostItemStatsDto, ErrorResponse>
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse>
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
     
     func subscribeKeyword(requestModel: SubscribeKeywordRequest) -> AnyPublisher<LostItemKeywordDto, ErrorResponse>
     func fetchKeywordSuggestion() -> AnyPublisher<LostItemKeywordSuggestionDto, ErrorResponse>
@@ -49,6 +51,14 @@ final class DefaultLostItemService: LostItemService {
     
     func fetchLostItemStats() -> AnyPublisher<LostItemStatsDto, ErrorResponse> {
         return networkService.requestWithResponse(api: LostItemAPI.fetchLostItemStats)
+    }
+    
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: LostItemAPI.reportLostItem(id, request))
+    }
+    
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse> {
+        return networkService.requestWithResponse(api: LostItemAPI.postLostItem(request))
     }
     
     func subscribeKeyword(requestModel: SubscribeKeywordRequest) -> AnyPublisher<LostItemKeywordDto, ErrorResponse> {

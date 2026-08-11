@@ -22,35 +22,27 @@ struct NoticeListDto: Decodable {
 }
 
 struct NoticeArticleDto: Decodable {
-    let id, boardId: Int
+    let id: Int
+    let boardId: Int
     let title: String?
+    let content: String?
     let author: String?
     let hit: Int?
-    let type: LostItemType?
-    let category: String?
-    let foundPlace: String?
-    let foundDate: String?
-    let content: String?
-    let updatedAt: String?
     let url: String?
     let attachments: [NoticeAttachmentDto]?
     let prevId: Int?
     let nextId: Int?
     let registeredAt: String
-    var isReported: Bool?
+    let updatedAt: String?
     
     enum CodingKeys: String, CodingKey {
         case id
         case boardId = "board_id"
-        case title, author, hit, content, attachments, url
-        case type, category
-        case foundPlace = "found_place"
-        case foundDate = "found_date"
+        case title, content, author, hit, url, attachments
         case prevId = "prev_id"
         case nextId = "next_id"
-        case updatedAt = "updated_at"
         case registeredAt = "registered_at"
-        case isReported = "is_reported"
+        case updatedAt = "updated_at"
     }
 }
 
@@ -93,19 +85,15 @@ extension NoticeArticleDto {
             id: id,
             boardId: boardId,
             title: newTitle,
+            content: modifyFontInHtml(html: content ?? ""),
             author: author,
             hit: hit,
-            type: type,
-            category: category,
-            foundPlace: foundPlace,
-            foundDate: foundDate,
-            content: boardId == 14 ? content : modifyFontInHtml(html: content ?? ""),
-            updatedAt: updatedAt,
             url: url,
             attachments: attachments ?? [],
             prevId: prevId,
             nextId: nextId,
-            registeredAt: newDate, isReported: isReported
+            registeredAt: newDate,
+            updatedAt: updatedAt
         )
     }
 
@@ -139,7 +127,7 @@ extension NoticeArticleDto {
             for elements in allTags {
                 for element in elements {
                     let existingStyle = try element.attr("style")
-                    let newStyle = "font-family: 'Pretandard-Medium', sans-serif; font-size: 16px;"
+                    let newStyle = "font-family: 'Pretendard-Medium', sans-serif; font-size: 16px;"
                     let updatedStyle = existingStyle.isEmpty ? newStyle : "\(existingStyle); \(newStyle)"
                     try element.attr("style", updatedStyle)
                 }
@@ -147,7 +135,7 @@ extension NoticeArticleDto {
            
             for element in bTags {
                 let existingStyle = try element.attr("style")
-                let newBoldStyle = "font-family: 'Pretandard-Bold', sans-serif; font-size: 16px;"
+                let newBoldStyle = "font-family: 'Pretendard-Bold', sans-serif; font-size: 16px;"
                 let updatedBoldStyle = existingStyle.isEmpty ? newBoldStyle : "\(existingStyle); \(newBoldStyle)"
                 try element.attr("style", updatedBoldStyle)
             }

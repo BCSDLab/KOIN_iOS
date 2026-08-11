@@ -31,7 +31,6 @@ final class DiningViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let fetchDiningListUseCase: FetchDiningListUseCase
     private let shareMenuListUseCase: ShareMenuListUseCase
-    private let diningLikeUseCase: DiningLikeUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
     private let changeNotiDetailUseCase: ChangeNotiDetailUseCase
     private let fetchNotiListUseCase: FetchNotiListUseCase
@@ -48,7 +47,6 @@ final class DiningViewModel: ViewModelProtocol {
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          dateProvder: DateProvider,
          shareMenuListUseCase: ShareMenuListUseCase,
-         diningLikeUseCase: DiningLikeUseCase,
          changeNotiUseCase: ChangeNotiUseCase,
          fetchNotiListUsecase: FetchNotiListUseCase,
          changeNotiDetailUseCase: ChangeNotiDetailUseCase,
@@ -57,7 +55,6 @@ final class DiningViewModel: ViewModelProtocol {
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.dateProvider = dateProvder
         self.shareMenuListUseCase = shareMenuListUseCase
-        self.diningLikeUseCase = diningLikeUseCase
         self.changeNotiUseCase = changeNotiUseCase
         self.fetchNotiListUseCase = fetchNotiListUsecase
         self.changeNotiDetailUseCase = changeNotiDetailUseCase
@@ -94,7 +91,6 @@ final class DiningViewModel: ViewModelProtocol {
 }
 
 extension DiningViewModel {
-
     private func fetchNotiList() {
         fetchNotiListUseCase.execute().sink(
             receiveCompletion: { _ in },

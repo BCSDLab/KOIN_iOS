@@ -56,14 +56,13 @@ extension HomeHostingController {
         let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let diningLikeUseCase = DefaultDiningLikeUseCase(diningRepository: diningRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let dateProvider = DefaultDateProvider()
         let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, diningLikeUseCase: diningLikeUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
+        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
         return DiningViewController(viewModel: viewModel)
     }
 

@@ -201,8 +201,8 @@ enum EventParameter {
             case lostItemKeywordAlarm = "lost_item_keyword_alarm"
             case lostItemKeywordRemove = "lost_item_keyword_remove"
             
-            case lostItemWrite = "lost_item_write"
             case findUserWrite = "find_user_write"
+            case lostItemWrite = "lost_item_write"
             case lostItemCategory = "lost_item_category"
             case lostItemAddItem = "lost_item_add_item"
             case lostItemWriteConfirm = "lost_item_write_confirm"
@@ -210,7 +210,6 @@ enum EventParameter {
             case itemPostReport = "item_post_report"
             case itemPostReportConfirm = "item_post_report_confirm"
             case messageListSelect = "message_list_select"
-            case itemPostType = "item_post_type"
             
             case loginPrompt = "login_prompt"
             

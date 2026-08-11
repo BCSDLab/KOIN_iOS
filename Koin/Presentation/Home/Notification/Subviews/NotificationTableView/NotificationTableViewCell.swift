@@ -103,7 +103,7 @@ extension NotificationTableViewCell {
             $0.top.equalTo(titleLabel.snp.bottom).offset(4)
             $0.leading.equalTo(titleLabel)
             $0.trailing.equalTo(dateLabel)
-            $0.bottom.equalToSuperview().offset(-(8 + 10)).priority(.high)
+            $0.bottom.equalToSuperview().offset(-18).priority(.high)
         }
     }
 }

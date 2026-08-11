@@ -10,6 +10,5 @@ import Combine
 protocol DiningRepository {
     func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDto], ErrorResponse>
     func fetchCoopShopList() -> AnyPublisher<CoopShopDto, ErrorResponse>
-    func diningLike(requestModel: DiningLikeRequest, isLiked: Bool) -> AnyPublisher<Void, ErrorResponse>
     func shareMenuList(shareModel: ShareDiningMenu)
 }
