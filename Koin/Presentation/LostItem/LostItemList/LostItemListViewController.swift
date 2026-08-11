@@ -246,7 +246,7 @@ extension LostItemListViewController {
         let onLostButtonTapped = { [weak self] in
             guard let self else { return }
             dismissView()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserWrite, .click, "잃어버렸어요"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemWrite, .click, "잃어버렸어요"))
             let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
             viewController.delegate = self
             navigationController?.pushViewController(viewController, animated: true)
