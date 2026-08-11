@@ -79,7 +79,7 @@ extension PostLostItemViewModel {
                   }
               } receiveValue: { [weak self] response in
                   self?.outputSubject.send(.showToast("게시글 작성이 완료되었습니다."))
-                  self?.outputSubject.send(.navigateToLostItemData(response.toDomain()))
+                  self?.outputSubject.send(.navigateToLostItemData(response))
               }.store(in: &subscriptions)
     }
     
