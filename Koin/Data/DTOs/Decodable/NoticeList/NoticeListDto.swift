@@ -139,7 +139,7 @@ extension NoticeArticleDto {
             for elements in allTags {
                 for element in elements {
                     let existingStyle = try element.attr("style")
-                    let newStyle = "font-family: 'Pretandard-Medium', sans-serif; font-size: 16px;"
+                    let newStyle = "font-family: 'Pretendard-Medium', sans-serif; font-size: 16px;"
                     let updatedStyle = existingStyle.isEmpty ? newStyle : "\(existingStyle); \(newStyle)"
                     try element.attr("style", updatedStyle)
                 }
@@ -147,7 +147,7 @@ extension NoticeArticleDto {
            
             for element in bTags {
                 let existingStyle = try element.attr("style")
-                let newBoldStyle = "font-family: 'Pretandard-Bold', sans-serif; font-size: 16px;"
+                let newBoldStyle = "font-family: 'Pretendard-Bold', sans-serif; font-size: 16px;"
                 let updatedBoldStyle = existingStyle.isEmpty ? newBoldStyle : "\(existingStyle); \(newBoldStyle)"
                 try element.attr("style", updatedBoldStyle)
             }
