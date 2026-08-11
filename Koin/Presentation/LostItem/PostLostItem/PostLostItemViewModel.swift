@@ -33,7 +33,7 @@ final class PostLostItemViewModel: ViewModelProtocol {
     
     var selectedIndex = 0
     private lazy var uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-    private lazy var postLostItemUseCase: PostLostItemUseCase = DefaultPostLostItemUseCase(noticeListRepository: DefaultNoticeListRepository(service: DefaultNoticeService()))
+    private lazy var postLostItemUseCase: PostLostItemUseCase = DefaultPostLostItemUseCase(lostItemRepository: DefaultLostItemRepository(service: DefaultLostItemService()))
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     let type: LostItemType
     

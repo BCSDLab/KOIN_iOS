@@ -15,6 +15,8 @@ enum LostItemAPI {
     case deleteLostItem(Int)
     case updateLostItem((Int, UpdateLostItemRequest))
     case fetchLostItemStats
+    case postLostItem([PostLostItemRequest])
+    case reportLostItem(Int, ReportLostItemRequest)
     
     case subscribeKeyword(SubscribeKeywordRequest)
     case fetchKeywordSuggestion
@@ -35,6 +37,8 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .deleteLostItem(let id): return "/articles/lost-item/\(id)"
         case .updateLostItem((let id, _)): return "/articles/lost-item/\(id)"
         case .fetchLostItemStats: return "/articles/lost-item/stats"
+        case .postLostItem: return "/articles/lost-item"
+        case .reportLostItem(let id, _): return "/articles/lost-item/\(id)/reports"
             
         case .subscribeKeyword: return "/articles/keyword?type=LOST_ITEM"
         case .fetchKeywordSuggestion: return "/articles/keyword/suggestions?type=LOST_ITEM"
@@ -51,6 +55,8 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .deleteLostItem: return .delete
         case .updateLostItem: return .put
         case .fetchLostItemStats: return .get
+        case .postLostItem: return .post
+        case .reportLostItem: return .post
             
         case .subscribeKeyword: return .post
         case .fetchKeywordSuggestion: return .get
@@ -71,6 +77,10 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .deleteLostItem: return nil
         case .updateLostItem((_, let request)): return try? request.toDictionary()
         case .fetchLostItemStats: return nil
+        case .postLostItem(let request):
+            return try? PostLostItemRequestWrapper(articles: request).toDictionary()
+        case .reportLostItem(_,let request):
+            return try? request.toDictionary()
             
         case .subscribeKeyword(let request):
             return try? request.toDictionary()
@@ -87,6 +97,8 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .deleteLostItem: return URLEncoding.default
         case .updateLostItem: return JSONEncoding.default
         case .fetchLostItemStats: return nil
+        case .postLostItem: return JSONEncoding.default
+        case .reportLostItem: return JSONEncoding.default
             
         case .subscribeKeyword:
             return JSONEncoding.default

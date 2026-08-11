@@ -13,14 +13,14 @@ protocol ReportLostItemUseCase {
 
 final class DefaultReportLostItemUseCase: ReportLostItemUseCase {
     
-    private let noticeListRepository: NoticeListRepository
+    private let lostItemRepository: LostItemRepository
     
-    init(noticeListRepository: NoticeListRepository) {
-        self.noticeListRepository = noticeListRepository
+    init(lostItemRepository: LostItemRepository) {
+        self.lostItemRepository = lostItemRepository
     }
     
     func execute(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
-        noticeListRepository.reportLostItemArticle(id: id, request: request)
+        lostItemRepository.reportLostItemArticle(id: id, request: request)
     }
 }
 

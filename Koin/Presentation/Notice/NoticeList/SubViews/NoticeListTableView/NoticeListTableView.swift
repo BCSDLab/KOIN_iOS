@@ -193,9 +193,6 @@ extension NoticeListTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         if isForSearch {
             return 0
-        }
-        else if noticeArticleList.first?.boardId == 14 {
-            return 120
         } else {
             return 66
         }

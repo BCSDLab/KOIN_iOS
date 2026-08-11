@@ -21,22 +21,12 @@ protocol NoticeListService {
     func downloadNoticeAttachment(downloadUrl: String, fileName: String) -> AnyPublisher<URL?, ErrorResponse>
     func manageRecentSearchedWord(name: String, date: Date, actionType: Int)
     func fetchRecentSearchedWord() -> [RecentSearchedWordInfo]
-    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse>
-    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
 }
 
 final class DefaultNoticeService: NoticeListService {
         
     private let networkService = NetworkService.shared
     private let coreDataService = CoreDataService.shared
-    
-    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
-        return networkService.request(api: NoticeListAPI.reportLostItem(id, request))
-    }
-    
-    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: NoticeListAPI.postLostItem(request))
-    }
     
     func fetchNoticeArticles(requestModel: FetchNoticeArticlesRequest) -> AnyPublisher<NoticeListDto, ErrorResponse> {
         return networkService.requestWithResponse(api: NoticeListAPI.fetchNoticeArticles(requestModel))

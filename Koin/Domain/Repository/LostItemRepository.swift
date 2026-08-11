@@ -16,6 +16,9 @@ protocol LostItemRepository {
     func updateLostItem(id: Int, requestModel: UpdateLostItemRequest) -> AnyPublisher<LostItemData, ErrorResponse>
     func fetchLostItemStats() -> AnyPublisher<LostItemStats, ErrorResponse>
     
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse>
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse>
+    
     func subscribeKeyword(requestModel: SubscribeKeywordRequest) -> AnyPublisher<LostItemKeyword, ErrorResponse>
     func fetchKeywordSuggestion() -> AnyPublisher<[String], ErrorResponse>
     func fetchMyKeyword() -> AnyPublisher<LostItemKeywords, ErrorResponse>

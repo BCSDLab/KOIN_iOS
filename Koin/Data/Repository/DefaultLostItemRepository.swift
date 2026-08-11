@@ -48,6 +48,14 @@ final class DefaultLostItemRepository: LostItemRepository {
             .eraseToAnyPublisher()
     }
     
+    func reportLostItemArticle(id: Int, request: ReportLostItemRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.reportLostItemArticle(id: id, request: request)
+    }
+    
+    func postLostItem(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse> {
+        service.postLostItem(request: request)
+    }
+    
     func subscribeKeyword(requestModel: SubscribeKeywordRequest) -> AnyPublisher<LostItemKeyword, ErrorResponse> {
         return service.subscribeKeyword(requestModel: requestModel)
             .map { $0.toDomain() }

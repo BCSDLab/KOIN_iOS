@@ -13,13 +13,13 @@ protocol PostLostItemUseCase {
 
 final class DefaultPostLostItemUseCase: PostLostItemUseCase {
     
-    private let noticeListRepository: NoticeListRepository
+    private let lostItemRepository: LostItemRepository
     
-    init(noticeListRepository: NoticeListRepository) {
-        self.noticeListRepository = noticeListRepository
+    init(lostItemRepository: LostItemRepository) {
+        self.lostItemRepository = lostItemRepository
     }
     
     func execute(request: [PostLostItemRequest]) -> AnyPublisher<LostItemDataDto, ErrorResponse> {
-        noticeListRepository.postLostItem(request: request)
+        lostItemRepository.postLostItem(request: request)
     }
 }

@@ -2198,6 +2198,7 @@
 				7C8ADD2C2F20B43F00F85BDE /* UpdateLostItemRequest.swift */,
 				D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */,
 				7CB11C772FB32656004E0C80 /* SubscribeKeywordRequest.swift */,
+				D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */,
 			);
 			path = LostItem;
 			sourceTree = "<group>";
@@ -4404,7 +4405,6 @@
 			children = (
 				833D9C212C6B4F6E00982145 /* NoticeListDto.swift */,
 				833D9C272C6B58ED00982145 /* NoticeKeywordDto.swift */,
-				D2B7EBC92D37C81B00EE46B0 /* PostLostItemRequest.swift */,
 			);
 			path = NoticeList;
 			sourceTree = "<group>";

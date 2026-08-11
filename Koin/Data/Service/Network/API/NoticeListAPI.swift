@@ -18,8 +18,6 @@ enum NoticeListAPI {
     case fetchNotificationKeyword
     case fetchRecommendedSearchWord(FetchRecommendedSearchWordRequest)
     case fetchRecommendedKeyword
-    case postLostItem([PostLostItemRequest])
-    case reportLostItem(Int, ReportLostItemRequest)
 }
 
 extension NoticeListAPI: Router, URLRequestConvertible {
@@ -39,8 +37,6 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         case .fetchRecommendedKeyword: return "/articles/keyword/suggestions?type=KOREATECH"
         case .fetchRecommendedSearchWord: return "/articles/hot/keyword"
         case .fetchNotificationKeyword: return "/articles/keyword/me?type=KOREATECH"
-        case .postLostItem: return "/articles/lost-item"
-        case .reportLostItem(let id, _): return "/articles/lost-item/\(id)/reports"
         }
     }
     
@@ -48,7 +44,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles, .searchNoticeArticle, .fetchNoticeData, .fetchHotNoticeArticles, .fetchNotificationKeyword, .fetchRecommendedKeyword, .fetchRecommendedSearchWord:
             return .get
-        case .createNotificationKeyword, .postLostItem, .reportLostItem:
+        case .createNotificationKeyword:
             return .post
         case .deleteNotificationKeyword:
             return .delete
@@ -74,10 +70,6 @@ extension NoticeListAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .deleteNotificationKeyword(let request):
             return try? request.toDictionary()
-        case .postLostItem(let request):
-            return try? PostLostItemRequestWrapper(articles: request).toDictionary()
-        case .reportLostItem(_,let request):
-            return try? request.toDictionary()
         }
     }
     
@@ -87,7 +79,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
             return URLEncoding.default
         case .fetchNoticeData, .fetchRecommendedSearchWord:
             return URLEncoding.queryString
-        case .createNotificationKeyword, .deleteNotificationKeyword, .postLostItem, .reportLostItem: return JSONEncoding.default
+        case .createNotificationKeyword, .deleteNotificationKeyword: return JSONEncoding.default
         }
     }
     

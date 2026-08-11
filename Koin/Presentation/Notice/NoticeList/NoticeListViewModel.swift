@@ -27,7 +27,6 @@ final class NoticeListViewModel: ViewModelProtocol {
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
     private let fetchMyKeywordUseCase: FetchNotificationKeywordUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private(set) var noticeList: [NoticeArticleDto] = []
     private(set) var isLoggedIn: Bool = false
     private(set) var noticeListType: NoticeListType = .all {
         didSet {
@@ -72,7 +71,6 @@ extension NoticeListViewModel {
             receiveValue: { [weak self] articleInfo in
                 guard let self = self else { return }
                 self.outputSubject.send(.updateBoard(articleInfo.articles, articleInfo.pages,self.noticeListType))
-                self.noticeList = articleInfo.articles
             }
         ).store(in: &subscriptions)
     }

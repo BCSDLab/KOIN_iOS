@@ -166,9 +166,6 @@ extension NoticeListViewController {
 
 extension NoticeListViewController {
     
-    func fetchLostItems() {
-        inputSubject.send(.changeBoard(viewModel.noticeListType))
-    }
     func navigateToNoticeData(noticeId: Int, boardId: Int) {
         let noticeListService = DefaultNoticeService()
         let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
