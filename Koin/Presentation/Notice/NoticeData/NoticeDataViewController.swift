@@ -375,7 +375,7 @@ extension NoticeDataViewController {
         }
         separatorDotLabel.snp.makeConstraints {
             $0.leading.equalTo(createdDateLabel.snp.trailing).offset(3)
-            $0.top.equalTo(createdDateLabel)
+            $0.centerY.equalTo(createdDateLabel)
             $0.width.equalTo(7)
             $0.height.equalTo(19)
         }
@@ -387,7 +387,7 @@ extension NoticeDataViewController {
         }
         separatorDot2Label.snp.makeConstraints {
             $0.leading.equalTo(nickNameLabel.snp.trailing).offset(3)
-            $0.top.equalTo(nickNameLabel)
+            $0.centerY.equalTo(createdDateLabel)
             $0.width.equalTo(7)
         }
         eyeImageView.snp.makeConstraints {
