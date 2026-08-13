@@ -78,7 +78,11 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
     private let scrollView = UIScrollView()
     
     private let contentView = UIView().then {
-        $0.backgroundColor = .white
+        $0.backgroundColor = .appColor(.neutral100)
+    }
+    
+    private let aiSummaryViewHostingController = NoticeAISummaryViewHostingController().then {
+        $0.sizingOptions = .intrinsicContentSize
     }
     
     private let contentTextView = UITextView().then {
@@ -94,14 +98,6 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         $0.font = UIFont.appFont(.pretendardBold, size: 16)
         $0.textColor = .appColor(.neutral800)
         $0.text = "첨부파일"
-    }
-    
-    private let separateView1 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-    }
-    
-    private let separateView2 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
     }
     
     private let noticeAttachmentsTableView = NoticeAttachmentsTableView(frame: .zero, style: .plain)
@@ -132,6 +128,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         inputSubject.send(.getPopularNotices)
         
         commonConfigureView()
+        aiSummaryViewHostingController.didMove(toParent: self)
         inputSubject.send(.getNoticeData)
     }
     
@@ -281,6 +278,8 @@ extension NoticeDataViewController {
                 urlRedirectButton.isHidden = true
             }
         }
+        
+        aiSummaryViewHostingController.configure(summary: noticeData.aiSummary)
     }
     
     private func updatePopularArticle(notices: [NoticeArticleDto]) {
@@ -332,9 +331,11 @@ extension NoticeDataViewController {
     }
     
     private func setUpLayOuts() {
+        addChild(aiSummaryViewHostingController)
+        
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
-        [titleWrappedView, contentWrappedView,popularNoticeWrappedView].forEach {
+        [titleWrappedView, aiSummaryViewHostingController.view, contentWrappedView,popularNoticeWrappedView].forEach {
             contentView.addSubview($0)
         }
         [titleGuideLabel, titleLabel, createdDateLabel, separatorDotLabel, nickNameLabel, separatorDot2Label, eyeImageView, hitLabel].forEach {
@@ -401,8 +402,14 @@ extension NoticeDataViewController {
             $0.top.equalTo(nickNameLabel)
             $0.height.equalTo(19)
         }
-        contentWrappedView.snp.makeConstraints {
+        
+        aiSummaryViewHostingController.view.snp.makeConstraints {
             $0.top.equalTo(titleWrappedView.snp.bottom).offset(6)
+            $0.leading.trailing.equalToSuperview()
+        }
+        
+        contentWrappedView.snp.makeConstraints {
+            $0.top.equalTo(aiSummaryViewHostingController.view.snp.bottom).offset(6)
             $0.leading.trailing.equalToSuperview()
         }
         contentTextView.snp.makeConstraints {

@@ -10,6 +10,7 @@ import Foundation
 struct NoticeDataInfo {
     let title: String
     let boardId: Int
+    let aiSummary: NoticeAISummary
     let content: String
     let author: String
     let hit: Int?
