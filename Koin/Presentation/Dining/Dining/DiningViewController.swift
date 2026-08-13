@@ -90,11 +90,6 @@ final class DiningViewController: UIViewController {
     
     private let diningNotiContentViewController = DiningNotiContentViewController()
     
-    private let diningLikeLoginModalViewController = ModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "더 맛있는 학식을 먹는 방법,\n로그인하고 좋아요를 남겨주세요!", subTitle: "여러분의 좋아요가 영양사님이 더 나은,\n식단을 제공할 수 있도록 도와줍니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray)).then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
     // MARK: - Initialization
     
     init(viewModel: DiningViewModel) {
@@ -168,8 +163,6 @@ final class DiningViewController: UIViewController {
             case let .showBottomSheet((soldOutIsOn, imageUplloadisOn)):
                 self?.showBottomSheet((soldOutIsOn, imageUplloadisOn))
                 UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
-            case .showLoginModal:
-                self?.present(strongSelf.diningLikeLoginModalViewController, animated: true, completion: nil)
             }
         }.store(in: &subscriptions)
         
@@ -211,10 +204,6 @@ final class DiningViewController: UIViewController {
         diningNotiContentViewController.shortcutButtonPublisher.sink { [weak self] in
             self?.navigateToNoti()
             self?.diningNotiContentViewController.dissmissView()
-        }.store(in: &subscriptions)
-        
-        diningLikeLoginModalViewController.rightButtonPublisher.sink { [weak self] in
-            self?.navigateToLogin()
         }.store(in: &subscriptions)
         
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).sink { [weak self] _ in
