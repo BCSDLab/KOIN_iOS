@@ -14,12 +14,11 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
     private let viewModel: BusSearchResultViewModel
     private let inputSubject: PassthroughSubject<BusSearchResultViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    private var datePickerSubTitle = ""
     
     // MARK: - UI Components
     
     private let tableView = BusSearchResultTableView(frame: .zero, style: .plain)
-    
-    private var busSearchDatePickerViewController = BusSearchDatePickerViewController(width: 301, height: 347, paddingBetweenLabels: 10, title: "출발 시각 설정", subTitle: "현재는 정규학기(12월 20일까지)의\n시간표를 제공하고 있어요.", titleColor: .appColor(.neutral700), subTitleColor: .gray)
     
     // MARK: - Initialization
     
@@ -69,42 +68,23 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateDatePickerData((dates, selectedDate)):
-                self?.busSearchDatePickerViewController.setPickerItems(items: dates, selectedItems: selectedDate)
             case let .udpatesSearchedResult(departTime, busSearchedResult):
                 self?.updateSearchedResult(departTime: departTime, departInfo: busSearchedResult)
             case let .updateSemesterInfo(semesterInfo):
                 self?.updateSemesterInfo(semesterInfo: semesterInfo)
             }
         }.store(in: &subscriptions)
-        
-        busSearchDatePickerViewController.leftButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureNow, .click, "지금 출발"))
-        }.store(in: &subscriptions)
-        
-        busSearchDatePickerViewController.changePickerDate.sink { [weak self] isChanged in
-            let logValue = isChanged != nil ? "Y" : "N"
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureTimeSettingDone, .click, logValue))
-        }.store(in: &subscriptions)
-        
+
         tableView.tapDepartTimeButtonPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
                 self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchResultDepartureTime, .click, "출발 시간 설정"))
-                busSearchDatePickerViewController.modalPresentationStyle = .overFullScreen
-                present(busSearchDatePickerViewController, animated: true)
+                self.presentBusSearchDatePickerViewController()
         }.store(in: &subscriptions)
         
         tableView.tapDepartBusTypeButtonPublisher.sink { [weak self] busType in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchResultBusType, .click, busType.koreanDescription))
             self?.inputSubject.send(.getSearchedResult(nil, busType))
-        }.store(in: &subscriptions)
-        
-        busSearchDatePickerViewController.pickerSelectedItemsPublisher.sink { [weak self] selectedItem in
-            if selectedItem.count > 3 {
-                let time = "\(selectedItem[0]) \(selectedItem[1]) \(selectedItem[2]):\(selectedItem[3])"
-                self?.inputSubject.send(.getSearchedResult(time, nil))
-            }
         }.store(in: &subscriptions)
     }
 }
@@ -143,7 +123,37 @@ extension BusSearchResultViewController {
     }
     
     private func updateSemesterInfo(semesterInfo: SemesterInfo) {
-        busSearchDatePickerViewController.updateSubMessageLabel(title: "\(semesterInfo.name)(\(semesterInfo.from) ~ \(semesterInfo.to))의\n시간표가 제공됩니다.")
+        datePickerSubTitle = "현재는 \(semesterInfo.name)(\(semesterInfo.to)까지)의 시간표를 제공하고 있어요."
+    }
+
+    private func presentBusSearchDatePickerViewController() {
+        guard let datePickerData = viewModel.datePickerData else { return }
+
+        let busSearchDatePickerViewController = BusSearchDatePickerViewController(
+            onDepartureNowTapped: { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureNow, .click, "지금 출발"))
+            },
+            onPickerDateChanged: { [weak self] isChanged in
+                let logValue = isChanged != nil ? "Y" : "N"
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureTimeSettingDone, .click, logValue))
+            },
+            onPickerItemsSelected: { [weak self] selectedItems in
+                guard selectedItems.count > 3 else { return }
+                self?.inputSubject.send(.updateDatePickerSelectedItems(selectedItems))
+                let time = "\(selectedItems[0]) \(selectedItems[1]) \(selectedItems[2]):\(selectedItems[3])"
+                self?.inputSubject.send(.getSearchedResult(time, nil))
+            },
+            width: 301,
+            height: 347,
+            paddingBetweenLabels: 10,
+            title: "출발 시각 설정",
+            subTitle: datePickerSubTitle,
+            titleColor: .appColor(.neutral700),
+            subTitleColor: .gray
+        )
+        busSearchDatePickerViewController.setPickerItems(items: datePickerData.0, selectedItems: datePickerData.1)
+        busSearchDatePickerViewController.modalPresentationStyle = .overFullScreen
+        present(busSearchDatePickerViewController, animated: false)
     }
 }
 

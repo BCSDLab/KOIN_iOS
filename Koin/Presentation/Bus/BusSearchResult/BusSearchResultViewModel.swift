@@ -10,12 +10,12 @@ import Combine
 final class BusSearchResultViewModel: ViewModelProtocol {
     enum Input {
         case getDatePickerData
+        case updateDatePickerSelectedItems([String])
         case getSearchedResult(String?, BusType?)
         case getSemesterInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
-        case updateDatePickerData(([[String]], [String]))
         case updateSemesterInfo(SemesterInfo)
         case udpatesSearchedResult(String?, SearchBusInfoResult)
     }
@@ -25,6 +25,7 @@ final class BusSearchResultViewModel: ViewModelProtocol {
     let busPlaces: (BusPlace, BusPlace)  // navigationItem을 설정하기 위해 private 임시 없앰
     private var departBusType: BusType = .noValue
     private var departBusTime: String = ""
+    private(set) var datePickerData: ([[String]], [String])?
     private let fetchDatePickerDataUseCase: FetchKoinPickerDataUseCase
     private let fetchSearchedResultUseCase: SearchBusInfoUseCase
     private let fetchSemesterInfoUseCase: FetchShuttleBusRoutesUseCase
@@ -43,6 +44,8 @@ final class BusSearchResultViewModel: ViewModelProtocol {
             switch input {
             case .getDatePickerData:
                 self?.getDatePickerData()
+            case let .updateDatePickerSelectedItems(selectedItems):
+                self?.updateDatePickerSelectedItems(selectedItems)
             case let .getSearchedResult(departDate, busType):
                 self?.getSearchedResult(departDate: departDate, busType: busType)
             case let .logEvent(label, category, value):
@@ -57,8 +60,12 @@ final class BusSearchResultViewModel: ViewModelProtocol {
 
 extension BusSearchResultViewModel {
     private func getDatePickerData() {
-        let data = fetchDatePickerDataUseCase.execute()
-        outputSubject.send(.updateDatePickerData(data))
+        datePickerData = fetchDatePickerDataUseCase.execute()
+    }
+
+    private func updateDatePickerSelectedItems(_ selectedItems: [String]) {
+        guard let datePickerData else { return }
+        self.datePickerData = (datePickerData.0, selectedItems)
     }
     
     private func getSearchedResult(departDate: String?, busType: BusType?) {
