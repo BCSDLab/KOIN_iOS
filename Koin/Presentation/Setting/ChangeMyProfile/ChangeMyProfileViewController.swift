@@ -27,11 +27,6 @@ final class ChangeMyProfileViewController: UIViewController {
     private let scrollView = UIScrollView().then { scrollView in
     }
     
-    private let revokeModalViewController = RevokeModalViewController().then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
     private lazy var deptButton = UIButton().then {
         $0.isHidden = userType == .general ? true : false
     }
@@ -281,11 +276,6 @@ final class ChangeMyProfileViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
-        
-        revokeModalViewController.revokeButtonPublisher.sink { [weak self] _ in
-            self?.viewModel.revoke()
-        }.store(in: &subscriptions)
-        
         viewModel.nicknameMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
             self?.nicknameStateView.isHidden = false
             self?.nicknameStateView.setState(state: response.1 ? .success : .warning, message: response.0)
@@ -387,6 +377,11 @@ final class ChangeMyProfileViewController: UIViewController {
 
 extension ChangeMyProfileViewController {
     @objc private func revokeButtonTapped() {
+        let revokeModalViewController = RevokeModalViewController(onRevokeButtonTapped: { [weak self] in
+            self?.viewModel.revoke()
+        })
+        revokeModalViewController.modalPresentationStyle = .overFullScreen
+        revokeModalViewController.modalTransitionStyle = .crossDissolve
         present(revokeModalViewController, animated: true, completion: nil)
     }
     @objc private func inquryButtonTapped() {

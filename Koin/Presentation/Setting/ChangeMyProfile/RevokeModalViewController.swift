@@ -6,12 +6,10 @@
 //
 
 
-import Combine
 import UIKit
 
 final class RevokeModalViewController: UIViewController {
-    
-    let revokeButtonPublisher = PassthroughSubject<Void, Never>()
+    private let onRevokeButtonTapped: () -> Void
     
     private let messageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 18)
@@ -67,6 +65,16 @@ final class RevokeModalViewController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
+
+    init(onRevokeButtonTapped: @escaping () -> Void) {
+        self.onRevokeButtonTapped = onRevokeButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -81,7 +89,7 @@ final class RevokeModalViewController: UIViewController {
     
     @objc private func revokeButtonTapped() {
         dismiss(animated: true, completion: nil)
-        revokeButtonPublisher.send(())
+        onRevokeButtonTapped()
     }
 }
 
