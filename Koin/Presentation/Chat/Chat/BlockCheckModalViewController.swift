@@ -5,11 +5,10 @@
 //  Created by 김나훈 on 2/18/25.
 //
 
-import Combine
 import UIKit
 
 final class BlockCheckModalViewController: UIViewController {
-    let buttonPublihser = PassthroughSubject<Void, Never>()
+    private let onBlockButtonTapped: () -> Void
     
     private let blockButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
@@ -30,6 +29,16 @@ final class BlockCheckModalViewController: UIViewController {
         $0.layer.shadowOffset = CGSize(width: 0, height: 2)
         $0.layer.shadowRadius = 4
     }
+
+    init(onBlockButtonTapped: @escaping () -> Void) {
+        self.onBlockButtonTapped = onBlockButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,8 +49,7 @@ final class BlockCheckModalViewController: UIViewController {
     }
     
     @objc func blockButtonTapped() {
-        buttonPublihser.send()
-        dismiss(animated: true, completion: nil)
+        dismiss(animated: true, completion: onBlockButtonTapped)
     }
     
     @objc func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {

@@ -44,11 +44,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         $0.setImage(UIImage.appImage(asset: .send), for: .normal)
     }
     
-    private let blockCheckModalViewController = BlockCheckModalViewController().then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
     private let chatHistoryTableView = ChatHistoryTableView().then {
         $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
     }
@@ -111,18 +106,6 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
             }
         }.store(in: &subscriptions)
         
-        blockCheckModalViewController.buttonPublihser.sink { [weak self] in
-            guard let self else { return }
-            let onRightButtonTapped: ()->Void = { [weak self] in
-                self?.inputSubject.send(.blockUser)
-            }
-            let modalViewController = ModalViewController(onRightButtonTapped: onRightButtonTapped, width: 301, height: 179, paddingBetweenLabels: 8, title: "이 사용자를 차단하시겠습니까?", subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray), rightButtonText: "차단하기")
-            modalViewController.modalTransitionStyle = .crossDissolve
-            dismiss(animated: true) { [weak self] in
-                self?.present(modalViewController, animated: false)
-            }
-        }.store(in: &subscriptions)
-        
         chatHistoryTableView.imageTapPublisher.sink { [weak self] imageUrl in
             self?.dismissKeyboard()
             
@@ -180,9 +163,33 @@ extension ChatViewController{
     
     @objc private func rightButtonTapped() {
         dismissKeyboard()
-        
+
+        let blockCheckModalViewController = BlockCheckModalViewController(onBlockButtonTapped: { [weak self] in
+            self?.presentBlockUserConfirmationModal()
+        })
+        blockCheckModalViewController.modalPresentationStyle = .overFullScreen
+        blockCheckModalViewController.modalTransitionStyle = .crossDissolve
         present(blockCheckModalViewController, animated: true)
     }
+
+    private func presentBlockUserConfirmationModal() {
+        let modalViewController = ModalViewController(
+            onRightButtonTapped: { [weak self] in
+                self?.inputSubject.send(.blockUser)
+            },
+            width: 301,
+            height: 179,
+            paddingBetweenLabels: 8,
+            title: "이 사용자를 차단하시겠습니까?",
+            subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.",
+            titleColor: .appColor(.neutral700),
+            subTitleColor: .appColor(.gray),
+            rightButtonText: "차단하기"
+        )
+        modalViewController.modalTransitionStyle = .crossDissolve
+        present(modalViewController, animated: false)
+    }
+
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
         let keyboardHeight = keyboardFrame.height
