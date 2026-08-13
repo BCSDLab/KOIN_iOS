@@ -5,15 +5,14 @@
 //  Created by 김나훈 on 8/13/24.
 //
 
-import Combine
 import UIKit
 import SnapKit
 
 final class DeleteReviewModalViewController: UIViewController {
     
     // MARK: - Properties
-    let deleteButtonPublisher = PassthroughSubject<Void, Never>()
-    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
+    private let onDeleteButtonTapped: () -> Void
+    private let onCancelButtonTapped: () -> Void
     
     // MARK: - UI Components
     private let containerView = UIView().then {
@@ -58,6 +57,20 @@ final class DeleteReviewModalViewController: UIViewController {
         $0.layer.cornerRadius = 6
         $0.layer.masksToBounds = true
     }
+
+    init(
+        onDeleteButtonTapped: @escaping () -> Void,
+        onCancelButtonTapped: @escaping () -> Void
+    ) {
+        self.onDeleteButtonTapped = onDeleteButtonTapped
+        self.onCancelButtonTapped = onCancelButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -74,13 +87,13 @@ final class DeleteReviewModalViewController: UIViewController {
 
 extension DeleteReviewModalViewController {
     @objc private func closeButtonTapped() {
-        cancelButtonPublisher.send()
+        onCancelButtonTapped()
         dismiss(animated: true, completion: nil)
     }
     
     @objc private func deleteButtonTapped() {
         dismiss(animated: true, completion: nil)
-        deleteButtonPublisher.send(())
+        onDeleteButtonTapped()
     }
 }
 

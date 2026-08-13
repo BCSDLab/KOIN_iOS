@@ -5,13 +5,11 @@
 //  Created by 김나훈 on 7/14/25.
 //
 
-import Combine
 import UIKit
 
 final class ModifyUserModalViewController: UIViewController {
-    
-    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
-    let navigateButtonPublisher = PassthroughSubject<Void, Never>()
+    private let onCancelButtonTapped: () -> Void
+    private let onNavigateButtonTapped: () -> Void
     
     private let messageLabel = UILabel().then {
         $0.text = "아직 입력되지 않은 정보가 있어요."
@@ -55,7 +53,12 @@ final class ModifyUserModalViewController: UIViewController {
         return view
     }()
     
-    init() {
+    init(
+        onCancelButtonTapped: @escaping () -> Void,
+        onNavigateButtonTapped: @escaping () -> Void
+    ) {
+        self.onCancelButtonTapped = onCancelButtonTapped
+        self.onNavigateButtonTapped = onNavigateButtonTapped
         super.init(nibName: nil, bundle: nil)
         self.modalPresentationStyle = .overFullScreen
         self.modalTransitionStyle = .crossDissolve
@@ -72,12 +75,10 @@ final class ModifyUserModalViewController: UIViewController {
         navigateButton.addTarget(self, action: #selector(navigateButtonTapped), for: .touchUpInside)
     }
     @objc private func cancelButtonTapped() {
-        cancelButtonPublisher.send()
-        dismiss(animated: true)
+        dismiss(animated: true, completion: onCancelButtonTapped)
     }
     @objc private func navigateButtonTapped() {
-        navigateButtonPublisher.send()
-        dismiss(animated: true)
+        dismiss(animated: true, completion: onNavigateButtonTapped)
     }
    
 }

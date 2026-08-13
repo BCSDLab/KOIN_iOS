@@ -89,17 +89,6 @@ final class TimetableViewController: UIViewController {
         $0.isHidden = true
     }
     
-    private let substituteTimetableModalViewController = SubstituteTimetableModalViewController().then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
-    private let selectDeptModalViewController = SelectDeptModalViewController().then { _ in
-    }
-    
-    private let deleteLectureModalViewController: DeleteLectureModalViewController = DeleteLectureModalViewController().then { _ in
-    }
-    
     private let containerView = UIView().then { _ in
     }
     
@@ -179,16 +168,14 @@ final class TimetableViewController: UIViewController {
                 $0.removeFromSuperview()
             }
             if lecture.1 && viewModel.checkDuplicatedClassTime(classTime: lecture.0.classTime){
-                substituteTimetableModalViewController.configure(lectureData: lecture.0)
-                self.present(substituteTimetableModalViewController, animated: true)
+                self.presentSubstituteTimetableModal(lectureData: lecture.0)
             } else {
                 self.inputSubject.send(.modifyLecture(lecture.0, lecture.1))
             }
         }.store(in: &subscriptions)
         
         addClassCollectionView.filterButtonPublisher.sink { [weak self] in
-            guard let self = self else { return }
-            self.present(self.selectDeptModalViewController, animated: false)
+            self?.presentSelectDeptModal()
         }.store(in: &subscriptions)
         
         addClassCollectionView.didTapCellPublisher.sink { [weak self] (selectedLecture, filteredLectures) in
@@ -219,8 +206,7 @@ final class TimetableViewController: UIViewController {
             
             self.toggleCollectionView(collectionView: self.addDirectCollectionView, animate: true)
             if viewModel.checkDuplicatedClassTime(classTime: item.1) {
-                substituteTimetableModalViewController.configure(customLecture: (item.0, item.1))
-                self.present(substituteTimetableModalViewController, animated: true)
+                self.presentSubstituteTimetableModal(customLecture: (item.0, item.1))
             } else {
                 self.inputSubject.send(.postCustomLecture(item.0, item.1))
             }
@@ -237,8 +223,7 @@ final class TimetableViewController: UIViewController {
         deleteLectureView.deleteButtonPublisher.sink { [weak self] lecture in
             guard let self = self else { return }
             self.deleteLectureView.isHidden = true
-            deleteLectureModalViewController.setMessageLabelText(lectureData: lecture)
-            self.present(deleteLectureModalViewController, animated: false)
+            self.presentDeleteLectureModal(lecture: lecture)
         }.store(in: &subscriptions)
         
         timetableCollectionView.heightChangedPublisher.sink { [weak self] in
@@ -248,34 +233,59 @@ final class TimetableViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
-        selectDeptModalViewController.selectedDeptPublisher.sink { [weak self] dept in
-            self?.addClassCollectionView.setUpSelectedDept(dept: dept)
-        }.store(in: &subscriptions)
-        
-        deleteLectureModalViewController.deleteButtonPublisher.sink { [weak self] lecture in
+    }
+}
+
+extension TimetableViewController {
+    private func presentSubstituteTimetableModal(lectureData: LectureData) {
+        let viewController = makeSubstituteTimetableModal()
+        viewController.configure(lectureData: lectureData)
+        present(viewController, animated: true)
+    }
+
+    private func presentSubstituteTimetableModal(customLecture: (String, [Int])) {
+        let viewController = makeSubstituteTimetableModal()
+        viewController.configure(customLecture: customLecture)
+        present(viewController, animated: true)
+    }
+
+    private func makeSubstituteTimetableModal() -> SubstituteTimetableModalViewController {
+        SubstituteTimetableModalViewController(onSubstituteButtonTapped: { [weak self] response in
+            self?.handleSubstituteResponse(response)
+        }).then {
+            $0.modalPresentationStyle = .overFullScreen
+            $0.modalTransitionStyle = .crossDissolve
+        }
+    }
+
+    private func handleSubstituteResponse(_ response: Any) {
+        let completion: (Subscribers.Completion<Never>) -> Void = { [weak self] _ in
+            self?.viewModel.selectedFrameId = self?.viewModel.selectedFrameId
+        }
+        if let lectureData = response as? LectureData {
+            viewModel.performLectureModification(lectureData: lectureData)
+                .sink(receiveCompletion: completion, receiveValue: { _ in })
+                .store(in: &subscriptions)
+        } else if let customLecture = response as? (String, [Int]) {
+            viewModel.performCustomLectureModification(lectureName: customLecture.0, lectureTime: customLecture.1)
+                .sink(receiveCompletion: completion, receiveValue: { _ in })
+                .store(in: &subscriptions)
+        }
+    }
+
+    private func presentSelectDeptModal() {
+        let viewController = SelectDeptModalViewController(onDepartmentSelected: { [weak self] department in
+            self?.addClassCollectionView.setUpSelectedDept(dept: department)
+        })
+        present(viewController, animated: false)
+    }
+
+    private func presentDeleteLectureModal(lecture: LectureData) {
+        let viewController = DeleteLectureModalViewController(onDeleteButtonTapped: { [weak self] lecture in
             self?.inputSubject.send(._deleteLecture(lecture))
-        }.store(in: &subscriptions)
-        
-        substituteTimetableModalViewController.substituteButtonPublisher.sink { [weak self] response in
-            guard let self = self else { return }
-            
-            if let lectureData = response as? LectureData {
-                self.viewModel.performLectureModification(lectureData: lectureData).sink(
-                    receiveCompletion: { _ in
-                        self.viewModel.selectedFrameId = self.viewModel.selectedFrameId
-                    },
-                    receiveValue: { _ in }
-                ).store(in: &self.subscriptions)
-                
-            } else if let customLecture = response as? (String, [Int]) {
-                self.viewModel.performCustomLectureModification(lectureName: customLecture.0, lectureTime: customLecture.1).sink(
-                    receiveCompletion: { _ in
-                        self.viewModel.selectedFrameId = self.viewModel.selectedFrameId
-                    },
-                    receiveValue: { _ in }
-                ).store(in: &self.subscriptions)
-            }
-        }.store(in: &subscriptions)
+        })
+        viewController.setMessageLabelText(lectureData: lecture)
+        present(viewController, animated: false)
     }
 }
 

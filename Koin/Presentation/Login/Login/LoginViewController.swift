@@ -109,8 +109,6 @@ final class LoginViewController: UIViewController {
         $0.textAlignment = .center
     }
     
-    private let modifyUserModalViewController = ModifyUserModalViewController()
-    
     // MARK: - Initialization
     init(viewModel: LoginViewModel) {
         self.viewModel = viewModel
@@ -144,24 +142,6 @@ final class LoginViewController: UIViewController {
     }
     
     private func bind() {
-        modifyUserModalViewController.cancelButtonPublisher.sink { [weak self] in
-            self?.navigationController?.popViewController(animated: true)
-        }.store(in: &subscriptions)
-        
-        modifyUserModalViewController.navigateButtonPublisher.sink { [weak self] in
-            guard let self = self else { return }
-            let homeViewController = makeHomeTabBarController()
-
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let modifyUseCase = DefaultModifyUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-            let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
-            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-            let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
-            let changeMyProfileViewController = ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase), userType: .student)
-            navigationController?.setViewControllers([homeViewController, changeMyProfileViewController], animated: true)
-            
-        }.store(in: &subscriptions)
-        
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
@@ -176,13 +156,36 @@ final class LoginViewController: UIViewController {
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .showModifyModal:
-                self?.present(self?.modifyUserModalViewController ?? UIViewController(), animated: true)
+                self?.presentModifyUserModal()
             }
         }.store(in: &subscriptions)
     }
 }
 
 extension LoginViewController {
+    private func presentModifyUserModal() {
+        let modifyUserModalViewController = ModifyUserModalViewController(
+            onCancelButtonTapped: { [weak self] in
+                self?.navigationController?.popViewController(animated: true)
+            },
+            onNavigateButtonTapped: { [weak self] in
+                self?.navigateToChangeMyProfile()
+            }
+        )
+        present(modifyUserModalViewController, animated: true)
+    }
+
+    private func navigateToChangeMyProfile() {
+        let homeViewController = makeHomeTabBarController()
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let modifyUseCase = DefaultModifyUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
+        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let checkDuplicatedNicknameUseCase = DefaultCheckDuplicatedNicknameUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
+        let changeMyProfileViewController = ChangeMyProfileViewController(viewModel: ChangeMyProfileViewModel(modifyUseCase: modifyUseCase, fetchDeptListUseCase: fetchDeptListUseCase, fetchUserDataUseCase: fetchUserDataUseCase, checkDuplicatedNicknameUseCase: checkDuplicatedNicknameUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase), userType: .student)
+        navigationController?.setViewControllers([homeViewController, changeMyProfileViewController], animated: true)
+    }
+
     @objc private func changeSecureButtonTapped() {
         passwordTextField.isSecureTextEntry.toggle()
         changeSecureButton.setImage(passwordTextField.isSecureTextEntry ? UIImage.appImage(asset: .visibility) : UIImage.appImage(asset: .visibilityNon), for: .normal)

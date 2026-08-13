@@ -227,11 +227,8 @@ extension LostItemListViewController {
             let loginViewController = LoginViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
-        let loginModalViewController = ModalViewControllerB(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 글을 작성해주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
-            $0.modalPresentationStyle = .overFullScreen
-            $0.modalTransitionStyle = .crossDissolve
-        }
-        navigationController?.present(loginModalViewController, animated: true)
+        let loginModalViewController = ModalViewController(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 글을 작성해주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray))
+        navigationController?.present(loginModalViewController, animated: false)
     }
     
     private func presentPostTypeModal() {

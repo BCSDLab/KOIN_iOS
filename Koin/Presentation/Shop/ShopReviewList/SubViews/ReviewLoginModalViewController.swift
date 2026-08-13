@@ -6,7 +6,6 @@
 //
 
 
-import Combine
 import UIKit
 
 final class ReviewLoginModalViewController: UIViewController {
@@ -14,11 +13,8 @@ final class ReviewLoginModalViewController: UIViewController {
     // MARK: - Properties
     
     private let message: String
-    
-    // MARK: - Publisher
-    
-    let loginButtonPublisher = PassthroughSubject<Void, Never>()
-    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
+    private let onLoginButtonTapped: () -> Void
+    private let onCancelButtonTapped: () -> Void
     
     // MARK: - UI Components
 
@@ -64,8 +60,14 @@ final class ReviewLoginModalViewController: UIViewController {
     
     // MARK: - Initializer
     
-    init(message: String) {
+    init(
+        message: String,
+        onLoginButtonTapped: @escaping () -> Void,
+        onCancelButtonTapped: @escaping () -> Void
+    ) {
         self.message = message
+        self.onLoginButtonTapped = onLoginButtonTapped
+        self.onCancelButtonTapped = onCancelButtonTapped
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -125,12 +127,12 @@ final class ReviewLoginModalViewController: UIViewController {
     
     @objc private func closeButtonTapped() {
         dismiss(animated: true, completion: nil)
-        cancelButtonPublisher.send()
+        onCancelButtonTapped()
     }
     
     @objc private func loginButtonTapped() {
         dismiss(animated: true, completion: nil)
-        loginButtonPublisher.send(())
+        onLoginButtonTapped()
     }
 }
 

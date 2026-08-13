@@ -5,12 +5,10 @@
 //  Created by 김나훈 on 12/10/24.
 //
 
-import Combine
 import UIKit
 
 final class DeleteFrameModalViewController: UIViewController {
-    
-    let deleteButtonPublisher = PassthroughSubject<FrameDto, Never>()
+    private let onDeleteButtonTapped: (FrameDto) -> Void
     private var frame: FrameDto? = nil
     
     private let messageLabel = UILabel().then {
@@ -43,6 +41,16 @@ final class DeleteFrameModalViewController: UIViewController {
         $0.layer.cornerRadius = 4
         $0.layer.masksToBounds = true
     }
+
+    init(onDeleteButtonTapped: @escaping (FrameDto) -> Void) {
+        self.onDeleteButtonTapped = onDeleteButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,7 +61,7 @@ final class DeleteFrameModalViewController: UIViewController {
   
     @objc private func deleteButtonTapped() {
         if let frame = frame {
-            deleteButtonPublisher.send(frame)
+            onDeleteButtonTapped(frame)
         }
         dismiss(animated: true, completion: nil)
     }

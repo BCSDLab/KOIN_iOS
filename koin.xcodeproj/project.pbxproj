@@ -72,7 +72,6 @@
 		7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F282F1D6A7F00149729 /* LostItemDataViewModel.swift */; };
 		7C372F322F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F302F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift */; };
 		7C372F332F1DB4C300149729 /* LostItemImagesCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F2F2F1DB4C300149729 /* LostItemImagesCollectionView.swift */; };
-		7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */; };
 		7C3ECC7A2F41505000EE8F13 /* ErrorResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */; };
 		7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */; };
 		7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C457B092FCE1BA80011D338 /* DiningView.swift */; };
@@ -1098,7 +1097,6 @@
 		7C372F282F1D6A7F00149729 /* LostItemDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemDataViewModel.swift; sourceTree = "<group>"; };
 		7C372F2F2F1DB4C300149729 /* LostItemImagesCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemImagesCollectionView.swift; sourceTree = "<group>"; };
 		7C372F302F1DB4C300149729 /* LostItemImagesCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemImagesCollectionViewCell.swift; sourceTree = "<group>"; };
-		7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewControllerB.swift; sourceTree = "<group>"; };
 		7C3ECC792F41505000EE8F13 /* ErrorResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ErrorResponse.swift; sourceTree = "<group>"; };
 		7C457AE62FCDE7240011D338 /* SwiftUIViewModelProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIViewModelProtocol.swift; sourceTree = "<group>"; };
 		7C457AFE2FCE1BA80011D338 /* CategoryFeaturedButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFeaturedButton.swift; sourceTree = "<group>"; };
@@ -5125,7 +5123,6 @@
 				7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */,
 				7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */,
 				835C991D2C7F1256002E02D3 /* ModalViewController.swift */,
-				7C372F382F1DCFF800149729 /* ModalViewControllerB.swift */,
 				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
 				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
 				7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */,
@@ -6373,7 +6370,6 @@
 				7CED92132EF2D1F900457128 /* SettingsViewController.swift in Sources */,
 				7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */,
 				7C0C18952F68A913001781B3 /* FetchCallVanChatUseCase.swift in Sources */,
-				7C372F392F1DCFF800149729 /* ModalViewControllerB.swift in Sources */,
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
 				7C372EE62F1C0CC400149729 /* LostItemListData.swift in Sources */,
 				7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */,

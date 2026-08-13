@@ -5,12 +5,10 @@
 //  Created by 김나훈 on 11/21/24.
 //
 
-import Combine
 import UIKit
 
 final class ModifySemesterModalViewController: UIViewController {
-    
-    let applyButtonPublisher = PassthroughSubject<([String], [String]), Never>()
+    private let onApplyButtonTapped: ([String], [String]) -> Void
     var frameList: [FrameData] = []
     var containerWidth: CGFloat
     var containerHeight: CGFloat
@@ -64,7 +62,12 @@ final class ModifySemesterModalViewController: UIViewController {
         $0.setTitle("적용하기", for: .normal)
     }
     
-    init(width: CGFloat, height: CGFloat) {
+    init(
+        onApplyButtonTapped: @escaping ([String], [String]) -> Void,
+        width: CGFloat,
+        height: CGFloat
+    ) {
+        self.onApplyButtonTapped = onApplyButtonTapped
         self.containerWidth = width
         self.containerHeight = height
         super.init(nibName: nil, bundle: nil)
@@ -177,8 +180,7 @@ extension ModifySemesterModalViewController {
         }
         print(addedSemesters)
         print(removedSemesters)
-        // Publish 결과
-        applyButtonPublisher.send((addedSemesters, removedSemesters))
+        onApplyButtonTapped(addedSemesters, removedSemesters)
 
         updateSemesterButtons()
     }

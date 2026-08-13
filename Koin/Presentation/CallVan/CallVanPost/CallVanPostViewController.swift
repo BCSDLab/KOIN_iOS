@@ -33,12 +33,6 @@ final class CallVanPostViewController: UIViewController {
     private let postButton = UIButton()
     
     private let bottomSheetContentView = CallVanPostPlaceBottomSheetView()
-    private lazy var bottomSheetViewController = BottomSheetViewControllerB(
-        contentView: bottomSheetContentView,
-        dimColor: .black,
-        dimAlpha: 0.7,
-        backgroundColor: UIColor.appColor(.neutral0)
-    )
     
     // MARK: - Initializer
     init(viewModel: CallVanPostViewModel) {
@@ -56,7 +50,6 @@ final class CallVanPostViewController: UIViewController {
         configureNavigationBar(style: .empty)
         configureView()
         setAddTargets()
-        setDelegates()
         bind()
         dateView.update(Date())
         timeView.update(Date())
@@ -139,11 +132,6 @@ extension CallVanPostViewController: PopLoggable {
 }
 
 extension CallVanPostViewController {
-    
-    private func setDelegates() {
-        bottomSheetContentView.delegate = bottomSheetViewController
-    }
-    
     private func setAddTargets() {
         postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
     }
@@ -193,8 +181,9 @@ extension CallVanPostViewController {
             customPlace: viewModel.request.departureCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
-        present(bottomSheetViewController, animated: false)
+        presentPlaceBottomSheet()
     }
+
     private func presentArrivalPlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
             guard let self else { return }
@@ -210,6 +199,17 @@ extension CallVanPostViewController {
             customPlace: viewModel.request.arrivalCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
+        presentPlaceBottomSheet()
+    }
+
+    private func presentPlaceBottomSheet() {
+        let bottomSheetViewController = BottomSheetViewControllerB(
+            contentView: bottomSheetContentView,
+            dimColor: .black,
+            dimAlpha: 0.7,
+            backgroundColor: UIColor.appColor(.neutral0)
+        )
+        bottomSheetContentView.delegate = bottomSheetViewController
         present(bottomSheetViewController, animated: false)
     }
 }
