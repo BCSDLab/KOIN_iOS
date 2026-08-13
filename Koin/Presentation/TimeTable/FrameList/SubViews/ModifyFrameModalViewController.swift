@@ -5,14 +5,11 @@
 //  Created by 김나훈 on 11/21/24.
 //
 
-import Combine
 import UIKit
 
 final class ModifyFrameModalViewController: UIViewController {
-    
-    let deleteButtonPublisher = PassthroughSubject<FrameDto, Never>()
-    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
-    let saveButtonPublisher = PassthroughSubject<FrameDto, Never>()
+    private let onDeleteButtonTapped: (FrameDto) -> Void
+    private let onSaveButtonTapped: (FrameDto) -> Void
     var containerWidth: CGFloat
     var containerHeight: CGFloat
     var frame: FrameDto = FrameDto(id: 0, timetableName: "", isMain: false)
@@ -70,7 +67,14 @@ final class ModifyFrameModalViewController: UIViewController {
         return view
     }()
     
-    init(width: CGFloat, height: CGFloat) {
+    init(
+        onDeleteButtonTapped: @escaping (FrameDto) -> Void,
+        onSaveButtonTapped: @escaping (FrameDto) -> Void,
+        width: CGFloat,
+        height: CGFloat
+    ) {
+        self.onDeleteButtonTapped = onDeleteButtonTapped
+        self.onSaveButtonTapped = onSaveButtonTapped
         self.containerWidth = width
         self.containerHeight = height
         super.init(nibName: nil, bundle: nil)
@@ -109,14 +113,14 @@ final class ModifyFrameModalViewController: UIViewController {
     }
     @objc private func deleteButtonTapped() {
         dismiss(animated: true, completion: nil)
-        deleteButtonPublisher.send(frame)
+        onDeleteButtonTapped(frame)
     }
     @objc private func cancelButtonTapped() {
         dismiss(animated: true, completion: nil)
     }
     
     @objc private func saveButtonTapped() {
-        saveButtonPublisher.send(frame)
+        onSaveButtonTapped(frame)
         dismiss(animated: true, completion: nil)
     }
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {

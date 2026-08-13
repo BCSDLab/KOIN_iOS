@@ -5,12 +5,10 @@
 //  Created by 김나훈 on 12/10/24.
 //
 
-import Combine
 import UIKit
 
 final class DeleteSemesterModalViewController: UIViewController {
-    
-    let deleteButtonPublisher = PassthroughSubject<[String], Never>()
+    private let onDeleteButtonTapped: ([String]) -> Void
     private var semesters: [String]? = nil
     
     private let messageLabel = UILabel().then {
@@ -54,6 +52,16 @@ final class DeleteSemesterModalViewController: UIViewController {
         view.layer.masksToBounds = true
         return view
     }()
+
+    init(onDeleteButtonTapped: @escaping ([String]) -> Void) {
+        self.onDeleteButtonTapped = onDeleteButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,7 +78,7 @@ final class DeleteSemesterModalViewController: UIViewController {
     
     @objc private func deleteButtonTapped() {
         if let semesters = semesters {
-            deleteButtonPublisher.send(semesters)
+            onDeleteButtonTapped(semesters)
         }
         dismiss(animated: true, completion: nil)
     }

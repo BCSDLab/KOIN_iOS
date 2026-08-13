@@ -20,22 +20,12 @@ final class FrameListViewController: UIViewController {
     // MARK: - UI Components
     private let tableView = UITableView(frame: .zero, style: .plain)
     
-    private let modifyFrameModalViewController: ModifyFrameModalViewController = ModifyFrameModalViewController(width: 327, height: 216)
-    
-    private let modifySemesterModalViewController: ModifySemesterModalViewController = ModifySemesterModalViewController(width: 327, height: 232)
-    
     private let emptyFrameLabel = UILabel().then {
         $0.text = "우측 상단의 버튼으로 학기를 추가해\n시간표 기능을 사용해 보세요!"
         $0.textAlignment = .center
         $0.numberOfLines = 2
         $0.textColor = UIColor.appColor(.neutral600)
         $0.font = UIFont.appFont(.pretendardMedium, size: 13)
-    }
-    
-    private let deleteSemesterModalViewController = DeleteSemesterModalViewController().then { _ in
-    }
-    
-    private let deleteFrameModalViewController = DeleteFrameModalViewController().then { _ in
     }
     
     // MARK: - Initialization
@@ -96,33 +86,6 @@ final class FrameListViewController: UIViewController {
             }
             .store(in: &subscriptions)
         
-        modifyFrameModalViewController.deleteButtonPublisher.sink(receiveValue: { [weak self] frame in
-            guard let self = self else { return }
-            deleteFrameModalViewController.configure(frame: frame)
-            present(deleteFrameModalViewController, animated: false)
-        }).store(in: &subscriptions)
-        
-        modifyFrameModalViewController.saveButtonPublisher.sink(receiveValue: { [weak self] frame in
-            self?.inputSubject.send(.modifyFrame(frame))
-            
-        }).store(in: &subscriptions)
-        
-        modifySemesterModalViewController.applyButtonPublisher.sink { [weak self] addedSemester, removedSemester in
-            guard let self = self else { return }
-            inputSubject.send(.modifySemester(addedSemester, []))
-            if !removedSemester.isEmpty {
-                deleteSemesterModalViewController.setSemesters(semesters: removedSemester)
-                present(deleteSemesterModalViewController, animated: false)
-            }
-        }.store(in: &subscriptions)
-        
-        deleteSemesterModalViewController.deleteButtonPublisher.sink { [weak self] semesters in
-            self?.inputSubject.send(.modifySemester([], semesters))
-        }.store(in: &subscriptions)
-        
-        deleteFrameModalViewController.deleteButtonPublisher.sink { [weak self] frame in
-            self?.inputSubject.send(.deleteFrame(frame))
-        }.store(in: &subscriptions)
     }
     
 }
@@ -130,10 +93,15 @@ final class FrameListViewController: UIViewController {
 extension FrameListViewController: TimetableCellDelegate {
     
     @objc private func modifySemesterButtonTapped() {
-        
+        let modifySemesterModalViewController = ModifySemesterModalViewController(
+            onApplyButtonTapped: { [weak self] addedSemesters, removedSemesters in
+                self?.applySemesterChanges(addedSemesters: addedSemesters, removedSemesters: removedSemesters)
+            },
+            width: 327,
+            height: 232
+        )
         modifySemesterModalViewController.configre(frameList: viewModel.frameData)
-        self.present(modifySemesterModalViewController, animated: true)
-        
+        present(modifySemesterModalViewController, animated: true)
     }
     
     @objc private func addTimetableTapped(_ sender: UIButton) {
@@ -152,13 +120,38 @@ extension FrameListViewController: TimetableCellDelegate {
         let row = indexPath.row
         
         // 추가 동작 (예: 삭제 모달 띄우기)
-        let timetable = viewModel.frameData[section].frame[row]
+        let modifyFrameModalViewController = ModifyFrameModalViewController(
+            onDeleteButtonTapped: { [weak self] frame in
+                self?.presentDeleteFrameModal(frame: frame)
+            },
+            onSaveButtonTapped: { [weak self] frame in
+                self?.inputSubject.send(.modifyFrame(frame))
+            },
+            width: 327,
+            height: 216
+        )
         modifyFrameModalViewController.configure(frame: viewModel.frameData[section].frame[row])
-        self.present(modifyFrameModalViewController, animated: true)
-        
-        
+        present(modifyFrameModalViewController, animated: true)
     }
-    
+
+    private func applySemesterChanges(addedSemesters: [String], removedSemesters: [String]) {
+        inputSubject.send(.modifySemester(addedSemesters, []))
+        guard !removedSemesters.isEmpty else { return }
+
+        let deleteSemesterModalViewController = DeleteSemesterModalViewController(onDeleteButtonTapped: { [weak self] semesters in
+            self?.inputSubject.send(.modifySemester([], semesters))
+        })
+        deleteSemesterModalViewController.setSemesters(semesters: removedSemesters)
+        present(deleteSemesterModalViewController, animated: false)
+    }
+
+    private func presentDeleteFrameModal(frame: FrameDto) {
+        let deleteFrameModalViewController = DeleteFrameModalViewController(onDeleteButtonTapped: { [weak self] frame in
+            self?.inputSubject.send(.deleteFrame(frame))
+        })
+        deleteFrameModalViewController.configure(frame: frame)
+        present(deleteFrameModalViewController, animated: false)
+    }
 }
 extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
