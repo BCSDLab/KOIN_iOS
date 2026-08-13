@@ -5,12 +5,11 @@
 //  Created by 김나훈 on 12/10/24.
 //
 
-import Combine
 import UIKit
 
 final class DeleteLectureModalViewController: UIViewController {
     
-    let deleteButtonPublisher = PassthroughSubject<LectureData, Never>()
+    private let onDeleteButtonTapped: (LectureData) -> Void
     private var lectureData: LectureData? = nil
     
     private let messageLabel = UILabel().then {
@@ -47,6 +46,14 @@ final class DeleteLectureModalViewController: UIViewController {
         return view
     }()
     
+    init(onDeleteButtonTapped: @escaping (LectureData) -> Void) {
+        self.onDeleteButtonTapped = onDeleteButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         modalPresentationStyle = .overFullScreen
@@ -63,7 +70,7 @@ final class DeleteLectureModalViewController: UIViewController {
     @objc private func deleteButtonTapped() {
         dismiss(animated: true, completion: nil)
         if let lectureData = lectureData {
-            deleteButtonPublisher.send(lectureData)
+            onDeleteButtonTapped(lectureData)
         }
         
     }

@@ -5,12 +5,11 @@
 //  Created by 김나훈 on 12/4/24.
 //
 
-import Combine
 import UIKit
 
 final class SubstituteTimetableModalViewController: UIViewController {
     
-    let substituteButtonPublisher = PassthroughSubject<Any, Never>()
+    private let onSubstituteButtonTapped: (Any) -> Void
     private var lectureData: LectureData?
     private var customLecture: (String, [Int])?
     
@@ -63,6 +62,14 @@ final class SubstituteTimetableModalViewController: UIViewController {
         return view
     }()
     
+    init(onSubstituteButtonTapped: @escaping (Any) -> Void) {
+        self.onSubstituteButtonTapped = onSubstituteButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -77,9 +84,9 @@ final class SubstituteTimetableModalViewController: UIViewController {
     @objc private func substituteButtonTapped() {
         dismiss(animated: true, completion: nil)
         if let lectureData = lectureData {
-                substituteButtonPublisher.send(lectureData)
+                onSubstituteButtonTapped(lectureData)
             } else if let customLecture = customLecture {
-                substituteButtonPublisher.send(customLecture)
+                onSubstituteButtonTapped(customLecture)
             } 
     }
     

@@ -5,12 +5,19 @@
 //  Created by 김나훈 on 12/6/24.
 //
 
-import Combine
 import UIKit
 
 final class SelectDeptModalViewController: UIViewController {
     
-    let selectedDeptPublisher = PassthroughSubject<String?, Never>()
+    private let onDepartmentSelected: (String?) -> Void
+
+    init(onDepartmentSelected: @escaping (String?) -> Void) {
+        self.onDepartmentSelected = onDepartmentSelected
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
     private var departmentButtons: [UIButton] = []
     private let departments = [
         "디자인ㆍ건축공학부",
@@ -68,7 +75,7 @@ final class SelectDeptModalViewController: UIViewController {
     }
     
     @objc private func completeButtonTapped() {
-        selectedDeptPublisher.send(selectedDepartment)
+        onDepartmentSelected(selectedDepartment)
         dismiss(animated: true, completion: nil)
     }
 
