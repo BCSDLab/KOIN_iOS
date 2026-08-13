@@ -195,7 +195,7 @@ extension LostItemKeywordViewController {
         let onRightButtonTapped: ()->Void = { [weak self] in
             self?.navigateToLogin()
         }
-        let viewController = ModalViewControllerB(
+        let viewController = ModalViewController(
             onRightButtonTapped: onRightButtonTapped,
             width: 301,
             height: 228,
@@ -206,8 +206,7 @@ extension LostItemKeywordViewController {
             subTitleColor: .appColor(.gray)
         )
         viewController.modalTransitionStyle = .crossDissolve
-        viewController.modalPresentationStyle = .overFullScreen
-        navigationController?.present(viewController, animated: true)
+        navigationController?.present(viewController, animated: false)
     }
     
     private func updateMyKeywordCountLabel(_ count: Int) {

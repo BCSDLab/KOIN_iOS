@@ -116,11 +116,10 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
             let onRightButtonTapped: ()->Void = { [weak self] in
                 self?.inputSubject.send(.blockUser)
             }
-            let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 179, paddingBetweenLabels: 8, title: "이 사용자를 차단하시겠습니까?", subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray), rightButtonText: "차단하기")
+            let modalViewController = ModalViewController(onRightButtonTapped: onRightButtonTapped, width: 301, height: 179, paddingBetweenLabels: 8, title: "이 사용자를 차단하시겠습니까?", subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray), rightButtonText: "차단하기")
             modalViewController.modalTransitionStyle = .crossDissolve
-            modalViewController.modalPresentationStyle = .overFullScreen
             dismiss(animated: true) { [weak self] in
-                self?.present(modalViewController, animated: true)
+                self?.present(modalViewController, animated: false)
             }
         }.store(in: &subscriptions)
         

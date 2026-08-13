@@ -89,7 +89,6 @@ final class ManageNoticeKeywordViewController: UIViewController {
     }
     
     private let keywordLoginModalViewController = ModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "키워드 알림을 받으려면\n로그인이 필요해요.", subTitle: "로그인 후 간편하게 공지사항 키워드\n알림을 받아보세요!", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray)).then {
-        $0.modalPresentationStyle = .overFullScreen
         $0.modalTransitionStyle = .crossDissolve
     }
     
@@ -139,7 +138,7 @@ final class ManageNoticeKeywordViewController: UIViewController {
             case .showLoginModal:
                 self.keywordNotificationSwtich.isOn = false
                 self.keywordNotificationSwtich.isEnabled = true
-                self.present(self.keywordLoginModalViewController.self, animated: true, completion: nil)
+                self.present(self.keywordLoginModalViewController.self, animated: false, completion: nil)
             case let .updateSwitch(isOn):
                 self.keywordNotificationSwtich.isOn = isOn
                 self.keywordNotificationSwtich.isEnabled = true
@@ -347,4 +346,3 @@ extension ManageNoticeKeywordViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-

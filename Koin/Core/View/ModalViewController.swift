@@ -9,16 +9,20 @@ import Combine
 import UIKit
 
 class ModalViewController: UIViewController {
-    let rightButtonPublisher = PassthroughSubject<Void, Never>()
-    let leftButtonPublisher = PassthroughSubject<Void, Never>()
+    
+    // MARK: - Properties
+    let onLeftButtonTapped: (()->Void)?
+    let onRightButtonTapped: ()->Void
+    
     var containerWidth: CGFloat = 0
     var containerHeight: CGFloat = 0
     var paddingBetweenLabels: CGFloat = 0
     var titleText: String = ""
-    var subTitleText: String = ""
+    var subTitleText: String?
     var titleColor: UIColor = .black
-    var subTitleColor: UIColor = .black
+    var subTitleColor: UIColor? = .black
     
+    // MARK: - UI Components
     private let messageLabel = UILabel().then {
         $0.numberOfLines = 0
     }
@@ -56,7 +60,21 @@ class ModalViewController: UIViewController {
     
     private var contentViewInContainer: UIView?
     
-    init(width: CGFloat, height: CGFloat, paddingBetweenLabels: CGFloat, title: String, subTitle: String, titleColor: UIColor, subTitleColor: UIColor, rightButtonText: String = "로그인하기") {
+    // MARK: - Initializer
+    init(
+        onLeftButtonTapped: (()->Void)? = nil,
+        onRightButtonTapped: @escaping ()->Void,
+        width: CGFloat,
+        height: CGFloat,
+        paddingBetweenLabels: CGFloat,
+        title: String,
+        subTitle: String?,
+        titleColor: UIColor,
+        subTitleColor: UIColor?,
+        rightButtonText: String = "로그인하기"
+    ) {
+        self.onLeftButtonTapped = onLeftButtonTapped
+        self.onRightButtonTapped = onRightButtonTapped
         super.init(nibName: nil, bundle: nil)
         self.containerWidth = width
         self.containerHeight = height
@@ -68,10 +86,35 @@ class ModalViewController: UIViewController {
         self.rightButton.setTitle(rightButtonText, for: .normal)
     }
     
+    convenience init(
+        onLeftButtonTapped: (()->Void)? = nil,
+        onRightButtonTapped: @escaping ()->Void,
+        width: CGFloat,
+        height: CGFloat,
+        title: String,
+        titleColor: UIColor,
+        rightButtonText: String = "로그인하기"
+    ) {
+        
+        self.init(
+            onLeftButtonTapped: onLeftButtonTapped,
+            onRightButtonTapped: onRightButtonTapped,
+            width: width,
+            height: height,
+            paddingBetweenLabels: 0,
+            title: title,
+            subTitle: nil,
+            titleColor: titleColor,
+            subTitleColor: nil,
+            rightButtonText: rightButtonText
+        )
+    }
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -83,12 +126,12 @@ class ModalViewController: UIViewController {
     }
     
     @objc func closeButtonTapped() {
-        leftButtonPublisher.send()
+        onLeftButtonTapped?()
         dismiss(animated: true, completion: nil)
     }
     
     @objc func rightButtonTapped() {
-        rightButtonPublisher.send()
+        onRightButtonTapped()
         dismiss(animated: true, completion: nil)
     }
     
@@ -129,12 +172,15 @@ class ModalViewController: UIViewController {
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 6
         paragraphStyle.alignment = alignment
-        let attributedString = NSMutableAttributedString(string: subTitleText)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: subTitleText.count))
-        attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: subTitleText.count))
-        attributedString.addAttribute(.foregroundColor, value: subTitleColor, range: NSRange(location: 0, length: subTitleText.count))
         
-        subMessageLabel.attributedText = attributedString
+        if let subTitleText {
+            let attributedString = NSMutableAttributedString(string: subTitleText)
+            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: subTitleText.count))
+            attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: subTitleText.count))
+            attributedString.addAttribute(.foregroundColor, value: subTitleColor ?? .black, range: NSRange(location: 0, length: subTitleText.count))
+            
+            subMessageLabel.attributedText = attributedString
+        }
     }
     
     func setContentViewInContainer(view: UIView, frame: CGRect) {
