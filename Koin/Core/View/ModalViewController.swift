@@ -125,20 +125,45 @@ class ModalViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        containerView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        containerView.alpha = 0
+        view.backgroundColor = UIColor.clear
+        
+        UIView.animate(springDuration: 0.2) {
+            containerView.transform = .identity
+            containerView.alpha = 1
+            view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
+        }
+    }
+    
+    // MARK: - Public
+    func dismissWithAnimation() {
+        UIView.animate(springDuration: 0.2) {
+            containerView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            containerView.alpha = 0
+            view.backgroundColor = UIColor.clear
+        } completion: { [weak self] _ in
+            self?.dismiss(animated: false)
+        }
+    }
+    
     @objc func closeButtonTapped() {
         onLeftButtonTapped?()
-        dismiss(animated: true, completion: nil)
+        dismissWithAnimation()
     }
     
     @objc func rightButtonTapped() {
         onRightButtonTapped()
-        dismiss(animated: true, completion: nil)
+        dismissWithAnimation()
     }
     
     @objc func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: view)
         if !containerView.frame.contains(location) {
-            dismiss(animated: true, completion: nil)
+            dismissWithAnimation()
         }
     }
     
@@ -252,7 +277,6 @@ extension ModalViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
         updateMessageLabel()
         updateSubMessageLabel()
     }
