@@ -26,6 +26,7 @@ struct NoticeArticleDto: Decodable {
     let boardId: Int
     let title: String?
     let content: String?
+    let aiSummary: NoticeAISummaryDto?
     let author: String?
     let hit: Int?
     let url: String?
@@ -39,6 +40,7 @@ struct NoticeArticleDto: Decodable {
         case id
         case boardId = "board_id"
         case title, content, author, hit, url, attachments
+        case aiSummary = "ai_summary"
         case prevId = "prev_id"
         case nextId = "next_id"
         case registeredAt = "registered_at"
@@ -74,13 +76,7 @@ extension NoticeArticleDto {
         return NoticeDataInfo(
             title: title ?? "",
             boardId: boardId,
-            aiSummary: .init( // TODO: API v2
-                status: .success,
-                items: [
-                    .init(icon: "📅", text: "인공지능 및 컴퓨터공학 전공 학부생 또는 대학원생은 이력서와 연구계획서를 dice_lab@kaist.ac.kr로 제출해야 합니다."),
-                    .init(icon: "🎯", text: "프로그래밍 역량이 필수이며, 대상은 인공지능 및 컴퓨터공학 전공 학부생 또는 대학원생입니다."),
-                    .init(icon: "📝", text: "모집 공고는 2025-03-01에 게시되었습니다.")
-                ]),
+            aiSummary: aiSummary?.toDomain() ?? NoticeAISummary(status: .unavailable, items: []),
             content: content ?? "",
             author: author ?? "-",
             hit: hit,
@@ -104,6 +100,7 @@ extension NoticeArticleDto {
             boardId: boardId,
             title: newTitle,
             content: modifyFontInHtml(html: content ?? ""),
+            aiSummary: aiSummary,
             author: author,
             hit: hit,
             url: url,
