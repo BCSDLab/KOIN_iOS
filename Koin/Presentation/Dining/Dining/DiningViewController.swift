@@ -88,8 +88,6 @@ final class DiningViewController: UIViewController {
         $0.textAlignment = .center
     }
     
-    private let diningNotiContentViewController = DiningNotiContentViewController()
-    
     // MARK: - Initialization
     
     init(viewModel: DiningViewModel) {
@@ -193,19 +191,6 @@ final class DiningViewController: UIViewController {
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .scroll, self.getCurrentDiningType()))
         }.store(in: &subscriptions)
         
-        diningNotiContentViewController.soldOutSwitchPublisher.sink { [weak self] isOn in
-            self?.inputSubject.send(.changeNoti(isOn, .diningSoldOut))
-        }.store(in: &subscriptions)
-        
-        diningNotiContentViewController.imageUploadSwitchPublisher.sink { [weak self] isOn in
-            self?.inputSubject.send(.changeNoti(isOn, .diningImageUpload))
-        }.store(in: &subscriptions)
-        
-        diningNotiContentViewController.shortcutButtonPublisher.sink { [weak self] in
-            self?.navigateToNoti()
-            self?.diningNotiContentViewController.dissmissView()
-        }.store(in: &subscriptions)
-        
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).sink { [weak self] _ in
             self?.diningListCollectionView.startToolTipImageViewAnimation()
         }
@@ -275,9 +260,20 @@ extension DiningViewController {
     }
     
     private func showBottomSheet(_ isOn: (Bool, Bool)) {
+        let diningNotiContentViewController = DiningNotiContentViewController(
+            onSoldOutSwitchChanged: { [weak self] isOn in
+                self?.inputSubject.send(.changeNoti(isOn, .diningSoldOut))
+            },
+            onImageUploadSwitchChanged: { [weak self] isOn in
+                self?.inputSubject.send(.changeNoti(isOn, .diningImageUpload))
+            },
+            onShortcutButtonTapped: { [weak self] in
+                self?.navigateToNoti()
+            }
+        )
         let bottomSheetViewController = BottomSheetViewController(contentViewController: diningNotiContentViewController, defaultHeight: 332, cornerRadius: 16, dimmedAlpha: 0.4, isPannedable: false)
         diningNotiContentViewController.updateButtonIsOn(isOn)
-        self.present(bottomSheetViewController, animated: true)
+        present(bottomSheetViewController, animated: true)
     }
     
     @objc private func navigationButtonTapped() {
