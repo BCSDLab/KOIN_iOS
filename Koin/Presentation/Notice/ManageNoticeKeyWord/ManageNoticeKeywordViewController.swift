@@ -88,10 +88,6 @@ final class ManageNoticeKeywordViewController: UIViewController {
         $0.text = "추천 키워드"
     }
     
-    private let keywordLoginModalViewController = ModalViewController(width: 301, height: 230, paddingBetweenLabels: 8, title: "키워드 알림을 받으려면\n로그인이 필요해요.", subTitle: "로그인 후 간편하게 공지사항 키워드\n알림을 받아보세요!", titleColor: .appColor(.neutral700), subTitleColor: .appColor(.gray)).then {
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
     private let myKeywordCollectionView = MyKeywordCollectionView(frame: .zero, collectionViewLayout: LeftAlignedCollectionViewFlowLayout())
     
     private let recommendedKeywordCollectionView = RecommendedKeywordCollectionView(frame: .zero, collectionViewLayout: LeftAlignedCollectionViewFlowLayout())
@@ -138,7 +134,7 @@ final class ManageNoticeKeywordViewController: UIViewController {
             case .showLoginModal:
                 self.keywordNotificationSwtich.isOn = false
                 self.keywordNotificationSwtich.isEnabled = true
-                self.present(self.keywordLoginModalViewController.self, animated: false, completion: nil)
+                self.presentLoginModal()
             case let .updateSwitch(isOn):
                 self.keywordNotificationSwtich.isOn = isOn
                 self.keywordNotificationSwtich.isEnabled = true
@@ -173,31 +169,6 @@ final class ManageNoticeKeywordViewController: UIViewController {
             self?.inputSubject.send(.addKeyword(keyword: keyword, isRecommended: true))
         }.store(in: &subscriptions)
         
-        keywordLoginModalViewController.rightButtonPublisher.sink { [weak self] in
-            let userRepository = DefaultUserRepository(service: DefaultUserService())
-            let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
-            let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-            let loginUseCase = DefaultLoginUseCase(userRepository: userRepository)
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: analyticsRepository)
-            let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
-            let sendDeviceTokenIfNeededUseCase = DefaultSendDeviceTokenIfNeededUseCase(
-                userRepository: userRepository,
-                notiRepository: notiRepository
-            )
-            let viewModel = LoginViewModel(
-                loginUseCase: loginUseCase,
-                logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                fetchUserDataUseCase: fetchUserDataUseCase,
-                sendDeviceTokenIfNeededUseCase: sendDeviceTokenIfNeededUseCase
-            )
-            let loginViewController = LoginViewController(viewModel: viewModel)
-            self?.navigationController?.pushViewController(loginViewController, animated: true)
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPrompt, .click, "키워드 알림 팝업"))
-        }.store(in: &subscriptions)
-        
-        keywordLoginModalViewController.leftButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "닫기"))
-        }.store(in: &subscriptions)
     }
 }
 
@@ -239,6 +210,27 @@ extension ManageNoticeKeywordViewController {
     
     private func conductAddKeywordIllegalType(illegalType: String) {
         showToast(message: illegalType, success: false)
+    }
+
+    private func presentLoginModal() {
+        let modalViewController = ModalViewController(
+            onLeftButtonTapped: { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "닫기"))
+            },
+            onRightButtonTapped: { [weak self] in
+                self?.navigateToLogin()
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPrompt, .click, "키워드 알림 팝업"))
+            },
+            width: 301,
+            height: 230,
+            paddingBetweenLabels: 8,
+            title: "키워드 알림을 받으려면\n로그인이 필요해요.",
+            subTitle: "로그인 후 간편하게 공지사항 키워드\n알림을 받아보세요!",
+            titleColor: .appColor(.neutral700),
+            subTitleColor: .appColor(.gray)
+        )
+
+        present(modalViewController, animated: false)
     }
  
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
