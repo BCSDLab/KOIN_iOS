@@ -208,6 +208,7 @@ public enum ImageAsset: String {
     case lostItemDelete
     
     // MARK: - Notice
+    case noticeAISummary
     case noticeLoginToolTip
     case noticeManageKeyword
     case noticeNotLoginToolTip

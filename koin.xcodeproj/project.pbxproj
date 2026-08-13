@@ -217,6 +217,8 @@
 		7C7BD71D302B2B0A003C5A15 /* AppImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7BD71C302B2B0A003C5A15 /* AppImage.swift */; };
 		7C7BD71F302B2B37003C5A15 /* PostLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7BD71E302B2B37003C5A15 /* PostLostItemUseCase.swift */; };
 		7C7BD721302B2C25003C5A15 /* ReportLostItemUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7BD720302B2C25003C5A15 /* ReportLostItemUseCase.swift */; };
+		7C7BD723302B3D8F003C5A15 /* NoticeAISummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7BD722302B3D8F003C5A15 /* NoticeAISummary.swift */; };
+		7C7BD725302B3E25003C5A15 /* NoticeAISummaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7BD724302B3E25003C5A15 /* NoticeAISummaryView.swift */; };
 		7C7CCE4A2F834D4B00E3A54B /* CallVanModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */; };
 		7C7CCE702F866E9400E3A54B /* AppPath.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE6F2F866E9400E3A54B /* AppPath.swift */; };
 		7C7CCE722F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */; };
@@ -1240,6 +1242,8 @@
 		7C7BD71C302B2B0A003C5A15 /* AppImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppImage.swift; sourceTree = "<group>"; };
 		7C7BD71E302B2B37003C5A15 /* PostLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemUseCase.swift; sourceTree = "<group>"; };
 		7C7BD720302B2C25003C5A15 /* ReportLostItemUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportLostItemUseCase.swift; sourceTree = "<group>"; };
+		7C7BD722302B3D8F003C5A15 /* NoticeAISummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeAISummary.swift; sourceTree = "<group>"; };
+		7C7BD724302B3E25003C5A15 /* NoticeAISummaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeAISummaryView.swift; sourceTree = "<group>"; };
 		7C7CCE492F834D4B00E3A54B /* CallVanModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanModalViewController.swift; sourceTree = "<group>"; };
 		7C7CCE6F2F866E9400E3A54B /* AppPath.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppPath.swift; sourceTree = "<group>"; };
 		7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanRestrictionUseCase.swift; sourceTree = "<group>"; };
@@ -3673,6 +3677,7 @@
 			children = (
 				7CED8F662EF2D1F900457128 /* HotNoticeArticlesTableView */,
 				7CED8F692EF2D1F900457128 /* NoticeAttachmentsTableView */,
+				7C7BD724302B3E25003C5A15 /* NoticeAISummaryView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -4385,6 +4390,7 @@
 				833D9C422C7061EC00982145 /* NoticeArticlesInfo.swift */,
 				833D9C332C70418100982145 /* NoticeListPages.swift */,
 				833D9C5F2C7457EE00982145 /* NoticeDataInfo.swift */,
+				7C7BD722302B3D8F003C5A15 /* NoticeAISummary.swift */,
 				831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */,
 				838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */,
 			);
@@ -5963,6 +5969,7 @@
 				7CED90D52EF2D1F900457128 /* SelectDeptModalViewController.swift in Sources */,
 				7CED90D72EF2D1F900457128 /* RecommendedKeywordCollectionView.swift in Sources */,
 				7CED90D92EF2D1F900457128 /* DiningViewController.swift in Sources */,
+				7C7BD725302B3E25003C5A15 /* NoticeAISummaryView.swift in Sources */,
 				7CCB1E4B2F29D87C00472669 /* PostChatDetailUseCase.swift in Sources */,
 				7CED90DA2EF2D1F900457128 /* RecentSearchTableView.swift in Sources */,
 				7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */,
@@ -6386,6 +6393,7 @@
 				D208A7BB2CA169DF007040E7 /* FetchBeneficialShopUseCase.swift in Sources */,
 				D2D462712D63C5ED00C60864 /* ChatRoomItem.swift in Sources */,
 				7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */,
+				7C7BD723302B3D8F003C5A15 /* NoticeAISummary.swift in Sources */,
 				D2B7EBCA2D37C81B00EE46B0 /* PostLostItemRequest.swift in Sources */,
 				0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */,
 				8354BE3D2C79D709009D4D7A /* AddNotificationKeywordUseCase.swift in Sources */,
