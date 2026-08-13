@@ -66,23 +66,6 @@ final class ReviewListViewController: UIViewController {
         $0.hidesWhenStopped = true
     }
     
-    // MARK: - Modal ViewControllers
-    
-    private lazy var reviewWriteLoginModalViewController = ReviewLoginModalViewController(message: "작성").then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
-    private lazy var reviewReportLoginModalViewController = ReviewLoginModalViewController(message: "신고").then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
-    private lazy var deleteReviewModalViewController = DeleteReviewModalViewController().then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
     // MARK: - Initialize
     
     init(viewModel: ReviewListViewModel) {
@@ -120,7 +103,6 @@ final class ReviewListViewController: UIViewController {
     private func bind() {
         bindViewModel()
         bindCollectionView()
-        bindModalViewControllers()
     }
 }
 
@@ -144,10 +126,10 @@ extension ReviewListViewController {
                 
                 switch output {
                 case .showWriteReviewLoginModal:
-                    self.present(self.reviewWriteLoginModalViewController, animated: true)
+                    self.presentReviewLoginModal(message: "작성")
                     
                 case .showReportReviewLoginModal:
-                    self.present(self.reviewReportLoginModalViewController, animated: true)
+                    self.presentReviewLoginModal(message: "신고")
                     
                 case .showMyReviewFilterError:
                     self.nonReviewListView.isHidden = false
@@ -235,66 +217,6 @@ extension ReviewListViewController {
             .store(in: &cancellables)
     }
     
-    private func bindModalViewControllers() {
-        reviewWriteLoginModalViewController.loginButtonPublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                self.inputSubject.send(.logEvent(
-                    EventParameter.EventLabel.Business.loginPrompt,
-                    .click,
-                    "리뷰 작성 팝업"
-                ))
-                self.showLoginScreen()
-            }
-            .store(in: &cancellables)
-        
-        reviewWriteLoginModalViewController.cancelButtonPublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                self.inputSubject.send(.logEvent(
-                    EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel,
-                    .click,
-                    self.viewModel.getShopName()
-                ))
-            }
-            .store(in: &cancellables)
-        
-        deleteReviewModalViewController.deleteButtonPublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                self.inputSubject.send(.logEvent(
-                    EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
-                    .click,
-                    "O"
-                ))
-                self.deleteReview()
-            }
-            .store(in: &cancellables)
-        
-        deleteReviewModalViewController.cancelButtonPublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                self.inputSubject.send(.logEvent(
-                    EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone,
-                    .click,
-                    "X"
-                ))
-            }
-            .store(in: &cancellables)
-        
-        reviewReportLoginModalViewController.loginButtonPublisher
-            .sink { [weak self] in
-                guard let self else { return }
-                self.inputSubject.send(.logEvent(
-                    EventParameter.EventLabel.Business.loginPrompt,
-                    .click,
-                    "리뷰 신고 팝업"
-                ))
-                self.showLoginScreen()
-            }
-            .store(in: &cancellables)
-    }
-        
     private func setAddTarget() {
         writeReviewButton.addTarget(self, action: #selector(writeReviewButtonTapped), for: .touchUpInside)
     }
@@ -388,7 +310,35 @@ extension ReviewListViewController {
             .click,
             viewModel.getShopName()
         ))
+        let deleteReviewModalViewController = DeleteReviewModalViewController(
+            onDeleteButtonTapped: { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
+                self?.deleteReview()
+            },
+            onCancelButtonTapped: { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
+            }
+        )
+        deleteReviewModalViewController.modalPresentationStyle = .overFullScreen
+        deleteReviewModalViewController.modalTransitionStyle = .crossDissolve
         present(deleteReviewModalViewController, animated: true)
+    }
+
+    private func presentReviewLoginModal(message: String) {
+        let reviewLoginModalViewController = ReviewLoginModalViewController(
+            message: message,
+            onLoginButtonTapped: { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
+                self?.showLoginScreen()
+            },
+            onCancelButtonTapped: { [weak self] in
+                guard message == "작성", let self else { return }
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
+            }
+        )
+        reviewLoginModalViewController.modalPresentationStyle = .overFullScreen
+        reviewLoginModalViewController.modalTransitionStyle = .crossDissolve
+        present(reviewLoginModalViewController, animated: true)
     }
     
     private func deleteReview() {
