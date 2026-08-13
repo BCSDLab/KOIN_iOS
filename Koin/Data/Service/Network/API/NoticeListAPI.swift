@@ -30,7 +30,7 @@ extension NoticeListAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchNoticeArticles: return "/articles"
         case .searchNoticeArticle: return "/articles/search"
-        case .fetchNoticeData(let request): return "/articles/\(request.noticeId)"
+        case .fetchNoticeData(let request): return "/v2/articles/\(request.noticeId)"
         case .fetchHotNoticeArticles: return "/articles/hot"
         case .createNotificationKeyword: return "/articles/keyword?type=KOREATECH"
         case .deleteNotificationKeyword(let request): return "/articles/keyword/\(request)"
