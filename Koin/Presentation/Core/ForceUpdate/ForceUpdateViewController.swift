@@ -86,11 +86,6 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         $0.backgroundColor = .clear
     }
     
-    private let updateModalViewController = UpdateModalViewController().then {
-        $0.modalPresentationStyle = .overFullScreen
-        $0.modalTransitionStyle = .crossDissolve
-    }
-    
     // MARK: - Initialization
     init(viewModel: ForceUpdateViewModel) {
         self.viewModel = viewModel
@@ -140,19 +135,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
             }
         }.store(in: &subscriptions)
         
-        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
-            self?.openStore()
-        }.store(in: &subscriptions)
-        
         setupCustomNotificationObservers()
-        
-        updateModalViewController.openStoreButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
-        }.store(in: &subscriptions)
-        
-        updateModalViewController.cancelButtonPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
-        }.store(in: &subscriptions)
     }
     
     private func setAddTarget() {
@@ -197,6 +180,17 @@ extension ForceUpdateViewController {
     }
     
     @objc private func errorCheckButtonTapped() {
+        let updateModalViewController = UpdateModalViewController(
+            onOpenStoreButtonTapped: { [weak self] in
+                self?.openStore()
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
+            },
+            onCloseButtonTapped: { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
+            }
+        )
+        updateModalViewController.modalPresentationStyle = .overFullScreen
+        updateModalViewController.modalTransitionStyle = .crossDissolve
         present(updateModalViewController, animated: true, completion: nil)
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }

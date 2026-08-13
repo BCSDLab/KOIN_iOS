@@ -5,15 +5,13 @@
 //  Created by 김나훈 on 10/1/24.
 //
 
-import Combine
 import UIKit
 import SnapKit
 
 final class UpdateModalViewController: UIViewController {
-    
     // MARK: - Properties
-    let openStoreButtonPublisher = PassthroughSubject<Void, Never>()
-    let cancelButtonPublisher = PassthroughSubject<Void, Never>()
+    private let onOpenStoreButtonTapped: () -> Void
+    private let onCloseButtonTapped: () -> Void
     
     // MARK: - UI Components
     private let messageLabel = UILabel().then {
@@ -59,6 +57,20 @@ final class UpdateModalViewController: UIViewController {
         $0.layer.cornerRadius = 4
         $0.layer.masksToBounds = true
     }
+
+    init(
+        onOpenStoreButtonTapped: @escaping () -> Void,
+        onCloseButtonTapped: @escaping () -> Void
+    ) {
+        self.onOpenStoreButtonTapped = onOpenStoreButtonTapped
+        self.onCloseButtonTapped = onCloseButtonTapped
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
@@ -77,12 +89,12 @@ final class UpdateModalViewController: UIViewController {
 extension UpdateModalViewController {
     @objc private func closeButtonTapped() {
         dismiss(animated: true, completion: nil)
-        cancelButtonPublisher.send()
+        onCloseButtonTapped()
     }
     
     @objc private func openStoreButtonTapped() {
         dismiss(animated: true, completion: nil)
-        openStoreButtonPublisher.send(())
+        onOpenStoreButtonTapped()
     }
 }
 
