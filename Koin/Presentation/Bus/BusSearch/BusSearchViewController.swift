@@ -66,8 +66,6 @@ final class BusSearchViewController: UIViewController {
         $0.isEnabled = false
     }
     
-    private let busAreaViewController = BusAreaSelectedViewController()
-    
     // MARK: - Initialization
     
     init(viewModel: BusSearchViewModel) {
@@ -92,25 +90,12 @@ final class BusSearchViewController: UIViewController {
         busNoticeWrappedView.addGestureRecognizer(tapGesture)
         bind()
         inputSubject.send(.fetchBusNotice)
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(self.didDismissDetailNotification(_:)),
-            name: NSNotification.Name("DismissBusAreaSelectedView"),
-            object: nil
-        )
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name("DismissBusAreaSelectedView"), object: nil)
-    }
-    
     
     // MARK: - Bind
     
@@ -124,35 +109,10 @@ final class BusSearchViewController: UIViewController {
                 self?.updateEmergencyNotice(notice: notice)
             }
         }.store(in: &subscriptions)
-        
-        busAreaViewController.departureBusAreaPublisher.sink { [weak self] departureArea in
-            guard let self = self else { return }
-            changeBusAreaButton(sender: departAreaSelectedButton, title: departureArea)
-            if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
-                manageSearchButton(isActivated: true)
-            }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureLocationConfirm, .click, departureArea.koreanDescription))
-        }.store(in: &subscriptions)
-        
-        busAreaViewController.arrivalBusAreaPublisher.sink { [weak self] arrivedArea in
-            guard let self = self else { return }
-            changeBusAreaButton(sender: arrivedAreaSelectedButton, title: arrivedArea)
-            if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
-                manageSearchButton(isActivated: true)
-            }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.arrivalLocationConfirm, .click, arrivedArea.koreanDescription))
-        }.store(in: &subscriptions)
     }
 }
 
 extension BusSearchViewController {
-    @objc func didDismissDetailNotification(_ notification: Notification) {
-        let departure = departAreaSelectedButton.tag != 0 ? BusPlace.allCases[departAreaSelectedButton.tag - 1] : nil
-        let arrival = arrivedAreaSelectedButton.tag != 0 ? BusPlace.allCases[arrivedAreaSelectedButton.tag - 1] : nil
-        
-        busAreaViewController.dismissWithoutConfirmPublisher.send(((departure, arrival), notification.object))
-    }
-
     @objc private func tapSearchButton(sender: UIButton) {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchBus, .click, "조회하기"))
         let repository = DefaultBusRepository(service: DefaultBusService())
@@ -197,7 +157,6 @@ extension BusSearchViewController {
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
         changeBusAreaButton(sender: departAreaSelectedButton, title: arrival)
         changeBusAreaButton(sender: arrivedAreaSelectedButton, title: departure)
-        busAreaViewController.swap(departure: departure, arrival: arrival)
     }
     
     private func updateSelectedBusArea(buttonState: BusAreaButtonState, busPlace: BusPlace?) {
@@ -211,11 +170,49 @@ extension BusSearchViewController {
             }
         }
 
-        busAreaViewController.configure(busAreaLists: busAreaList, buttonState: buttonState)
+        let departure = selectedBusPlace(from: departAreaSelectedButton)
+        let arrival = selectedBusPlace(from: arrivedAreaSelectedButton)
+        let busAreaViewController = BusAreaSelectedViewController(
+            onDepartureBusAreaSelected: { [weak self] departureArea in
+                self?.selectDepartureBusArea(departureArea)
+            },
+            onArrivalBusAreaSelected: { [weak self] arrivalArea in
+                self?.selectArrivalBusArea(arrivalArea)
+            }
+        )
+        busAreaViewController.configure(
+            busAreaLists: busAreaList,
+            buttonState: buttonState,
+            departure: departure,
+            arrival: arrival
+        )
         let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 312.5 + UIApplication.bottomSafeAreaHeight(), cornerRadius: 32, isPannedable: false)
         bottomSheet.modalPresentationStyle = .overFullScreen
         bottomSheet.modalTransitionStyle = .crossDissolve
         present(bottomSheet, animated: true)
+    }
+
+    private func selectedBusPlace(from button: UIButton) -> BusPlace? {
+        guard button.tag != 0 else { return nil }
+        return BusPlace.allCases[button.tag - 1]
+    }
+
+    private func selectDepartureBusArea(_ departureArea: BusPlace) {
+        changeBusAreaButton(sender: departAreaSelectedButton, title: departureArea)
+        updateSearchButtonIfNeeded()
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureLocationConfirm, .click, departureArea.koreanDescription))
+    }
+
+    private func selectArrivalBusArea(_ arrivalArea: BusPlace) {
+        changeBusAreaButton(sender: arrivedAreaSelectedButton, title: arrivalArea)
+        updateSearchButtonIfNeeded()
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.arrivalLocationConfirm, .click, arrivalArea.koreanDescription))
+    }
+
+    private func updateSearchButtonIfNeeded() {
+        if departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 {
+            manageSearchButton(isActivated: true)
+        }
     }
     
     private func changeBusAreaButton(sender: UIButton, title: BusPlace) {
