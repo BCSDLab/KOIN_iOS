@@ -173,7 +173,7 @@ extension ChatViewController{
     }
 
     private func presentBlockUserConfirmationModal() {
-        let modalViewController = ModalViewController(
+        let modalViewController = KoinModalViewController(
             onRightButtonTapped: { [weak self] in
                 self?.inputSubject.send(.blockUser)
             },
@@ -186,8 +186,7 @@ extension ChatViewController{
             subTitleColor: .appColor(.gray),
             rightButtonText: "차단하기"
         )
-        modalViewController.modalTransitionStyle = .crossDissolve
-        present(modalViewController, animated: false)
+        present(modalViewController, animated: true)
     }
 
     @objc private func keyboardWillShow(_ notification: Notification) {

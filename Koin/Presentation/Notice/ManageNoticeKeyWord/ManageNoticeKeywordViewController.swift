@@ -213,7 +213,7 @@ extension ManageNoticeKeywordViewController {
     }
 
     private func presentLoginModal() {
-        let modalViewController = ModalViewController(
+        let modalViewController = KoinModalViewController(
             onLeftButtonTapped: { [weak self] in
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "닫기"))
             },
@@ -229,8 +229,7 @@ extension ManageNoticeKeywordViewController {
             titleColor: .appColor(.neutral700),
             subTitleColor: .appColor(.gray)
         )
-
-        present(modalViewController, animated: false)
+        present(modalViewController, animated: true)
     }
  
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {

@@ -152,8 +152,7 @@ extension BusSearchResultViewController {
             subTitleColor: .gray
         )
         busSearchDatePickerViewController.setPickerItems(items: datePickerData.0, selectedItems: datePickerData.1)
-        busSearchDatePickerViewController.modalPresentationStyle = .overFullScreen
-        present(busSearchDatePickerViewController, animated: false)
+        present(busSearchDatePickerViewController, animated: true)
     }
 }
 

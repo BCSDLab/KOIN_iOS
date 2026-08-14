@@ -58,6 +58,8 @@
 		7C17EEB02EBF708B008BCA89 /* ShopSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */; };
 		7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
+		7C333E7C302E285B009D2B89 /* KoinModalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */; };
+		7C333E7E302E28AA009D2B89 /* KoinModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */; };
 		7C372ED92F1B7F3900149729 /* FetchLostItemListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372ED82F1B7F3900149729 /* FetchLostItemListRequest.swift */; };
 		7C372EDD2F1B8DC900149729 /* LostItemListFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372EDC2F1B8DC900149729 /* LostItemListFilterButton.swift */; };
 		7C372EE62F1C0CC400149729 /* LostItemListData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C372EE52F1C0CC400149729 /* LostItemListData.swift */; };
@@ -682,7 +684,7 @@
 		8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8354BE512C7A0566009D4D7A /* CoreDataService.swift */; };
 		835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99162C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift */; };
 		835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C99192C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift */; };
-		835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* ModalViewController.swift */; };
+		835C991E2C7F1256002E02D3 /* KoinModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835C991D2C7F1256002E02D3 /* KoinModalViewController.swift */; };
 		835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1F82C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift */; };
 		835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */; };
 		835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */; };
@@ -1083,6 +1085,8 @@
 		7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchDto.swift; sourceTree = "<group>"; };
 		7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSearchShopUseCase.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
+		7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalAnimator.swift; sourceTree = "<group>"; };
+		7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalPresentationController.swift; sourceTree = "<group>"; };
 		7C372ED82F1B7F3900149729 /* FetchLostItemListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLostItemListRequest.swift; sourceTree = "<group>"; };
 		7C372EDC2F1B8DC900149729 /* LostItemListFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListFilterButton.swift; sourceTree = "<group>"; };
 		7C372EE52F1C0CC400149729 /* LostItemListData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListData.swift; sourceTree = "<group>"; };
@@ -1688,7 +1692,7 @@
 		8354BE512C7A0566009D4D7A /* CoreDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoreDataService.swift; sourceTree = "<group>"; };
 		835C99162C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
 		835C99192C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationKeywordUseCase.swift; sourceTree = "<group>"; };
-		835C991D2C7F1256002E02D3 /* ModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModalViewController.swift; sourceTree = "<group>"; };
+		835C991D2C7F1256002E02D3 /* KoinModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalViewController.swift; sourceTree = "<group>"; };
 		835DC1F82C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedKeywordUseCase.swift; sourceTree = "<group>"; };
 		835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHotSearchingKeywordUseCase.swift; sourceTree = "<group>"; };
 		835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManageRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
@@ -2184,6 +2188,24 @@
 				8354BE512C7A0566009D4D7A /* CoreDataService.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		7C333E7A302E280C009D2B89 /* KoinModalViewController */ = {
+			isa = PBXGroup;
+			children = (
+				7C333E7F302E317C009D2B89 /* Transition */,
+				835C991D2C7F1256002E02D3 /* KoinModalViewController.swift */,
+			);
+			path = KoinModalViewController;
+			sourceTree = "<group>";
+		};
+		7C333E7F302E317C009D2B89 /* Transition */ = {
+			isa = PBXGroup;
+			children = (
+				7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */,
+				7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */,
+			);
+			path = Transition;
 			sourceTree = "<group>";
 		};
 		7C372ED72F1B7F3100149729 /* LostItem */ = {
@@ -5122,7 +5144,7 @@
 				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
 				7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */,
 				7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */,
-				835C991D2C7F1256002E02D3 /* ModalViewController.swift */,
+				7C333E7A302E280C009D2B89 /* KoinModalViewController */,
 				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
 				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
 				7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */,
@@ -6455,6 +6477,7 @@
 				D2D422722BB2A7BE00A8AF04 /* Confirmable.swift in Sources */,
 				7CA60D672F6619F4007C08C1 /* CallVanService.swift in Sources */,
 				7CC42B8F2F5DCE7400940CE1 /* CallVanChatViewController.swift in Sources */,
+				7C333E7C302E285B009D2B89 /* KoinModalAnimator.swift in Sources */,
 				7C58FEAB2F6020A900A2737B /* CallVanReportImagesCollectionView.swift in Sources */,
 				D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */,
 				D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */,
@@ -6538,7 +6561,7 @@
 				7C58FEAD2F6020AD00A2737B /* CallVanReportImagesCollectionViewCell.swift in Sources */,
 				7C016548300AA1520013DD7B /* DepartmentCategoryViewModel.swift in Sources */,
 				D249CD282C12DCCC000813F9 /* DiningService.swift in Sources */,
-				835C991E2C7F1256002E02D3 /* ModalViewController.swift in Sources */,
+				835C991E2C7F1256002E02D3 /* KoinModalViewController.swift in Sources */,
 				D2DA83952C181A3B00A2F156 /* FetchShopEventListUseCase.swift in Sources */,
 				D29F21F82C5085B900994554 /* RefreshTokenRequest.swift in Sources */,
 				7CF77B3A300254BE003642C1 /* ProfileHostingController.swift in Sources */,
@@ -6578,6 +6601,7 @@
 				D2FB23452BFB6D090098BA2B /* CustomNavigationController.swift in Sources */,
 				D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */,
 				7C6790B52FCC5B460045E163 /* ImageAsset.swift in Sources */,
+				7C333E7E302E28AA009D2B89 /* KoinModalPresentationController.swift in Sources */,
 				D874DB4F2DBF1FEE0098EED0 /* SendVerificationCodeRequest.swift in Sources */,
 				7CA60D772F663F7B007C08C1 /* PostNotificationReadUseCase.swift in Sources */,
 				7C8A941E2FD0A94F00DEA6F5 /* NotificationViewModel.swift in Sources */,

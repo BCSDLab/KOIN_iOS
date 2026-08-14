@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class BusSearchDatePickerViewController: ModalViewController {
+final class BusSearchDatePickerViewController: KoinModalViewController {
     
     // MARK: - Properties
     private let onDepartureNowTapped: () -> Void
@@ -63,7 +63,7 @@ final class BusSearchDatePickerViewController: ModalViewController {
         onPickerItemsSelected(selectedItems)
         onPickerDateChanged(pickerView.changeSelectedItemPublisher.value)
         pickerView.changeSelectedItemPublisher.send(nil)
-        dismissWithAnimation()
+        dismiss(animated: true)
     }
     
     override func closeButtonTapped() {
@@ -81,7 +81,7 @@ final class BusSearchDatePickerViewController: ModalViewController {
         pickerView.setSelectedData(selectedItem: selectedItems)
         onPickerItemsSelected(selectedItems)
         pickerView.changeSelectedItemPublisher.send(nil)
-        dismissWithAnimation()
+        dismiss(animated: true)
     }
 
     // MARK: - Public

@@ -1,5 +1,5 @@
 //
-//  LoginModalViewController.swift
+//  KoinModalViewController.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/28/24.
@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-class ModalViewController: UIViewController {
+class KoinModalViewController: UIViewController {
     
     // MARK: - Properties
     let onLeftButtonTapped: (()->Void)?
@@ -30,7 +30,7 @@ class ModalViewController: UIViewController {
     private let subMessageLabel = UILabel().then {
         $0.numberOfLines = 0
     }
-
+    
     private let closeButton = UIButton().then {
         $0.backgroundColor = UIColor.appColor(.neutral0)
         $0.layer.borderColor = UIColor.appColor(.neutral500).cgColor
@@ -84,6 +84,8 @@ class ModalViewController: UIViewController {
         self.titleColor = titleColor
         self.subTitleColor = subTitleColor
         self.rightButton.setTitle(rightButtonText, for: .normal)
+        
+        configureTransition()
     }
     
     convenience init(
@@ -125,45 +127,23 @@ class ModalViewController: UIViewController {
         view.addGestureRecognizer(tapGesture)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        containerView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-        containerView.alpha = 0
-        view.backgroundColor = UIColor.clear
-        
-        UIView.animate(springDuration: 0.2) {
-            containerView.transform = .identity
-            containerView.alpha = 1
-            view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
-        }
-    }
-    
     // MARK: - Public
-    func dismissWithAnimation() {
-        UIView.animate(springDuration: 0.2) {
-            containerView.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-            containerView.alpha = 0
-            view.backgroundColor = UIColor.clear
-        } completion: { [weak self] _ in
-            self?.dismiss(animated: false)
-        }
-    }
-    
     @objc func closeButtonTapped() {
-        onLeftButtonTapped?()
-        dismissWithAnimation()
+        dismiss(animated: true) { [weak self] in
+            self?.onLeftButtonTapped?()
+        }
     }
     
     @objc func rightButtonTapped() {
-        onRightButtonTapped()
-        dismissWithAnimation()
+        dismiss(animated: true) { [weak self] in
+            self?.onRightButtonTapped()
+        }
     }
     
     @objc func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: view)
         if !containerView.frame.contains(location) {
-            dismissWithAnimation()
+            dismiss(animated: true)
         }
     }
     
@@ -234,7 +214,7 @@ class ModalViewController: UIViewController {
     }
 }
 
-extension ModalViewController {
+extension KoinModalViewController {
     
     private func setUpLayOuts() {
         [containerView].forEach {
@@ -275,9 +255,43 @@ extension ModalViewController {
     }
     
     private func configureView() {
+        view.backgroundColor = UIColor.clear
         setUpLayOuts()
         setUpConstraints()
         updateMessageLabel()
         updateSubMessageLabel()
     }
 }
+
+extension KoinModalViewController: UIViewControllerTransitioningDelegate {
+    func animationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController,
+        source: UIViewController
+    ) -> (any UIViewControllerAnimatedTransitioning)? {
+        KoinModalAnimator(transitionType: .present)
+    }
+    
+    func animationController(
+        forDismissed dismissed: UIViewController
+    ) -> (any UIViewControllerAnimatedTransitioning)? {
+        KoinModalAnimator(transitionType: .dismiss)
+    }
+    
+    func presentationController(
+        forPresented presented: UIViewController,
+        presenting: UIViewController?,
+        source: UIViewController
+    ) -> UIPresentationController? {
+        KoinModalPresentationController(
+            presentedViewController: presented,
+            presenting: presenting
+        )
+    }
+    
+    private func configureTransition() {
+        modalPresentationStyle = .custom
+        transitioningDelegate = self
+    }
+}
+
