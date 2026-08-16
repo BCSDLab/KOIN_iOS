@@ -537,7 +537,6 @@
 		7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCE2EF2D1F900457128 /* ShopSummaryTableView.swift */; };
 		7CED917D2EF2D1F900457128 /* ReviewImageUploadCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90172EF2D1F900457128 /* ReviewImageUploadCollectionView.swift */; };
 		7CED917F2EF2D1F900457128 /* NoticeListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F4D2EF2D1F900457128 /* NoticeListViewController.swift */; };
-		7CED91802EF2D1F900457128 /* ReviewLoginModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED900C2EF2D1F900457128 /* ReviewLoginModalViewController.swift */; };
 		7CED91822EF2D1F900457128 /* DeliveryTipsCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FDC2EF2D1F900457128 /* DeliveryTipsCollectionView.swift */; };
 		7CED91832EF2D1F900457128 /* NoticeDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F702EF2D1F900457128 /* NoticeDataViewModel.swift */; };
 		7CED91852EF2D1F900457128 /* DiningOperatingTimeCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90762EF2D1F900457128 /* DiningOperatingTimeCollectionView.swift */; };
@@ -1562,7 +1561,6 @@
 		7CED90082EF2D1F900457128 /* ImageDropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropDownCell.swift; sourceTree = "<group>"; };
 		7CED900A2EF2D1F900457128 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		7CED900B2EF2D1F900457128 /* NonReviewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonReviewListView.swift; sourceTree = "<group>"; };
-		7CED900C2EF2D1F900457128 /* ReviewLoginModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewLoginModalViewController.swift; sourceTree = "<group>"; };
 		7CED900D2EF2D1F900457128 /* DeleteReviewModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewModalViewController.swift; sourceTree = "<group>"; };
 		7CED900F2EF2D1F900457128 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
 		7CED90102EF2D1F900457128 /* ReviewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewModel.swift; sourceTree = "<group>"; };
@@ -3987,7 +3985,6 @@
 				7CED90092EF2D1F900457128 /* ReviewListCollectionView */,
 				7CED900A2EF2D1F900457128 /* ScoreView.swift */,
 				7CED900B2EF2D1F900457128 /* NonReviewListView.swift */,
-				7CED900C2EF2D1F900457128 /* ReviewLoginModalViewController.swift */,
 				7CED900D2EF2D1F900457128 /* DeleteReviewModalViewController.swift */,
 			);
 			path = SubViews;
@@ -6195,7 +6192,6 @@
 				7CC42B942F5DCEA600940CE1 /* CallVanChatTableView.swift in Sources */,
 				7CED917D2EF2D1F900457128 /* ReviewImageUploadCollectionView.swift in Sources */,
 				7CED917F2EF2D1F900457128 /* NoticeListViewController.swift in Sources */,
-				7CED91802EF2D1F900457128 /* ReviewLoginModalViewController.swift in Sources */,
 				7CED91822EF2D1F900457128 /* DeliveryTipsCollectionView.swift in Sources */,
 				7C58FE892F5F9E7600A2737B /* CallVanData.swift in Sources */,
 				7CED91832EF2D1F900457128 /* NoticeDataViewModel.swift in Sources */,

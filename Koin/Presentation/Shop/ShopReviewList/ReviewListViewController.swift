@@ -325,20 +325,42 @@ extension ReviewListViewController {
     }
 
     private func presentReviewLoginModal(message: String) {
-        let reviewLoginModalViewController = ReviewLoginModalViewController(
-            message: message,
-            onLoginButtonTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
-                self?.showLoginScreen()
-            },
-            onCancelButtonTapped: { [weak self] in
-                guard message == "작성", let self else { return }
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
-            }
-        )
-        reviewLoginModalViewController.modalPresentationStyle = .overFullScreen
-        reviewLoginModalViewController.modalTransitionStyle = .crossDissolve
-        present(reviewLoginModalViewController, animated: true)
+        let mainText: String
+        let subText: String
+        
+        switch message {
+        case "작성":
+            mainText = "리뷰를 작성하기 위해\n로그인이 필요해요."
+            subText = "리뷰 작성은 회원만 사용 가능합니다."
+            
+        case "신고":
+            mainText = "리뷰를 신고하기 위해\n로그인이 필요해요."
+            subText = "리뷰 신고는 회원만 사용 가능합니다."
+            
+        default:
+            return
+        }
+        
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .titles(
+                mainTitleText: mainText,
+                subTitleText: subText
+            ),
+            button: .init(
+                leftButtonTitle: "닫기",
+                leftButtonAction: { [weak self] in
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
+                    self?.showLoginScreen()
+                },
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: { [weak self] in
+                    guard message == "작성", let self else { return }
+                    inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
+                }
+            )
+        ))
+        present(modalViewController, animated: true)
     }
     
     private func deleteReview() {
