@@ -310,18 +310,23 @@ extension ReviewListViewController {
             .click,
             viewModel.getShopName()
         ))
-        let deleteReviewModalViewController = DeleteReviewModalViewController(
-            onDeleteButtonTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
-                self?.deleteReview()
-            },
-            onCancelButtonTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
-            }
-        )
-        deleteReviewModalViewController.modalPresentationStyle = .overFullScreen
-        deleteReviewModalViewController.modalTransitionStyle = .crossDissolve
-        present(deleteReviewModalViewController, animated: true)
+        
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .singleTitle(text: "삭제한 리뷰는 되돌릴 수 없습니다.\n삭제 하시겠습니까?"),
+            button: .init(
+                leftButtonTitle: "취소하기",
+                leftButtonAction: { [weak self] in
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
+                    self?.deleteReview()
+                },
+                rightButtonTitle: "삭제하기",
+                rightButtonAction: { [weak self] in
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
+                }
+            )
+        ))
+        present(modalViewController, animated: true)
     }
 
     private func presentReviewLoginModal(message: String) {

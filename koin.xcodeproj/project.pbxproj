@@ -440,7 +440,6 @@
 		7CED90E22EF2D1F900457128 /* PointLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90892EF2D1F900457128 /* PointLabel.swift */; };
 		7CED90E32EF2D1F900457128 /* FindPhoneIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F2F2EF2D1F900457128 /* FindPhoneIdViewController.swift */; };
 		7CED90E42EF2D1F900457128 /* SubstituteTimetableModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908D2EF2D1F900457128 /* SubstituteTimetableModalViewController.swift */; };
-		7CED90E62EF2D1F900457128 /* DeleteReviewModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED900D2EF2D1F900457128 /* DeleteReviewModalViewController.swift */; };
 		7CED90E72EF2D1F900457128 /* ForceUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE02EF2D1F900457128 /* ForceUpdateViewController.swift */; };
 		7CED90E92EF2D1F900457128 /* DiningCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED906C2EF2D1F900457128 /* DiningCollectionView.swift */; };
 		7CED90EB2EF2D1F900457128 /* LandViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AC2EF2D1F900457128 /* LandViewController.swift */; };
@@ -1561,7 +1560,6 @@
 		7CED90082EF2D1F900457128 /* ImageDropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropDownCell.swift; sourceTree = "<group>"; };
 		7CED900A2EF2D1F900457128 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		7CED900B2EF2D1F900457128 /* NonReviewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonReviewListView.swift; sourceTree = "<group>"; };
-		7CED900D2EF2D1F900457128 /* DeleteReviewModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteReviewModalViewController.swift; sourceTree = "<group>"; };
 		7CED900F2EF2D1F900457128 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
 		7CED90102EF2D1F900457128 /* ReviewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewModel.swift; sourceTree = "<group>"; };
 		7CED90122EF2D1F900457128 /* DashedBorderButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DashedBorderButton.swift; sourceTree = "<group>"; };
@@ -3985,7 +3983,6 @@
 				7CED90092EF2D1F900457128 /* ReviewListCollectionView */,
 				7CED900A2EF2D1F900457128 /* ScoreView.swift */,
 				7CED900B2EF2D1F900457128 /* NonReviewListView.swift */,
-				7CED900D2EF2D1F900457128 /* DeleteReviewModalViewController.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -6023,7 +6020,6 @@
 				7CED90E22EF2D1F900457128 /* PointLabel.swift in Sources */,
 				7CED90E32EF2D1F900457128 /* FindPhoneIdViewController.swift in Sources */,
 				7CED90E42EF2D1F900457128 /* SubstituteTimetableModalViewController.swift in Sources */,
-				7CED90E62EF2D1F900457128 /* DeleteReviewModalViewController.swift in Sources */,
 				7CED90E72EF2D1F900457128 /* ForceUpdateViewController.swift in Sources */,
 				7CED90E92EF2D1F900457128 /* DiningCollectionView.swift in Sources */,
 				7C86750E30061AA0003CB942 /* CheckHasUnreadNotificationHistoryUseCase.swift in Sources */,
