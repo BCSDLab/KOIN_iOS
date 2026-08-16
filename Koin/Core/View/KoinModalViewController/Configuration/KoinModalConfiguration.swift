@@ -65,8 +65,8 @@ struct KoinModalConfiguration {
         )
         case singleButton(
             title: String,
-            action: (()->Void)?,
-            style: KoinModalStyle.ButtonStyle?
+            action: (()->Void)? = nil,
+            style: KoinModalStyle.ButtonStyle? = nil
         )
         case none
     }

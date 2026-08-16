@@ -146,25 +146,32 @@ extension CallVanPostViewController {
 extension CallVanPostViewController {
     
     private func showRestrictedModal(_ type: RestrictionType?, _ until: String?) {
-        let modalViewController: CallVanModalViewController
+        let mainTitle: String
+        let subTitle: String
+        
         switch type {
         case .temporaryRestriction14Days:
-            guard let until else {
-                return
-            }
-            modalViewController = CallVanModalViewController(
-                title: RestrictionType.temporaryRestriction14Days.rawValue,
-                description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
+            mainTitle = RestrictionType.temporaryRestriction14Days.rawValue
+            subTitle = RestrictionType.temporaryRestriction14Days.getDescription(until: until)
         case .permanentRestriction:
-            modalViewController = CallVanModalViewController(
-                title: RestrictionType.temporaryRestriction14Days.rawValue,
-                description: RestrictionType.permanentRestriction.getDescription())
-        default:
+            mainTitle = RestrictionType.temporaryRestriction14Days.rawValue
+            subTitle = RestrictionType.permanentRestriction.getDescription()
+        case nil:
             return
         }
-        modalViewController.modalPresentationStyle = .overFullScreen
+        
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .titles(
+                mainTitleText: mainTitle,
+                subTitleText: subTitle
+            ),
+            button: .singleButton(
+                title: "닫기"
+            )
+        ))
         present(modalViewController, animated: false)
-    }    
+    }
     
     private func presentDeparturePlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
