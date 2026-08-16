@@ -179,7 +179,7 @@ extension ChatViewController{
                 mainTitleText: "이 사용자를 차단하시겠습니까?",
                 subTitleText: "쪽지 수신 및 발신이 모두 차단됩니다."
             ),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "닫기",
                 rightButtonTitle: "차단하기",
                 rightButtonAction: { [weak self] in

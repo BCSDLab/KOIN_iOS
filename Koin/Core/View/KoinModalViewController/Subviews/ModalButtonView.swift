@@ -21,10 +21,12 @@ final class ModalButtonView: UIView {
     private let configuration: KoinModalConfiguration
     let leftButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let rightButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let singleButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     private let leftButton = UIButton()
     private let rightButton = UIButton()
+    private let singleButton = UIButton()
     
     // MARK: - Initializer
     init(configuration: KoinModalConfiguration) {
@@ -40,6 +42,11 @@ final class ModalButtonView: UIView {
 }
 
 extension ModalButtonView {
+    private func setUpAddTargets() {
+        leftButton.addTarget(self, action: #selector(onLeftButtonTapped), for: .touchUpInside)
+        rightButton.addTarget(self, action: #selector(onRightButtonTapped), for: .touchUpInside)
+        singleButton.addTarget(self, action: #selector(onSingleButtonTapped), for: .touchUpInside)
+    }
     
     // MARK: - Objc
     @objc private func onLeftButtonTapped() {
@@ -48,12 +55,8 @@ extension ModalButtonView {
     @objc private func onRightButtonTapped() {
         rightButtonTappedPublisher.send()
     }
-}
-
-extension ModalButtonView {
-    private func setUpAddTargets() {
-        leftButton.addTarget(self, action: #selector(onLeftButtonTapped), for: .touchUpInside)
-        rightButton.addTarget(self, action: #selector(onRightButtonTapped), for: .touchUpInside)
+    @objc private func onSingleButtonTapped() {
+        singleButtonTappedPublisher.send()
     }
 }
 
@@ -65,33 +68,60 @@ extension ModalButtonView {
     }
     
     private func setUpStyles() {
-        guard let button = configuration.button else { return }
-        
-        let leftButtonTitle = button.leftButtonTitle
-        let leftButtonStyle = button.leftButtonStyle ?? configuration.style.leftButton
-        let rightButtonTitle = button.rightButtonTitle
-        let rightButtonStyle = button.rightButtonStyle ?? configuration.style.rightButton
-        
-        apply(title: leftButtonTitle, style: leftButtonStyle, to: leftButton)
-        apply(title: rightButtonTitle, style: rightButtonStyle, to: rightButton)
+        switch configuration.button {
+        case .buttons(let leftButtonTitle, _, let leftButtonStyle, let rightButtonTitle, _, let rightButtonStyle):
+            let leftButtonTitle = leftButtonTitle
+            let leftButtonStyle = leftButtonStyle ?? configuration.style.leftButton
+            let rightButtonTitle = rightButtonTitle
+            let rightButtonStyle = rightButtonStyle ?? configuration.style.rightButton
+            
+            apply(title: leftButtonTitle, style: leftButtonStyle, to: leftButton)
+            apply(title: rightButtonTitle, style: rightButtonStyle, to: rightButton)
+        case .singleButton(let title, _, let style):
+            let title = title
+            let style = style ?? configuration.style.singleButton
+            
+            apply(title: title, style: style, to: singleButton)
+        case .none:
+            return
+        }
     }
     
     private func setUpLayouts() {
-        [leftButton, rightButton].forEach {
-            addSubview($0)
+        switch configuration.button {
+        case .buttons:
+            [leftButton, rightButton].forEach {
+                addSubview($0)
+            }
+        case .singleButton:
+            [singleButton].forEach {
+                addSubview($0)
+            }
+        case .none:
+            return
         }
     }
     
     private func setUpConstraints() {
-        leftButton.snp.makeConstraints {
-            $0.height.equalTo(Layout.ButtonHeight)
-            $0.top.leading.bottom.equalToSuperview()
-        }
-        rightButton.snp.makeConstraints {
-            $0.height.equalTo(Layout.ButtonHeight)
-            $0.width.equalTo(leftButton.snp.width)
-            $0.leading.equalTo(leftButton.snp.trailing).offset(Layout.PaddingBetweenButtons)
-            $0.top.trailing.bottom.equalToSuperview()
+        switch configuration.button {
+        case .buttons:
+            leftButton.snp.makeConstraints {
+                $0.height.equalTo(Layout.ButtonHeight)
+                $0.top.leading.bottom.equalToSuperview()
+            }
+            rightButton.snp.makeConstraints {
+                $0.height.equalTo(Layout.ButtonHeight)
+                $0.width.equalTo(leftButton.snp.width)
+                $0.leading.equalTo(leftButton.snp.trailing).offset(Layout.PaddingBetweenButtons)
+                $0.top.trailing.bottom.equalToSuperview()
+            }
+        case .singleButton:
+            singleButton.snp.makeConstraints {
+                $0.edges.equalToSuperview()
+                $0.height.equalTo(Layout.ButtonHeight)
+            }
+        case .none:
+            return
         }
     }
 }

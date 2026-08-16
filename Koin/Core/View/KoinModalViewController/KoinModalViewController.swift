@@ -16,6 +16,10 @@ class KoinModalViewController: UIViewController {
     private let configuration: KoinModalConfiguration
     private var subscriptions = Set<AnyCancellable>()
     
+    private let leftButtonAction: (()->Void)?
+    private let rightButtonAction: (()->Void)?
+    private let singleButtonAction: (()->Void)?
+    
     // MARK: - UI Components
     private let containerLayoutGuide = UILayoutGuide()
     private let containerView = UIView()
@@ -27,6 +31,21 @@ class KoinModalViewController: UIViewController {
         self.configuration = configuration
         self.contentView = ModalContentView(configuration: configuration)
         self.buttonView = ModalButtonView(configuration: configuration)
+        
+        switch configuration.button {
+        case .buttons(_, let leftButtonAction, _, _, let rightButtonAction, _):
+            self.leftButtonAction = leftButtonAction
+            self.rightButtonAction = rightButtonAction
+            self.singleButtonAction = nil
+        case .singleButton(_, let action, _):
+            self.leftButtonAction = nil
+            self.rightButtonAction = nil
+            self.singleButtonAction = action
+        default:
+            self.leftButtonAction = nil
+            self.rightButtonAction = nil
+            self.singleButtonAction = nil
+        }
         super.init(nibName: nil, bundle: nil)
         configureTransition()
     }
@@ -52,17 +71,27 @@ class KoinModalViewController: UIViewController {
         buttonView.rightButtonTappedPublisher.sink { [weak self] in
             self?.rightButtonTapped()
         }.store(in: &subscriptions)
+        
+        buttonView.singleButtonTappedPublisher.sink { [weak self] in
+            self?.singleButtonTapped()
+        }.store(in: &subscriptions)
     }
     
     func leftButtonTapped() {
         dismiss(animated: true) { [weak self] in
-            self?.configuration.button?.leftButtonAction?()
+            self?.leftButtonAction?()
         }
     }
     
     func rightButtonTapped() {
         dismiss(animated: true) { [weak self] in
-            self?.configuration.button?.rightButtonAction()
+            self?.rightButtonAction?()
+        }
+    }
+    
+    func singleButtonTapped() {
+        dismiss(animated: true) { [weak self] in
+            self?.singleButtonAction?()
         }
     }
 }
@@ -141,12 +170,17 @@ extension KoinModalViewController {
         
         view.addLayoutGuide(containerLayoutGuide)
         
-        if configuration.button == nil {
+        
+        switch configuration.button {
+        case .none:
             buttonView.removeFromSuperview()
+        case .buttons, .singleButton:
+            break
         }
     }
     private func setUpConstraints() {
-        if let _ = configuration.button {
+        switch configuration.button {
+        case .buttons, .singleButton:
             contentView.snp.makeConstraints {
                 $0.top.equalToSuperview().offset(configuration.layout.contentTopPadding)
                 $0.leading.equalToSuperview().offset(configuration.layout.contentHorizontalPadding)
@@ -158,7 +192,7 @@ extension KoinModalViewController {
                 $0.trailing.equalToSuperview().offset(-configuration.layout.buttonHorizontalPadding)
                 $0.bottom.equalToSuperview().offset(-configuration.layout.buttonBottomPadding)
             }
-        } else {
+        case .none:
             contentView.snp.makeConstraints {
                 $0.top.equalToSuperview().offset(configuration.layout.contentTopPadding)
                 $0.leading.equalToSuperview().offset(configuration.layout.contentHorizontalPadding)

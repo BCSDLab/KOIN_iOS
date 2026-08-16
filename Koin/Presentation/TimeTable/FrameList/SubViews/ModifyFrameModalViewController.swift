@@ -36,7 +36,7 @@ final class ModifyFrameModalViewController: KoinModalViewController {
         super.init(configuration: .init(
             appearance: .primary,
             content: .custom(customView: containerView),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "취소",
                 rightButtonTitle: "저장",
                 rightButtonAction: {} //rightButtonAction

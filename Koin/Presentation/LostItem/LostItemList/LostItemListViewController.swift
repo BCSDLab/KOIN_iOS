@@ -233,7 +233,7 @@ extension LostItemListViewController {
                 mainTitleText: "게시글을 작성하려면\n로그인이 필요해요.",
                 subTitleText: "로그인 후 글을 작성해주세요!"
             ),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "닫기",
                 leftButtonAction: onLeftButtonTapped,
                 rightButtonTitle: "로그인하기",

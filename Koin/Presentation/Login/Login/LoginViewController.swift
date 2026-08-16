@@ -180,7 +180,7 @@ extension LoginViewController {
                     fontSize: 12
                 )
             ),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "나중에 하기",
                 leftButtonAction: { [weak self] in
                     self?.navigationController?.popViewController(animated: true)

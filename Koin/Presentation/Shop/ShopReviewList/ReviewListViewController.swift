@@ -314,7 +314,7 @@ extension ReviewListViewController {
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .new,
             content: .singleTitle(text: "삭제한 리뷰는 되돌릴 수 없습니다.\n삭제 하시겠습니까?"),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "취소하기",
                 leftButtonAction: { [weak self] in
                     self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
@@ -352,7 +352,7 @@ extension ReviewListViewController {
                 mainTitleText: mainText,
                 subTitleText: subText
             ),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "닫기",
                 leftButtonAction: { [weak self] in
                     self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))

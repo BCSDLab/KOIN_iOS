@@ -14,6 +14,10 @@ struct KoinModalStyle {
     let leftButton: ButtonStyle
     let rightButton: ButtonStyle
     
+    var singleButton: ButtonStyle {
+        rightButton
+    }
+    
     struct TitleStyle {
         let textColor: ColorAsset
         let font: FontAsset

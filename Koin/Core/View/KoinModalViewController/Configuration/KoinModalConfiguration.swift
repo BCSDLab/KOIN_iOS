@@ -10,13 +10,13 @@ import UIKit
 struct KoinModalConfiguration {
     let appearance: Appearance
     let content: Content
-    let button: Button?
+    let button: Button
     let layout: Layout
     
     init(
         appearance: Appearance,
         content: Content,
-        button: Button?,
+        button: Button,
         layout: Layout = .init()
     ) {
         self.appearance = appearance
@@ -53,30 +53,22 @@ struct KoinModalConfiguration {
             customView: UIView
         )
     }
-
-    struct Button {
-        let leftButtonTitle: String
-        let leftButtonAction: (()->Void)?
-        let leftButtonStyle: KoinModalStyle.ButtonStyle?
-        let rightButtonTitle: String
-        let rightButtonAction: ()->Void
-        let rightButtonStyle: KoinModalStyle.ButtonStyle?
-        
-        init(
+    
+    enum Button {
+        case buttons(
             leftButtonTitle: String,
-            leftButtonAction: (() -> Void)? = nil,
+            leftButtonAction: (()->Void)? = nil,
             leftButtonStyle: KoinModalStyle.ButtonStyle? = nil,
             rightButtonTitle: String,
-            rightButtonAction: @escaping () -> Void,
+            rightButtonAction: ()->Void,
             rightButtonStyle: KoinModalStyle.ButtonStyle? = nil
-        ) {
-            self.leftButtonTitle = leftButtonTitle
-            self.leftButtonAction = leftButtonAction
-            self.leftButtonStyle = leftButtonStyle
-            self.rightButtonTitle = rightButtonTitle
-            self.rightButtonAction = rightButtonAction
-            self.rightButtonStyle = rightButtonStyle
-        }
+        )
+        case singleButton(
+            title: String,
+            action: (()->Void)?,
+            style: KoinModalStyle.ButtonStyle?
+        )
+        case none
     }
     
     struct Layout {

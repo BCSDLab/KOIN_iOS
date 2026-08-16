@@ -201,7 +201,7 @@ extension LostItemKeywordViewController {
                 mainTitleText: "키워드 알림을 받으려면\n로그인이 필요해요.",
                 subTitleText: "로그인 후 간편하게 분실물 키워드\n알림을 받아보세요!"
             ),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "닫기",
                 rightButtonTitle: "로그인하기",
                 rightButtonAction: onRightButtonTapped

@@ -37,7 +37,7 @@ final class RevokeModalViewController: KoinModalViewController {
                 mainTitle: mainTitle,
                 subTitle: subTitle
             ),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "취소",
                 rightButtonTitle: "회원탈퇴",
                 rightButtonAction: onRevokeButtonTapped

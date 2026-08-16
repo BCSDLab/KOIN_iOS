@@ -83,7 +83,7 @@ final class BusSearchDatePickerViewController: KoinModalViewController {
         super.init(configuration: .init(
             appearance: .primary,
             content: .custom(customView: customView),
-            button: .init(
+            button: .buttons(
                 leftButtonTitle: "지금 출발",
                 leftButtonAction: onLeftButtonTapped,
                 leftButtonStyle: .init(
