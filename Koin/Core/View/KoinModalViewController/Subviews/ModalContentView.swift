@@ -133,12 +133,14 @@ extension ModalContentView {
         let mutableAttributedString = NSMutableAttributedString(attributedString: attributedString)
         let paragraphStyle = NSMutableParagraphStyle().then {
             $0.lineHeightMultiple = 1.6
+            $0.alignment = .center
         }
         let fullRange = {
             let text = attributedString.string
             return (text as NSString).range(of: text)
         }()
         mutableAttributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: fullRange)
-        label.attributedText = mutableAttributedString        
+        label.attributedText = mutableAttributedString
+        label.numberOfLines = 0
     }
 }
