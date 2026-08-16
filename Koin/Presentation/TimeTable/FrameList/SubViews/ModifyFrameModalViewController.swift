@@ -7,99 +7,100 @@
 
 import UIKit
 
-final class ModifyFrameModalViewController: UIViewController {
+final class ModifyFrameModalViewController: KoinModalViewController {
+    
+    // MARK: - Properties
     private let onDeleteButtonTapped: (FrameDto) -> Void
     private let onSaveButtonTapped: (FrameDto) -> Void
-    var containerWidth: CGFloat
-    var containerHeight: CGFloat
-    var frame: FrameDto = FrameDto(id: 0, timetableName: "", isMain: false)
+    private var frame: FrameDto = FrameDto(id: 0, timetableName: "", isMain: false)
     
-    private let messageLabel = UILabel().then {
-        $0.text = "시간표 설정"
-        $0.font = UIFont.appFont(.pretendardRegular, size: 17)
-    }
+    // MARK: - UI Components
+    let containerView = UIView()
     
-    private let deleteButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.danger700)
-        $0.setTitle("삭제", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-    }
+    let messageLabel = UILabel()
+    let deleteButton = UIButton()
+    let textField = UITextField()
     
-    private let textField = UITextField().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-    }
+    let checkButtonWrapperView = UIView()
+    let checkButton = UIButton()
+    let buttonTextLabel = UILabel()
     
-    private let checkButton = UIButton().then { _ in
-    }
-    private let buttonTextLabel = UILabel().then {
-        $0.text = "기본 시간표로 설정하기"
-        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
-    }
-
-    private let cancelButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.neutral0)
-        $0.layer.borderColor = UIColor.appColor(.neutral500).cgColor
-        $0.layer.borderWidth = 1.0
-        $0.setTitle("취소", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-    }
-    
-    private let saveButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
-        $0.setTitle("저장", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-    }
-    
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 4
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
+    // MARK: - Initializer
     init(
         onDeleteButtonTapped: @escaping (FrameDto) -> Void,
-        onSaveButtonTapped: @escaping (FrameDto) -> Void,
-        width: CGFloat,
-        height: CGFloat
+        onSaveButtonTapped: @escaping (FrameDto) -> Void
     ) {
         self.onDeleteButtonTapped = onDeleteButtonTapped
         self.onSaveButtonTapped = onSaveButtonTapped
-        self.containerWidth = width
-        self.containerHeight = height
-        super.init(nibName: nil, bundle: nil)
-        textField.delegate = self
+        
+        super.init(configuration: .init(
+            appearance: .primary,
+            content: .custom(customView: containerView),
+            button: .init(
+                leftButtonTitle: "취소",
+                rightButtonTitle: "저장",
+                rightButtonAction: {} //rightButtonAction
+            ),
+            layout: .init(
+                width: 327,
+                contentTopPadding: 12,
+                contentHorizontalPadding: 24,
+                paddingBetweenContentAndButton: 10,
+                buttonHorizontalPadding: 24,
+                buttonBottomPadding: 16
+            )
+        ))
     }
-    
-    required init?(coder: NSCoder) {
+    @MainActor required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
-        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
-        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        setUpDelegate()
+        setUpAddTargets()
     }
     
+    // MARK: - Public
     func configure(frame: FrameDto) {
         self.frame = frame
-        self.textField.text = frame.timetableName
+        self.textField.attributedPlaceholder = NSAttributedString(
+            string: frame.timetableName,
+            attributes: [
+                .font: UIFont.appFont(.pretendardRegular, size: 14),
+                .foregroundColor: UIColor.appColor(.neutral500)
+            ])
         self.frame = frame
         self.checkButton.setImage(UIImage.appImage(asset: frame.isMain ? .checkFill : .checkEmpty), for: .normal)
+    }
+    
+    // MARK: - Override
+    override func rightButtonTapped() {
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            onSaveButtonTapped(frame)
+        }
+    }
+}
+
+extension ModifyFrameModalViewController {
+    private func setUpDelegate() {
+        textField.delegate = self
+    }
+    
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder() // 키보드 내리기
+        return true
+    }
+}
+
+extension ModifyFrameModalViewController {
+    private func setUpAddTargets() {
+        textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
+        deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
@@ -111,85 +112,95 @@ final class ModifyFrameModalViewController: UIViewController {
         frame.isMain.toggle()
         checkButton.setImage(UIImage.appImage(asset: frame.isMain ? .checkFill : .checkEmpty), for: .normal)
     }
+    
     @objc private func deleteButtonTapped() {
         dismiss(animated: true) { [weak self] in
             guard let self else { return }
             onDeleteButtonTapped(frame)
         }
     }
-    @objc private func cancelButtonTapped() {
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc private func saveButtonTapped() {
-        onSaveButtonTapped(frame)
-        dismiss(animated: true, completion: nil)
-    }
-    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            textField.resignFirstResponder() // 키보드 내리기
-            return true
-        }
-   
 }
 
 extension ModifyFrameModalViewController {
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
+    }
     
-    private func setUpLayOuts() {
-        [containerView].forEach {
-            view.addSubview($0)
+    private func setUpStyles() {
+        messageLabel.do {
+            $0.text = "시간표 설정"
+            $0.font = UIFont.appFont(.pretendardSemiBold, size: 16)
         }
-        [deleteButton, messageLabel, textField, checkButton, buttonTextLabel, cancelButton, saveButton].forEach {
+        
+        deleteButton.do {
+            $0.backgroundColor = UIColor.appColor(.danger700)
+            $0.setTitle("삭제", for: .normal)
+            $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
+            $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
+            $0.layer.cornerRadius = 4
+            $0.layer.masksToBounds = true
+        }
+        
+        textField.do {
+            $0.backgroundColor = UIColor.appColor(.neutral100)
+            $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 4
+            $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 16, height: 22))
+            $0.leftViewMode = .always
+            $0.rightView = UIView(frame: .init(x: 0, y: 0, width: 16, height: 22))
+            $0.rightViewMode = .always
+            $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+            $0.textColor = UIColor.appColor(.neutral800)
+        }
+        
+        buttonTextLabel.do {
+            $0.text = "기본 시간표로 설정하기"
+            $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+        }
+    }
+    private func setUpLayouts() {
+        [checkButton, buttonTextLabel].forEach {
+            checkButtonWrapperView.addSubview($0)
+        }
+        [deleteButton, messageLabel, textField, checkButtonWrapperView].forEach {
             containerView.addSubview($0)
         }
     }
-    
     private func setUpConstraints() {
-        containerView.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.centerY.equalTo(view.snp.centerY)
-            make.width.equalTo(containerWidth)
-            make.height.equalTo(containerHeight)
-        }
         deleteButton.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(13)
-            make.leading.equalTo(containerView.snp.leading).offset(24)
+            make.top.leading.equalToSuperview()
             make.width.equalTo(60)
             make.height.equalTo(24)
         }
         messageLabel.snp.makeConstraints { make in
-            make.top.equalTo(deleteButton.snp.bottom)
-            make.centerX.equalTo(containerView.snp.centerX)
+            make.top.equalToSuperview().offset(14)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(26)
         }
         textField.snp.makeConstraints { make in
             make.top.equalTo(messageLabel.snp.bottom).offset(14)
-            make.leading.equalTo(containerView.snp.leading).offset(24)
-            make.trailing.equalTo(containerView.snp.trailing).offset(-24)
+            make.leading.equalTo(containerView.snp.leading)
+            make.trailing.equalTo(containerView.snp.trailing)
             make.height.equalTo(46)
         }
-        checkButton.snp.makeConstraints { make in
-            make.top.equalTo(textField.snp.bottom).offset(8)
-            make.leading.equalTo(textField.snp.leading).offset(61)
-            make.width.height.equalTo(24)
+        checkButtonWrapperView.snp.makeConstraints {
+            $0.height.equalTo(24)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(textField.snp.bottom).offset(10)
+            $0.bottom.equalToSuperview()
         }
-        buttonTextLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(checkButton.snp.centerY)
-            make.leading.equalTo(checkButton.snp.trailing).offset(5)
+        
+        checkButton.snp.makeConstraints {
+            $0.top.leading.bottom.equalToSuperview()
+            $0.size.equalTo(24)
         }
-        cancelButton.snp.makeConstraints { make in
-            make.width.equalTo(135.5)
-            make.height.equalTo(48)
-            make.trailing.equalTo(containerView.snp.centerX).offset(-4)
-            make.bottom.equalTo(containerView.snp.bottom).offset(-16)
+        buttonTextLabel.snp.makeConstraints {
+            $0.centerY.equalTo(checkButton)
+            $0.leading.equalTo(checkButton.snp.trailing).offset(5)
+            $0.trailing.equalToSuperview()
         }
-        saveButton.snp.makeConstraints { make in
-            make.width.height.bottom.equalTo(cancelButton)
-            make.leading.equalTo(containerView.snp.centerX).offset(4)
-        }
-    }
-    
-    private func configureView() {
-        setUpLayOuts()
-        setUpConstraints()
-        view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
     }
 }

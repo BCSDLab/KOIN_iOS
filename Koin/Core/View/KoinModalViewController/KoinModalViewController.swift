@@ -45,16 +45,24 @@ class KoinModalViewController: UIViewController {
     // MARK: - Bind
     private func bind() {
         buttonView.leftButtonTappedPublisher.sink { [weak self] in
-            self?.dismiss(animated: true) { [weak self] in
-                self?.configuration.button?.leftButtonAction?()
-            }
+            self?.leftButtonTapped()
         }.store(in: &subscriptions)
         
         buttonView.rightButtonTappedPublisher.sink { [weak self] in
-            self?.dismiss(animated: true) { [weak self] in
-                self?.configuration.button?.rightButtonAction()
-            }
+            self?.rightButtonTapped()
         }.store(in: &subscriptions)
+    }
+    
+    func leftButtonTapped() {
+        dismiss(animated: true) { [weak self] in
+            self?.configuration.button?.leftButtonAction?()
+        }
+    }
+    
+    func rightButtonTapped() {
+        dismiss(animated: true) { [weak self] in
+            self?.configuration.button?.rightButtonAction()
+        }
     }
 }
 

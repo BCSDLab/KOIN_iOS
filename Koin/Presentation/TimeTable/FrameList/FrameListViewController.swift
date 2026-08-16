@@ -126,9 +126,7 @@ extension FrameListViewController: TimetableCellDelegate {
             },
             onSaveButtonTapped: { [weak self] frame in
                 self?.inputSubject.send(.modifyFrame(frame))
-            },
-            width: 327,
-            height: 216
+            }
         )
         modifyFrameModalViewController.configure(frame: viewModel.frameData[section].frame[row])
         present(modifyFrameModalViewController, animated: true)
