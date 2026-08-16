@@ -130,9 +130,7 @@ extension BusSearchResultViewController {
         guard let datePickerData = viewModel.datePickerData else { return }
 
         let busSearchDatePickerViewController = BusSearchDatePickerViewController(
-            onDepartureNowTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureNow, .click, "지금 출발"))
-            },
+            subTitle: datePickerSubTitle,
             onPickerDateChanged: { [weak self] isChanged in
                 let logValue = isChanged != nil ? "Y" : "N"
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureTimeSettingDone, .click, logValue))
@@ -143,13 +141,9 @@ extension BusSearchResultViewController {
                 let time = "\(selectedItems[0]) \(selectedItems[1]) \(selectedItems[2]):\(selectedItems[3])"
                 self?.inputSubject.send(.getSearchedResult(time, nil))
             },
-            width: 301,
-            height: 347,
-            paddingBetweenLabels: 10,
-            title: "출발 시각 설정",
-            subTitle: datePickerSubTitle,
-            titleColor: .appColor(.neutral700),
-            subTitleColor: .gray
+            onDepartureNowTapped: { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureNow, .click, "지금 출발"))
+            }
         )
         busSearchDatePickerViewController.setPickerItems(items: datePickerData.0, selectedItems: datePickerData.1)
         present(busSearchDatePickerViewController, animated: true)

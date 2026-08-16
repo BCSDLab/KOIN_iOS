@@ -24,7 +24,11 @@ final class KoinPickerView: UIView, UIPickerViewDelegate, UIPickerViewDataSource
     private let pickerView = UIPickerView(frame: .zero)
     
     // MARK: - Initialization
-    init(font: UIFont = .appFont(.pretendardMedium, size: 16), selectedColor: UIColor = .appColor(.primary500), deselectedColor: UIColor = .appColor(.neutral800)) {
+    init(
+        font: UIFont = .appFont(.pretendardMedium, size: 16),
+        selectedColor: UIColor = .appColor(.primary500),
+        deselectedColor: UIColor = .appColor(.neutral800)
+    ) {
         self.font = font
         self.selectedColor = selectedColor
         self.deselectedColor = deselectedColor
