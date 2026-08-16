@@ -17,6 +17,7 @@ class KoinModalViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
+    private let containerLayoutGuide = UILayoutGuide()
     private let containerView = UIView()
     private var contentView: ModalContentView
     private let buttonView: ModalButtonView
@@ -100,14 +101,16 @@ extension KoinModalViewController: UIViewControllerTransitioningDelegate {
 
 extension KoinModalViewController {
     private func setUpGestureRecognizer() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutsideOfContainerView))
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapAround))
         view.addGestureRecognizer(tapGesture)
     }
     
-    @objc private func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {
+    @objc private func didTapAround(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: view)
         if !containerView.frame.contains(location) {
             dismiss(animated: true)
+        } else {
+            view.endEditing(true)
         }
     }
 }
@@ -136,6 +139,8 @@ extension KoinModalViewController {
             view.addSubview($0)
         }
         
+        view.addLayoutGuide(containerLayoutGuide)
+        
         if configuration.button == nil {
             buttonView.removeFromSuperview()
         }
@@ -163,8 +168,14 @@ extension KoinModalViewController {
         }
         
         containerView.snp.makeConstraints {
-            $0.center.equalToSuperview()
+            $0.center.equalTo(containerLayoutGuide)
             $0.width.equalTo(configuration.layout.width)
+        }
+        
+        containerLayoutGuide.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
         }
     }
 }
