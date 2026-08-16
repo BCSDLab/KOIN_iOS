@@ -195,17 +195,19 @@ extension LostItemKeywordViewController {
         let onRightButtonTapped: ()->Void = { [weak self] in
             self?.navigateToLogin()
         }
-        let viewController = KoinModalViewController(
-            onRightButtonTapped: onRightButtonTapped,
-            width: 301,
-            height: 228,
-            paddingBetweenLabels: 16,
-            title: "키워드 알림을 받으려면\n로그인이 필요해요.",
-            subTitle: "로그인 후 간편하게 분실물 키워드\n알림을 받아보세요!",
-            titleColor: .appColor(.neutral800),
-            subTitleColor: .appColor(.gray)
-        )
-        navigationController?.present(viewController, animated: true)
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "키워드 알림을 받으려면\n로그인이 필요해요.",
+                subTitleText: "로그인 후 간편하게 분실물 키워드\n알림을 받아보세요!"
+            ),
+            button: .init(
+                leftButtonTitle: "닫기",
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
+        navigationController?.present(modalViewController, animated: true)
     }
     
     private func updateMyKeywordCountLabel(_ count: Int) {

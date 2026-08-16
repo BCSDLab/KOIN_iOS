@@ -2,114 +2,32 @@
 //  KoinModalViewController.swift
 //  koin
 //
-//  Created by JOOMINKYUNG on 8/28/24.
+//  Created by 홍기정 on 8/15/26.
 //
 
-import Combine
 import UIKit
+import Combine
+import SnapKit
+import Then
 
 class KoinModalViewController: UIViewController {
     
     // MARK: - Properties
-    let onLeftButtonTapped: (()->Void)?
-    let onRightButtonTapped: ()->Void
-    
-    var containerWidth: CGFloat = 0
-    var containerHeight: CGFloat = 0
-    var paddingBetweenLabels: CGFloat = 0
-    var titleText: String = ""
-    var subTitleText: String?
-    var titleColor: UIColor = .black
-    var subTitleColor: UIColor? = .black
+    private let configuration: KoinModalConfiguration
+    private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
-    private let messageLabel = UILabel().then {
-        $0.numberOfLines = 0
-    }
-    
-    private let subMessageLabel = UILabel().then {
-        $0.numberOfLines = 0
-    }
-    
-    private let closeButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.neutral0)
-        $0.layer.borderColor = UIColor.appColor(.neutral500).cgColor
-        $0.layer.borderWidth = 1.0
-        $0.setTitle("닫기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-    }
-    
-    private let rightButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
-        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-    }
-    
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 8
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    private var contentViewInContainer: UIView?
+    private let containerView = UIView()
+    private var contentView: ModalContentView
+    private let buttonView: ModalButtonView
     
     // MARK: - Initializer
-    init(
-        onLeftButtonTapped: (()->Void)? = nil,
-        onRightButtonTapped: @escaping ()->Void,
-        width: CGFloat,
-        height: CGFloat,
-        paddingBetweenLabels: CGFloat,
-        title: String,
-        subTitle: String?,
-        titleColor: UIColor,
-        subTitleColor: UIColor?,
-        rightButtonText: String = "로그인하기"
-    ) {
-        self.onLeftButtonTapped = onLeftButtonTapped
-        self.onRightButtonTapped = onRightButtonTapped
+    init(configuration: KoinModalConfiguration) {
+        self.configuration = configuration
+        self.contentView = ModalContentView(configuration: configuration)
+        self.buttonView = ModalButtonView(configuration: configuration)
         super.init(nibName: nil, bundle: nil)
-        self.containerWidth = width
-        self.containerHeight = height
-        self.paddingBetweenLabels = paddingBetweenLabels
-        self.titleText = title
-        self.subTitleText = subTitle
-        self.titleColor = titleColor
-        self.subTitleColor = subTitleColor
-        self.rightButton.setTitle(rightButtonText, for: .normal)
-        
         configureTransition()
-    }
-    
-    convenience init(
-        onLeftButtonTapped: (()->Void)? = nil,
-        onRightButtonTapped: @escaping ()->Void,
-        width: CGFloat,
-        height: CGFloat,
-        title: String,
-        titleColor: UIColor,
-        rightButtonText: String = "로그인하기"
-    ) {
-        
-        self.init(
-            onLeftButtonTapped: onLeftButtonTapped,
-            onRightButtonTapped: onRightButtonTapped,
-            width: width,
-            height: height,
-            paddingBetweenLabels: 0,
-            title: title,
-            subTitle: nil,
-            titleColor: titleColor,
-            subTitleColor: nil,
-            rightButtonText: rightButtonText
-        )
     }
     
     required init?(coder: NSCoder) {
@@ -119,151 +37,33 @@ class KoinModalViewController: UIViewController {
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
+        setUpGestureRecognizer()
         configureView()
-        rightButton.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        bind()
+    }
+    
+    // MARK: - Bind
+    private func bind() {
+        buttonView.leftButtonTappedPublisher.sink { [weak self] in
+            self?.dismiss(animated: true) { [weak self] in
+                self?.configuration.button?.leftButtonAction?()
+            }
+        }.store(in: &subscriptions)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutsideOfContainerView))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    // MARK: - Public
-    @objc func closeButtonTapped() {
-        dismiss(animated: true) { [weak self] in
-            self?.onLeftButtonTapped?()
-        }
-    }
-    
-    @objc func rightButtonTapped() {
-        dismiss(animated: true) { [weak self] in
-            self?.onRightButtonTapped()
-        }
-    }
-    
-    @objc func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {
-        let location = sender.location(in: view)
-        if !containerView.frame.contains(location) {
-            dismiss(animated: true)
-        }
-    }
-    
-    func updaterightButton(buttonColor: UIColor = .appColor(.primary500), borderWidth: CGFloat, title: String) {
-        rightButton.backgroundColor = buttonColor
-        rightButton.layer.borderWidth = borderWidth
-        rightButton.setTitle(title, for: .normal)
-    }
-    
-    func updateCloseButton(buttonColor: UIColor = .systemBackground, borderWidth: CGFloat, title: String) {
-        closeButton.backgroundColor = buttonColor
-        closeButton.layer.borderWidth = borderWidth
-        closeButton.setTitle(title, for: .normal)
-    }
-    
-    func updateMessageLabel(font: UIFont = .appFont(.pretendardMedium, size: 18), alignment: NSTextAlignment = .center, title: String? = nil) {
-        if let title = title { titleText = title }
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 8
-        paragraphStyle.alignment = alignment
-        let attributedString = NSMutableAttributedString(string: titleText)
-        attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: titleText.count))
-        attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: titleText.count))
-        attributedString.addAttribute(.foregroundColor, value: titleColor, range: NSRange(location: 0, length: titleText.count))
-        
-        messageLabel.attributedText = attributedString
-    }
-    
-    func updateSubMessageLabel(font: UIFont = .appFont(.pretendardRegular, size: 14), alignment: NSTextAlignment = .center, title: String? = nil) {
-        if let title = title { subTitleText = title }
-        let paragraphStyle = NSMutableParagraphStyle()
-        paragraphStyle.lineSpacing = 6
-        paragraphStyle.alignment = alignment
-        
-        if let subTitleText {
-            let attributedString = NSMutableAttributedString(string: subTitleText)
-            attributedString.addAttribute(.paragraphStyle, value: paragraphStyle, range: NSRange(location: 0, length: subTitleText.count))
-            attributedString.addAttribute(.font, value: font, range: NSRange(location: 0, length: subTitleText.count))
-            attributedString.addAttribute(.foregroundColor, value: subTitleColor ?? .black, range: NSRange(location: 0, length: subTitleText.count))
-            
-            subMessageLabel.attributedText = attributedString
-        }
-    }
-    
-    func setContentViewInContainer(view: UIView, frame: CGRect) {
-        self.contentViewInContainer = view
-        self.contentViewInContainer?.frame = frame
-        
-        guard let contentViewInContainer = contentViewInContainer else { return }
-        containerView.addSubview(contentViewInContainer)
-        contentViewInContainer.snp.makeConstraints { make in
-            make.top.equalTo(subMessageLabel.snp.bottom).offset(24)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(contentViewInContainer.frame.height)
-        }
-        closeButton.snp.remakeConstraints { make in
-            make.top.equalTo(contentViewInContainer.snp.bottom).offset(24)
-            make.trailing.equalTo(containerView.snp.centerX).offset(-2)
-            make.width.equalTo(114.5)
-            make.height.equalTo(48)
-        }
-        rightButton.snp.remakeConstraints { make in
-            make.top.equalTo(contentViewInContainer.snp.bottom).offset(24)
-            make.leading.equalTo(containerView.snp.centerX).offset(2)
-            make.width.equalTo(114.5)
-            make.height.equalTo(48)
-        }
-    }
-}
-
-extension KoinModalViewController {
-    
-    private func setUpLayOuts() {
-        [containerView].forEach {
-            view.addSubview($0)
-        }
-        [messageLabel, subMessageLabel, closeButton, rightButton].forEach {
-            containerView.addSubview($0)
-        }
-    }
-    
-    private func setUpConstraints() {
-        containerView.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.centerY.equalTo(view.snp.centerY)
-            make.width.equalTo(containerWidth)
-            make.height.equalTo(containerHeight)
-        }
-        messageLabel.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(24)
-            make.leading.trailing.equalToSuperview().inset(24)
-        }
-        subMessageLabel.snp.makeConstraints { make in
-            make.top.equalTo(messageLabel.snp.bottom).offset(paddingBetweenLabels)
-            make.leading.trailing.equalToSuperview().inset(24)
-        }
-        closeButton.snp.makeConstraints { make in
-            make.top.equalTo(subMessageLabel.snp.bottom).offset(24)
-            make.trailing.equalTo(containerView.snp.centerX).offset(-2)
-            make.width.equalTo(114.5)
-            make.height.equalTo(48)
-        }
-        rightButton.snp.makeConstraints { make in
-            make.top.equalTo(subMessageLabel.snp.bottom).offset(24)
-            make.leading.equalTo(containerView.snp.centerX).offset(2)
-            make.width.equalTo(114.5)
-            make.height.equalTo(48)
-        }
-    }
-    
-    private func configureView() {
-        view.backgroundColor = UIColor.clear
-        setUpLayOuts()
-        setUpConstraints()
-        updateMessageLabel()
-        updateSubMessageLabel()
+        buttonView.rightButtonTappedPublisher.sink { [weak self] in
+            self?.dismiss(animated: true) { [weak self] in
+                self?.configuration.button?.rightButtonAction()
+            }
+        }.store(in: &subscriptions)
     }
 }
 
 extension KoinModalViewController: UIViewControllerTransitioningDelegate {
+    private func configureTransition() {
+        modalPresentationStyle = .custom
+        transitioningDelegate = self
+    }
+    
     func animationController(
         forPresented presented: UIViewController,
         presenting: UIViewController,
@@ -288,10 +88,75 @@ extension KoinModalViewController: UIViewControllerTransitioningDelegate {
             presenting: presenting
         )
     }
+}
+
+extension KoinModalViewController {
+    private func setUpGestureRecognizer() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutsideOfContainerView))
+        view.addGestureRecognizer(tapGesture)
+    }
     
-    private func configureTransition() {
-        modalPresentationStyle = .custom
-        transitioningDelegate = self
+    @objc private func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {
+        let location = sender.location(in: view)
+        if !containerView.frame.contains(location) {
+            dismiss(animated: true)
+        }
     }
 }
 
+extension KoinModalViewController {
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
+    }
+    
+    private func setUpStyles() {
+        view.backgroundColor = .clear
+        
+        containerView.do {
+            $0.backgroundColor = .appColor(.neutral0)
+            $0.layer.cornerRadius = 8
+        }
+    }
+    
+    private func setUpLayouts() {
+        [contentView, buttonView].forEach {
+            containerView.addSubview($0)
+        }
+        [containerView].forEach {
+            view.addSubview($0)
+        }
+        
+        if configuration.button == nil {
+            buttonView.removeFromSuperview()
+        }
+    }
+    private func setUpConstraints() {
+        if let _ = configuration.button {
+            contentView.snp.makeConstraints {
+                $0.top.equalToSuperview().offset(configuration.layout.contentTopPadding)
+                $0.leading.equalToSuperview().offset(configuration.layout.contentHorizontalPadding)
+                $0.trailing.equalToSuperview().offset(-configuration.layout.contentHorizontalPadding)
+            }
+            buttonView.snp.makeConstraints {
+                $0.top.equalTo(contentView.snp.bottom).offset(configuration.layout.paddingBetweenContentAndButton)
+                $0.leading.equalToSuperview().offset(configuration.layout.buttonHorizontalPadding)
+                $0.trailing.equalToSuperview().offset(-configuration.layout.buttonHorizontalPadding)
+                $0.bottom.equalToSuperview().offset(-configuration.layout.buttonBottomPadding)
+            }
+        } else {
+            contentView.snp.makeConstraints {
+                $0.top.equalToSuperview().offset(configuration.layout.contentTopPadding)
+                $0.leading.equalToSuperview().offset(configuration.layout.contentHorizontalPadding)
+                $0.trailing.equalToSuperview().offset(-configuration.layout.contentHorizontalPadding)
+                $0.bottom.equalToSuperview().offset(-configuration.layout.contentBottomPadding)
+            }
+        }
+        
+        containerView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.width.equalTo(configuration.layout.width)
+        }
+    }
+}

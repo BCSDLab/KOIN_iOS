@@ -246,7 +246,15 @@ extension LostItemDataViewController {
             self?.inputSubject.send(.deleteData)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, EventParameter.EventCategory.click, "확인"))
         }
-        let modalViewController = KoinModalViewController(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .singleTitle(text: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?"),
+            button: .init(
+                leftButtonTitle: "취소",
+                rightButtonTitle: "확인",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
         navigationController?.present(modalViewController, animated: true)
     }
     
@@ -269,7 +277,15 @@ extension LostItemDataViewController {
             inputSubject.send(.changeState(viewModel.id))
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemFound, .click, "\(type.description)물"))
         }
-        let modalViewController = KoinModalViewController(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .singleTitle(text: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?"),
+            button: .init(
+                leftButtonTitle: "취소",
+                rightButtonTitle: "확인",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
         navigationController?.present(modalViewController, animated: true)
     }
     
@@ -309,7 +325,19 @@ extension LostItemDataViewController {
             let loginViewController = LoginViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
-        let modalViewController = KoinModalViewController(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 대화를 시작하세요!", titleColor: .appColor(.neutral600), subTitleColor: .appColor(.gray))
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "쪽지를 보내려면\n로그인이 필요해요.",
+                subTitleText: "로그인 후 대화를 시작하세요!"
+            ),
+            button: .init(
+                leftButtonTitle: "닫기",
+                leftButtonAction: onLeftButtonTapped,
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
         navigationController?.present(modalViewController, animated: true)
     }
     
@@ -334,7 +362,18 @@ extension LostItemDataViewController {
             let loginViewController = LoginViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
-        let modalViewController = KoinModalViewController(onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 신고하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: .appColor(.neutral600), subTitleColor: .appColor(.gray))
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "게시글을 신고하려면\n로그인이 필요해요.",
+                subTitleText: "로그인 후 이용해주세요."
+            ),
+            button: .init(
+                leftButtonTitle: "닫기",
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
         navigationController?.present(modalViewController, animated: true)
     }
     

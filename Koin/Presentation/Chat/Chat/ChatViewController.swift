@@ -173,19 +173,20 @@ extension ChatViewController{
     }
 
     private func presentBlockUserConfirmationModal() {
-        let modalViewController = KoinModalViewController(
-            onRightButtonTapped: { [weak self] in
-                self?.inputSubject.send(.blockUser)
-            },
-            width: 301,
-            height: 179,
-            paddingBetweenLabels: 8,
-            title: "이 사용자를 차단하시겠습니까?",
-            subTitle: "쪽지 수신 및 발신이 모두 차단됩니다.",
-            titleColor: .appColor(.neutral700),
-            subTitleColor: .appColor(.gray),
-            rightButtonText: "차단하기"
-        )
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "이 사용자를 차단하시겠습니까?",
+                subTitleText: "쪽지 수신 및 발신이 모두 차단됩니다."
+            ),
+            button: .init(
+                leftButtonTitle: "닫기",
+                rightButtonTitle: "차단하기",
+                rightButtonAction: { [weak self] in
+                    self?.inputSubject.send(.blockUser)
+                }
+            )
+        ))
         present(modalViewController, animated: true)
     }
 
