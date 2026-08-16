@@ -593,7 +593,6 @@
 		7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE02EF2D1F900457128 /* ShopDetailTableViewNameCell.swift */; };
 		7CED91DF2EF2D1F900457128 /* NotiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F152EF2D1F900457128 /* NotiViewController.swift */; };
 		7CED91E32EF2D1F900457128 /* AddClassCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90962EF2D1F900457128 /* AddClassCollectionViewCell.swift */; };
-		7CED91E52EF2D1F900457128 /* ModifyUserModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F222EF2D1F900457128 /* ModifyUserModalViewController.swift */; };
 		7CED91E62EF2D1F900457128 /* ShopSummaryInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FC82EF2D1F900457128 /* ShopSummaryInfoView.swift */; };
 		7CED91E92EF2D1F900457128 /* ShopDetailTableViewDeliveryTipsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE32EF2D1F900457128 /* ShopDetailTableViewDeliveryTipsCell.swift */; };
 		7CED91EA2EF2D1F900457128 /* TimetableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90992EF2D1F900457128 /* TimetableCollectionView.swift */; };
@@ -1468,7 +1467,6 @@
 		7CED8F1A2EF2D1F900457128 /* PolicyListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyListCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8F1B2EF2D1F900457128 /* PolicyListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyListTableView.swift; sourceTree = "<group>"; };
 		7CED8F1E2EF2D1F900457128 /* PolicyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PolicyViewController.swift; sourceTree = "<group>"; };
-		7CED8F222EF2D1F900457128 /* ModifyUserModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyUserModalViewController.swift; sourceTree = "<group>"; };
 		7CED8F232EF2D1F900457128 /* LoginViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewModel.swift; sourceTree = "<group>"; };
 		7CED8F242EF2D1F900457128 /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
 		7CED8F262EF2D1F900457128 /* AgreementFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementFormViewController.swift; sourceTree = "<group>"; };
@@ -3510,7 +3508,6 @@
 		7CED8F252EF2D1F900457128 /* Login */ = {
 			isa = PBXGroup;
 			children = (
-				7CED8F222EF2D1F900457128 /* ModifyUserModalViewController.swift */,
 				7CED8F232EF2D1F900457128 /* LoginViewModel.swift */,
 				7CED8F242EF2D1F900457128 /* LoginViewController.swift */,
 			);
@@ -6379,7 +6376,6 @@
 				7C61D3492F220EAC005FAC3A /* EditLostItemFoundDateView.swift in Sources */,
 				7CC42B202F56F3C400940CE1 /* CallVanState.swift in Sources */,
 				7C8ADD382F20C0B200F85BDE /* LostItemListDto.swift in Sources */,
-				7CED91E52EF2D1F900457128 /* ModifyUserModalViewController.swift in Sources */,
 				7C640409300F3F7700A9589F /* FetchDepartmentRequestDto.swift in Sources */,
 				7CED91E62EF2D1F900457128 /* ShopSummaryInfoView.swift in Sources */,
 				7CED91E92EF2D1F900457128 /* ShopDetailTableViewDeliveryTipsCell.swift in Sources */,
