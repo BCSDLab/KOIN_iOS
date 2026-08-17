@@ -250,11 +250,8 @@ extension TimetableViewController {
     }
 
     private func makeSubstituteTimetableModal() -> SubstituteTimetableModalViewController {
-        SubstituteTimetableModalViewController(onSubstituteButtonTapped: { [weak self] response in
+        SubstituteTimetableModalViewController { [weak self] response in
             self?.handleSubstituteResponse(response)
-        }).then {
-            $0.modalPresentationStyle = .overFullScreen
-            $0.modalTransitionStyle = .crossDissolve
         }
     }
 
