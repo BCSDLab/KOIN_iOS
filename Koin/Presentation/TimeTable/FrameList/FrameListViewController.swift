@@ -134,10 +134,9 @@ extension FrameListViewController: TimetableCellDelegate {
         inputSubject.send(.modifySemester(addedSemesters, []))
         guard !removedSemesters.isEmpty else { return }
 
-        let deleteSemesterModalViewController = DeleteSemesterModalViewController(onDeleteButtonTapped: { [weak self] semesters in
+        let deleteSemesterModalViewController = DeleteSemesterModalViewController(semesters: removedSemesters) { [weak self] semesters in
             self?.inputSubject.send(.modifySemester([], semesters))
-        })
-        deleteSemesterModalViewController.setSemesters(semesters: removedSemesters)
+        }
         present(deleteSemesterModalViewController, animated: false)
     }
 
