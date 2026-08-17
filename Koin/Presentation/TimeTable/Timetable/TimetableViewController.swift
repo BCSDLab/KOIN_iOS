@@ -274,10 +274,10 @@ extension TimetableViewController {
     }
 
     private func presentSelectDeptModal() {
-        let viewController = SelectDeptModalViewController(onDepartmentSelected: { [weak self] department in
+        let viewController = SelectDeptModalViewController { [weak self] department in
             self?.addClassCollectionView.setUpSelectedDept(dept: department)
-        })
-        present(viewController, animated: false)
+        }
+        present(viewController, animated: true)
     }
 
     private func presentDeleteLectureModal(lecture: LectureData) {
