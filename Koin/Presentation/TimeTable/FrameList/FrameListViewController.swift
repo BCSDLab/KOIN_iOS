@@ -96,11 +96,9 @@ extension FrameListViewController: TimetableCellDelegate {
         let modifySemesterModalViewController = ModifySemesterModalViewController(
             onApplyButtonTapped: { [weak self] addedSemesters, removedSemesters in
                 self?.applySemesterChanges(addedSemesters: addedSemesters, removedSemesters: removedSemesters)
-            },
-            width: 327,
-            height: 232
+            }
         )
-        modifySemesterModalViewController.configre(frameList: viewModel.frameData)
+        modifySemesterModalViewController.configure(frameList: viewModel.frameData)
         present(modifySemesterModalViewController, animated: true)
     }
     
