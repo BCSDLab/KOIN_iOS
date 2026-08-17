@@ -417,14 +417,19 @@ extension ShopReviewViewController {
         guard presentedViewController == nil,
               navigationController?.transitionCoordinator == nil else { return }
         
-        let viewController = BackButtonPopUpViewController()
-        viewController.modalPresentationStyle = .overFullScreen
-        viewController.modalTransitionStyle = .crossDissolve
-        viewController.onStop = { [weak self, weak viewController] in
-            viewController?.dismiss(animated: false)
-            self?.navigationController?.popViewController(animated: true)
-        }
-        present(viewController, animated: false)
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .singleTitle(text: "리뷰 수정을 그만하시겠어요?"),
+            button: .buttons(
+                leftButtonTitle: "그만하기",
+                leftButtonAction: { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
+                },
+                rightButtonTitle: "계속쓰기",
+                rightButtonAction: {}
+            )
+        ))
+        present(modalViewController, animated: true)
     }
     
     private func setNavigationItem() {
@@ -667,4 +672,3 @@ extension UIResponder {
         Static.responder = self
     }
 }
-

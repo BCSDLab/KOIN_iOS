@@ -545,7 +545,6 @@
 		7CED918A2EF2D1F900457128 /* NoticeDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F6F2EF2D1F900457128 /* NoticeDataViewController.swift */; };
 		7CED918B2EF2D1F900457128 /* LostArticleImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE82EF2D1F900457128 /* LostArticleImageCollectionView.swift */; };
 		7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90002EF2D1F900457128 /* ScoreChartCollectionViewCell.swift */; };
-		7CED918F2EF2D1F900457128 /* BackButtonPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED901D2EF2D1F900457128 /* BackButtonPopUpViewController.swift */; };
 		7CED91902EF2D1F900457128 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F342EF2D1F900457128 /* StateView.swift */; };
 		7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3D2EF2D1F900457128 /* TabBarCollectionView.swift */; };
 		7CED91922EF2D1F900457128 /* ShopSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FDA2EF2D1F900457128 /* ShopSummaryViewController.swift */; };
@@ -1568,7 +1567,6 @@
 		7CED90182EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewImageUploadCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED901B2EF2D1F900457128 /* ShopReviewViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReviewViewModel.swift; sourceTree = "<group>"; };
 		7CED901C2EF2D1F900457128 /* ShopReviewViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReviewViewController.swift; sourceTree = "<group>"; };
-		7CED901D2EF2D1F900457128 /* BackButtonPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackButtonPopUpViewController.swift; sourceTree = "<group>"; };
 		7CED901F2EF2D1F900457128 /* ReportDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportDetailView.swift; sourceTree = "<group>"; };
 		7CED90212EF2D1F900457128 /* ShopReviewReportViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReviewReportViewModel.swift; sourceTree = "<group>"; };
 		7CED90222EF2D1F900457128 /* ShopReviewReportViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReviewReportViewController.swift; sourceTree = "<group>"; };
@@ -4029,7 +4027,6 @@
 				7CED901A2EF2D1F900457128 /* SubViews */,
 				7CED901B2EF2D1F900457128 /* ShopReviewViewModel.swift */,
 				7CED901C2EF2D1F900457128 /* ShopReviewViewController.swift */,
-				7CED901D2EF2D1F900457128 /* BackButtonPopUpViewController.swift */,
 			);
 			path = ShopReview;
 			sourceTree = "<group>";
@@ -6201,7 +6198,6 @@
 				7CA60D792F664952007C08C1 /* PostAllNotificationsReadUseCase.swift in Sources */,
 				7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */,
 				7CB11C7C2FB32817004E0C80 /* LostItemKeyword.swift in Sources */,
-				7CED918F2EF2D1F900457128 /* BackButtonPopUpViewController.swift in Sources */,
 				7C58FE862F5F9CDD00A2737B /* CallVanDataViewController.swift in Sources */,
 				7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */,
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,
