@@ -62,8 +62,6 @@ enum DiningFixture {
         )
     }
 
-    /// 프로덕션 코드(`DefaultDateProvider`, `Date.formatDateToYYMMDD()`)가 `Calendar.current`와
-    /// 기본 `DateFormatter`를 쓰기 때문에, 테스트도 같은 기준으로 Date를 만든다.
     static func date(
         year: Int = 2026,
         month: Int = 8,
