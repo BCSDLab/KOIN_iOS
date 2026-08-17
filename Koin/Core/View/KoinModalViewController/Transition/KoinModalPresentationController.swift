@@ -34,7 +34,6 @@ final class KoinModalPresentationController: UIPresentationController {
         guard let containerView else { return }
         
         dimmingView.frame = containerView.bounds
-//        containerView.insertSubview(dimmingView, at: 0)
         containerView.addSubview(dimmingView)
         
         guard let transitionCoordinator = presentedViewController.transitionCoordinator else {

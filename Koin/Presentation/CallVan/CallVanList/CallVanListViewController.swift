@@ -398,7 +398,7 @@ extension CallVanListViewController {
             mainTitle = RestrictionType.temporaryRestriction14Days.rawValue
             subTitle = RestrictionType.temporaryRestriction14Days.getDescription(until: until)
         case .permanentRestriction:
-            mainTitle = RestrictionType.temporaryRestriction14Days.rawValue
+            mainTitle = RestrictionType.permanentRestriction.rawValue
             subTitle = RestrictionType.permanentRestriction.getDescription()
         case nil:
             return

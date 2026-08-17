@@ -281,7 +281,7 @@ extension TimetableViewController {
         let modalViewController = DeleteLectureModalViewController(lectureData: lecture) { [weak self] lecture in
             self?.inputSubject.send(._deleteLecture(lecture))
         }
-        present(modalViewController, animated: false)
+        present(modalViewController, animated: true)
     }
 }
 

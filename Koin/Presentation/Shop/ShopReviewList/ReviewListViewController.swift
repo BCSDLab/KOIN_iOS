@@ -317,12 +317,12 @@ extension ReviewListViewController {
             button: .buttons(
                 leftButtonTitle: "취소하기",
                 leftButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
-                    self?.deleteReview()
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
                 },
                 rightButtonTitle: "삭제하기",
                 rightButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
+                    self?.deleteReview()
                 }
             )
         ))
@@ -355,13 +355,13 @@ extension ReviewListViewController {
             button: .buttons(
                 leftButtonTitle: "닫기",
                 leftButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
-                    self?.showLoginScreen()
+                    guard message == "작성", let self else { return }
+                    inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
                 },
                 rightButtonTitle: "로그인하기",
                 rightButtonAction: { [weak self] in
-                    guard message == "작성", let self else { return }
-                    inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
+                    self?.showLoginScreen()
                 }
             )
         ))

@@ -189,12 +189,12 @@ extension ForceUpdateViewController {
             button: .buttons(
                 leftButtonTitle: "닫기",
                 leftButtonAction: { [weak self] in
-                    self?.openStore()
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
                 },
                 rightButtonTitle: "스토어 가기",
                 rightButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
+                    self?.openStore()
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
                 }
             )
         ))

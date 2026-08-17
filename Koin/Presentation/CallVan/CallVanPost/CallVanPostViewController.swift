@@ -154,7 +154,7 @@ extension CallVanPostViewController {
             mainTitle = RestrictionType.temporaryRestriction14Days.rawValue
             subTitle = RestrictionType.temporaryRestriction14Days.getDescription(until: until)
         case .permanentRestriction:
-            mainTitle = RestrictionType.temporaryRestriction14Days.rawValue
+            mainTitle = RestrictionType.permanentRestriction.rawValue
             subTitle = RestrictionType.permanentRestriction.getDescription()
         case nil:
             return
@@ -170,7 +170,7 @@ extension CallVanPostViewController {
                 title: "닫기"
             )
         ))
-        present(modalViewController, animated: false)
+        present(modalViewController, animated: true)
     }
     
     private func presentDeparturePlaceBottomSheet() {

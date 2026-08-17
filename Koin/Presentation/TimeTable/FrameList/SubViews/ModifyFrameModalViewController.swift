@@ -89,11 +89,6 @@ extension ModifyFrameModalViewController {
     private func setUpDelegate() {
         textField.delegate = self
     }
-    
-    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder() // 키보드 내리기
-        return true
-    }
 }
 
 extension ModifyFrameModalViewController {

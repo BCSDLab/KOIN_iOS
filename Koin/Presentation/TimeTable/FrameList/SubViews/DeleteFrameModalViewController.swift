@@ -16,7 +16,7 @@ final class DeleteFrameModalViewController: KoinModalViewController {
     // MARK: - Initializer
     init(
         frame: FrameDto,
-        onDeleteButtonTapped: @escaping (FrameDto) -> Void,
+        onDeleteButtonTapped: @escaping (FrameDto) -> Void
     ) {
         self.onDeleteButtonTapped = onDeleteButtonTapped
         self.frame = frame

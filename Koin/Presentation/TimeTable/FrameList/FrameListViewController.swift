@@ -144,7 +144,7 @@ extension FrameListViewController: TimetableCellDelegate {
         let deleteFrameModalViewController = DeleteFrameModalViewController(frame: frame) { [weak self] frame in
             self?.inputSubject.send(.deleteFrame(frame))
         }
-        present(deleteFrameModalViewController, animated: false)
+        present(deleteFrameModalViewController, animated: true)
     }
 }
 extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
