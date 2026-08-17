@@ -44,10 +44,20 @@ final class CategoryHostingController: UIHostingController<CategoryView>, Hostin
             navigationController?.pushViewController(makeBusSearchViewController(), animated: true)
         case .showCallVan:
             navigationController?.pushViewController(makeCallVanListViewController(), animated: true)
+        case .showChatList:
+            navigationController?.pushViewController(makeChatListViewController(), animated: true)
         case .showLand:
             navigationController?.pushViewController(makeLandViewController(), animated: true)
         case .showBusiness:
             presentBusiness()
+            
+        case .showLoginToast:
+            showToastMessageWithButton(
+                message: "로그인이 필요한 기능입니다.",
+                buttonTitle: "로그인"
+            ) { [weak self] in
+                self?.navigateToLogin()
+            }
         }
     }
 }
@@ -173,6 +183,10 @@ extension CategoryHostingController {
             fetchNotiListUseCase: fetchNotiListUseCase
         )
         return CallVanListViewController(viewModel: viewModel)
+    }
+    
+    private func makeChatListViewController() -> UIViewController {
+        return ChatListTableViewController(viewModel: ChatListTableViewModel())
     }
 
     private func makeLandViewController() -> UIViewController {
