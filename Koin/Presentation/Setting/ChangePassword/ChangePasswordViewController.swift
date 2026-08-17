@@ -117,6 +117,10 @@ final class ChangePasswordViewController: UIViewController {
         }.store(in: &subscriptions)
     }
     
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        completeButtonTapped()
+        return false
+    }
 }
 
 extension ChangePasswordViewController {
