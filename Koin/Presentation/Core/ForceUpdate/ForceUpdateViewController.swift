@@ -180,18 +180,25 @@ extension ForceUpdateViewController {
     }
     
     @objc private func errorCheckButtonTapped() {
-        let updateModalViewController = UpdateModalViewController(
-            onOpenStoreButtonTapped: { [weak self] in
-                self?.openStore()
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
-            },
-            onCloseButtonTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
-            }
-        )
-        updateModalViewController.modalPresentationStyle = .overFullScreen
-        updateModalViewController.modalTransitionStyle = .crossDissolve
-        present(updateModalViewController, animated: true, completion: nil)
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .titles(
+                mainTitleText: "이미 업데이트 하셨나요?",
+                subTitleText: "업데이트 이후에도 이 화면이 나타나는\n경우에는 스토어에서 코인을\n삭제 후 재설치 해 주세요."
+            ),
+            button: .buttons(
+                leftButtonTitle: "닫기",
+                leftButtonAction: { [weak self] in
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
+                },
+                rightButtonTitle: "스토어 가기",
+                rightButtonAction: { [weak self] in
+                    self?.openStore()
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
+                }
+            )
+        ))
+        present(modalViewController, animated: true, completion: nil)
         inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }
 }

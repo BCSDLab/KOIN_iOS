@@ -7,192 +7,170 @@
 
 import UIKit
 
-final class ModifySemesterModalViewController: UIViewController {
+final class ModifySemesterModalViewController: KoinModalViewController {
+
+    private enum Layout {
+        static let yearButtonWidth: CGFloat = 90
+        static let yearButtonHeight: CGFloat = 24
+        static let messageLabelTopOffset: CGFloat = 12
+        static let messageLabelHeight: CGFloat = 26
+        static let semesterButtonWidth: CGFloat = 125
+        static let semesterButtonHeight: CGFloat = 40
+        static let semesterButtonCornerRadius: CGFloat = 4
+        static let paddingBetweenMessageAndSemester: CGFloat = 10
+        static let paddingBetweenSemesterRows: CGFloat = 10
+    }
+
+    private enum SemesterState: Int {
+        case unselected = 0
+        case added = 1
+        case existing = 2
+        case removed = 3
+    }
+
+    // MARK: - Properties
     private let onApplyButtonTapped: ([String], [String]) -> Void
-    var frameList: [FrameData] = []
-    var containerWidth: CGFloat
-    var containerHeight: CGFloat
-    
+
+    // MARK: - State
+    private var frameList: [FrameData] = []
     private var selectedYear: String = {
         let currentYear = Calendar.current.component(.year, from: Date())
         return "\(currentYear)"
     }()
 
-    private var selectedFrames: Set<String> = []
-    
-    
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 4
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    private let selectYearButton = UIButton().then {
-        let currentYear = Calendar.current.component(.year, from: Date())
-        $0.backgroundColor = UIColor.appColor(.neutral300)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
-        $0.setTitle("\(currentYear)", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+    private var semesterMapping: [(button: UIButton, semester: String)] {
+        [
+            (firstSemesterButton, "\(selectedYear)1"),
+            (summerSemesterButton, "\(selectedYear)-여름"),
+            (secondSemesterButton, "\(selectedYear)2"),
+            (winterSemesterButton, "\(selectedYear)-겨울")
+        ]
     }
 
-    private let messageLabel = UILabel().then {
-        $0.text = "학기 편집"
-        $0.font = UIFont.appFont(.pretendardBold, size: 18)
-    }
-    private let firstSemesterButton = UIButton().then {
-        $0.setTitle("1학기", for: .normal)
-    }
-    private let summerSelectButton = UIButton().then {
-        $0.setTitle("여름학기", for: .normal)
-    }
-    private let secondSemesterButton = UIButton().then {
-        $0.setTitle("2학기", for: .normal)
-    }
-    private let winterSemesterButton = UIButton().then {
-        $0.setTitle("겨울학기", for: .normal)
-    }
-    private let cancelButton = UIButton().then {
-        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        $0.setTitle("취소", for: .normal)
-    }
-    private let applyButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
-        $0.setTitle("적용하기", for: .normal)
-    }
-    
-    init(
-        onApplyButtonTapped: @escaping ([String], [String]) -> Void,
-        width: CGFloat,
-        height: CGFloat
-    ) {
+    // MARK: - UI Components
+    private let containerView = UIView()
+    private let selectYearButton = UIButton()
+    private let messageLabel = UILabel()
+    private let firstSemesterButton = UIButton()
+    private let summerSemesterButton = UIButton()
+    private let secondSemesterButton = UIButton()
+    private let winterSemesterButton = UIButton()
+
+    // MARK: - Initializer
+    init(onApplyButtonTapped: @escaping ([String], [String]) -> Void) {
         self.onApplyButtonTapped = onApplyButtonTapped
-        self.containerWidth = width
-        self.containerHeight = height
-        super.init(nibName: nil, bundle: nil)
+
+        super.init(configuration: .init(
+            appearance: .primary,
+            content: .custom(customView: containerView),
+            button: .buttons(
+                leftButtonTitle: "취소",
+                rightButtonTitle: "적용하기",
+                rightButtonAction: {}
+            ),
+            layout: .init(
+                width: 327,
+                contentTopPadding: 12,
+                contentHorizontalPadding: 24,
+                paddingBetweenContentAndButton: 10,
+                buttonHorizontalPadding: 24
+            )
+        ))
     }
-    
-    required init?(coder: NSCoder) {
+    @MainActor required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        selectYearButton.addTarget(self, action: #selector(selectYearButtonTapped), for: .touchUpInside)
-        firstSemesterButton.addTarget(self, action: #selector(semesterButtonTapped(_:)), for: .touchUpInside)
-        summerSelectButton.addTarget(self, action: #selector(semesterButtonTapped(_:)), for: .touchUpInside)
-        secondSemesterButton.addTarget(self, action: #selector(semesterButtonTapped(_:)), for: .touchUpInside)
-        winterSemesterButton.addTarget(self, action: #selector(semesterButtonTapped(_:)), for: .touchUpInside)
-        
-        cancelButton.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
-        applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
-        
-        // 초기 상태 업데이트
+        setUpAddTargets()
         updateSemesterButtons()
     }
-    
-    func configre(frameList: [FrameData]) {
+
+    // MARK: - Public
+    func configure(frameList: [FrameData]) {
         self.frameList = frameList
         updateSemesterButtons()
     }
-}
-extension ModifySemesterModalViewController {
-    
-    private func updateSemesterButtons() {
-        let semesterMapping: [(UIButton, String)] = [
-            (firstSemesterButton, "\(selectedYear)1"),
-            (summerSelectButton, "\(selectedYear)-여름"),
-            (secondSemesterButton, "\(selectedYear)2"),
-            (winterSemesterButton, "\(selectedYear)-겨울")
-        ]
-        
-        for (button, semester) in semesterMapping {
-            if frameList.contains(where: { $0.semester == semester }) {
-                button.tag = 2
-                button.backgroundColor = UIColor.appColor(.success700)
-                button.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-            } else {
-                button.tag = 0
-                button.backgroundColor = UIColor.appColor(.neutral0)
-                button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-            }
-        }
-    }
-    
-    @objc private func semesterButtonTapped(_ sender: UIButton) {
-        switch sender.tag {
-        case 0: // 초기 상태(흰색)
-            sender.tag = 1
-            sender.backgroundColor = UIColor.appColor(.success700)
-            sender.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        case 1: // 새로 선택된 학기(초록색)
-            sender.tag = 0
-            sender.backgroundColor = UIColor.appColor(.neutral0)
-            sender.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        case 2: // 이미 존재하는 학기(초록색)
-            sender.tag = 3
-            sender.backgroundColor = UIColor.appColor(.danger700)
-            sender.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        case 3: // 삭제 예정(빨간색)
-            sender.tag = 2
-            sender.backgroundColor = UIColor.appColor(.success700)
-            sender.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        default:
-            break
-        }
-    }
 
-    
-    private func getSemester(for button: UIButton) -> String? {
-        switch button {
-        case firstSemesterButton: return "\(selectedYear)1"
-        case summerSelectButton: return "\(selectedYear)-여름"
-        case secondSemesterButton: return "\(selectedYear)2"
-        case winterSemesterButton: return "\(selectedYear)-겨울"
-        default: return nil
-        }
-    }
-    
-    @objc private func cancelButtonTapped() {
-        updateSemesterButtons()
-        dismiss(animated: true, completion: nil)
-    }
-    
-    @objc private func applyButtonTapped() {
-        dismiss(animated: true, completion: nil)
-        let semesterMapping: [(UIButton, String)] = [
-            (firstSemesterButton, "\(selectedYear)1"),
-            (summerSelectButton, "\(selectedYear)-여름"),
-            (secondSemesterButton, "\(selectedYear)2"),
-            (winterSemesterButton, "\(selectedYear)-겨울")
-        ]
-
+    // MARK: - Override
+    override func rightButtonTapped() {
         var addedSemesters: [String] = []
         var removedSemesters: [String] = []
 
         for (button, semester) in semesterMapping {
-            if button.tag == 1 { // 새로 추가될 학기
+            switch SemesterState(rawValue: button.tag) {
+            case .added:
                 addedSemesters.append(semester)
-            } else if button.tag == 3 { // 삭제될 학기
+            case .removed:
                 removedSemesters.append(semester)
+            default:
+                break
             }
         }
-        print(addedSemesters)
-        print(removedSemesters)
-        onApplyButtonTapped(addedSemesters, removedSemesters)
 
-        updateSemesterButtons()
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            onApplyButtonTapped(addedSemesters, removedSemesters)
+        }
+    }
+}
+
+extension ModifySemesterModalViewController {
+    private func setUpAddTargets() {
+        selectYearButton.addTarget(self, action: #selector(selectYearButtonTapped), for: .touchUpInside)
+        [firstSemesterButton, summerSemesterButton, secondSemesterButton, winterSemesterButton].forEach {
+            $0.addTarget(self, action: #selector(semesterButtonTapped(_:)), for: .touchUpInside)
+        }
     }
 
-    
+    private func updateSemesterButtons() {
+        for (button, semester) in semesterMapping {
+            let isExisting = frameList.contains { $0.semester == semester }
+            apply(state: isExisting ? .existing : .unselected, to: button)
+        }
+    }
+
+    private func apply(state: SemesterState, to button: UIButton) {
+        button.tag = state.rawValue
+
+        switch state {
+        case .unselected:
+            button.backgroundColor = .appColor(.neutral0)
+            button.setTitleColor(.appColor(.neutral800), for: .normal)
+        case .added, .existing:
+            button.backgroundColor = .appColor(.success700)
+            button.setTitleColor(.appColor(.neutral0), for: .normal)
+        case .removed:
+            button.backgroundColor = .appColor(.danger700)
+            button.setTitleColor(.appColor(.neutral0), for: .normal)
+        }
+    }
+
+    // MARK: - Objc
+    @objc private func semesterButtonTapped(_ sender: UIButton) {
+        switch SemesterState(rawValue: sender.tag) {
+        case .unselected: // 초기 상태(흰색)
+            apply(state: .added, to: sender)
+        case .added: // 새로 선택된 학기(초록색)
+            apply(state: .unselected, to: sender)
+        case .existing: // 이미 존재하는 학기(초록색)
+            apply(state: .removed, to: sender)
+        case .removed: // 삭제 예정(빨간색)
+            apply(state: .existing, to: sender)
+        case .none:
+            break
+        }
+    }
+
     @objc private func selectYearButtonTapped() {
-        // 현재 연도 계산
         let currentYear = Calendar.current.component(.year, from: Date())
         let years = (2019...currentYear).reversed().map { "\($0)" } // 2019년부터 현재 연도까지
-        
+
         let alert = UIAlertController(title: "연도 선택", message: nil, preferredStyle: .actionSheet)
-        
+
         for year in years {
             let action = UIAlertAction(title: year, style: .default) { [weak self] _ in
                 guard let self = self else { return }
@@ -202,93 +180,90 @@ extension ModifySemesterModalViewController {
             }
             alert.addAction(action)
         }
-        
+
         let cancelAction = UIAlertAction(title: "취소", style: .cancel, handler: nil)
         alert.addAction(cancelAction)
-        
+
         present(alert, animated: true, completion: nil)
     }
+}
 
-    
-    
-    
-    
-    private func setUpLayOuts() {
-        [containerView].forEach {
-            view.addSubview($0)
+extension ModifySemesterModalViewController {
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
+    }
+
+    private func setUpStyles() {
+        selectYearButton.do {
+            $0.backgroundColor = .appColor(.neutral300)
+            $0.titleLabel?.font = .appFont(.pretendardMedium, size: 12)
+            $0.setTitle(selectedYear, for: .normal)
+            $0.setTitleColor(.appColor(.neutral800), for: .normal)
         }
-        [selectYearButton, messageLabel, firstSemesterButton, summerSelectButton, secondSemesterButton, winterSemesterButton, cancelButton, applyButton].forEach {
+
+        messageLabel.do {
+            $0.text = "학기 편집"
+            $0.font = .appFont(.pretendardBold, size: 18)
+        }
+
+        firstSemesterButton.setTitle("1학기", for: .normal)
+        summerSemesterButton.setTitle("여름학기", for: .normal)
+        secondSemesterButton.setTitle("2학기", for: .normal)
+        winterSemesterButton.setTitle("겨울학기", for: .normal)
+
+        [firstSemesterButton, summerSemesterButton, secondSemesterButton, winterSemesterButton].forEach {
+            $0.titleLabel?.font = .appFont(.pretendardMedium, size: 16)
+            $0.setTitleColor(.appColor(.neutral800), for: .normal)
+            $0.layer.borderWidth = 1.0
+            $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+            $0.layer.cornerRadius = Layout.semesterButtonCornerRadius
+            $0.layer.masksToBounds = true
+        }
+    }
+
+    private func setUpLayouts() {
+        [selectYearButton, messageLabel, firstSemesterButton, summerSemesterButton, secondSemesterButton, winterSemesterButton].forEach {
             containerView.addSubview($0)
         }
     }
-    
+
     private func setUpConstraints() {
-        containerView.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.centerY.equalTo(view.snp.centerY)
-            make.width.equalTo(containerWidth)
-            make.height.equalTo(containerHeight)
+        selectYearButton.snp.makeConstraints {
+            $0.top.leading.equalToSuperview()
+            $0.width.equalTo(Layout.yearButtonWidth)
+            $0.height.equalTo(Layout.yearButtonHeight)
         }
-        selectYearButton.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(12)
-            make.leading.equalTo(containerView.snp.leading).offset(24)
-            make.width.equalTo(90)
-            make.height.equalTo(24)
+        messageLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(Layout.messageLabelTopOffset)
+            $0.centerX.equalToSuperview()
+            $0.height.equalTo(Layout.messageLabelHeight)
         }
-        messageLabel.snp.makeConstraints { make in
-            make.top.equalTo(selectYearButton.snp.bottom)
-            make.centerX.equalTo(containerView.snp.centerX)
+        firstSemesterButton.snp.makeConstraints {
+            $0.top.equalTo(messageLabel.snp.bottom).offset(Layout.paddingBetweenMessageAndSemester)
+            $0.leading.equalToSuperview()
+            $0.width.equalTo(Layout.semesterButtonWidth)
+            $0.height.equalTo(Layout.semesterButtonHeight)
         }
-        firstSemesterButton.snp.makeConstraints { make in
-            make.top.equalTo(messageLabel.snp.bottom).offset(14)
-            make.leading.equalTo(containerView.snp.leading).offset(24)
-            make.width.equalTo(125)
-            make.height.equalTo(40)
+        summerSemesterButton.snp.makeConstraints {
+            $0.top.equalTo(firstSemesterButton)
+            $0.trailing.equalToSuperview()
+            $0.width.equalTo(Layout.semesterButtonWidth)
+            $0.height.equalTo(Layout.semesterButtonHeight)
         }
-        summerSelectButton.snp.makeConstraints { make in
-            make.top.equalTo(messageLabel.snp.bottom).offset(14)
-            make.trailing.equalTo(containerView.snp.trailing).offset(-24)
-            make.width.height.equalTo(firstSemesterButton)
+        secondSemesterButton.snp.makeConstraints {
+            $0.top.equalTo(firstSemesterButton.snp.bottom).offset(Layout.paddingBetweenSemesterRows)
+            $0.leading.equalTo(firstSemesterButton)
+            $0.width.equalTo(Layout.semesterButtonWidth)
+            $0.height.equalTo(Layout.semesterButtonHeight)
+            $0.bottom.equalToSuperview()
         }
-        secondSemesterButton.snp.makeConstraints { make in
-            make.top.equalTo(firstSemesterButton.snp.bottom).offset(10)
-            make.width.height.leading.equalTo(firstSemesterButton)
+        winterSemesterButton.snp.makeConstraints {
+            $0.top.equalTo(secondSemesterButton)
+            $0.trailing.equalTo(summerSemesterButton)
+            $0.width.equalTo(Layout.semesterButtonWidth)
+            $0.height.equalTo(Layout.semesterButtonHeight)
         }
-        winterSemesterButton.snp.makeConstraints { make in
-            make.top.equalTo(secondSemesterButton)
-            make.width.height.trailing.equalTo(summerSelectButton)
-        }
-        cancelButton.snp.makeConstraints { make in
-            make.width.equalTo(135.5)
-            make.height.equalTo(48)
-            make.trailing.equalTo(containerView.snp.centerX).offset(-4)
-            make.top.equalTo(winterSemesterButton.snp.bottom).offset(10)
-        }
-        applyButton.snp.makeConstraints { make in
-            make.width.height.bottom.equalTo(cancelButton)
-            make.leading.equalTo(containerView.snp.centerX).offset(4)
-        }
-    }
-    
-    private func setUpComponents() {
-        [firstSemesterButton, secondSemesterButton, summerSelectButton, winterSemesterButton, cancelButton, applyButton].forEach {
-            $0.layer.borderWidth = 1.0
-            $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-            $0.layer.cornerRadius = 4
-            $0.layer.masksToBounds = true
-        }
-        [firstSemesterButton, secondSemesterButton, summerSelectButton, winterSemesterButton].forEach {
-            $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
-            $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        }
-        [cancelButton, applyButton].forEach {
-            $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        }
-    }
-    private func configureView() {
-        setUpLayOuts()
-        setUpConstraints()
-        setUpComponents()
-        view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
     }
 }

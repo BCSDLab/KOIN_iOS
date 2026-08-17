@@ -96,11 +96,9 @@ extension FrameListViewController: TimetableCellDelegate {
         let modifySemesterModalViewController = ModifySemesterModalViewController(
             onApplyButtonTapped: { [weak self] addedSemesters, removedSemesters in
                 self?.applySemesterChanges(addedSemesters: addedSemesters, removedSemesters: removedSemesters)
-            },
-            width: 327,
-            height: 232
+            }
         )
-        modifySemesterModalViewController.configre(frameList: viewModel.frameData)
+        modifySemesterModalViewController.configure(frameList: viewModel.frameData)
         present(modifySemesterModalViewController, animated: true)
     }
     
@@ -126,9 +124,7 @@ extension FrameListViewController: TimetableCellDelegate {
             },
             onSaveButtonTapped: { [weak self] frame in
                 self?.inputSubject.send(.modifyFrame(frame))
-            },
-            width: 327,
-            height: 216
+            }
         )
         modifyFrameModalViewController.configure(frame: viewModel.frameData[section].frame[row])
         present(modifyFrameModalViewController, animated: true)
@@ -138,19 +134,17 @@ extension FrameListViewController: TimetableCellDelegate {
         inputSubject.send(.modifySemester(addedSemesters, []))
         guard !removedSemesters.isEmpty else { return }
 
-        let deleteSemesterModalViewController = DeleteSemesterModalViewController(onDeleteButtonTapped: { [weak self] semesters in
+        let deleteSemesterModalViewController = DeleteSemesterModalViewController(semesters: removedSemesters) { [weak self] semesters in
             self?.inputSubject.send(.modifySemester([], semesters))
-        })
-        deleteSemesterModalViewController.setSemesters(semesters: removedSemesters)
+        }
         present(deleteSemesterModalViewController, animated: false)
     }
 
     private func presentDeleteFrameModal(frame: FrameDto) {
-        let deleteFrameModalViewController = DeleteFrameModalViewController(onDeleteButtonTapped: { [weak self] frame in
+        let deleteFrameModalViewController = DeleteFrameModalViewController(frame: frame) { [weak self] frame in
             self?.inputSubject.send(.deleteFrame(frame))
-        })
-        deleteFrameModalViewController.configure(frame: frame)
-        present(deleteFrameModalViewController, animated: false)
+        }
+        present(deleteFrameModalViewController, animated: true)
     }
 }
 extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {

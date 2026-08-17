@@ -7,96 +7,166 @@
 
 import UIKit
 
-final class BusSearchDatePickerViewController: ModalViewController {
+final class BusSearchDatePickerViewController: KoinModalViewController {
     
     // MARK: - Properties
-    private let onDepartureNowTapped: () -> Void
     private let onPickerDateChanged: (Bool?) -> Void
     private let onPickerItemsSelected: ([String]) -> Void
+    private let onDepartureNowTapped: ()->Void
     
     // MARK: - UI Components
+    private let customView = UIView()
+    private let mainTitleLabel = UILabel()
+    private let subTitleLabel = UILabel()
     private let pickerView = KoinPickerView()
     
     // MARK: - Initializer
     init(
-        onDepartureNowTapped: @escaping () -> Void,
+        subTitle: String,
         onPickerDateChanged: @escaping (Bool?) -> Void,
         onPickerItemsSelected: @escaping ([String]) -> Void,
-        width: CGFloat,
-        height: CGFloat,
-        paddingBetweenLabels: CGFloat,
-        title: String,
-        subTitle: String,
-        titleColor: UIColor,
-        subTitleColor: UIColor
+        onDepartureNowTapped: @escaping ()->Void
     ) {
-        self.onDepartureNowTapped = onDepartureNowTapped
         self.onPickerDateChanged = onPickerDateChanged
         self.onPickerItemsSelected = onPickerItemsSelected
-        super.init(
-            onLeftButtonTapped: nil,
-            onRightButtonTapped: {},
-            width: width,
-            height: height,
-            paddingBetweenLabels: paddingBetweenLabels,
-            title: title,
-            subTitle: subTitle,
-            titleColor: titleColor,
-            subTitleColor: subTitleColor
-        )
+        self.onDepartureNowTapped = onDepartureNowTapped
+        
+        super.init(configuration: .init(
+            appearance: .primary,
+            content: .custom(customView: customView),
+            button: .buttons(
+                leftButtonTitle: "지금 출발",
+                leftButtonStyle: .init(
+                    textColor: .neutral600,
+                    font: .pretendardMedium,
+                    fontSize: 15
+                ),
+                rightButtonTitle: "완료",
+                rightButtonAction: {}
+            ),
+            layout: .init(
+                contentTopPadding: 24,
+                contentHorizontalPadding: 0
+            )
+        ))
+        
+        configureSubTitleLabel(subTitle)
     }
-    
-    @available(*, unavailable)
-    required init?(coder: NSCoder) {
+    @MainActor required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        setContentViewInContainer(view: pickerView, frame: .init(x: 0, y: 0, width: 301, height: 122))
         configureView()
     }
     
-    override func rightButtonTapped() {
-        let selectedItems = pickerView.selectedItemPublisher.value
-        onPickerItemsSelected(selectedItems)
-        onPickerDateChanged(pickerView.changeSelectedItemPublisher.value)
-        pickerView.changeSelectedItemPublisher.send(nil)
-        dismissWithAnimation()
-    }
-    
-    override func closeButtonTapped() {
-        onDepartureNowTapped()
-        
-        let currentDate = Date()
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: currentDate)
-        let minute = calendar.component(.minute, from: currentDate)
-        let amPm = hour < 12 ? "오전" : "오후"
-        let adjustedHour = hour % 12
-        let displayHour = adjustedHour == 0 ? 12 : adjustedHour
-        
-        let selectedItems = ["오늘", amPm, String(displayHour), String(format: "%02d", minute)]
-        pickerView.setSelectedData(selectedItem: selectedItems)
-        onPickerItemsSelected(selectedItems)
-        pickerView.changeSelectedItemPublisher.send(nil)
-        dismissWithAnimation()
-    }
-
     // MARK: - Public
     func setPickerItems(items: [[String]], selectedItems: [String]) {
         pickerView.changeSelectedItemPublisher.send(nil)
         pickerView.setPickerData(items: items, selectedItem: selectedItems)
     }
+    
+    // MARK: - Override
+    override func leftButtonTapped() {
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            
+            let currentDate = Date()
+            let calendar = Calendar.current
+            let hour = calendar.component(.hour, from: currentDate)
+            let minute = calendar.component(.minute, from: currentDate)
+            let amPm = hour < 12 ? "오전" : "오후"
+            let adjustedHour = hour % 12
+            let displayHour = adjustedHour == 0 ? 12 : adjustedHour
+            
+            let selectedItems = ["오늘", amPm, String(displayHour), String(format: "%02d", minute)]
+            pickerView.setSelectedData(selectedItem: selectedItems)
+            onPickerItemsSelected(selectedItems)
+            pickerView.changeSelectedItemPublisher.send(nil)
+            
+            onDepartureNowTapped()
+        }
+    }
+    
+    override func rightButtonTapped() {
+        dismiss(animated: true) { [weak self] in
+            guard let self else { return }
+            onPickerItemsSelected(pickerView.selectedItemPublisher.value)
+            onPickerDateChanged(pickerView.changeSelectedItemPublisher.value)
+            pickerView.changeSelectedItemPublisher.send(nil)
+        }
+    }
 }
 
 extension BusSearchDatePickerViewController {
-    // MARK: - Configure
+    
+    private func configureSubTitleLabel(_ text: String) {
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.do {
+            $0.alignment = .left
+            $0.lineSpacing = 14 * 0.6
+            $0.lineBreakStrategy = .hangulWordPriority
+        }
+        subTitleLabel.attributedText = NSAttributedString(
+            string: text,
+            attributes: [
+                .foregroundColor: UIColor.appColor(.neutral500),
+                .font: UIFont.appFont(.pretendardRegular, size: 14),
+                .paragraphStyle: paragraphStyle,
+            ]
+        )
+    }
+    
     private func configureView() {
-        updateMessageLabel(alignment: .left)
-        updateSubMessageLabel(alignment: .left)
-        updaterightButton(borderWidth: 0, title: "완료")
-        updateCloseButton(borderWidth: 0, title: "지금 출발")
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
+    }
+    
+    private func setUpStyles() {
+        mainTitleLabel.do {
+            $0.text = "출발 시각 설정"
+            $0.textColor = .appColor(.neutral700)
+            $0.font = .appFont(.pretendardMedium, size: 18)
+            $0.numberOfLines = 1
+            $0.textAlignment = .left
+        }
+        subTitleLabel.do {
+            $0.numberOfLines = 2
+        }
+        pickerView.do {
+            $0.backgroundColor = .appColor(.neutral50)
+        }
+    }
+    
+    private func setUpLayouts() {
+        [mainTitleLabel, subTitleLabel, pickerView].forEach {
+            customView.addSubview($0)
+        }
+    }
+    
+    private func setUpConstraints() {
+        mainTitleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.height.equalTo(29)
+        }
+        subTitleLabel.snp.makeConstraints {
+            $0.top.equalTo(mainTitleLabel.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(mainTitleLabel)
+            $0.height.equalTo(44)
+        }
+        pickerView.snp.makeConstraints {
+            $0.top.equalTo(subTitleLabel.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
+        }
+        
+        customView.snp.makeConstraints {
+            $0.width.equalTo(301)
+            $0.height.equalTo(227)
+        }
     }
 }

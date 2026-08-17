@@ -164,15 +164,35 @@ final class LoginViewController: UIViewController {
 
 extension LoginViewController {
     private func presentModifyUserModal() {
-        let modifyUserModalViewController = ModifyUserModalViewController(
-            onCancelButtonTapped: { [weak self] in
-                self?.navigationController?.popViewController(animated: true)
-            },
-            onNavigateButtonTapped: { [weak self] in
-                self?.navigateToChangeMyProfile()
-            }
-        )
-        present(modifyUserModalViewController, animated: true)
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "아직 입력되지 않은 정보가 있어요.",
+                mainTitleStyle: .init(
+                    textColor: .neutral800,
+                    font: .pretendardMedium,
+                    fontSize: 18
+                ),
+                subTitleText: "필수 정보를 입력하시면 더 많은 기능을 이용하실 수 있어요.\n지금 입력하시겠어요?",
+                subTitleStyle: .init(
+                    textColor: .neutral500,
+                    font: .pretendardRegular,
+                    fontSize: 12
+                )
+            ),
+            button: .buttons(
+                leftButtonTitle: "나중에 하기",
+                leftButtonAction: { [weak self] in
+                    self?.navigationController?.popViewController(animated: true)
+                },
+                rightButtonTitle: "지금 입력하기",
+                rightButtonAction: { [weak self] in
+                    self?.navigateToChangeMyProfile()
+                }
+            ),
+            layout: .init(width: 342)
+        ))
+        present(modalViewController, animated: true)
     }
 
     private func navigateToChangeMyProfile() {

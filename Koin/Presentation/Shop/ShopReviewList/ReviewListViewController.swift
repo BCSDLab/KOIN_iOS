@@ -310,35 +310,62 @@ extension ReviewListViewController {
             .click,
             viewModel.getShopName()
         ))
-        let deleteReviewModalViewController = DeleteReviewModalViewController(
-            onDeleteButtonTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
-                self?.deleteReview()
-            },
-            onCancelButtonTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
-            }
-        )
-        deleteReviewModalViewController.modalPresentationStyle = .overFullScreen
-        deleteReviewModalViewController.modalTransitionStyle = .crossDissolve
-        present(deleteReviewModalViewController, animated: true)
+        
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .singleTitle(text: "삭제한 리뷰는 되돌릴 수 없습니다.\n삭제 하시겠습니까?"),
+            button: .buttons(
+                leftButtonTitle: "취소하기",
+                leftButtonAction: { [weak self] in
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
+                },
+                rightButtonTitle: "삭제하기",
+                rightButtonAction: { [weak self] in
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
+                    self?.deleteReview()
+                }
+            )
+        ))
+        present(modalViewController, animated: true)
     }
 
     private func presentReviewLoginModal(message: String) {
-        let reviewLoginModalViewController = ReviewLoginModalViewController(
-            message: message,
-            onLoginButtonTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
-                self?.showLoginScreen()
-            },
-            onCancelButtonTapped: { [weak self] in
-                guard message == "작성", let self else { return }
-                inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
-            }
-        )
-        reviewLoginModalViewController.modalPresentationStyle = .overFullScreen
-        reviewLoginModalViewController.modalTransitionStyle = .crossDissolve
-        present(reviewLoginModalViewController, animated: true)
+        let mainText: String
+        let subText: String
+        
+        switch message {
+        case "작성":
+            mainText = "리뷰를 작성하기 위해\n로그인이 필요해요."
+            subText = "리뷰 작성은 회원만 사용 가능합니다."
+            
+        case "신고":
+            mainText = "리뷰를 신고하기 위해\n로그인이 필요해요."
+            subText = "리뷰 신고는 회원만 사용 가능합니다."
+            
+        default:
+            return
+        }
+        
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .titles(
+                mainTitleText: mainText,
+                subTitleText: subText
+            ),
+            button: .buttons(
+                leftButtonTitle: "닫기",
+                leftButtonAction: { [weak self] in
+                    guard message == "작성", let self else { return }
+                    inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
+                },
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: { [weak self] in
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
+                    self?.showLoginScreen()
+                }
+            )
+        ))
+        present(modalViewController, animated: true)
     }
     
     private func deleteReview() {

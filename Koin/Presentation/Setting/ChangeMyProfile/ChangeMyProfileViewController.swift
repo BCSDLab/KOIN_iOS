@@ -377,11 +377,9 @@ final class ChangeMyProfileViewController: UIViewController {
 
 extension ChangeMyProfileViewController {
     @objc private func revokeButtonTapped() {
-        let revokeModalViewController = RevokeModalViewController(onRevokeButtonTapped: { [weak self] in
+        let revokeModalViewController = RevokeModalViewController { [weak self] in
             self?.viewModel.revoke()
-        })
-        revokeModalViewController.modalPresentationStyle = .overFullScreen
-        revokeModalViewController.modalTransitionStyle = .crossDissolve
+        }
         present(revokeModalViewController, animated: true, completion: nil)
     }
     @objc private func inquryButtonTapped() {

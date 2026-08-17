@@ -250,11 +250,8 @@ extension TimetableViewController {
     }
 
     private func makeSubstituteTimetableModal() -> SubstituteTimetableModalViewController {
-        SubstituteTimetableModalViewController(onSubstituteButtonTapped: { [weak self] response in
+        SubstituteTimetableModalViewController { [weak self] response in
             self?.handleSubstituteResponse(response)
-        }).then {
-            $0.modalPresentationStyle = .overFullScreen
-            $0.modalTransitionStyle = .crossDissolve
         }
     }
 
@@ -274,18 +271,17 @@ extension TimetableViewController {
     }
 
     private func presentSelectDeptModal() {
-        let viewController = SelectDeptModalViewController(onDepartmentSelected: { [weak self] department in
+        let viewController = SelectDeptModalViewController { [weak self] department in
             self?.addClassCollectionView.setUpSelectedDept(dept: department)
-        })
-        present(viewController, animated: false)
+        }
+        present(viewController, animated: true)
     }
 
     private func presentDeleteLectureModal(lecture: LectureData) {
-        let viewController = DeleteLectureModalViewController(onDeleteButtonTapped: { [weak self] lecture in
+        let modalViewController = DeleteLectureModalViewController(lectureData: lecture) { [weak self] lecture in
             self?.inputSubject.send(._deleteLecture(lecture))
-        })
-        viewController.setMessageLabelText(lectureData: lecture)
-        present(viewController, animated: false)
+        }
+        present(modalViewController, animated: true)
     }
 }
 

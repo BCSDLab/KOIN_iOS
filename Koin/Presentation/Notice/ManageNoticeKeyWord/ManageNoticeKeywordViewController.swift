@@ -211,28 +211,32 @@ extension ManageNoticeKeywordViewController {
     private func conductAddKeywordIllegalType(illegalType: String) {
         showToast(message: illegalType, success: false)
     }
-
+    
     private func presentLoginModal() {
-        let modalViewController = ModalViewController(
-            onLeftButtonTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "닫기"))
-            },
-            onRightButtonTapped: { [weak self] in
-                self?.navigateToLogin()
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPrompt, .click, "키워드 알림 팝업"))
-            },
-            width: 301,
-            height: 230,
-            paddingBetweenLabels: 8,
-            title: "키워드 알림을 받으려면\n로그인이 필요해요.",
-            subTitle: "로그인 후 간편하게 공지사항 키워드\n알림을 받아보세요!",
-            titleColor: .appColor(.neutral700),
-            subTitleColor: .appColor(.gray)
-        )
-
-        present(modalViewController, animated: false)
+        let onLeftButtonTapped: ()->Void = { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "닫기"))
+        }
+        let onRightButtonTapped = { [weak self] in
+            self?.navigateToLogin()
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPrompt, .click, "키워드 알림 팝업"))
+        }
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "키워드 알림을 받으려면\n로그인이 필요해요.",
+                subTitleText: "로그인 후 간편하게 공지사항 키워드\n알림을 받아보세요!"
+            ),
+            button: .buttons(
+                leftButtonTitle: "닫기",
+                leftButtonAction: onLeftButtonTapped,
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: onRightButtonTapped
+            ),
+            layout: .init(width: 301)
+        ))
+        present(modalViewController, animated: true)
     }
- 
+    
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text {
             textField.text = ""
