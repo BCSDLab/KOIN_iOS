@@ -18,8 +18,17 @@ final class CertificationView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
-    private let idTextField = UITextField().then { textField in
-        textField.isUserInteractionEnabled = false
+    private let idLabelBackgroundView = UIView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.layer.cornerRadius = 4
+        $0.layer.masksToBounds = true
+    }
+    
+    private let idLabel = UILabel().then {
+        $0.font = .appFont(.pretendardRegular, size: 14)
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.backgroundColor = .clear
+        $0.textAlignment = .left
     }
     
     private let passwordTitleLabel = UILabel().then {
@@ -28,9 +37,19 @@ final class CertificationView: UIView {
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
-    let passwordTextField = UITextField().then { textField in
-        textField.placeholder = "현재 비밀번호를 입력해주세요."
-        textField.isSecureTextEntry = true
+    let passwordTextField = UITextField().then {
+        $0.placeholder = "현재 비밀번호를 입력해주세요."
+        $0.isSecureTextEntry = true
+        
+        $0.font = UIFont.appFont(.pretendardRegular, size: 14)
+        $0.textColor = UIColor.appColor(.neutral800)
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.layer.cornerRadius = 4
+        $0.layer.masksToBounds = true
+        
+        let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
+        $0.leftView = paddingView
+        $0.leftViewMode = .always
     }
     
     private let changeSecureButton = UIButton().then { button in
@@ -56,7 +75,7 @@ final class CertificationView: UIView {
     }
     
     func fillEmailText(text: String) {
-        idTextField.text = text
+        idLabel.text = text
     }
     
     func getPasswordText() -> String {
@@ -84,7 +103,7 @@ extension CertificationView {
 
 extension CertificationView {
     private func setUpLayOuts() {
-        [idTitleLabel, idTextField, passwordTitleLabel, passwordTextField, errorResponseLabel, changeSecureButton].forEach {
+        [idTitleLabel, idLabelBackgroundView, idLabel, passwordTitleLabel, passwordTextField, errorResponseLabel, changeSecureButton].forEach {
             self.addSubview($0)
         }
     }
@@ -94,13 +113,17 @@ extension CertificationView {
             make.top.equalTo(self.snp.top)
             make.leading.equalTo(self.snp.leading).offset(8)
         }
-        idTextField.snp.makeConstraints { make in
+        idLabelBackgroundView.snp.makeConstraints { make in
             make.top.equalTo(idTitleLabel.snp.bottom).offset(5)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(46)
         }
+        idLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(idLabelBackgroundView)
+            make.leading.trailing.equalTo(idLabelBackgroundView).inset(16)
+        }
         passwordTitleLabel.snp.makeConstraints { make in
-            make.top.equalTo(idTextField.snp.bottom).offset(30)
+            make.top.equalTo(idLabel.snp.bottom).offset(30)
             make.leading.equalTo(self.snp.leading).offset(8)
         }
         passwordTextField.snp.makeConstraints { make in
@@ -119,25 +142,10 @@ extension CertificationView {
             make.height.equalTo(20)
         }
     }
-    
-    private func setUpTextFields() {
-        [idTextField, passwordTextField].forEach {
-            $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-            $0.textColor = UIColor.appColor(.neutral800)
-            $0.backgroundColor = UIColor.appColor(.neutral100)
-            $0.layer.cornerRadius = 4
-            $0.layer.masksToBounds = true
-            
-            let paddingView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: $0.frame.height))
-            $0.leftView = paddingView
-            $0.leftViewMode = .always
-        }
-    }
-    
+
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        setUpTextFields()
         self.backgroundColor = .systemBackground
     }
     
