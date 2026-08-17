@@ -15,14 +15,17 @@ struct CategoryView: ActionBindableView {
         case showTimetable
         case showLostItem
         case showFacility
+        case showDepartment
         case showDining
         case showShop
         case showBusTimetable
         case showBusRoute
         case showCallVan
+        case showChatList
         case showLand
         case showBusiness
-        case showDepartment
+        
+        case showLoginToast
     }
 
     // MARK: - Properties
@@ -81,6 +84,7 @@ struct CategoryView: ActionBindableView {
                 CategorySection(
                     title: "기타",
                     items: [
+                        .chat,
                         .land,
                         .business,
                     ],
@@ -96,17 +100,28 @@ struct CategoryView: ActionBindableView {
         }
         .scrollIndicators(.hidden)
         .background(Color.appColor(.newBackground))
+        .onAppear {
+            viewModel.execute(.checkAuth)
+        }
     }
 }
 
 private extension CategoryView {
     
     private func didTapItem(_ item: HomeCategoryItem) {
+        if case item = .chat {
+            guard viewModel.isLoggedIn else {
+                sendAction(.showLoginToast)
+                return
+            }
+        }
+        
         let action = action(for: item)
         sendAction(action)
         
-        let loggingInfo = loggingInfo(for: action)
-        viewModel.execute(.logEvent(loggingInfo.label, .click, loggingInfo.value))
+        if let loggingInfo = loggingInfo(for: action) {
+            viewModel.execute(.logEvent(loggingInfo.label, .click, loggingInfo.value))
+        }
     }
 
     private func action(for item: HomeCategoryItem) -> Action {
@@ -129,6 +144,8 @@ private extension CategoryView {
             return .showBusRoute
         case .callVan:
             return .showCallVan
+        case .chat:
+            return .showChatList
         case .land:
             return .showLand
         case .business:
@@ -136,7 +153,7 @@ private extension CategoryView {
         }
     }
 
-    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus, value: String) {
+    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus, value: String)? {
         switch action {
         case .showTimetable:
             return (.categoryTimetable, "시간표")
@@ -156,10 +173,14 @@ private extension CategoryView {
             return (.categoryTransportation, "교통편 조회하기")
         case .showCallVan:
             return (.categoryTransportation, "콜밴팟 모집")
+        case .showChatList:
+            return (.categoryEtc, "채팅")
         case .showLand:
             return (.categoryEtc, "복덕방")
         case .showBusiness:
             return (.categoryEtc, "코인 for Business")
+        case .showLoginToast:
+            return nil
         }
     }
 }

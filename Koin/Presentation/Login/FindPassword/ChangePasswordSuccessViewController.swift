@@ -154,8 +154,12 @@ extension ChangePasswordSuccessViewController {
     }
     
     private func makeCategoryHostingController() -> UIViewController {
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
+        let categoryRootView = CategoryView(
+            viewModel: CategoryViewModel(
+                checkLoginUseCase: checkLoginUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase))
         return CategoryHostingController(rootView: categoryRootView)
     }
     

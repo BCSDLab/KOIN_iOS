@@ -259,6 +259,7 @@ public enum ImageAsset: String {
     case categoryBusSearch
     case categoryBusTimetable
     case categoryCallVan
+    case categoryChat
     case categoryDepartment
     case categoryDining
     case categoryFacility

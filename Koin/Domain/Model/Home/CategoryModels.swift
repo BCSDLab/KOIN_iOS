@@ -16,6 +16,7 @@ enum HomeCategoryItem: Identifiable {
     case busTimetable
     case busRoute
     case callVan
+    case chat
     case land
     case business
     case department
@@ -42,6 +43,8 @@ enum HomeCategoryItem: Identifiable {
             return "교통편 조회하기"
         case .callVan:
             return "콜밴팟 모집"
+        case .chat:
+            return "채팅"
         case .land:
             return "복덕방"
         case .business:
@@ -80,6 +83,8 @@ enum HomeCategoryItem: Identifiable {
             return .categoryBusSearch
         case .callVan:
             return .categoryCallVan
+        case .chat:
+            return .categoryChat
         case .land:
             return .categoryLand
         case .business:
