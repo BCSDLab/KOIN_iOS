@@ -16,7 +16,7 @@ struct DiningLoggingTests {
 
     @Test(
         "메뉴 이미지를 탭하면 시간대와 장소를 조합해 로깅한다",
-        arguments: [(1, "A코너", "점심_A코너"), (0, "B코너", "아침_B코너")]
+        arguments: [(0, "A코너", "아침_A코너"), (1, "B코너", "점심_B코너"), (2, "C코너", "저녁_C코너")]
     )
     func 메뉴_이미지를_탭하면_시간대와_장소를_조합해_로깅한다(segmentIndex: Int, place: String, expectedValue: String) {
         let bed = DiningLoggingTestBed()
