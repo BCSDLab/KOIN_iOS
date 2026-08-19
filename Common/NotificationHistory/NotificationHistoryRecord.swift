@@ -1,5 +1,5 @@
 //
-//  NotificationRecord.swift
+//  NotificationHistoryRecord.swift
 //  koin
 //
 //  Created by 홍기정 on 7/6/26.
@@ -9,7 +9,7 @@ import SwiftData
 import Foundation
 
 @Model
-final class NotificationRecord {
+final class NotificationHistoryRecord {
     var body: String
     var title: String
     var category: AppPath

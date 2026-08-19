@@ -21,7 +21,7 @@ final class NotificationViewModel: ViewModelProtocol {
     }
     
     enum Output {
-        case updateNotifications([NotificationItem])
+        case updateNotifications([NotificationHistoryItem])
         case showToast(String)
     }
     

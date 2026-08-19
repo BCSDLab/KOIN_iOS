@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchNotificationHistoryUseCase {
-    func execute() async throws -> [NotificationItem]
+    func execute() async throws -> [NotificationHistoryItem]
 }
 
 final class DefaultFetchNotificationHistoryUseCase: FetchNotificationHistoryUseCase {
@@ -20,7 +20,7 @@ final class DefaultFetchNotificationHistoryUseCase: FetchNotificationHistoryUseC
         self.notificationHistoryRepository = notificationHistoryRepository
     }
     
-    func execute() async throws -> [NotificationItem] {
+    func execute() async throws -> [NotificationHistoryItem] {
         try await notificationHistoryRepository.fetchAll()
     }
 }

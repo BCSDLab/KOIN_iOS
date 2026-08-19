@@ -1,5 +1,5 @@
 //
-//  NotificationItem.swift
+//  NotificationHistoryItem.swift
 //  koin
 //
 //  Created by 홍기정 on 6/3/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NotificationItem {
+struct NotificationHistoryItem {
     let id: String
     var isRead: Bool
     let icon: ImageAsset
@@ -18,10 +18,9 @@ struct NotificationItem {
     let dateText: String
 }
 
-extension NotificationItem {
-    
-    init?(from record: NotificationRecord) {
-        guard let icon = NotificationItem.icon(for: record.category) else {
+extension NotificationHistoryItem {
+    init?(from record: NotificationHistoryRecord) {
+        guard let icon = NotificationHistoryItem.icon(for: record.category) else {
             return nil
         }
         self.id = record.messageId
@@ -31,9 +30,9 @@ extension NotificationItem {
         self.uri = record.schemeUri
         self.title = record.title
         self.content = record.body
-        self.dateText = NotificationItem.dateText(for: record.createdAt)
+        self.dateText = NotificationHistoryItem.dateText(for: record.createdAt)
     }
-    
+
     static func icon(for appPath: AppPath) -> ImageAsset? {
         switch appPath {
         case .shop:
@@ -52,7 +51,7 @@ extension NotificationItem {
             return nil
         }
     }
-    
+
     static func dateText(for createdAt: Date) -> String {
         let now = Date()
         let compareComponents = Calendar.current.dateComponents(
@@ -60,7 +59,7 @@ extension NotificationItem {
             from: createdAt,
             to: now
         )
-        
+
         if let day = compareComponents.day, 1 <= day {
             return "\(day)일 전"
         }

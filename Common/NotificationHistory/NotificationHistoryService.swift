@@ -9,8 +9,8 @@ import SwiftData
 import Foundation
 
 protocol NotificationHistoryService {
-    func insert(record: NotificationRecord) async throws
-    func fetchAll() async throws -> [NotificationRecord]
+    func insert(record: NotificationHistoryRecord) async throws
+    func fetchAll() async throws -> [NotificationHistoryRecord]
     func markAsRead(messageId: String) async throws
     func markAllAsRead() async throws
     func delete(messageId: String) async throws
@@ -25,13 +25,13 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
     // MARK: - Initializer
     init() {
         container = try? ModelContainer(
-            for: NotificationRecord.self,
+            for: NotificationHistoryRecord.self,
             configurations: .init(groupContainer: .identifier("group.com.bcsdlab.koin"))
         )
     }
     
     // MARK: - Create
-    func insert(record: NotificationRecord) async throws {
+    func insert(record: NotificationHistoryRecord) async throws {
         guard let container else {
             throw SwiftDataError.loadIssueModelContainer
         }
@@ -48,7 +48,7 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
     }
     
     // MARK: - Read
-    func fetchAll() async throws -> [NotificationRecord] {
+    func fetchAll() async throws -> [NotificationHistoryRecord] {
         guard let container else {
             throw SwiftDataError.loadIssueModelContainer
         }
@@ -60,7 +60,7 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         }
         
         return try await MainActor.run {
-            var descriptor = FetchDescriptor<NotificationRecord>(
+            var descriptor = FetchDescriptor<NotificationHistoryRecord>(
                 sortBy: [SortDescriptor(\.createdAt, order: .reverse)]
             )
             descriptor.fetchLimit = .max
@@ -76,7 +76,7 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         }
         
         try await MainActor.run {
-            var descriptor = FetchDescriptor<NotificationRecord>(
+            var descriptor = FetchDescriptor<NotificationHistoryRecord>(
                 predicate: #Predicate { notification in
                     notification.messageId == messageId
                 }
@@ -97,7 +97,7 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         }
         
         try await MainActor.run {
-            var descriptor = FetchDescriptor<NotificationRecord>()
+            var descriptor = FetchDescriptor<NotificationHistoryRecord>()
             descriptor.fetchLimit = .max
             try container.mainContext.enumerate(descriptor) { notification in
                 notification.isRead = true
@@ -115,7 +115,7 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         }
         
         try await MainActor.run {
-            try container.mainContext.delete(model: NotificationRecord.self, where: #Predicate { notification in
+            try container.mainContext.delete(model: NotificationHistoryRecord.self, where: #Predicate { notification in
                 notification.messageId == messageId
             })
             try container.mainContext.save()
@@ -130,7 +130,7 @@ final class DefaultNotificationHistoryService: NotificationHistoryService {
         }
         
         try await MainActor.run {
-            try container.mainContext.delete(model: NotificationRecord.self)
+            try container.mainContext.delete(model: NotificationHistoryRecord.self)
             try container.mainContext.save()
         }
         
@@ -149,7 +149,7 @@ extension DefaultNotificationHistoryService {
         }
         
         try await MainActor.run {
-            try container.mainContext.delete(model: NotificationRecord.self, where: #Predicate { notification in
+            try container.mainContext.delete(model: NotificationHistoryRecord.self, where: #Predicate { notification in
                 notification.createdAt < expirationDate
             })
             try container.mainContext.save()
