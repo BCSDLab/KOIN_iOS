@@ -1,5 +1,5 @@
 //
-//  ChatViewController.swift
+//  LostItemChatViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 2/16/25.
@@ -9,11 +9,11 @@ import Combine
 import PhotosUI
 import UIKit
 
-final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerViewControllerDelegate {
+final class LostItemChatViewController: UIViewController, UITextViewDelegate, PHPickerViewControllerDelegate {
     //
     // MARK: - Properties
-    private let viewModel: ChatViewModel
-    private let inputSubject: PassthroughSubject<ChatViewModel.Input, Never> = .init()
+    private let viewModel: LostItemChatViewModel
+    private let inputSubject: PassthroughSubject<LostItemChatViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var messageInputBottomConstraint: NSLayoutConstraint!
     private var textViewHeightConstraint: NSLayoutConstraint!
@@ -44,11 +44,11 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
         $0.setImage(UIImage.appImage(asset: .send), for: .normal)
     }
     
-    private let chatHistoryTableView = ChatHistoryTableView().then {
+    private let chatHistoryTableView = LostItemChatHistoryTableView().then {
         $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
     }
     
-    init(viewModel: ChatViewModel) {
+    init(viewModel: LostItemChatViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         let rightButton = UIBarButtonItem(image: UIImage.appImage(asset: .threeCircle), style: .plain, target: self, action: #selector(rightButtonTapped))
@@ -116,7 +116,7 @@ final class ChatViewController: UIViewController, UITextViewDelegate, PHPickerVi
     }
 }
 
-extension ChatViewController{
+extension LostItemChatViewController{
     
     @objc private func sendButtonTapped() {
         if textView.text.isEmpty || textView.textColor == .appColor(.neutral500) { return }
@@ -164,7 +164,7 @@ extension ChatViewController{
     @objc private func rightButtonTapped() {
         dismissKeyboard()
 
-        let blockCheckModalViewController = BlockCheckModalViewController(onBlockButtonTapped: { [weak self] in
+        let blockCheckModalViewController = LostItemBlockCheckModalViewController(onBlockButtonTapped: { [weak self] in
             self?.presentBlockUserConfirmationModal()
         })
         blockCheckModalViewController.modalPresentationStyle = .overFullScreen
@@ -252,7 +252,7 @@ extension ChatViewController{
     }
 }
 
-extension ChatViewController {
+extension LostItemChatViewController {
     
     private func setUpLayOuts() {
         [bottomBackgroundView, chatHistoryTableView, messageInputView].forEach {

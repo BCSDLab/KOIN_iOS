@@ -101,12 +101,12 @@ final class LostItemDataViewController: UIViewController {
         lostItemDataTableView.cellTappedPublisher.sink { [weak self] id in
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
-            let chatRepository = DefaultChatRepository(service: DefaultChatService())
+            let chatRepository = DefaultLostItemRepository(service: DefaultLostItemService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
-            let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+            let createChatRoomUseCase = DefaultLostItemCreateChatRoomUseCase(chatRepository: chatRepository)
             let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let viewModel = LostItemDataViewModel(
@@ -289,13 +289,13 @@ extension LostItemDataViewController {
         navigationController?.present(modalViewController, animated: true)
     }
     
-    private func navigateToChat(_ createChatRoomResponse: CreateChatRoomResponse) {
-        let chatViewModel = ChatViewModel(
+    private func navigateToChat(_ createChatRoomResponse: LostItemCreateChatRoomResponse) {
+        let chatViewModel = LostItemChatViewModel(
             articleId: createChatRoomResponse.articleId,
             chatRoomId: createChatRoomResponse.chatRoomId,
             articleTitle: createChatRoomResponse.articleTitle
         )
-        let viewController = ChatViewController(viewModel: chatViewModel)
+        let viewController = LostItemChatViewController(viewModel: chatViewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     

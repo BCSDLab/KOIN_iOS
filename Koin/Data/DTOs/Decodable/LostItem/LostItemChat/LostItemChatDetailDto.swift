@@ -1,5 +1,5 @@
 //
-//  ChatDetailDto.swift
+//  LostItemChatDetailDto.swift
 //  koin
 //
 //  Created by 김나훈 on 2/18/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ChatDetailDto: Codable {
+struct LostItemChatDetailDto: Codable {
     let userId: Int
     let userNickname, content, timestamp: String
     let isImage: Bool
@@ -20,15 +20,14 @@ struct ChatDetailDto: Codable {
     }
 }
 
-extension ChatDetailDto {
-    func toDomain(currentUserId: Int) -> ChatMessage {
-        return ChatMessage(
+extension LostItemChatDetailDto {
+    func toDomain(currentUserId: Int) -> LostItemChatMessage {
+        return LostItemChatMessage(
             senderNickname: userNickname,
             content: content,
             timestamp: timestamp,
             isImage: isImage,
-            isMine: userId == currentUserId, chatDateInfo: timestamp.toChatDateInfo()
+            isMine: userId == currentUserId, chatDateInfo: timestamp.toLostItemChatDateInfo()
         )
     }
 }
-

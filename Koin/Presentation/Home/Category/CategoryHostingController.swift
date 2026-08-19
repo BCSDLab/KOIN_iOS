@@ -186,7 +186,7 @@ extension CategoryHostingController {
     }
     
     private func makeChatListViewController() -> UIViewController {
-        return ChatListTableViewController(viewModel: ChatListTableViewModel())
+        return LostItemChatListTableViewController(viewModel: LostItemChatListTableViewModel())
     }
 
     private func makeLandViewController() -> UIViewController {

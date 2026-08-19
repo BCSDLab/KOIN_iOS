@@ -1,5 +1,5 @@
 //
-//  ChatListTableViewController.swift
+//  LostItemChatListTableViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 2/18/25.
@@ -8,17 +8,17 @@
 import Combine
 import UIKit
 
-final class ChatListTableViewController: UITableViewController {
+final class LostItemChatListTableViewController: UITableViewController {
     
     // MARK: - Properties
-    private let viewModel: ChatListTableViewModel
-    private let inputSubject: PassthroughSubject<ChatListTableViewModel.Input, Never> = .init()
+    private let viewModel: LostItemChatListTableViewModel
+    private let inputSubject: PassthroughSubject<LostItemChatListTableViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
     
     
-    init(viewModel: ChatListTableViewModel) {
+    init(viewModel: LostItemChatListTableViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         navigationItem.title = "쪽지"
@@ -35,7 +35,7 @@ final class ChatListTableViewController: UITableViewController {
         super.viewDidLoad()
         configureView()
         bind()
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "ChatCell")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.identifier)
         tableView.separatorStyle = .none
     }
     
@@ -65,11 +65,11 @@ final class ChatListTableViewController: UITableViewController {
     }
 }
 
-extension ChatListTableViewController {
+extension LostItemChatListTableViewController {
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat = viewModel.chatList[indexPath.row]
-        let viewController = ChatViewController(viewModel: ChatViewModel(articleId: chat.articleId, chatRoomId: chat.chatRoomId, articleTitle: chat.articleTitle))
+        let viewController = LostItemChatViewController(viewModel: LostItemChatViewModel(articleId: chat.articleId, chatRoomId: chat.chatRoomId, articleTitle: chat.articleTitle))
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.messageListSelect, .click, "쪽지"))
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -86,7 +86,7 @@ extension ChatListTableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ChatCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: UITableViewCell.identifier, for: indexPath)
         let chat = viewModel.chatList[indexPath.row]
         cell.contentView.subviews.forEach { $0.removeFromSuperview() }
         let thumbnailContainerView = UIView().then {
@@ -138,7 +138,7 @@ extension ChatListTableViewController {
         }
         titleLabel.text = chat.articleTitle
         contentLabel.text = "\(chat.recentMessageContent)"
-        recentTimeLabel.text = chat.lastMessageAt.toChatDateInfo().showingText
+        recentTimeLabel.text = chat.lastMessageAt.toLostItemChatDateInfo().showingText
         unreadMessageLabel.text = String(chat.unreadMessageCount)
         unreadMessageLabel.isHidden = chat.unreadMessageCount == 0
         
@@ -185,7 +185,7 @@ extension ChatListTableViewController {
     
 }
 
-extension ChatListTableViewController {
+extension LostItemChatListTableViewController {
     
     private func setUpLayOuts() {
         [].forEach {

@@ -1,5 +1,5 @@
 //
-//  ChatTextTableViewCell.swift
+//  LostItemChatTextTableViewCell.swift
 //  koin
 //
 //  Created by 김나훈 on 2/20/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ChatTextTableViewCell: UITableViewCell {
+final class LostItemChatTextTableViewCell: UITableViewCell {
     // MARK: - UI Components
     
     private let messageLabel = InsetLabel(top: 10, left: 12, bottom: 10, right: 12).then {
@@ -37,7 +37,7 @@ final class ChatTextTableViewCell: UITableViewCell {
         configureView()
     }
     
-    func configure(message: ChatMessage) {
+    func configure(message: LostItemChatMessage) {
         messageLabel.text = message.content
         messageLabel.backgroundColor = message.isMine ? UIColor.appColor(.neutral100) : UIColor.appColor(.info100)
         timestampLabel.text = String(format: "%02d:%02d", message.chatDateInfo.hour, message.chatDateInfo.minute)
@@ -46,14 +46,14 @@ final class ChatTextTableViewCell: UITableViewCell {
     
 }
 
-extension ChatTextTableViewCell {
+extension LostItemChatTextTableViewCell {
     private func setUpLayouts() {
         [messageLabel, timestampLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
-    private func setUpConstraints(message: ChatMessage) {
+    private func setUpConstraints(message: LostItemChatMessage) {
         messageLabel.snp.remakeConstraints {
             if message.isMine {
                 $0.trailing.equalToSuperview().offset(-16)

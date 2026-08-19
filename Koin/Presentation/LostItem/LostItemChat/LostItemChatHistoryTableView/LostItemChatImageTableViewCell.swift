@@ -1,5 +1,5 @@
 //
-//  ChatImageTableViewCell.swift
+//  LostItemChatImageTableViewCell.swift
 //  koin
 //
 //  Created by 김나훈 on 2/20/25.
@@ -8,7 +8,7 @@
 import Combine
 import UIKit
 
-final class ChatImageTableViewCell: UITableViewCell {
+final class LostItemChatImageTableViewCell: UITableViewCell {
     
     // MARK: - Properties
     private var imageUrl: String?
@@ -43,7 +43,7 @@ final class ChatImageTableViewCell: UITableViewCell {
         configureView()
     }
     
-    func configure(message: ChatMessage) {
+    func configure(message: LostItemChatMessage) {
         imageUrl = message.content
         textImageView.loadImageWithSpinner(from: message.content)
         timestampLabel.text = String(format: "%02d:%02d", message.chatDateInfo.hour, message.chatDateInfo.minute)
@@ -60,14 +60,14 @@ final class ChatImageTableViewCell: UITableViewCell {
     }
 }
 
-extension ChatImageTableViewCell {
+extension LostItemChatImageTableViewCell {
     private func setUpLayouts() {
         [textImageView, timestampLabel].forEach {
             contentView.addSubview($0)
         }
     }
     
-    private func setUpConstraints(message: ChatMessage) {
+    private func setUpConstraints(message: LostItemChatMessage) {
         textImageView.snp.remakeConstraints {
             if message.isMine {
                 $0.trailing.equalToSuperview().offset(-16)

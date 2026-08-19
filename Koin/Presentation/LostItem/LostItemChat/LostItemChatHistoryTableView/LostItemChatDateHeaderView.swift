@@ -1,5 +1,5 @@
 //
-//  ChatDateHeaderView.swift
+//  LostItemChatDateHeaderView.swift
 //  koin
 //
 //  Created by 김나훈 on 2/20/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class ChatDateHeaderView: UITableViewHeaderFooterView {
+final class LostItemChatDateHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - UI Components
     
@@ -34,13 +34,13 @@ final class ChatDateHeaderView: UITableViewHeaderFooterView {
     
 }
 
-extension ChatDateHeaderView {
-    func configure(date: ChatDateInfo) {
+extension LostItemChatDateHeaderView {
+    func configure(date: LostItemChatDateInfo) {
         dateLabel.text = "\(date.year)년 \(date.month)월 \(date.day)일"
     }
 }
 
-extension ChatDateHeaderView {
+extension LostItemChatDateHeaderView {
     
     private func setUpLayouts() {
         contentView.addSubview(dateLabel)

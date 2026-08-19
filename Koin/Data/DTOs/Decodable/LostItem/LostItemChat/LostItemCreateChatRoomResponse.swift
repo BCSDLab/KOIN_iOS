@@ -1,5 +1,5 @@
 //
-//  CreateCharRoomResponse.swift
+//  LostItemCreateChatRoomResponse.swift
 //  koin
 //
 //  Created by 김나훈 on 2/18/25.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct CreateChatRoomResponse: Decodable {
+struct LostItemCreateChatRoomResponse: Decodable {
     let articleId: Int
     let chatRoomId: Int
     let userId: Int

@@ -195,8 +195,8 @@ extension NotificationViewController {
     }
     
     private func navigateToChat(articleId: Int, chatRoomId: Int) {
-        let viewModel = ChatViewModel(articleId: articleId, chatRoomId: chatRoomId, articleTitle: nil)
-        let viewController = ChatViewController(viewModel: viewModel)
+        let viewModel = LostItemChatViewModel(articleId: articleId, chatRoomId: chatRoomId, articleTitle: nil)
+        let viewController = LostItemChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -213,13 +213,13 @@ extension NotificationViewController {
     private func navigateToLostItemData(lostItemId: Int) {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
-        let chatRepository = DefaultChatRepository(service: DefaultChatService())
+        let chatRepository = DefaultLostItemRepository(service: DefaultLostItemService())
         let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
         let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
         let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
         let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
         let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
-        let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+        let createChatRoomUseCase = DefaultLostItemCreateChatRoomUseCase(chatRepository: chatRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = LostItemDataViewModel(
             checkLoginUseCase: checkLoginUseCase,

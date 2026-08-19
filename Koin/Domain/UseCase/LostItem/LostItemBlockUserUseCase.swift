@@ -1,5 +1,5 @@
 //
-//  BlockUserUseCase.swift
+//  LostItemBlockUserUseCase.swift
 //  koin
 //
 //  Created by 김나훈 on 2/18/25.
@@ -7,14 +7,14 @@
 
 import Combine
 
-protocol BlockUserUseCase {
+protocol LostItemBlockUserUseCase {
     func execute(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse>
 }
-final class DefaultBlockUserUseCase: BlockUserUseCase {
+final class DefaultLostItemBlockUserUseCase: LostItemBlockUserUseCase {
     
-    private let chatRepository: ChatRepository
+    private let chatRepository: LostItemRepository
     
-    init(chatRepository: ChatRepository) {
+    init(chatRepository: LostItemRepository) {
         self.chatRepository = chatRepository
     }
     

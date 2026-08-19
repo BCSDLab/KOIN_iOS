@@ -1,5 +1,5 @@
 //
-//  ChatListTableViewModel.swift
+//  LostItemChatListTableViewModel.swift
 //  koin
 //
 //  Created by 김나훈 on 2/18/25.
@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 
-final class ChatListTableViewModel: ViewModelProtocol {
+final class LostItemChatListTableViewModel: ViewModelProtocol {
     
     // MARK: - Input
     
@@ -28,19 +28,18 @@ final class ChatListTableViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var pollingSubscriptions: AnyCancellable?
-    private(set) var chatList: [ChatRoomItem] = [] {
+    private(set) var chatList: [LostItemChatRoomItem] = [] {
         didSet {
             outputSubject.send(.showChatRoom)
         }
     }
-    private let chatRepository = DefaultChatRepository(service: DefaultChatService())
-    private lazy var fetchChatRoomUseCase = DefaultFetchChatRoomUseCase(chatRepository: chatRepository)
+    private let chatRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+    private lazy var fetchChatRoomUseCase = DefaultLostItemFetchChatRoomUseCase(chatRepository: chatRepository)
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     
     // MARK: - Initialization
     
-    init() {
-    }
+    init() {}
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
@@ -60,17 +59,17 @@ final class ChatListTableViewModel: ViewModelProtocol {
     
 }
 
-extension ChatListTableViewModel {
+extension LostItemChatListTableViewModel {
 
     private func fetchChatRooms() {
         pollingSubscriptions?.cancel()
         pollingSubscriptions = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .prepend(Date())
-            .flatMap { [weak self] _ -> AnyPublisher<[ChatRoomItem], Never> in
+            .flatMap { [weak self] _ -> AnyPublisher<[LostItemChatRoomItem], Never> in
                 guard let self else { return Empty().eraseToAnyPublisher() }
                 return fetchChatRoomUseCase.execute()
-                    .catch { error -> AnyPublisher<[ChatRoomItem], Never> in
+                    .catch { error -> AnyPublisher<[LostItemChatRoomItem], Never> in
                         return Empty().eraseToAnyPublisher()
                     }.eraseToAnyPublisher()
             }

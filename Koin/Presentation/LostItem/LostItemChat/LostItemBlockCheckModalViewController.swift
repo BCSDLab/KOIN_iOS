@@ -1,5 +1,5 @@
 //
-//  BlockCheckModalViewController.swift
+//  LostItemBlockCheckModalViewController.swift
 //  koin
 //
 //  Created by 김나훈 on 2/18/25.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class BlockCheckModalViewController: UIViewController {
+final class LostItemBlockCheckModalViewController: UIViewController {
     private let onBlockButtonTapped: () -> Void
     
     private let blockButton = UIButton().then {
@@ -61,7 +61,7 @@ final class BlockCheckModalViewController: UIViewController {
     
 }
 
-extension BlockCheckModalViewController {
+extension LostItemBlockCheckModalViewController {
     
     private func setUpLayOuts() {
         [blockButton].forEach {

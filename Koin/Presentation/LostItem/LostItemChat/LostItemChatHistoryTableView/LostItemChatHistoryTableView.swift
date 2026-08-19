@@ -1,5 +1,5 @@
 //
-//  ChatHistoryTableView.swift
+//  LostItemChatHistoryTableView.swift
 //  koin
 //
 //  Created by 김나훈 on 2/20/25.
@@ -8,10 +8,10 @@
 import Combine
 import UIKit
 
-final class ChatHistoryTableView: UITableView {
+final class LostItemChatHistoryTableView: UITableView {
     
     // MARK: - Properties
-    private var chatSections: [(date: ChatDateInfo, messages: [ChatMessage])] = []
+    private var chatSections: [(date: LostItemChatDateInfo, messages: [LostItemChatMessage])] = []
     let imageTapPublisher = PassthroughSubject<String, Never>()
 
     // MARK: - Initialization
@@ -30,9 +30,9 @@ final class ChatHistoryTableView: UITableView {
         dataSource = self
         sectionHeaderTopPadding = 0
         separatorStyle = .none
-        register(ChatImageTableViewCell.self, forCellReuseIdentifier: "ChatImageTableViewCell")
-        register(ChatTextTableViewCell.self, forCellReuseIdentifier: ChatTextTableViewCell.identifier)
-        register(ChatDateHeaderView.self, forHeaderFooterViewReuseIdentifier: ChatDateHeaderView.identifier)
+        register(LostItemChatImageTableViewCell.self, forCellReuseIdentifier: LostItemChatImageTableViewCell.identifier)
+        register(LostItemChatTextTableViewCell.self, forCellReuseIdentifier: LostItemChatTextTableViewCell.identifier)
+        register(LostItemChatDateHeaderView.self, forHeaderFooterViewReuseIdentifier: LostItemChatDateHeaderView.identifier)
     }
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -47,14 +47,14 @@ final class ChatHistoryTableView: UITableView {
     }
 
     // MARK: - 데이터 세팅
-    func setChatHistory(item: [ChatMessage]) {
+    func setChatHistory(item: [LostItemChatMessage]) {
         chatSections = groupMessagesByDate(messages: item)
         reloadData()
         scrollToBottom(animated: false)
     }
 
-    private func groupMessagesByDate(messages: [ChatMessage]) -> [(date: ChatDateInfo, messages: [ChatMessage])] {
-        var groupedMessages: [(date: ChatDateInfo, messages: [ChatMessage])] = []
+    private func groupMessagesByDate(messages: [LostItemChatMessage]) -> [(date: LostItemChatDateInfo, messages: [LostItemChatMessage])] {
+        var groupedMessages: [(date: LostItemChatDateInfo, messages: [LostItemChatMessage])] = []
         
         for message in messages {
             if let lastSection = groupedMessages.last, lastSection.date.day == message.chatDateInfo.day {
@@ -69,7 +69,7 @@ final class ChatHistoryTableView: UITableView {
         return groupedMessages
     }
 
-    func appendNewMessage(_ message: ChatMessage) {
+    func appendNewMessage(_ message: LostItemChatMessage) {
         if let lastSection = chatSections.last, lastSection.date.day == message.chatDateInfo.day {
             // 같은 날짜(day)면 기존 섹션에 메시지 추가
             chatSections[chatSections.count - 1].messages.append(message)
@@ -88,7 +88,7 @@ final class ChatHistoryTableView: UITableView {
 }
 
 // MARK: - UITableViewDataSource
-extension ChatHistoryTableView: UITableViewDataSource {
+extension LostItemChatHistoryTableView: UITableViewDataSource {
     
     private func scrollToBottom(animated: Bool) {
         guard !chatSections.isEmpty else { return }
@@ -115,7 +115,7 @@ extension ChatHistoryTableView: UITableViewDataSource {
         let message = chatSections[indexPath.section].messages[indexPath.row]
         
         if message.isImage {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: "ChatImageTableViewCell", for: indexPath) as? ChatImageTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LostItemChatImageTableViewCell.identifier, for: indexPath) as? LostItemChatImageTableViewCell else {
                 return UITableViewCell()
             }
             cell.configure(message: message)
@@ -124,7 +124,7 @@ extension ChatHistoryTableView: UITableViewDataSource {
             }.store(in: &cell.cancellables)
             return cell
         } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatTextTableViewCell.identifier, for: indexPath) as? ChatTextTableViewCell else {
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: LostItemChatTextTableViewCell.identifier, for: indexPath) as? LostItemChatTextTableViewCell else {
                 return UITableViewCell()
             }
             cell.configure(message: message)
@@ -134,10 +134,10 @@ extension ChatHistoryTableView: UITableViewDataSource {
 }
 
 // MARK: - UITableViewDelegate (헤더)
-extension ChatHistoryTableView: UITableViewDelegate {
+extension LostItemChatHistoryTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: ChatDateHeaderView.identifier) as? ChatDateHeaderView else {
+        guard let header = tableView.dequeueReusableHeaderFooterView(withIdentifier: LostItemChatDateHeaderView.identifier) as? LostItemChatDateHeaderView else {
             return nil
         }
         header.configure(date: chatSections[section].date)

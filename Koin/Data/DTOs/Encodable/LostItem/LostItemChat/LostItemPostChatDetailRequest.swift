@@ -1,5 +1,5 @@
 //
-//  PostChatDetailRequest.swift
+//  LostItemPostChatDetailRequest.swift
 //  koin
 //
 //  Created by 홍기정 on 1/28/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct PostChatDetailRequest: Encodable {
+struct LostItemPostChatDetailRequest: Encodable {
     
     let userNickname: String
     let content: String

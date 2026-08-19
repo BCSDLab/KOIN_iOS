@@ -1,5 +1,5 @@
 //
-//  ChatViewModel.swift
+//  LostItemChatViewModel.swift
 //  koin
 //
 //  Created by 김나훈 on 2/16/25.
@@ -8,7 +8,7 @@
 import Combine
 import Foundation
 
-final class ChatViewModel: ViewModelProtocol {
+final class LostItemChatViewModel: ViewModelProtocol {
     
     // MARK: - Input
     
@@ -25,7 +25,7 @@ final class ChatViewModel: ViewModelProtocol {
     
     enum Output {
         case updateTitle(String)
-        case showChatHistory([ChatMessage])
+        case showChatHistory([LostItemChatMessage])
         case showToast(String, Bool)
     }
     
@@ -33,13 +33,13 @@ final class ChatViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     private var pollingSubscriptions: AnyCancellable?
-    private let chatRepository = DefaultChatRepository(service: DefaultChatService())
-    private lazy var fetchChatDetailUseCase = DefaultFetchChatDetailUseCase(chatRepository: chatRepository)
-    private lazy var blockUserUserCase = DefaultBlockUserUseCase(chatRepository: chatRepository)
-    private lazy var postChatDetailUseCase = DefaultPostChatDetailUseCase(chatRepository: chatRepository)
+    private let chatRepository = DefaultLostItemRepository(service: DefaultLostItemService())
+    private lazy var fetchChatDetailUseCase = DefaultLostItemFetchChatDetailUseCase(chatRepository: chatRepository)
+    private lazy var blockUserUserCase = DefaultLostItemBlockUserUseCase(chatRepository: chatRepository)
+    private lazy var postChatDetailUseCase = DefaultLostItemPostChatDetailUseCase(chatRepository: chatRepository)
     private let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private lazy var uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
-    private lazy var fetchChatRoomUseCase = DefaultFetchChatRoomUseCase(chatRepository: chatRepository)
+    private lazy var fetchChatRoomUseCase = DefaultLostItemFetchChatRoomUseCase(chatRepository: chatRepository)
     let articleId: Int
     let chatRoomId: Int
     private var articleTitle: String?
@@ -76,7 +76,7 @@ final class ChatViewModel: ViewModelProtocol {
     
 }
 
-extension ChatViewModel {
+extension LostItemChatViewModel {
     
     private func uploadFiles(files: [Data]) {
         uploadFileUseCase.execute(files: files, domain: .lostItem).sink { [weak self] completion in
@@ -106,10 +106,10 @@ extension ChatViewModel {
         pollingSubscriptions = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
             .prepend(Date())
-            .flatMap { [weak self] _ -> AnyPublisher<[ChatMessage], Never> in
+            .flatMap { [weak self] _ -> AnyPublisher<[LostItemChatMessage], Never> in
                 guard let self else { return Empty().eraseToAnyPublisher() }
                 return fetchChatDetailUseCase.execute(userId: UserDataManager.shared.id, articleId: articleId, chatRoomId: chatRoomId)
-                    .catch { error -> AnyPublisher<[ChatMessage], Never> in
+                    .catch { error -> AnyPublisher<[LostItemChatMessage], Never> in
                         return Empty().eraseToAnyPublisher()
                     }
                     .eraseToAnyPublisher()
