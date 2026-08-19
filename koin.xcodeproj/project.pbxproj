@@ -736,6 +736,10 @@
 		AA20000000000000000004 /* DateProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000004 /* DateProviderTests.swift */; };
 		AA20000000000000000005 /* FetchDiningListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000005 /* FetchDiningListUseCaseTests.swift */; };
 		AA20000000000000000006 /* ShareMenuListUseCaseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000006 /* ShareMenuListUseCaseTests.swift */; };
+		AA20000000000000000007 /* DiningLoggingTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000007 /* DiningLoggingTestSupport.swift */; };
+		AA20000000000000000008 /* DiningViewModelStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000008 /* DiningViewModelStubs.swift */; };
+		AA20000000000000000009 /* DiningLoggingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000009 /* DiningLoggingTests.swift */; };
+		AA20000000000000000010 /* DiningTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000010 /* DiningTypeTests.swift */; };
 		B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* OrderImage.swift */; };
 		B46B8CC22E76CB7300A8E797 /* ShopSummaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */; };
 		B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */; };
@@ -1744,6 +1748,10 @@
 		AA10000000000000000004 /* DateProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateProviderTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000005 /* FetchDiningListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListUseCaseTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000006 /* ShareMenuListUseCaseTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCaseTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000007 /* DiningLoggingTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLoggingTestSupport.swift; sourceTree = "<group>"; };
+		AA10000000000000000008 /* DiningViewModelStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningViewModelStubs.swift; sourceTree = "<group>"; };
+		AA10000000000000000009 /* DiningLoggingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLoggingTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000010 /* DiningTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningTypeTests.swift; sourceTree = "<group>"; };
 		B438AEE32E756AB600E889C4 /* OrderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderImage.swift; sourceTree = "<group>"; };
 		B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDto.swift; sourceTree = "<group>"; };
 		B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopSummaryFromShopUseCase.swift; sourceTree = "<group>"; };
@@ -4564,6 +4572,7 @@
 			children = (
 				AA10000000000000000001 /* PublisherTestSupport.swift */,
 				AA10000000000000000002 /* DiningFixtures.swift */,
+				AA10000000000000000007 /* DiningLoggingTestSupport.swift */,
 			);
 			path = Support;
 			sourceTree = "<group>";
@@ -4572,6 +4581,7 @@
 			isa = PBXGroup;
 			children = (
 				AA10000000000000000003 /* SpyDiningRepository.swift */,
+				AA10000000000000000008 /* DiningViewModelStubs.swift */,
 			);
 			path = Doubles;
 			sourceTree = "<group>";
@@ -4582,6 +4592,8 @@
 				AA10000000000000000004 /* DateProviderTests.swift */,
 				AA10000000000000000005 /* FetchDiningListUseCaseTests.swift */,
 				AA10000000000000000006 /* ShareMenuListUseCaseTests.swift */,
+				AA10000000000000000009 /* DiningLoggingTests.swift */,
+				AA10000000000000000010 /* DiningTypeTests.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6660,6 +6672,10 @@
 				AA20000000000000000004 /* DateProviderTests.swift in Sources */,
 				AA20000000000000000005 /* FetchDiningListUseCaseTests.swift in Sources */,
 				AA20000000000000000006 /* ShareMenuListUseCaseTests.swift in Sources */,
+				AA20000000000000000007 /* DiningLoggingTestSupport.swift in Sources */,
+				AA20000000000000000008 /* DiningViewModelStubs.swift in Sources */,
+				AA20000000000000000009 /* DiningLoggingTests.swift in Sources */,
+				AA20000000000000000010 /* DiningTypeTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

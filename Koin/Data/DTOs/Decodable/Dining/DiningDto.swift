@@ -35,7 +35,20 @@ struct DiningDto: Decodable {
     }
     
     func toDomain() -> DiningItem {
-        return .init(id: id, type: type, place: place, priceCard: priceCard, priceCash: priceCash, kcal: kcal ?? 0, menu: menu ?? [], soldoutAt: soldoutAt, changedAt: changedAt, imageUrl: imageURL, likes: likes, isLiked: isLiked, date: date
+        return .init(
+            id: id,
+            type: type,
+            place: place,
+            priceCard: priceCard,
+            priceCash: priceCash,
+            kcal: kcal ?? 0,
+            menu: menu ?? [],
+            soldoutAt: soldoutAt,
+            changedAt: changedAt,
+            imageUrl: imageURL,
+            likes: likes,
+            isLiked: isLiked,
+            date: date
         )
     }
 }
@@ -50,7 +63,16 @@ enum DiningType: String, Decodable {
         let rawValue = try container.decode(String.self)
         self = DiningType(rawValue: rawValue) ?? .breakfast
     }
-    
+
+    init?(segmentIndex: Int) {
+        switch segmentIndex {
+        case 0: self = .breakfast
+        case 1: self = .lunch
+        case 2: self = .dinner
+        default: return nil
+        }
+    }
+
     var name: String {
         switch self {
         case .breakfast : "아침"

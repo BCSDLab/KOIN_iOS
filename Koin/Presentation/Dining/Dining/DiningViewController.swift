@@ -14,8 +14,8 @@ final class DiningViewController: UIViewController {
     // MARK: - Properties
     
     private let viewModel: DiningViewModel
-    private let inputSubject: PassthroughSubject<DiningViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    let inputSubject: PassthroughSubject<DiningViewModel.Input, Never> = .init()
     private let refreshControl = UIRefreshControl()
     private var viewDidAppeared = false
     
@@ -33,7 +33,7 @@ final class DiningViewController: UIViewController {
         }
     }()
     
-    private let diningTypeSegmentControl = UISegmentedControl().then {
+    let diningTypeSegmentControl = UISegmentedControl().then {
         $0.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
         $0.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
         $0.insertSegment(withTitle: "아침", at: 0, animated: true)
@@ -62,7 +62,7 @@ final class DiningViewController: UIViewController {
         $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
     }
     
-    private let diningListCollectionView: DiningCollectionView = {
+    let diningListCollectionView: DiningCollectionView = {
         let flowLayout = UICollectionViewFlowLayout().then {
             $0.scrollDirection = .vertical
         }
@@ -131,11 +131,7 @@ final class DiningViewController: UIViewController {
         super.viewDidAppear(true)
         checkAndShowBottomSheet()
         if viewDidAppeared {
-            switch diningTypeSegmentControl.selectedSegmentIndex {
-            case 0: inputSubject.send(.updateDisplayDateTime(nil, .breakfast))
-            case 1: inputSubject.send(.updateDisplayDateTime(nil, .lunch))
-            default: inputSubject.send(.updateDisplayDateTime(nil, .dinner))
-            }
+            inputSubject.send(.updateDisplayDateTime(nil, currentDiningType))
         }
         viewDidAppeared = true
 
@@ -151,7 +147,7 @@ final class DiningViewController: UIViewController {
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            guard let strongSelf = self else { return }
+            guard self != nil else { return }
             switch output {
             case let .updateDiningList(list, diningType):
                 self?.setDiningList(list)
@@ -177,7 +173,7 @@ final class DiningViewController: UIViewController {
             zoomedImageViewController.setImage(tappedDiningImage)
             self.present(zoomedImageViewController, animated: true, completion: nil)
             
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuImage, .click, "\(self.getCurrentDiningType())_\(tappedPlaceText)"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuImage, .click, "\(self.currentDiningType.name)_\(tappedPlaceText)"))
             
         }.store(in: &subscriptions)
         
@@ -188,7 +184,7 @@ final class DiningViewController: UIViewController {
         
         diningListCollectionView.logScrollPublisher.sink { [weak self] _ in
             guard let self = self else { return }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .scroll, self.getCurrentDiningType()))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .scroll, self.currentDiningType.name))
         }.store(in: &subscriptions)
         
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).sink { [weak self] _ in
@@ -215,7 +211,7 @@ extension DiningViewController {
         diningListCollectionView.addGestureRecognizer(swipeRightGesture)
     }
     
-    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
         let currentSegmentIndex = diningTypeSegmentControl.selectedSegmentIndex
         if gesture.direction == .left {
             if currentSegmentIndex < diningTypeSegmentControl.numberOfSegments - 1 {
@@ -230,14 +226,9 @@ extension DiningViewController {
     }
     
     @objc private func refresh() {
-        switch diningTypeSegmentControl.selectedSegmentIndex {
-        case 0: inputSubject.send(.updateDisplayDateTime(nil, .breakfast))
-        case 1: inputSubject.send(.updateDisplayDateTime(nil, .lunch))
-        default: inputSubject.send(.updateDisplayDateTime(nil, .dinner))
-        }
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .click, getCurrentDiningType()))
-        
+        inputSubject.send(.updateDisplayDateTime(nil, currentDiningType))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .click, currentDiningType.name))
+
         refreshControl.endRefreshing()
     }
     
@@ -284,13 +275,10 @@ extension DiningViewController {
     }
     
     @objc private func segmentDidChange(_ sender: UISegmentedControl) {
-        switch sender.selectedSegmentIndex {
-        case 0: inputSubject.send(.updateDisplayDateTime(nil, .breakfast))
-        case 1: inputSubject.send(.updateDisplayDateTime(nil, .lunch))
-        default: inputSubject.send(.updateDisplayDateTime(nil, .dinner))
-        }
-        
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .click, getCurrentDiningType()))
+        let diningType = DiningType(segmentIndex: sender.selectedSegmentIndex) ?? .dinner
+
+        inputSubject.send(.updateDisplayDateTime(nil, diningType))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .click, diningType.name))
     }
     
     private func moveUnderLineView(diningType: DiningType) {
@@ -332,12 +320,8 @@ extension DiningViewController {
         diningListCollectionView.setDiningList(list)
     }
     
-    private func getCurrentDiningType() -> String {
-        switch diningTypeSegmentControl.selectedSegmentIndex {
-        case 0: return "아침"
-        case 1: return "점심"
-        default: return "저녁"
-        }
+    private var currentDiningType: DiningType {
+        DiningType(segmentIndex: diningTypeSegmentControl.selectedSegmentIndex) ?? .dinner
     }
 }
 
