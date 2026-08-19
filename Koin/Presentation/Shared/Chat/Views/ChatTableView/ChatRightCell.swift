@@ -1,5 +1,5 @@
 //
-//  CallVanChatLeftCell.swift
+//  ChatRightCell.swift
 //  koin
 //
 //  Created by 홍기정 on 3/9/26.
@@ -10,7 +10,7 @@ import Combine
 import SnapKit
 import Then
 
-final class CallVanChatLeftCell: UITableViewCell {
+final class ChatRightCell: UITableViewCell {
     
     // MARK: - Properties
     let imageTappedPublisher = PassthroughSubject<String, Never>()
@@ -31,9 +31,6 @@ final class CallVanChatLeftCell: UITableViewCell {
     private let contentsStackView = UIStackView()
     
     private let profileWrapperView = UIView()
-    private let profileImageView = UIImageView()
-    private let nicknameLabel = UILabel()
-    private let leftUserLabel = UILabel()
     
     private let messageImageWrapperView = UIView()
     private let messageImageView = UIImageView()
@@ -55,35 +52,33 @@ final class CallVanChatLeftCell: UITableViewCell {
     }
     
     // MARK: - Public
-    func configure(message: CallVanChatMessage) {
+    func configure(message: ChatMessageRowModel) {
         
         // MARK: 프로필
-        profileWrapperView.isHidden = !message.showProfile
-        profileImageView.image = message.profileImage
-        nicknameLabel.text = message.senderNickname
-        leftUserLabel.isHidden = !message.isLeftUser
+        profileWrapperView.isHidden = !message.showsProfile
         
         // MARK: 이미지
-        messageImageWrapperView.isHidden = !message.isImage
-        if message.isImage {
-            imageUrl = message.content
-            messageImageView.loadImageWithSpinner(from: message.content)
-            messageImageTimeLabel.text = message.time
-        }
-        
-        // MARK: 텍스트
-        messageTextWrapperView.isHidden = message.isImage
-        if !message.isImage {
+        switch message.content {
+        case .image(let imageUrl):
+            messageImageWrapperView.isHidden = false
+            messageTextWrapperView.isHidden = true
+            self.imageUrl = imageUrl
+            messageImageView.loadImageWithSpinner(from: imageUrl)
+            messageImageTimeLabel.text = message.timeText
+        case .text(let text):
+            messageImageWrapperView.isHidden = true
+            messageTextWrapperView.isHidden = false
+            imageUrl = nil
             messageTextLabel.attributedText = NSAttributedString(
-                string: message.content,
+                string: text,
                 attributes: messageTextLabelAttributes
             )
-            messageTextTimeLabel.text = message.time
+            messageTextTimeLabel.text = message.timeText
         }
     }
 }
 
-extension CallVanChatLeftCell {
+extension ChatRightCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         messageImageView.image = nil
@@ -106,7 +101,7 @@ extension CallVanChatLeftCell {
     }
 }
 
-extension CallVanChatLeftCell {
+extension ChatRightCell {
     
     private func configureView() {
         setUpStyles()
@@ -120,19 +115,8 @@ extension CallVanChatLeftCell {
         contentsStackView.do {
             $0.axis = .vertical
             $0.spacing = 8
-            $0.alignment = .leading
+            $0.alignment = .trailing
             $0.distribution = .fillProportionally
-        }
-        
-        // MARK: 닉네임
-        nicknameLabel.do {
-            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-            $0.textColor = UIColor.appColor(.neutral600)
-        }
-        leftUserLabel.do {
-            $0.font = UIFont.appFont(.pretendardRegular, size: 10)
-            $0.textColor = UIColor.appColor(.new500)
-            $0.text = "(나간 사용자)"
         }
         
         // MARK: 이미지
@@ -163,9 +147,6 @@ extension CallVanChatLeftCell {
     }
     
     private func setUpLayouts() {
-        [profileImageView, nicknameLabel, leftUserLabel].forEach {
-            profileWrapperView.addSubview($0)
-        }
         [messageImageView, messageImageTimeLabel].forEach {
             messageImageWrapperView.addSubview($0)
         }
@@ -188,34 +169,24 @@ extension CallVanChatLeftCell {
         }
         
         // MARK: 프로필
-        profileImageView.snp.makeConstraints {
-            $0.top.equalTo(profileWrapperView).offset(8)
-            $0.leading.bottom.equalTo(profileWrapperView)
-            $0.size.equalTo(32)
-        }
-        nicknameLabel.snp.makeConstraints {
-            $0.centerY.equalTo(profileImageView)
-            $0.leading.equalTo(profileImageView.snp.trailing).offset(8)
-        }
-        leftUserLabel.snp.makeConstraints {
-            $0.centerY.equalTo(profileImageView)
-            $0.leading.equalTo(nicknameLabel.snp.trailing).offset(4)
+        profileWrapperView.snp.makeConstraints {
+            $0.height.equalTo(0)
         }
         
         // MARK: 이미지
         messageImageView.snp.makeConstraints {
             $0.size.equalTo(168)
-            $0.top.leading.bottom.equalTo(messageImageWrapperView)
+            $0.top.trailing.bottom.equalTo(messageImageWrapperView)
         }
         messageImageTimeLabel.snp.makeConstraints {
             $0.height.equalTo(19)
-            $0.leading.equalTo(messageImageView.snp.trailing).offset(8)
-            $0.bottom.trailing.equalTo(messageImageWrapperView)
+            $0.trailing.equalTo(messageImageView.snp.leading).offset(-8)
+            $0.bottom.leading.equalTo(messageImageWrapperView)
         }
         
         // MARK: 텍스트
         messageTextView.snp.makeConstraints {
-            $0.top.leading.bottom.equalTo(messageTextWrapperView)
+            $0.top.trailing.bottom.equalTo(messageTextWrapperView)
         }
         messageTextLabel.snp.makeConstraints {
             $0.width.lessThanOrEqualTo(UIScreen.main.bounds.width / 2)
@@ -224,8 +195,8 @@ extension CallVanChatLeftCell {
         }
         messageTextTimeLabel.snp.makeConstraints {
             $0.height.equalTo(19)
-            $0.leading.equalTo(messageTextView.snp.trailing).offset(8)
-            $0.bottom.trailing.equalTo(messageTextWrapperView)
+            $0.trailing.equalTo(messageTextView.snp.leading).offset(-8)
+            $0.bottom.leading.equalTo(messageTextWrapperView)
         }
     }
 }

@@ -1,5 +1,5 @@
 //
-//  CallVanChatTableView.swift
+//  ChatTableView.swift
 //  koin
 //
 //  Created by 홍기정 on 3/9/26.
@@ -9,12 +9,12 @@ import UIKit
 import Combine
 import Then
 
-final class CallVanChatTableView: UITableView {
+final class ChatTableView: UITableView {
     
     // MARK: - Properties
     let imageTappedPublisher = PassthroughSubject<String, Never>()
     private var dates: [String] = []
-    private var messages: [[CallVanChatMessage]] = []
+    private var messages: [[ChatMessageRowModel]] = []
     
     // MARK: - Initializer
     init() {
@@ -26,14 +26,14 @@ final class CallVanChatTableView: UITableView {
     }
     
     // MARK: - Public
-    func configure(callVanChat: CallVanChat) {
-        self.dates = callVanChat.dates
-        self.messages = callVanChat.messages
+    func configure(model: ChatListModel) {
+        self.dates = model.dates
+        self.messages = model.messages
         reloadData()
     }
 }
 
-extension CallVanChatTableView {
+extension ChatTableView {
     
     private func commonInit() {
         allowsSelection = false
@@ -45,16 +45,16 @@ extension CallVanChatTableView {
         keyboardDismissMode = .interactiveWithAccessory
         delegate = self
         dataSource = self
-        register(CallVanChatLeftCell.self, forCellReuseIdentifier: CallVanChatLeftCell.identifier)
-        register(CallVanChatRightCell.self, forCellReuseIdentifier: CallVanChatRightCell.identifier)
-        register(CallVanChatDateHeaderView.self, forHeaderFooterViewReuseIdentifier: CallVanChatDateHeaderView.identifier)
+        register(ChatLeftCell.self, forCellReuseIdentifier: ChatLeftCell.identifier)
+        register(ChatRightCell.self, forCellReuseIdentifier: ChatRightCell.identifier)
+        register(ChatDateHeaderView.self, forHeaderFooterViewReuseIdentifier: ChatDateHeaderView.identifier)
     }
 }
 
-extension CallVanChatTableView: UITableViewDelegate {
+extension ChatTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: CallVanChatDateHeaderView.identifier) as? CallVanChatDateHeaderView else {
+        guard let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: ChatDateHeaderView.identifier) as? ChatDateHeaderView else {
             return nil
         }
         headerView.configure(date: dates[section])
@@ -62,7 +62,7 @@ extension CallVanChatTableView: UITableViewDelegate {
     }
 }
 
-extension CallVanChatTableView: UITableViewDataSource {
+extension ChatTableView: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return dates.count
@@ -75,15 +75,16 @@ extension CallVanChatTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let message = messages[indexPath.section][indexPath.row]
         
-        if message.isMine {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: CallVanChatRightCell.identifier, for: indexPath) as? CallVanChatRightCell else {
+        switch message.alignment {
+        case .right:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatRightCell.identifier, for: indexPath) as? ChatRightCell else {
                 return UITableViewCell()
             }
             cell.configure(message: message)
             bind(cell)
             return cell
-        } else {
-            guard let cell = tableView.dequeueReusableCell(withIdentifier: CallVanChatLeftCell.identifier, for: indexPath) as? CallVanChatLeftCell else {
+        case .left:
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: ChatLeftCell.identifier, for: indexPath) as? ChatLeftCell else {
                 return UITableViewCell()
             }
             cell.configure(message: message)
@@ -92,13 +93,13 @@ extension CallVanChatTableView: UITableViewDataSource {
         }
     }
     
-    private func bind(_ cell: CallVanChatLeftCell) {
+    private func bind(_ cell: ChatLeftCell) {
         cell.imageTappedPublisher.sink { [weak self] imageUrl in
             self?.imageTappedPublisher.send(imageUrl)
         }.store(in: &cell.subscriptions)
     }
     
-    private func bind(_ cell: CallVanChatRightCell) {
+    private func bind(_ cell: ChatRightCell) {
         cell.imageTappedPublisher.sink { [weak self] imageUrl in
             self?.imageTappedPublisher.send(imageUrl)
         }.store(in: &cell.subscriptions)

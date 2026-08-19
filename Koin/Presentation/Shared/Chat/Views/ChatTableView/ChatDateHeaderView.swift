@@ -1,5 +1,5 @@
 //
-//  CallVanChatDateHeaderView.swift
+//  ChatDateHeaderView.swift
 //  koin
 //
 //  Created by 홍기정 on 3/9/26.
@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class CallVanChatDateHeaderView: UITableViewHeaderFooterView {
+final class ChatDateHeaderView: UITableViewHeaderFooterView {
     
     // MARK: - UI Components
     private let dateView = UIView()
@@ -30,7 +30,7 @@ final class CallVanChatDateHeaderView: UITableViewHeaderFooterView {
     }
 }
 
-extension CallVanChatDateHeaderView {
+extension ChatDateHeaderView {
     
     private func configureView() {
         setUpStyles()

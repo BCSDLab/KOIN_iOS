@@ -405,10 +405,10 @@
 		7CC42B892F5D85F700940CE1 /* CallVanChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B882F5D85F700940CE1 /* CallVanChat.swift */; };
 		7CC42B8F2F5DCE7400940CE1 /* CallVanChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */; };
 		7CC42B912F5DCE7D00940CE1 /* CallVanChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B902F5DCE7D00940CE1 /* CallVanChatViewModel.swift */; };
-		7CC42B942F5DCEA600940CE1 /* CallVanChatTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B932F5DCEA600940CE1 /* CallVanChatTableView.swift */; };
-		7CC42B962F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B952F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift */; };
-		7CC42B982F5E812F00940CE1 /* CallVanChatLeftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B972F5E812F00940CE1 /* CallVanChatLeftCell.swift */; };
-		7CC42B9C2F5E834E00940CE1 /* CallVanChatRightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */; };
+		7CC42B942F5DCEA600940CE1 /* ChatTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B932F5DCEA600940CE1 /* ChatTableView.swift */; };
+		7CC42B962F5DCEB300940CE1 /* ChatDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B952F5DCEB300940CE1 /* ChatDateHeaderView.swift */; };
+		7CC42B982F5E812F00940CE1 /* ChatLeftCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B972F5E812F00940CE1 /* ChatLeftCell.swift */; };
+		7CC42B9C2F5E834E00940CE1 /* ChatRightCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B9B2F5E834E00940CE1 /* ChatRightCell.swift */; };
 		7CCB1E4B2F29D87C00472669 /* LostItemPostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* LostItemPostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* LostItemPostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* LostItemPostChatDetailRequest.swift */; };
 		7CD411EA2FEB92280079467B /* HomeTabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD411E92FEB92280079467B /* HomeTabBarItem.swift */; };
@@ -766,6 +766,11 @@
 		D19A00013000000000000002 /* NotificationRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000001 /* NotificationRowModel.swift */; };
 		D19A00013000000000000004 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000003 /* NotificationListView.swift */; };
 		D19A00013000000000000006 /* NotificationRowModel+NotificationHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */; };
+		D19A10013000000000000002 /* ChatListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A10013000000000000001 /* ChatListModel.swift */; };
+		D19A10013000000000000004 /* ChatMessageRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A10013000000000000003 /* ChatMessageRowModel.swift */; };
+		D19A10013000000000000006 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A10013000000000000005 /* ChatListView.swift */; };
+		D19A10013000000000000008 /* ChatInputView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A10013000000000000007 /* ChatInputView.swift */; };
+		D19A1001300000000000000A /* ChatListModel+CallVanChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A10013000000000000009 /* ChatListModel+CallVanChat.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
 		D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */; };
 		D2078BF62BC4CCEB00A39861 /* EventDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078BF52BC4CCEB00A39861 /* EventDto.swift */; };
@@ -1410,10 +1415,10 @@
 		7CC42B882F5D85F700940CE1 /* CallVanChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChat.swift; sourceTree = "<group>"; };
 		7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatViewController.swift; sourceTree = "<group>"; };
 		7CC42B902F5DCE7D00940CE1 /* CallVanChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatViewModel.swift; sourceTree = "<group>"; };
-		7CC42B932F5DCEA600940CE1 /* CallVanChatTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatTableView.swift; sourceTree = "<group>"; };
-		7CC42B952F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatDateHeaderView.swift; sourceTree = "<group>"; };
-		7CC42B972F5E812F00940CE1 /* CallVanChatLeftCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatLeftCell.swift; sourceTree = "<group>"; };
-		7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatRightCell.swift; sourceTree = "<group>"; };
+		7CC42B932F5DCEA600940CE1 /* ChatTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatTableView.swift; sourceTree = "<group>"; };
+		7CC42B952F5DCEB300940CE1 /* ChatDateHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDateHeaderView.swift; sourceTree = "<group>"; };
+		7CC42B972F5E812F00940CE1 /* ChatLeftCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLeftCell.swift; sourceTree = "<group>"; };
+		7CC42B9B2F5E834E00940CE1 /* ChatRightCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRightCell.swift; sourceTree = "<group>"; };
 		7CCB1E4A2F29D87C00472669 /* LostItemPostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemPostChatDetailUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4D2F29DB3200472669 /* LostItemPostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemPostChatDetailRequest.swift; sourceTree = "<group>"; };
 		7CD411E92FEB92280079467B /* HomeTabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarItem.swift; sourceTree = "<group>"; };
@@ -1774,6 +1779,11 @@
 		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
 		D19A00013000000000000003 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
 		D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationRowModel+NotificationHistoryItem.swift"; sourceTree = "<group>"; };
+		D19A10013000000000000001 /* ChatListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListModel.swift; sourceTree = "<group>"; };
+		D19A10013000000000000003 /* ChatMessageRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageRowModel.swift; sourceTree = "<group>"; };
+		D19A10013000000000000005 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
+		D19A10013000000000000007 /* ChatInputView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatInputView.swift; sourceTree = "<group>"; };
+		D19A10013000000000000009 /* ChatListModel+CallVanChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatListModel+CallVanChat.swift"; sourceTree = "<group>"; };
 		D2009F752C17270F00211D1B /* CalendarDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDate.swift; sourceTree = "<group>"; };
 		D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnalyticsService.swift; sourceTree = "<group>"; };
 		D2078BF52BC4CCEB00A39861 /* EventDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDto.swift; sourceTree = "<group>"; };
@@ -3253,30 +3263,19 @@
 		7CC42B8A2F5DCE4800940CE1 /* CallVanChat */ = {
 			isa = PBXGroup;
 			children = (
-				7CC42B8B2F5DCE5700940CE1 /* Subviews */,
+				7CC42B8B2F5DCE5700940CE1 /* Support */,
 				7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */,
 				7CC42B902F5DCE7D00940CE1 /* CallVanChatViewModel.swift */,
 			);
 			path = CallVanChat;
 			sourceTree = "<group>";
 		};
-		7CC42B8B2F5DCE5700940CE1 /* Subviews */ = {
+		7CC42B8B2F5DCE5700940CE1 /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				7CC42B922F5DCE9800940CE1 /* CallVanChatTableView */,
+				D19A10013000000000000009 /* ChatListModel+CallVanChat.swift */,
 			);
-			path = Subviews;
-			sourceTree = "<group>";
-		};
-		7CC42B922F5DCE9800940CE1 /* CallVanChatTableView */ = {
-			isa = PBXGroup;
-			children = (
-				7CC42B932F5DCEA600940CE1 /* CallVanChatTableView.swift */,
-				7CC42B952F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift */,
-				7CC42B972F5E812F00940CE1 /* CallVanChatLeftCell.swift */,
-				7CC42B9B2F5E834E00940CE1 /* CallVanChatRightCell.swift */,
-			);
-			path = CallVanChatTableView;
+			path = Support;
 			sourceTree = "<group>";
 		};
 		7CCB1E4C2F29DB2500472669 /* LostItemChat */ = {
@@ -4665,6 +4664,7 @@
 		D19A00013000000000000007 /* Shared */ = {
 			isa = PBXGroup;
 			children = (
+				D19A1001300000000000000C /* Chat */,
 				D19A00013000000000000008 /* Notification */,
 			);
 			path = Shared;
@@ -4693,6 +4693,45 @@
 				D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		D19A1001300000000000000C /* Chat */ = {
+			isa = PBXGroup;
+			children = (
+				D19A1001300000000000000D /* Models */,
+				D19A1001300000000000000E /* Views */,
+			);
+			path = Chat;
+			sourceTree = "<group>";
+		};
+		D19A1001300000000000000D /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D19A10013000000000000001 /* ChatListModel.swift */,
+				D19A10013000000000000003 /* ChatMessageRowModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D19A1001300000000000000E /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				D19A10013000000000000005 /* ChatListView.swift */,
+				D19A10013000000000000007 /* ChatInputView.swift */,
+				7CC42B922F5DCE9800940CE1 /* ChatTableView */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		7CC42B922F5DCE9800940CE1 /* ChatTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B932F5DCEA600940CE1 /* ChatTableView.swift */,
+				7CC42B952F5DCEB300940CE1 /* ChatDateHeaderView.swift */,
+				7CC42B972F5E812F00940CE1 /* ChatLeftCell.swift */,
+				7CC42B9B2F5E834E00940CE1 /* ChatRightCell.swift */,
+			);
+			path = ChatTableView;
 			sourceTree = "<group>";
 		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
@@ -5800,7 +5839,7 @@
 				D874DB4D2DBF1A6C0098EED0 /* SendVerificationCodeUsecase.swift in Sources */,
 				7CC42B622F59D0EF00940CE1 /* CallVanPostPlaceView.swift in Sources */,
 				D27DD0E42BA609F30081FD36 /* ShopDataDto.swift in Sources */,
-				7CC42B9C2F5E834E00940CE1 /* CallVanChatRightCell.swift in Sources */,
+				7CC42B9C2F5E834E00940CE1 /* ChatRightCell.swift in Sources */,
 				D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */,
 				D27DD0CB2BA608310081FD36 /* ShopCategoryDto.swift in Sources */,
 				7C6790B32FCC5B2A0045E163 /* TimetableColorAsset.swift in Sources */,
@@ -5836,7 +5875,7 @@
 				D27DD0CC2BA608310081FD36 /* ShopsDto.swift in Sources */,
 				7C61D3632F242D8D005FAC3A /* AddLostItemHeaderView.swift in Sources */,
 				D874DB492DBE31530098EED0 /* CheckDuplicatedPhoneNumberUseCase.swift in Sources */,
-				7CC42B982F5E812F00940CE1 /* CallVanChatLeftCell.swift in Sources */,
+				7CC42B982F5E812F00940CE1 /* ChatLeftCell.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
@@ -6183,7 +6222,7 @@
 				7C8A00012FD000000011D338 /* HomeViewModel.swift in Sources */,
 				7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */,
 				7C61D34B2F220EB3005FAC3A /* EditLostItemFoundPlaceView.swift in Sources */,
-				7CC42B942F5DCEA600940CE1 /* CallVanChatTableView.swift in Sources */,
+				7CC42B942F5DCEA600940CE1 /* ChatTableView.swift in Sources */,
 				7CED917D2EF2D1F900457128 /* ReviewImageUploadCollectionView.swift in Sources */,
 				7CED917F2EF2D1F900457128 /* NoticeListViewController.swift in Sources */,
 				7CED91822EF2D1F900457128 /* DeliveryTipsCollectionView.swift in Sources */,
@@ -6352,7 +6391,7 @@
 				7C6403FE300F36F200A9589F /* DepartmentAPI.swift in Sources */,
 				7CA60D632F66197C007C08C1 /* CallVanRepository.swift in Sources */,
 				7C0C188F2F67F8BA001781B3 /* CallVanDataDto.swift in Sources */,
-				7CC42B962F5DCEB300940CE1 /* CallVanChatDateHeaderView.swift in Sources */,
+				7CC42B962F5DCEB300940CE1 /* ChatDateHeaderView.swift in Sources */,
 				7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */,
 				7C8A943B2FD424A600DEA6F5 /* WeatherDto.swift in Sources */,
 				7CED91DF2EF2D1F900457128 /* NotiViewController.swift in Sources */,
@@ -6485,6 +6524,11 @@
 				D19A00013000000000000002 /* NotificationRowModel.swift in Sources */,
 				D19A00013000000000000004 /* NotificationListView.swift in Sources */,
 				D19A00013000000000000006 /* NotificationRowModel+NotificationHistoryItem.swift in Sources */,
+				D19A10013000000000000002 /* ChatListModel.swift in Sources */,
+				D19A10013000000000000004 /* ChatMessageRowModel.swift in Sources */,
+				D19A10013000000000000006 /* ChatListView.swift in Sources */,
+				D19A10013000000000000008 /* ChatInputView.swift in Sources */,
+				D19A1001300000000000000A /* ChatListModel+CallVanChat.swift in Sources */,
 				7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */,
 				7C8BFCF12FD04B800963679 /* HomeCounts.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDto.swift in Sources */,

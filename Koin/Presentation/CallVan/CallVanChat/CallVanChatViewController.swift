@@ -17,7 +17,6 @@ final class CallVanChatViewController: UIViewController {
     private let inputSubject = PassthroughSubject<CallVanChatViewModel.Input, Never>()
     private let viewModel: CallVanChatViewModel
     private var subscriptions: Set<AnyCancellable> = []
-    private let textViewPlaceHolder = "메시지 보내기"
     
     // MARK: - TitleView
     private lazy var titleLabel = UILabel()
@@ -27,11 +26,7 @@ final class CallVanChatViewController: UIViewController {
     private lazy var titleView = UIView()
     
     // MARK: - UI Components
-    private let callVanChatTableView = CallVanChatTableView()
-    private let wrapperView = UIView()
-    private let sendImageButton = UIButton()
-    private let messageTextView = UITextView()
-    private let sendMessageButton = UIButton()
+    private let chatListView = ChatListView()
     
     // MARK: - Initializer
     init(viewModel: CallVanChatViewModel) {
@@ -46,10 +41,7 @@ final class CallVanChatViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        setDelegate()
-        setAddTargets()
         bind()
-        setGesture()
         configureNavigationBar(style: .empty)
         inputSubject.send(.viewDidLoad)
     }
@@ -71,55 +63,47 @@ final class CallVanChatViewController: UIViewController {
             case let .showToast(message):
                 showToastMessage(message: message)
             case let .update(callVanChat):
-                callVanChatTableView.configure(callVanChat: callVanChat)
+                chatListView.update(model: ChatListModel(from: callVanChat))
             case let .updateData(callVanData):
                 configureNavigationBar(callVanData)
             }
         }.store(in: &subscriptions)
-        
-        callVanChatTableView.imageTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] imageUrl in
-            let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
-            zoomedImageViewController.configure(url: imageUrl)
-            zoomedImageViewController.modalTransitionStyle = .crossDissolve
-            zoomedImageViewController.modalPresentationStyle = .overFullScreen
-            self?.present(zoomedImageViewController, animated: true)
-        }.store(in: &subscriptions)
-    }
-}
 
-extension CallVanChatViewController {
-    
-    private func setGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapAround))
-        tapGesture.cancelsTouchesInView = false
-        callVanChatTableView.addGestureRecognizer(tapGesture)
-    }
-    
-    private func setAddTargets() {
-        sendImageButton.addTarget(self, action: #selector(sendImageButtonTapped), for: .touchUpInside)
-        sendMessageButton.addTarget(self, action: #selector(sendMessageButtonTapped), for: .touchUpInside)
-    }
-    
-    @objc private func didTapAround() {
-        dismissKeyboard()
-    }
-    
-    @objc private func sendMessageButtonTapped() {
-        guard messageTextView.textColor == UIColor.appColor(.neutral800) else {
-            return
-        }
-        let text = messageTextView.text.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !text.isEmpty {
-            inputSubject.send(.sendMessage(text))
-            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanChatSend, category: .click, value: ""))
-            messageTextView.text = ""
-        }
+        chatListView.messageSendPublisher
+            .sink { [weak self] message in
+                self?.inputSubject.send(.sendMessage(message))
+                self?.inputSubject.send(
+                    .logEvent(
+                        label: EventParameter.EventLabel.Campus.callvanChatSend,
+                        category: .click,
+                        value: ""
+                    )
+                )
+            }
+            .store(in: &subscriptions)
+
+        chatListView.imageSendTappedPublisher
+            .sink { [weak self] in
+                self?.presentImagePicker()
+            }
+            .store(in: &subscriptions)
+
+        chatListView.imageTappedPublisher
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] imageUrl in
+                let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
+                zoomedImageViewController.configure(url: imageUrl)
+                zoomedImageViewController.modalTransitionStyle = .crossDissolve
+                zoomedImageViewController.modalPresentationStyle = .overFullScreen
+                self?.present(zoomedImageViewController, animated: true)
+            }
+            .store(in: &subscriptions)
     }
 }
 
 extension CallVanChatViewController: PHPickerViewControllerDelegate {
     
-    @objc private func sendImageButtonTapped() {
+    private func presentImagePicker() {
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
         configuration.selectionLimit = 1
@@ -150,27 +134,6 @@ extension CallVanChatViewController: PHPickerViewControllerDelegate {
             return
         }
         inputSubject.send(.sendImage(imageData))
-    }
-}
-
-extension CallVanChatViewController: UITextViewDelegate {
-    
-    private func setDelegate() {
-        messageTextView.delegate = self
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == UIColor.appColor(.neutral500) {
-            textView.text = ""
-            textView.textColor = UIColor.appColor(.neutral800)
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).count == 0 {
-            textView.text = textViewPlaceHolder
-            textView.textColor = UIColor.appColor(.neutral500)
-        }
     }
 }
 
@@ -213,41 +176,6 @@ extension CallVanChatViewController {
     
     private func setUpStyles() {
         view.backgroundColor = UIColor.appColor(.neutral100)
-        
-        // MARK: - UI Components
-        callVanChatTableView.do {
-            $0.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
-            $0.backgroundColor = .white
-            $0.separatorStyle = .none
-            $0.showsVerticalScrollIndicator = false
-        }
-        wrapperView.do {
-            $0.backgroundColor = UIColor.appColor(.neutral100)
-        }
-        sendImageButton.do {
-            $0.setImage(UIImage.appImage(asset: .callVanSendImage), for: .normal)
-            $0.backgroundColor = UIColor.appColor(.neutral0)
-            $0.layer.cornerRadius = 12
-            $0.clipsToBounds = true
-        }
-        messageTextView.do {
-            let font = UIFont.appFont(.pretendardRegular, size: 12)
-            let height: CGFloat = 32
-            let topBottomInset = (height - font.lineHeight) / 2
-            
-            $0.isScrollEnabled = false
-            $0.font = font
-            $0.backgroundColor = UIColor.appColor(.neutral0)
-            $0.textContainerInset = UIEdgeInsets(top: topBottomInset, left: 16, bottom: topBottomInset, right: 16)
-            $0.layer.cornerRadius = 12
-            $0.text = textViewPlaceHolder
-            $0.textColor = UIColor.appColor(.neutral500)
-        }
-        sendMessageButton.do {
-            $0.setImage(UIImage.appImage(asset: .callVanSendMessage), for: .normal)
-            $0.layer.cornerRadius = 12
-            $0.clipsToBounds = true
-        }
     }
     
     private func setUpLayouts() {
@@ -260,12 +188,7 @@ extension CallVanChatViewController {
         }
         
         // MARK: - UI Components
-        [sendImageButton, messageTextView, sendMessageButton].forEach {
-            wrapperView.addSubview($0)
-        }
-        [callVanChatTableView, wrapperView].forEach {
-            view.addSubview($0)
-        }
+        view.addSubview(chatListView)
     }
     
     private func setUpConstraints() {
@@ -286,30 +209,9 @@ extension CallVanChatViewController {
         }
         
         // MARK: - UI Components
-        callVanChatTableView.snp.makeConstraints {
+        chatListView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(wrapperView.snp.top)
-        }
-        wrapperView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
-        }
-        sendImageButton.snp.makeConstraints {
-            $0.size.equalTo(32)
-            $0.top.equalTo(wrapperView).offset(8)
-            $0.leading.equalTo(wrapperView).offset(24)
-        }
-        sendMessageButton.snp.makeConstraints {
-            $0.size.equalTo(32)
-            $0.top.equalTo(wrapperView).offset(8)
-            $0.trailing.equalTo(wrapperView).offset(-24)
-        }
-        messageTextView.snp.makeConstraints {
-            $0.top.bottom.equalTo(wrapperView).inset(8)
-            $0.leading.equalTo(sendImageButton.snp.trailing).offset(8)
-            $0.trailing.equalTo(sendMessageButton.snp.leading).offset(-8)
-            $0.bottom.greaterThanOrEqualTo(sendImageButton)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
     }
 }
