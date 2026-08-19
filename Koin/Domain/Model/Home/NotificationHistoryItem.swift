@@ -19,6 +19,25 @@ struct NotificationHistoryItem {
 }
 
 extension NotificationHistoryItem {
+    var logValue: String? {
+        switch appPath {
+        case .shop:
+            return "주변상점"
+        case .dining:
+            return "식단"
+        case .keyword:
+            return "키워드알림"
+        case .chat:
+            return "분실물 채팅"
+        case .callvan:
+            return "콜밴팟"
+        case .callvanChat:
+            return "콜밴팟 채팅"
+        default:
+            return nil
+        }
+    }
+
     init?(from record: NotificationHistoryRecord) {
         guard let icon = NotificationHistoryItem.icon(for: record.category) else {
             return nil

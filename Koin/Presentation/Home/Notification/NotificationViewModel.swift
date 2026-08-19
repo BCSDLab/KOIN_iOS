@@ -13,15 +13,16 @@ final class NotificationViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case reload
+        case selectNotification(id: String)
         case deleteNotification(id: String)
         case deleteAllNotifications
-        case markAsRead(id: String)
         case markAllAsRead
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     enum Output {
         case updateNotifications([NotificationHistoryItem])
+        case selectedNotification(NotificationHistoryItem)
         case showToast(String)
     }
     
@@ -56,12 +57,12 @@ final class NotificationViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad, .reload:
                 self?.loadNotifications()
+            case .selectNotification(let id):
+                self?.selectNotification(id: id)
             case .deleteNotification(let id):
                 self?.deleteNotification(id: id)
             case .deleteAllNotifications:
                 self?.deleteAllNotifications()
-            case .markAsRead(let id):
-                self?.markAsRead(id: id)
             case .markAllAsRead:
                 self?.markAllAsRead()
             case let .logEvent(label, category, value):
@@ -88,6 +89,13 @@ private extension NotificationViewModel {
             }
         }
     }
+        if let logValue = notification.logValue {
+            makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.notificationList,
+                category: .click,
+                value: logValue
+            )
+        }
 
     private func deleteNotification(id: String) {
         Task {

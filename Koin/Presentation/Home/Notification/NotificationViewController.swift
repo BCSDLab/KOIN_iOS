@@ -83,32 +83,11 @@ private extension NotificationViewController {
         
         notificationTableView.tapNotificationPublisher
             .sink { [weak self] item in
-                self?.inputSubject.send(.markAsRead(id: item.id))
+                self?.inputSubject.send(.selectNotification(id: id))
                 self?.makeLogEvent(notification: item)
                 self?.handleNavigation(item)
             }
             .store(in: &subscriptions)
-    }
-}
-
-extension NotificationViewController {
-    private func makeLogEvent(notification: NotificationItem) {
-        let logValue: String
-        switch notification.appPath {
-        case .shop:
-            logValue = "주변상점"
-        case .dining:
-            logValue = "식단"
-        case .keyword:
-            logValue = "키워드알림"
-        case .chat:
-            logValue = "분실물 채팅"
-        case .callvan:
-            logValue = "콜밴팟"
-        case .callvanChat:
-            logValue = "콜밴팟 채팅"
-        }
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, logValue))
     }
 }
 
