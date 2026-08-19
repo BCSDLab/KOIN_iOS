@@ -11,6 +11,7 @@ import Then
 
 final class NotificationFooterView: UIView {
     
+    // MARK: - UI Components
     private let label = UILabel()
 
     override init(frame: CGRect) {

@@ -18,8 +18,8 @@ final class NotificationPopUpViewController: UIViewController {
     private let deleteAllButton = UIButton()
     
     // MARK: - Properties
-    @objc private let markAllAsRead: ()->Void
-    @objc private let deleteAll: ()->Void
+    private let markAllAsRead: ()->Void
+    private let deleteAll: ()->Void
     private var minimizedTransform: CGAffineTransform {
         let scale = 0.4
         

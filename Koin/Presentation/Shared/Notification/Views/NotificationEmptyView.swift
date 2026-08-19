@@ -1,5 +1,5 @@
 //
-//  NotificationEmptyBackgroundView.swift
+//  NotificationEmptyView.swift
 //  koin
 //
 //  Created by 홍기정 on 6/3/26.
@@ -9,7 +9,7 @@ import UIKit
 import SnapKit
 import Then
 
-final class NotificationEmptyBackgroundView: UIView {
+final class NotificationEmptyView: UIView {
     
     // MARK: - UI Components
     private let layoutGuide = UILayoutGuide()
@@ -27,7 +27,7 @@ final class NotificationEmptyBackgroundView: UIView {
     }
 }
 
-extension NotificationEmptyBackgroundView {
+extension NotificationEmptyView {
     
     private func configureView() {
         setUpStyles()

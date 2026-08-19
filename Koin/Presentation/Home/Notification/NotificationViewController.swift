@@ -8,7 +8,6 @@
 import UIKit
 import Combine
 import SnapKit
-import Then
 
 final class NotificationViewController: UIViewController {
     
@@ -18,12 +17,7 @@ final class NotificationViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - UI Components
-    private let notificationTableView = NotificationTableView()
-    private let refreshControl = UIRefreshControl()
-    
-    private let loadingIndicator = UIActivityIndicatorView(style: .medium).then {
-        $0.hidesWhenStopped = true
-    }
+    private let notificationListView = NotificationListView()
 
     // MARK: - Initialization
     init(viewModel: NotificationViewModel) {
@@ -39,10 +33,9 @@ final class NotificationViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         configureNavigationBar()
-        setAddTargets()
         bind()
+        notificationListView.startLoading()
         inputSubject.send(.viewDidLoad)
-        loadingIndicator.startAnimating()
         title = "알림"
     }
     
@@ -63,53 +56,42 @@ private extension NotificationViewController {
                 
                 switch event {
                 case .updateNotifications(let notifications):
-                    self.notificationTableView.update(notifications: notifications)
-                    self.updateStateViews(isEmpty: notifications.isEmpty)
+                    notificationListView.update(items: notifications.map { NotificationRowModel(from: $0) })
+                case .selectedNotification(let notification):
+                    handleNavigation(notification)
                 case .showToast(let message):
                     showToastMessage(message: message)
                 }
             }
             .store(in: &subscriptions)
         
-        notificationTableView.deletePublisher
+        notificationListView.deletePublisher
             .sink { [weak self] id in
                 guard let self else { return }
                 self.inputSubject.send(.deleteNotification(id: id))
-                self.updateStateViews(isEmpty: self.notificationTableView.isEmpty)
                 self.showToastMessage(message: "알림이 삭제되었습니다.")
                 self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListDelete, .click, "알림 삭제"))
             }
             .store(in: &subscriptions)
         
-        notificationTableView.tapNotificationPublisher
-            .sink { [weak self] item in
+        notificationListView.itemTappedPublisher
+            .sink { [weak self] id in
                 self?.inputSubject.send(.selectNotification(id: id))
-                self?.makeLogEvent(notification: item)
-                self?.handleNavigation(item)
             }
             .store(in: &subscriptions)
-    }
-}
 
-extension NotificationViewController {
-    private func updateStateViews(isEmpty: Bool) {
-        loadingIndicator.stopAnimating()
-        refreshControl.endRefreshing()
-        
-        UIView.animate(
-            withDuration: 0.2,
-            delay: 0,
-            options: [.curveEaseInOut, .beginFromCurrentState]
-        ) { [weak self] in
-            self?.notificationTableView.backgroundView?.alpha = isEmpty ? 1 : 0
-        }
+        notificationListView.refreshPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.reload)
+            }
+            .store(in: &subscriptions)
     }
 }
 
 // MARK: - Navigation
 
 extension NotificationViewController {
-    private func handleNavigation(_ item: NotificationItem) {
+    private func handleNavigation(_ item: NotificationHistoryItem) {
         guard let uri: String = item.uri,
               let parsedQuery = parseQuery(uri: uri) else {
             return
@@ -320,21 +302,16 @@ private extension NotificationViewController {
         showPopUpView()
     }
     
-    @objc func didPullToRefresh() {
-        inputSubject.send(.reload)
-    }
-
     private func showPopUpView() {
         let popUpViewController = NotificationPopUpViewController(
             markAllAsRead: { [weak self] in
                 self?.inputSubject.send(.markAllAsRead)
-                self?.notificationTableView.markAllAsRead()
+                self?.notificationListView.markAllAsRead()
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListReadAll, .click, "모두 읽음으로 표시"))
             },
             deleteAll: { [weak self] in
                 self?.inputSubject.send(.deleteAllNotifications)
-                self?.notificationTableView.deleteAll()
-                self?.updateStateViews(isEmpty: true)
+                self?.notificationListView.deleteAll()
                 self?.showToastMessage(message: "알림이 삭제되었습니다.")
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListDeleteAll, .click, "알림 전체 삭제"))
             }
@@ -350,11 +327,6 @@ private extension NotificationViewController {
 // MARK: - Configure
 
 private extension NotificationViewController {
-    
-    private func setAddTargets() {
-        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
-    }
-    
     private func configureNavigationBar() {
         
         let rightBarButtonItem = UIBarButtonItem(
@@ -374,28 +346,16 @@ private extension NotificationViewController {
     
     private func setUpStyles() {
         view.backgroundColor = UIColor.ColorSystem.Neutral.gray0
-        
-        notificationTableView.refreshControl = refreshControl
-        
-        notificationTableView.backgroundView = NotificationEmptyBackgroundView().then {
-            $0.alpha = 0
-        }
     }
     
     private func setUpLayouts() {
-        [notificationTableView, loadingIndicator].forEach {
-            view.addSubview($0)
-        }
+        view.addSubview(notificationListView)
     }
     
     private func setUpConstraints() {
-        notificationTableView.snp.makeConstraints {
+        notificationListView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.bottom.equalToSuperview()
-        }
-        
-        loadingIndicator.snp.makeConstraints {
-            $0.center.equalToSuperview()
         }
     }
 }

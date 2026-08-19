@@ -254,7 +254,7 @@
 		7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A00102FD200000011D338 /* DiningIndicatorChip.swift */; };
 		7C8A941E2FD0A94F00DEA6F5 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */; };
 		7C8A941F2FD0A94F00DEA6F5 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */; };
-		7C8A94222FD0A96400DEA6F5 /* NotificationEmptyBackgroundView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94212FD0A96400DEA6F5 /* NotificationEmptyBackgroundView.swift */; };
+		7C8A94222FD0A96400DEA6F5 /* NotificationEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94212FD0A96400DEA6F5 /* NotificationEmptyView.swift */; };
 		7C8A94272FD0A97400DEA6F5 /* NotificationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94242FD0A97400DEA6F5 /* NotificationFooterView.swift */; };
 		7C8A94282FD0A97400DEA6F5 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94262FD0A97400DEA6F5 /* NotificationTableViewCell.swift */; };
 		7C8A94292FD0A97400DEA6F5 /* NotificationTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94252FD0A97400DEA6F5 /* NotificationTableView.swift */; };
@@ -763,6 +763,9 @@
 		B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */; };
 		B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D6292EEB01E600A19521 /* Debug.xcconfig */; };
 		B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */; };
+		D19A00013000000000000002 /* NotificationRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000001 /* NotificationRowModel.swift */; };
+		D19A00013000000000000004 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000003 /* NotificationListView.swift */; };
+		D19A00013000000000000006 /* NotificationRowModel+NotificationHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */; };
 		D2009F762C17270F00211D1B /* CalendarDate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F752C17270F00211D1B /* CalendarDate.swift */; };
 		D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */; };
 		D2078BF62BC4CCEB00A39861 /* EventDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2078BF52BC4CCEB00A39861 /* EventDto.swift */; };
@@ -1272,7 +1275,7 @@
 		7C8A00102FD200000011D338 /* DiningIndicatorChip.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningIndicatorChip.swift; sourceTree = "<group>"; };
 		7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
-		7C8A94212FD0A96400DEA6F5 /* NotificationEmptyBackgroundView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEmptyBackgroundView.swift; sourceTree = "<group>"; };
+		7C8A94212FD0A96400DEA6F5 /* NotificationEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEmptyView.swift; sourceTree = "<group>"; };
 		7C8A94242FD0A97400DEA6F5 /* NotificationFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFooterView.swift; sourceTree = "<group>"; };
 		7C8A94252FD0A97400DEA6F5 /* NotificationTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableView.swift; sourceTree = "<group>"; };
 		7C8A94262FD0A97400DEA6F5 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
@@ -1768,6 +1771,9 @@
 		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		B6A0D6292EEB01E600A19521 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
+		D19A00013000000000000003 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
+		D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationRowModel+NotificationHistoryItem.swift"; sourceTree = "<group>"; };
 		D2009F752C17270F00211D1B /* CalendarDate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalendarDate.swift; sourceTree = "<group>"; };
 		D2009F7E2C1784DA00211D1B /* MockAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockAnalyticsService.swift; sourceTree = "<group>"; };
 		D2078BF52BC4CCEB00A39861 /* EventDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDto.swift; sourceTree = "<group>"; };
@@ -2379,7 +2385,7 @@
 		7C457B282FCE1BA80011D338 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
-				7C8A94202FD0A95100DEA6F5 /* Subviews */,
+				D19A0001300000000000000A /* Support */,
 				7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */,
 				7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */,
 			);
@@ -2792,14 +2798,15 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
-		7C8A94202FD0A95100DEA6F5 /* Subviews */ = {
+		7C8A94202FD0A95100DEA6F5 /* Views */ = {
 			isa = PBXGroup;
 			children = (
 				7C8A94232FD0A96700DEA6F5 /* NotificationTableView */,
-				7C8A94212FD0A96400DEA6F5 /* NotificationEmptyBackgroundView.swift */,
+				7C8A94212FD0A96400DEA6F5 /* NotificationEmptyView.swift */,
+				D19A00013000000000000003 /* NotificationListView.swift */,
 				7C7F56B32FFB6A6400847151 /* NotificationPopUpViewController.swift */,
 			);
-			path = Subviews;
+			path = Views;
 			sourceTree = "<group>";
 		};
 		7C8A94232FD0A96700DEA6F5 /* NotificationTableView */ = {
@@ -4307,6 +4314,7 @@
 			isa = PBXGroup;
 			children = (
 				7C86751030062FF3003CB942 /* Core */,
+				D19A00013000000000000007 /* Shared */,
 				7C457B2A2FCE1BA80011D338 /* Home */,
 				7C016541300A9FF80013DD7B /* Department */,
 				7CED8EF42EF2D1F900457128 /* LostItem */,
@@ -4652,6 +4660,39 @@
 				B6A0D62B2EEB01F100A19521 /* Release.xcconfig */,
 			);
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		D19A00013000000000000007 /* Shared */ = {
+			isa = PBXGroup;
+			children = (
+				D19A00013000000000000008 /* Notification */,
+			);
+			path = Shared;
+			sourceTree = "<group>";
+		};
+		D19A00013000000000000008 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+				D19A00013000000000000009 /* Models */,
+				7C8A94202FD0A95100DEA6F5 /* Views */,
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		D19A00013000000000000009 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				D19A00013000000000000001 /* NotificationRowModel.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D19A0001300000000000000A /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
@@ -6441,6 +6482,9 @@
 				7C8BFCE32FD04B8000963679 /* HomeHeader.swift in Sources */,
 				7CF77B4430027321003642C1 /* TimeTableView.swift in Sources */,
 				7C8BFCE42FD04B8000963679 /* NotificationHistoryItem.swift in Sources */,
+				D19A00013000000000000002 /* NotificationRowModel.swift in Sources */,
+				D19A00013000000000000004 /* NotificationListView.swift in Sources */,
+				D19A00013000000000000006 /* NotificationRowModel+NotificationHistoryItem.swift in Sources */,
 				7C8BFCE52FD04B8000963679 /* CategoryModels.swift in Sources */,
 				7C8BFCF12FD04B800963679 /* HomeCounts.swift in Sources */,
 				D2908D262BB8D11A0008F908 /* SemesterDto.swift in Sources */,
@@ -6514,7 +6558,7 @@
 				7C333EA53030429B009D2B89 /* ModalButtonView.swift in Sources */,
 				D22C54712C6A2A60000826DA /* FetchShopReviewUseCase.swift in Sources */,
 				7C6403D3300BE8A100A9589F /* DepartmentEmptyView.swift in Sources */,
-				7C8A94222FD0A96400DEA6F5 /* NotificationEmptyBackgroundView.swift in Sources */,
+				7C8A94222FD0A96400DEA6F5 /* NotificationEmptyView.swift in Sources */,
 				8354BE522C7A0566009D4D7A /* CoreDataService.swift in Sources */,
 				D2D7C0D52C28298500C85A85 /* FetchLandListUseCase.swift in Sources */,
 				7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */,

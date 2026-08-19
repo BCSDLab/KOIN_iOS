@@ -27,7 +27,7 @@ final class NotificationTableViewCell: UITableViewCell {
     }
 
     // MARK: - Public
-    func configure(item: NotificationItem) {
+    func configure(item: NotificationRowModel) {
         iconImageView.image = .appImage(asset: item.icon)?.withRenderingMode(.alwaysTemplate)
         titleLabel.text = item.title
         contentLabel.text = item.content

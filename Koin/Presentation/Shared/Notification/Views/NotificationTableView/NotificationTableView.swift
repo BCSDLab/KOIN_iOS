@@ -20,13 +20,13 @@ final class NotificationTableView: UITableView {
     
     // MARK: - Publisher
     let deletePublisher = PassthroughSubject<String, Never>()
-    let tapNotificationPublisher = PassthroughSubject<NotificationItem, Never>()
+    let tapNotificationPublisher = PassthroughSubject<String, Never>()
     
     // MARK: - UI Components
     private let realFooterView = NotificationFooterView()
     
     // MARK: - Properties
-    private var notifications: [NotificationItem] = []
+    private var notifications: [NotificationRowModel] = []
     var isEmpty: Bool {
         notifications.isEmpty
     }
@@ -43,7 +43,7 @@ final class NotificationTableView: UITableView {
     }
     
     // MARK: - Public
-    func update(notifications: [NotificationItem]) {
+    func update(notifications: [NotificationRowModel]) {
         performBatchUpdates {
             self.notifications = notifications
             recalculateFooterHeightIfNeeded()
@@ -173,8 +173,9 @@ extension NotificationTableView: UITableViewDelegate {
         guard notifications.indices.contains(indexPath.row) else {
             return
         }
-        tapNotificationPublisher.send(notifications[indexPath.row])
-        didSelectNotification(id: notifications[indexPath.row].id)
+        let id = notifications[indexPath.row].id
+        tapNotificationPublisher.send(id)
+        didSelectNotification(id: id)
     }
 
     func tableView(
