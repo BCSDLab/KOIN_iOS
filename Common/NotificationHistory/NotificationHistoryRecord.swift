@@ -8,8 +8,10 @@
 import SwiftData
 import Foundation
 
+typealias NotificationHistoryRecord = NotificationRecord
+
 @Model
-final class NotificationHistoryRecord {
+final class NotificationRecord {
     var body: String
     var title: String
     var category: AppPath
