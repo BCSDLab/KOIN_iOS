@@ -13,15 +13,16 @@ final class NotificationViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case reload
+        case selectNotification(id: String)
         case deleteNotification(id: String)
         case deleteAllNotifications
-        case markAsRead(id: String)
         case markAllAsRead
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     enum Output {
-        case updateNotifications([NotificationItem])
+        case updateNotifications([NotificationHistoryItem])
+        case selectedNotification(NotificationHistoryItem)
         case showToast(String)
     }
     
@@ -32,6 +33,7 @@ final class NotificationViewModel: ViewModelProtocol {
     private let updateNotificationHistoryUseCase: UpdateNotificationHistoryUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
+    private var notificationHistoryItems: [NotificationHistoryItem] = []
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - Initializer
@@ -56,12 +58,12 @@ final class NotificationViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad, .reload:
                 self?.loadNotifications()
+            case .selectNotification(let id):
+                self?.selectNotification(id: id)
             case .deleteNotification(let id):
                 self?.deleteNotification(id: id)
             case .deleteAllNotifications:
                 self?.deleteAllNotifications()
-            case .markAsRead(let id):
-                self?.markAsRead(id: id)
             case .markAllAsRead:
                 self?.markAllAsRead()
             case let .logEvent(label, category, value):
@@ -82,6 +84,7 @@ private extension NotificationViewModel {
         Task {
             do {
                 let notifications = try await fetchNotificationHistoryUseCase.execute()
+                self.notificationHistoryItems = notifications
                 outputSubject.send(.updateNotifications(notifications))
             } catch {
                 outputSubject.send(.showToast(error.localizedDescription))
@@ -89,27 +92,64 @@ private extension NotificationViewModel {
         }
     }
 
+    private func selectNotification(id: String) {
+        guard let notification = notificationHistoryItems.first(where: { $0.id == id }),
+              let logValue = notification.logValue else {
+            return
+        }
+        markAsRead(id: id)
+        
+        outputSubject.send(.selectedNotification(notification))
+        
+        makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.notificationList,
+            category: .click,
+            value: logValue
+        )
+    }
+
     private func deleteNotification(id: String) {
+        notificationHistoryItems.removeAll { $0.id == id }
         Task {
-            try? await deleteNotificationHistoryUseCase.delete(id: id)
+            do {
+                try await deleteNotificationHistoryUseCase.delete(id: id)
+            } catch {
+                outputSubject.send(.showToast(error.localizedDescription))
+            }
         }
     }
     
     private func deleteAllNotifications() {
+        notificationHistoryItems.removeAll()
         Task {
-            try? await deleteNotificationHistoryUseCase.deleteAll()
+            do {
+                try await deleteNotificationHistoryUseCase.deleteAll()
+            } catch {
+                outputSubject.send(.showToast(error.localizedDescription))
+            }
         }
     }
     
     private func markAsRead(id: String) {
+        if let index = notificationHistoryItems.firstIndex(where: { $0.id == id }) {
+            notificationHistoryItems[index].isRead = true
+        }
+        
         Task {
             try? await updateNotificationHistoryUseCase.markAsRead(id: id)
         }
     }
     
     private func markAllAsRead() {
+        for index in notificationHistoryItems.indices {
+            notificationHistoryItems[index].isRead = true
+        }
         Task {
-            try? await updateNotificationHistoryUseCase.markAllAsRead()
+            do {
+                try await updateNotificationHistoryUseCase.markAllAsRead()
+            } catch {
+                outputSubject.send(.showToast(error.localizedDescription))
+            }
         }
     }
     

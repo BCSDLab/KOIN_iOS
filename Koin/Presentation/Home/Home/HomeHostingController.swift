@@ -243,7 +243,7 @@ extension HomeHostingController {
                 return
             }
             navigationController?.pushViewController(
-                ChatListTableViewController(viewModel: ChatListTableViewModel()),
+                LostItemChatListTableViewController(viewModel: LostItemChatListTableViewModel()),
                 animated: true
             )
         case "lostitem":

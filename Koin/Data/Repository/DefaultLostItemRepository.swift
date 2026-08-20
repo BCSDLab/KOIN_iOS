@@ -79,4 +79,24 @@ final class DefaultLostItemRepository: LostItemRepository {
     func unsubscribeKeyword(id: Int) -> AnyPublisher<Void, ErrorResponse> {
         return service.unsubscribeKeyword(id: id)
     }
+
+    func createChatRoom(articleId: Int) -> AnyPublisher<LostItemCreateChatRoomResponse, ErrorResponse> {
+        service.createChatRoom(articleId: articleId)
+    }
+
+    func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse> {
+        service.blockUser(articleId: articleId, chatRoomId: chatRoomId)
+    }
+
+    func fetchChatRoom() -> AnyPublisher<[LostItemChatRoomDto], ErrorResponse> {
+        service.fetchChatRoom()
+    }
+
+    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[LostItemChatDetailDto], ErrorResponse> {
+        service.fetchChatDetail(articleId: articleId, chatRoomId: chatRoomId)
+    }
+
+    func postChatDetail(articleId: Int, chatRoomId: Int, request: LostItemPostChatDetailRequest) -> AnyPublisher<LostItemChatDetailDto, ErrorResponse> {
+        service.postChatDetail(articleId: articleId, chatRoomId: chatRoomId, request: request)
+    }
 }

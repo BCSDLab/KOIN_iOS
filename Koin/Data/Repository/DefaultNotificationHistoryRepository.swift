@@ -15,10 +15,10 @@ final class DefaultNotificationHistoryRepository: NotificationHistoryRepository 
         self.service = service
     }
        
-    func fetchAll() async throws -> [NotificationItem] {
+    func fetchAll() async throws -> [NotificationHistoryItem] {
         try await service.fetchAll()
             .compactMap {
-                NotificationItem.init(from: $0)
+                NotificationHistoryItem.init(from: $0)
             }
     }
     
