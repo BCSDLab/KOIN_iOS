@@ -474,14 +474,12 @@ extension TimetableViewModel {
 
 extension TimetableViewModel {
     private func updateDeparments(_ response: [SemesterLecture]) {
-        guard departments.isEmpty else {
-            return
-        }
         self.departments = response
             .map(\.department)
             .reduce(into: Set<String>(), { departments, department in
                 departments.insert(department)
             })
             .sorted()
+        self.selectedDepartment = nil
     }
 }

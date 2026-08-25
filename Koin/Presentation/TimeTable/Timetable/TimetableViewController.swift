@@ -525,6 +525,7 @@ extension TimetableViewController {
     }
     @objc private func modifyTimetableButtonTapped() {
         addClassCollectionView.setUpSelectedDept(dept: nil)
+        inputSubject.send(.selectedDepartment(nil))
         
         if addClassCollectionView.isHidden && addDirectCollectionView.isHidden {
             toggleCollectionView(collectionView: addClassCollectionView, animate: true)
