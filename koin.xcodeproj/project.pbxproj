@@ -3286,6 +3286,17 @@
 			path = Support;
 			sourceTree = "<group>";
 		};
+		7CC42B922F5DCE9800940CE1 /* ChatTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B932F5DCEA600940CE1 /* ChatTableView.swift */,
+				7CC42B952F5DCEB300940CE1 /* ChatDateHeaderView.swift */,
+				7CC42B972F5E812F00940CE1 /* ChatLeftCell.swift */,
+				7CC42B9B2F5E834E00940CE1 /* ChatRightCell.swift */,
+			);
+			path = ChatTableView;
+			sourceTree = "<group>";
+		};
 		7CCB1E4C2F29DB2500472669 /* LostItemChat */ = {
 			isa = PBXGroup;
 			children = (
@@ -4733,17 +4744,6 @@
 				7CC42B922F5DCE9800940CE1 /* ChatTableView */,
 			);
 			path = Views;
-			sourceTree = "<group>";
-		};
-		7CC42B922F5DCE9800940CE1 /* ChatTableView */ = {
-			isa = PBXGroup;
-			children = (
-				7CC42B932F5DCEA600940CE1 /* ChatTableView.swift */,
-				7CC42B952F5DCEB300940CE1 /* ChatDateHeaderView.swift */,
-				7CC42B972F5E812F00940CE1 /* ChatLeftCell.swift */,
-				7CC42B9B2F5E834E00940CE1 /* ChatRightCell.swift */,
-			);
-			path = ChatTableView;
 			sourceTree = "<group>";
 		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
