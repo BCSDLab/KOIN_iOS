@@ -13,7 +13,6 @@ final class EditLostItemImagesView: UIView {
     // MARK: - Properties
     private var type: LostItemType
     private var images: [AppImage]
-    let dismissDropDownPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -86,7 +85,6 @@ final class EditLostItemImagesView: UIView {
     }
     
     @objc private func addImageButtonTapped() {
-        dismissDropDownPublisher.send()
         addImageButtonPublisher.send()
         endEditing(true)
     }

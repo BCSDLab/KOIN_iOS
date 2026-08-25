@@ -58,6 +58,9 @@ final class EditLostItemViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
+    // MARK: - Dropdown
+    private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
+    
     // MARK: - Initializer
     init(viewModel: EditLostItemViewModel) {
         self.viewModel = viewModel
@@ -87,11 +90,7 @@ final class EditLostItemViewController: UIViewController {
         configureNavigationBar(style: .empty)
     }
     
-    override func hideKeyboardWhenTappedAround() {
-        super.hideKeyboardWhenTappedAround()
-        foundDateView.dismissDropdown()
-    }
-    
+    // MARK: - Bind
     private func bind() {
         viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
             guard let self else { return }
@@ -110,28 +109,7 @@ final class EditLostItemViewController: UIViewController {
             self?.addImageButtonTapped()
         }.store(in: &subscriptions)
         
-        imagesView.dismissDropDownPublisher.sink { [weak self] in
-            self?.foundDateView.dismissDropdown()
-        }.store(in: &subscriptions)
-        
-        categoryView.dismissDropDownPublisher.sink { [weak self] in
-            self?.foundDateView.dismissDropdown()
-        }.store(in: &subscriptions)
-        
-        foundPlaceView.shouldDismissDropDownPublisher.sink { [weak self] in
-            self?.foundDateView.dismissDropdown()
-        }.store(in: &subscriptions)
-        
-        contentView.shouldDismissDropDownPublisher.sink { [weak self] in
-            self?.foundDateView.dismissDropdown()
-        }.store(in: &subscriptions)
-        
-        foundDateView.focusDropdownPublisher.sink { [weak self] targetView in
-            guard let self else { return }
-            var rect = targetView.convert(targetView.bounds, to: scrollView)
-            rect.size.height += 15
-            scrollView.scrollRectToVisible(rect, animated: true)
-        }.store(in: &subscriptions)
+        foundDateView.prepareDropdown(host: dropdownHost)
     }
 }
 
@@ -142,8 +120,10 @@ extension EditLostItemViewController {
     }
     
     @objc private func editButtonTapped() {
+        guard !dropdownHost.isPresenting else {
+            return
+        }
         dismissKeyboard()
-        foundDateView.dismissDropdown()
         
         if foundDateView.isValid && foundPlaceView.isValid {
             let imageUrls = imagesView.imageUploadCollectionView.imageUrls
@@ -194,6 +174,8 @@ extension EditLostItemViewController {
             return
         }
         
+        guard !dropdownHost.isPresenting else { return }
+
         let contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
@@ -218,6 +200,8 @@ extension EditLostItemViewController {
     }
     
     @objc private func keyBoardWillHide(_ notification: NSNotification) {
+        guard !dropdownHost.isPresenting else { return }
+
         let contentInset = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
         scrollView.scrollIndicatorInsets = contentInset
