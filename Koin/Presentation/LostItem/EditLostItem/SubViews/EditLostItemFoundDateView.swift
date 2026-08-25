@@ -130,14 +130,20 @@ final class EditLostItemFoundDateView: UIView {
     private func dropdownValueChanged() {
         // shouldScrollTo(dropdownView)
         
-        let formattedDate = {
+        let displayDate = {
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy년 M월 d일"
             return formatter.string(from: dropdownView.dateValue)
         }()
-        dateButton.setTitle(formattedDate, for: .normal)
+        dateButton.setTitle(displayDate, for: .normal)
         dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         dateWarningLabel.isHidden = true
+        
+        let formattedDate = {
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy-MM-dd"
+            return formatter.string(from: dropdownView.dateValue)
+        }()
         self.foundDate = formattedDate
     }
 }
