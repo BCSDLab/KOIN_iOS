@@ -16,15 +16,7 @@ protocol KoinDropdownContentView: AnyObject {
 
 @MainActor
 final class KoinDropdown: UIView {
-
-    enum State {
-        case dismissed
-        case presented
-    }
-
-    // MARK: - State
-    private(set) var state: State = .dismissed
-
+    
     // MARK: - Properties
     private weak var host: KoinDropdownHost?
     private(set) weak var trigger: UIView?
@@ -36,7 +28,7 @@ final class KoinDropdown: UIView {
 
     // MARK: - Animation
     let animator = KoinDropdownAnimator()
-    private var travel: CGFloat = 0
+    private(set) var travel: CGFloat = 0
 
     // MARK: - Initializer
     init(
@@ -85,8 +77,8 @@ final class KoinDropdown: UIView {
 
 
 extension KoinDropdown {
-    func calculateTravel(in space: UIView) -> CGFloat? {
-        guard let trigger else { return nil }
+    func layout(in space: UIView) -> Bool {
+        guard let trigger else { return false }
         contentView.transform = .identity
 
         let triggerFrame = trigger.convert(trigger.bounds, to: space)
@@ -95,7 +87,7 @@ extension KoinDropdown {
         
         guard 0 < triggerFrame.width,
               0 < panelHeight else {
-            return nil
+            return false
         }
         self.frame = CGRect(
             x: triggerFrame.minX - padding.left,
@@ -112,16 +104,15 @@ extension KoinDropdown {
         applyShadow()
         
         travel = panelHeight + configuration.topPadding
-        return travel
+        return true
     }
 
+
     func animatePresent() {
-        state = .presented
         animator.present(view: contentView, travel: travel)
     }
 
     func animateDismiss(completion: @escaping () -> Void) {
-        state = .dismissed
         animator.dismiss(
             view: contentView,
             travel: travel,

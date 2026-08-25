@@ -17,7 +17,6 @@ final class KoinDropdownHost {
     // MARK: - Properties
     private weak var scrollView: UIScrollView?
     private var overlay: UIView?
-    private var dropdowns: [KoinDropdown] = []
     
     private var presentedDropdown: KoinDropdown?
     private var addedBottomInset: CGFloat = 0
@@ -37,14 +36,12 @@ final class KoinDropdownHost {
         contentView: UIView & KoinDropdownContentView,
         configuration: KoinDropdownConfiguration
     ) -> KoinDropdown {
-        let dropdown = KoinDropdown(
+        return KoinDropdown(
             host: self,
             trigger: trigger,
             contentView: contentView,
             configuration: configuration
         )
-        dropdowns.append(dropdown)
-        return dropdown
     }
 }
 
@@ -52,7 +49,7 @@ extension KoinDropdownHost {
 
     // MARK: - Toggle
     func toggle(_ dropdown: KoinDropdown) {
-        if dropdown.state == .presented {
+        if presentedDropdown === dropdown {
             dismiss(dropdown)
         } else {
             present(dropdown)
@@ -74,7 +71,7 @@ extension KoinDropdownHost {
         self.overlay = overlay
         
         // overlay에 들어가는 dropdown
-        guard let travel = dropdown.calculateTravel(in: overlay) else {
+        guard dropdown.layout(in: overlay) else {
             overlay.removeFromSuperview()
             self.overlay = nil
             return
@@ -87,7 +84,7 @@ extension KoinDropdownHost {
         
         // present
         addedBottomInset = addBottomInset(
-            travel: travel,
+            travel: dropdown.travel,
             of: dropdown,
             in: scrollView
         )
@@ -107,9 +104,7 @@ extension KoinDropdownHost {
     }
     
     func dismiss(_ dropdown: KoinDropdown) {
-        guard let presentedDropdown,
-              presentedDropdown === dropdown,
-              presentedDropdown.state == .presented else {
+        guard presentedDropdown === dropdown else {
             return
         }
         

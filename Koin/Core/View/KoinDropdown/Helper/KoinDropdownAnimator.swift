@@ -13,7 +13,7 @@ final class KoinDropdownAnimator {
     enum Metric {
         static let presentDuration: TimeInterval = 0.3
         static let presentBounce: CGFloat = 0.15
-        static let dismissDuration: TimeInterval = 0.15
+        static let dismissDuration: TimeInterval = 0.2
     }
 
     private func hiddenTransform(travel: CGFloat) -> CGAffineTransform {
@@ -31,8 +31,7 @@ final class KoinDropdownAnimator {
 
         UIView.animate(
             springDuration: Metric.presentDuration,
-            bounce: Metric.presentBounce,
-            initialSpringVelocity: 0
+            bounce: Metric.presentBounce
         ) {
             view.alpha = 1
             view.transform = .identity
@@ -46,11 +45,7 @@ final class KoinDropdownAnimator {
         travel: CGFloat,
         completion: (() -> Void)? = nil
     ) {
-        UIView.animate(
-            springDuration: Metric.dismissDuration,
-            initialSpringVelocity: 0,
-            options: [.beginFromCurrentState, .allowUserInteraction]
-        ) {
+        UIView.animate(springDuration: Metric.dismissDuration) {
             view.alpha = 0
             view.transform = self.hiddenTransform(travel: travel)
         } completion: { _ in
