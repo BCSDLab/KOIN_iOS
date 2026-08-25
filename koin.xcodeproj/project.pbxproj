@@ -582,7 +582,6 @@
 		7CED91CE2EF2D1F900457128 /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F142EF2D1F900457128 /* NotiViewModel.swift */; };
 		7CED91CF2EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F622EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift */; };
 		7CED91D22EF2D1F900457128 /* LandImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B32EF2D1F900457128 /* LandImageCollectionViewCell.swift */; };
-		7CED91D52EF2D1F900457128 /* ImageDropDownCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90082EF2D1F900457128 /* ImageDropDownCell.swift */; };
 		7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE82EF2D1F900457128 /* ShopDetailViewModel.swift */; };
 		7CED91D82EF2D1F900457128 /* ClassComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908A2EF2D1F900457128 /* ClassComponentView.swift */; };
 		7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE02EF2D1F900457128 /* ShopDetailTableViewNameCell.swift */; };
@@ -1566,7 +1565,6 @@
 		7CED90052EF2D1F900457128 /* ReviewListCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListCollectionView.swift; sourceTree = "<group>"; };
 		7CED90062EF2D1F900457128 /* ReviewListCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED90072EF2D1F900457128 /* ReviewListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListHeaderView.swift; sourceTree = "<group>"; };
-		7CED90082EF2D1F900457128 /* ImageDropDownCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDropDownCell.swift; sourceTree = "<group>"; };
 		7CED900A2EF2D1F900457128 /* ScoreView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScoreView.swift; sourceTree = "<group>"; };
 		7CED900B2EF2D1F900457128 /* NonReviewListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NonReviewListView.swift; sourceTree = "<group>"; };
 		7CED900F2EF2D1F900457128 /* ReviewListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewController.swift; sourceTree = "<group>"; };
@@ -4001,7 +3999,6 @@
 				7CED90052EF2D1F900457128 /* ReviewListCollectionView.swift */,
 				7CED90062EF2D1F900457128 /* ReviewListCollectionViewCell.swift */,
 				7CED90072EF2D1F900457128 /* ReviewListHeaderView.swift */,
-				7CED90082EF2D1F900457128 /* ImageDropDownCell.swift */,
 			);
 			path = ReviewListCollectionView;
 			sourceTree = "<group>";
@@ -6426,7 +6423,6 @@
 				7CED91CE2EF2D1F900457128 /* NotiViewModel.swift in Sources */,
 				7CED91CF2EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift in Sources */,
 				7CED91D22EF2D1F900457128 /* LandImageCollectionViewCell.swift in Sources */,
-				7CED91D52EF2D1F900457128 /* ImageDropDownCell.swift in Sources */,
 				7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */,
 				7C01656F300B4A2D0013DD7B /* DepartmentView.swift in Sources */,
 				7C7F429B2F629B8800CC5860 /* UploadDomain.swift in Sources */,
