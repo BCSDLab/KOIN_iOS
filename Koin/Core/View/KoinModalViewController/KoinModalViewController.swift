@@ -131,6 +131,7 @@ extension KoinModalViewController: UIViewControllerTransitioningDelegate {
 extension KoinModalViewController {
     private func setUpGestureRecognizer() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapAround))
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
     }
     

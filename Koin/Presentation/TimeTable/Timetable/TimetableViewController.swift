@@ -151,6 +151,7 @@ final class TimetableViewController: UIViewController {
             }
             self.view.endEditing(true)
             self.toggleCollectionView(collectionView: self.addClassCollectionView, animate: true)
+            self.inputSubject.send(.selectedDepartment(nil))
             
         }.store(in: &subscriptions)
         
@@ -271,10 +272,14 @@ extension TimetableViewController {
     }
 
     private func presentSelectDeptModal() {
-        let viewController = SelectDeptModalViewController { [weak self] department in
+        let modalViewController = SelectDeptModalViewController(
+            departments: viewModel.departments,
+            selectedDapartment: viewModel.selectedDepartment
+        ) { [weak self] department in
             self?.addClassCollectionView.setUpSelectedDept(dept: department)
+            self?.inputSubject.send(.selectedDepartment(department))
         }
-        present(viewController, animated: true)
+        present(modalViewController, animated: true)
     }
 
     private func presentDeleteLectureModal(lecture: LectureData) {
@@ -519,7 +524,7 @@ extension TimetableViewController {
         }
     }
     @objc private func modifyTimetableButtonTapped() {
-        
+        addClassCollectionView.setUpSelectedDept(dept: nil)
         
         if addClassCollectionView.isHidden && addDirectCollectionView.isHidden {
             toggleCollectionView(collectionView: addClassCollectionView, animate: true)
