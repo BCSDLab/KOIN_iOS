@@ -10,15 +10,20 @@ import Combine
 import SnapKit
 import Then
 
-final class CallVanPostTimeView: ExtendedTouchAreaView {
+final class CallVanPostTimeView: UIView {
     
     // MARK: - Properteis
     let timeButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let timeChangedPublisher = PassthroughSubject<Date, Never>()
+    
     private var subscriptions: Set<AnyCancellable> = []
     private let formatter = DateFormatter().then {
         $0.locale = Locale(identifier: "ko_KR")
     }
+    
+    // MARK: - Dropdown
+    var dropdownTrigger: UIView { timeButton }
+    var dropdownContentView: UIView & KoinDropdownContentView { timeDropDownView }
     
     // MARK: - UI Components
     private let titleLabel = UILabel()
@@ -39,6 +44,7 @@ final class CallVanPostTimeView: ExtendedTouchAreaView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
     
     // MARK: - Public
     func update(_ date: Date) {
@@ -66,9 +72,6 @@ extension CallVanPostTimeView {
             }
         }.store(in: &subscriptions)
         
-        timeDropDownView.applyButtonTappedPublisher.sink { [weak self] in
-            self?.dismissTimeDropDownView()
-        }.store(in: &subscriptions)
     }
 }
 
@@ -80,32 +83,6 @@ extension CallVanPostTimeView {
     
     @objc private func timeButtonTapped() {
         timeButtonTappedPublisher.send()
-        
-        if timeDropDownView.isHidden {
-            presentTimeDropDownView()
-        } else {
-            dismissTimeDropDownView()
-        }
-    }
-    
-    private func presentTimeDropDownView() {
-        timeDropDownView.isHidden = false
-        UIView.animate(springDuration: 0.3, bounce: 0.3, initialSpringVelocity: 0) { [weak self] in
-            guard let self else { return }
-            timeDropDownView.alpha = 1
-            timeDropDownView.transform = CGAffineTransform.identity
-        }
-    }
-    
-    func dismissTimeDropDownView() {
-        UIView.animate(springDuration: 0.2, bounce: 0, initialSpringVelocity: 0) { [weak self] in
-            guard let self else { return }
-            timeDropDownView.alpha = 0
-            timeDropDownView.transform = CGAffineTransform(translationX: 0, y: -20)
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.1 ) { [weak self] in
-            self?.timeDropDownView.isHidden = true
-        }
     }
 }
 
@@ -121,11 +98,6 @@ extension CallVanPostTimeView {
         timeDropDownView.do {
             $0.backgroundColor = UIColor.appColor(.neutral100)
             $0.layer.cornerRadius = 8
-            $0.clipsToBounds = true
-            $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
-            $0.isHidden = true
-            $0.transform = CGAffineTransform(translationX: 0, y: -20)
-            $0.alpha = 0
         }
         titleLabel.do {
             $0.text = "출발 시각"
@@ -159,7 +131,7 @@ extension CallVanPostTimeView {
     }
     
     private func setUpLayouts() {
-        [titleLabel, descriptionLabel, timeButton, amPmLabel, separatorView, timeLabel, timeDropDownView].forEach {
+        [titleLabel, descriptionLabel, timeButton, amPmLabel, separatorView, timeLabel].forEach {
             addSubview($0)
         }
     }
@@ -191,11 +163,6 @@ extension CallVanPostTimeView {
         timeLabel.snp.makeConstraints {
             $0.centerY.equalTo(timeButton)
             $0.leading.equalTo(separatorView.snp.trailing).offset(16)
-        }
-        timeDropDownView.snp.makeConstraints {
-            $0.height.equalTo(153)
-            $0.top.equalTo(timeButton.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(24)
         }
     }
 }

@@ -63,6 +63,16 @@ final class KoinPickerDropDownView: UIView {
     }
 }
 
+// MARK: - KoinDropdownContentView
+extension KoinPickerDropDownView: KoinDropdownContentView {
+    var dismissTappedPublisher: AnyPublisher<Void, Never> {
+        applyButtonTappedPublisher.eraseToAnyPublisher()
+    }
+    var height: CGFloat {
+        return 153
+    }
+}
+
 extension KoinPickerDropDownView {
     
     private func bind() {
@@ -134,6 +144,7 @@ extension KoinPickerDropDownView {
     
     private func setUpConstraints() {
         pickerView.snp.makeConstraints {
+            $0.height.equalTo(90)
             $0.top.equalToSuperview().offset(12)
             $0.centerX.equalToSuperview()
         }
