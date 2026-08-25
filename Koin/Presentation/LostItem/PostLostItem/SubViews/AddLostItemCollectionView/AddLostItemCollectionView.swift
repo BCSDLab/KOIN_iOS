@@ -9,15 +9,21 @@ import Combine
 import UIKit
 
 final class AddLostItemCollectionView: UICollectionView {
+
+    // MARK: - Dropdown
+    private lazy var dropdownHost = KoinDropdownHost(scrollView: self)
     
     // MARK: - Properties
     private var footerCancellables = Set<AnyCancellable>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
-    let shouldDismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
     let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
     
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
+    
+    var isDropdownPresenting: Bool {
+        dropdownHost.isPresenting
+    }
     
     // MARK: - Initializer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -52,6 +58,10 @@ final class AddLostItemCollectionView: UICollectionView {
 
 extension AddLostItemCollectionView {
     
+    func dismissDropdown() {
+        dropdownHost.dismissPresented()
+    }
+
     func setType(type: LostItemType) {
         self.type = type
         reloadData()
@@ -60,15 +70,6 @@ extension AddLostItemCollectionView {
         articles[index].images?.append(url)
         reloadData()
         collectionViewLayout.invalidateLayout()
-    }
-    
-    func dismissDatePicker(_ currentIndexPath: IndexPath?) {
-        for row in 0..<numberOfItems(inSection: 0) {
-            let indexPath = IndexPath(row: row, section: 0)
-            if indexPath != currentIndexPath {
-                (cellForItem(at: indexPath) as? AddLostItemCollectionViewCell)?.dismissDropdown()
-            }
-        }
     }
     
     func firstResponder() -> UIView? {
@@ -126,19 +127,7 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         cell.imageUrlsPublisher.sink { [weak self] urls in
             self?.articles[indexPath.row].images = urls
         }.store(in: &cell.cancellables)
-        cell.shouldDismissDropDownPublisher.sink { [weak self] indexPath in
-            self?.dismissDatePicker(indexPath)
-        }.store(in: &cell.cancellables)
-        cell.shouldDismissKeyBoardPublisher.sink { [weak self] in
-            self?.shouldDismissKeyBoardPublisher.send()
-        }.store(in: &cell.cancellables)
-        cell.focusDropdownPublisher
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] targetView in
-            var rect = targetView.convert(targetView.bounds, to: self)
-            rect.size.height += 15
-            self?.scrollRectToVisible(rect, animated: true)
-        }.store(in: &cell.cancellables)
+        cell.prepareDropdown(host: dropdownHost)
         return cell
     }
     
@@ -162,7 +151,7 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
                     formatter.dateFormat = "yyyy년 M월 d일"
                     return formatter.string(from: Date())
                 }()
-                self?.dismissDatePicker(nil)
+                self?.dismissDropdown()
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
                     self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
                     self?.reloadData()
@@ -171,9 +160,6 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
                 case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.findUserAddItem, .click, "물품 추가"))
                 case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.lostItemAddItem, .click, "물품 추가"))
                 }
-            }.store(in: &footerCancellables)
-            footerView.shouldDismissDropDownPublisher.sink { [weak self] in
-                self?.dismissDatePicker(nil)
             }.store(in: &footerCancellables)
             return footerView
         }

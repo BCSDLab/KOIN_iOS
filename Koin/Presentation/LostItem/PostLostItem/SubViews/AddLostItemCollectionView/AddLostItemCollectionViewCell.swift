@@ -20,9 +20,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     let locationPublisher = PassthroughSubject<String, Never>()
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
-    let shouldDismissDropDownPublisher = PassthroughSubject<IndexPath?, Never>()
-    let shouldDismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
-    let focusDropdownPublisher = PassthroughSubject<UIView, Never>()
     
     private var type: LostItemType = .lost
     private var textViewPlaceHolder = ""
@@ -141,17 +138,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.contentHorizontalAlignment = .left
         $0.titleEdgeInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 0)
     }
-    
-    private lazy var dropdownView = DatePickerDropdownView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.layer.cornerRadius = 12
-        $0.clipsToBounds = true
-        $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
-        $0.isHidden = true
-        $0.transform = CGAffineTransform(translationX: 0, y: -20)
-        $0.alpha = 0
-    }
-    
+
     private let locationLabel = UILabel().then { _ in
     }
     private let locationEssentialLabel = UILabel().then {
@@ -196,6 +183,14 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.text = textViewPlaceHolder
     }
     
+    // MARK: - Dropdown
+    private lazy var dropdownView = DatePickerDropdownView().then {
+        $0.backgroundColor = UIColor.appColor(.neutral100)
+        $0.layer.cornerRadius = 12
+    }
+
+    private var dropdown: KoinDropdown?
+    
     // MARK: - Initializer
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -217,22 +212,25 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             self?.pictureCountLabel.text = "\(urls.count)/10"
             self?.imageUrlsPublisher.send(urls)
             }.store(in: &cancellable)
-        imageUploadCollectionView.shouldDismissDropDownKeyBoardPublisher.sink { [weak self] in
-            self?.shouldDismissDropDownPublisher.send(nil)
-            self?.shouldDismissKeyBoardPublisher.send()
-            }.store(in: &cancellable)
         dropdownView.valueChangedPublisher.sink { [weak self] in
             self?.dropdownValueChanged()
             }.store(in: &cancellable)
-        dropdownView.dismissDropdownPublisher.sink { [weak self] in
-            self?.shouldDismissDropDownPublisher.send(nil)
-        }.store(in: &cancellable)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - PrepareForReuse
+    /// ScrollView 를 아는 CollectionView 가 Host 를 넘겨준다. 셀당 한 번만 만든다.
+    func prepareDropdown(host: KoinDropdownHost) {
+        guard dropdown == nil else { return }
+        dropdown = host.makeDropdown(
+            trigger: dateButton,
+            contentView: dropdownView,
+            configuration: .init(topPadding: 4, shadow: .shadow2)
+        )
+    }
+
     override func prepareForReuse() {
         super.prepareForReuse()
         cancellables.forEach { $0.cancel() }
@@ -339,9 +337,6 @@ extension AddLostItemCollectionViewCell {
 extension AddLostItemCollectionViewCell{
     
     @objc private func addImageButtonTapped() {
-        shouldDismissDropDownPublisher.send(nil)
-        shouldDismissKeyBoardPublisher.send()
-        
         addImageButtonPublisher.send()
         
         // TODO: 높이 해결
@@ -356,15 +351,10 @@ extension AddLostItemCollectionViewCell{
     }
     
     @objc private func deleteCellButtonTapped() {
-        shouldDismissDropDownPublisher.send(nil)
-        shouldDismissKeyBoardPublisher.send()
         deleteButtonPublisher.send()
     }
     
     @objc private func stackButtonTapped(_ sender: UIButton) {
-        shouldDismissDropDownPublisher.send(nil)
-        shouldDismissKeyBoardPublisher.send()
-    
         categoryWarningLabel.isHidden = true
         categoryPublisher.send(sender.titleLabel?.text ?? "")
         categoryStackView.arrangedSubviews.forEach { view in
@@ -475,43 +465,8 @@ extension AddLostItemCollectionViewCell {
     
     // MARK: - dropdown 열기/닫기
     @objc private func dateButtonTapped(button: UIButton) {
-        if dropdownView.isHidden {
-            presentDropdown()
-            shouldDismissKeyBoardPublisher.send()
-            focusDropdownPublisher.send(dropdownView)
-        } else {
-            dismissDropdown()
-        }
-    }
-    
-    private func presentDropdown() {
-        
-        guard let text = itemCountLabel.text,
-              let lastCharacter = text.last,
-              let row = Int(String(lastCharacter)) else {
-            return
-        }
-        let indexPath = IndexPath(row: row - 1, section: 0)
-        
-        shouldDismissDropDownPublisher.send(indexPath)
-        
-        dropdownView.isHidden = false
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            guard let self else { return }
-            dropdownView.alpha = 1
-            dropdownView.transform = CGAffineTransform(translationX: 0, y: 0)
-        }
-    }
-    
-    @objc func dismissDropdown() {
-        UIView.animate(withDuration: 0.1) { [weak self] in
-            guard let self else { return }
-            dropdownView.alpha = 0
-            dropdownView.transform = CGAffineTransform(translationX: 0, y: -20)
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.1 ) { [weak self] in
-            self?.dropdownView.isHidden = true
-        }
+        // KoinDropdown 은 표시 중 키보드가 없다고 전제한다. 먼저 내린다.
+        dropdown?.toggle()
     }
     
     private func dropdownValueChanged() {
@@ -531,9 +486,6 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
             
     // MARK: 내용 수정 시작
     func textViewDidBeginEditing(_ textView: UITextView) {
-        // 열려있는 드롭다운  닫기
-        shouldDismissDropDownPublisher.send(nil)
-        
         // placeholder 비우기
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
@@ -574,9 +526,6 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
     
     // MARK: 장소 수정 시작
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        // 열려있는 dropdown 닫기
-        shouldDismissDropDownPublisher.send(nil)
-        
         // placeholder 비우기
         if textField.textColor == UIColor.appColor(.neutral500) {
             textField.text = ""
@@ -612,7 +561,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
 extension AddLostItemCollectionViewCell {
     
     private func setUpLayouts() {
-        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView, categoryEssentialLabel, dateEssentialLabel, locationEssentialLabel, dropdownView, dateButton].forEach {
+        [separateView, itemCountLabel, pictureLabel, pictureMessageLabel, pictureCountLabel, addPictureButton, categoryLabel, categoryMessageLabel, categoryStackView, dateLabel, locationLabel, locationTextField, contentLabel, contentTextCountLabel, contentTextView, deleteCellButton, categoryWarningLabel, dateWarningLabel, locationWarningLabel, imageUploadCollectionView, categoryEssentialLabel, dateEssentialLabel, locationEssentialLabel, dateButton].forEach {
             contentView.addSubview($0)
         }
         dateButton.addSubview(chevronImage)
@@ -699,10 +648,6 @@ extension AddLostItemCollectionViewCell {
             $0.leading.equalTo(itemCountLabel.snp.leading)
             $0.trailing.equalTo(contentView.snp.trailing).offset(-24)
             $0.height.equalTo(40)
-        }
-        dropdownView.snp.makeConstraints {
-            $0.top.equalTo(dateButton.snp.bottom).offset(4)
-            $0.leading.trailing.equalTo(dateButton)
         }
         
         chevronImage.snp.makeConstraints { make in

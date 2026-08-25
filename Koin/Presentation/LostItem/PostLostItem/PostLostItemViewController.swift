@@ -75,7 +75,7 @@ final class PostLostItemViewController: UIViewController {
         title = "\(viewModel.type.description)물 신고"
         
         addLostItemCollectionView.setType(type: viewModel.type)
-        configureTapGestureToDismissKeyboardDropdown()
+        hideKeyboardWhenTappedAround()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -108,10 +108,6 @@ final class PostLostItemViewController: UIViewController {
         addLostItemCollectionView.logPublisher.sink { [weak self] value in
             self?.inputSubject.send(.logEvent(value.0, value.1, value.2))
         }.store(in: &subscriptions)
-        
-        addLostItemCollectionView.shouldDismissKeyBoardPublisher.sink { [weak self] in
-            self?.dismissKeyboard()
-        }.store(in: &subscriptions)
     }
 }
 
@@ -138,6 +134,8 @@ extension PostLostItemViewController {
             return
         }
         
+        guard !addLostItemCollectionView.isDropdownPresenting else { return }
+
         let contentInset = UIEdgeInsets(
             top: 0,
             left: 0,
@@ -160,6 +158,8 @@ extension PostLostItemViewController {
     }
     
     @objc private func keyBoardWillHide(_ notification: NSNotification) {
+        guard !addLostItemCollectionView.isDropdownPresenting else { return }
+
         let contentInset = UIEdgeInsets.zero
         addLostItemCollectionView.contentInset = contentInset
         
@@ -187,8 +187,6 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
         return allCellData
     }
     private func writeButtonTapped() {
-        dismissKeyboardDropdown()
-        
         var isAllValid = true
         for index in 0..<addLostItemCollectionView.numberOfItems(inSection: 0) {
             let indexPath = IndexPath(item: index, section: 0)
@@ -264,19 +262,6 @@ extension PostLostItemViewController: UITextViewDelegate, PHPickerViewController
         let viewController = LostItemDataViewController(viewModel: viewModel)
         viewController.delegate = (delegate as? LostItemDataViewControllerDelegate)
         replaceTopViewController(viewController, animated: true)
-    }
-}
-
-extension PostLostItemViewController {
-    
-    private func configureTapGestureToDismissKeyboardDropdown() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboardDropdown))
-        view.addGestureRecognizer(tapGesture)
-    }
-    
-    @objc private func dismissKeyboardDropdown() {
-        addLostItemCollectionView.dismissDatePicker(nil)
-        dismissKeyboard()
     }
 }
 

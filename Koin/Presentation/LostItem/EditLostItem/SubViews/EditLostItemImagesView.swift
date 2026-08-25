@@ -79,12 +79,6 @@ final class EditLostItemImagesView: UIView {
             self?.addPictureButton.isEnabled = urls.count < 10
             self?.pictureCountLabel.text = "\(urls.count)/10"
         }.store(in: &subscriptions)
-        
-        imageUploadCollectionView.shouldDismissDropDownKeyBoardPublisher.sink { [weak self] in
-            self?.dismissDropDownPublisher.send()
-            self?.endEditing(true)
-        }.store(in: &subscriptions)
-        
     }
     
     private func setAddTargets() {

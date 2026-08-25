@@ -12,7 +12,6 @@ final class AddLostItemFooterView: UICollectionReusableView {
     
     static let identifier = "AddLostItemFooterView"
     let addItemButtonPublisher = PassthroughSubject<Void, Never>()
-    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
     
     private let addItemButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
@@ -43,7 +42,6 @@ final class AddLostItemFooterView: UICollectionReusableView {
 extension AddLostItemFooterView {
     @objc private func addItemButtonTapped() {
         addItemButtonPublisher.send()
-        shouldDismissDropDownPublisher.send()
         self.endEditing(true)
     }
     
