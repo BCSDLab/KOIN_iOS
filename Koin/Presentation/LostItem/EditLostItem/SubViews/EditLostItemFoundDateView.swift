@@ -8,7 +8,7 @@
 import UIKit
 import Combine
 
-final class EditLostItemFoundDateView: ExtendedTouchAreaView {
+final class EditLostItemFoundDateView: UIView {
     
     // MARK: - Properties
     private var type: LostItemType
@@ -18,7 +18,6 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
         dateWarningLabel.isHidden
     }
     private(set) var foundDate: String
-    let focusDropdownPublisher = PassthroughSubject<UIView, Never>()
     
     // MARK: - UI Components
     private lazy var dateLabel = UILabel().then {
@@ -68,12 +67,12 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
     private lazy var dropdownView = DatePickerDropdownView().then {
         $0.backgroundColor = UIColor.appColor(.neutral100)
         $0.layer.cornerRadius = 12
-        $0.clipsToBounds = true
-        $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
-        $0.isHidden = true
-        $0.transform = CGAffineTransform(translationX: 0, y: -20)
-        $0.alpha = 0
     }
+
+    // MARK: - Dropdown
+    var dropdownTrigger: UIView { dateButton }
+    var dropdownContentView: UIView & KoinDropdownContentView { dropdownView }
+    private var dropdown: KoinDropdown?
     
     // MARK: - Initializer
     init(type: LostItemType, foundDate: String) {
@@ -107,9 +106,6 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
         dropdownView.valueChangedPublisher.sink { [weak self] in
             self?.dropdownValueChanged()
         }.store(in: &subscriptions)
-        dropdownView.dismissDropdownPublisher.sink { [weak self] in
-            self?.dismissDropdown()
-        }.store(in: &subscriptions)
     }
     
     private func setAddTargets() {
@@ -117,36 +113,18 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
     }
     
     @objc private func dateButtonTapped(button: UIButton) {
-        if dropdownView.isHidden {
-            presentDropdown()
-            endEditing(true)
-            focusDropdownPublisher.send(dropdownView)
-        } else {
-            dismissDropdown()
-        }
+        endEditing(true)
+        dropdown?.toggle()
     }
-    
-    private func presentDropdown() {
-        // 열려있는 키보드 닫기
-        self.endEditing(true)
-        
-        dropdownView.isHidden = false
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            guard let self else { return }
-            dropdownView.alpha = 1
-            dropdownView.transform = CGAffineTransform(translationX: 0, y: 0)
-        }
-    }
-    
-    @objc func dismissDropdown() {
-        UIView.animate(withDuration: 0.2) { [weak self] in
-            guard let self else { return }
-            dropdownView.alpha = 0
-            dropdownView.transform = CGAffineTransform(translationX: 0, y: -20)
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.1 ) { [weak self] in
-            self?.dropdownView.isHidden = true
-        }
+
+    /// ScrollView 를 아는 호출부가 Host 를 넘겨준다.
+    func prepareDropdown(host: KoinDropdownHost) {
+        guard dropdown == nil else { return }
+        dropdown = host.makeDropdown(
+            trigger: dateButton,
+            contentView: dropdownView,
+            configuration: .init(topPadding: 4, shadow: .shadow2)
+        )
     }
     
     private func dropdownValueChanged() {
@@ -167,7 +145,7 @@ final class EditLostItemFoundDateView: ExtendedTouchAreaView {
 extension EditLostItemFoundDateView {
     
     private func setUpLayouts() {
-        [dateLabel, dateWarningLabel, dateButton, chevronImage, dropdownView, essentialLabel].forEach {
+        [dateLabel, dateWarningLabel, dateButton, chevronImage, essentialLabel].forEach {
             addSubview($0)
         }
     }
@@ -194,10 +172,6 @@ extension EditLostItemFoundDateView {
             $0.width.height.equalTo(24)
             $0.centerY.equalTo(dateButton)
             $0.trailing.equalTo(dateButton.snp.trailing).offset(-16)
-        }
-        dropdownView.snp.makeConstraints {
-            $0.top.equalTo(dateButton.snp.bottom).offset(4)
-            $0.leading.trailing.equalTo(dateButton)
         }
     }
     

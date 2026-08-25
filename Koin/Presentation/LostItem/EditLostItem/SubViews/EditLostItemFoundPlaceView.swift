@@ -13,7 +13,6 @@ final class EditLostItemFoundPlaceView: UIView {
     // MARK: - Properties
     private var type: LostItemType
     private lazy var textFieldPlaceHolder = "\(type.description) 장소를 입력해주세요."
-    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
     
     var isValid: Bool {
         locationWarningLabel.isHidden
@@ -107,8 +106,6 @@ extension EditLostItemFoundPlaceView: UITextFieldDelegate {
     
     // MARK: 장소 수정 시작
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        shouldDismissDropDownPublisher.send()
-        
         // placeholder 비우기
         if textField.textColor == UIColor.appColor(.neutral500) {
             textField.text = ""

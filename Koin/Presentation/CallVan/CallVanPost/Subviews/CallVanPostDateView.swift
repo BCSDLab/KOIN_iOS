@@ -10,7 +10,7 @@ import Combine
 import SnapKit
 import Then
 
-final class CallVanPostDateView: ExtendedTouchAreaView {
+final class CallVanPostDateView: UIView {
     
     // MARK: - Properties
     let dateButtonTappedPublisher = PassthroughSubject<Void, Never>()
@@ -21,6 +21,10 @@ final class CallVanPostDateView: ExtendedTouchAreaView {
         $0.dateFormat = "yyyy년 M월 d일"
     }
     
+    // MARK: - Dropdown
+    var dropdownTrigger: UIView { dateButton }
+    var dropdownContentView: UIView & KoinDropdownContentView { dateDropDownView }
+
     // MARK: - UI Components
     private let titleLabel = UILabel()
     private let descriptionLabel = UILabel()
@@ -58,9 +62,6 @@ extension CallVanPostDateView {
             
         }.store(in: &subscriptions)
         
-        dateDropDownView.applyButtonTappedPublisher.sink { [weak self] in
-            self?.dismissDateDropDownView()
-        }.store(in: &subscriptions)
     }
 }
 
@@ -72,32 +73,6 @@ extension CallVanPostDateView {
     
     @objc private func dateButtonTapped() {
         dateButtonTappedPublisher.send()
-        
-        if dateDropDownView.isHidden {
-            presentDateDropDownView()
-        } else {
-            dismissDateDropDownView()
-        }
-    }
-    
-    private func presentDateDropDownView() {
-        dateDropDownView.isHidden = false
-        UIView.animate(springDuration: 0.3, bounce: 0.3, initialSpringVelocity: 0) { [weak self] in
-            guard let self else { return }
-            dateDropDownView.alpha = 1
-            dateDropDownView.transform = CGAffineTransform.identity
-        }
-    }
-    
-    func dismissDateDropDownView() {
-        UIView.animate(springDuration: 0.2, bounce: 0, initialSpringVelocity: 0) { [weak self] in
-            guard let self else { return }
-            dateDropDownView.alpha = 0
-            dateDropDownView.transform = CGAffineTransform(translationX: 0, y: -20)
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now()+0.1 ) { [weak self] in
-            self?.dateDropDownView.isHidden = true
-        }
     }
 }
 
@@ -135,16 +110,11 @@ extension CallVanPostDateView {
         dateDropDownView.do {
             $0.backgroundColor = UIColor.appColor(.neutral100)
             $0.layer.cornerRadius = 8
-            $0.clipsToBounds = true
-            $0.layer.applySketchShadow(color: UIColor.appColor(.neutral800), alpha: 0.08, x: 0, y: 4, blur: 10, spread: 0)
-            $0.isHidden = true
-            $0.transform = CGAffineTransform(translationX: 0, y: -20)
-            $0.alpha = 0
         }
     }
     
     private func setUpLayouts() {
-        [titleLabel, descriptionLabel, dateButton, dateLabel, downArrowImageView, dateDropDownView].forEach {
+        [titleLabel, descriptionLabel, dateButton, dateLabel, downArrowImageView].forEach {
             addSubview($0)
         }
     }
@@ -173,11 +143,6 @@ extension CallVanPostDateView {
         downArrowImageView.snp.makeConstraints {
             $0.centerY.equalTo(dateButton)
             $0.trailing.equalTo(dateButton).offset(-12)
-        }
-        dateDropDownView.snp.makeConstraints {
-            $0.height.equalTo(153)
-            $0.top.equalTo(dateButton.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(24)
         }
     }
 }

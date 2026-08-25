@@ -23,6 +23,8 @@ final class CallVanPostViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let scrollView = UIScrollView()
+    private let scrollContentView = UIView()
     private let placeView = CallVanPostPlaceView()
     private let dateView = CallVanPostDateView()
     private let timeView = CallVanPostTimeView()
@@ -33,6 +35,19 @@ final class CallVanPostViewController: UIViewController {
     private let postButton = UIButton()
     
     private let bottomSheetContentView = CallVanPostPlaceBottomSheetView()
+    
+    // MARK: - Dropdown
+    private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
+    private lazy var dateDropdown = dropdownHost.makeDropdown(
+        trigger: dateView.dropdownTrigger,
+        contentView: dateView.dropdownContentView,
+        configuration: .init(topPadding: 12, shadow: .shadow2)
+    )
+    private lazy var timeDropdown = dropdownHost.makeDropdown(
+        trigger: timeView.dropdownTrigger,
+        contentView: timeView.dropdownContentView,
+        configuration: .init(topPadding: 12, shadow: .shadow2)
+    )
     
     // MARK: - Initializer
     init(viewModel: CallVanPostViewModel) {
@@ -97,7 +112,7 @@ final class CallVanPostViewController: UIViewController {
         }.store(in: &subscriptions)
         
         dateView.dateButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
-                self?.timeView.dismissTimeDropDownView()
+                self?.dateDropdown.toggle()
             }.store(in: &subscriptions)
         
         dateView.dateChangedPublisher.sink { [weak self] date in
@@ -105,7 +120,7 @@ final class CallVanPostViewController: UIViewController {
         }.store(in: &subscriptions)
         
         timeView.timeButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
-                self?.dateView.dismissDateDropDownView()
+                self?.timeDropdown.toggle()
             }.store(in: &subscriptions)
         
         timeView.timeChangedPublisher.sink { [weak self] time in
@@ -137,6 +152,8 @@ extension CallVanPostViewController {
     }
     
     @objc private func postButtonTapped() {
+        guard !dropdownHost.isPresenting else { return }
+
         postButton.isUserInteractionEnabled = false
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteDone, category: .click, value: ""))
         inputSubject.send(.postData)
@@ -299,15 +316,26 @@ extension CallVanPostViewController {
         }
     }
     private func setUpLayouts() {
-        [placeView, participantsView, separatorView, descriptionLabel, postButton,
-         timeView, dateView].forEach {
+        [placeView, dateView, timeView, participantsView].forEach {
+            scrollContentView.addSubview($0)
+        }
+        scrollView.addSubview(scrollContentView)
+        [scrollView, separatorView, descriptionLabel, postButton].forEach {
             view.addSubview($0)
         }
     }
     private func setUpConstraints() {
-        placeView.snp.makeConstraints {
+        scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(separatorView.snp.top)
+        }
+        scrollContentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        placeView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
         }
         dateView.snp.makeConstraints {
             $0.top.equalTo(placeView.snp.bottom)
@@ -320,6 +348,7 @@ extension CallVanPostViewController {
         participantsView.snp.makeConstraints {
             $0.top.equalTo(timeView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
         
         postButton.snp.makeConstraints {

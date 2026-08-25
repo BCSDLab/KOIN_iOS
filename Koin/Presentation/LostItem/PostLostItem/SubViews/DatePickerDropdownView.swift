@@ -61,6 +61,17 @@ final class DatePickerDropdownView: UIView {
     }
 }
 
+// MARK: - KoinDropdownContentView
+
+extension DatePickerDropdownView: KoinDropdownContentView {
+    var dismissTappedPublisher: AnyPublisher<Void, Never> {
+        dismissDropdownPublisher.eraseToAnyPublisher()
+    }
+    var height: CGFloat {
+        return 161
+    }
+}
+
 extension DatePickerDropdownView {
     
     private func setAddTargets() {
