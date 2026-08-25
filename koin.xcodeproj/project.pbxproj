@@ -767,6 +767,7 @@
 		B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */; };
 		B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D6292EEB01E600A19521 /* Debug.xcconfig */; };
 		B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */; };
+		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
 		D19A00013000000000000002 /* NotificationRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000001 /* NotificationRowModel.swift */; };
 		D19A00013000000000000004 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000003 /* NotificationListView.swift */; };
 		D19A00013000000000000006 /* NotificationRowModel+NotificationHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */; };
@@ -1006,6 +1007,9 @@
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
+		FE01000000000000000021 /* KoinDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000011 /* KoinDropdown.swift */; };
+		FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000013 /* KoinDropdownAnimator.swift */; };
+		FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000016 /* KoinDropdownConfiguration.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1784,6 +1788,7 @@
 		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		B6A0D6292EEB01E600A19521 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownHost.swift; sourceTree = "<group>"; };
 		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
 		D19A00013000000000000003 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
 		D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationRowModel+NotificationHistoryItem.swift"; sourceTree = "<group>"; };
@@ -2027,6 +2032,9 @@
 		EC692285302700A400EE26ED /* koinUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
+		FE01000000000000000011 /* KoinDropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdown.swift; sourceTree = "<group>"; };
+		FE01000000000000000013 /* KoinDropdownAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownAnimator.swift; sourceTree = "<group>"; };
+		FE01000000000000000016 /* KoinDropdownConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownConfiguration.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2882,6 +2890,14 @@
 			path = LostItem;
 			sourceTree = "<group>";
 		};
+		7C8B2FF0303D928300A7EB5A /* Helper */ = {
+			isa = PBXGroup;
+			children = (
+				FE01000000000000000013 /* KoinDropdownAnimator.swift */,
+			);
+			path = Helper;
+			sourceTree = "<group>";
+		};
 		7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */ = {
 			isa = PBXGroup;
 			children = (
@@ -3284,6 +3300,17 @@
 				D19A10013000000000000009 /* ChatListModel+CallVanChat.swift */,
 			);
 			path = Support;
+			sourceTree = "<group>";
+		};
+		7CC42B922F5DCE9800940CE1 /* ChatTableView */ = {
+			isa = PBXGroup;
+			children = (
+				7CC42B932F5DCEA600940CE1 /* ChatTableView.swift */,
+				7CC42B952F5DCEB300940CE1 /* ChatDateHeaderView.swift */,
+				7CC42B972F5E812F00940CE1 /* ChatLeftCell.swift */,
+				7CC42B9B2F5E834E00940CE1 /* ChatRightCell.swift */,
+			);
+			path = ChatTableView;
 			sourceTree = "<group>";
 		};
 		7CCB1E4C2F29DB2500472669 /* LostItemChat */ = {
@@ -4735,17 +4762,6 @@
 			path = Views;
 			sourceTree = "<group>";
 		};
-		7CC42B922F5DCE9800940CE1 /* ChatTableView */ = {
-			isa = PBXGroup;
-			children = (
-				7CC42B932F5DCEA600940CE1 /* ChatTableView.swift */,
-				7CC42B952F5DCEB300940CE1 /* ChatDateHeaderView.swift */,
-				7CC42B972F5E812F00940CE1 /* ChatLeftCell.swift */,
-				7CC42B9B2F5E834E00940CE1 /* ChatRightCell.swift */,
-			);
-			path = ChatTableView;
-			sourceTree = "<group>";
-		};
 		D2009F7D2C1784C000211D1B /* MockService */ = {
 			isa = PBXGroup;
 			children = (
@@ -5248,6 +5264,7 @@
 				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
 				83EBB8792D0FDFD700346018 /* KoinPickerView.swift */,
 				7CC42B732F5AD39C00940CE1 /* KoinPickerDropDownView */,
+				FE01000000000000000031 /* KoinDropdown */,
 				D289873D2D21B30D00AA7285 /* DebouncedButton.swift */,
 				D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */,
 				D89F8FDA2DF12847000265DC /* StatefulButton.swift */,
@@ -5560,6 +5577,17 @@
 			path = koinUnitTests;
 			sourceTree = "<group>";
 		};
+		FE01000000000000000031 /* KoinDropdown */ = {
+			isa = PBXGroup;
+			children = (
+				7C8B2FF0303D928300A7EB5A /* Helper */,
+				FE01000000000000000016 /* KoinDropdownConfiguration.swift */,
+				D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */,
+				FE01000000000000000011 /* KoinDropdown.swift */,
+			);
+			path = KoinDropdown;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -5754,6 +5782,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FE01000000000000000021 /* KoinDropdown.swift in Sources */,
+				D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */,
+				FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */,
+				FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */,
 				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
 				7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */,
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
