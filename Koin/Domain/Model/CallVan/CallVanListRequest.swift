@@ -26,10 +26,26 @@ enum CallVanListSort: String, CallVanFilterState {
     case departureDesc = "출발시각순"
     case latestAsc = "과거순"
     case latestDesc = "최신순"
+    
+    var index: Int? {
+        switch self {
+        case .latestDesc: 0
+        case .departureDesc: 1
+        default: nil
+        }
+    }
 }
 
 enum CallVanMineOrJoined: String, CallVanFilterState {
     case all = "전체"
     case mine = "내 게시물"
     case joined = "참여중인 게시물"
+    
+    var index: Int {
+        switch self {
+        case .all: 0
+        case .mine: 1
+        case .joined: 2
+        }
+    }
 }
