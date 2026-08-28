@@ -82,7 +82,7 @@ extension CallVanListRequest {
         }
         
         arrival.forEach { place in
-            filterGroupModels[3].didTap(itemAt: place.index)
+            filterGroupModels[4].didTap(itemAt: place.index)
         }
         
         return filterGroupModels
