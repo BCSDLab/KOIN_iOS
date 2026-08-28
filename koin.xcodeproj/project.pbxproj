@@ -134,6 +134,7 @@
 		7C4D5A5A2F01638800B40128 /* BusAreaSelectdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */; };
 		7C4D5A5B2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A2E2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift */; };
 		7C4D5A5D2F0163BA00B40128 /* DIContainer+Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */; };
+		7C50A1DD3042016300897A6F /* LeftAlignedLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C50A1DC3042016300897A6F /* LeftAlignedLayout.swift */; };
 		7C50F8DC300FC03B00A87BAE /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 7C50F8DB300FC03B00A87BAE /* AppIcon.icon */; };
 		7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */; };
 		7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */; };
@@ -1176,6 +1177,7 @@
 		7C4D5A382F01638800B40128 /* BusTimetableDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableDataViewController.swift; sourceTree = "<group>"; };
 		7C4D5A392F01638800B40128 /* BusTimetableDataViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableDataViewModel.swift; sourceTree = "<group>"; };
 		7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Bus.swift"; sourceTree = "<group>"; };
+		7C50A1DC3042016300897A6F /* LeftAlignedLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeftAlignedLayout.swift; sourceTree = "<group>"; };
 		7C50F8DB300FC03B00A87BAE /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoHeaderView.swift; sourceTree = "<group>"; };
 		7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoFooterView.swift; sourceTree = "<group>"; };
@@ -2621,6 +2623,7 @@
 		7C50A1DB3042014000897A6F /* SwiftUI */ = {
 			isa = PBXGroup;
 			children = (
+				7C50A1DC3042016300897A6F /* LeftAlignedLayout.swift */,
 			);
 			path = SwiftUI;
 			sourceTree = "<group>";
@@ -6592,6 +6595,7 @@
 				7C05D07B2FBC2A0100F4D825 /* ShopBenefitTableView.swift in Sources */,
 				B68D2CE92EA505B800F3B479 /* ToastVariant.swift in Sources */,
 				7C4C714E2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift in Sources */,
+				7C50A1DD3042016300897A6F /* LeftAlignedLayout.swift in Sources */,
 				7CA60D952F667AE4007C08C1 /* ReopenCallVanUseCase.swift in Sources */,
 				D29F21D92C4E1AB800994554 /* CheckDuplicatedNicknameUseCase.swift in Sources */,
 				D249CD232C12DB73000813F9 /* DiningRepository.swift in Sources */,
