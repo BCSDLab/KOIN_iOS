@@ -227,12 +227,7 @@ extension CallVanPostViewController {
     }
 
     private func presentPlaceBottomSheet() {
-        let bottomSheetViewController = BottomSheetViewControllerB(
-            contentView: bottomSheetContentView,
-            dimColor: .black,
-            dimAlpha: 0.7,
-            backgroundColor: UIColor.appColor(.neutral0)
-        )
+        let bottomSheetViewController = BottomSheetViewControllerB(contentView: bottomSheetContentView)
         bottomSheetContentView.delegate = bottomSheetViewController
         present(bottomSheetViewController, animated: false)
     }
