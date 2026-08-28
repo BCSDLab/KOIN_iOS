@@ -2591,6 +2591,40 @@
 			path = Bus;
 			sourceTree = "<group>";
 		};
+		7C50A1DA3042013B00897A6F /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
+				7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */,
+				7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */,
+				7C333E7A302E280C009D2B89 /* KoinModalViewController */,
+				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
+				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
+				7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */,
+				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
+				7CC42B042F56A78600940CE1 /* PaddingLabel.swift */,
+				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
+				83EBB8792D0FDFD700346018 /* KoinPickerView.swift */,
+				7CC42B732F5AD39C00940CE1 /* KoinPickerDropDownView */,
+				FE01000000000000000031 /* KoinDropdown */,
+				D289873D2D21B30D00AA7285 /* DebouncedButton.swift */,
+				D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */,
+				D89F8FDA2DF12847000265DC /* StatefulButton.swift */,
+				D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */,
+				7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */,
+				B608F0E52EB5DC2C0006F355 /* OrderHistoryUIComponents */,
+				7C65FDCA2FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView */,
+			);
+			path = UIKit;
+			sourceTree = "<group>";
+		};
+		7C50A1DB3042014000897A6F /* SwiftUI */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = SwiftUI;
+			sourceTree = "<group>";
+		};
 		7C58FE842F5F9CC700A2737B /* CallVanData */ = {
 			isa = PBXGroup;
 			children = (
@@ -5307,26 +5341,8 @@
 		D2D380E42BA6EAE7009AD5A9 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
-				7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */,
-				7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */,
-				7C333E7A302E280C009D2B89 /* KoinModalViewController */,
-				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
-				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
-				7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */,
-				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
-				7CC42B042F56A78600940CE1 /* PaddingLabel.swift */,
-				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
-				83EBB8792D0FDFD700346018 /* KoinPickerView.swift */,
-				7CC42B732F5AD39C00940CE1 /* KoinPickerDropDownView */,
-				FE01000000000000000031 /* KoinDropdown */,
-				D289873D2D21B30D00AA7285 /* DebouncedButton.swift */,
-				D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */,
-				D89F8FDA2DF12847000265DC /* StatefulButton.swift */,
-				D891F25E2E45DC9D006D1F41 /* TrackPaddedSlider.swift */,
-				7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */,
-				B608F0E52EB5DC2C0006F355 /* OrderHistoryUIComponents */,
-				7C65FDCA2FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView */,
+				7C50A1DA3042013B00897A6F /* UIKit */,
+				7C50A1DB3042014000897A6F /* SwiftUI */,
 			);
 			path = View;
 			sourceTree = "<group>";
