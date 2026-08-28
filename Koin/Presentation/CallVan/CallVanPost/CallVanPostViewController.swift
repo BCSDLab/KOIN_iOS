@@ -201,7 +201,7 @@ extension CallVanPostViewController {
         }
         bottomSheetContentView.configure(
             title: .departure,
-            place: viewModel.request.departureType,
+            selectedPlace: viewModel.request.departureType,
             customPlace: viewModel.request.departureCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
@@ -219,7 +219,7 @@ extension CallVanPostViewController {
         }
         bottomSheetContentView.configure(
             title: .arrival,
-            place: viewModel.request.arrivalType,
+            selectedPlace: viewModel.request.arrivalType,
             customPlace: viewModel.request.arrivalCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )

@@ -17,35 +17,58 @@ final class CallVanPostPlaceBottomSheetView: UIView {
         case arrival = "도착지가 어디인가요?"
     }
     
+    // MARK: - State
+    private var selectedPlace: CallVanPlace? {
+        didSet {
+            guard let selectedPlace else {
+                applyButton.isEnabled = false
+                return
+            }
+            updateSelection(selectedPlace)
+            updateTextField(isEditing: selectedPlace == .custom)
+            validate()
+        }
+    }
+    private var customPlace: String? {
+        didSet {
+            validate()
+        }
+    }
+    
     // MARK: - Properties
     weak var delegate: BottomSheetViewControllerBDelegate?
     private var onApplyButtonTapped: ((CallVanPlace, String?)->Void)?
+    private var filterGroup = FilterGroupModel(
+        title: "",
+        hasAllButton: false,
+        items: [
+            CallVanPlace.frontGate.rawValue,
+            CallVanPlace.backGate.rawValue,
+            CallVanPlace.dormitoryMain.rawValue,
+            CallVanPlace.dormitorySub.rawValue,
+            CallVanPlace.terminal.rawValue,
+            CallVanPlace.station.rawValue,
+            CallVanPlace.asanStation.rawValue,
+            CallVanPlace.custom.rawValue
+        ],
+        behavior: .single,
+        allowEmptySelection: true
+    )
+    private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
-    private let containerView = UIView()
-    
     private let titleLabel = UILabel()
     private let closeButton = UIButton()
     private let topSeparatorView = UIView()
     
-    private let buttonsStackView1 = UIStackView()
-    private let buttons1 = [
-        CallVanFilterButton(filterState: CallVanPlace.frontGate),
-        CallVanFilterButton(filterState: CallVanPlace.backGate),
-        CallVanFilterButton(filterState: CallVanPlace.dormitoryMain),
-        CallVanFilterButton(filterState: CallVanPlace.dormitorySub)
-    ]
-    
-    private let buttonsStackView2 = UIStackView()
-    private let buttons2 = [
-        CallVanFilterButton(filterState: CallVanPlace.terminal),
-        CallVanFilterButton(filterState: CallVanPlace.station),
-        CallVanFilterButton(filterState: CallVanPlace.asanStation)
-    ]
-    private let customButton = CallVanFilterButton(filterState: CallVanPlace.custom)
+    private lazy var filterGroupCollectionView = FilterGroupCollectionView(filterGroup: filterGroup)
     
     private let separatorView = UIView()
-    private let customPlaceTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral800), font: UIFont.appFont(.pretendardMedium, size: 15))
+    private let customPlaceTextField = DefaultTextField(
+        placeholder: "",
+        placeholderColor: UIColor.appColor(.neutral800),
+        font: UIFont.appFont(.pretendardMedium, size: 15)
+    )
     private let applyButton = UIButton()
     private let bottomSeparatorView = UIView()
     
@@ -55,177 +78,121 @@ final class CallVanPostPlaceBottomSheetView: UIView {
         configureView()
         setAddTargets()
         setDelegate()
+        bind()
     }
     
     // MARK: - Public
     func configure(
         title: Title,
-        place: CallVanPlace?,
+        selectedPlace: CallVanPlace?,
         customPlace: String?,
         onApplyButtonTapped: @escaping (CallVanPlace, String?)->Void
     ) {
+        self.selectedPlace = selectedPlace
+        self.customPlace = customPlace
         self.onApplyButtonTapped = onApplyButtonTapped
-
         titleLabel.text = title.rawValue
-
-        resetState()
-
-        if place == .custom {
-            (buttons1 + buttons2).forEach {
-                $0.isSelected = false
-            }
-            customButton.isSelected = true
-            customPlaceTextField.text = customPlace
-            updateCustomPlaceTextField(isVisible: true)
-            updateApplyButtonTitle(isCustomSelected: true)
-            valiate(customPlaceTextField)
-        } else {
-            let place = place ?? CallVanPlace.frontGate
-            (buttons1 + buttons2).forEach {
-                $0.isSelected = $0.filterState as? CallVanPlace == place
-            }
-            customButton.isSelected = false
-            updateCustomPlaceTextField(isVisible: false)
-            updateApplyButtonTitle(isCustomSelected: false)
-            applyButton.backgroundColor = UIColor.appColor(.new500)
-            applyButton.isEnabled = true
-        }
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    // MARK: - Bind
+    private func bind() {
+        filterGroupCollectionView.itemTappedPublisher
+            .sink { [weak self] selectedIndex in
+                guard let self,
+                      let selectedPlace = CallVanPlace(rawValue: filterGroup.items[selectedIndex].title) else {
+                    return
+                }
+                self.selectedPlace = selectedPlace
+            }
+            .store(in: &subscriptions)
+    }
 }
 
 extension CallVanPostPlaceBottomSheetView {
-    
-    private func setAddTargets() {
-        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
-        
-        (buttons1 + buttons2).forEach {
-            $0.addTarget(self, action: #selector(placeButtonTapped(_:)), for: .touchUpInside)
-        }
-        customButton.addTarget(self, action: #selector(customButtonTapped(_:)), for: .touchUpInside)
-        
-        applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
-        
-        customPlaceTextField.addTarget(self, action: #selector(valiate(_:)), for: .editingChanged)
+    // MARK: - Set Delegate
+    private func setDelegate() {
+        customPlaceTextField.delegate = self
     }
     
+    // MARK: - Set AddTargets
+    private func setAddTargets() {
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        customPlaceTextField.addTarget(self, action: #selector(editingChanged), for: .editingChanged)
+        applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
+    }
+    
+    // MARK: - Objc
     @objc private func closeButtonTapped() {
         customPlaceTextField.resignFirstResponder()
         delegate?.dismiss()
     }
     
-    @objc private func placeButtonTapped(_ sender: UIButton) {
-        if let placeButton = sender as? CallVanFilterButton {
-            (buttons1 + buttons2).forEach {
-                $0.isSelected = $0.filterState.rawValue == placeButton.filterState.rawValue
-            }
-        }
-        customButton.isSelected = false
-
-        updateCustomPlaceTextField(isVisible: false)
-        UIView.animate(
-            withDuration: 0.2,
-            animations: { [weak self] in
-                self?.superview?.layoutIfNeeded()
-                self?.layoutIfNeeded()
-                self?.applyButton.isEnabled = true
-                self?.applyButton.backgroundColor = UIColor.appColor(.new500)
-                self?.updateApplyButtonTitle(isCustomSelected: false)
-            },
-            completion: { [weak self] _ in
-                self?.customPlaceTextField.resignFirstResponder()
-            }
-        )
-    }
-    
-    @objc private func customButtonTapped(_ sender: UIButton) {
-        (buttons1 + buttons2).forEach {
-            $0.isSelected = false
-        }
-        sender.isSelected = true
-
-        updateCustomPlaceTextField(isVisible: true)
-        UIView.animate(
-            withDuration: 0.2,
-            animations: { [weak self] in
-                self?.superview?.layoutIfNeeded()
-                self?.layoutIfNeeded()
-                self?.updateApplyButtonTitle(isCustomSelected: true)
-            },
-            completion: { [weak self] _ in
-                self?.customPlaceTextField.becomeFirstResponder()
-            }
-        )
-    }
-    
     @objc private func applyButtonTapped() {
-        if let selectedButton = (buttons1 + buttons2).first(where: { $0.isSelected }),
-           let selectedPlace = selectedButton.filterState as? CallVanPlace {
+        guard let selectedPlace else { return }
+        customPlaceTextField.resignFirstResponder()
+        
+        switch selectedPlace {
+        case .custom:
+            onApplyButtonTapped?(.custom, customPlace)
+        default:
             onApplyButtonTapped?(selectedPlace, nil)
         }
-        else if customButton.isSelected,
-                let customPlace = customPlaceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
-                !customPlace.isEmpty {
-            onApplyButtonTapped?(.custom, customPlace)
-        }
-        customPlaceTextField.resignFirstResponder()
+        
         delegate?.dismiss()
+    }
+    
+    @objc private func editingChanged() {
+        customPlace = customPlaceTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }
 
 extension CallVanPostPlaceBottomSheetView: UITextFieldDelegate {
-    
-    private func setDelegate() {
-        customPlaceTextField.delegate = self
-    }
-    
+    // MARK: - Handle Textfield
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        customPlace = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
         self.endEditing(true)
         return true
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        valiate(textField)
+        customPlace = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
     }
     
-    @objc private func valiate(_ textField: UITextField) {
-        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines),
-           !text.isEmpty {
-            applyButton.backgroundColor = UIColor.appColor(.new500)
-            applyButton.isEnabled = true
-        } else {
-            applyButton.backgroundColor = UIColor.appColor(.neutral400)
-            applyButton.isEnabled = false
-        }
+    private func updateTextField(isEditing: Bool) {
+        updateTextField(isVisible: isEditing)
+        updateApplyButton(isCustomSelected: isEditing)
     }
-}
-
-extension CallVanPostPlaceBottomSheetView {
-
-    private func resetState() {
-        (buttons1 + buttons2).forEach {
-            $0.isSelected = false
-        }
-        customButton.isSelected = false
-        customPlaceTextField.text = nil
-        customPlaceTextField.resignFirstResponder()
-        updateCustomPlaceTextField(isVisible: false)
-        updateApplyButtonTitle(isCustomSelected: false)
-        applyButton.backgroundColor = UIColor.appColor(.new500)
-        applyButton.isEnabled = true
-    }
-
-    private func updateCustomPlaceTextField(isVisible: Bool) {
+    
+    private func updateTextField(isVisible: Bool) {
         customPlaceTextField.snp.remakeConstraints {
             $0.height.equalTo(isVisible ? 47 : 0)
             $0.top.equalTo(separatorView.snp.bottom).offset(isVisible ? 24 : 0)
             $0.leading.trailing.equalToSuperview().inset(32)
         }
+        
+        if isVisible {
+            customPlaceTextField.isHidden = false
+        }
+        
+        UIView.animate(springDuration: 0.2) { [weak self] in
+            self?.superview?.layoutIfNeeded()
+            self?.layoutIfNeeded()
+            self?.customPlaceTextField.alpha = isVisible ? 1 : 0
+        } completion: { [weak self] _ in
+            self?.customPlaceTextField.isHidden = !isVisible
+        }
+        
+        if isVisible {
+            customPlaceTextField.becomeFirstResponder()
+        } else {
+            customPlaceTextField.resignFirstResponder()
+        }
     }
-
-    private func updateApplyButtonTitle(isCustomSelected: Bool) {
+    
+    private func updateApplyButton(isCustomSelected: Bool) {
         let title = isCustomSelected ? "입력완료" : "선택하기"
         applyButton.setAttributedTitle(NSAttributedString(
             string: title,
@@ -235,7 +202,52 @@ extension CallVanPostPlaceBottomSheetView {
             ]), for: .normal
         )
     }
+}
+
+extension CallVanPostPlaceBottomSheetView {
+    // MARK: - Update CollecitonView
+    private func updateSelection(_ selectedPlace: CallVanPlace) {
+        guard let selectedIndex = filterGroup.items.firstIndex(where: { $0.title == selectedPlace.rawValue }) else {
+            return
+        }
+        
+        let before = filterGroup.items.map(\.isSelected)
+        filterGroup.didTap(itemAt: selectedIndex)
+        let after = filterGroup.items.map(\.isSelected)
+        
+        filterGroupCollectionView.update(
+            filterGroup: filterGroup,
+            changed: Self.changedIndexPaths(before: before, after: after)
+        )
+    }
     
+    private static func changedIndexPaths(before: [Bool], after: [Bool]) -> [IndexPath] {
+        zip(before, after).enumerated().compactMap { index, pair in
+            pair.0 != pair.1 ? IndexPath(row: index, section: 0) : nil
+        }
+    }
+}
+
+extension CallVanPostPlaceBottomSheetView {
+    // MARK: - Validate
+    private func validate() {
+        applyButton.backgroundColor = isValid ? UIColor.appColor(.new500) : UIColor.appColor(.neutral400)
+        applyButton.isEnabled = isValid
+    }
+    
+    private var isValid: Bool {
+        guard let selectedPlace else { return false }
+        switch selectedPlace {
+        case .custom:
+            let isEmpty = customPlace?.isEmpty ?? true
+            return !isEmpty
+        default:
+            return true
+        }
+    }
+}
+
+extension CallVanPostPlaceBottomSheetView {
     private func configureView() {
         setUpStyles()
         setUpLayouts()
@@ -243,7 +255,7 @@ extension CallVanPostPlaceBottomSheetView {
     }
     
     private func setUpStyles() {
-        containerView.do {
+        self.do {
             $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
             $0.layer.cornerRadius = 32
             $0.backgroundColor = UIColor.appColor(.neutral0)
@@ -259,11 +271,6 @@ extension CallVanPostPlaceBottomSheetView {
         }
         [topSeparatorView, separatorView, bottomSeparatorView].forEach {
             $0.backgroundColor = UIColor.appColor(.neutral300)
-        }
-        [buttonsStackView1, buttonsStackView2].forEach {
-            $0.axis = .horizontal
-            $0.spacing = 12
-            $0.distribution = .fillProportionally
         }
         customPlaceTextField.do {
             $0.layer.cornerRadius = 12
@@ -289,33 +296,18 @@ extension CallVanPostPlaceBottomSheetView {
     }
     
     private func setUpLayouts() {
-        buttons1.forEach {
-            buttonsStackView1.addArrangedSubview($0)
-        }
-        buttons2.forEach {
-            buttonsStackView2.addArrangedSubview($0)
-        }
-        buttonsStackView2.addArrangedSubview(customButton)
-        
         [titleLabel, closeButton, topSeparatorView,
-         buttonsStackView1, buttonsStackView2,
+         filterGroupCollectionView,
          separatorView, customPlaceTextField,
          applyButton, bottomSeparatorView].forEach {
-            containerView.addSubview($0)
-        }
-        
-        [containerView].forEach {
             addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        containerView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
         titleLabel.snp.makeConstraints {
             $0.height.equalTo(29)
-            $0.top.equalTo(containerView).offset(12)
+            $0.top.equalToSuperview().offset(12)
             $0.leading.equalToSuperview().offset(32)
         }
         closeButton.snp.makeConstraints {
@@ -327,21 +319,13 @@ extension CallVanPostPlaceBottomSheetView {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(titleLabel.snp.bottom).offset(12)
         }
-        
-        buttonsStackView1.snp.makeConstraints {
-            $0.height.equalTo(34)
+        filterGroupCollectionView.snp.makeConstraints {
             $0.top.equalTo(topSeparatorView.snp.bottom).offset(12)
-            $0.leading.equalToSuperview().offset(32)
+            $0.leading.trailing.equalToSuperview().inset(32)
         }
-        buttonsStackView2.snp.makeConstraints {
-            $0.height.equalTo(34)
-            $0.top.equalTo(buttonsStackView1.snp.bottom).offset(8)
-            $0.leading.equalTo(buttonsStackView1)
-        }
-        
         separatorView.snp.makeConstraints {
             $0.height.equalTo(1)
-            $0.top.equalTo(buttonsStackView2.snp.bottom).offset(12)
+            $0.top.equalTo(filterGroupCollectionView.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview().inset(32)
         }
         customPlaceTextField.snp.makeConstraints {
