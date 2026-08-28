@@ -245,6 +245,7 @@
 		7C8261973040344700C20F64 /* FilterGroupCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8261963040344700C20F64 /* FilterGroupCollectionView.swift */; };
 		7C82619930403C5E00C20F64 /* FilterGroupCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82619830403C5E00C20F64 /* FilterGroupCollectionViewCell.swift */; };
 		7C82619C30407FF300C20F64 /* FilterGroupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82619B30407FF300C20F64 /* FilterGroupView.swift */; };
+		7C8261A03040C7E700C20F64 /* CallVanListRequest+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82619F3040C7E700C20F64 /* CallVanListRequest+.swift */; };
 		7C82FF782E9D18C7006335A7 /* OrderShopDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */; };
 		7C85D2752EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */; };
 		7C86750E30061AA0003CB942 /* CheckHasUnreadNotificationHistoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C86750D30061AA0003CB942 /* CheckHasUnreadNotificationHistoryUseCase.swift */; };
@@ -383,7 +384,6 @@
 		7CC42B1E2F56F3B200940CE1 /* CallVanButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B1D2F56F3B200940CE1 /* CallVanButton.swift */; };
 		7CC42B202F56F3C400940CE1 /* CallVanState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B1F2F56F3C400940CE1 /* CallVanState.swift */; };
 		7CC42B222F56F9C100940CE1 /* CallVanList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B212F56F9C100940CE1 /* CallVanList.swift */; };
-		7CC42B282F575E8100940CE1 /* CallVanListFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B272F575E8100940CE1 /* CallVanListFilterViewController.swift */; };
 		7CC42B2A2F575F4D00940CE1 /* CallVanFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B292F575F4D00940CE1 /* CallVanFilterButton.swift */; };
 		7CC42B2F2F58105B00940CE1 /* CallVanBottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B2E2F58105B00940CE1 /* CallVanBottomSheetViewController.swift */; };
 		7CC42B332F58247D00940CE1 /* CallVanNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B322F58247D00940CE1 /* CallVanNotification.swift */; };
@@ -1284,6 +1284,7 @@
 		7C8261963040344700C20F64 /* FilterGroupCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterGroupCollectionView.swift; sourceTree = "<group>"; };
 		7C82619830403C5E00C20F64 /* FilterGroupCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterGroupCollectionViewCell.swift; sourceTree = "<group>"; };
 		7C82619B30407FF300C20F64 /* FilterGroupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterGroupView.swift; sourceTree = "<group>"; };
+		7C82619F3040C7E700C20F64 /* CallVanListRequest+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CallVanListRequest+.swift"; sourceTree = "<group>"; };
 		7C82FF772E9D18C7006335A7 /* OrderShopDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderShopDetail.swift; sourceTree = "<group>"; };
 		7C85D2742EBDE374005E63FF /* FetchOrderShopMenusAndGroupsFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopMenusAndGroupsFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C86750D30061AA0003CB942 /* CheckHasUnreadNotificationHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckHasUnreadNotificationHistoryUseCase.swift; sourceTree = "<group>"; };
@@ -1406,7 +1407,6 @@
 		7CC42B1D2F56F3B200940CE1 /* CallVanButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanButton.swift; sourceTree = "<group>"; };
 		7CC42B1F2F56F3C400940CE1 /* CallVanState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanState.swift; sourceTree = "<group>"; };
 		7CC42B212F56F9C100940CE1 /* CallVanList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanList.swift; sourceTree = "<group>"; };
-		7CC42B272F575E8100940CE1 /* CallVanListFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanListFilterViewController.swift; sourceTree = "<group>"; };
 		7CC42B292F575F4D00940CE1 /* CallVanFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanFilterButton.swift; sourceTree = "<group>"; };
 		7CC42B2E2F58105B00940CE1 /* CallVanBottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanBottomSheetViewController.swift; sourceTree = "<group>"; };
 		7CC42B322F58247D00940CE1 /* CallVanNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanNotification.swift; sourceTree = "<group>"; };
@@ -3188,6 +3188,7 @@
 		7CC42B092F56AB0100940CE1 /* CallVanList */ = {
 			isa = PBXGroup;
 			children = (
+				7C82619E3040C7C100C20F64 /* Mapper */,
 				7CC42B0F2F56AB7E00940CE1 /* Subviews */,
 				7CC42B0D2F56AB7900940CE1 /* CallVanListViewController.swift */,
 				7CC42B432F5991AE00940CE1 /* CallVanListViewModel.swift */,
@@ -3199,8 +3200,6 @@
 			isa = PBXGroup;
 			children = (
 				7CC42B262F575E6900940CE1 /* CallVanListCollectionView */,
-				7CC42B292F575F4D00940CE1 /* CallVanFilterButton.swift */,
-				7CC42B272F575E8100940CE1 /* CallVanListFilterViewController.swift */,
 				7CC42B2E2F58105B00940CE1 /* CallVanBottomSheetViewController.swift */,
 			);
 			path = Subviews;
@@ -3308,6 +3307,7 @@
 				7CC42B5B2F59CFD600940CE1 /* CallVanPostTimeView.swift */,
 				7CC42B5F2F59D06C00940CE1 /* CallVanPostParticipantsView.swift */,
 				7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */,
+				7CC42B292F575F4D00940CE1 /* CallVanFilterButton.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -6392,6 +6392,7 @@
 				7C4D5A482F01638800B40128 /* BusTimetableDataViewModel.swift in Sources */,
 				7C4D5A492F01638800B40128 /* BusSearchDatePickerViewController.swift in Sources */,
 				7C640412300F435E00A9589F /* DepartmentCategoryDto.swift in Sources */,
+				7C8261A03040C7E700C20F64 /* CallVanListRequest+.swift in Sources */,
 				7C4D5A4A2F01638800B40128 /* BusTimetableRouteCollectionView.swift in Sources */,
 				7CC42B442F5991AE00940CE1 /* CallVanListViewModel.swift in Sources */,
 				7C61D34D2F220EBA005FAC3A /* EditLostItemContentView.swift in Sources */,

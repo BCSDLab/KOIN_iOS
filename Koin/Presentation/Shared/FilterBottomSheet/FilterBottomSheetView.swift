@@ -15,6 +15,7 @@ class FilterBottomSheetView: UIView {
     // MARK: - Properties
     weak var delegate: BottomSheetViewControllerBDelegate?
     private var groupModels: [FilterGroupModel]
+    private let onFilterItemTapped: (FilterItemModel)->Bool
     private let onApplyTapped: ([FilterGroupModel])->Void
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -35,9 +36,11 @@ class FilterBottomSheetView: UIView {
     // MARK: - Initializer
     init(
         groupModels: [FilterGroupModel],
+        onFilterItemTapped: @escaping (FilterItemModel)->Bool,
         onApplyTapped: @escaping ([FilterGroupModel])->Void
     ) {
         self.groupModels = groupModels
+        self.onFilterItemTapped = onFilterItemTapped
         self.onApplyTapped = onApplyTapped
         self.filterGroupViews = groupModels.map { group in
             FilterGroupView(filterGroup: group)
@@ -65,6 +68,11 @@ class FilterBottomSheetView: UIView {
     }
 
     private func didTapItem(groupIndex: Int, itemIndex: Int) {
+        let tappedItem = groupModels[groupIndex].items[itemIndex]
+        guard onFilterItemTapped(tappedItem) else {
+            return
+        }
+        
         let before = groupModels[groupIndex].items.map(\.isSelected)
         groupModels[groupIndex].didTap(itemAt: itemIndex)
         let after = groupModels[groupIndex].items.map(\.isSelected)

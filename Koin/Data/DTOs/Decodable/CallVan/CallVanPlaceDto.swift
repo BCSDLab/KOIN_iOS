@@ -10,7 +10,6 @@ import Foundation
 enum CallVanPlaceDto: String, Codable {
     case frontGate = "FRONT_GATE"
     case backGate = "BACK_GATE"
-    case tennisCourt = "TENNIS_COURT"
     case dormitoryMain = "DORMITORY_MAIN"
     case dormitorySub = "DORMITORY_SUB"
     case terminal = "TERMINAL"
@@ -29,7 +28,6 @@ extension CallVanPlaceDto {
         case .dormitorySub: self = .dormitorySub
         case .frontGate: self = .frontGate
         case .station: self = .station
-        case .tennisCourt: self = .tennisCourt
         case .terminal: self = .terminal
         case .all: return nil
         }
@@ -51,8 +49,6 @@ extension CallVanPlaceDto {
             return .frontGate
         case .station:
             return .station
-        case .tennisCourt:
-            return .tennisCourt
         case .terminal:
             return .terminal
         }
