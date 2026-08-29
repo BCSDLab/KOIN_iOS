@@ -799,7 +799,7 @@
 		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
 		D19A00013000000000000002 /* NotificationRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000001 /* NotificationRowModel.swift */; };
 		D19A00013000000000000004 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000003 /* NotificationListView.swift */; };
-		D19A00013000000000000006 /* NotificationRowModel+NotificationHistoryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */; };
+		D19A00013000000000000006 /* NotificationHistoryItem+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000005 /* NotificationHistoryItem+.swift */; };
 		D19A10013000000000000002 /* ChatListModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A10013000000000000001 /* ChatListModel.swift */; };
 		D19A10013000000000000004 /* ChatMessageRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A10013000000000000003 /* ChatMessageRowModel.swift */; };
 		D19A10013000000000000006 /* ChatListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A10013000000000000005 /* ChatListView.swift */; };
@@ -1849,7 +1849,7 @@
 		D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownHost.swift; sourceTree = "<group>"; };
 		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
 		D19A00013000000000000003 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
-		D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationRowModel+NotificationHistoryItem.swift"; sourceTree = "<group>"; };
+		D19A00013000000000000005 /* NotificationHistoryItem+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationHistoryItem+.swift"; sourceTree = "<group>"; };
 		D19A10013000000000000001 /* ChatListModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListModel.swift; sourceTree = "<group>"; };
 		D19A10013000000000000003 /* ChatMessageRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMessageRowModel.swift; sourceTree = "<group>"; };
 		D19A10013000000000000005 /* ChatListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatListView.swift; sourceTree = "<group>"; };
@@ -2469,7 +2469,7 @@
 		7C457B282FCE1BA80011D338 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
-				D19A0001300000000000000A /* Support */,
+				D19A0001300000000000000A /* Mapper */,
 				7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */,
 				7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */,
 			);
@@ -4931,12 +4931,12 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		D19A0001300000000000000A /* Support */ = {
+		D19A0001300000000000000A /* Mapper */ = {
 			isa = PBXGroup;
 			children = (
-				D19A00013000000000000005 /* NotificationRowModel+NotificationHistoryItem.swift */,
+				D19A00013000000000000005 /* NotificationHistoryItem+.swift */,
 			);
-			path = Support;
+			path = Mapper;
 			sourceTree = "<group>";
 		};
 		D19A1001300000000000000C /* Chat */ = {
@@ -6780,7 +6780,7 @@
 				7C8BFCE42FD04B8000963679 /* NotificationHistoryItem.swift in Sources */,
 				D19A00013000000000000002 /* NotificationRowModel.swift in Sources */,
 				D19A00013000000000000004 /* NotificationListView.swift in Sources */,
-				D19A00013000000000000006 /* NotificationRowModel+NotificationHistoryItem.swift in Sources */,
+				D19A00013000000000000006 /* NotificationHistoryItem+.swift in Sources */,
 				D19A10013000000000000002 /* ChatListModel.swift in Sources */,
 				D19A10013000000000000004 /* ChatMessageRowModel.swift in Sources */,
 				D19A10013000000000000006 /* ChatListView.swift in Sources */,
