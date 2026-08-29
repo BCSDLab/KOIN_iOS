@@ -41,4 +41,6 @@ extension ErrorResponse {
     static let fileManagerFailedDirectory = ErrorResponse(statusCode: nil, code: "FILEMANAGER_FAILED_DIRECTORY", message: "파일 저장 위치 찾기 실패")
     static let deleteKeywordError = ErrorResponse(statusCode: nil, code: "DELETE_KEYWORD_ERROR", message: "로그인에 실패하여 코어데이터에서 키워드 삭제")
     static let createKeywordError = ErrorResponse(statusCode: nil, code: "CREATE_KEYWORD_ERROR", message: "로그인에 실패하여 코어데이터에서 키워드 저장")
+    
+    static let dateFormatterFailedConvert = ErrorResponse(code: "DATEFORMATTER_FAILED_CONVERT", message: "날짜 변환 실패")
 }
