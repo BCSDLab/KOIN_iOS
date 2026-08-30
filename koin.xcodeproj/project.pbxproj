@@ -357,6 +357,11 @@
 		7CA6868D2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868C2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift */; };
 		7CA6868F2FFCF42E007937E9 /* NotificationHistoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */; };
 		7CA686902FFCF42E007937E9 /* NotificationHistoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */; };
+		7CACF86530436CFF00AC2828 /* RecruitNotificationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CACF86430436CFF00AC2828 /* RecruitNotificationListViewController.swift */; };
+		7CACF86730436D2600AC2828 /* RecruitNotificationListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CACF86630436D2600AC2828 /* RecruitNotificationListViewModel.swift */; };
+		7CACF86930436E7700AC2828 /* RecruitNotification+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CACF86830436E7700AC2828 /* RecruitNotification+.swift */; };
+		7CACF86B3044093F00AC2828 /* DeleteRecruitNotificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CACF86A3044093F00AC2828 /* DeleteRecruitNotificationUseCase.swift */; };
+		7CACF87030440CEE00AC2828 /* MarkAsReadRecruitNotificationUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CACF86F30440CEE00AC2828 /* MarkAsReadRecruitNotificationUseCase.swift */; };
 		7CB0618F2F320F3A00E83CA9 /* NMapsMap in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB0618E2F320F3A00E83CA9 /* NMapsMap */; };
 		7CB061932F32100900E83CA9 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061922F32100900E83CA9 /* Alamofire */; };
 		7CB061992F32186800E83CA9 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7CB061982F32186800E83CA9 /* SnapKit */; };
@@ -1420,6 +1425,11 @@
 		7CA6868A2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationHistoryUseCase.swift; sourceTree = "<group>"; };
 		7CA6868C2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNotificationHistoryUseCase.swift; sourceTree = "<group>"; };
 		7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryError.swift; sourceTree = "<group>"; };
+		7CACF86430436CFF00AC2828 /* RecruitNotificationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitNotificationListViewController.swift; sourceTree = "<group>"; };
+		7CACF86630436D2600AC2828 /* RecruitNotificationListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitNotificationListViewModel.swift; sourceTree = "<group>"; };
+		7CACF86830436E7700AC2828 /* RecruitNotification+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecruitNotification+.swift"; sourceTree = "<group>"; };
+		7CACF86A3044093F00AC2828 /* DeleteRecruitNotificationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRecruitNotificationUseCase.swift; sourceTree = "<group>"; };
+		7CACF86F30440CEE00AC2828 /* MarkAsReadRecruitNotificationUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MarkAsReadRecruitNotificationUseCase.swift; sourceTree = "<group>"; };
 		7CB061BE2F32312E00E83CA9 /* DPDConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPDConstants.swift; sourceTree = "<group>"; };
 		7CB061BF2F32312E00E83CA9 /* DPDKeyboardListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DPDKeyboardListener.swift; sourceTree = "<group>"; };
 		7CB061C02F32312E00E83CA9 /* DPDUIView+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DPDUIView+Extension.swift"; sourceTree = "<group>"; };
@@ -2655,6 +2665,7 @@
 			isa = PBXGroup;
 			children = (
 				7C50A1B43041A25D00897A6F /* RecruitList */,
+				7CACF86130436C1900AC2828 /* RecruitNotificationList */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2733,8 +2744,8 @@
 		7C50A1FB3042E99E00897A6F /* Recruit */ = {
 			isa = PBXGroup;
 			children = (
-				7C50A1FC3042E9AB00897A6F /* FetchRecruitListUseCase.swift */,
-				7C50A20E3043278300897A6F /* FetchRecruitNotificationListUseCase.swift */,
+				7CACF86C3044096200AC2828 /* RecruitList */,
+				7CACF86E3044097800AC2828 /* RecruitNotificationList */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -3209,6 +3220,42 @@
 				7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */,
 			);
 			path = Core;
+			sourceTree = "<group>";
+		};
+		7CACF86130436C1900AC2828 /* RecruitNotificationList */ = {
+			isa = PBXGroup;
+			children = (
+				7CACF86230436C4A00AC2828 /* Mapper */,
+				7CACF86430436CFF00AC2828 /* RecruitNotificationListViewController.swift */,
+				7CACF86630436D2600AC2828 /* RecruitNotificationListViewModel.swift */,
+			);
+			path = RecruitNotificationList;
+			sourceTree = "<group>";
+		};
+		7CACF86230436C4A00AC2828 /* Mapper */ = {
+			isa = PBXGroup;
+			children = (
+				7CACF86830436E7700AC2828 /* RecruitNotification+.swift */,
+			);
+			path = Mapper;
+			sourceTree = "<group>";
+		};
+		7CACF86C3044096200AC2828 /* RecruitList */ = {
+			isa = PBXGroup;
+			children = (
+				7C50A1FC3042E9AB00897A6F /* FetchRecruitListUseCase.swift */,
+			);
+			path = RecruitList;
+			sourceTree = "<group>";
+		};
+		7CACF86E3044097800AC2828 /* RecruitNotificationList */ = {
+			isa = PBXGroup;
+			children = (
+				7C50A20E3043278300897A6F /* FetchRecruitNotificationListUseCase.swift */,
+				7CACF86A3044093F00AC2828 /* DeleteRecruitNotificationUseCase.swift */,
+				7CACF86F30440CEE00AC2828 /* MarkAsReadRecruitNotificationUseCase.swift */,
+			);
+			path = RecruitNotificationList;
 			sourceTree = "<group>";
 		};
 		7CB061C12F32312E00E83CA9 /* helpers */ = {
@@ -6207,6 +6254,7 @@
 				D29F21C72C4DF15200994554 /* FindPasswordUseCase.swift in Sources */,
 				D2DA83932C181A2100A2F156 /* FetchShopMenuListUseCase.swift in Sources */,
 				D2C163D82E252DB500DC68A8 /* ChangePasswordUseCase.swift in Sources */,
+				7CACF86730436D2600AC2828 /* RecruitNotificationListViewModel.swift in Sources */,
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
 				83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
@@ -6607,6 +6655,7 @@
 				7C8A94292FD0A97400DEA6F5 /* NotificationTableView.swift in Sources */,
 				7C6790962FCC48A60045E163 /* UIImageView+.swift in Sources */,
 				7C8A942D2FD2C01A00DEA6F5 /* FetchEventCountUseCase.swift in Sources */,
+				7CACF86930436E7700AC2828 /* RecruitNotification+.swift in Sources */,
 				7C6790972FCC48A60045E163 /* CALayer+.swift in Sources */,
 				7C6790982FCC48A60045E163 /* UITextFiled+Publisher.swift in Sources */,
 				7C6790992FCC48A60045E163 /* UIFont+.swift in Sources */,
@@ -6630,6 +6679,7 @@
 				7CED91CD2EF2D1F900457128 /* LostItemChatViewModel.swift in Sources */,
 				7C640400300F395300A9589F /* DepartmentRepository.swift in Sources */,
 				7CED91CE2EF2D1F900457128 /* NotiViewModel.swift in Sources */,
+				7CACF86530436CFF00AC2828 /* RecruitNotificationListViewController.swift in Sources */,
 				7CED91CF2EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift in Sources */,
 				7CED91D22EF2D1F900457128 /* LandImageCollectionViewCell.swift in Sources */,
 				7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */,
@@ -6798,6 +6848,7 @@
 				D85939772DC12D0900CE4CB2 /* CheckDuplicatedIdRequest.swift in Sources */,
 				D208A7CF2CABB85B007040E7 /* DefaultCoreRepository.swift in Sources */,
 				83DD0DB92C5378E600278ABD /* SearchBusInfoResult.swift in Sources */,
+				7CACF86B3044093F00AC2828 /* DeleteRecruitNotificationUseCase.swift in Sources */,
 				7C58FE922F5FAC0100A2737B /* CallVanDataView.swift in Sources */,
 				D27DD0CA2BA608310081FD36 /* DiningDto.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
@@ -6910,6 +6961,7 @@
 				D208A7A62CA111EB007040E7 /* AssignAbTestRequest.swift in Sources */,
 				D223D61B2D9C0FEC00C29BE6 /* FetchBannerUseCase.swift in Sources */,
 				D21572662CEDDDC60061E725 /* FetchMySemesterUseCase.swift in Sources */,
+				7CACF87030440CEE00AC2828 /* MarkAsReadRecruitNotificationUseCase.swift in Sources */,
 				B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */,
 				D249CD2A2C12DD34000813F9 /* DiningAPI.swift in Sources */,
 				83E770FC2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift in Sources */,

@@ -94,8 +94,8 @@ final class MockRecruitRepository: RecruitRepository {
                 chatRoomId: 1,
                 type: .chat,
                 title: "팀원모집 @@님의 메시지",
-                description: "메세지메세지",
-                time: "2시간 전",
+                content: "메세지메세지",
+                dateText: "2시간 전",
                 isRead: false
             ),
             RecruitNotification(
@@ -103,8 +103,8 @@ final class MockRecruitRepository: RecruitRepository {
                 chatRoomId: 0,
                 type: .default,
                 title: "팀원 모집 지원 승인",
-                description: "지원했던 AI 공모전 팀원 모집에 승인되었어요.",
-                time: "2시간 전",
+                content: "지원했던 AI 공모전 팀원 모집에 승인되었어요.",
+                dateText: "2시간 전",
                 isRead: false
             ),
             RecruitNotification(
@@ -112,8 +112,8 @@ final class MockRecruitRepository: RecruitRepository {
                 chatRoomId: 0,
                 type: .default,
                 title: "팀원 모집 지원 거절",
-                description: "지원했던 AI 공모전 팀원 모집에 승인 거절되었어요.\n다른 모집글에 지원해보세요.",
-                time: "2시간 전",
+                content: "지원했던 AI 공모전 팀원 모집에 승인 거절되었어요.\n다른 모집글에 지원해보세요.",
+                dateText: "2시간 전",
                 isRead: false
             ),
             RecruitNotification(
@@ -121,8 +121,8 @@ final class MockRecruitRepository: RecruitRepository {
                 chatRoomId: 0,
                 type: .default,
                 title: "팀원 모집글 삭제",
-                description: "지원했던 AI 공모전 팀원 모집글이 삭제되었어요.\n다른 모집글에 지원해보세요.",
-                time: "2시간 전",
+                content: "지원했던 AI 공모전 팀원 모집글이 삭제되었어요.\n다른 모집글에 지원해보세요.",
+                dateText: "2시간 전",
                 isRead: false
             ),
             RecruitNotification(
@@ -130,10 +130,26 @@ final class MockRecruitRepository: RecruitRepository {
                 chatRoomId: 0,
                 type: .default,
                 title: "팀원 모집기간 종료",
-                description: "작성했던 AI 공모전 팀원 모집 기간이 종료되었어요.",
-                time: "2시간 전",
+                content: "작성했던 AI 공모전 팀원 모집 기간이 종료되었어요.",
+                dateText: "2시간 전",
                 isRead: false
             )
         ])
+    }
+    
+    func deleteNotification(_ id: Int) async throws -> Void {
+        
+    }
+    
+    func deleteAllNotification() async throws -> Void {
+        
+    }
+    
+    func markAsReadNotification(_ id: Int) async throws -> Void {
+        
+    }
+    
+    func markAllAsReadNotification() async throws -> Void {
+        
     }
 }

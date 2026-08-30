@@ -14,9 +14,9 @@ struct RecruitNotification {
     let type: RecruitNotificationType
     
     let title: String
-    let description: String
-    let time: String
-    let isRead: Bool
+    let content: String
+    let dateText: String
+    var isRead: Bool
 }
 
 enum RecruitNotificationType {

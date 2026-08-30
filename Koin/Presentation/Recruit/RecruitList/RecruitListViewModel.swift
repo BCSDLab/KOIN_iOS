@@ -47,16 +47,16 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
     }
     
     // MARK: - UseCase
-    private let fetchListUseCase: FetchRecruitListUseCase
-    private let fetchNotificationListUseCase: FetchRecruitNotificationListUseCase
+    private let fetchRecruitListUseCase: FetchRecruitListUseCase
+    private let fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase
     
     // MARK: - Initializer
     init(
         fetchRecruitListUseCase: FetchRecruitListUseCase,
         fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase
     ) {
-        self.fetchListUseCase = fetchRecruitListUseCase
-        self.fetchNotificationListUseCase = fetchRecruitNotificationListUseCase
+        self.fetchRecruitListUseCase = fetchRecruitListUseCase
+        self.fetchRecruitNotificationListUseCase = fetchRecruitNotificationListUseCase
     }
     
     // MARK: - Public
@@ -123,7 +123,7 @@ extension RecruitListViewModel {
                 }
                 
                 filterState.page = page
-                var response = try await fetchListUseCase.execute(filter: filterState)
+                var response = try await fetchRecruitListUseCase.execute(filter: filterState)
                 
                 response.recruits = (recruitList?.recruits ?? []) + response.recruits
                 response.recruits.removeDuplicates()
@@ -138,7 +138,7 @@ extension RecruitListViewModel {
     private func fetchHasUnreadNotification() {
         Task {
             do {
-                self.hasUnreadNotification = try await fetchNotificationListUseCase.execute().hasUnread
+                self.hasUnreadNotification = try await fetchRecruitNotificationListUseCase.execute().hasUnread
             } catch {
                 if let error = (error as? ErrorResponse),
                    error.statusCode != 401 {

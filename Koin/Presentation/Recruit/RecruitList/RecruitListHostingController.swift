@@ -80,8 +80,18 @@ extension RecruitListHostingController {
         }
         return
     }
-    private func showRecruitNotification() {
-        // TODO
+    private func showRecruitNotificationList() {
+        let recruitRepository = MockRecruitRepository()
+        let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
+        let markAsReadRecruitNotificationUseCase = DefaultMarkAsReadRecruitNotificationUseCase(repository: recruitRepository)
+        let deleteRecruitNotificationUseCase = DefaultDeleteRecruitNotificationUseCase(repository: recruitRepository)
+        let viewModel = RecruitNotificationListViewModel(
+            fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase,
+            markAsReadRecruitNotificationUseCase: markAsReadRecruitNotificationUseCase,
+            deleteRecruitNotificationUseCase: deleteRecruitNotificationUseCase
+        )
+        let viewController = RecruitNotificationListViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
     private func showRecruitProfile() {
         // TODO
@@ -117,7 +127,7 @@ extension RecruitListHostingController {
             showLoginToast()
             return
         }
-        showRecruitNotification()
+        showRecruitNotificationList()
     }
     
     @objc private func profileButtonTapped() {
