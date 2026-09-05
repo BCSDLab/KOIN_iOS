@@ -19,7 +19,7 @@ final class KoinDropdown: UIView {
     
     // MARK: - Properties
     private weak var host: KoinDropdownHost?
-    private(set) weak var trigger: UIView?
+    private(set) weak var anchor: UIView?
     private let configuration: KoinDropdownConfiguration
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -33,12 +33,12 @@ final class KoinDropdown: UIView {
     // MARK: - Initializer
     init(
         host: KoinDropdownHost,
-        trigger: UIView,
+        anchor: UIView,
         contentView: UIView & KoinDropdownContentView,
         configuration: KoinDropdownConfiguration
     ) {
         self.host = host
-        self.trigger = trigger
+        self.anchor = anchor
         self.contentView = contentView
         self.configuration = configuration
         super.init(frame: .zero)
@@ -78,27 +78,27 @@ final class KoinDropdown: UIView {
 
 extension KoinDropdown {
     func layout(in space: UIView) -> Bool {
-        guard let trigger else { return false }
+        guard let anchor else { return false }
         contentView.transform = .identity
 
-        let triggerFrame = trigger.convert(trigger.bounds, to: space)
+        let anchorFrame = anchor.convert(anchor.bounds, to: space)
         let panelHeight = contentView.height
         let padding = configuration.shadowPadding
         
-        guard 0 < triggerFrame.width,
+        guard 0 < anchorFrame.width,
               0 < panelHeight else {
             return false
         }
         self.frame = CGRect(
-            x: triggerFrame.minX - padding.left,
-            y: triggerFrame.maxY,
-            width: triggerFrame.width + padding.left + padding.right,
+            x: anchorFrame.minX - padding.left,
+            y: anchorFrame.maxY,
+            width: anchorFrame.width + padding.left + padding.right,
             height: configuration.topPadding + panelHeight + padding.bottom
         )
         contentView.frame = CGRect(
             x: padding.left,
             y: configuration.topPadding,
-            width: triggerFrame.width,
+            width: anchorFrame.width,
             height: panelHeight
         )
         applyShadow()

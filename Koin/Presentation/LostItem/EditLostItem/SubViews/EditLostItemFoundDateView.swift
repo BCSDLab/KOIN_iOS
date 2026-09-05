@@ -121,7 +121,7 @@ final class EditLostItemFoundDateView: UIView {
     func prepareDropdown(host: KoinDropdownHost) {
         guard dropdown == nil else { return }
         dropdown = host.makeDropdown(
-            trigger: dateButton,
+            anchor: dateButton,
             contentView: dropdownView,
             configuration: .init(topPadding: 4, shadow: .shadow2)
         )
