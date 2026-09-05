@@ -225,6 +225,10 @@ public enum ImageAsset: String {
     case recruitNotificationChat
     case recruitNotificationMember
     case recruitPencil
+    case recruitPostMeetingTypeMixed
+    case recruitPostMeetingTypeOffline
+    case recruitPostMeetingTypeOnline
+    case recruitPostRolePlus
     case recruitProfile
     case recruitSearch
     
