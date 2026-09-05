@@ -173,8 +173,10 @@ final class DiningViewController: UIViewController {
             zoomedImageViewController.setImage(tappedDiningImage)
             self.present(zoomedImageViewController, animated: true, completion: nil)
             
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuImage, .click, "\(self.currentDiningType.name)_\(tappedPlaceText)"))
-            
+            if let currentDiningType = self.currentDiningType {
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuImage, .click, "\(currentDiningType.name)_\(tappedPlaceText)"))
+            }
+
         }.store(in: &subscriptions)
         
         diningListCollectionView.shareButtonPublisher.sink { [weak self] item in
@@ -183,8 +185,8 @@ final class DiningViewController: UIViewController {
         }.store(in: &subscriptions)
         
         diningListCollectionView.logScrollPublisher.sink { [weak self] _ in
-            guard let self = self else { return }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .scroll, self.currentDiningType.name))
+            guard let self = self, let currentDiningType = self.currentDiningType else { return }
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .scroll, currentDiningType.name))
         }.store(in: &subscriptions)
         
         NotificationCenter.default.publisher(for: UIApplication.willEnterForegroundNotification).sink { [weak self] _ in
@@ -213,21 +215,26 @@ extension DiningViewController {
     
     @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
         let currentSegmentIndex = diningTypeSegmentControl.selectedSegmentIndex
-        if gesture.direction == .left {
-            if currentSegmentIndex < diningTypeSegmentControl.numberOfSegments - 1 {
-                diningTypeSegmentControl.selectedSegmentIndex = currentSegmentIndex + 1
-            }
-        } else if gesture.direction == .right {
-            if currentSegmentIndex > 0 {
-                diningTypeSegmentControl.selectedSegmentIndex = currentSegmentIndex - 1
-            }
+        let nextSegmentIndex: Int
+
+        switch gesture.direction {
+        case .left: nextSegmentIndex = currentSegmentIndex + 1
+        case .right: nextSegmentIndex = currentSegmentIndex - 1
+        default: return
         }
+
+        guard (0..<diningTypeSegmentControl.numberOfSegments).contains(nextSegmentIndex) else { return }
+
+        diningTypeSegmentControl.selectedSegmentIndex = nextSegmentIndex
         segmentDidChange(diningTypeSegmentControl)
     }
     
     @objc private func refresh() {
         inputSubject.send(.updateDisplayDateTime(nil, currentDiningType))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .click, currentDiningType.name))
+
+        if let currentDiningType {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .click, currentDiningType.name))
+        }
 
         refreshControl.endRefreshing()
     }
@@ -275,7 +282,7 @@ extension DiningViewController {
     }
     
     @objc private func segmentDidChange(_ sender: UISegmentedControl) {
-        let diningType = DiningType(segmentIndex: sender.selectedSegmentIndex) ?? .dinner
+        guard let diningType = DiningType(segmentIndex: sender.selectedSegmentIndex) else { return }
 
         inputSubject.send(.updateDisplayDateTime(nil, diningType))
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.menuTime, .click, diningType.name))
@@ -320,8 +327,8 @@ extension DiningViewController {
         diningListCollectionView.setDiningList(list)
     }
     
-    private var currentDiningType: DiningType {
-        DiningType(segmentIndex: diningTypeSegmentControl.selectedSegmentIndex) ?? .dinner
+    private var currentDiningType: DiningType? {
+        DiningType(segmentIndex: diningTypeSegmentControl.selectedSegmentIndex)
     }
 }
 
