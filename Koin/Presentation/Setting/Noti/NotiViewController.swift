@@ -81,7 +81,7 @@ final class NotiViewController: UIViewController {
     
     private let soldOutSwitch: UISwitch = {
         let uiSwitch = UISwitch()
-        uiSwitch.onTintColor = UIColor.appColor(.primary500)
+        uiSwitch.onTintColor = UIColor.appColor(.new500)
         return uiSwitch
     }()
     
@@ -93,7 +93,7 @@ final class NotiViewController: UIViewController {
     
     private let diningImageUploadSwitch: UISwitch = {
         let uiSwitch = UISwitch()
-        uiSwitch.onTintColor = UIColor.appColor(.primary500)
+        uiSwitch.onTintColor = UIColor.appColor(.new500)
         return uiSwitch
     }()
     
@@ -123,7 +123,7 @@ final class NotiViewController: UIViewController {
     
     private let chatSwitch: UISwitch = {
         let uiSwitch = UISwitch()
-        uiSwitch.onTintColor = UIColor.appColor(.primary500)
+        uiSwitch.onTintColor = UIColor.appColor(.new500)
         return uiSwitch
     }()
     
@@ -183,13 +183,13 @@ final class NotiViewController: UIViewController {
     
     private let eventSwitch: UISwitch = {
         let uiSwitch = UISwitch()
-        uiSwitch.onTintColor = UIColor.appColor(.primary500)
+        uiSwitch.onTintColor = UIColor.appColor(.new500)
         return uiSwitch
     }()
     
     private let reviewSwitch: UISwitch = {
         let uiSwitch = UISwitch()
-        uiSwitch.onTintColor = UIColor.appColor(.primary500)
+        uiSwitch.onTintColor = UIColor.appColor(.new500)
         return uiSwitch
     }()
     
@@ -235,9 +235,8 @@ final class NotiViewController: UIViewController {
             self.mealLabels.append(label)
             // 스위치 생성
             let switchControl = UISwitch()
-            switchControl.onTintColor = UIColor.appColor(.primary500)
+            switchControl.onTintColor = UIColor.appColor(.new500)
             wrapView.addSubview(switchControl)
-            switchControl.transform = CGAffineTransformMakeScale(0.9, 0.75)
             switchControl.snp.makeConstraints { switchControl in
                 switchControl.trailing.equalToSuperview().inset(21)
                 switchControl.top.equalToSuperview().inset(15)
@@ -278,7 +277,7 @@ final class NotiViewController: UIViewController {
 
     private let callVanSwitch: UISwitch = {
         let uiSwitch = UISwitch()
-        uiSwitch.onTintColor = UIColor.appColor(.primary500)
+        uiSwitch.onTintColor = UIColor.appColor(.new500)
         return uiSwitch
     }()
     
@@ -320,7 +319,7 @@ final class NotiViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
-        configureNavigationBar(style: .fill)
+        configureNavigationBar(style: .empty)
     }
     
     // MARK: - Bind
@@ -548,7 +547,6 @@ extension NotiViewController {
             make.top.equalTo(16)
         }
         
-        soldOutSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         soldOutSwitch.snp.makeConstraints { make in
             make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
@@ -583,7 +581,6 @@ extension NotiViewController {
             make.top.equalTo(16)
         }
         
-        diningImageUploadSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         diningImageUploadSwitch.snp.makeConstraints { make in
             make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
@@ -614,7 +611,6 @@ extension NotiViewController {
             make.top.equalTo(chatNotiLabel.snp.bottom).offset(8)
             make.height.equalTo(17)
         }
-        chatSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         chatSwitch.snp.makeConstraints { make in
             make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
@@ -645,9 +641,7 @@ extension NotiViewController {
         
         keywordNotiChevronImage.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(21)
-            make.top.equalToSuperview().inset(15)
-            make.width.equalTo(16)
-            make.height.equalTo(20)
+            make.centerY.equalToSuperview()
         }
 
         lostItemKeywordNotiLabel.snp.makeConstraints { make in
@@ -664,9 +658,7 @@ extension NotiViewController {
 
         lostItemKeywordNotiChevronImage.snp.makeConstraints { make in
             make.trailing.equalToSuperview().inset(21)
-            make.top.equalToSuperview().inset(15)
-            make.width.equalTo(16)
-            make.height.equalTo(20)
+            make.centerY.equalToSuperview()
         }
     
         shopGuideLabel.snp.makeConstraints { make in
@@ -686,8 +678,7 @@ extension NotiViewController {
             make.height.equalTo(26)
             make.top.equalTo(16)
         }
-        
-        eventSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
+    
         eventSwitch.snp.makeConstraints { make in
             make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
@@ -710,7 +701,6 @@ extension NotiViewController {
             make.top.equalTo(16)
         }
         
-        reviewSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         reviewSwitch.snp.makeConstraints { make in
             make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)
@@ -736,7 +726,6 @@ extension NotiViewController {
             make.height.equalTo(26)
             make.top.equalTo(16)
         }
-        callVanSwitch.transform = CGAffineTransformMakeScale(0.9, 0.75)
         callVanSwitch.snp.makeConstraints { make in
             make.trailing.equalTo(view.snp.trailing).inset(21)
             make.top.equalToSuperview().inset(15)

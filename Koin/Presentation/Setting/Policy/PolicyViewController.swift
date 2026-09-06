@@ -63,7 +63,7 @@ final class PolicyViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .fill)
+        configureNavigationBar(style: .empty)
     }
     
     private func bind() {

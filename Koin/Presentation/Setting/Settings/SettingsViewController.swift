@@ -108,7 +108,7 @@ final class SettingsViewController: UIViewController {
                         self.recentVersionLabel.textColor = UIColor.appColor(.neutral400)
                     } else {
                         self.recentVersionLabel.text = "최신 버전 \(version)"
-                        self.recentVersionLabel.textColor = UIColor.appColor(.primary500)
+                        self.recentVersionLabel.textColor = UIColor.appColor(.new500)
                     }
                 }
             }

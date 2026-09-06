@@ -172,8 +172,8 @@ final class ChangeMyProfileViewController: UIViewController {
             var updatedConfig = button.configuration ?? UIButton.Configuration.plain()
             let isSelected = button.isSelected
             updatedConfig.image = isSelected
-            ? UIImage(named: "circleCheckedPrimary500")
-            : UIImage(named: "circlePrimary500")
+            ? UIImage.appImage(asset: .circleCheckedPrimary500)?.withTintColor(.appColor(.new500))
+            : UIImage.appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500))
             var text = AttributedString("남성")
             text.font = UIFont.appFont(.pretendardRegular, size: 12)
             updatedConfig.attributedTitle = text
@@ -196,8 +196,8 @@ final class ChangeMyProfileViewController: UIViewController {
             var updatedConfig = button.configuration ?? UIButton.Configuration.plain()
             let isSelected = button.isSelected
             updatedConfig.image = isSelected
-            ? UIImage(named: "circleCheckedPrimary500")
-            : UIImage(named: "circlePrimary500")
+            ? UIImage.appImage(asset: .circleCheckedPrimary500)?.withTintColor(.appColor(.new500))
+            : UIImage.appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500))
             var text = AttributedString("여성")
             text.font = UIFont.appFont(.pretendardRegular, size: 12)
             updatedConfig.attributedTitle = text
@@ -209,6 +209,7 @@ final class ChangeMyProfileViewController: UIViewController {
     private let saveButton = StateButton(font: UIFont.appFont(.pretendardMedium, size: 15)).then {
         $0.setTitle("저장", for: .normal)
         $0.setState(state: .unusable)
+        $0.layer.cornerRadius = 8
     }
     
     // MARK: - Initialization
@@ -713,7 +714,7 @@ extension ChangeMyProfileViewController {
         helpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         helpLabel.textColor = UIColor.appColor(.neutral500)
         inquryButton.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
-        inquryButton.setTitleColor(UIColor.appColor(.primary500), for: .normal)
+        inquryButton.setTitleColor(UIColor.appColor(.new500), for: .normal)
         emailTextLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
         emailTextLabel.textColor = .black
     }
