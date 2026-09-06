@@ -448,7 +448,7 @@ extension LoginViewController {
         
         copyrightLabel.snp.makeConstraints {
             $0.bottom.centerX.equalTo(footerLayoutGuide)
-            $0.height.equalTo(12)
+            $0.height.equalTo(18)
         }
         ownerButton.snp.makeConstraints {
             $0.top.centerX.equalTo(footerLayoutGuide)

@@ -3598,9 +3598,9 @@
 			children = (
 				7CED8F262EF2D1F900457128 /* AgreementFormViewController.swift */,
 				7CED8F272EF2D1F900457128 /* CertificationFormViewController.swift */,
+				7CED8F2B2EF2D1F900457128 /* SelectTypeFormViewController.swift */,
 				7CED8F282EF2D1F900457128 /* EnterFormViewController.swift */,
 				7CED8F292EF2D1F900457128 /* RegisterCompletionViewController.swift */,
-				7CED8F2B2EF2D1F900457128 /* SelectTypeFormViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

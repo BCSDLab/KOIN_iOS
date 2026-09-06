@@ -47,11 +47,17 @@ final class SelectTypeFormViewController: UIViewController {
     }
     
     private let logoImageView = UIImageView().then {
-        $0.image = UIImage.appImage(asset: .koinLogo)
+        $0.image = UIImage.appImage(asset: .bcsdSymbolLogo)
+        $0.contentMode = .scaleAspectFit
+    }
+
+    private let logoTextImageView = UIImageView().then {
+        $0.image = UIImage.appImage(asset: .koinTextLogo)
+        $0.contentMode = .scaleAspectFit
     }
     
     private let studentButton = UIButton().then {
-        $0.backgroundColor = .appColor(.sub500)
+        $0.backgroundColor = .appColor(.new500)
         $0.setTitle("한국기술교육대학교 학생", for: .normal)
         $0.setTitleColor(.white, for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
@@ -59,11 +65,13 @@ final class SelectTypeFormViewController: UIViewController {
     }
     
     private let generalButton = UIButton().then {
-        $0.backgroundColor = .appColor(.primary500)
+        $0.backgroundColor = .appColor(.neutral0)
         $0.setTitle("외부인", for: .normal)
-        $0.setTitleColor(.white, for: .normal)
+        $0.setTitleColor(.appColor(.new500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.layer.cornerRadius = 8
+        $0.layer.borderColor = UIColor.appColor(.new500).cgColor
+        $0.layer.borderWidth = 1
     }
     
     // MARK: - Init
@@ -133,7 +141,7 @@ extension SelectTypeFormViewController {
 // MARK: UI Settings
 extension SelectTypeFormViewController {
     private func setUpLayouts() {
-        [stepTextLabel, stepLabel, progressView, logoImageView, studentButton, generalButton].forEach {
+        [stepTextLabel, stepLabel, progressView, logoImageView, logoTextImageView, studentButton, generalButton].forEach {
             view.addSubview($0)
         }
     }
@@ -156,14 +164,20 @@ extension SelectTypeFormViewController {
         }
         
         logoImageView.snp.makeConstraints {
-            $0.top.equalTo(progressView.snp.bottom).offset(100)
+            $0.top.equalTo(progressView.snp.bottom).offset(52)
             $0.centerX.equalToSuperview()
-            $0.width.greaterThanOrEqualTo(96)
-            $0.height.greaterThanOrEqualTo(56)
+            $0.height.equalTo(66)
+        }
+
+        logoTextImageView.snp.makeConstraints {
+            $0.top.equalTo(logoImageView.snp.bottom).offset(9)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(102)
+            $0.height.equalTo(41)
         }
         
         studentButton.snp.makeConstraints {
-            $0.top.equalTo(logoImageView.snp.bottom).offset(80)
+            $0.top.equalTo(logoTextImageView.snp.bottom).offset(52)
             $0.leading.equalToSuperview().offset(48)
             $0.trailing.equalToSuperview().offset(-48)
             $0.height.equalTo(48)
