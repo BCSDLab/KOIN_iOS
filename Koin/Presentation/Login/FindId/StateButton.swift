@@ -31,11 +31,11 @@ final class StateButton: UIButton {
             self.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
             self.isEnabled = false
         case .usable:
-            self.backgroundColor = UIColor.appColor(.primary500)
+            self.backgroundColor = UIColor.appColor(.new500)
             self.setTitleColor(.white, for: .normal)
             self.isEnabled = true
         case .retry:
-            self.backgroundColor = UIColor.appColor(.sub500)
+            self.backgroundColor = UIColor.appColor(.new600)
             self.setTitleColor(.white, for: .normal)
             self.isEnabled = false
         }

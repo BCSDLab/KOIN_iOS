@@ -37,13 +37,13 @@ final class StateView: UIView {
          messageLabel.text = message
         switch state {
         case .success:
-            imageView.image = UIImage(named: "successCircle")
+            imageView.image = UIImage.appImage(asset: .successCircle)
             messageLabel.textColor = UIColor.appColor(.success700)
         case .warning:
-            imageView.image = UIImage(named: "warningOrange")
-            messageLabel.textColor = UIColor.appColor(.sub500)
+            imageView.image = UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600))
+            messageLabel.textColor = UIColor.appColor(.new600)
         case .dangerous:
-            imageView.image = UIImage(named: "warningRed")
+            imageView.image = UIImage.appImage(asset: .warningRed)
             messageLabel.textColor = UIColor.appColor(.danger700)
         }
     }
