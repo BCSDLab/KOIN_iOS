@@ -20,6 +20,7 @@ enum HomeCategoryItem: Identifiable {
     case land
     case business
     case department
+    case recruit
 
     var id: String { title }
 
@@ -49,13 +50,15 @@ enum HomeCategoryItem: Identifiable {
             return "복덕방"
         case .business:
             return "코인 for Business"
+        case .recruit:
+            return "팀원모집"
         }
     }
 
     var subtitle: String? {
         switch self {
-        case .timetable:
-            return "내 강의 정보 확인하기"
+        case .recruit:
+            return "교내 활동 팀원 구하기"
         case .lostItem:
             return "분실물 신고 / 조회하기"
         default:
@@ -89,6 +92,8 @@ enum HomeCategoryItem: Identifiable {
             return .categoryLand
         case .business:
             return .categoryBusiness
+        case .recruit:
+            return .categoryRecruit
         }
     }
 }

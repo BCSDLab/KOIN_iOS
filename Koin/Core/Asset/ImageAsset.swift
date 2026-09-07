@@ -214,6 +214,20 @@ public enum ImageAsset: String {
     case noticeNotLoginToolTip
     case noticeSearch
     
+    // MARK: - Recruit
+    case recruitBell
+    case recruitBellDot
+    case recruitDate
+    case recruitFilter
+    case recruitFilterX
+    case recruitLocation
+    case recruitMember
+    case recruitNotificationChat
+    case recruitNotificationMember
+    case recruitPencil
+    case recruitProfile
+    case recruitSearch
+    
     // MARK: - Shop
     case call
     case callBenefit
@@ -265,6 +279,7 @@ public enum ImageAsset: String {
     case categoryFacility
     case categoryLand
     case categoryLostitem
+    case categoryRecruit
     case categoryShop
     case categoryTimetable
     case chevronRightRounded

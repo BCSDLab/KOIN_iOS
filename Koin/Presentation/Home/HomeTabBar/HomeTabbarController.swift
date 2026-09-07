@@ -156,7 +156,7 @@ extension HomeTabBarController {
             var navigationBarStyle: NavigationBarStyle
             switch items[index].tab {
             case .home, .category, .profile:
-                navigationBarStyle = .order
+                navigationBarStyle = .newBackground
             case .board:
                 navigationBarStyle = .empty
             }

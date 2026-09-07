@@ -39,6 +39,10 @@ final class NotificationListView: UIView {
         loadingIndicator.startAnimating()
     }
     
+    func stopLoading() {
+        loadingIndicator.stopAnimating()
+    }
+    
     func update(items: [NotificationRowModel]) {
         tableView.update(notifications: items)
         updateStateViews(isEmpty: items.isEmpty)

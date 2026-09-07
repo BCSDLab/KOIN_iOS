@@ -50,6 +50,8 @@ final class CategoryHostingController: UIHostingController<CategoryView>, Hostin
             navigationController?.pushViewController(makeLandViewController(), animated: true)
         case .showBusiness:
             presentBusiness()
+        case .showRecruit:
+            navigationController?.pushViewController(makeRecruitListViewController(), animated: true)
             
         case .showLoginToast:
             showToastMessageWithButton(
@@ -196,6 +198,18 @@ extension CategoryHostingController {
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = LandViewModel(fetchLandListUseCase: fetchLandListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         return LandViewController(viewModel: viewModel)
+    }
+    
+    private func makeRecruitListViewController() -> UIViewController {
+        let recruitRepository = MockRecruitRepository()
+        let fetchRecruitListUseCase = DefaultFetchRecruitListUseCase(repository: recruitRepository)
+        let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
+        let viewModel = RecruitListViewModel(
+            fetchRecruitListUseCase: fetchRecruitListUseCase,
+            fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase
+        )
+        let rootView = RecruitListView(viewModel: viewModel)
+        return RecruitListHostingController(rootView: rootView)
     }
 
     private func presentBusiness() {
