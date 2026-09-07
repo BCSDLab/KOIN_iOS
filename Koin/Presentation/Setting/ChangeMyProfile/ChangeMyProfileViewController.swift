@@ -50,6 +50,7 @@ final class ChangeMyProfileViewController: UIViewController {
     
     private let idTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
         $0.isUserInteractionEnabled = false
+        $0.keyboardType = .alphabet
     }
     
     private let nameTitleLabel = UILabel().then {
@@ -76,7 +77,9 @@ final class ChangeMyProfileViewController: UIViewController {
         $0.text = "휴대전화"
     }
     
-    private let phoneTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    private let phoneTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+        $0.keyboardType = .numberPad
+    }
     
     private let sendButton = StateButton(title: "인증번호 발송").then {
         $0.setState(state: .unusable)
@@ -88,6 +91,7 @@ final class ChangeMyProfileViewController: UIViewController {
     
     private let certNumberTextField = DefaultTextField(placeholder: "인증번호를 입력해주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
         $0.isHidden = true
+        $0.keyboardType = .numberPad
     }
     
     private let remainTimeLabel = UILabel().then {
@@ -117,7 +121,9 @@ final class ChangeMyProfileViewController: UIViewController {
         $0.text = "이메일"
     }
     
-    private let emailTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    private let emailTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+        $0.keyboardType = .alphabet
+    }
     
     private lazy var emailTextLabel = UILabel().then {
         $0.text = "@koreatech.ac.kr"
@@ -139,6 +145,7 @@ final class ChangeMyProfileViewController: UIViewController {
     
     private lazy var studentNumberTextField = DefaultTextField(placeholder: "", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
         $0.isHidden = userType == .general ? true : false
+        $0.keyboardType = .numberPad
     }
     
     private lazy var majorTitleLabel = UILabel().then {
@@ -172,8 +179,8 @@ final class ChangeMyProfileViewController: UIViewController {
             var updatedConfig = button.configuration ?? UIButton.Configuration.plain()
             let isSelected = button.isSelected
             updatedConfig.image = isSelected
-            ? UIImage(named: "circleCheckedPrimary500")
-            : UIImage(named: "circlePrimary500")
+            ? UIImage.appImage(asset: .circleCheckedPrimary500)?.withTintColor(.appColor(.new500))
+            : UIImage.appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500))
             var text = AttributedString("남성")
             text.font = UIFont.appFont(.pretendardRegular, size: 12)
             updatedConfig.attributedTitle = text
@@ -196,8 +203,8 @@ final class ChangeMyProfileViewController: UIViewController {
             var updatedConfig = button.configuration ?? UIButton.Configuration.plain()
             let isSelected = button.isSelected
             updatedConfig.image = isSelected
-            ? UIImage(named: "circleCheckedPrimary500")
-            : UIImage(named: "circlePrimary500")
+            ? UIImage.appImage(asset: .circleCheckedPrimary500)?.withTintColor(.appColor(.new500))
+            : UIImage.appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500))
             var text = AttributedString("여성")
             text.font = UIFont.appFont(.pretendardRegular, size: 12)
             updatedConfig.attributedTitle = text
@@ -209,6 +216,7 @@ final class ChangeMyProfileViewController: UIViewController {
     private let saveButton = StateButton(font: UIFont.appFont(.pretendardMedium, size: 15)).then {
         $0.setTitle("저장", for: .normal)
         $0.setState(state: .unusable)
+        $0.layer.cornerRadius = 8
     }
     
     // MARK: - Initialization
@@ -713,7 +721,7 @@ extension ChangeMyProfileViewController {
         helpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         helpLabel.textColor = UIColor.appColor(.neutral500)
         inquryButton.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
-        inquryButton.setTitleColor(UIColor.appColor(.primary500), for: .normal)
+        inquryButton.setTitleColor(UIColor.appColor(.new500), for: .normal)
         emailTextLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
         emailTextLabel.textColor = .black
     }

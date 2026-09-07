@@ -28,7 +28,13 @@ final class FindPhoneIdViewController: UIViewController {
         $0.text = certType == .phone ? "휴대전화 번호" : "이메일"
     }
     
-    private lazy var phoneNumberTextField = DefaultTextField(placeholder: certType == .phone ? "- 없이 번호를 입력해 주세요." : "등록된 이메일을 입력해 주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    private lazy var phoneNumberTextField = DefaultTextField(
+        placeholder: certType == .phone ? "- 없이 번호를 입력해 주세요." : "등록된 이메일을 입력해 주세요.",
+        placeholderColor: UIColor.appColor(.neutral400),
+        font: UIFont.appFont(.pretendardRegular, size: 14)
+    ).then {
+        $0.keyboardType = certType == .phone ? .numberPad : .emailAddress
+    }
     
     private let sendButton = StateButton().then {
         $0.setState(state: .unusable)
@@ -41,7 +47,7 @@ final class FindPhoneIdViewController: UIViewController {
     
     private let changeButton = UIButton().then {
         $0.setTitle("이메일로 찾기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.primary500), for: .normal)
+        $0.setTitleColor(UIColor.appColor(.new500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 12)
     }
     
@@ -73,6 +79,8 @@ final class FindPhoneIdViewController: UIViewController {
     private let saveButton = StateButton(font: UIFont.appFont(.pretendardMedium, size: 16)).then {
         $0.setState(state: .unusable)
         $0.setTitle("저장", for: .normal)
+    }.then {
+        $0.layer.cornerRadius = 8
     }
     
     init(viewModel: FindIdViewModel, certType: CertType = .phone) {
@@ -172,6 +180,10 @@ extension FindPhoneIdViewController {
             }
     }
     @objc private func sendButtonTapped() {
+        [helpLabel, changeButton].forEach {
+            $0.isHidden = true
+        }
+        
         if certType == .phone {
             viewModel.sendVerificationCode(phoneNumber: phoneNumberTextField.text ?? "")
         } else {
@@ -242,15 +254,15 @@ extension FindPhoneIdViewController {
         phoneStateView.snp.makeConstraints {
             $0.top.equalTo(phoneNumberTextField.snp.bottom).offset(5)
             $0.leading.equalTo(phoneNumberTextField)
-            $0.height.equalTo(19)
         }
         helpLabel.snp.makeConstraints {
-            $0.top.equalTo(phoneStateView.snp.bottom).offset(5)
+            $0.top.equalTo(phoneNumberTextField.snp.bottom).offset(5)
             $0.leading.equalTo(phoneNumberLabel)
+            $0.height.equalTo(19)
         }
         changeButton.snp.makeConstraints {
             $0.leading.equalTo(helpLabel.snp.trailing).offset(5)
-            $0.top.bottom.equalTo(helpLabel)
+            $0.centerY.equalTo(helpLabel)
             $0.width.equalTo(66)
             $0.height.equalTo(19)
         }

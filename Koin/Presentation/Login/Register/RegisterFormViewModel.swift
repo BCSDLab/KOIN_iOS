@@ -106,7 +106,7 @@ extension RegisterFormViewModel {
     private func checkDuplicatedPhoneNumber(phone: String) {
         checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showHttpResult(error.message, .sub500))
+                self?.outputSubject.send(.showHttpResult(error.message, .new600))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.changeSendVerificationButtonStatus)
@@ -169,7 +169,7 @@ extension RegisterFormViewModel {
     private func checkDuplicatedNickname(nickname: String) {
         checkDuplicatedNicknameUseCase.execute(nickname: nickname).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showHttpResult(error.message, .danger700))
+                self?.outputSubject.send(.showNicknameHttpResult(error.message, .new600))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.changeCheckButtonStatus)

@@ -21,18 +21,18 @@ final class ChangePasswordViewController: UIViewController {
     private let progressTitleLabel = UILabel().then {
         $0.text = "1. 계정 인증"
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
     }
     
     private let progressStepLabel = UILabel().then {
         $0.text = "1 / 2"
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
     }
     
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral300)
-        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.progressTintColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 0.5
@@ -47,6 +47,7 @@ final class ChangePasswordViewController: UIViewController {
         button.backgroundColor = UIColor.appColor(.neutral300)
         button.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
         button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
+        button.layer.cornerRadius = 8
     }
     
     private let certificationView = CertificationView(frame: .zero).then { view in
@@ -85,7 +86,7 @@ final class ChangePasswordViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .fill)
+        configureNavigationBar(style: .empty)
     }
     
     
@@ -97,7 +98,12 @@ final class ChangePasswordViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .showToast(message, success, dismiss):
-                self?.showToast(message: message, success: success)
+                self?.showToastMessage(config: .init(
+                    intent: success ? .neutral : .negative,
+                    variant: .standard,
+                    message: message,
+                    bottomInset: 68
+                ))
                 if dismiss {
                     self?.navigationController?.popViewController(animated: true)
                 }
@@ -126,7 +132,7 @@ final class ChangePasswordViewController: UIViewController {
 extension ChangePasswordViewController {
     
     private func changeButtonEnable(isEnable: Bool) {
-        completeButton.backgroundColor = isEnable ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
+        completeButton.backgroundColor = isEnable ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
         completeButton.setTitleColor(isEnable ? UIColor.appColor(.neutral0) : UIColor.appColor(.neutral600), for: .normal)
         completeButton.isEnabled = isEnable ? true : false
     }
@@ -194,9 +200,8 @@ extension ChangePasswordViewController {
             make.height.equalTo(300)
         }
         completeButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.snp.bottom).offset(-24)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-10)
+            make.leading.trailing.equalToSuperview().inset(24)
             make.height.equalTo(48)
         }
     }

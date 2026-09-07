@@ -57,7 +57,7 @@ final class CertificationView: UIView {
     }
     
     private let errorResponseLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.sub500)
+        $0.textColor = UIColor.appColor(.new600)
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
     }
     
@@ -83,7 +83,7 @@ final class CertificationView: UIView {
     }
     
     func showErrorMessage(message: String) {
-        passwordTextField.layer.borderColor = UIColor.appColor(.sub500).cgColor
+        passwordTextField.layer.borderColor = UIColor.appColor(.new600).cgColor
         passwordTextField.layer.borderWidth = 1.0
         errorResponseLabel.text = "⚠ \(message)"
     }

@@ -26,19 +26,19 @@ final class AgreementFormViewController: UIViewController {
     
     private let stepTextLabel = UILabel().then {
         $0.text = "1. 약관 동의"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let stepLabel = UILabel().then {
         $0.text = "1 / 4"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral200)
-        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.progressTintColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 0.25
@@ -65,7 +65,7 @@ final class AgreementFormViewController: UIViewController {
         config.image = resizedImage
         config.imagePlacement = .leading
         config.imagePadding = 8
-        config.baseForegroundColor = UIColor.appColor(.primary500)
+        config.baseForegroundColor = UIColor.appColor(.new500)
         config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 8, bottom: 0, trailing: 0)
 
         var attrTitle = AttributedString("모두 동의합니다.")
@@ -79,7 +79,7 @@ final class AgreementFormViewController: UIViewController {
 
         $0.configurationUpdateHandler = { button in
             var updatedConfig = button.configuration
-            updatedConfig?.baseForegroundColor = UIColor.appColor(.primary500)
+            updatedConfig?.baseForegroundColor = UIColor.appColor(.new500)
             updatedConfig?.background.backgroundColor = UIColor.appColor(.neutral100)
             button.configuration = updatedConfig
         }
@@ -150,12 +150,14 @@ extension AgreementFormViewController {
         let requiredChecked = agreementItems[0].checkButton.isSelected && agreementItems[1].checkButton.isSelected
         
         nextButton.isEnabled = requiredChecked
-        nextButton.backgroundColor = requiredChecked ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral300)
+        nextButton.backgroundColor = requiredChecked ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
         nextButton.setTitleColor(requiredChecked ? .white : UIColor.appColor(.neutral600), for: .normal)
     }
 
     private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
-        let original = isSelected ? UIImage.appImage(asset: .checkFilledCircle) : UIImage.appImage(asset: .checkEmptyCircle)
+        let original = isSelected
+        ? UIImage.appImage(asset: .checkFilledCircle)?.withTintColor(.appColor(.new500), renderingMode: .alwaysTemplate)
+            : UIImage.appImage(asset: .checkEmptyCircle)
         let resized = original?.resize(to: CGSize(width: 16, height: 16))
         checkbox.setImage(resized, for: .normal)
     }

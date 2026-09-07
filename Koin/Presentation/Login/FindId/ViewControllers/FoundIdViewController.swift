@@ -23,18 +23,20 @@ final class FoundIdViewController: UIViewController {
     private let subMessageLabel = UILabel()
     
     private let loginButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.sub500)
+        $0.backgroundColor = UIColor.appColor(.new500)
         $0.setTitle("로그인 바로가기", for: .normal)
         $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.layer.cornerRadius = 8
     }
     
     private let findPasswordButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
+        $0.backgroundColor = UIColor.appColor(.neutral0)
         $0.setTitle("비밀번호 찾기", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 15)
+        $0.setTitleColor(UIColor.appColor(.new500), for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
+        $0.layer.borderColor = UIColor.appColor(.new500).cgColor
+        $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 8
     }
     
@@ -260,7 +262,7 @@ extension FoundIdViewController {
     
     private func setupComponents() {
         messageLabel.font = UIFont.appFont(.pretendardBold, size: 24)
-        messageLabel.textColor = UIColor.appColor(.primary500)
+        messageLabel.textColor = UIColor.appColor(.new500)
     }
     
     private func setupUI() {
