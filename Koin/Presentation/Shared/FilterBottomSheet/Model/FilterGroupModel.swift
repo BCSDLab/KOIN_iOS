@@ -26,6 +26,7 @@ struct FilterGroupModel {
         hasAllButton: Bool,
         items: [String],
         behavior: Behavior,
+        allowEmptySelection: Bool = false
     ) {
         self.title = title
         self.description = description
@@ -40,7 +41,7 @@ struct FilterGroupModel {
         }
         
         if !self.items.contains(where: { $0.isSelected }) {
-            reset()
+            reset(allowEmptySelection)
         }
     }
 }
@@ -52,8 +53,9 @@ extension FilterGroupModel {
 }
 
 extension FilterGroupModel {
-    mutating func reset() {
-        deselectAll(except: 0)
+    mutating func reset(_ allowEmptySelection: Bool = false) {
+        let selectedIndex: Int? = allowEmptySelection ? nil : 0
+        deselectAll(except: selectedIndex)
     }
     
     mutating func didTap(itemAt index: Int) {
@@ -67,7 +69,7 @@ extension FilterGroupModel {
 }
 
 extension FilterGroupModel {
-    mutating private func deselectAll(except selectedIndex: Int) {
+    mutating private func deselectAll(except selectedIndex: Int?) {
         for index in items.indices {
             items[index].isSelected = index == selectedIndex
         }
