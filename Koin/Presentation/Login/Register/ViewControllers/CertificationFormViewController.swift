@@ -430,6 +430,7 @@ extension CertificationFormViewController {
             [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
                 $0.isHidden = true
             }
+            sendVerificationButton.updateState(isEnabled: false)
         } else {
             phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
             [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
