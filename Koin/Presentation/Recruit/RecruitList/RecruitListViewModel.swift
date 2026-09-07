@@ -12,7 +12,8 @@ import Observation
 final class RecruitListViewModel: SwiftUIViewModelProtocol {
     
     enum Input {
-        case viewDidAppear
+        case onFirstAppear
+        case onAppear
         case refresh
         case updateFilter(keyword: String? = nil, filterState: RecruitListFilter? = nil)
         case deleteFilter(rawvalue: String)
@@ -28,6 +29,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
     private(set) var isLoading: Bool = false
     private(set) var hasUnreadNotification: Bool = false
     private(set) var errorMessage: String? = nil
+    private var fetchListTask: Task<Void, Never>?
     
     var isEmpty: Bool {
         if let recruitList {
@@ -62,7 +64,11 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
     // MARK: - Public
     func execute(_ input: Input) {
         switch input {
-        case .viewDidAppear, .refresh:
+        case .onFirstAppear:
+            fetchList()
+        case .onAppear:
+            fetchHasUnreadNotification()
+        case .refresh:
             fetchList()
             fetchHasUnreadNotification()
         case .updateFilter(let keyword, let filterState):
@@ -84,20 +90,25 @@ extension RecruitListViewModel {
         _ keyword: String?,
         _ filterState: RecruitListFilter?
     ) {
+        defer {
+            isLoading = false
+            fetchList()
+        }
         if let keyword {
             self.filterState.keyword = keyword
-            fetchList()
         } else if let filterState {
             var filterState = filterState
             filterState.keyword = self.filterState.keyword
             self.filterState = filterState
-            fetchList()
         }
     }
     
     private func deleteFilter(_ rawValue: String) {
+        defer {
+            isLoading = false
+            fetchList()
+        }
         filterState.remove(item: rawValue)
-        fetchList()
     }
     
     private func loadNextPage() {
@@ -105,8 +116,12 @@ extension RecruitListViewModel {
     }
     
     private func resetFilter() {
-        filterState = .init()
-        fetchList()
+        defer {
+            isLoading = false
+            fetchList()
+        }
+        let keyword = filterState.keyword
+        filterState = .init(keyword: keyword)
     }
 }
 
@@ -115,19 +130,27 @@ extension RecruitListViewModel {
         guard !isLoading else {
             return
         }
-        Task {
+        fetchListTask?.cancel()
+        fetchListTask = Task {
             do {
                 isLoading = true
                 defer {
                     isLoading = false
                 }
                 
+                let cachedPage = filterState.page
                 filterState.page = page
                 var response = try await fetchRecruitListUseCase.execute(filter: filterState)
                 
-                response.recruits = (recruitList?.recruits ?? []) + response.recruits
-                response.recruits.removeDuplicates()
+                guard response.currentPage == page else {
+                    filterState.page = cachedPage
+                    return
+                }
                 
+                if 1 < page {
+                    response.recruits = (recruitList?.recruits ?? []) + response.recruits
+                    response.recruits.removeDuplicates()
+                }
                 self.recruitList = response
             } catch {
                 errorMessage = (error as? ErrorResponse)?.message

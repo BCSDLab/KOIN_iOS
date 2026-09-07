@@ -15,7 +15,6 @@ final class RecruitNotificationListViewController: UIViewController {
     private let viewModel: RecruitNotificationListViewModel
     private let inputSubject = PassthroughSubject<RecruitNotificationListViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
-    
     private var notificationList: RecruitNotificationList?
 
     // MARK: - UI Components
@@ -60,6 +59,8 @@ private extension RecruitNotificationListViewController {
                     updateNotificationList(notificationList)
                 case .showToast(let message):
                     showToastMessage(message: message)
+                case .didFinishLoading:
+                    notificationListView.stopLoading()
                 }
             }
             .store(in: &subscriptions)
@@ -72,7 +73,6 @@ private extension RecruitNotificationListViewController {
                 }
                 self.notificationList?.delete(id: id)
                 self.inputSubject.send(.deleteNotification(id: id))
-                self.showToastMessage(message: "알림이 삭제되었습니다.")
             }
             .store(in: &subscriptions)
         
@@ -130,7 +130,6 @@ extension RecruitNotificationListViewController {
                 self?.inputSubject.send(.deleteAllNotifications)
                 self?.notificationList?.deleteAll()
                 self?.notificationListView.deleteAll()
-                self?.showToastMessage(message: "알림이 삭제되었습니다.")
             }
         )
         popUpViewController.modalPresentationStyle = .overFullScreen

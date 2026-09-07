@@ -20,6 +20,10 @@ struct RecruitListView: ActionBindableView {
     var sendAction: ((Action) -> Void) = { _ in }
     @State private var viewModel: RecruitListViewModel
     
+    var recruits: [RecruitDetail] {
+        viewModel.recruitList?.recruits ?? []
+    }
+    
     // MARK: - Initializer
     init(viewModel: RecruitListViewModel) {
         self.viewModel = viewModel
@@ -56,29 +60,29 @@ struct RecruitListView: ActionBindableView {
                     .frame(maxWidth: .infinity, alignment: .leading)
                 
                 LazyVStack(spacing: 8) {
-                    ForEach(viewModel.recruitList?.recruits ?? []) { row in
+                    ForEach(recruits) { recruit in
                         Button {
                             
                         } label: {
-                            RecruitListRowView(model: row)
+                            RecruitListRowView(model: recruit)
                         }
                         .frame(maxWidth: .infinity)
                         .buttonStyle(.plain)
+                        .onAppear {
+                            if recruits.last?.id == recruit.id,
+                               viewModel.hasNextPage,
+                               !viewModel.isLoading {
+                                viewModel.execute(.loadNextPage)
+                            }
+                        }
                     }
                 }
                 .frame(maxWidth: .infinity)
                 
-                if viewModel.hasNextPage {
-                    ProgressView()
-                        .frame(maxWidth: .infinity, idealHeight: 77, alignment: .center)
-                        .task {
-                            viewModel.execute(.loadNextPage)
-                        }
-                        .isHidden(!viewModel.isLoading)
-                    
-                } else {
-                    Spacer(minLength: 77)
-                }
+                ProgressView()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .frame(height: 77)
+                    .isHidden(!(viewModel.hasNextPage && viewModel.isLoading), shouldOccupySpace: true)
             }
             .padding(.horizontal, 22)
             .background {
@@ -96,7 +100,10 @@ struct RecruitListView: ActionBindableView {
                 .padding(EdgeInsets(top: 0, leading: 0, bottom: 23, trailing: 30))
         }
         .onFirstAppear {
-            viewModel.execute(.viewDidAppear)
+            viewModel.execute(.onFirstAppear)
+        }
+        .onAppear {
+            viewModel.execute(.onAppear)
         }
         .onChange(of: viewModel.errorMessage) {
             if let message = viewModel.errorMessage {

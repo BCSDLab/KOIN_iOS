@@ -22,6 +22,7 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
     enum Output {
         case updateNotifications(RecruitNotificationList)
         case showToast(String)
+        case didFinishLoading
     }
     
     // MARK: - Properties
@@ -77,6 +78,7 @@ private extension RecruitNotificationListViewModel {
                 if let message = (error as? ErrorResponse)?.message {
                     outputSubject.send(.showToast(message))
                 }
+                outputSubject.send(.didFinishLoading)
             }
         }
     }
@@ -85,6 +87,7 @@ private extension RecruitNotificationListViewModel {
         Task {
             do {
                 try await deleteRecruitNotificationUseCase.execute(id: id)
+                outputSubject.send(.showToast("알림이 삭제되었습니다."))
             } catch {
                 if let message = (error as? ErrorResponse)?.message {
                     outputSubject.send(.showToast(message))
@@ -97,6 +100,7 @@ private extension RecruitNotificationListViewModel {
         Task {
             do {
                 try await deleteRecruitNotificationUseCase.execute(id: nil)
+                outputSubject.send(.showToast("알림이 삭제되었습니다."))
             } catch {
                 if let message = (error as? ErrorResponse)?.message {
                     outputSubject.send(.showToast(message))

@@ -9,6 +9,11 @@ import SwiftUI
 
 final class RecruitListHostingController: UIHostingController<RecruitListView>, HostingControllerProtocol {
     
+    // MARK: - Layout
+    private var toastMessageBottomInset: CGFloat {
+        23 + 43 + 12
+    }
+    
     // MARK: - UI Components
     private let notificationBarButton = UIButton(type: .system)
     private let profileBarButton = UIButton(type: .system)
@@ -45,7 +50,7 @@ final class RecruitListHostingController: UIHostingController<RecruitListView>, 
         case .showFilterBottomSheet(let filterState, let onApplyTapped):
             showFilterBottomSheet(filterState, onApplyTapped)
         case .showToast(let message):
-            showToastMessage(message: message)
+            showToastMessage(message: message, bottomInset: toastMessageBottomInset)
         case .showLoginToast:
             showLoginToast()
         case .showRecruitPost:
@@ -72,9 +77,11 @@ extension RecruitListHostingController {
     }
     
     private func showLoginToast() {
+        
         showToastMessageWithButton(
             message: "로그인이 필요한 기능입니다.",
-            buttonTitle: "로그인"
+            buttonTitle: "로그인",
+            bottomInset: toastMessageBottomInset
         ) { [weak self] in
             self?.navigateToLogin()
         }
