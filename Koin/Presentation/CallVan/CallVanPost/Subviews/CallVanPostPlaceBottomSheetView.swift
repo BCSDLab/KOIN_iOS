@@ -20,10 +20,6 @@ final class CallVanPostPlaceBottomSheetView: UIView {
     // MARK: - State
     private var selectedPlace: CallVanPlace? {
         didSet {
-            guard let selectedPlace else {
-                applyButton.isEnabled = false
-                return
-            }
             updateSelection(selectedPlace)
             updateTextField(isEditing: selectedPlace == .custom)
             validate()
@@ -206,13 +202,15 @@ extension CallVanPostPlaceBottomSheetView: UITextFieldDelegate {
 
 extension CallVanPostPlaceBottomSheetView {
     // MARK: - Update CollecitonView
-    private func updateSelection(_ selectedPlace: CallVanPlace) {
-        guard let selectedIndex = filterGroup.items.firstIndex(where: { $0.title == selectedPlace.rawValue }) else {
-            return
+    private func updateSelection(_ selectedPlace: CallVanPlace?) {
+        let before = filterGroup.items.map(\.isSelected)
+        
+        filterGroup.reset(true)
+        if let selectedPlace,
+           let selectedIndex = filterGroup.items.firstIndex(where: { $0.title == selectedPlace.rawValue }) {
+            filterGroup.didTap(itemAt: selectedIndex)
         }
         
-        let before = filterGroup.items.map(\.isSelected)
-        filterGroup.didTap(itemAt: selectedIndex)
         let after = filterGroup.items.map(\.isSelected)
         
         filterGroupCollectionView.update(
