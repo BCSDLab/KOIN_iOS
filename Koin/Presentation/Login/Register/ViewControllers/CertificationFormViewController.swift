@@ -94,6 +94,7 @@ final class CertificationFormViewController: UIViewController {
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
     ).then {
+        $0.keyboardType = .numberPad
         $0.isHidden = true
     }
     
@@ -140,6 +141,7 @@ final class CertificationFormViewController: UIViewController {
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
     ).then {
+        $0.keyboardType = .numberPad
         $0.isHidden = true
     }
     
