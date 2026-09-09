@@ -99,4 +99,25 @@ struct DiningLoggingTests {
 
         #expect(bed.recorder.loggedEvents == [DiningLoggedEvent("menu_time", "click", "저녁")])
     }
+    
+    @Test("세그먼트가 선택되지 않으면 로깅하지 않는다")
+    func 세그먼트가_선택되지_않으면_로깅하지_않는다() {
+        let bed = DiningLoggingTestBed()
+        bed.selectSegment(-1)
+
+        bed.tapMenuImage(place: "A코너")
+        bed.scrollDiningList()
+
+        #expect(bed.recorder.loggedEvents.isEmpty)
+    }
+
+    @Test("무시된 스와이프는 로깅하지 않는다")
+    func 무시된_스와이프는_로깅하지_않는다() {
+        let bed = DiningLoggingTestBed()
+        bed.selectSegment(0)
+
+        bed.swipe(.right)
+
+        #expect(bed.recorder.loggedEvents.isEmpty)
+    }
 }
