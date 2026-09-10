@@ -139,11 +139,7 @@ final class AgreementFormViewController: UIViewController {
 
 extension AgreementFormViewController {
     private func configureAgreementItems() {
-        let item1 = AgreementItemView(agreement: .personalInformation, title: "개인정보 이용약관 (필수)")
-        let item2 = AgreementItemView(agreement: .koin, title: "코인 이용약관 (필수)")
-        let item3 = AgreementItemView(agreement: .marketing, title: "마케팅수신 동의약관 (선택)")
-
-        agreementItems = [item1, item2, item3]
+        agreementItems = AgreementText.allCases.map(AgreementItemView.init)
         agreementItems.forEach { agreementStackView.addArrangedSubview($0) }
     }
 
@@ -304,10 +300,7 @@ private final class AgreementItemView: UIStackView {
     let checkButton = UIButton(type: .system)
     let textView = UITextView()
 
-    init(
-        agreement: AgreementText,
-        title: String
-    ) {
+    init(agreement: AgreementText) {
         self.agreement = agreement
         super.init(frame: .zero)
         axis = .vertical
@@ -322,7 +315,7 @@ private final class AgreementItemView: UIStackView {
         config.imagePadding = 8
         config.baseForegroundColor = UIColor.appColor(.gray)
 
-        var attrTitle = AttributedString(title)
+        var attrTitle = AttributedString(agreement.title)
         attrTitle.font = UIFont.appFont(.pretendardMedium, size: 14)
         config.attributedTitle = attrTitle
         config.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)

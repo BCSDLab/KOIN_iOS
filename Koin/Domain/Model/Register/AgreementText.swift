@@ -7,13 +7,23 @@
 
 import Foundation
 
-enum AgreementText: CustomStringConvertible {
+enum AgreementText: CaseIterable {
     case personalInformation
     case koin
     case marketing
 }
 
-extension AgreementText {
+extension AgreementText: CustomStringConvertible {
+    static let required: [AgreementText] = [.personalInformation, .koin]
+
+    var title: String {
+        switch self {
+        case .personalInformation: return "개인정보 이용약관 (필수)"
+        case .koin: return "코인 이용약관 (필수)"
+        case .marketing: return "마케팅수신 동의약관 (선택)"
+        }
+    }
+    
     var description: String {
         switch self {
         case .personalInformation:

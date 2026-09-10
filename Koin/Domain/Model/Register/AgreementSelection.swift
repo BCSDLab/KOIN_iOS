@@ -14,11 +14,11 @@ struct AgreementSelection: Equatable {
     var marketing: Bool = false
 
     var isRequiredSatisfied: Bool {
-        return personalInformation && koin
+        return AgreementText.required.allSatisfy { self[$0] }
     }
 
     var isAllSelected: Bool {
-        return isRequiredSatisfied && marketing
+        return AgreementText.allCases.allSatisfy { self[$0] }
     }
 
     subscript(agreement: AgreementText) -> Bool {
@@ -47,9 +47,7 @@ struct AgreementSelection: Equatable {
         let next = !isAllSelected
         let marketingNewlyAgreed = next && !marketing
 
-        personalInformation = next
-        koin = next
-        marketing = next
+        AgreementText.allCases.forEach { self[$0] = next }
 
         return marketingNewlyAgreed
     }
