@@ -12,12 +12,15 @@ import Combine
 final class AgreementFormViewController: UIViewController {
     
     // MARK: - Properties
+    
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var agreementItems: [AgreementItemView] = []
+    private var selection = AgreementSelection()
     
     // MARK: - UI Components
+    
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
     }
@@ -91,6 +94,7 @@ final class AgreementFormViewController: UIViewController {
     }
     
     // MARK: - Init
+    
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -100,8 +104,9 @@ final class AgreementFormViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
+    
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -114,6 +119,8 @@ final class AgreementFormViewController: UIViewController {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
+    
+    // MARK: - Bind
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
@@ -128,11 +135,13 @@ final class AgreementFormViewController: UIViewController {
     }
 }
 
+// MARK: - Functions
+
 extension AgreementFormViewController {
     private func configureAgreementItems() {
-        let item1 = AgreementItemView(title: "개인정보 이용약관 (필수)", text: AgreementText.personalInformation.description)
-        let item2 = AgreementItemView(title: "코인 이용약관 (필수)", text: AgreementText.koin.description)
-        let item3 = AgreementItemView(title: "마케팅수신 동의약관 (선택)", text: AgreementText.marketing.description)
+        let item1 = AgreementItemView(agreement: .personalInformation, title: "개인정보 이용약관 (필수)")
+        let item2 = AgreementItemView(agreement: .koin, title: "코인 이용약관 (필수)")
+        let item3 = AgreementItemView(agreement: .marketing, title: "마케팅수신 동의약관 (선택)")
 
         agreementItems = [item1, item2, item3]
         agreementItems.forEach { agreementStackView.addArrangedSubview($0) }
@@ -147,11 +156,24 @@ extension AgreementFormViewController {
     }
     
     private func notifyAgreementState() {
-        let requiredChecked = agreementItems[0].checkButton.isSelected && agreementItems[1].checkButton.isSelected
+        let requiredChecked = selection.isRequiredSatisfied
         
         nextButton.isEnabled = requiredChecked
         nextButton.backgroundColor = requiredChecked ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
         nextButton.setTitleColor(requiredChecked ? .white : UIColor.appColor(.neutral600), for: .normal)
+    }
+
+    private func syncCheckboxes() {
+        agreementItems.forEach {
+            let isSelected = selection[$0.agreement]
+            $0.checkButton.isSelected = isSelected
+            updateCheckboxImage(checkbox: $0.checkButton, isSelected: isSelected)
+        }
+        
+        agreementAllButton.isSelected = selection.isAllSelected
+        updateCheckboxImage(checkbox: agreementAllButton, isSelected: selection.isAllSelected)
+        
+        notifyAgreementState()
     }
 
     private func updateCheckboxImage(checkbox: UIButton, isSelected: Bool) {
@@ -173,30 +195,23 @@ extension AgreementFormViewController {
     }
 }
 
+// MARK: - @objc
+
 extension AgreementFormViewController {
     @objc private func allAgreementTapped(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        updateCheckboxImage(checkbox: sender, isSelected: sender.isSelected)
-        agreementItems.forEach {
-            $0.checkButton.isSelected = sender.isSelected
-            updateCheckboxImage(checkbox: $0.checkButton, isSelected: sender.isSelected)
+        if selection.toggleAll() {
+            requestPushNotificationPermission()
         }
-        notifyAgreementState()
+        syncCheckboxes()
     }
     
     @objc private func individualAgreementTapped(_ sender: UIButton) {
-        sender.isSelected.toggle()
-        updateCheckboxImage(checkbox: sender, isSelected: sender.isSelected)
+        guard let item = agreementItems.first(where: { $0.checkButton == sender }) else { return }
 
-        let allSelected = agreementItems.allSatisfy { $0.checkButton.isSelected }
-        agreementAllButton.isSelected = allSelected
-        updateCheckboxImage(checkbox: agreementAllButton, isSelected: allSelected)
-
-        notifyAgreementState()
-
-        if sender == agreementItems[2].checkButton && sender.isSelected {
+        if selection.toggle(item.agreement) {
             requestPushNotificationPermission()
         }
+        syncCheckboxes()
     }
     
     @objc private func nextButtonTapped() {
@@ -208,10 +223,16 @@ extension AgreementFormViewController {
     }
 }
 
-// MARK: UI Settings
+// MARK: - UI Settings
+
 extension AgreementFormViewController {
     private func setUpLayouts() {
-        [stepTextLabel, stepLabel, progressView, nextButton].forEach {
+        [
+            stepTextLabel,
+            stepLabel,
+            progressView,
+            nextButton
+        ].forEach {
             view.addSubview($0)
         }
         
@@ -277,11 +298,17 @@ extension AgreementFormViewController {
 }
 
 // MARK: - 체크박스 뷰
+
 private final class AgreementItemView: UIStackView {
+    let agreement: AgreementText
     let checkButton = UIButton(type: .system)
     let textView = UITextView()
 
-    init(title: String, text: String) {
+    init(
+        agreement: AgreementText,
+        title: String
+    ) {
+        self.agreement = agreement
         super.init(frame: .zero)
         axis = .vertical
         spacing = 4
@@ -312,7 +339,7 @@ private final class AgreementItemView: UIStackView {
             button.configuration = updatedConfig
         }
 
-        textView.text = text
+        textView.text = agreement.description
         textView.textColor = UIColor.appColor(.neutral800)
         textView.font = UIFont.systemFont(ofSize: 9)
         textView.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
