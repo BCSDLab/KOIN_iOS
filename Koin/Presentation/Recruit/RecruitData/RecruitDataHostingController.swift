@@ -145,18 +145,16 @@ extension RecruitDataHostingController {
     }
     
     private func navigateToEdit() {
-        guard let id = rootView.id else {
+        guard let data = rootView.data else {
             return
         }
         let recruitRepository = MockRecruitRepository()
-        let fetchRecruitDataUseCase = DefaultFetchRecruitDataUseCase(repository: recruitRepository)
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
         let viewModel = RecruitPostViewModel(
-            postType: .modify(id: id),
+            postType: .modify(data: data),
             postRecruitUseCase: postRecruitUseCase,
-            modifyRecruitUseCase: modifyRecruitUseCase,
-            fetchRecruitDataUseCase: fetchRecruitDataUseCase
+            modifyRecruitUseCase: modifyRecruitUseCase
         )
         let viewController = RecruitPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

@@ -295,7 +295,7 @@ extension RecruitPostViewController {
 
 extension RecruitPostViewController {
     
-    private func handlePostCompleted(id: Int) { // TODO: 화면전환
+    private func handlePostCompleted(id: Int) {
         let repository = MockRecruitRepository()
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)

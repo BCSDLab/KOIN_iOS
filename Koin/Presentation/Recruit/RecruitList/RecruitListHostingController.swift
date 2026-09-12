@@ -125,14 +125,12 @@ extension RecruitListHostingController {
     }
     private func showRecruitPost() {
         let recruitRepository = MockRecruitRepository()
-        let fetchRecruitDataUseCase = DefaultFetchRecruitDataUseCase(repository: recruitRepository)
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
         let viewModel = RecruitPostViewModel(
             postType: .post,
             postRecruitUseCase: postRecruitUseCase,
-            modifyRecruitUseCase: modifyRecruitUseCase,
-            fetchRecruitDataUseCase: fetchRecruitDataUseCase
+            modifyRecruitUseCase: modifyRecruitUseCase
         )
         let viewController = RecruitPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

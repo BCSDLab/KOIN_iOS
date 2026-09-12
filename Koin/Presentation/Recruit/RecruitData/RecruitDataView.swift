@@ -24,6 +24,9 @@ struct RecruitDataView: ActionBindableView {
     var id: Int? {
         viewModel.data?.id
     }
+    var data: RecruitData? {
+        viewModel.data
+    }
     
     // MARK: - Initializer
     init(
