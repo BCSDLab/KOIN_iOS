@@ -25,4 +25,8 @@ struct RecruitDetail: Identifiable, Equatable {
     
     let type: RecruitRoleType
     let roles: [RecruitRole]
+    
+    let description: String
+    let relatedUrl: String?
+    let qualification: String?
 }

@@ -26,7 +26,10 @@ final class MockRecruitRepository: RecruitRepository {
                 RecruitRole(id: 1, name: "프론트엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: false),
                 RecruitRole(id: 2, name: "백엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: false),
                 RecruitRole(id: 3, name: "디자인", currentParticipants: 0, maximumParticipants: 1, isClosed: false)
-            ]
+            ],
+            description: "",
+            relatedUrl: nil,
+            qualification: nil
         )
         
         let externalActivity = RecruitDetail(
@@ -42,7 +45,10 @@ final class MockRecruitRepository: RecruitRepository {
             currentParticipants: 2,
             maximumParticipants: 3,
             type: .general,
-            roles: []
+            roles: [],
+            description: "",
+            relatedUrl: nil,
+            qualification: nil
         )
         
         let closedExternalActivity = RecruitDetail(
@@ -58,7 +64,10 @@ final class MockRecruitRepository: RecruitRepository {
             currentParticipants: 5,
             maximumParticipants: 5,
             type: .general,
-            roles: []
+            roles: [],
+            description: "",
+            relatedUrl: nil,
+            qualification: nil
         )
         
         let studies = (4...7).map { id in
@@ -75,7 +84,10 @@ final class MockRecruitRepository: RecruitRepository {
                 currentParticipants: 2,
                 maximumParticipants: 3,
                 type: .general,
-                roles: []
+                roles: [],
+                description: "",
+                relatedUrl: nil,
+                qualification: nil
             )
         }
         
@@ -85,6 +97,40 @@ final class MockRecruitRepository: RecruitRepository {
             totalPage: 1,
             currentPage: 1
         )
+    }
+    
+    func fetchDetail(_ id: Int) async throws -> RecruitDetail {
+        try await Task.sleep(nanoseconds: 300_000_000)
+        return RecruitDetail(
+            id: id,
+            category: .contest,
+            title: "AI 아이디어 공모전 팀원 모집",
+            meetingType: .online,
+            startDate: "2026.07.26",
+            endDate: "2026.08.07",
+            deadline: "2026.08.07",
+            dDay: 5,
+            state: .recruiting,
+            currentParticipants: 0,
+            maximumParticipants: 3,
+            type: .roleBased,
+            roles: [
+                RecruitRole(id: 1, name: "프론트엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: false),
+                RecruitRole(id: 2, name: "백엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: false),
+                RecruitRole(id: 3, name: "디자인", currentParticipants: 0, maximumParticipants: 1, isClosed: false)
+            ],
+            description: "소개소개소개소개소개소개소개소개소개소개",
+            relatedUrl: nil,
+            qualification: "2학년이상\n참여율 높은 사람\n@@@"
+        )
+    }
+    
+    func post(_ request: RecruitPostRequest) async throws -> Int {
+        return 1
+    }
+    
+    func modify(_ id: Int, _ request: RecruitPostRequest) async throws -> Void {
+        return
     }
     
     func fetchNotificationList() async throws -> RecruitNotificationList {

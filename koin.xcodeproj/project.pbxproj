@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */; };
+		0E2253358E42231BE436FA27 /* RecruitPostScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */; };
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
+		1537B6CFD3D7AF52A2E9E944 /* RecruitPostMeetingTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F70BC5F3AA1A34663C32CA /* RecruitPostMeetingTypeView.swift */; };
+		5006987DEF4B5F454D7EA2D5 /* RecruitPostTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */; };
+		515B96092C6730C797C1F837 /* PostRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */; };
+		75EBF253F4468B2060B79212 /* RecruitPostSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3694E3ACBE05B8C7F15357 /* RecruitPostSectionHeaderView.swift */; };
 		7C016540300A88940013DD7B /* ShuttleTicketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */; };
 		7C016544300AA1450013DD7B /* DepartmentCategoryHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016543300AA1450013DD7B /* DepartmentCategoryHostingController.swift */; };
 		7C016546300AA14C0013DD7B /* DepartmentCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016545300AA14C0013DD7B /* DepartmentCategoryView.swift */; };
@@ -357,6 +363,7 @@
 		7CA6868D2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868C2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift */; };
 		7CA6868F2FFCF42E007937E9 /* NotificationHistoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */; };
 		7CA686902FFCF42E007937E9 /* NotificationHistoryError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */; };
+		7CAC2DDC304C34E900AC2828 /* RecruitPostRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CAC2DDB304C34E900AC2828 /* RecruitPostRequest.swift */; };
 		7CACF86530436CFF00AC2828 /* RecruitNotificationListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CACF86430436CFF00AC2828 /* RecruitNotificationListViewController.swift */; };
 		7CACF86730436D2600AC2828 /* RecruitNotificationListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CACF86630436D2600AC2828 /* RecruitNotificationListViewModel.swift */; };
 		7CACF86930436E7700AC2828 /* RecruitNotification+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CACF86830436E7700AC2828 /* RecruitNotification+.swift */; };
@@ -447,6 +454,7 @@
 		7CCB1E4B2F29D87C00472669 /* LostItemPostChatDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4A2F29D87C00472669 /* LostItemPostChatDetailUseCase.swift */; };
 		7CCB1E4E2F29DB3200472669 /* LostItemPostChatDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CCB1E4D2F29DB3200472669 /* LostItemPostChatDetailRequest.swift */; };
 		7CD411EA2FEB92280079467B /* HomeTabBarItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CD411E92FEB92280079467B /* HomeTabBarItem.swift */; };
+		7CDCD0A93053F96E004204DA /* RecruitPostRoleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0A83053F96E004204DA /* RecruitPostRoleTableViewCell.swift */; };
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
@@ -764,6 +772,9 @@
 		83E96DB82BBC6FBF00164914 /* BusSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E96DB72BBC6FBF00164914 /* BusSearchDto.swift */; };
 		83EBB87A2D0FDFD700346018 /* KoinPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8792D0FDFD700346018 /* KoinPickerView.swift */; };
 		83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */; };
+		A0B343754988C9398C4FE726 /* ModifyRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */; };
+		A1D000010000000000000001 /* FetchRecruitDetailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D000010000000000000002 /* FetchRecruitDetailUseCase.swift */; };
+		A1E000010000000000000001 /* RecruitPostRoleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E000010000000000000002 /* RecruitPostRoleTableView.swift */; };
 		AA20000000000000000001 /* PublisherTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* PublisherTestSupport.swift */; };
 		AA20000000000000000002 /* DiningFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000002 /* DiningFixtures.swift */; };
 		AA20000000000000000003 /* SpyDiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000003 /* SpyDiningRepository.swift */; };
@@ -774,6 +785,7 @@
 		AA20000000000000000008 /* DiningViewModelStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000008 /* DiningViewModelStubs.swift */; };
 		AA20000000000000000009 /* DiningLoggingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000009 /* DiningLoggingTests.swift */; };
 		AA20000000000000000010 /* DiningTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000010 /* DiningTypeTests.swift */; };
+		B0495459FC164809B16A96B6 /* RecruitPostTextViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54351A8A0C1A4046C3155481 /* RecruitPostTextViewView.swift */; };
 		B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* OrderImage.swift */; };
 		B46B8CC22E76CB7300A8E797 /* ShopSummaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */; };
 		B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */; };
@@ -801,6 +813,8 @@
 		B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */; };
 		B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D6292EEB01E600A19521 /* Debug.xcconfig */; };
 		B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */; };
+		C1838F7A4424DEA14DB2D107 /* RecruitPostCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5F05DAB30AABDF79BC780 /* RecruitPostCategoryView.swift */; };
+		CD3000000000000000000001 /* RecruitPostCategoryDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */; };
 		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
 		D19A00013000000000000002 /* NotificationRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000001 /* NotificationRowModel.swift */; };
 		D19A00013000000000000004 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000003 /* NotificationListView.swift */; };
@@ -1039,6 +1053,8 @@
 		D8F5C54A2E6EF76800FB6708 /* OrderFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C5492E6EF76800FB6708 /* OrderFloatingButton.swift */; };
 		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
+		E5DD3F6BE6C501B7B3BD659C /* RecruitPostRoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */; };
+		F0F216EDAA69B52CBEC0E606 /* RecruitPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */; };
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 		FE01000000000000000021 /* KoinDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000011 /* KoinDropdown.swift */; };
@@ -1079,6 +1095,13 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
+		1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostTextFieldView.swift; sourceTree = "<group>"; };
+		288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostViewModel.swift; sourceTree = "<group>"; };
+		3C3694E3ACBE05B8C7F15357 /* RecruitPostSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostSectionHeaderView.swift; sourceTree = "<group>"; };
+		4EE5F05DAB30AABDF79BC780 /* RecruitPostCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostCategoryView.swift; sourceTree = "<group>"; };
+		5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyRecruitUseCase.swift; sourceTree = "<group>"; };
+		54351A8A0C1A4046C3155481 /* RecruitPostTextViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostTextViewView.swift; sourceTree = "<group>"; };
+		73F70BC5F3AA1A34663C32CA /* RecruitPostMeetingTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostMeetingTypeView.swift; sourceTree = "<group>"; };
 		7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleTicketViewController.swift; sourceTree = "<group>"; };
 		7C016543300AA1450013DD7B /* DepartmentCategoryHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentCategoryHostingController.swift; sourceTree = "<group>"; };
 		7C016545300AA14C0013DD7B /* DepartmentCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepartmentCategoryView.swift; sourceTree = "<group>"; };
@@ -1425,6 +1448,7 @@
 		7CA6868A2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteNotificationHistoryUseCase.swift; sourceTree = "<group>"; };
 		7CA6868C2FFCE867007937E9 /* UpdateNotificationHistoryUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateNotificationHistoryUseCase.swift; sourceTree = "<group>"; };
 		7CA6868E2FFCF42E007937E9 /* NotificationHistoryError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryError.swift; sourceTree = "<group>"; };
+		7CAC2DDB304C34E900AC2828 /* RecruitPostRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRequest.swift; sourceTree = "<group>"; };
 		7CACF86430436CFF00AC2828 /* RecruitNotificationListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitNotificationListViewController.swift; sourceTree = "<group>"; };
 		7CACF86630436D2600AC2828 /* RecruitNotificationListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitNotificationListViewModel.swift; sourceTree = "<group>"; };
 		7CACF86830436E7700AC2828 /* RecruitNotification+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecruitNotification+.swift"; sourceTree = "<group>"; };
@@ -1499,6 +1523,7 @@
 		7CCB1E4A2F29D87C00472669 /* LostItemPostChatDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemPostChatDetailUseCase.swift; sourceTree = "<group>"; };
 		7CCB1E4D2F29DB3200472669 /* LostItemPostChatDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemPostChatDetailRequest.swift; sourceTree = "<group>"; };
 		7CD411E92FEB92280079467B /* HomeTabBarItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabBarItem.swift; sourceTree = "<group>"; };
+		7CDCD0A83053F96E004204DA /* RecruitPostRoleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleTableViewCell.swift; sourceTree = "<group>"; };
 		7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeviceTokenUseCase.swift; sourceTree = "<group>"; };
 		7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EC42EF2D1F900457128 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1741,6 +1766,8 @@
 		7CF77B7330058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordScrollViewHostingController.swift; sourceTree = "<group>"; };
 		7CF77B843005F105003642C1 /* NoticeSearchEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeSearchEmptyView.swift; sourceTree = "<group>"; };
 		7CF77B863005F642003642C1 /* FetchMainFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMainFrameUseCase.swift; sourceTree = "<group>"; };
+		7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitUseCase.swift; sourceTree = "<group>"; };
+		82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostViewController.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
 		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
@@ -1817,7 +1844,10 @@
 		83E96DB72BBC6FBF00164914 /* BusSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDto.swift; sourceTree = "<group>"; };
 		83EBB8792D0FDFD700346018 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
+		8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostScheduleView.swift; sourceTree = "<group>"; };
 		A001E2B42845091D00D6C310 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A1D000010000000000000002 /* FetchRecruitDetailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitDetailUseCase.swift; sourceTree = "<group>"; };
+		A1E000010000000000000002 /* RecruitPostRoleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleTableView.swift; sourceTree = "<group>"; };
 		AA10000000000000000001 /* PublisherTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherTestSupport.swift; sourceTree = "<group>"; };
 		AA10000000000000000002 /* DiningFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningFixtures.swift; sourceTree = "<group>"; };
 		AA10000000000000000003 /* SpyDiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyDiningRepository.swift; sourceTree = "<group>"; };
@@ -1856,6 +1886,7 @@
 		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		B6A0D6292EEB01E600A19521 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostCategoryDropdownView.swift; sourceTree = "<group>"; };
 		D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownHost.swift; sourceTree = "<group>"; };
 		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
 		D19A00013000000000000003 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
@@ -2100,6 +2131,7 @@
 		EC692285302700A400EE26ED /* koinUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
+		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
 		FE01000000000000000011 /* KoinDropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdown.swift; sourceTree = "<group>"; };
 		FE01000000000000000013 /* KoinDropdownAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownAnimator.swift; sourceTree = "<group>"; };
 		FE01000000000000000016 /* KoinDropdownConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownConfiguration.swift; sourceTree = "<group>"; };
@@ -2146,6 +2178,23 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		35728BBC0BEFE046C56D7CDF /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				3C3694E3ACBE05B8C7F15357 /* RecruitPostSectionHeaderView.swift */,
+				1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */,
+				54351A8A0C1A4046C3155481 /* RecruitPostTextViewView.swift */,
+				4EE5F05DAB30AABDF79BC780 /* RecruitPostCategoryView.swift */,
+				CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */,
+				73F70BC5F3AA1A34663C32CA /* RecruitPostMeetingTypeView.swift */,
+				8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */,
+				F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */,
+				A1E000010000000000000002 /* RecruitPostRoleTableView.swift */,
+				7CDCD0A83053F96E004204DA /* RecruitPostRoleTableViewCell.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		7C016541300A9FF80013DD7B /* Department */ = {
 			isa = PBXGroup;
 			children = (
@@ -2666,6 +2715,7 @@
 			children = (
 				7C50A1B43041A25D00897A6F /* RecruitList */,
 				7CACF86130436C1900AC2828 /* RecruitNotificationList */,
+				7CACF873304441AA00AC2828 /* RecruitPost */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2694,6 +2744,7 @@
 				7C50A1FE3042E9DC00897A6F /* RecruitList.swift */,
 				7C50A20A304324F500897A6F /* RecruitNotification.swift */,
 				7C50A20C3043273A00897A6F /* RecruitNotificationList.swift */,
+				7CAC2DDB304C34E900AC2828 /* RecruitPostRequest.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2744,6 +2795,8 @@
 		7C50A1FB3042E99E00897A6F /* Recruit */ = {
 			isa = PBXGroup;
 			children = (
+				A1D000010000000000000003 /* RecruitDetail */,
+				C1309DAEB0F857F481B1A4B0 /* RecruitPost */,
 				7CACF86C3044096200AC2828 /* RecruitList */,
 				7CACF86E3044097800AC2828 /* RecruitNotificationList */,
 			);
@@ -3256,6 +3309,16 @@
 				7CACF86F30440CEE00AC2828 /* MarkAsReadRecruitNotificationUseCase.swift */,
 			);
 			path = RecruitNotificationList;
+			sourceTree = "<group>";
+		};
+		7CACF873304441AA00AC2828 /* RecruitPost */ = {
+			isa = PBXGroup;
+			children = (
+				35728BBC0BEFE046C56D7CDF /* Subviews */,
+				82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */,
+				288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */,
+			);
+			path = RecruitPost;
 			sourceTree = "<group>";
 		};
 		7CB061C12F32312E00E83CA9 /* helpers */ = {
@@ -4846,6 +4909,14 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		A1D000010000000000000003 /* RecruitDetail */ = {
+			isa = PBXGroup;
+			children = (
+				A1D000010000000000000002 /* FetchRecruitDetailUseCase.swift */,
+			);
+			path = RecruitDetail;
+			sourceTree = "<group>";
+		};
 		AA30000000000000000001 /* Support */ = {
 			isa = PBXGroup;
 			children = (
@@ -4949,6 +5020,15 @@
 				B6A0D62B2EEB01F100A19521 /* Release.xcconfig */,
 			);
 			path = Configuration;
+			sourceTree = "<group>";
+		};
+		C1309DAEB0F857F481B1A4B0 /* RecruitPost */ = {
+			isa = PBXGroup;
+			children = (
+				5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */,
+				7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */,
+			);
+			path = RecruitPost;
 			sourceTree = "<group>";
 		};
 		D19A00013000000000000007 /* Shared */ = {
@@ -6020,6 +6100,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F0F216EDAA69B52CBEC0E606 /* RecruitPostViewModel.swift in Sources */,
+				004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */,
+				E5DD3F6BE6C501B7B3BD659C /* RecruitPostRoleView.swift in Sources */,
+				A1E000010000000000000001 /* RecruitPostRoleTableView.swift in Sources */,
+				0E2253358E42231BE436FA27 /* RecruitPostScheduleView.swift in Sources */,
+				1537B6CFD3D7AF52A2E9E944 /* RecruitPostMeetingTypeView.swift in Sources */,
+				C1838F7A4424DEA14DB2D107 /* RecruitPostCategoryView.swift in Sources */,
+				CD3000000000000000000001 /* RecruitPostCategoryDropdownView.swift in Sources */,
+				B0495459FC164809B16A96B6 /* RecruitPostTextViewView.swift in Sources */,
+				5006987DEF4B5F454D7EA2D5 /* RecruitPostTextFieldView.swift in Sources */,
+				75EBF253F4468B2060B79212 /* RecruitPostSectionHeaderView.swift in Sources */,
+				A0B343754988C9398C4FE726 /* ModifyRecruitUseCase.swift in Sources */,
+				515B96092C6730C797C1F837 /* PostRecruitUseCase.swift in Sources */,
 				FE01000000000000000021 /* KoinDropdown.swift in Sources */,
 				D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */,
 				FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */,
@@ -6142,6 +6235,7 @@
 				D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */,
 				7CA63A212F1AF73F00226F86 /* LostItemList.swift in Sources */,
 				D208A7C62CABB426007040E7 /* CoreRepository.swift in Sources */,
+				7CDCD0A93053F96E004204DA /* RecruitPostRoleTableViewCell.swift in Sources */,
 				7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */,
 				7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDto.swift in Sources */,
@@ -6199,6 +6293,7 @@
 				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
 				7C7F56B72FFB9FE000847151 /* NotificationHistoryRecord.swift in Sources */,
 				7C50A1FD3042E9AB00897A6F /* FetchRecruitListUseCase.swift in Sources */,
+				A1D000010000000000000001 /* FetchRecruitDetailUseCase.swift in Sources */,
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
 				7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */,
 				833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */,
@@ -6791,6 +6886,7 @@
 				7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */,
 				7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */,
 				D21572542CEDC17A0061E725 /* DeleteFrameUseCase.swift in Sources */,
+				7CAC2DDC304C34E900AC2828 /* RecruitPostRequest.swift in Sources */,
 				D89BAA392DCA5B3D006D3BB7 /* GeneralRegisterFormRequest.swift in Sources */,
 				D20AB9562C55352A006BC684 /* ChangeNotiDetailUseCase.swift in Sources */,
 				7C50A20B304324F500897A6F /* RecruitNotification.swift in Sources */,
@@ -7244,6 +7340,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = koin/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "코인(stage)";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "이 앱은 복덕방 기능을 사용하기 위해 위치 정보가 필요합니다.";
@@ -7279,6 +7376,7 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = koin/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "코인(stage)";
 				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSSupportsOpeningDocumentsInPlace = YES;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "이 앱은 복덕방 기능을 사용하기 위해 위치 정보가 필요합니다.";
