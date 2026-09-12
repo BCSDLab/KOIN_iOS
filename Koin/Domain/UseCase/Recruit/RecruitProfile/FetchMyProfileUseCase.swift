@@ -2,7 +2,7 @@
 //  FetchMyProfileUseCase.swift
 //  koin
 //
-//  Created by Codex on 9/13/26.
+//  Created by 홍기정 on 9/13/26.
 //
 
 import Foundation

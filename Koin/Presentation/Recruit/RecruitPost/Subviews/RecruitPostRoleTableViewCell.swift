@@ -2,7 +2,7 @@
 //  RecruitPostRoleTableViewCell.swift
 //  koin
 //
-//  Created by Codex on 9/11/26.
+//  Created by 홍기정 on 9/11/26.
 //
 
 import UIKit
