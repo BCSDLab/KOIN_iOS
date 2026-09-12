@@ -55,7 +55,27 @@ final class RecruitListHostingController: UIHostingController<RecruitListView>, 
             showLoginToast()
         case .showRecruitPost:
             showRecruitPost()
+        case .showRecruitData(let id):
+            showRecruitData(id: id)
         }
+    }
+}
+
+extension RecruitListHostingController: RecruitDataHostingControllerDelegate {
+    func delete(id: Int) {
+        rootView.delete(id: id)
+    }
+    
+    private func showRecruitData(id: Int) {
+        let repository = MockRecruitRepository()
+        let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
+        let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
+        let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)
+        let controller = RecruitDataHostingController(
+            rootView: RecruitDataView(viewModel: viewModel),
+            delegate: self
+        )
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
@@ -104,8 +124,17 @@ extension RecruitListHostingController {
         // TODO
     }
     private func showRecruitPost() {
-        // TOOD
-    }    
+        let recruitRepository = MockRecruitRepository()
+        let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
+        let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
+        let viewModel = RecruitPostViewModel(
+            postType: .post,
+            postRecruitUseCase: postRecruitUseCase,
+            modifyRecruitUseCase: modifyRecruitUseCase
+        )
+        let viewController = RecruitPostViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
 }
 
 extension RecruitListHostingController {
@@ -185,3 +214,4 @@ extension RecruitListHostingController {
         }
     }
 }
+

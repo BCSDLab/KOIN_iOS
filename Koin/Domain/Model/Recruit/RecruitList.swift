@@ -8,9 +8,16 @@
 import Foundation
 
 struct RecruitList {
-    var recruits: [RecruitDetail]
+    var recruits: [RecruitSummary]
     
-    let totalCount: Int
+    var totalCount: Int
     let totalPage: Int
     let currentPage: Int
+}
+
+extension RecruitList {
+    mutating func delete(id: Int) {
+        recruits.removeAll(where: { $0.id == id })
+        totalCount -= 1
+    }
 }

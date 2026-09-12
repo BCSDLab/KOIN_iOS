@@ -1,25 +1,23 @@
 //
-//  RecruitDetail.swift
+//  RecruitSummary.swift
 //  koin
 //
-//  Created by 홍기정 on 8/29/26.
+//  Created by 홍기정 on 9/12/26.
 //
 
 import Foundation
 
-struct RecruitDetail: Identifiable, Equatable {
+struct RecruitSummary: Identifiable, Equatable {
     let id: Int
     let category: RecruitCategory
     let title: String
     let meetingType: RecruitMeetingType
     
-    let startDate: String
-    let endDate: String
-    let deadline: String
-    let dDay: Int
+    let startDate: Date
+    let endDate: Date
+    let deadline: Date
+    let dDay: String
     
-    let state: RecruitState
-
     let currentParticipants: Int
     let maximumParticipants: Int
     

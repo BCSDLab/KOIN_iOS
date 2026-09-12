@@ -9,9 +9,9 @@ import SwiftUI
 
 struct RecruitListRowView: View {
     
-    let model: RecruitDetail
+    let model: RecruitSummary
     
-    init(model: RecruitDetail) {
+    init(model: RecruitSummary) {
         self.model = model
     }
     
@@ -24,7 +24,7 @@ struct RecruitListRowView: View {
             rolesView
                 .padding(.bottom, 8)
                 .isHidden(model.type == .general)
-            detailView
+            dataView
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 16)
@@ -48,7 +48,7 @@ extension RecruitListRowView {
                 .background(Color.appColor(model.category.backgroundColor))
                 .clipShape(.capsule)
             
-            Text("D-\(model.dDay)")
+            Text(model.dDay)
                 .font(.appFont(.pretendardMedium, size: 10))
                 .foregroundStyle(Color.appColor(.danger700))
         }
@@ -79,7 +79,7 @@ extension RecruitListRowView {
     }
     
     @ViewBuilder
-    private var detailView: some View {
+    private var dataView: some View {
         LeftAlignedLayout(interitemSpacing: 8, interlineSpacing: 4) {
             Group {
                 HStack(alignment: .center, spacing: 2) {
@@ -91,7 +91,7 @@ extension RecruitListRowView {
                 
                 HStack(alignment: .center, spacing: 2) {
                     Image.appImage(asset: .recruitDate)
-                    Text("\(model.startDate) ~ \(model.endDate)")
+                    Text("\(model.startDate.formatDateToYYYYMMDD(separator: ".")) ~ \(model.endDate.formatDateToYYYYMMDD(separator: "."))")
                         .font(.appFont(.pretendardRegular, size: 10))
                         .foregroundStyle(Color.appColor(.neutral500))
                 }

@@ -32,13 +32,13 @@ final class KoinDropdownHost {
 
     // MARK: - Public
     func makeDropdown(
-        trigger: UIView,
+        anchor: UIView,
         contentView: UIView & KoinDropdownContentView,
         configuration: KoinDropdownConfiguration
     ) -> KoinDropdown {
         return KoinDropdown(
             host: self,
-            trigger: trigger,
+            anchor: anchor,
             contentView: contentView,
             configuration: configuration
         )
@@ -159,12 +159,12 @@ extension KoinDropdownHost {
         of dropdown: KoinDropdown,
         in scrollView: UIScrollView
     ) -> CGFloat {
-        guard let trigger = dropdown.trigger else {
+        guard let anchor = dropdown.anchor else {
             return 0
         }
         
-        let triggerMaxY = trigger.convert(trigger.bounds, to: scrollView).maxY
-        let dropdownMaxY = triggerMaxY + travel
+        let anchorMaxY = anchor.convert(anchor.bounds, to: scrollView).maxY
+        let dropdownMaxY = anchorMaxY + travel
         let viewport = scrollView.bounds.height
         let maxOffsetY = max(
             -scrollView.adjustedContentInset.top,

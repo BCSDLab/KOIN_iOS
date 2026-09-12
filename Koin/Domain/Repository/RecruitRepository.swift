@@ -14,4 +14,8 @@ protocol RecruitRepository {
     func deleteAllNotification() async throws -> Void
     func markAsReadNotification(_ id: Int) async throws -> Void
     func markAllAsReadNotification() async throws -> Void
+    func post(_ request: RecruitPostRequest) async throws -> Int
+    func modify(_ id: Int, _ request: RecruitPostRequest) async throws -> Void
+    func fetchData(_ id: Int) async throws -> RecruitData
+    func deleteData(id: Int) async throws -> Bool
 }

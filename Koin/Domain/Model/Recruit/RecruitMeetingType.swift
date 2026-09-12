@@ -22,4 +22,30 @@ enum RecruitMeetingType: String, CaseIterable {
             3
         }
     }
+    
+    var imageAsset: ImageAsset {
+        switch self {
+        case .online:
+            return .recruitPostMeetingTypeOnline
+        case .offline:
+            return .recruitPostMeetingTypeOffline
+        case .mixed:
+            return .recruitPostMeetingTypeMixed
+        }
+    }
+}
+
+extension RecruitMeetingType {
+    init?(index: Int) {
+        switch index {
+        case 1:
+            self = .online
+        case 2:
+            self = .offline
+        case 3:
+            self = .mixed
+        default:
+            return nil
+        }
+    }
 }

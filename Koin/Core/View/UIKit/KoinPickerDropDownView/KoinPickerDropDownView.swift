@@ -61,6 +61,15 @@ final class KoinPickerDropDownView: UIView {
         self.selectedItem = selectedItem
         pickerView.update(selectedItem: selectedItem)
     }
+    
+    func configure(
+        from startDate: Date,
+        to endDate: Date,
+        selectedDate: Date
+    ) {
+        (delegate as? KoinPickerDropDownViewDateDelegate)?.resetDates(from: startDate, to: endDate)
+        delegate.reset(koinPicker: self, initialDate: selectedDate)
+    }
 }
 
 // MARK: - KoinDropdownContentView

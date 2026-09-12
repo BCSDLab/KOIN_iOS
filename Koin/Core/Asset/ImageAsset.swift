@@ -215,6 +215,13 @@ public enum ImageAsset: String {
     case noticeSearch
     
     // MARK: - Recruit
+    case recruitDataLocation
+    case recruitDataCalendar
+    case recruitDataMembers
+    case recruitDataClock
+    case recruitDataAuthor
+    case recruitDataRoleClosed
+    case recruitDataRoleOpen
     case recruitBell
     case recruitBellDot
     case recruitDate
@@ -225,6 +232,10 @@ public enum ImageAsset: String {
     case recruitNotificationChat
     case recruitNotificationMember
     case recruitPencil
+    case recruitPostMeetingTypeMixed
+    case recruitPostMeetingTypeOffline
+    case recruitPostMeetingTypeOnline
+    case recruitPostRolePlus
     case recruitProfile
     case recruitSearch
     
