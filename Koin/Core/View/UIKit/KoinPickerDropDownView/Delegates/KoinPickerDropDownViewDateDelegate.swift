@@ -67,9 +67,14 @@ extension KoinPickerDropDownViewDateDelegate: KoinPickerDropDownViewDelegate {
 extension KoinPickerDropDownViewDateDelegate {
     
     func resetDates(from startDate: Date, to endDate: Date) {
-        let interval = endDate.timeIntervalSince(startDate)
-        let intervalDay = Int(interval / 86400)
-        let range: Range<Int> = .init(1...intervalDay)
+        let calendar = Calendar.current
+        let startDay = calendar.startOfDay(for: startDate)
+        let endDay = calendar.startOfDay(for: endDate)
+        guard let dayDiff = calendar.dateComponents([.day], from: startDay, to: endDay).day,
+              0 < dayDiff else {
+            return
+        }
+        let range: Range<Int> = .init(1...(dayDiff + 1))
         resetDates(range: range, startDate: startDate)
     }
     

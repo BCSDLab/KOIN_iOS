@@ -23,6 +23,20 @@ struct RecruitPostRequest {
     var qualification: String?
     
     var isValid: Bool {
+        guard let category,
+              let title,
+              !title.isEmpty,
+              let meetingType,
+              let startDate,
+              let endDate,
+              let deadline,
+              let description,
+              !description.isEmpty,
+              !(startDate < endDate),
+              !(endDate < deadline) else {
+            return false
+        }
+              
         switch type {
         case .roleBased:
             guard !roles.isEmpty else {
@@ -33,18 +47,10 @@ struct RecruitPostRequest {
                     return false
                 }
             }
+            return true
         case .general:
-            guard roles.isEmpty, numberOfGeneralMembers != nil else {
-                return false
-            }
+            return roles.isEmpty
         }
-        return category != nil
-        && !(title?.isEmpty ?? true)
-        && meetingType != nil
-        && startDate != nil
-        && endDate != nil
-        && deadline != nil
-        && !(description?.isEmpty ?? true)
     }
 }
 
