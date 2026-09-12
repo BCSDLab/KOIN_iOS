@@ -15,12 +15,12 @@ struct RecruitData: Identifiable, Equatable {
     let title: String
     
     let meetingType: RecruitMeetingType
-    let startDate: String
-    let endDate: String
-    let deadlineDate: String
+    let startDate: Date
+    let endDate: Date
+    let deadlineDate: Date
     let currentParticipants: Int
     let maximumParticipants: Int
-    let createdAt: String?
+    let createdAt: Date?
     let author: String?
     
     let type: RecruitRoleType

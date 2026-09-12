@@ -18,7 +18,7 @@ struct RecruitDataMetadataView: View {
             metadataRow(
                 icon: .recruitDataCalendar,
                 title: "활동 기간",
-                value: "\(data.startDate) ~ \(data.endDate)"
+                value: "\(data.startDate.formatDateToYYYYMMDD(separator: ".")) ~ \(data.endDate.formatDateToYYYYMMDD(separator: "."))"
             )
             metadataRow(
                 icon: .recruitDataMembers,
@@ -28,7 +28,7 @@ struct RecruitDataMetadataView: View {
             metadataRow(
                 icon: .recruitDataClock,
                 title: "작성일",
-                value: data.createdAt ?? "-"
+                value: data.createdAt?.formatDateToYYYYMMDD(separator: ".") ?? ""
             )
             metadataRow(
                 icon: .recruitDataAuthor,

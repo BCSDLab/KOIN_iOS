@@ -44,10 +44,10 @@ final class RecruitPostTextViewView: UIView {
     }
     
     // MARK: - Public
-    func configure(text: String) {
+    func configure(text: String?) {
         textView.text = text
-        placeholderLabel.isHidden = !text.isEmpty
-        headerView.updateCounter(current: text.count, limit: limit)
+        placeholderLabel.isHidden = !(text?.isEmpty ?? true)
+        headerView.updateCounter(current: text?.count ?? 0, limit: limit)
     }
 }
 

@@ -21,9 +21,8 @@ final class RecruitPostViewModel: ViewModelProtocol {
     }
     enum Output {
         case updateLoading(Bool)
-        case updateForm(RecruitPostRequest)
+        case updateForm(RecruitData)
         
-        case postFailed
         case postCompleted(id: Int)
         case modifyCompleted(id: Int)
         case showToast(String)
@@ -71,20 +70,21 @@ extension RecruitPostViewModel {
         guard case let .modify(data) = postType else {
             return
         }
-        outputSubject.send(.updateForm(.init(from: data)))
+        outputSubject.send(.updateForm(data))
     }
 }
 
 extension RecruitPostViewModel {
     
     private func submit(_ request: RecruitPostRequest) {
-        outputSubject.send(.updateLoading(true))
         
         Task {
             do {
+                outputSubject.send(.updateLoading(true))
                 defer {
                     outputSubject.send(.updateLoading(false))
                 }
+                
                 switch postType {
                 case .post:
                     let id = try await postRecruitUseCase.execute(request: request)
@@ -94,7 +94,6 @@ extension RecruitPostViewModel {
                     outputSubject.send(.modifyCompleted(id: data.id))
                 }
             } catch {
-                outputSubject.send(.postFailed)
                 if let error = error as? ErrorResponse {
                     outputSubject.send(.showToast(error.message))
                 }

@@ -9,14 +9,17 @@ import Foundation
 
 final class MockRecruitRepository: RecruitRepository {
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        
         let contest = RecruitSummary(
             id: 1,
             category: .contest,
             title: "AI 아이디어 공모전 팀원 모집",
             meetingType: .online,
-            startDate: "2026.07.26",
-            endDate: "2026.08.07",
-            deadline: "2026.08.07",
+            startDate: dateFormatter.date(from: "2026.07.26") ?? Date(),
+            endDate: dateFormatter.date(from: "2026.08.26") ?? Date(),
+            deadline: dateFormatter.date(from: "2026.08.26") ?? Date(),
             dDay: "D-5",
             currentParticipants: 0,
             maximumParticipants: 3,
@@ -33,9 +36,9 @@ final class MockRecruitRepository: RecruitRepository {
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
             meetingType: .mixed,
-            startDate: "2026.07.26",
-            endDate: "2026.08.07",
-            deadline: "2026.08.07",
+            startDate: dateFormatter.date(from: "2026.07.26") ?? Date(),
+            endDate: dateFormatter.date(from: "2026.08.26") ?? Date(),
+            deadline: dateFormatter.date(from: "2026.08.26") ?? Date(),
             dDay: "D-1",
             currentParticipants: 2,
             maximumParticipants: 3,
@@ -48,9 +51,9 @@ final class MockRecruitRepository: RecruitRepository {
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
             meetingType: .mixed,
-            startDate: "2026.07.26",
-            endDate: "2026.08.07",
-            deadline: "2026.08.07",
+            startDate: dateFormatter.date(from: "2026.07.26") ?? Date(),
+            endDate: dateFormatter.date(from: "2026.08.26") ?? Date(),
+            deadline: dateFormatter.date(from: "2026.08.26") ?? Date(),
             dDay: "D-day",
             currentParticipants: 5,
             maximumParticipants: 5,
@@ -64,9 +67,9 @@ final class MockRecruitRepository: RecruitRepository {
                 category: .study,
                 title: "2026 스터디 팀원 모집",
                 meetingType: .mixed,
-                startDate: "2026.07.26",
-                endDate: "2026.08.07",
-                deadline: "2026.08.07",
+                startDate: dateFormatter.date(from: "2026.07.26") ?? Date(),
+                endDate: dateFormatter.date(from: "2026.08.26") ?? Date(),
+                deadline: dateFormatter.date(from: "2026.08.26") ?? Date(),
                 dDay: "D-1",
                 currentParticipants: 2,
                 maximumParticipants: 3,
@@ -89,6 +92,8 @@ final class MockRecruitRepository: RecruitRepository {
         guard let item = list.recruits.first(where: { $0.id == id }) else {
             throw NSError(domain: "MockRecruitRepository", code: 404)
         }
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
         return RecruitData(
             id: item.id,
             category: item.category,
@@ -100,7 +105,7 @@ final class MockRecruitRepository: RecruitRepository {
             deadlineDate: item.deadline,
             currentParticipants: item.currentParticipants,
             maximumParticipants: item.maximumParticipants,
-            createdAt: "2026.02.02",
+            createdAt: dateFormatter.date(from: "2026.07.26") ?? Date(),
             author: "@@@",
             type: item.type,
             roles: item.roles,

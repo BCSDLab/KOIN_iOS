@@ -67,7 +67,9 @@ final class RecruitPostScheduleView: UIView {
         startDateDropdownContentView.reset(initialDate: Date())
         endDateDropdownContentView.reset(initialDate: Date())
         deadlineDateDropdownContentView.reset(initialDate: Date())
-
+        
+        let today = Date()
+        configure(startDate: today, endDate: today, deadlineDate: today, updateLabelText: false)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -91,6 +93,43 @@ final class RecruitPostScheduleView: UIView {
             deadlineDateLabel.text = formatter.string(from: deadlineDate)
             deadlineDateDropdownContentView.reset(initialDate: deadlineDate)
         }
+    }
+    
+    func configure(
+        startDate: Date,
+        endDate: Date,
+        deadlineDate: Date,
+        updateLabelText: Bool = true
+    ) {
+        let date1970 = Date.init(timeIntervalSince1970: 0)
+        func dateAfterOneYaer(_ date: Date) -> Date {
+            let oneYear: Double = 365 * 24 * 60 * 60
+            return date.addingTimeInterval(oneYear)
+        }
+        
+        if updateLabelText {
+            startDateLabel.text = startDate.formatDateToYYYYMMDD(separator: ".")
+            endDateLabel.text = endDate.formatDateToYYYYMMDD(separator: ".")
+            deadlineDateLabel.text = deadlineDate.formatDateToYYYYMMDD(separator: ".")
+        }
+        
+        startDateDropdownContentView.configure(
+            from: date1970,
+            to: dateAfterOneYaer(startDate),
+            selectedDate: startDate
+        )
+        
+        endDateDropdownContentView.configure(
+            from: date1970,
+            to: dateAfterOneYaer(endDate),
+            selectedDate: endDate
+        )
+        
+        deadlineDateDropdownContentView.configure(
+            from: date1970,
+            to: dateAfterOneYaer(deadlineDate),
+            selectedDate: deadlineDate
+        )
     }
 }
 

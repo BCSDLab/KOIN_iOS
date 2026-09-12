@@ -91,7 +91,7 @@ extension RecruitListRowView {
                 
                 HStack(alignment: .center, spacing: 2) {
                     Image.appImage(asset: .recruitDate)
-                    Text("\(model.startDate) ~ \(model.endDate)")
+                    Text("\(model.startDate.formatDateToYYYYMMDD(separator: ".")) ~ \(model.endDate.formatDateToYYYYMMDD(separator: "."))")
                         .font(.appFont(.pretendardRegular, size: 10))
                         .foregroundStyle(Color.appColor(.neutral500))
                 }

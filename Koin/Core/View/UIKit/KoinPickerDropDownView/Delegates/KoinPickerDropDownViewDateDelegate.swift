@@ -20,6 +20,7 @@ final class KoinPickerDropDownViewDateDelegate {
     }
 }
 
+// FIXME: 리팩토링 필요
 extension KoinPickerDropDownViewDateDelegate: KoinPickerDropDownViewDelegate {
     
     func reset(koinPicker: KoinPickerDropDownView, initialDate: Date) {
@@ -65,9 +66,16 @@ extension KoinPickerDropDownViewDateDelegate: KoinPickerDropDownViewDelegate {
 
 extension KoinPickerDropDownViewDateDelegate {
     
-    private func resetDates(range: Range<Int>) {
+    func resetDates(from startDate: Date, to endDate: Date) {
+        let interval = endDate.timeIntervalSince(startDate)
+        let intervalDay = Int(interval / 86400)
+        let range: Range<Int> = .init(1...intervalDay)
+        resetDates(range: range, startDate: startDate)
+    }
+    
+    private func resetDates(range: Range<Int>, startDate: Date? = nil) {
         let calendar = Calendar.current
-        let startDay = calendar.startOfDay(for: Date())
+        let startDay = calendar.startOfDay(for: startDate ?? Date())
         let availableDates = range.compactMap {
             calendar.date(byAdding: .day, value: $0, to: startDay)
         }

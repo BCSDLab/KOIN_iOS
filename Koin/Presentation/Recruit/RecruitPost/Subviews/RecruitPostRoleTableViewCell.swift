@@ -203,12 +203,8 @@ extension RecruitPostRoleTableViewCell {
         configuration.contentInsets = .zero
         button.configuration = configuration
         button.configurationUpdateHandler = { button in
-            if !button.isEnabled {
-                var configuration = button.configuration
-                let image = configuration?.image
-                configuration?.image?.withTintColor(.appColor(.neutral400))
-                button.configuration = configuration
-            }
+            let image = button.configuration?.image
+            button.configuration?.image = image?.withTintColor(.appColor(button.isEnabled ? .neutral600 : .neutral400))
         }
     }
 

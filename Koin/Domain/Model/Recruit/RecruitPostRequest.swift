@@ -44,7 +44,7 @@ struct RecruitPostRequest {
         && startDate != nil
         && endDate != nil
         && deadline != nil
-        && description != nil
+        && !(description?.isEmpty ?? true)
     }
 }
 
@@ -58,23 +58,19 @@ struct RecruitRoleRequest {
 }
 
 extension RecruitPostRequest {
-    init(from form: RecruitData) {
-        let dateFormatter = DateFormatter().then {
-            $0.dateFormat = "yyyy-MM-dd"
-        }
-        
-        self.category = form.category
-        self.title = form.title
-        self.meetingType = form.meetingType
-        self.startDate = dateFormatter.date(from: form.startDate)
-        self.endDate = dateFormatter.date(from: form.endDate)
-        self.deadline = dateFormatter.date(from: form.deadlineDate)
-        self.type = form.type
-        self.numberOfGeneralMembers = form.maximumParticipants
-        self.roles = form.roles.map { .init(from: $0) }
-        self.description = form.description
-        self.relatedUrl = form.relatedUrl?.absoluteString
-        self.qualification = form.qualification
+    init(from data: RecruitData) {
+        self.category = data.category
+        self.title = data.title
+        self.meetingType = data.meetingType
+        self.startDate = data.startDate
+        self.endDate = data.endDate
+        self.deadline = data.deadlineDate
+        self.type = data.type
+        self.numberOfGeneralMembers = data.maximumParticipants
+        self.roles = data.roles.map { .init(from: $0) }
+        self.description = data.description
+        self.relatedUrl = data.relatedUrl?.absoluteString
+        self.qualification = data.qualification
     }
 }
 

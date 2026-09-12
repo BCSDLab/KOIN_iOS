@@ -82,7 +82,6 @@ final class RecruitPostViewController: UIViewController {
     )
     
     private let postButton = UIButton()
-    private let loadingIndicator = UIActivityIndicatorView(style: .medium)
     
     // MARK: - Dropdown
     private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
@@ -158,17 +157,11 @@ extension RecruitPostViewController {
             .sink { [weak self] output in
                 guard let self else { return }
                 switch output {
-                case let .updateForm(request):
-                    var formRequest = request
-                    if formRequest.type == .roleBased && formRequest.roles.isEmpty {
-                        formRequest.roles = [.init()]
-                    }
-                    self.request = formRequest
-                    updateViews()
+                case let .updateForm(data):
+                    updateForm(data)
+                    updateViews(data)
                 case let .updateLoading(isLoading):
-                    isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
-                case .postFailed:
-                    postButton.isUserInteractionEnabled = true
+                    updateLoading(isLoading)
                 case .postCompleted(let id):
                     handlePostCompleted(id: id)
                 case .modifyCompleted(let id):
@@ -295,6 +288,15 @@ extension RecruitPostViewController {
 
 extension RecruitPostViewController {
     
+    private func updateLoading(_ isLoading: Bool) {
+        guard var configuration = postButton.configuration else {
+            return
+        }
+        configuration.showsActivityIndicator = isLoading
+        postButton.configuration = configuration
+        postButton.isUserInteractionEnabled = !isLoading
+    }
+    
     private func handlePostCompleted(id: Int) {
         let repository = MockRecruitRepository()
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
@@ -304,7 +306,7 @@ extension RecruitPostViewController {
             rootView: RecruitDataView(viewModel: viewModel),
             delegate: nil
         )
-        navigationController?.replaceTopViewController(viewController, animated: true)
+        replaceTopViewController(viewController, animated: true)
         showToastMessage(message: completionMessage, bottomInset: 60)
     }
     
@@ -332,23 +334,27 @@ extension RecruitPostViewController {
         postButton.backgroundColor = request.isValid ? UIColor.appColor(.new500) : UIColor.appColor(.neutral400)
     }
     
-    private func updateViews() {
-        categoryView.configure(category: request.category)
-        titleView.configure(text: request.title)
-        meetingTypeView.configure(meetingType: request.meetingType)
+    private func updateForm(_ data: RecruitData) {
+        request = .init(from: data)
+    }
+    
+    private func updateViews(_ data: RecruitData) {
+        categoryView.configure(category: data.category)
+        titleView.configure(text: data.title)
+        meetingTypeView.configure(meetingType: data.meetingType)
         scheduleView.configure(
-            startDate: request.startDate,
-            endDate: request.endDate,
-            deadlineDate: request.deadline
+            startDate: data.startDate,
+            endDate: data.endDate,
+            deadlineDate: data.deadlineDate
         )
         roleView.configure(
-            roleType: request.type,
-            roles: request.roles,
-            numberOfGeneralMembers: request.numberOfGeneralMembers,
+            roleType: data.type,
+            roles: data.roles.map { RecruitRoleRequest(from: $0) },
+            numberOfGeneralMembers: data.maximumParticipants,
         )
-        descriptionView.configure(text: request.description ?? "")
-        relatedUrlView.configure(text: request.relatedUrl ?? "")
-        qualificationView.configure(text: request.qualification ?? "")
+        descriptionView.configure(text: data.description)
+        relatedUrlView.configure(text: data.relatedUrl?.absoluteString)
+        qualificationView.configure(text: data.qualification)
     }
 }
 
