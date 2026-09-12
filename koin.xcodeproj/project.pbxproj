@@ -464,6 +464,14 @@
 		7CDCD0B73055863E004204DA /* RecruitDataRelatedUrlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0B63055863E004204DA /* RecruitDataRelatedUrlView.swift */; };
 		7CDCD0BB30559234004204DA /* RecruitDataPopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0BA30559234004204DA /* RecruitDataPopUpViewController.swift */; };
 		7CDCD0BD30559E70004204DA /* DeleteRecruitDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0BC30559E70004204DA /* DeleteRecruitDataUseCase.swift */; };
+		7CDCD0C93055D639004204DA /* RecruitProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0C83055D639004204DA /* RecruitProfileView.swift */; };
+		7CDCD0CB3055D63F004204DA /* RecruitProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0CA3055D63F004204DA /* RecruitProfileViewModel.swift */; };
+		7CDCD0CD3055D64A004204DA /* RecruitProfileHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0CC3055D64A004204DA /* RecruitProfileHostingController.swift */; };
+		7CDCD0D03055E938004204DA /* RecruitProfileActionCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0CF3055E938004204DA /* RecruitProfileActionCardView.swift */; };
+		7CDCD0D23055E9E4004204DA /* RecruitProfileCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0D13055E9E4004204DA /* RecruitProfileCardView.swift */; };
+		7CDCD0D43055EA07004204DA /* RecruitProfileEmptyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0D33055EA07004204DA /* RecruitProfileEmptyCardView.swift */; };
+		7CDCD0D63055EA5B004204DA /* RecruitProfileActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0D53055EA5B004204DA /* RecruitProfileActionButton.swift */; };
+		7CDCD0D83055EECF004204DA /* RecruitProfileActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0D73055EECF004204DA /* RecruitProfileActivity.swift */; };
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
@@ -825,6 +833,8 @@
 		B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D6292EEB01E600A19521 /* Debug.xcconfig */; };
 		B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */; };
 		BAD01845AA334A648E2FA2BD /* RecruitDataHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBC0EF8E0FE44F48744BEC7 /* RecruitDataHeaderView.swift */; };
+		C0DE00000000000000000001 /* RecruitProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000002 /* RecruitProfile.swift */; };
+		C0DE00000000000000000003 /* FetchMyProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000004 /* FetchMyProfileUseCase.swift */; };
 		C1838F7A4424DEA14DB2D107 /* RecruitPostCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5F05DAB30AABDF79BC780 /* RecruitPostCategoryView.swift */; };
 		CD3000000000000000000001 /* RecruitPostCategoryDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */; };
 		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
@@ -1546,6 +1556,14 @@
 		7CDCD0B63055863E004204DA /* RecruitDataRelatedUrlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataRelatedUrlView.swift; sourceTree = "<group>"; };
 		7CDCD0BA30559234004204DA /* RecruitDataPopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataPopUpViewController.swift; sourceTree = "<group>"; };
 		7CDCD0BC30559E70004204DA /* DeleteRecruitDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteRecruitDataUseCase.swift; sourceTree = "<group>"; };
+		7CDCD0C83055D639004204DA /* RecruitProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileView.swift; sourceTree = "<group>"; };
+		7CDCD0CA3055D63F004204DA /* RecruitProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileViewModel.swift; sourceTree = "<group>"; };
+		7CDCD0CC3055D64A004204DA /* RecruitProfileHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileHostingController.swift; sourceTree = "<group>"; };
+		7CDCD0CF3055E938004204DA /* RecruitProfileActionCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileActionCardView.swift; sourceTree = "<group>"; };
+		7CDCD0D13055E9E4004204DA /* RecruitProfileCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileCardView.swift; sourceTree = "<group>"; };
+		7CDCD0D33055EA07004204DA /* RecruitProfileEmptyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileEmptyCardView.swift; sourceTree = "<group>"; };
+		7CDCD0D53055EA5B004204DA /* RecruitProfileActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileActionButton.swift; sourceTree = "<group>"; };
+		7CDCD0D73055EECF004204DA /* RecruitProfileActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileActivity.swift; sourceTree = "<group>"; };
 		7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeviceTokenUseCase.swift; sourceTree = "<group>"; };
 		7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EC42EF2D1F900457128 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -1911,6 +1929,8 @@
 		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		B6A0D6292EEB01E600A19521 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		C0DE00000000000000000002 /* RecruitProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfile.swift; sourceTree = "<group>"; };
+		C0DE00000000000000000004 /* FetchMyProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyProfileUseCase.swift; sourceTree = "<group>"; };
 		CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostCategoryDropdownView.swift; sourceTree = "<group>"; };
 		D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownHost.swift; sourceTree = "<group>"; };
 		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
@@ -2743,6 +2763,7 @@
 				7CACF86130436C1900AC2828 /* RecruitNotificationList */,
 				7CACF873304441AA00AC2828 /* RecruitPost */,
 				7CDCD0AE30556C89004204DA /* RecruitData */,
+				7CDCD0C43055D58B004204DA /* RecruitProfile */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2773,6 +2794,8 @@
 				7C50A20C3043273A00897A6F /* RecruitNotificationList.swift */,
 				7CAC2DDB304C34E900AC2828 /* RecruitPostRequest.swift */,
 				7C50A1D63041F91400897A6F /* RecruitData.swift */,
+				C0DE00000000000000000002 /* RecruitProfile.swift */,
+				7CDCD0D73055EECF004204DA /* RecruitProfileActivity.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2824,6 +2847,7 @@
 			isa = PBXGroup;
 			children = (
 				A1D000010000000000000003 /* RecruitData */,
+				C0DE00000000000000000005 /* RecruitProfile */,
 				C1309DAEB0F857F481B1A4B0 /* RecruitPost */,
 				7CACF86C3044096200AC2828 /* RecruitList */,
 				7CACF86E3044097800AC2828 /* RecruitNotificationList */,
@@ -3685,6 +3709,28 @@
 				D6AB6864692D44B9849E0447 /* RecruitDataButton.swift */,
 				7CDCD0B63055863E004204DA /* RecruitDataRelatedUrlView.swift */,
 				673826738C364FB68ECE18FE /* RecruitDataContentView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CDCD0C43055D58B004204DA /* RecruitProfile */ = {
+			isa = PBXGroup;
+			children = (
+				7CDCD0CE3055E929004204DA /* Subviews */,
+				7CDCD0CC3055D64A004204DA /* RecruitProfileHostingController.swift */,
+				7CDCD0C83055D639004204DA /* RecruitProfileView.swift */,
+				7CDCD0CA3055D63F004204DA /* RecruitProfileViewModel.swift */,
+			);
+			path = RecruitProfile;
+			sourceTree = "<group>";
+		};
+		7CDCD0CE3055E929004204DA /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CDCD0D13055E9E4004204DA /* RecruitProfileCardView.swift */,
+				7CDCD0D33055EA07004204DA /* RecruitProfileEmptyCardView.swift */,
+				7CDCD0D53055EA5B004204DA /* RecruitProfileActionButton.swift */,
+				7CDCD0CF3055E938004204DA /* RecruitProfileActionCardView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -5077,6 +5123,14 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		C0DE00000000000000000005 /* RecruitProfile */ = {
+			isa = PBXGroup;
+			children = (
+				C0DE00000000000000000004 /* FetchMyProfileUseCase.swift */,
+			);
+			path = RecruitProfile;
+			sourceTree = "<group>";
+		};
 		C1309DAEB0F857F481B1A4B0 /* RecruitPost */ = {
 			isa = PBXGroup;
 			children = (
@@ -6208,6 +6262,9 @@
 				D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				7C0C189F2F68AB33001781B3 /* CallVanChatRequest.swift in Sources */,
+				7CDCD0CB3055D63F004204DA /* RecruitProfileViewModel.swift in Sources */,
+				C0DE00000000000000000001 /* RecruitProfile.swift in Sources */,
+				C0DE00000000000000000003 /* FetchMyProfileUseCase.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
 				7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */,
 				7CC42B132F56AB9D00940CE1 /* CallVanListCollectionView.swift in Sources */,
@@ -6351,6 +6408,7 @@
 				A1D000010000000000000001 /* FetchRecruitDataUseCase.swift in Sources */,
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
 				7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */,
+				7CDCD0D43055EA07004204DA /* RecruitProfileEmptyCardView.swift in Sources */,
 				833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */,
 				D27DD0E22BA609740081FD36 /* MenuDto.swift in Sources */,
 				D27A5D9C2C6BE56500C4275F /* FetchShopListRequest.swift in Sources */,
@@ -6630,6 +6688,7 @@
 				7CED91752EF2D1F900457128 /* ShopReviewReportViewController.swift in Sources */,
 				7CED91782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				7C457B2B2FCE1BA80011D338 /* DiningView.swift in Sources */,
+				7CDCD0D03055E938004204DA /* RecruitProfileActionCardView.swift in Sources */,
 				7C8A00072FD200000011D338 /* DiningHeaderButton.swift in Sources */,
 				7C8A00092FD200000011D338 /* DiningCarousel.swift in Sources */,
 				7C8A000B2FD200000011D338 /* DiningMenuCard.swift in Sources */,
@@ -6799,6 +6858,7 @@
 				7C50A1E23042C82F00897A6F /* RecruitRoleType.swift in Sources */,
 				7C6790932FCC48A60045E163 /* UICollectionView+.swift in Sources */,
 				7C6790942FCC48A60045E163 /* UIViewcontroller+Alert.swift in Sources */,
+				7CDCD0D83055EECF004204DA /* RecruitProfileActivity.swift in Sources */,
 				7CDCD0B430556CC2004204DA /* RecruitDataHostingController.swift in Sources */,
 				7C6790952FCC48A60045E163 /* UIButton+.swift in Sources */,
 				7C50A1D13041F8BF00897A6F /* RecruitState.swift in Sources */,
@@ -6869,10 +6929,12 @@
 				7C0C18992F68AA2B001781B3 /* CallVanChatDto.swift in Sources */,
 				7CED91F82EF2D1F900457128 /* TimetableViewModel.swift in Sources */,
 				7CC42B3E2F59600200940CE1 /* CallVanNotificationDropdownViewController.swift in Sources */,
+				7CDCD0D63055EA5B004204DA /* RecruitProfileActionButton.swift in Sources */,
 				7CED91F92EF2D1F900457128 /* LandOptionCollectionView.swift in Sources */,
 				7CED91FA2EF2D1F900457128 /* DeliveryTipsCollectionViewCell.swift in Sources */,
 				7CED91FC2EF2D1F900457128 /* DiningCollectionViewCellA.swift in Sources */,
 				7CED91FE2EF2D1F900457128 /* LostArticleImageCollectionViewCell.swift in Sources */,
+				7CDCD0CD3055D64A004204DA /* RecruitProfileHostingController.swift in Sources */,
 				7CED91FF2EF2D1F900457128 /* FoundIdViewController.swift in Sources */,
 				7CED92002EF2D1F900457128 /* MyKeywordCollectionView.swift in Sources */,
 				7CED92022EF2D1F900457128 /* ShopSummaryMenuGroupCollectionViewCell.swift in Sources */,
@@ -6970,6 +7032,7 @@
 				7C333E9330301B3D009D2B89 /* KoinModalViewController.swift in Sources */,
 				D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
+				7CDCD0D23055E9E4004204DA /* RecruitProfileCardView.swift in Sources */,
 				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
 				D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */,
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponseDto.swift in Sources */,
@@ -7009,6 +7072,7 @@
 				D27DD0CA2BA608310081FD36 /* DiningDto.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
 				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
+				7CDCD0C93055D639004204DA /* RecruitProfileView.swift in Sources */,
 				7C016574300BD8AF0013DD7B /* FetchDepartmentCategoryUseCase.swift in Sources */,
 				7C3ECC7A2F41505000EE8F13 /* ErrorResponse.swift in Sources */,
 				D2FB23552BFD49520098BA2B /* ShopRepository.swift in Sources */,

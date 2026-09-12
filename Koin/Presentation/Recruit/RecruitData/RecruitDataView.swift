@@ -77,8 +77,6 @@ extension RecruitDataView {
             sendAction(.showLoginToast)
             return
         }
-        let id = data.id
-        
         if data.isAuthor {
             sendAction(.showApplicant)
         } else if data.canApply {
@@ -87,11 +85,9 @@ extension RecruitDataView {
     }
     
     private func handleDelete() {
-        guard let data = viewModel.data,
-              viewModel.didDelete else {
+        guard viewModel.didDelete else {
             return
         }
-        let id = data.id
         sendAction(.showToast(message: "삭제되었습니다"))
         sendAction(.didDelete)
     }
