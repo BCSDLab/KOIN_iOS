@@ -19,7 +19,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
         case deleteFilter(rawvalue: String)
         case resetFilter
         case loadNextPage
-        
+        case delete(id: Int)
         case didShowToast
     }
     
@@ -79,6 +79,8 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
             resetFilter()
         case .loadNextPage:
             loadNextPage()
+        case .delete(let id):
+            recruitList?.delete(id: id)
         case .didShowToast:
             errorMessage = nil
         }

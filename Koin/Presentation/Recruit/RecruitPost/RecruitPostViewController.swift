@@ -16,7 +16,7 @@ final class RecruitPostViewController: UIViewController {
         switch viewModel.postType {
         case .post:
             return "모집글 작성"
-        case .edit:
+        case .modify:
             return "모집글 수정"
         }
     }
@@ -24,7 +24,7 @@ final class RecruitPostViewController: UIViewController {
         switch viewModel.postType {
         case .post:
             return "등록하기"
-        case .edit:
+        case .modify:
             return "수정하기"
         }
     }
@@ -32,7 +32,7 @@ final class RecruitPostViewController: UIViewController {
         switch viewModel.postType {
         case .post:
             return "모집글이 등록되었습니다."
-        case .edit:
+        case .modify:
             return "모집글이 수정되었습니다."
         }
     }
@@ -81,7 +81,7 @@ final class RecruitPostViewController: UIViewController {
         placeholder: "지원 자격 또는 우대사항을 작성해주세요."
     )
     
-    private let submitButton = UIButton()
+    private let postButton = UIButton()
     private let loadingIndicator = UIActivityIndicatorView(style: .medium)
     
     // MARK: - Dropdown
@@ -167,12 +167,14 @@ extension RecruitPostViewController {
                     updateViews()
                 case let .updateLoading(isLoading):
                     isLoading ? loadingIndicator.startAnimating() : loadingIndicator.stopAnimating()
-                case .submitFailed:
-                    submitButton.isUserInteractionEnabled = true
-                case .submitCompleted:
-                    handleSubmitCompleted()
+                case .postFailed:
+                    postButton.isUserInteractionEnabled = true
+                case .postCompleted(let id):
+                    handlePostCompleted(id: id)
+                case .modifyCompleted(let id):
+                    handleModifyCompleted(id: id)
                 case let .showToast(message):
-                    showToastMessage(message: message)
+                    showToastMessage(message: message, bottomInset: 72)
                 }
             }.store(in: &subscriptions)
     }
@@ -293,14 +295,41 @@ extension RecruitPostViewController {
 
 extension RecruitPostViewController {
     
-    private func handleSubmitCompleted() { // TODO: 화면전환
-//        showToastMessage(message: )
-//        navigationController?.replaceTopViewController(<#T##viewController: UIViewController##UIViewController#>, animated: <#T##Bool#>)
+    private func handlePostCompleted(id: Int) { // TODO: 화면전환
+        let repository = MockRecruitRepository()
+        let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
+        let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
+        let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)
+        let viewController = RecruitDataHostingController(
+            rootView: RecruitDataView(viewModel: viewModel),
+            delegate: nil
+        )
+        navigationController?.replaceTopViewController(viewController, animated: true)
+        showToastMessage(message: completionMessage, bottomInset: 60)
+    }
+    
+    private func handleModifyCompleted(id: Int) {
+        guard var viewControllers = navigationController?.viewControllers else {
+            return
+        }
+        
+        let repository = MockRecruitRepository()
+        let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
+        let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
+        let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)
+        let viewController = RecruitDataHostingController(
+            rootView: RecruitDataView(viewModel: viewModel),
+            delegate: nil
+        )
+        viewControllers[viewControllers.count - 2] = viewController
+        navigationController?.viewControllers = viewControllers
+        navigationController?.popToViewController(viewController, animated: true)
+        showToastMessage(message: completionMessage, bottomInset: 60)
     }
     
     private func validate() {
-        submitButton.isEnabled = request.isValid
-        submitButton.backgroundColor = request.isValid ? UIColor.appColor(.new500) : UIColor.appColor(.neutral400)
+        postButton.isEnabled = request.isValid
+        postButton.backgroundColor = request.isValid ? UIColor.appColor(.new500) : UIColor.appColor(.neutral400)
     }
     
     private func updateViews() {
@@ -326,12 +355,12 @@ extension RecruitPostViewController {
 extension RecruitPostViewController {
     
     private func setAddTargets() {
-        submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
+        postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
     }
     
-    @objc private func submitButtonTapped() {
+    @objc private func postButtonTapped() {
         guard !dropdownHost.isPresenting else { return }
-        submitButton.isUserInteractionEnabled = false
+        postButton.isUserInteractionEnabled = false
         view.endEditing(true)
         inputSubject.send(.submit(request))
     }
@@ -403,7 +432,7 @@ extension RecruitPostViewController {
             $0.spacing = 24
             $0.axis = .vertical
         }
-        submitButton.do {
+        postButton.do {
             $0.setAttributedTitle(NSAttributedString(
                 string: submitButtonTitle,
                 attributes: [
@@ -425,7 +454,7 @@ extension RecruitPostViewController {
             scrollView.addSubview($0)
         }
         
-        [scrollView, submitButton].forEach {
+        [scrollView, postButton].forEach {
             view.addSubview($0)
         }
     }
@@ -434,13 +463,13 @@ extension RecruitPostViewController {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview().inset(24)
-            $0.bottom.equalTo(submitButton.snp.top).offset(-16)
+            $0.bottom.equalTo(postButton.snp.top).offset(-16)
         }
         contentStackView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
         }
-        submitButton.snp.makeConstraints {
+        postButton.snp.makeConstraints {
             $0.height.equalTo(48)
             $0.leading.trailing.equalToSuperview().inset(32)
             $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)

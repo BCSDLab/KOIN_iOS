@@ -9,7 +9,7 @@ import Foundation
 
 final class MockRecruitRepository: RecruitRepository {
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList {
-        let contest = RecruitDetail(
+        let contest = RecruitSummary(
             id: 1,
             category: .contest,
             title: "AI 아이디어 공모전 팀원 모집",
@@ -17,22 +17,18 @@ final class MockRecruitRepository: RecruitRepository {
             startDate: "2026.07.26",
             endDate: "2026.08.07",
             deadline: "2026.08.07",
-            dDay: 5,
-            state: .recruiting,
+            dDay: "D-5",
             currentParticipants: 0,
             maximumParticipants: 3,
             type: .roleBased,
             roles: [
-                RecruitRole(id: 1, name: "프론트엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: false),
+                RecruitRole(id: 1, name: "프론트엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: true),
                 RecruitRole(id: 2, name: "백엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: false),
                 RecruitRole(id: 3, name: "디자인", currentParticipants: 0, maximumParticipants: 1, isClosed: false)
-            ],
-            description: "",
-            relatedUrl: nil,
-            qualification: nil
+            ]
         )
         
-        let externalActivity = RecruitDetail(
+        let externalActivity = RecruitSummary(
             id: 2,
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
@@ -40,18 +36,14 @@ final class MockRecruitRepository: RecruitRepository {
             startDate: "2026.07.26",
             endDate: "2026.08.07",
             deadline: "2026.08.07",
-            dDay: 13,
-            state: .recruiting,
+            dDay: "D-1",
             currentParticipants: 2,
             maximumParticipants: 3,
             type: .general,
-            roles: [],
-            description: "",
-            relatedUrl: nil,
-            qualification: nil
+            roles: []
         )
         
-        let closedExternalActivity = RecruitDetail(
+        let closedExternalActivity = RecruitSummary(
             id: 3,
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
@@ -59,19 +51,15 @@ final class MockRecruitRepository: RecruitRepository {
             startDate: "2026.07.26",
             endDate: "2026.08.07",
             deadline: "2026.08.07",
-            dDay: 0,
-            state: .closed,
+            dDay: "D-day",
             currentParticipants: 5,
             maximumParticipants: 5,
             type: .general,
-            roles: [],
-            description: "",
-            relatedUrl: nil,
-            qualification: nil
+            roles: []
         )
         
         let studies = (4...7).map { id in
-            RecruitDetail(
+            RecruitSummary(
                 id: id,
                 category: .study,
                 title: "2026 스터디 팀원 모집",
@@ -79,15 +67,11 @@ final class MockRecruitRepository: RecruitRepository {
                 startDate: "2026.07.26",
                 endDate: "2026.08.07",
                 deadline: "2026.08.07",
-                dDay: 13,
-                state: .recruiting,
+                dDay: "D-1",
                 currentParticipants: 2,
                 maximumParticipants: 3,
                 type: .general,
-                roles: [],
-                description: "",
-                relatedUrl: nil,
-                qualification: nil
+                roles: []
             )
         }
         
@@ -99,29 +83,36 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
     
-    func fetchDetail(_ id: Int) async throws -> RecruitDetail {
+    func fetchData(_ id: Int) async throws -> RecruitData {
         try await Task.sleep(nanoseconds: 300_000_000)
-        return RecruitDetail(
-            id: id,
-            category: .contest,
-            title: "AI 아이디어 공모전 팀원 모집",
-            meetingType: .online,
-            startDate: "2026.07.26",
-            endDate: "2026.08.07",
-            deadline: "2026.08.07",
-            dDay: 5,
-            state: .recruiting,
-            currentParticipants: 0,
-            maximumParticipants: 3,
-            type: .roleBased,
-            roles: [
-                RecruitRole(id: 1, name: "프론트엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: false),
-                RecruitRole(id: 2, name: "백엔드", currentParticipants: 0, maximumParticipants: 1, isClosed: false),
-                RecruitRole(id: 3, name: "디자인", currentParticipants: 0, maximumParticipants: 1, isClosed: false)
-            ],
-            description: "소개소개소개소개소개소개소개소개소개소개",
-            relatedUrl: nil,
-            qualification: "2학년이상\n참여율 높은 사람\n@@@"
+        let list = try await fetchList(RecruitListFilter())
+        guard let item = list.recruits.first(where: { $0.id == id }) else {
+            throw NSError(domain: "MockRecruitRepository", code: 404)
+        }
+        return RecruitData(
+            id: item.id,
+            category: item.category,
+            dDay: item.dDay,
+            title: item.title,
+            meetingType: item.meetingType,
+            startDate: item.startDate,
+            endDate: item.endDate,
+            deadlineDate: item.deadline,
+            currentParticipants: item.currentParticipants,
+            maximumParticipants: item.maximumParticipants,
+            createdAt: "2026.02.02",
+            author: "@@@",
+            type: item.type,
+            roles: item.roles,
+            description: "소개소개소개소개소개소개소개소개소개소개소개소개소개소개",
+            relatedUrl: URL(string: "https://bcsdlab.com"),
+            qualification: "2학년이상\n참여율 높은 사람\n@@@",
+            isAuthor: UserDataManager.shared.isLoggedIn && item.id % 2 == 1,
+            canApply: true,
+            applyBlockReason: nil,
+            canManageApplicants: false,
+            teamChatAvailable: false,
+            teamChatRoomId: nil
         )
     }
     
@@ -183,6 +174,10 @@ final class MockRecruitRepository: RecruitRepository {
         ])
     }
     
+    func deleteData(id: Int) async throws -> Bool {
+        true
+    }
+    
     func deleteNotification(_ id: Int) async throws -> Void {
         
     }
@@ -199,3 +194,4 @@ final class MockRecruitRepository: RecruitRepository {
         
     }
 }
+

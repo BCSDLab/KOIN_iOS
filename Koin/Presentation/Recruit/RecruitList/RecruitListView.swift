@@ -14,13 +14,14 @@ struct RecruitListView: ActionBindableView {
         case showToast(message: String)
         case showLoginToast
         case showRecruitPost
+        case showRecruitData(id: Int)
     }
     
     // MARK: - Properties
     var sendAction: ((Action) -> Void) = { _ in }
     @State private var viewModel: RecruitListViewModel
     
-    var recruits: [RecruitDetail] {
+    var recruits: [RecruitSummary] {
         viewModel.recruitList?.recruits ?? []
     }
     
@@ -62,7 +63,7 @@ struct RecruitListView: ActionBindableView {
                 LazyVStack(spacing: 8) {
                     ForEach(recruits) { recruit in
                         Button {
-                            
+                            sendAction(.showRecruitData(id: recruit.id))
                         } label: {
                             RecruitListRowView(model: recruit)
                         }
@@ -134,5 +135,10 @@ struct RecruitListView: ActionBindableView {
             .clipShape(RoundedRectangle(cornerRadius: 43/2))
         }
         .buttonStyle(.plain)
+    }
+    
+    // MARK: - Public
+    func delete(id: Int) {
+        viewModel.execute(.delete(id: id))
     }
 }

@@ -12,7 +12,7 @@ final class RecruitPostViewModel: ViewModelProtocol {
     
     enum PostType {
         case post
-        case edit(id: Int)
+        case modify(id: Int)
     }
     
     enum Input {
@@ -23,15 +23,16 @@ final class RecruitPostViewModel: ViewModelProtocol {
         case updateLoading(Bool)
         case updateForm(RecruitPostRequest)
         
-        case submitFailed
-        case submitCompleted(id: Int?)
+        case postFailed
+        case postCompleted(id: Int)
+        case modifyCompleted(id: Int)
         case showToast(String)
     }
     
     // MARK: - Properties
     private let postRecruitUseCase: PostRecruitUseCase
     private let modifyRecruitUseCase: ModifyRecruitUseCase
-    private let fetchRecruitDetailUseCase: FetchRecruitDetailUseCase
+    private let fetchRecruitDataUseCase: FetchRecruitDataUseCase
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -43,12 +44,12 @@ final class RecruitPostViewModel: ViewModelProtocol {
         postType: PostType,
         postRecruitUseCase: PostRecruitUseCase,
         modifyRecruitUseCase: ModifyRecruitUseCase,
-        fetchRecruitDetailUseCase: FetchRecruitDetailUseCase
+        fetchRecruitDataUseCase: FetchRecruitDataUseCase
     ) {
         self.postType = postType
         self.postRecruitUseCase = postRecruitUseCase
         self.modifyRecruitUseCase = modifyRecruitUseCase
-        self.fetchRecruitDetailUseCase = fetchRecruitDetailUseCase
+        self.fetchRecruitDataUseCase = fetchRecruitDataUseCase
     }
     
     // MARK: - Public
@@ -70,7 +71,7 @@ final class RecruitPostViewModel: ViewModelProtocol {
 extension RecruitPostViewModel {
     
     private func fetchFormIfNeeded() {
-        guard case let .edit(id) = postType else {
+        guard case let .modify(id) = postType else {
             return
         }
         
@@ -81,8 +82,8 @@ extension RecruitPostViewModel {
             }
             
             do {
-                let detail = try await fetchRecruitDetailUseCase.execute(id: id)
-                outputSubject.send(.updateForm(.init(from: detail)))
+                let data = try await fetchRecruitDataUseCase.execute(id: id)
+                outputSubject.send(.updateForm(.init(from: data)))
             } catch {
                 if let error = error as? ErrorResponse {
                     outputSubject.send(.showToast(error.message))
@@ -105,13 +106,13 @@ extension RecruitPostViewModel {
                 switch postType {
                 case .post:
                     let id = try await postRecruitUseCase.execute(request: request)
-                    outputSubject.send(.submitCompleted(id: id))
-                case let .edit(id):
+                    outputSubject.send(.postCompleted(id: id))
+                case let .modify(id):
                     try await modifyRecruitUseCase.execute(id: id, request: request)
-                    outputSubject.send(.submitCompleted(id: id))
+                    outputSubject.send(.modifyCompleted(id: id))
                 }
             } catch {
-                outputSubject.send(.submitFailed)
+                outputSubject.send(.postFailed)
                 if let error = error as? ErrorResponse {
                     outputSubject.send(.showToast(error.message))
                 }
