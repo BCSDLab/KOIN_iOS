@@ -9,10 +9,8 @@ import Combine
 import Foundation
 @testable import koin
 
-/// 호출 여부와 전달된 인자를 기록만 하고, 검증은 테스트 코드에 맡기는 테스트 더블.
 final class SpyDiningRepository: DiningRepository {
 
-    /// `fetchDiningList`가 돌려줄 응답. 테스트에서 시나리오별로 갈아끼운다.
     var stubbedDiningList: [DiningDto] = []
 
     private(set) var fetchDiningListCallCount = 0
