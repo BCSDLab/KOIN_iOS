@@ -745,6 +745,11 @@
 		AA20000000000000000008 /* DiningViewModelStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000008 /* DiningViewModelStubs.swift */; };
 		AA20000000000000000009 /* DiningLoggingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000009 /* DiningLoggingTests.swift */; };
 		AA20000000000000000010 /* DiningTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000010 /* DiningTypeTests.swift */; };
+		AA20000000000000000020 /* AgreementSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000020 /* AgreementSelectionTests.swift */; };
+		AA20000000000000000021 /* AgreementTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000021 /* AgreementTextTests.swift */; };
+		AA20000000000000000022 /* CustomSessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000022 /* CustomSessionManagerTests.swift */; };
+		AA20000000000000000023 /* RegisterFormViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000023 /* RegisterFormViewModelTests.swift */; };
+		AA20000000000000000024 /* RegisterFormViewModelStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000024 /* RegisterFormViewModelStubs.swift */; };
 		B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* OrderImage.swift */; };
 		B46B8CC22E76CB7300A8E797 /* ShopSummaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */; };
 		B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */; };
@@ -1766,6 +1771,11 @@
 		AA10000000000000000008 /* DiningViewModelStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningViewModelStubs.swift; sourceTree = "<group>"; };
 		AA10000000000000000009 /* DiningLoggingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLoggingTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000010 /* DiningTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningTypeTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000020 /* AgreementSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementSelectionTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000021 /* AgreementTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementTextTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000022 /* CustomSessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManagerTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000023 /* RegisterFormViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000024 /* RegisterFormViewModelStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelStubs.swift; sourceTree = "<group>"; };
 		B438AEE32E756AB600E889C4 /* OrderImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderImage.swift; sourceTree = "<group>"; };
 		B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSummaryDto.swift; sourceTree = "<group>"; };
 		B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopSummaryFromShopUseCase.swift; sourceTree = "<group>"; };
@@ -4656,6 +4666,7 @@
 			children = (
 				AA10000000000000000003 /* SpyDiningRepository.swift */,
 				AA10000000000000000008 /* DiningViewModelStubs.swift */,
+				AA10000000000000000024 /* RegisterFormViewModelStubs.swift */,
 			);
 			path = Doubles;
 			sourceTree = "<group>";
@@ -4670,6 +4681,17 @@
 				AA10000000000000000010 /* DiningTypeTests.swift */,
 			);
 			path = Dining;
+			sourceTree = "<group>";
+		};
+		AA30000000000000000004 /* Register */ = {
+			isa = PBXGroup;
+			children = (
+				AA10000000000000000020 /* AgreementSelectionTests.swift */,
+				AA10000000000000000021 /* AgreementTextTests.swift */,
+				AA10000000000000000022 /* CustomSessionManagerTests.swift */,
+				AA10000000000000000023 /* RegisterFormViewModelTests.swift */,
+			);
+			path = Register;
 			sourceTree = "<group>";
 		};
 		B46B8D242E770A3100A8E797 /* Fonts */ = {
@@ -5607,6 +5629,7 @@
 				AA30000000000000000001 /* Support */,
 				AA30000000000000000002 /* Doubles */,
 				AA30000000000000000003 /* Dining */,
+				AA30000000000000000004 /* Register */,
 			);
 			path = koinUnitTests;
 			sourceTree = "<group>";
@@ -6800,6 +6823,11 @@
 				AA20000000000000000008 /* DiningViewModelStubs.swift in Sources */,
 				AA20000000000000000009 /* DiningLoggingTests.swift in Sources */,
 				AA20000000000000000010 /* DiningTypeTests.swift in Sources */,
+				AA20000000000000000020 /* AgreementSelectionTests.swift in Sources */,
+				AA20000000000000000021 /* AgreementTextTests.swift in Sources */,
+				AA20000000000000000022 /* CustomSessionManagerTests.swift in Sources */,
+				AA20000000000000000023 /* RegisterFormViewModelTests.swift in Sources */,
+				AA20000000000000000024 /* RegisterFormViewModelStubs.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
