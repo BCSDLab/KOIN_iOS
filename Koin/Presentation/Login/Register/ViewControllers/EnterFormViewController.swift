@@ -12,11 +12,13 @@ import Combine
 final class EnterFormViewController: UIViewController {
     
     // MARK: - Properties
+    
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
     }
@@ -228,6 +230,7 @@ final class EnterFormViewController: UIViewController {
     }
     
     // MARK: - Init
+    
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -239,6 +242,7 @@ final class EnterFormViewController: UIViewController {
     }
 
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -264,6 +268,8 @@ final class EnterFormViewController: UIViewController {
         super.viewDidLayoutSubviews()
         setUpTextFieldUnderline()
     }
+    
+    // MARK: - Bind
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
@@ -309,8 +315,6 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.success700))
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
                 self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
-            case let .showUserType(type):
-                self?.configureUserTypeSpecificUI(for: type)
             case .succesRegister:
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
@@ -623,7 +627,8 @@ extension EnterFormViewController {
     }
 }
 
-// MARK: UI Settings
+// MARK: - UI Settings
+
 extension EnterFormViewController {
     private func setUpLayouts() {
         [stepTextLabel, stepLabel, progressView, nextButton].forEach {

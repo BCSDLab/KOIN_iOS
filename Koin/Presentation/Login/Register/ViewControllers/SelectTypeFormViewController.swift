@@ -12,16 +12,13 @@ import Combine
 final class SelectTypeFormViewController: UIViewController {
     
     // MARK: - Properties
+    
     private let viewModel: RegisterFormViewModel
     private var subscriptions: Set<AnyCancellable> = []
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     
-    enum UserType {
-        case student
-        case general
-    }
-    
     // MARK: - UI Components
+    
     private let stepTextLabel = UILabel().then {
         $0.text = "3. 회원 유형 선택"
         $0.textColor = UIColor.appColor(.new500)
@@ -75,6 +72,7 @@ final class SelectTypeFormViewController: UIViewController {
     }
     
     // MARK: - Init
+    
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -86,6 +84,7 @@ final class SelectTypeFormViewController: UIViewController {
     }
     
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -102,6 +101,8 @@ final class SelectTypeFormViewController: UIViewController {
         studentButton.addTarget(self, action: #selector(studentButtonTapped), for: .touchUpInside)
         generalButton.addTarget(self, action: #selector(generalButtonTapped), for: .touchUpInside)
     }
+    
+    // MARK: - Bind
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
@@ -138,7 +139,8 @@ extension SelectTypeFormViewController {
     }
 }
 
-// MARK: UI Settings
+// MARK: - UI Settings
+
 extension SelectTypeFormViewController {
     private func setUpLayouts() {
         [stepTextLabel, stepLabel, progressView, logoImageView, logoTextImageView, studentButton, generalButton].forEach {
