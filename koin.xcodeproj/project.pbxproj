@@ -746,6 +746,10 @@
 		AA20000000000000000009 /* DiningLoggingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000009 /* DiningLoggingTests.swift */; };
 		AA20000000000000000010 /* DiningTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000010 /* DiningTypeTests.swift */; };
 		AA20000000000000000020 /* AgreementSelectionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000020 /* AgreementSelectionTests.swift */; };
+		AA20000000000000000032 /* CertificationInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000032 /* CertificationInputTests.swift */; };
+		AA20000000000000000033 /* VerificationSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000033 /* VerificationSessionTests.swift */; };
+		AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */; };
+		AA20000000000000000035 /* CertificationUseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000035 /* CertificationUseCaseSpies.swift */; };
 		AA20000000000000000021 /* AgreementTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000021 /* AgreementTextTests.swift */; };
 		AA20000000000000000022 /* CustomSessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000022 /* CustomSessionManagerTests.swift */; };
 		AA20000000000000000023 /* RegisterFormViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000023 /* RegisterFormViewModelTests.swift */; };
@@ -1011,6 +1015,8 @@
 		D8F5C54C2E6F012500FB6708 /* LottieAnimationManageable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */; };
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		E1A70C012D9A4F1100AGSEL1 /* AgreementSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A70C002D9A4F1100AGSEL0 /* AgreementSelection.swift */; };
+		AA20000000000000000030 /* CertificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000030 /* CertificationInput.swift */; };
+		AA20000000000000000031 /* VerificationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000031 /* VerificationSession.swift */; };
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 		FE01000000000000000021 /* KoinDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000011 /* KoinDropdown.swift */; };
@@ -1772,6 +1778,10 @@
 		AA10000000000000000009 /* DiningLoggingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningLoggingTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000010 /* DiningTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningTypeTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000020 /* AgreementSelectionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementSelectionTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000032 /* CertificationInputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInputTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000033 /* VerificationSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSessionTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelCertificationTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000035 /* CertificationUseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationUseCaseSpies.swift; sourceTree = "<group>"; };
 		AA10000000000000000021 /* AgreementTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementTextTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000022 /* CustomSessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManagerTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000023 /* RegisterFormViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelTests.swift; sourceTree = "<group>"; };
@@ -2041,6 +2051,8 @@
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		E1A70C002D9A4F1100AGSEL0 /* AgreementSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementSelection.swift; sourceTree = "<group>"; };
+		AA10000000000000000030 /* CertificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInput.swift; sourceTree = "<group>"; };
+		AA10000000000000000031 /* VerificationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSession.swift; sourceTree = "<group>"; };
 		EC692285302700A400EE26ED /* koinUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -4667,6 +4679,7 @@
 				AA10000000000000000003 /* SpyDiningRepository.swift */,
 				AA10000000000000000008 /* DiningViewModelStubs.swift */,
 				AA10000000000000000024 /* RegisterFormViewModelStubs.swift */,
+				AA10000000000000000035 /* CertificationUseCaseSpies.swift */,
 			);
 			path = Doubles;
 			sourceTree = "<group>";
@@ -4687,6 +4700,9 @@
 			isa = PBXGroup;
 			children = (
 				AA10000000000000000020 /* AgreementSelectionTests.swift */,
+				AA10000000000000000032 /* CertificationInputTests.swift */,
+				AA10000000000000000033 /* VerificationSessionTests.swift */,
+				AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */,
 				AA10000000000000000021 /* AgreementTextTests.swift */,
 				AA10000000000000000022 /* CustomSessionManagerTests.swift */,
 				AA10000000000000000023 /* RegisterFormViewModelTests.swift */,
@@ -5639,6 +5655,8 @@
 			children = (
 				D29F21E42C4F4C3700994554 /* AgreementText.swift */,
 				E1A70C002D9A4F1100AGSEL0 /* AgreementSelection.swift */,
+				AA10000000000000000030 /* CertificationInput.swift */,
+				AA10000000000000000031 /* VerificationSession.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -6103,6 +6121,8 @@
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				E1A70C012D9A4F1100AGSEL1 /* AgreementSelection.swift in Sources */,
+				AA20000000000000000030 /* CertificationInput.swift in Sources */,
+				AA20000000000000000031 /* VerificationSession.swift in Sources */,
 				7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */,
 				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
 				7C8A942F2FD2C15400DEA6F5 /* ShopEventCountDto.swift in Sources */,
@@ -6824,6 +6844,10 @@
 				AA20000000000000000009 /* DiningLoggingTests.swift in Sources */,
 				AA20000000000000000010 /* DiningTypeTests.swift in Sources */,
 				AA20000000000000000020 /* AgreementSelectionTests.swift in Sources */,
+				AA20000000000000000032 /* CertificationInputTests.swift in Sources */,
+				AA20000000000000000033 /* VerificationSessionTests.swift in Sources */,
+				AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */,
+				AA20000000000000000035 /* CertificationUseCaseSpies.swift in Sources */,
 				AA20000000000000000021 /* AgreementTextTests.swift in Sources */,
 				AA20000000000000000022 /* CustomSessionManagerTests.swift in Sources */,
 				AA20000000000000000023 /* RegisterFormViewModelTests.swift in Sources */,
