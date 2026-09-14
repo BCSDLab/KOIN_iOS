@@ -28,7 +28,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
         case deletedData(Int)
         case popViewController
         case checkedLogin((CheckLoginOption, Bool))
-        case navigateToChat(CreateChatRoomResponse)
+        case navigateToChat(LostItemCreateChatRoomResponse)
     }
     
     enum CheckLoginOption {
@@ -42,7 +42,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
     private let fetchLostItemListUseCase: FetchLostItemListUseCase
     private let changeLostItemStateUseCase: ChangeLostItemStateUseCase
     private let deleteLostItemUseCase: DeleteLostItemUseCase
-    private let createChatRoomUseCase: CreateChatRoomUseCase
+    private let createChatRoomUseCase: LostItemCreateChatRoomUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     var type: LostItemType?
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -57,7 +57,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
          fetchLostItemListUseCase: FetchLostItemListUseCase,
          changeLostItemStateUseCase: ChangeLostItemStateUseCase,
          deleteLostItemUseCase: DeleteLostItemUseCase,
-         createChatRoomUseCase: CreateChatRoomUseCase,
+         createChatRoomUseCase: LostItemCreateChatRoomUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          id: Int) {
         self.checkLoginUseCase = checkLoginUseCase

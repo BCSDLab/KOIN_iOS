@@ -23,6 +23,8 @@ final class CallVanPostViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    private let scrollView = UIScrollView()
+    private let scrollContentView = UIView()
     private let placeView = CallVanPostPlaceView()
     private let dateView = CallVanPostDateView()
     private let timeView = CallVanPostTimeView()
@@ -33,11 +35,18 @@ final class CallVanPostViewController: UIViewController {
     private let postButton = UIButton()
     
     private let bottomSheetContentView = CallVanPostPlaceBottomSheetView()
-    private lazy var bottomSheetViewController = BottomSheetViewControllerB(
-        contentView: bottomSheetContentView,
-        dimColor: .black,
-        dimAlpha: 0.7,
-        backgroundColor: UIColor.appColor(.neutral0)
+    
+    // MARK: - Dropdown
+    private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
+    private lazy var dateDropdown = dropdownHost.makeDropdown(
+        trigger: dateView.dropdownTrigger,
+        contentView: dateView.dropdownContentView,
+        configuration: .init(topPadding: 12, shadow: .shadow2)
+    )
+    private lazy var timeDropdown = dropdownHost.makeDropdown(
+        trigger: timeView.dropdownTrigger,
+        contentView: timeView.dropdownContentView,
+        configuration: .init(topPadding: 12, shadow: .shadow2)
     )
     
     // MARK: - Initializer
@@ -56,7 +65,6 @@ final class CallVanPostViewController: UIViewController {
         configureNavigationBar(style: .empty)
         configureView()
         setAddTargets()
-        setDelegates()
         bind()
         dateView.update(Date())
         timeView.update(Date())
@@ -104,7 +112,7 @@ final class CallVanPostViewController: UIViewController {
         }.store(in: &subscriptions)
         
         dateView.dateButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
-                self?.timeView.dismissTimeDropDownView()
+                self?.dateDropdown.toggle()
             }.store(in: &subscriptions)
         
         dateView.dateChangedPublisher.sink { [weak self] date in
@@ -112,7 +120,7 @@ final class CallVanPostViewController: UIViewController {
         }.store(in: &subscriptions)
         
         timeView.timeButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
-                self?.dateView.dismissDateDropDownView()
+                self?.timeDropdown.toggle()
             }.store(in: &subscriptions)
         
         timeView.timeChangedPublisher.sink { [weak self] time in
@@ -139,16 +147,13 @@ extension CallVanPostViewController: PopLoggable {
 }
 
 extension CallVanPostViewController {
-    
-    private func setDelegates() {
-        bottomSheetContentView.delegate = bottomSheetViewController
-    }
-    
     private func setAddTargets() {
         postButton.addTarget(self, action: #selector(postButtonTapped), for: .touchUpInside)
     }
     
     @objc private func postButtonTapped() {
+        guard !dropdownHost.isPresenting else { return }
+
         postButton.isUserInteractionEnabled = false
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteDone, category: .click, value: ""))
         inputSubject.send(.postData)
@@ -158,25 +163,32 @@ extension CallVanPostViewController {
 extension CallVanPostViewController {
     
     private func showRestrictedModal(_ type: RestrictionType?, _ until: String?) {
-        let modalViewController: CallVanModalViewController
+        let mainTitle: String
+        let subTitle: String
+        
         switch type {
         case .temporaryRestriction14Days:
-            guard let until else {
-                return
-            }
-            modalViewController = CallVanModalViewController(
-                title: RestrictionType.temporaryRestriction14Days.rawValue,
-                description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
+            mainTitle = RestrictionType.temporaryRestriction14Days.rawValue
+            subTitle = RestrictionType.temporaryRestriction14Days.getDescription(until: until)
         case .permanentRestriction:
-            modalViewController = CallVanModalViewController(
-                title: RestrictionType.temporaryRestriction14Days.rawValue,
-                description: RestrictionType.permanentRestriction.getDescription())
-        default:
+            mainTitle = RestrictionType.permanentRestriction.rawValue
+            subTitle = RestrictionType.permanentRestriction.getDescription()
+        case nil:
             return
         }
-        modalViewController.modalPresentationStyle = .overFullScreen
-        present(modalViewController, animated: false)
-    }    
+        
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .titles(
+                mainTitleText: mainTitle,
+                subTitleText: subTitle
+            ),
+            button: .singleButton(
+                title: "닫기"
+            )
+        ))
+        present(modalViewController, animated: true)
+    }
     
     private func presentDeparturePlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
@@ -189,12 +201,13 @@ extension CallVanPostViewController {
         }
         bottomSheetContentView.configure(
             title: .departure,
-            place: viewModel.request.departureType,
+            selectedPlace: viewModel.request.departureType,
             customPlace: viewModel.request.departureCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
-        present(bottomSheetViewController, animated: false)
+        presentPlaceBottomSheet()
     }
+
     private func presentArrivalPlaceBottomSheet() {
         let onApplyButtonTapped: (CallVanPlace, String?)->Void = { [weak self] (place, customPlace) in
             guard let self else { return }
@@ -206,10 +219,16 @@ extension CallVanPostViewController {
         }
         bottomSheetContentView.configure(
             title: .arrival,
-            place: viewModel.request.arrivalType,
+            selectedPlace: viewModel.request.arrivalType,
             customPlace: viewModel.request.arrivalCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
+        presentPlaceBottomSheet()
+    }
+
+    private func presentPlaceBottomSheet() {
+        let bottomSheetViewController = BottomSheetViewControllerB(contentView: bottomSheetContentView)
+        bottomSheetContentView.delegate = bottomSheetViewController
         present(bottomSheetViewController, animated: false)
     }
 }
@@ -292,15 +311,26 @@ extension CallVanPostViewController {
         }
     }
     private func setUpLayouts() {
-        [placeView, participantsView, separatorView, descriptionLabel, postButton,
-         timeView, dateView].forEach {
+        [placeView, dateView, timeView, participantsView].forEach {
+            scrollContentView.addSubview($0)
+        }
+        scrollView.addSubview(scrollContentView)
+        [scrollView, separatorView, descriptionLabel, postButton].forEach {
             view.addSubview($0)
         }
     }
     private func setUpConstraints() {
-        placeView.snp.makeConstraints {
+        scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(separatorView.snp.top)
+        }
+        scrollContentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
+        placeView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
         }
         dateView.snp.makeConstraints {
             $0.top.equalTo(placeView.snp.bottom)
@@ -313,6 +343,7 @@ extension CallVanPostViewController {
         participantsView.snp.makeConstraints {
             $0.top.equalTo(timeView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview()
         }
         
         postButton.snp.makeConstraints {

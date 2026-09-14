@@ -2,174 +2,212 @@
 //  SelectDeptModalViewController.swift
 //  koin
 //
-//  Created by 김나훈 on 12/6/24.
+//  Created by 홍기정 on 8/23/26.
 //
 
-import Combine
 import UIKit
 
-final class SelectDeptModalViewController: UIViewController {
+final class SelectDeptModalViewController: KoinModalViewController {
     
-    let selectedDeptPublisher = PassthroughSubject<String?, Never>()
-    private var departmentButtons: [UIButton] = []
-    private let departments = [
-        "디자인ㆍ건축공학부",
-        "고용서비스정책학과",
-        "기계공학부",
-        "메카트로닉스공학부",
-        "산업경영학부",
-        "전기ㆍ전자ㆍ통신공학부",
-        "컴퓨터공학부",
-        "에너지신소재화학공학부",
-        "HRD학과",
-        "교양학부",
-        "안전공학과",
-        "융합학과"
-    ]
-    private var selectedDepartment: String? = nil
-    private var selectedButton: UIButton? = nil
+    // MARK: - Properties
+    private let onCompleteButtonTapped: (String?)->Void
     
-    private let messageLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
-        $0.textColor = UIColor.appColor(.primary500)
-        $0.text = "전공선택"
+    // MARK: - Radio Button
+    private let departmentRadioButtonGroup = RadioButtonGroup()
+    
+    // MARK: - State
+    var selectedDepartment: String? {
+        departmentRadioButtonGroup.selectedRadioButton?.accessibilityLabel
     }
     
-    private let completeButton = UIButton().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
-        $0.setTitle("완료", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
+    // MARK: - UI Components
+    private let customView = UIView()
+    
+    private let titleLabel = UILabel()
+    
+    private let departmentScrollView = UIScrollView()
+    private let departmentStackView = UIStackView()
+    private var departmentRadioButtons: [RadioButton] = []
+    
+    private let cancelButton = UIButton()
+    private let completeButton = UIButton()
+    
+    // MARK: - Initializer
+    init(
+        departments: [String],
+        selectedDapartment: String? = nil,
+        onCompleteButtonTapped: @escaping (String?)->Void
+    ) {
+        self.onCompleteButtonTapped = onCompleteButtonTapped
+        
+        super.init(configuration: .init(
+            appearance: .primary,
+            content: .custom(customView: customView),
+            button: .none,
+            layout: .init(
+                width: 327,
+                contentTopPadding: 0,
+                contentHorizontalPadding: 0,
+                contentBottomPadding: 0
+            )
+        ))
+        
+        setUpRadioButtons(
+            departments: departments,
+            selectedDapartment: selectedDapartment
+        )
+    }
+    @MainActor required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
-    private let containerView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .white
-        view.layer.cornerRadius = 4
-        view.layer.masksToBounds = true
-        return view
-    }()
-    
-    private let gridStackView = UIStackView().then {
-        $0.axis = .vertical
-        $0.spacing = 4.8
-        $0.distribution = .fillEqually
-    }
-    
+    // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        modalPresentationStyle = .overFullScreen
-        modalTransitionStyle = .crossDissolve
-        completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
-        setupDepartments()
+        setAddTargets()
     }
+}
     
-    @objc private func completeButtonTapped() {
-        selectedDeptPublisher.send(selectedDepartment)
-        dismiss(animated: true, completion: nil)
-    }
-
-    private func setupDepartments() {
-        departmentButtons.forEach { $0.removeFromSuperview() }
-        departmentButtons.removeAll()
-        
-        let buttonsPerRow = 2
-        var currentRow: UIStackView? = nil
-        gridStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        for (index, department) in departments.enumerated() {
-            let button = createDepartmentButton(title: department)
-            departmentButtons.append(button)
-            if index % buttonsPerRow == 0 {
-                currentRow = UIStackView()
-                currentRow?.axis = .horizontal
-                currentRow?.spacing = 4.8
-                currentRow?.distribution = .fillEqually
-                gridStackView.addArrangedSubview(currentRow!)
-            }
+extension SelectDeptModalViewController {
+    private func setUpRadioButtons(
+        departments: [String],
+        selectedDapartment: String? = nil
+    ) {
+        for department in departments {
+            let radioButton = RadioButton(title: department)
             
-            currentRow?.addArrangedSubview(button)
-        }
-        
-        view.layoutIfNeeded()
-    }
-    
-    private func createDepartmentButton(title: String) -> UIButton {
-        let button = UIButton(type: .system)
-        button.setTitle(title, for: .normal)
-        button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        button.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
-        button.layer.cornerRadius = 4
-        button.layer.borderWidth = 1
-        button.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        button.backgroundColor = .white
-        button.addTarget(self, action: #selector(departmentButtonTapped(_:)), for: .touchUpInside)
-        return button
-    }
-    
-    @objc private func departmentButtonTapped(_ sender: UIButton) {
-        guard let department = sender.title(for: .normal) else { return }
-        
-        if selectedButton == sender {
-            sender.backgroundColor = .white
-            sender.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-            selectedButton = nil
-            selectedDepartment = nil
-        } else {
-            departmentButtons.forEach { button in
-                button.backgroundColor = .white
-                button.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            departmentRadioButtons.append(radioButton)
+            departmentRadioButtonGroup.addRadioButton(radioButton)
+            
+            if department == selectedDapartment {
+                departmentRadioButtonGroup.selectRadioButton(radioButton)
             }
-            sender.backgroundColor = UIColor.appColor(.primary500)
-            sender.setTitleColor(.white, for: .normal)
-            selectedButton = sender
-            selectedDepartment = department
         }
     }
 }
 
 extension SelectDeptModalViewController {
+    private func setAddTargets() {
+        cancelButton.addTarget(self, action: #selector(cancelButtonButtonTapped), for: .touchUpInside)
+        completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
+    }
     
-    private func setUpLayOuts() {
-        [containerView].forEach {
-            view.addSubview($0)
+    @objc private func cancelButtonButtonTapped() {
+        dismiss(animated: true)
+    }
+    
+    @objc private func completeButtonTapped() {
+        onCompleteButtonTapped(selectedDepartment)
+        dismiss(animated: true)
+    }
+}
+
+extension SelectDeptModalViewController {
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
+    }
+    
+    private func setUpStyles() {
+        titleLabel.do {
+            $0.text = "전공선택"
+            $0.textColor = .appColor(.primary500)
+            $0.font = .appFont(.pretendardSemiBold, size: 18)
         }
-        [messageLabel, gridStackView, completeButton].forEach {
-            containerView.addSubview($0)
+        
+        departmentScrollView.do {
+            $0.contentInset = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+            $0.verticalScrollIndicatorInsets = UIEdgeInsets(top: 12, left: 0, bottom: 12, right: 0)
+        }
+        
+        departmentStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 8
+            $0.alignment = .fill
+        }
+        
+        cancelButton.do {
+            $0.setAttributedTitle(
+                NSAttributedString(
+                    string: "취소",
+                    attributes: [
+                        .font: UIFont.appFont(.pretendardMedium, size: 14),
+                        .foregroundColor: UIColor.appColor(.neutral500)
+                    ]),
+                for: .normal
+            )
+        }
+        completeButton.do {
+            $0.setAttributedTitle(
+                NSAttributedString(
+                    string: "완료",
+                    attributes: [
+                        .font: UIFont.appFont(.pretendardMedium, size: 14),
+                        .foregroundColor: UIColor.appColor(.neutral0)
+                    ]),
+                for: .normal
+            )
+            $0.backgroundColor = .appColor(.primary500)
+            $0.layer.cornerRadius = 6
+        }
+    }
+    
+    private func setUpLayouts() {
+        departmentRadioButtons.forEach {
+            departmentStackView.addArrangedSubview($0)
+        }
+        
+        [departmentStackView].forEach {
+            departmentScrollView.addSubview($0)
+        }
+        
+        [titleLabel,
+         departmentScrollView,
+         cancelButton,
+         completeButton].forEach {
+            customView.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        containerView.snp.makeConstraints { make in
-            make.centerX.equalTo(view.snp.centerX)
-            make.centerY.equalTo(view.snp.centerY)
-            make.width.equalTo(327)
-            make.height.equalTo(323)
+        titleLabel.snp.makeConstraints {
+            $0.height.equalTo(29)
+            $0.top.equalToSuperview().offset(12)
+            $0.leading.equalToSuperview().offset(24)
         }
-        messageLabel.snp.makeConstraints { make in
-            make.top.equalTo(containerView.snp.top).offset(18)
-            make.leading.equalTo(containerView.snp.leading).offset(12)
+        
+        departmentScrollView.snp.makeConstraints {
+            $0.top.equalTo(titleLabel.snp.bottom).offset(12)
+            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.height.equalTo(323)
         }
-        gridStackView.snp.makeConstraints { make in
-            make.top.equalTo(messageLabel.snp.bottom).offset(10)
-            make.leading.equalTo(containerView.snp.leading).offset(12)
-            make.trailing.equalTo(containerView.snp.trailing).offset(-12)
-            make.height.equalTo(216)
+        
+        departmentStackView.snp.makeConstraints {
+            $0.edges.equalTo(departmentScrollView.contentLayoutGuide)
+            $0.width.equalTo(departmentScrollView)
         }
-        completeButton.snp.makeConstraints { make in
-            make.trailing.equalTo(containerView.snp.trailing).offset(-12)
-            make.bottom.equalTo(containerView.snp.bottom).offset(-18)
-            make.width.equalTo(60)
-            make.height.equalTo(30)
+        
+        departmentRadioButtons.forEach {
+            $0.snp.makeConstraints {
+                $0.height.equalTo(24)
+            }
         }
-    }
-    
-    private func configureView() {
-        setUpLayOuts()
-        setUpConstraints()
-        view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
+        
+        completeButton.snp.makeConstraints {
+            $0.width.equalTo(49)
+            $0.height.equalTo(30)
+            $0.top.equalTo(departmentScrollView.snp.bottom).offset(12)
+            $0.trailing.equalToSuperview().offset(-24)
+            $0.bottom.equalToSuperview().offset(-12)
+        }
+        
+        cancelButton.snp.makeConstraints {
+            $0.width.equalTo(49)
+            $0.height.equalTo(30)
+            $0.trailing.equalTo(completeButton.snp.leading).offset(-8)
+            $0.bottom.equalTo(completeButton)
+        }
     }
 }

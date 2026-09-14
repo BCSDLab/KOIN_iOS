@@ -25,19 +25,19 @@ final class EnterFormViewController: UIViewController {
     
     private let stepTextLabel = UILabel().then {
         $0.text = "4. 정보 입력"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let stepLabel = UILabel().then {
         $0.text = "4 / 4"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral200)
-        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.progressTintColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 1
@@ -65,12 +65,15 @@ final class EnterFormViewController: UIViewController {
         placeholder: "5~13자리로 입력해 주세요.",
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
-    )
+    ).then {
+        $0.autocorrectionType = .no
+        $0.textContentType = .oneTimeCode
+    }
     
     private let checkIdDuplicateButton = StatefulButton(
         title: "중복 확인",
         font: .appFont(.pretendardRegular, size: 10),
-        enabledColor: .appColor(.primary500),
+        enabledColor: .appColor(.new500),
         disabledColor: .appColor(.neutral300),
         cornerRadius: 4
     ).then {
@@ -99,10 +102,12 @@ final class EnterFormViewController: UIViewController {
         font: UIFont.appFont(.pretendardRegular, size: 13)
     ).then {
         $0.isSecureTextEntry = true
+        $0.autocorrectionType = .no
+        $0.textContentType = .oneTimeCode
     }
     
     private let passwordInfoLabel: UILabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
@@ -112,6 +117,8 @@ final class EnterFormViewController: UIViewController {
         font: UIFont.appFont(.pretendardRegular, size: 13)
     ).then {
         $0.isSecureTextEntry = true
+        $0.autocorrectionType = .no
+        $0.textContentType = .oneTimeCode
         $0.isHidden = true
     }
     
@@ -159,11 +166,12 @@ final class EnterFormViewController: UIViewController {
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
     ).then {
+        $0.keyboardType = .numberPad
         $0.isHidden = true
     }
     
     private let studentIdWarningLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 학번 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 학번 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
@@ -178,7 +186,7 @@ final class EnterFormViewController: UIViewController {
     private let nicknameDuplicateButton = StatefulButton(
         title: "중복 확인",
         font: .appFont(.pretendardRegular, size: 10),
-        enabledColor: .appColor(.primary500),
+        enabledColor: .appColor(.new500),
         disabledColor: .appColor(.neutral300),
         cornerRadius: 4
     ).then {
@@ -187,7 +195,7 @@ final class EnterFormViewController: UIViewController {
     }
     
     private let nicknameResponseLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "중복된 닉네임입니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "이미 존재하는 닉네임입니다..", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
@@ -215,7 +223,7 @@ final class EnterFormViewController: UIViewController {
     }
     
     private let generalEmailResponseLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
@@ -266,10 +274,10 @@ final class EnterFormViewController: UIViewController {
                 guard !message.isEmpty else { return }
                 self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
-                    image: UIImage.appImage(asset: .warningOrange),
+                    image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
                     text: message,
                     font: UIFont.appFont(.pretendardRegular, size: 12),
-                    textColor: .appColor(.sub500)
+                    textColor: .appColor(.new600)
                 )
             case .successCheckDuplicatedId:
                 self?.checkIdResponseLabel.isHidden = false
@@ -285,13 +293,13 @@ final class EnterFormViewController: UIViewController {
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             case let .showNicknameHttpResult(message, color):
-                self?.nicknameResponseLabel.isHidden = false
                 self?.nicknameResponseLabel.setImageText(
-                    image: UIImage.appImage(asset: .warningOrange),
+                    image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
                     text: message,
                     font: UIFont.appFont(.pretendardRegular, size: 12),
-                    textColor: .appColor(.sub500)
+                    textColor: .appColor(.new600)
                 )
+                self?.nicknameResponseLabel.isHidden = false
             case .changeCheckButtonStatus:
                 self?.nicknameDuplicateButton.updateState(isEnabled: false)
                 self?.nicknameResponseLabel.setImageText(
@@ -399,10 +407,13 @@ extension EnterFormViewController {
 
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        let bottomInset = keyboardFrame.height - (view.frame.height - nextButton.frame.minY)
         
-        scrollView.contentInset.bottom = keyboardFrame.height
-        scrollView.verticalScrollIndicatorInsets.bottom = keyboardFrame.height
+        scrollView.contentInset.bottom = bottomInset
+        scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
     }
 
     @objc private func keyboardWillHide(_ notification: Notification) {
@@ -509,7 +520,7 @@ extension EnterFormViewController {
         
         if isValid {
             nextButton.isEnabled = true
-            nextButton.backgroundColor = UIColor.appColor(.primary500)
+            nextButton.backgroundColor = UIColor.appColor(.new500)
             nextButton.setTitleColor(.white, for: .normal)
         } else {
             nextButton.isEnabled = false
@@ -690,7 +701,7 @@ extension EnterFormViewController {
         }
         
         checkIdResponseLabel.snp.makeConstraints {
-            $0.top.equalTo(idTextField.snp.bottom).offset(8)
+            $0.top.equalTo(idTextField.snp.bottom)
             $0.leading.equalTo(idTextField.snp.leading).offset(4)
             $0.height.equalTo(20)
         }
@@ -757,7 +768,7 @@ extension EnterFormViewController {
         }
         
         nicknameTextField.snp.makeConstraints {
-            $0.top.equalTo(studentIdTextField.snp.bottom).offset(8)
+            $0.top.equalTo(studentIdTextField.snp.bottom).offset(20)
             $0.leading.equalTo(departmentDropdownButton.snp.leading)
             $0.trailing.equalTo(nicknameDuplicateButton.snp.leading).offset(-16)
             $0.height.equalTo(40)
@@ -777,7 +788,7 @@ extension EnterFormViewController {
         }
         
         studentEmailTextField.snp.makeConstraints {
-            $0.top.equalTo(nicknameTextField.snp.bottom).offset(8)
+            $0.top.equalTo(nicknameTextField.snp.bottom).offset(20)
             $0.leading.equalTo(departmentDropdownButton.snp.leading)
             $0.trailing.equalToSuperview().offset(-126)
             $0.height.equalTo(40)
@@ -844,7 +855,7 @@ extension EnterFormViewController {
             setUpGeneralConstraints()
 
             nextButton.isEnabled = true
-            nextButton.backgroundColor = UIColor.appColor(.primary500)
+            nextButton.backgroundColor = UIColor.appColor(.new500)
             nextButton.setTitleColor(.white, for: .normal)
         }
 

@@ -27,19 +27,19 @@ final class CertificationFormViewController: UIViewController {
     
     private let stepTextLabel = UILabel().then {
         $0.text = "2. 본인 인증"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let stepLabel = UILabel().then {
         $0.text = "2 / 4"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral200)
-        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.progressTintColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 0.5
@@ -70,16 +70,16 @@ final class CertificationFormViewController: UIViewController {
     )
     
     private let nameHelpLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
     private let femaleButton = UIButton().then {
-        $0.applyRadioStyle(title: "여성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500), foregroundColor: .black)
+        $0.applyRadioStyle(title: "여성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), foregroundColor: .black)
     }
     
     private let maleButton = UIButton().then {
-        $0.applyRadioStyle(title: "남성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500), foregroundColor: .black)
+        $0.applyRadioStyle(title: "남성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), foregroundColor: .black)
     }
     
     private let phoneNumberLabel = UILabel().then {
@@ -94,13 +94,14 @@ final class CertificationFormViewController: UIViewController {
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
     ).then {
+        $0.keyboardType = .numberPad
         $0.isHidden = true
     }
     
     private let sendVerificationButton = StatefulButton(
         title: "인증번호 발송",
         font: .appFont(.pretendardRegular, size: 10),
-        enabledColor: .appColor(.primary500),
+        enabledColor: .appColor(.new500),
         disabledColor: .appColor(.neutral300),
         cornerRadius: 4
     ).then {
@@ -109,14 +110,14 @@ final class CertificationFormViewController: UIViewController {
     }
 
     private let phoneNumberReponseLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger700))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.numberOfLines = 2
         $0.isHidden = true
     }
     
     let goToLoginButton = UIButton().then {
         $0.setTitle("로그인 하기", for: .normal)
-        $0.setTitleColor(.appColor(.primary500), for: .normal)
+        $0.setTitleColor(.appColor(.new500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.isHidden = true
     }
@@ -130,7 +131,7 @@ final class CertificationFormViewController: UIViewController {
     
     private let contactButton = UIButton().then {
         $0.setTitle("문의하기", for: .normal)
-        $0.setTitleColor(.appColor(.primary500), for: .normal)
+        $0.setTitleColor(.appColor(.new500), for: .normal)
         $0.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.isHidden = true
     }
@@ -140,6 +141,7 @@ final class CertificationFormViewController: UIViewController {
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
     ).then {
+        $0.keyboardType = .numberPad
         $0.isHidden = true
     }
     
@@ -154,7 +156,7 @@ final class CertificationFormViewController: UIViewController {
     private let verificationButton = StatefulButton(
         title: "인증번호 확인",
         font: .appFont(.pretendardRegular, size: 10),
-        enabledColor: .appColor(.primary500),
+        enabledColor: .appColor(.new500),
         disabledColor: .appColor(.neutral300),
         cornerRadius: 4
     ).then {
@@ -163,7 +165,7 @@ final class CertificationFormViewController: UIViewController {
     }
     
     private let verificationHelpLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger700))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
@@ -238,7 +240,7 @@ final class CertificationFormViewController: UIViewController {
                 self?.viewModel.tempPhoneNumber = self?.phoneNumberTextField.text
                 self?.viewModel.tempGender = self?.femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500) ? "1" : "0"
                 self?.nextButton.isEnabled = true
-                self?.nextButton.backgroundColor = UIColor.appColor(.primary500)
+                self?.nextButton.backgroundColor = UIColor.appColor(.new500)
                 self?.nextButton.setTitleColor(.white, for: .normal)
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
                 self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, "인증완료", customSessionId))
@@ -342,8 +344,8 @@ extension CertificationFormViewController {
         var femaleConfig = femaleButton.configuration
         var maleConfig = maleButton.configuration
 
-        femaleConfig?.image = UIImage.appImage(asset: isFemale ? .circleCheckedPrimary500 : .circlePrimary500)
-        maleConfig?.image = UIImage.appImage(asset: isFemale ? .circlePrimary500 : .circleCheckedPrimary500)
+        femaleConfig?.image = UIImage.appImage(asset: isFemale ? .circleCheckedPrimary500 : .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal)
+        maleConfig?.image = UIImage.appImage(asset: isFemale ? .circlePrimary500 : .circleCheckedPrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal)
 
         femaleButton.configuration = femaleConfig
         maleButton.configuration = maleConfig
@@ -352,7 +354,8 @@ extension CertificationFormViewController {
     private func updatePhoneNumberSectionVisibility() {
         let nameCount = nameTextField.text?.count ?? 0
         let isNameValid = (2...5).contains(nameCount)
-        let isGenderSelected = (femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500)) || (maleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500))
+        let isGenderSelected = (femaleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal))
+        || (maleButton.configuration?.image == UIImage.appImage(asset: .circleCheckedPrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal))
         
         let shouldShowPhoneFields = isNameValid && isGenderSelected
         
@@ -401,10 +404,10 @@ extension CertificationFormViewController {
     private func showVerificationHelpResult(_ message: String, _ color: ColorAsset) {
         verificationHelpLabel.isHidden = false
         verificationHelpLabel.setImageText(
-            image: UIImage.appImage(asset: .warningOrange),
+            image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
             text: message,
             font: UIFont.appFont(.pretendardRegular, size: 12),
-            textColor: UIColor.appColor(color)
+            textColor: UIColor.appColor(.new600)
         )
     }
     
@@ -419,13 +422,19 @@ extension CertificationFormViewController {
     private func showHttpResult(_ message: String, _ color: ColorAsset) {
         phoneNumberReponseLabel.isHidden = false
         
-        if message == "이미 존재하는 전화번호입니다." {
+        if message.contains("이미 존재") {
             phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningRed), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger600))
             [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
                 $0.isHidden = false
             }
+        } else if message.contains("24시간 이후 재시도") {
+            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningRed), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger600))
+            [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
+                $0.isHidden = true
+            }
+            sendVerificationButton.updateState(isEnabled: false)
         } else {
-            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningOrange), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(color))
+            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
             [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
                 $0.isHidden = true
             }
@@ -474,7 +483,7 @@ extension CertificationFormViewController {
                 self.timer?.invalidate()
                 self.timer = nil
                 self.verificationHelpLabel.isHidden = false
-                self.verificationHelpLabel.setImageText(image: .appImage(asset: .warningOrange), text: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+                self.verificationHelpLabel.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
             }
         }
     }

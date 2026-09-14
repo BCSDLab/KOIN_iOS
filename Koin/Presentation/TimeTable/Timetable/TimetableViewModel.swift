@@ -22,6 +22,8 @@ final class TimetableViewModel: ViewModelProtocol {
         case modifyLecture(LectureData, Bool)
         case _deleteLecture(LectureData)
         case postCustomLecture(String, [Int])
+        
+        case selectedDepartment(String?)
     }
     
     // MARK: - Output
@@ -104,6 +106,10 @@ final class TimetableViewModel: ViewModelProtocol {
         }
     }
     
+    // 전체 전공 목록
+    private(set) var departments: [String] = []
+    private(set) var selectedDepartment: String?
+    
     
     // MARK: - Initialization
     
@@ -119,6 +125,8 @@ final class TimetableViewModel: ViewModelProtocol {
                 self?.deleteLectureById(lecture: lecture)
             case let .postCustomLecture(lectureName, lectureTime):
                 self?.postCustomLecture(lectureName: lectureName, classTime: lectureTime)
+            case let .selectedDepartment(selectedDepartment):
+                self?.selectedDepartment = selectedDepartment
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -387,6 +395,7 @@ extension TimetableViewModel {
             receiveCompletion: { _ in },
             receiveValue: { [weak self] response in
                 self?.outputSubject.send(.updateLectureList(response))
+                self?.updateDeparments(response)
             }
         ).store(in: &subscriptions)
     }
@@ -460,5 +469,17 @@ extension TimetableViewModel {
                 }
             }
         ).store(in: &subscriptions)
+    }
+}
+
+extension TimetableViewModel {
+    private func updateDeparments(_ response: [SemesterLecture]) {
+        self.departments = response
+            .map(\.department)
+            .reduce(into: Set<String>(), { departments, department in
+                departments.insert(department)
+            })
+            .sorted()
+        self.selectedDepartment = nil
     }
 }

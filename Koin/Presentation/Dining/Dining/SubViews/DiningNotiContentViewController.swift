@@ -5,16 +5,13 @@
 //  Created by 김나훈 on 7/29/24.
 //
 
-import Combine
 import Then
 import UIKit
 
 final class DiningNotiContentViewController: UIViewController {
-    
-    
-    let soldOutSwitchPublisher = PassthroughSubject<Bool, Never>()
-    let imageUploadSwitchPublisher = PassthroughSubject<Bool, Never>()
-    let shortcutButtonPublisher = PassthroughSubject<Void, Never>()
+    private let onSoldOutSwitchChanged: (Bool) -> Void
+    private let onImageUploadSwitchChanged: (Bool) -> Void
+    private let onShortcutButtonTapped: () -> Void
     
     private let diningNotiLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardBold, size: 18)
@@ -67,7 +64,14 @@ final class DiningNotiContentViewController: UIViewController {
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
     }
     
-    init() {
+    init(
+        onSoldOutSwitchChanged: @escaping (Bool) -> Void,
+        onImageUploadSwitchChanged: @escaping (Bool) -> Void,
+        onShortcutButtonTapped: @escaping () -> Void
+    ) {
+        self.onSoldOutSwitchChanged = onSoldOutSwitchChanged
+        self.onImageUploadSwitchChanged = onImageUploadSwitchChanged
+        self.onShortcutButtonTapped = onShortcutButtonTapped
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -92,21 +96,17 @@ extension DiningNotiContentViewController {
         imageUploadSwitch.isOn = isOn.1
     }
     
-    func dissmissView() {
-        dismiss(animated: true, completion: nil)
-    }
-    
     @objc private func buttonTapped(_ sender: UIButton) {
         switch sender {
-        case notiShortcutButton: shortcutButtonPublisher.send(())
+        case notiShortcutButton: dismiss(animated: true, completion: onShortcutButtonTapped)
         default: dismiss(animated: true, completion: nil)
         }
     }
     
     @objc private func switchToggled(_ sender: UISwitch) {
         switch sender {
-        case soldOutSwitch: soldOutSwitchPublisher.send(sender.isOn)
-        default: imageUploadSwitchPublisher.send(sender.isOn)
+        case soldOutSwitch: onSoldOutSwitchChanged(sender.isOn)
+        default: onImageUploadSwitchChanged(sender.isOn)
         }
     }
 }
@@ -165,4 +165,3 @@ extension DiningNotiContentViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-

@@ -8,7 +8,7 @@
 import Combine
 
 protocol NotificationHistoryRepository {
-    func fetchAll() async throws -> [NotificationItem]
+    func fetchAll() async throws -> [NotificationHistoryItem]
     func deleteAll() async throws
     func delete(id: String) async throws
     func markAsRead(id: String) async throws

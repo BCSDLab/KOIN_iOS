@@ -125,13 +125,13 @@ final class LostItemListViewController: UIViewController {
             
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
-            let chatRepository = DefaultChatRepository(service: DefaultChatService())
+            let chatRepository = DefaultLostItemRepository(service: DefaultLostItemService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
             let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
-            let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+            let createChatRoomUseCase = DefaultLostItemCreateChatRoomUseCase(chatRepository: chatRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let viewModel = LostItemDataViewModel(
                 checkLoginUseCase: checkLoginUseCase,
@@ -227,11 +227,20 @@ extension LostItemListViewController {
             let loginViewController = LoginViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
-        let loginModalViewController = ModalViewControllerB(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 작성하려면\n로그인이 필요해요.", subTitle: "로그인 후 글을 작성해주세요!", titleColor: UIColor.appColor(.neutral700), subTitleColor: UIColor.appColor(.gray)).then {
-            $0.modalPresentationStyle = .overFullScreen
-            $0.modalTransitionStyle = .crossDissolve
-        }
-        navigationController?.present(loginModalViewController, animated: true)
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "게시글을 작성하려면\n로그인이 필요해요.",
+                subTitleText: "로그인 후 글을 작성해주세요!"
+            ),
+            button: .buttons(
+                leftButtonTitle: "닫기",
+                leftButtonAction: onLeftButtonTapped,
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
+        navigationController?.present(modalViewController, animated: true)
     }
     
     private func presentPostTypeModal() {

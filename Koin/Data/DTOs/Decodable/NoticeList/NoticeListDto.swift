@@ -26,6 +26,7 @@ struct NoticeArticleDto: Decodable {
     let boardId: Int
     let title: String?
     let content: String?
+    let aiSummary: NoticeAISummaryDto?
     let author: String?
     let hit: Int?
     let url: String?
@@ -39,6 +40,7 @@ struct NoticeArticleDto: Decodable {
         case id
         case boardId = "board_id"
         case title, content, author, hit, url, attachments
+        case aiSummary = "ai_summary"
         case prevId = "prev_id"
         case nextId = "next_id"
         case registeredAt = "registered_at"
@@ -71,7 +73,19 @@ extension NoticeListDto {
 
 extension NoticeArticleDto {
     func toDomain() -> NoticeDataInfo {
-        return NoticeDataInfo(title: title ?? "", boardId: boardId, content: content ?? "", author: author ?? "-", hit: hit, prevId: prevId, nextId: nextId, attachments: attachments ?? [], url: url, registeredAt: registeredAt)
+        return NoticeDataInfo(
+            title: title ?? "",
+            boardId: boardId,
+            aiSummary: aiSummary?.toDomain() ?? NoticeAISummary(status: .unavailable, items: []),
+            content: content ?? "",
+            author: author ?? "-",
+            hit: hit,
+            prevId: prevId,
+            nextId: nextId,
+            attachments: attachments ?? [],
+            url: url,
+            registeredAt: registeredAt
+        )
     }
     
     func toDomainWithChangedDate() -> NoticeArticleDto {
@@ -86,6 +100,7 @@ extension NoticeArticleDto {
             boardId: boardId,
             title: newTitle,
             content: modifyFontInHtml(html: content ?? ""),
+            aiSummary: aiSummary,
             author: author,
             hit: hit,
             url: url,

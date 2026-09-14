@@ -196,21 +196,36 @@ extension CallVanListViewController {
     }
     
     @objc private func filterButtonTapped() {
-        let height = min(view.frame.height - view.safeAreaInsets.top - view.safeAreaInsets.bottom, 707)
-        let contentViewController = CallVanListFilterViewController(
-            filter: viewModel.filterState,
-            onApplyButtonTapped: { [weak self] filterState in
-                guard let self else { return }
-                inputSubject.send(.updateFilterState(filterState))
-                inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanFilterApply, category: .click, value: ""))
-            },
-            isLoggedIn: viewModel.isLoggedIn,
-            height: height
+        let onFilterItemTapped: (FilterItemModel)->Bool = { [weak self] filterItem in
+            guard let self else { return false }
+            if filterItem.title == CallVanMineOrJoined.mine.rawValue
+                || filterItem.title == CallVanMineOrJoined.joined.rawValue {
+                if viewModel.isLoggedIn {
+                    return true
+                } else {
+                    showToastMessage(message: "로그인이 필요한 기능입니다.")
+                    return false
+                }
+            }
+            return true
+        }
+        let onApplyTapped: ([FilterGroupModel])->Void = { [weak self] groupModels in
+            guard let request = CallVanListRequest(from: groupModels) else {
+                return
+            }
+            self?.inputSubject.send(.updateFilterState(request))
+            self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanFilterApply, category: .click, value: ""))
+        }
+        let contentView = FilterBottomSheetView(
+            groupModels: viewModel.filterState.toFilterGroupModels(),
+            onFilterItemTapped: onFilterItemTapped,
+            onApplyTapped: onApplyTapped
         )
-        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: height + view.safeAreaInsets.bottom)
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        present(bottomSheetViewController, animated: false)
+        let bottomSheetVC = BottomSheetViewControllerB(contentView: contentView)
+        contentView.delegate = bottomSheetVC
+        
+        present(bottomSheetVC, animated: false)
+        
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanFilter, category: .click, value: ""))
     }
     
@@ -390,23 +405,27 @@ extension CallVanListViewController {
     }
     
     private func showRestrictedModal(type: RestrictionType?, until: String?) {
-        let modalViewController: CallVanModalViewController
+        let mainTitle: String
+        let subTitle: String
+        
         switch type {
         case .temporaryRestriction14Days:
-            guard let until else {
-                return
-            }
-            modalViewController = CallVanModalViewController(
-                title: RestrictionType.temporaryRestriction14Days.rawValue,
-                description: RestrictionType.temporaryRestriction14Days.getDescription(until: until))
+            mainTitle = RestrictionType.temporaryRestriction14Days.rawValue
+            subTitle = RestrictionType.temporaryRestriction14Days.getDescription(until: until)
         case .permanentRestriction:
-            modalViewController = CallVanModalViewController(
-                title: RestrictionType.temporaryRestriction14Days.rawValue,
-                description: RestrictionType.permanentRestriction.getDescription())
-        default:
+            mainTitle = RestrictionType.permanentRestriction.rawValue
+            subTitle = RestrictionType.permanentRestriction.getDescription()
+        case nil:
             return
         }
-        modalViewController.modalPresentationStyle = .overFullScreen
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .titles(
+                mainTitleText: mainTitle,
+                subTitleText: subTitle
+            ),
+            button: .singleButton(title: "닫기")
+        ))
         present(modalViewController, animated: false)
     }
     

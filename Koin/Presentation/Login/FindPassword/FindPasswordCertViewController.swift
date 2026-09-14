@@ -25,19 +25,19 @@ final class FindPasswordCertViewController: UIViewController {
     
     private let stepTextLabel = UILabel().then {
         $0.text = "1. 계정 인증"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let stepLabel = UILabel().then {
         $0.text = "1 / 2"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral200)
-        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.progressTintColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 0.5
@@ -195,6 +195,9 @@ extension FindPasswordCertViewController {
             }
     }
     @objc private func sendButtonTapped() {
+        [helpLabel, changeButton].forEach {
+            $0.isHidden = true
+        }
         switch certType {
         case .phone: viewModel.sendVerificationCode()
         case .email: viewModel.sendVerificationEmail()
@@ -283,7 +286,7 @@ extension FindPasswordCertViewController {
             $0.height.equalTo(32)
         }
         helpLabel.snp.makeConstraints {
-            $0.top.equalTo(phoneTextField.snp.bottom).offset(3)
+            $0.top.equalTo(phoneTextField.snp.bottom).offset(8)
             $0.leading.equalTo(phoneTextField)
         }
         changeButton.snp.makeConstraints {
@@ -293,7 +296,7 @@ extension FindPasswordCertViewController {
             $0.height.equalTo(19)
         }
         phoneStateView.snp.makeConstraints {
-            $0.top.equalTo(helpLabel.snp.bottom).offset(4)
+            $0.top.equalTo(phoneTextField.snp.bottom).offset(8)
             $0.leading.equalTo(stepTextLabel)
             $0.height.equalTo(19)
         }
@@ -336,7 +339,7 @@ extension FindPasswordCertViewController {
         helpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         helpLabel.textColor = UIColor.appColor(.neutral500)
         changeButton.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 12)
-        changeButton.setTitleColor(UIColor.appColor(.primary500), for: .normal)
+        changeButton.setTitleColor(UIColor.appColor(.new500), for: .normal)
     }
     private func setUpTextFieldUnderline() {
         [idtextField, phoneTextField, certNumberTextField].forEach {

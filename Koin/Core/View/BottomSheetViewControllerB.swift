@@ -17,38 +17,39 @@ protocol BottomSheetViewControllerBDelegate: AnyObject {
 final class BottomSheetViewControllerB: UIViewController {
     
     // MARK: - Properties
-    private var contentViewBottomConstraint: Constraint?
-    private var safeAreaHeightConstraint: Constraint?
-    private var alpha: CGFloat
+    private var dismissContentViewConstraint: Constraint?
+    private var presentContentViewConstraint: Constraint?
+    private let dimAlpha: CGFloat
     
     // MARK: - UI Components
     private let dimView = UIView().then { $0.alpha = 0 }
     private let contentView: UIView
     private let safeAreaView = UIView()
     
+    // MARK: - LayoutGuide
+    private let safeAreaLayoutGuide = UILayoutGuide()
+    
     // MARK: - Initializer
-    init(contentView: UIView, dimColor: UIColor, dimAlpha: CGFloat, backgroundColor: UIColor) {
+    init(
+        contentView: UIView,
+        dimAlpha: CGFloat = 0.7
+    ) {
         self.contentView = contentView
-        self.alpha = dimAlpha
+        self.dimAlpha = dimAlpha
         
         super.init(nibName: nil, bundle: nil)
         
-        modalTransitionStyle = .crossDissolve
         modalPresentationStyle = .overFullScreen
         
         dimView.do {
-            $0.backgroundColor = dimColor
+            $0.backgroundColor = .appColor(.neutral800)
         }
         safeAreaView.do {
-            $0.backgroundColor = backgroundColor
+            $0.backgroundColor = contentView.backgroundColor
         }
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
     }
     
     // MARK: - Life Cycle
@@ -61,7 +62,6 @@ final class BottomSheetViewControllerB: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        safeAreaHeightConstraint?.update(offset: view.safeAreaInsets.bottom)
         present()
     }
 }
@@ -69,17 +69,22 @@ final class BottomSheetViewControllerB: UIViewController {
 extension BottomSheetViewControllerB: BottomSheetViewControllerBDelegate {
     
     func present() {
-//        view.layoutIfNeeded()
-        contentViewBottomConstraint?.update(offset: 0)
+        view.layoutIfNeeded()
+        
+        dismissContentViewConstraint?.deactivate()
+        presentContentViewConstraint?.activate()
+        
         UIView.animate(withDuration: 0.25) { [weak self] in
             guard let self else { return }
-            dimView.alpha = alpha
+            dimView.alpha = dimAlpha
             view.layoutIfNeeded()
         }
     }
     
     func dismiss() {
-        contentViewBottomConstraint?.update(offset: contentView.bounds.height)
+        dismissContentViewConstraint?.activate()
+        presentContentViewConstraint?.deactivate()
+        
         UIView.animate(
             withDuration: 0.25,
             animations: { [weak self] in
@@ -94,7 +99,6 @@ extension BottomSheetViewControllerB: BottomSheetViewControllerBDelegate {
 }
 
 extension BottomSheetViewControllerB {
-    
     private func setGesture() {
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dimViewTapped))
         dimView.addGestureRecognizer(tapGesture)
@@ -107,7 +111,6 @@ extension BottomSheetViewControllerB {
 }
 
 extension BottomSheetViewControllerB {
-    
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
@@ -117,6 +120,9 @@ extension BottomSheetViewControllerB {
         [dimView, contentView, safeAreaView].forEach {
             view.addSubview($0)
         }
+        [safeAreaLayoutGuide].forEach {
+            view.addLayoutGuide($0)
+        }
     }
     
     private func setUpConstraints() {
@@ -124,14 +130,22 @@ extension BottomSheetViewControllerB {
             $0.edges.equalToSuperview()
         }
         contentView.snp.makeConstraints {
-            contentView.layoutIfNeeded()
-            contentViewBottomConstraint = $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top).offset(contentView.bounds.height).constraint
+            $0.height.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.height)
             $0.leading.trailing.equalToSuperview()
+            dismissContentViewConstraint = $0.top.equalTo(view.snp.bottom).constraint
+            presentContentViewConstraint = $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top).constraint
+        }
+        presentContentViewConstraint?.deactivate()
+        
+        safeAreaLayoutGuide.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalTo(view.keyboardLayoutGuide.snp.top)
+            $0.bottom.equalToSuperview()
         }
         safeAreaView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(contentView.snp.bottom)
-            safeAreaHeightConstraint = $0.height.equalTo(0).constraint
+            $0.height.equalTo(safeAreaLayoutGuide.snp.height)
         }
     }
 }

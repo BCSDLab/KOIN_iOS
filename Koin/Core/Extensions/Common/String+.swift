@@ -10,7 +10,7 @@ import Kingfisher
 import SwiftSoup
 
 extension String {
-    func toChatDateInfo() -> ChatDateInfo {
+    func toLostItemChatDateInfo() -> LostItemChatDateInfo {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
         formatter.timeZone = TimeZone(secondsFromGMT: 0) // ✅ UTC 그대로 변환
@@ -31,7 +31,7 @@ extension String {
         // ✅ 문자열을 Date 타입으로 변환 (UTC 기준)
         guard let date = formatter.date(from: formattedDateString) else {
             print("❌ 변환 실패: \(formattedDateString)")
-            return ChatDateInfo(
+            return LostItemChatDateInfo(
                 year: 0, month: 0, day: 0, hour: 0, minute: 0, second: 0,
                 isToday: false, isYesterday: false, showingText: "날짜 오류"
             )
@@ -81,7 +81,7 @@ extension String {
         }
 
         
-        return ChatDateInfo(
+        return LostItemChatDateInfo(
             year: components.year ?? 0,
             month: components.month ?? 0,
             day: components.day ?? 0,

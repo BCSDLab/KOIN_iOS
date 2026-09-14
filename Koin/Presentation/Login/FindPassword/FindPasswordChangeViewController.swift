@@ -19,19 +19,19 @@ final class FindPasswordChangeViewController: UIViewController {
     
     private let stepTextLabel = UILabel().then {
         $0.text = "2. 비밀번호 변경"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let stepLabel = UILabel().then {
         $0.text = "2 / 2"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral200)
-        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.progressTintColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 1
@@ -68,6 +68,8 @@ final class FindPasswordChangeViewController: UIViewController {
     private let nextButton = StateButton(font: UIFont.appFont(.pretendardMedium, size: 15)).then {
         $0.setTitle("다음", for: .normal)
         $0.setState(state: .unusable)
+    }.then {
+        $0.layer.cornerRadius = 8
     }
     
     init(viewModel: FindPasswordViewModel, certType: FindPasswordCertViewController.CertType) {
