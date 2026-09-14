@@ -24,6 +24,7 @@ struct CategoryView: ActionBindableView {
         case showChatList
         case showLand
         case showBusiness
+        case showRecruit
         
         case showLoginToast
     }
@@ -51,8 +52,8 @@ struct CategoryView: ActionBindableView {
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 12) {
-                    CategoryFeaturedButton(item: .timetable) {
-                        didTapItem(.timetable)
+                    CategoryFeaturedButton(item: .recruit) {
+                        didTapItem(.recruit)
                     }
                     CategoryFeaturedButton(item: .lostItem) {
                         didTapItem(.lostItem)
@@ -64,7 +65,8 @@ struct CategoryView: ActionBindableView {
                         .facility,
                         .department,
                         .dining,
-                        .shop
+                        .shop,
+                        .timetable
                     ],
                     action: { item in
                         didTapItem(item)
@@ -86,7 +88,7 @@ struct CategoryView: ActionBindableView {
                     items: [
                         .chat,
                         .land,
-                        .business,
+                        .business
                     ],
                     action: { item in
                         didTapItem(item)
@@ -150,13 +152,15 @@ private extension CategoryView {
             return .showLand
         case .business:
             return .showBusiness
+        case .recruit:
+            return .showRecruit
         }
     }
 
     private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus, value: String)? {
         switch action {
-        case .showTimetable:
-            return (.categoryTimetable, "시간표")
+        case .showRecruit:
+            return nil // TODO: 로깅 추가
         case .showLostItem:
             return (.categoryLostProperty, "분실물")
         case .showFacility:
@@ -167,6 +171,8 @@ private extension CategoryView {
             return (.categoryCampus, "식단")
         case .showShop:
             return (.categoryCampus, "주변상점")
+        case .showTimetable:
+            return (.categoryTimetable, "시간표") // TODO: 로깅 수정
         case .showBusTimetable:
             return (.categoryTransportation, "버스 시간표")
         case .showBusRoute:
