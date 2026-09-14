@@ -749,6 +749,7 @@
 		AA20000000000000000032 /* CertificationInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000032 /* CertificationInputTests.swift */; };
 		AA20000000000000000033 /* VerificationSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000033 /* VerificationSessionTests.swift */; };
 		AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */; };
+		AA20000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */; };
 		AA20000000000000000035 /* CertificationUseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000035 /* CertificationUseCaseSpies.swift */; };
 		AA20000000000000000021 /* AgreementTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000021 /* AgreementTextTests.swift */; };
 		AA20000000000000000022 /* CustomSessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000022 /* CustomSessionManagerTests.swift */; };
@@ -1781,6 +1782,7 @@
 		AA10000000000000000032 /* CertificationInputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInputTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000033 /* VerificationSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSessionTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelCertificationTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelSelectTypeTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000035 /* CertificationUseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationUseCaseSpies.swift; sourceTree = "<group>"; };
 		AA10000000000000000021 /* AgreementTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementTextTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000022 /* CustomSessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManagerTests.swift; sourceTree = "<group>"; };
@@ -4703,6 +4705,7 @@
 				AA10000000000000000032 /* CertificationInputTests.swift */,
 				AA10000000000000000033 /* VerificationSessionTests.swift */,
 				AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */,
+				AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */,
 				AA10000000000000000021 /* AgreementTextTests.swift */,
 				AA10000000000000000022 /* CustomSessionManagerTests.swift */,
 				AA10000000000000000023 /* RegisterFormViewModelTests.swift */,
@@ -6847,6 +6850,7 @@
 				AA20000000000000000032 /* CertificationInputTests.swift in Sources */,
 				AA20000000000000000033 /* VerificationSessionTests.swift in Sources */,
 				AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */,
+				AA20000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift in Sources */,
 				AA20000000000000000035 /* CertificationUseCaseSpies.swift in Sources */,
 				AA20000000000000000021 /* AgreementTextTests.swift in Sources */,
 				AA20000000000000000022 /* CustomSessionManagerTests.swift in Sources */,
