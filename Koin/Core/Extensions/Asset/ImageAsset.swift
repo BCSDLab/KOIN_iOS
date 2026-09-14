@@ -256,6 +256,7 @@ public enum ImageAsset: String {
     
     // MARK: - Home
     case categoryBusiness
+    case categoryRecruit
     case categoryBusSearch
     case categoryBusTimetable
     case categoryCallVan
