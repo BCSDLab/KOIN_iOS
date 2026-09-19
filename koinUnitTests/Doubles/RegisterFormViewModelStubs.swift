@@ -139,3 +139,31 @@ extension RegisterFormViewModel {
         )
     }
 }
+
+final class OutputRecorder {
+
+    private let viewModel: RegisterFormViewModel
+    private let input = PassthroughSubject<RegisterFormViewModel.Input, Never>()
+    private var subscriptions: Set<AnyCancellable> = []
+
+    private(set) var outputs: [RegisterFormViewModel.Output] = []
+
+    init(_ viewModel: RegisterFormViewModel) {
+        self.viewModel = viewModel
+        viewModel.transform(with: input.eraseToAnyPublisher())
+            .sink { [weak self] in self?.outputs.append($0) }
+            .store(in: &subscriptions)
+    }
+
+    func send(_ value: RegisterFormViewModel.Input) {
+        input.send(value)
+    }
+
+    var httpResultMessages: [String] {
+        outputs.compactMap { if case let .showHttpResult(message, _) = $0 { return message } else { return nil } }
+    }
+
+    var httpResultColors: [ColorAsset] {
+        outputs.compactMap { if case let .showHttpResult(_, color) = $0 { return color } else { return nil } }
+    }
+}
