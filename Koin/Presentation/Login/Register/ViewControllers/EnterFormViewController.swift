@@ -378,24 +378,16 @@ extension EnterFormViewController {
     @objc private func idTextFieldDidChange(_ textField: UITextField) {
         guard let input = textField.text else { return }
 
-        let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789_.-")
-        let filtered = input.lowercased().filter {
-            guard let scalar = $0.unicodeScalars.first else { return false }
-            return allowedCharacterSet.contains(scalar)
-        }
+        let acceptedText = LoginIdInput.acceptedText(from: input)
+        textField.text = acceptedText
 
-        let trimmed = String(filtered.prefix(13))
-        textField.text = trimmed
-
-        let isValid = textField.isValidIdFormat()
-
-        checkIdDuplicateButton.updateState(isEnabled: isValid)
+        checkIdDuplicateButton.updateState(isEnabled: LoginIdInput.isValid(acceptedText))
     }
     
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let isValid = textField.isValidPasswordFormat()
+        let isValid = PasswordInput.isValid(text)
 
         passwordInfoLabel.isHidden = isValid
         passwordTextField2.isHidden = !isValid
@@ -457,19 +449,10 @@ extension EnterFormViewController {
     @objc private func studentIdTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let numericText = text.filter { $0.isNumber }
-        let trimmedText = String(numericText.prefix(10))
-        textField.text = trimmedText
+        let acceptedDigits = StudentNumberInput.acceptedDigits(from: text)
+        textField.text = acceptedDigits
 
-        let yearPart = String(trimmedText.prefix(4))
-        let isYearValid: Bool = {
-            guard let year = Int(yearPart) else { return false }
-            let currentYear = Calendar.current.component(.year, from: Date())
-            return (1991...currentYear).contains(year)
-        }()
-
-        let isLengthValid = trimmedText.count >= 8 && trimmedText.count <= 10
-        let isValid = isLengthValid && isYearValid
+        let isValid = StudentNumberInput.isValid(acceptedDigits)
         studentIdWarningLabel.isHidden = isValid
         
         if isValid {
@@ -490,11 +473,10 @@ extension EnterFormViewController {
     @objc private func nicknameTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let trimmedText = String(text.prefix(10))
-        textField.text = trimmedText
+        let acceptedText = NicknameInput.acceptedText(from: text)
+        textField.text = acceptedText
 
-        let isValid = !trimmedText.isEmpty && trimmedText.count <= 10
-        nicknameDuplicateButton.updateState(isEnabled: isValid)
+        nicknameDuplicateButton.updateState(isEnabled: NicknameInput.canCheckDuplicate(acceptedText))
     }
     
     @objc private func checkStudentNicknameDuplicateButtonTapped() {
@@ -505,19 +487,16 @@ extension EnterFormViewController {
     
     @objc private func studentEmailTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789._-")
-        let filteredText = text.filter { String($0).rangeOfCharacter(from: allowedCharacterSet) != nil }
-        let trimmedText = String(filteredText.prefix(30))
-        textField.text = trimmedText
+        textField.text = StudentEmailInput.acceptedText(from: text)
     }
     
     @objc private func generalEmailTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         
-        let trimmedText = String(text.prefix(30))
-        textField.text = trimmedText
+        let acceptedText = GeneralEmailInput.acceptedText(from: text)
+        textField.text = acceptedText
 
-        generalEmailResponseLabel.isHidden = trimmedText.isValidEmailFormat
+        generalEmailResponseLabel.isHidden = GeneralEmailInput.isValid(acceptedText)
     }
     
     @objc private func nextButtonTapped() {
@@ -573,7 +552,7 @@ extension EnterFormViewController {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = textField.text ?? ""
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
-        return newText.count <= 18
+        return newText.count <= PasswordInput.maxLength
     }
 }
 
