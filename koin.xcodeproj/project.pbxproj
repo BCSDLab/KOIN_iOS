@@ -751,6 +751,10 @@
 		AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */; };
 		AA20000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */; };
 		AA20000000000000000035 /* CertificationUseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000035 /* CertificationUseCaseSpies.swift */; };
+		AA20000000000000000037 /* RegisterInfoInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000037 /* RegisterInfoInput.swift */; };
+		AA20000000000000000038 /* RegisterInfoInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000038 /* RegisterInfoInputTests.swift */; };
+		AA20000000000000000039 /* RegisterFormViewModelEnterFormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000039 /* RegisterFormViewModelEnterFormTests.swift */; };
+		AA20000000000000000040 /* EnterFormUseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000040 /* EnterFormUseCaseSpies.swift */; };
 		AA20000000000000000021 /* AgreementTextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000021 /* AgreementTextTests.swift */; };
 		AA20000000000000000022 /* CustomSessionManagerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000022 /* CustomSessionManagerTests.swift */; };
 		AA20000000000000000023 /* RegisterFormViewModelTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000023 /* RegisterFormViewModelTests.swift */; };
@@ -1784,6 +1788,10 @@
 		AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelCertificationTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelSelectTypeTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000035 /* CertificationUseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationUseCaseSpies.swift; sourceTree = "<group>"; };
+		AA10000000000000000037 /* RegisterInfoInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterInfoInput.swift; sourceTree = "<group>"; };
+		AA10000000000000000038 /* RegisterInfoInputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterInfoInputTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000039 /* RegisterFormViewModelEnterFormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelEnterFormTests.swift; sourceTree = "<group>"; };
+		AA10000000000000000040 /* EnterFormUseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormUseCaseSpies.swift; sourceTree = "<group>"; };
 		AA10000000000000000021 /* AgreementTextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementTextTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000022 /* CustomSessionManagerTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomSessionManagerTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000023 /* RegisterFormViewModelTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelTests.swift; sourceTree = "<group>"; };
@@ -4682,6 +4690,7 @@
 				AA10000000000000000008 /* DiningViewModelStubs.swift */,
 				AA10000000000000000024 /* RegisterFormViewModelStubs.swift */,
 				AA10000000000000000035 /* CertificationUseCaseSpies.swift */,
+				AA10000000000000000040 /* EnterFormUseCaseSpies.swift */,
 			);
 			path = Doubles;
 			sourceTree = "<group>";
@@ -4706,6 +4715,8 @@
 				AA10000000000000000033 /* VerificationSessionTests.swift */,
 				AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */,
 				AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */,
+				AA10000000000000000038 /* RegisterInfoInputTests.swift */,
+				AA10000000000000000039 /* RegisterFormViewModelEnterFormTests.swift */,
 				AA10000000000000000021 /* AgreementTextTests.swift */,
 				AA10000000000000000022 /* CustomSessionManagerTests.swift */,
 				AA10000000000000000023 /* RegisterFormViewModelTests.swift */,
@@ -5660,6 +5671,7 @@
 				E1A70C002D9A4F1100AGSEL0 /* AgreementSelection.swift */,
 				AA10000000000000000030 /* CertificationInput.swift */,
 				AA10000000000000000031 /* VerificationSession.swift */,
+				AA10000000000000000037 /* RegisterInfoInput.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -6126,6 +6138,7 @@
 				E1A70C012D9A4F1100AGSEL1 /* AgreementSelection.swift in Sources */,
 				AA20000000000000000030 /* CertificationInput.swift in Sources */,
 				AA20000000000000000031 /* VerificationSession.swift in Sources */,
+				AA20000000000000000037 /* RegisterInfoInput.swift in Sources */,
 				7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */,
 				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
 				7C8A942F2FD2C15400DEA6F5 /* ShopEventCountDto.swift in Sources */,
@@ -6852,6 +6865,9 @@
 				AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */,
 				AA20000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift in Sources */,
 				AA20000000000000000035 /* CertificationUseCaseSpies.swift in Sources */,
+				AA20000000000000000038 /* RegisterInfoInputTests.swift in Sources */,
+				AA20000000000000000039 /* RegisterFormViewModelEnterFormTests.swift in Sources */,
+				AA20000000000000000040 /* EnterFormUseCaseSpies.swift in Sources */,
 				AA20000000000000000021 /* AgreementTextTests.swift in Sources */,
 				AA20000000000000000022 /* CustomSessionManagerTests.swift in Sources */,
 				AA20000000000000000023 /* RegisterFormViewModelTests.swift in Sources */,
