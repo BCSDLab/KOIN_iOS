@@ -752,6 +752,8 @@
 		AA20000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */; };
 		AA20000000000000000035 /* CertificationUseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000035 /* CertificationUseCaseSpies.swift */; };
 		AA20000000000000000037 /* RegisterInfoInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000037 /* RegisterInfoInput.swift */; };
+		AA20000000000000000041 /* EnterFormState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000041 /* EnterFormState.swift */; };
+		AA20000000000000000042 /* EnterFormStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000042 /* EnterFormStateTests.swift */; };
 		AA20000000000000000038 /* RegisterInfoInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000038 /* RegisterInfoInputTests.swift */; };
 		AA20000000000000000039 /* RegisterFormViewModelEnterFormTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000039 /* RegisterFormViewModelEnterFormTests.swift */; };
 		AA20000000000000000040 /* EnterFormUseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000040 /* EnterFormUseCaseSpies.swift */; };
@@ -1789,6 +1791,8 @@
 		AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelSelectTypeTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000035 /* CertificationUseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationUseCaseSpies.swift; sourceTree = "<group>"; };
 		AA10000000000000000037 /* RegisterInfoInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterInfoInput.swift; sourceTree = "<group>"; };
+		AA10000000000000000041 /* EnterFormState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormState.swift; sourceTree = "<group>"; };
+		AA10000000000000000042 /* EnterFormStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormStateTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000038 /* RegisterInfoInputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterInfoInputTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000039 /* RegisterFormViewModelEnterFormTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelEnterFormTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000040 /* EnterFormUseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormUseCaseSpies.swift; sourceTree = "<group>"; };
@@ -4716,6 +4720,7 @@
 				AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */,
 				AA10000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift */,
 				AA10000000000000000038 /* RegisterInfoInputTests.swift */,
+				AA10000000000000000042 /* EnterFormStateTests.swift */,
 				AA10000000000000000039 /* RegisterFormViewModelEnterFormTests.swift */,
 				AA10000000000000000021 /* AgreementTextTests.swift */,
 				AA10000000000000000022 /* CustomSessionManagerTests.swift */,
@@ -5672,6 +5677,7 @@
 				AA10000000000000000030 /* CertificationInput.swift */,
 				AA10000000000000000031 /* VerificationSession.swift */,
 				AA10000000000000000037 /* RegisterInfoInput.swift */,
+				AA10000000000000000041 /* EnterFormState.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -6139,6 +6145,7 @@
 				AA20000000000000000030 /* CertificationInput.swift in Sources */,
 				AA20000000000000000031 /* VerificationSession.swift in Sources */,
 				AA20000000000000000037 /* RegisterInfoInput.swift in Sources */,
+				AA20000000000000000041 /* EnterFormState.swift in Sources */,
 				7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */,
 				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
 				7C8A942F2FD2C15400DEA6F5 /* ShopEventCountDto.swift in Sources */,
@@ -6866,6 +6873,7 @@
 				AA20000000000000000036 /* RegisterFormViewModelSelectTypeTests.swift in Sources */,
 				AA20000000000000000035 /* CertificationUseCaseSpies.swift in Sources */,
 				AA20000000000000000038 /* RegisterInfoInputTests.swift in Sources */,
+				AA20000000000000000042 /* EnterFormStateTests.swift in Sources */,
 				AA20000000000000000039 /* RegisterFormViewModelEnterFormTests.swift in Sources */,
 				AA20000000000000000040 /* EnterFormUseCaseSpies.swift in Sources */,
 				AA20000000000000000021 /* AgreementTextTests.swift in Sources */,

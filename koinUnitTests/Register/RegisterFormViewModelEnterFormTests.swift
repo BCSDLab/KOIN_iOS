@@ -227,16 +227,38 @@ struct RegisterFormViewModelRegisterTests {
         #expect(successCount == 2)
     }
 
-    @Test("가입에 실패하면 아무것도 전달하지 않는다")
-    func 가입에_실패하면_아무것도_전달하지_않는다() {
+    @Test("학생 가입에 실패하면 오류 문구를 전달한다")
+    func 학생_가입에_실패하면_오류_문구를_전달한다() {
         let spy = SpyRegisterFormUseCase()
-        spy.stubbedResult = .failure(ErrorResponse(statusCode: 500, code: "500", message: "서버 오류"))
+        spy.stubbedResult = .failure(ErrorResponse(statusCode: 500, code: "500", message: "서버 오류가 발생했습니다."))
+        let recorder = OutputRecorder(.makeForEnterForm(registerFormUseCase: spy))
+
+        recorder.send(.tryStudentRegister(studentRequest()))
+
+        #expect(recorder.httpResultMessages == ["서버 오류가 발생했습니다."])
+    }
+
+    @Test("외부인 가입에 실패하면 오류 문구를 전달한다")
+    func 외부인_가입에_실패하면_오류_문구를_전달한다() {
+        let spy = SpyRegisterFormUseCase()
+        spy.stubbedResult = .failure(ErrorResponse(statusCode: 500, code: "500", message: "서버 오류가 발생했습니다."))
+        let recorder = OutputRecorder(.makeForEnterForm(registerFormUseCase: spy))
+
+        recorder.send(.tryGeneralRegister(generalRequest()))
+
+        #expect(recorder.httpResultMessages == ["서버 오류가 발생했습니다."])
+    }
+
+    @Test("가입에 실패하면 성공을 알리지 않는다")
+    func 가입에_실패하면_성공을_알리지_않는다() {
+        let spy = SpyRegisterFormUseCase()
+        spy.stubbedResult = .failure(ErrorResponse(statusCode: 500, code: "500", message: "서버 오류가 발생했습니다."))
         let recorder = OutputRecorder(.makeForEnterForm(registerFormUseCase: spy))
 
         recorder.send(.tryStudentRegister(studentRequest()))
         recorder.send(.tryGeneralRegister(generalRequest()))
 
-        #expect(recorder.outputs.isEmpty)
+        #expect(recorder.outputs.contains { if case .succesRegister = $0 { return true } else { return false } } == false)
     }
 }
 
