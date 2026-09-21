@@ -50,13 +50,29 @@ struct NameInputTests {
         #expect(NameInput("김1234!").acceptedText == "김")
     }
 
-    @Test("한글과 영문이 섞이면 각각의 한도를 따로 센다")
-    func 한글과_영문이_섞이면_각각의_한도를_따로_센다() {
-        let sut = NameInput("김Alexander")
+    @Test("첫 글자가 한글이면 영문은 입력되지 않는다")
+    func 첫_글자가_한글이면_영문은_입력되지_않는다() {
+        #expect(NameInput("김Alexander").acceptedText == "김")
+    }
 
-        #expect(sut.acceptedText == "김Alexander")
-        #expect(sut.koreanCharacterCount == 1)
-        #expect(sut.englishCharacterCount == 9)
+    @Test("첫 글자가 영문이면 한글은 입력되지 않는다")
+    func 첫_글자가_영문이면_한글은_입력되지_않는다() {
+        #expect(NameInput("Al김").acceptedText == "Al")
+    }
+
+    @Test("한글을 조합하는 중인 자모도 한글로 입력된다")
+    func 한글을_조합하는_중인_자모도_한글로_입력된다() {
+        #expect(NameInput("김ㅊ").acceptedText == "김ㅊ")
+    }
+
+    @Test("영문 이름의 공백은 입력되지 않는다")
+    func 영문_이름의_공백은_입력되지_않는다() {
+        #expect(NameInput("Gil Dong").acceptedText == "GilDong")
+    }
+
+    @Test("자모로 시작하면 한글 이름으로 보고 영문은 입력되지 않는다")
+    func 자모로_시작하면_한글_이름으로_보고_영문은_입력되지_않는다() {
+        #expect(NameInput("ㄱAl").acceptedText == "ㄱ")
     }
 
     @Test(
