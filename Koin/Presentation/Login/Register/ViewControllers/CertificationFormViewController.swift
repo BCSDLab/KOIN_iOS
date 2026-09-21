@@ -273,6 +273,7 @@ final class CertificationFormViewController: UIViewController {
                     textColor: UIColor.appColor(.success700)
                 )
                 self?.contactButton.isHidden = true
+                self?.lockCertificationInputs()
                 self?.viewModel.tempName = self?.nameTextField.text
                 self?.viewModel.tempPhoneNumber = self?.phoneNumberTextField.text
                 self?.viewModel.tempGender = self?.selectedGender?.rawValue
@@ -475,6 +476,13 @@ extension CertificationFormViewController {
         inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, "인증번호 발송", customSessionId))
     }
     
+    private func lockCertificationInputs() {
+        view.endEditing(true)
+        [nameTextField, femaleButton, maleButton, phoneNumberTextField, verificationTextField].forEach {
+            $0.isUserInteractionEnabled = false
+        }
+    }
+
     private func startResendCooldown() {
         sendVerificationButton.updateState(isEnabled: false)
         resendCooldownWorkItem?.cancel()
