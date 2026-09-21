@@ -53,6 +53,10 @@ enum PhoneNumberInput {
     static func acceptedDigits(from rawText: String) -> String {
         return String(rawText.filter { $0.isNumber }.prefix(digitCount))
     }
+
+    static func isComplete(_ text: String) -> Bool {
+        return text.count == digitCount
+    }
 }
 
 enum VerificationCodeInput {

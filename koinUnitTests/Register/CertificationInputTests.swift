@@ -129,6 +129,14 @@ struct PhoneNumberInputTests {
     func 열한_자리를_넘지_않는다() {
         #expect(PhoneNumberInput.acceptedDigits(from: "010123456789999") == "01012345678")
     }
+
+    @Test(
+        "열한 자리를 모두 채워야 완성된 번호로 본다",
+        arguments: [("", false), ("0101234567", false), ("01012345678", true)]
+    )
+    func 열한_자리를_모두_채워야_완성된_번호로_본다(text: String, expected: Bool) {
+        #expect(PhoneNumberInput.isComplete(text) == expected)
+    }
 }
 
 @Suite("VerificationCodeInput - 인증번호 입력")

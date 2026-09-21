@@ -256,7 +256,9 @@ final class CertificationFormViewController: UIViewController {
             case .changeSendVerificationButtonStatus:
                 guard let self else { return }
                 self.phoneNumberReponseLabel.isHidden = true
-                self.sendVerificationButton.updateState(isEnabled: self.sendPolicy.canSend(at: Date()))
+                self.sendVerificationButton.updateState(
+                    isEnabled: self.sendPolicy.canSend(at: Date()) && PhoneNumberInput.isComplete(self.phoneNumberTextField.text ?? "")
+                )
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
             case .correctVerificationCode:
@@ -453,7 +455,9 @@ extension CertificationFormViewController {
     }
     
     @objc private func sendVerificationButtonTapped() {
-        guard sendPolicy.canSend(at: Date()) else { return }
+        guard let phoneNumber = phoneNumberTextField.text,
+              PhoneNumberInput.isComplete(phoneNumber),
+              sendPolicy.canSend(at: Date()) else { return }
 
         timer?.invalidate()
         verificationTimer.reset()
@@ -467,10 +471,6 @@ extension CertificationFormViewController {
         verificationHelpLabel.text = "인증번호 발송이 안 되시나요?"
         verificationHelpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         verificationHelpLabel.textColor = UIColor.appColor(.neutral500)
-        
-        guard let phoneNumber = phoneNumberTextField.text, !phoneNumber.isEmpty else {
-            return
-        }
         
         inputSubject.send(.sendVerificationCode(phoneNumber))
         let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
@@ -491,7 +491,7 @@ extension CertificationFormViewController {
         let workItem = DispatchWorkItem { [weak self] in
             guard let self,
                   self.sendPolicy.canSend(at: Date()),
-                  !(self.phoneNumberTextField.text ?? "").isEmpty else { return }
+                  PhoneNumberInput.isComplete(self.phoneNumberTextField.text ?? "") else { return }
             self.sendVerificationButton.updateState(isEnabled: true)
         }
         resendCooldownWorkItem = workItem
