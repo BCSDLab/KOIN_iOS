@@ -23,7 +23,9 @@ final class StatefulButton: UIButton {
          cornerRadius: CGFloat = 4) {
         super.init(frame: .zero)
         self.enabledColor = enabledColor
+        self.enabledTextColor = enabledTextColor
         self.disabledColor = disabledColor
+        self.disabledTextColor = disabledTextColor
         self.setTitle(title, for: .normal)
         self.titleLabel?.font = font
         self.layer.cornerRadius = cornerRadius

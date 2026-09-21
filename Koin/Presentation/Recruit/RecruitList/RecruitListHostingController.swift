@@ -121,14 +121,20 @@ extension RecruitListHostingController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     private func showRecruitProfile() {
-        // TODO
+        let repository = MockRecruitRepository()
+        let fetchMyProfileUseCase = DefaultFetchMyProfileUseCase(repository: repository)
+        let viewModel = RecruitProfileViewModel(fetchMyProfileUseCase: fetchMyProfileUseCase)
+        let viewController = RecruitProfileHostingController(
+            rootView: RecruitProfileView(viewModel: viewModel)
+        )
+        navigationController?.pushViewController(viewController, animated: true)
     }
     private func showRecruitPost() {
         let recruitRepository = MockRecruitRepository()
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
         let viewModel = RecruitPostViewModel(
-            postType: .post,
+            mode: .post,
             postRecruitUseCase: postRecruitUseCase,
             modifyRecruitUseCase: modifyRecruitUseCase
         )
@@ -214,4 +220,3 @@ extension RecruitListHostingController {
         }
     }
 }
-

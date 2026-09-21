@@ -8,6 +8,73 @@
 import Foundation
 
 final class MockRecruitRepository: RecruitRepository {
+    func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo {
+        try await Task.sleep(nanoseconds: 300_000_000)
+        return basicInfo
+    }
+
+    func postRecruitProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        return RecruitProfile(
+            nickname: "홍길동",
+            department: "컴퓨터공학부",
+            studentNumber: "2023100000",
+            preferredRole: request.preferredRole ?? "",
+            skills: request.skills,
+            activities: request.activities.enumerated().map { index, activity in
+                RecruitProfileActivity(
+                    id: index + 1,
+                    title: activity.title ?? "",
+                    startedAt: activity.startedAt ?? Date(),
+                    endedAt: activity.endedAt,
+                    isOngoing: activity.isOngoing,
+                    description: activity.description ?? ""
+                )
+            },
+            selfIntroduction: request.introduction ?? ""
+        )
+    }
+
+    func fetchMyProfile() async throws -> RecruitProfile {
+        guard UserDataManager.shared.isLoggedIn else {
+            throw ErrorResponse(
+                statusCode: 401,
+                code: "UNAUTHORIZED",
+                message: "로그인이 필요한 기능입니다."
+            )
+        }
+
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+
+        guard let startedAt = dateFormatter.date(from: "2025.03.03"),
+              let endedAt = dateFormatter.date(from: "2025.05.05") else {
+            throw ErrorResponse.dateFormatterFailedConvert
+        }
+
+        return RecruitProfile(
+            nickname: "홍길동",
+            department: "컴퓨터공학부",
+            studentNumber: "2023100000",
+            preferredRole: "기획",
+            skills: ["정보처리기사"],
+            activities: [
+                RecruitProfileActivity(
+                    id: 1,
+                    title: "AI 공모전",
+                    startedAt: startedAt,
+                    endedAt: endedAt,
+                    isOngoing: false,
+                    description: "기획 담당"
+                )
+            ],
+            selfIntroduction: "안녕하세요."
+        )
+    }
+
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
@@ -199,4 +266,3 @@ final class MockRecruitRepository: RecruitRepository {
         
     }
 }
-

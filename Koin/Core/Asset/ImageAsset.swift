@@ -237,6 +237,8 @@ public enum ImageAsset: String {
     case recruitPostMeetingTypeOnline
     case recruitPostRolePlus
     case recruitProfile
+    case recruitProfileMyApplications
+    case recruitProfileMyPosts
     case recruitSearch
     
     // MARK: - Shop

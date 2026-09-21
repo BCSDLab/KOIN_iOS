@@ -11,6 +11,9 @@ import Then
 
 final class RecruitPostSectionHeaderView: UIView {
     
+    // MARK: - Properties
+    private let titleFont: UIFont
+    
     // MARK: - UI Components
     private let titleLabel = UILabel()
     private let isRequiredLabel = UILabel()
@@ -19,9 +22,11 @@ final class RecruitPostSectionHeaderView: UIView {
     // MARK: - Initializer
     init(
         title: String,
+        titleFont: UIFont = .appFont(.pretendardSemiBold, size: 16),
         isRequired: Bool,
         limit: Int? = nil
     ) {
+        self.titleFont = titleFont
         super.init(frame: .zero)
         configureView(
             title,
@@ -61,12 +66,12 @@ extension RecruitPostSectionHeaderView {
     ) {
         titleLabel.do {
             $0.text = title
-            $0.font = .appFont(.pretendardSemiBold, size: 16)
+            $0.font = titleFont
             $0.textColor = .appColor(.neutral800)
         }
         isRequiredLabel.do {
             $0.text = "*"
-            $0.font = .appFont(.pretendardSemiBold, size: 16)
+            $0.font = titleFont
             $0.textColor = .appColor(.new500)
             $0.isHidden = !isRequired
         }

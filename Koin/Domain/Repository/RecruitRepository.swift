@@ -18,4 +18,7 @@ protocol RecruitRepository {
     func modify(_ id: Int, _ request: RecruitPostRequest) async throws -> Void
     func fetchData(_ id: Int) async throws -> RecruitData
     func deleteData(id: Int) async throws -> Bool
+    func fetchMyProfile() async throws -> RecruitProfile
+    func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo
+    func postRecruitProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile
 }
