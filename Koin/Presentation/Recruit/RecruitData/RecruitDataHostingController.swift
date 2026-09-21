@@ -152,7 +152,7 @@ extension RecruitDataHostingController {
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
         let viewModel = RecruitPostViewModel(
-            postType: .modify(data: data),
+            mode: .modify(data: data),
             postRecruitUseCase: postRecruitUseCase,
             modifyRecruitUseCase: modifyRecruitUseCase
         )

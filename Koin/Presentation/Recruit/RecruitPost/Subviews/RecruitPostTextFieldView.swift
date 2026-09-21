@@ -1,5 +1,5 @@
 //
-//  RecruitPostTextFieldView.swift
+//  RecruitTextFieldView.swift
 //  koin
 //
 //  Created by 홍기정 on 8/30/26.
@@ -10,7 +10,7 @@ import Combine
 import SnapKit
 import Then
 
-final class RecruitPostTextFieldView: UIView {
+final class RecruitTextFieldView: UIView {
     
     // MARK: - Properties
     let textChangedPublisher = PassthroughSubject<String?, Never>()
@@ -25,7 +25,8 @@ final class RecruitPostTextFieldView: UIView {
         title: String,
         isRequired: Bool,
         limit: Int?,
-        placeholder: String
+        placeholder: String,
+        keyboardType: UIKeyboardType = .default
     ) {
         self.headerView = RecruitPostSectionHeaderView(
             title: title,
@@ -37,6 +38,7 @@ final class RecruitPostTextFieldView: UIView {
         configureView()
         setAddTargets()
         setUpPlaceholder(placeholder)
+        textField.keyboardType = keyboardType
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -44,12 +46,14 @@ final class RecruitPostTextFieldView: UIView {
     
     // MARK: - Public
     func configure(text: String?) {
-        textField.text = text
+        if textField.text != text {
+            textField.text = text
+        }
         updateCounter(text: text)
     }
 }
 
-extension RecruitPostTextFieldView {
+extension RecruitTextFieldView {
     private func setAddTargets() {
         textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
         textField.addTarget(self, action: #selector(textFieldEditingEnd), for: .editingDidEnd)
@@ -82,7 +86,7 @@ extension RecruitPostTextFieldView {
     }
 }
 
-extension RecruitPostTextFieldView {
+extension RecruitTextFieldView {
     
     private func setUpPlaceholder(_ placeholder: String?) {
         guard let placeholder else { return }

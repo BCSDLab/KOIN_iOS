@@ -10,7 +10,7 @@ import Combine
 
 final class RecruitPostViewModel: ViewModelProtocol {
     
-    enum PostType {
+    enum Mode {
         case post
         case modify(data: RecruitData)
     }
@@ -35,15 +35,15 @@ final class RecruitPostViewModel: ViewModelProtocol {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
-    let postType: PostType
+    let mode: Mode
     
     // MARK: - Initializer
     init(
-        postType: PostType,
+        mode: Mode,
         postRecruitUseCase: PostRecruitUseCase,
         modifyRecruitUseCase: ModifyRecruitUseCase,
     ) {
-        self.postType = postType
+        self.mode = mode
         self.postRecruitUseCase = postRecruitUseCase
         self.modifyRecruitUseCase = modifyRecruitUseCase
     }
@@ -67,7 +67,7 @@ final class RecruitPostViewModel: ViewModelProtocol {
 extension RecruitPostViewModel {
     
     private func applyDataIfModifying() {
-        guard case let .modify(data) = postType else {
+        guard case let .modify(data) = mode else {
             return
         }
         outputSubject.send(.updateForm(data))
@@ -85,7 +85,7 @@ extension RecruitPostViewModel {
                     outputSubject.send(.updateLoading(false))
                 }
                 
-                switch postType {
+                switch mode {
                 case .post:
                     let id = try await postRecruitUseCase.execute(request: request)
                     outputSubject.send(.postCompleted(id: id))

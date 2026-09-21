@@ -13,7 +13,7 @@ import Then
 final class RecruitPostViewController: UIViewController {
     
     private var navigationTitle: String {
-        switch viewModel.postType {
+        switch viewModel.mode {
         case .post:
             return "모집글 작성"
         case .modify:
@@ -21,7 +21,7 @@ final class RecruitPostViewController: UIViewController {
         }
     }
     private var submitButtonTitle: String {
-        switch viewModel.postType {
+        switch viewModel.mode {
         case .post:
             return "등록하기"
         case .modify:
@@ -29,7 +29,7 @@ final class RecruitPostViewController: UIViewController {
         }
     }
     private var completionMessage: String {
-        switch viewModel.postType {
+        switch viewModel.mode {
         case .post:
             return "모집글이 등록되었습니다."
         case .modify:
@@ -53,7 +53,7 @@ final class RecruitPostViewController: UIViewController {
     private let contentStackView = UIStackView()
     
     private let categoryView = RecruitPostCategoryView()
-    private let titleView = RecruitPostTextFieldView(
+    private let titleView = RecruitTextFieldView(
         title: "제목",
         isRequired: true,
         limit: 50,
@@ -68,7 +68,7 @@ final class RecruitPostViewController: UIViewController {
         limit: 1000,
         placeholder: "소개를 작성해주세요."
     )
-    private let relatedUrlView = RecruitPostTextFieldView(
+    private let relatedUrlView = RecruitTextFieldView(
         title: "관련 Url",
         isRequired: false,
         limit: nil,
@@ -401,7 +401,9 @@ extension RecruitPostViewController {
             .sink { [weak self] notification in
                 guard let self else { return }
                 let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect
-                let keyboardMinY = keyboardFrame.map { self.view.convert($0, from: nil).minY } ?? scrollView.frame.maxY
+                let keyboardMinY = keyboardFrame.map { [weak self] in
+                    self?.view.convert($0, from: nil).minY ?? 0
+                } ?? scrollView.frame.maxY
                 let overlap = max(0, scrollView.frame.maxY - keyboardMinY)
                 scrollView.contentInset.bottom = overlap + 16
                 scrollFocusedInputIntoView()

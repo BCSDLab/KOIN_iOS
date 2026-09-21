@@ -11,6 +11,7 @@
 		0E2253358E42231BE436FA27 /* RecruitPostScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */; };
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
 		1537B6CFD3D7AF52A2E9E944 /* RecruitPostMeetingTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F70BC5F3AA1A34663C32CA /* RecruitPostMeetingTypeView.swift */; };
+		247DF973D072E88901E5C249 /* RecruitProfilePostDepartmentDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEABD714DCF0FD2D5DBACD9 /* RecruitProfilePostDepartmentDropdownView.swift */; };
 		2E6336C1CDB4445BA858DA5A /* RecruitDataContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673826738C364FB68ECE18FE /* RecruitDataContentView.swift */; };
 		5006987DEF4B5F454D7EA2D5 /* RecruitPostTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */; };
 		515B96092C6730C797C1F837 /* PostRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */; };
@@ -412,6 +413,9 @@
 		7CB11C7E2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C7D2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift */; };
 		7CB11C802FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB11C7F2FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift */; };
 		7CB2D8B62FDDA7000A9C1234 /* HostingControllerProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB2D8B52FDDA7000A9C1234 /* HostingControllerProtocol.swift */; };
+		7CB8EB4330584FC100300E99 /* RecruitProfilePostFirstStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB8EB4230584FC100300E99 /* RecruitProfilePostFirstStepView.swift */; };
+		7CB8EB4530584FC500300E99 /* RecruitProfilePostSecondStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB8EB4430584FC500300E99 /* RecruitProfilePostSecondStepView.swift */; };
+		7CB8EB48305857A800300E99 /* RecruitDropdownTriggerButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CB8EB47305857A800300E99 /* RecruitDropdownTriggerButton.swift */; };
 		7CBFAF112FBC44CA001D64E3 /* ShopBenefitPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFAF102FBC44CA001D64E3 /* ShopBenefitPageControl.swift */; };
 		7CBFAF152FBC48C6001D64E3 /* ShopBenefitEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFAF142FBC48C6001D64E3 /* ShopBenefitEmptyView.swift */; };
 		7CBFAF172FBC49C9001D64E3 /* ShopBenefitOpenCloseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFAF162FBC49C9001D64E3 /* ShopBenefitOpenCloseView.swift */; };
@@ -472,6 +476,14 @@
 		7CDCD0D43055EA07004204DA /* RecruitProfileEmptyCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0D33055EA07004204DA /* RecruitProfileEmptyCardView.swift */; };
 		7CDCD0D63055EA5B004204DA /* RecruitProfileActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0D53055EA5B004204DA /* RecruitProfileActionButton.swift */; };
 		7CDCD0D83055EECF004204DA /* RecruitProfileActivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0D73055EECF004204DA /* RecruitProfileActivity.swift */; };
+		7CDCD0DB3055EFA7004204DA /* RecruitProfilePostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0DA3055EFA7004204DA /* RecruitProfilePostViewController.swift */; };
+		7CDCD0DD3055EFA9004204DA /* RecruitProfilePostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0DC3055EFA9004204DA /* RecruitProfilePostViewModel.swift */; };
+		7CDCD0E0305602A2004204DA /* RecruitProfileRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0DF305602A2004204DA /* RecruitProfileRequest.swift */; };
+		7CDCD0E2305602F6004204DA /* RecruitProfileActivityRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E1305602F6004204DA /* RecruitProfileActivityRequest.swift */; };
+		7CDCD0E430560758004204DA /* BasicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E330560758004204DA /* BasicInfo.swift */; };
+		7CDCD0E6305695E8004204DA /* RecruitSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E5305695E8004204DA /* RecruitSectionHeaderView.swift */; };
+		7CDCD0E83056A000004204DA /* RecruitProfilePostDepartmentTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E73056A000004204DA /* RecruitProfilePostDepartmentTableView.swift */; };
+		7CDCD0EA3056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E93056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift */; };
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
@@ -805,6 +817,7 @@
 		AA20000000000000000009 /* DiningLoggingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000009 /* DiningLoggingTests.swift */; };
 		AA20000000000000000010 /* DiningTypeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000010 /* DiningTypeTests.swift */; };
 		B0495459FC164809B16A96B6 /* RecruitPostTextViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54351A8A0C1A4046C3155481 /* RecruitPostTextViewView.swift */; };
+		B154A7D97E6AAEC2ED3D8119 /* MockFetchDeptListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E10C78030CB500BD595276 /* MockFetchDeptListUseCase.swift */; };
 		B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* OrderImage.swift */; };
 		B46B8CC22E76CB7300A8E797 /* ShopSummaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */; };
 		B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */; };
@@ -1079,6 +1092,7 @@
 		F0F216EDAA69B52CBEC0E606 /* RecruitPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */; };
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
+		F7F814BB370C922B6D8AA6EF /* RecruitStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */; };
 		FE01000000000000000021 /* KoinDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000011 /* KoinDropdown.swift */; };
 		FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000013 /* KoinDropdownAnimator.swift */; };
 		FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000016 /* KoinDropdownConfiguration.swift */; };
@@ -1120,6 +1134,7 @@
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostTextFieldView.swift; sourceTree = "<group>"; };
 		288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostViewModel.swift; sourceTree = "<group>"; };
+		2DEABD714DCF0FD2D5DBACD9 /* RecruitProfilePostDepartmentDropdownView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostDepartmentDropdownView.swift; sourceTree = "<group>"; };
 		3C3694E3ACBE05B8C7F15357 /* RecruitPostSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostSectionHeaderView.swift; sourceTree = "<group>"; };
 		4EE5F05DAB30AABDF79BC780 /* RecruitPostCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostCategoryView.swift; sourceTree = "<group>"; };
 		5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyRecruitUseCase.swift; sourceTree = "<group>"; };
@@ -1504,6 +1519,9 @@
 		7CB11C7D2FB32A26004E0C80 /* SubscribeLostItemKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscribeLostItemKeywordUseCase.swift; sourceTree = "<group>"; };
 		7CB11C7F2FB32AF1004E0C80 /* UnsubscribeLostItemKeywordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnsubscribeLostItemKeywordUseCase.swift; sourceTree = "<group>"; };
 		7CB2D8B52FDDA7000A9C1234 /* HostingControllerProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HostingControllerProtocol.swift; sourceTree = "<group>"; };
+		7CB8EB4230584FC100300E99 /* RecruitProfilePostFirstStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostFirstStepView.swift; sourceTree = "<group>"; };
+		7CB8EB4430584FC500300E99 /* RecruitProfilePostSecondStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostSecondStepView.swift; sourceTree = "<group>"; };
+		7CB8EB47305857A800300E99 /* RecruitDropdownTriggerButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDropdownTriggerButton.swift; sourceTree = "<group>"; };
 		7CBFAF102FBC44CA001D64E3 /* ShopBenefitPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBenefitPageControl.swift; sourceTree = "<group>"; };
 		7CBFAF142FBC48C6001D64E3 /* ShopBenefitEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBenefitEmptyView.swift; sourceTree = "<group>"; };
 		7CBFAF162FBC49C9001D64E3 /* ShopBenefitOpenCloseView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopBenefitOpenCloseView.swift; sourceTree = "<group>"; };
@@ -1564,6 +1582,14 @@
 		7CDCD0D33055EA07004204DA /* RecruitProfileEmptyCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileEmptyCardView.swift; sourceTree = "<group>"; };
 		7CDCD0D53055EA5B004204DA /* RecruitProfileActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileActionButton.swift; sourceTree = "<group>"; };
 		7CDCD0D73055EECF004204DA /* RecruitProfileActivity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileActivity.swift; sourceTree = "<group>"; };
+		7CDCD0DA3055EFA7004204DA /* RecruitProfilePostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostViewController.swift; sourceTree = "<group>"; };
+		7CDCD0DC3055EFA9004204DA /* RecruitProfilePostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostViewModel.swift; sourceTree = "<group>"; };
+		7CDCD0DF305602A2004204DA /* RecruitProfileRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileRequest.swift; sourceTree = "<group>"; };
+		7CDCD0E1305602F6004204DA /* RecruitProfileActivityRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileActivityRequest.swift; sourceTree = "<group>"; };
+		7CDCD0E330560758004204DA /* BasicInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicInfo.swift; sourceTree = "<group>"; };
+		7CDCD0E5305695E8004204DA /* RecruitSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitSectionHeaderView.swift; sourceTree = "<group>"; };
+		7CDCD0E73056A000004204DA /* RecruitProfilePostDepartmentTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostDepartmentTableView.swift; sourceTree = "<group>"; };
+		7CDCD0E93056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostDepartmentTableViewCell.swift; sourceTree = "<group>"; };
 		7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeviceTokenUseCase.swift; sourceTree = "<group>"; };
 		7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EC42EF2D1F900457128 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -2175,6 +2201,8 @@
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		EC692285302700A400EE26ED /* koinUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitStepView.swift; sourceTree = "<group>"; };
+		F0E10C78030CB500BD595276 /* MockFetchDeptListUseCase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockFetchDeptListUseCase.swift; sourceTree = "<group>"; };
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
@@ -2764,6 +2792,7 @@
 				7CACF873304441AA00AC2828 /* RecruitPost */,
 				7CDCD0AE30556C89004204DA /* RecruitData */,
 				7CDCD0C43055D58B004204DA /* RecruitProfile */,
+				7CDCD0D93055EF87004204DA /* RecruitProfilePost */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2796,6 +2825,9 @@
 				7C50A1D63041F91400897A6F /* RecruitData.swift */,
 				C0DE00000000000000000002 /* RecruitProfile.swift */,
 				7CDCD0D73055EECF004204DA /* RecruitProfileActivity.swift */,
+				7CDCD0DF305602A2004204DA /* RecruitProfileRequest.swift */,
+				7CDCD0E1305602F6004204DA /* RecruitProfileActivityRequest.swift */,
+				7CDCD0E330560758004204DA /* BasicInfo.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -3731,6 +3763,31 @@
 				7CDCD0D33055EA07004204DA /* RecruitProfileEmptyCardView.swift */,
 				7CDCD0D53055EA5B004204DA /* RecruitProfileActionButton.swift */,
 				7CDCD0CF3055E938004204DA /* RecruitProfileActionCardView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CDCD0D93055EF87004204DA /* RecruitProfilePost */ = {
+			isa = PBXGroup;
+			children = (
+				7CDCD0DE3055EFB1004204DA /* Subviews */,
+				7CDCD0DA3055EFA7004204DA /* RecruitProfilePostViewController.swift */,
+				7CDCD0DC3055EFA9004204DA /* RecruitProfilePostViewModel.swift */,
+			);
+			path = RecruitProfilePost;
+			sourceTree = "<group>";
+		};
+		7CDCD0DE3055EFB1004204DA /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7CB8EB4230584FC100300E99 /* RecruitProfilePostFirstStepView.swift */,
+				7CB8EB4430584FC500300E99 /* RecruitProfilePostSecondStepView.swift */,
+				EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */,
+				7CDCD0E5305695E8004204DA /* RecruitSectionHeaderView.swift */,
+				2DEABD714DCF0FD2D5DBACD9 /* RecruitProfilePostDepartmentDropdownView.swift */,
+				7CDCD0E73056A000004204DA /* RecruitProfilePostDepartmentTableView.swift */,
+				7CDCD0E93056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift */,
+				7CB8EB47305857A800300E99 /* RecruitDropdownTriggerButton.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -5518,6 +5575,7 @@
 				D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */,
 				D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */,
 				7CF77B863005F642003642C1 /* FetchMainFrameUseCase.swift */,
+				F0E10C78030CB500BD595276 /* MockFetchDeptListUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -6069,8 +6127,6 @@
 				EC69228A302700A400EE26ED /* PBXTargetDependency */,
 			);
 			name = koinUnitTests;
-			packageProductDependencies = (
-			);
 			productName = koinUnitTests;
 			productReference = EC692285302700A400EE26ED /* koinUnitTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -6260,6 +6316,7 @@
 				D2FB23532BFD47E30098BA2B /* FetchShopCategoryListUseCase.swift in Sources */,
 				D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */,
 				D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */,
+				7CDCD0DB3055EFA7004204DA /* RecruitProfilePostViewController.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				7C0C189F2F68AB33001781B3 /* CallVanChatRequest.swift in Sources */,
 				7CDCD0CB3055D63F004204DA /* RecruitProfileViewModel.swift in Sources */,
@@ -6321,6 +6378,7 @@
 				B46B8CC22E76CB7300A8E797 /* ShopSummaryDto.swift in Sources */,
 				7C50A2053042EF4F00897A6F /* MockRecruitRepository.swift in Sources */,
 				D2D462662D63B98F00C60864 /* LostItemFetchChatRoomUseCase.swift in Sources */,
+				7CDCD0DD3055EFA9004204DA /* RecruitProfilePostViewModel.swift in Sources */,
 				7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */,
 				D2BD36962BAA027A00FAE609 /* TokenRefreshRequest.swift in Sources */,
 				D2D7C0D72C28299200C85A85 /* FetchLandDetailUseCase.swift in Sources */,
@@ -6407,6 +6465,7 @@
 				7C50A1FD3042E9AB00897A6F /* FetchRecruitListUseCase.swift in Sources */,
 				A1D000010000000000000001 /* FetchRecruitDataUseCase.swift in Sources */,
 				D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */,
+				7CB8EB48305857A800300E99 /* RecruitDropdownTriggerButton.swift in Sources */,
 				7C457AE72FCDE7240011D338 /* SwiftUIViewModelProtocol.swift in Sources */,
 				7CDCD0D43055EA07004204DA /* RecruitProfileEmptyCardView.swift in Sources */,
 				833D9C392C7058C300982145 /* NoticeListRepository.swift in Sources */,
@@ -6531,10 +6590,12 @@
 				7CED90CE2EF2D1F900457128 /* ForceModifyUserViewController.swift in Sources */,
 				7CED90CF2EF2D1F900457128 /* ChangeMyProfileViewModel.swift in Sources */,
 				7C0C18912F67FA58001781B3 /* ReportCallVanUserUseCase.swift in Sources */,
+				7CB8EB4330584FC100300E99 /* RecruitProfilePostFirstStepView.swift in Sources */,
 				7CED90D02EF2D1F900457128 /* LostItemChatHistoryTableView.swift in Sources */,
 				7CF77B543003B276003642C1 /* HomeLogoView.swift in Sources */,
 				7C016558300AA3790013DD7B /* DepartmentTask.swift in Sources */,
 				7CED90D12EF2D1F900457128 /* NoticeSearchViewController.swift in Sources */,
+				7CDCD0E430560758004204DA /* BasicInfo.swift in Sources */,
 				7CED90D22EF2D1F900457128 /* TagCollectionViewCell.swift in Sources */,
 				7C50A1CC3041E29000897A6F /* RecruitListFilter.swift in Sources */,
 				7CED90D32EF2D1F900457128 /* LandCollectionView.swift in Sources */,
@@ -6603,6 +6664,7 @@
 				7CED91152EF2D1F900457128 /* LoginViewModel.swift in Sources */,
 				7C7F56B42FFB6A6400847151 /* NotificationPopUpViewController.swift in Sources */,
 				7CED91162EF2D1F900457128 /* ShopSortOptionSheetViewController.swift in Sources */,
+				7CB8EB4530584FC500300E99 /* RecruitProfilePostSecondStepView.swift in Sources */,
 				7CED91172EF2D1F900457128 /* TimetableText+.swift in Sources */,
 				7CED91182EF2D1F900457128 /* LandViewModel.swift in Sources */,
 				7CED911C2EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift in Sources */,
@@ -6710,6 +6772,7 @@
 				7C457B382FCE1BA80011D338 /* HomeHeaderView.swift in Sources */,
 				7C457B3C2FCE1BA80011D338 /* MobilitySmallButton.swift in Sources */,
 				7C457B3D2FCE1BA80011D338 /* CategoryFeaturedButton.swift in Sources */,
+				7CDCD0E0305602A2004204DA /* RecruitProfileRequest.swift in Sources */,
 				7C457B3E2FCE1BA80011D338 /* CategoryRow.swift in Sources */,
 				7C457B3F2FCE1BA80011D338 /* CategorySection.swift in Sources */,
 				7C50A1CF3041F66700897A6F /* RecruitListEmptyView.swift in Sources */,
@@ -6963,6 +7026,7 @@
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
 				7C372EE62F1C0CC400149729 /* LostItemListData.swift in Sources */,
 				7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */,
+				7CDCD0E2305602F6004204DA /* RecruitProfileActivityRequest.swift in Sources */,
 				7CED921A2EF2D1F900457128 /* ShopViewController.swift in Sources */,
 				D86E2E152E7D860E006D63AF /* ShuttleBusTimetable.swift in Sources */,
 				7C01656D300B49F80013DD7B /* DepartmentHostingController.swift in Sources */,
@@ -7239,6 +7303,12 @@
 				831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */,
 				7C6790322FCC00150045E163 /* PopLoggable.swift in Sources */,
 				D249CD2C2C12E32F000813F9 /* DefaultDiningRepository.swift in Sources */,
+				F7F814BB370C922B6D8AA6EF /* RecruitStepView.swift in Sources */,
+				247DF973D072E88901E5C249 /* RecruitProfilePostDepartmentDropdownView.swift in Sources */,
+				7CDCD0E6305695E8004204DA /* RecruitSectionHeaderView.swift in Sources */,
+				7CDCD0E83056A000004204DA /* RecruitProfilePostDepartmentTableView.swift in Sources */,
+				7CDCD0EA3056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift in Sources */,
+				B154A7D97E6AAEC2ED3D8119 /* MockFetchDeptListUseCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -49,11 +49,13 @@ final class RecruitProfileHostingController: UIHostingController<RecruitProfileV
 
 extension RecruitProfileHostingController {
     private func navigateToProfilePost() {
-        // TODO: navigate
+        let controller = makeProfilePostViewController(mode: .post)
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     private func navigateToProfileModify(profile: RecruitProfile) {
-        // TODO: navigate
+        let controller = makeProfilePostViewController(mode: .modify(profile))
+        navigationController?.pushViewController(controller, animated: true)
     }
     
     private func navigateToMyPosts() {
@@ -62,5 +64,17 @@ extension RecruitProfileHostingController {
     
     private func navigateToMyApplications() {
         // TODO: navigate
+    }
+
+    private func makeProfilePostViewController(
+        mode: RecruitProfilePostViewModel.Mode
+    ) -> RecruitProfilePostViewController {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let viewModel = RecruitProfilePostViewModel(
+            fetchDeptListUseCase: MockFetchDeptListUseCase(),
+            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: userRepository),
+            mode: mode
+        )
+        return RecruitProfilePostViewController(viewModel: viewModel)
     }
 }
