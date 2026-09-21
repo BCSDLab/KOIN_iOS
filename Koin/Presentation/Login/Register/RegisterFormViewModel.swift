@@ -48,6 +48,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case showDeptDropDownList([String])
         case changeCheckButtonStatus
         case succesRegister
+        case failRegister(String)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -192,7 +193,7 @@ extension RegisterFormViewModel {
         )
         .sink { [weak self] completion in
             if case let .failure(error) = completion {
-                print("❌ 학생 회원가입 실패: \(error.message), code: \(error.code)")
+                self?.outputSubject.send(.failRegister(error.message))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.succesRegister)
@@ -214,7 +215,7 @@ extension RegisterFormViewModel {
         )
         .sink { [weak self] completion in
             if case let .failure(error) = completion {
-                print("❌ 외부인 회원가입 실패: \(error.message), code: \(error.code)")
+                self?.outputSubject.send(.failRegister(error.message))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.succesRegister)

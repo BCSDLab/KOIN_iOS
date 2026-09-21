@@ -321,6 +321,10 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.success700))
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
                 self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
+            case let .failRegister(message):
+                let alertController = UIAlertController(title: "회원가입 실패", message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "확인", style: .default))
+                self?.present(alertController, animated: true)
             case .succesRegister:
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
