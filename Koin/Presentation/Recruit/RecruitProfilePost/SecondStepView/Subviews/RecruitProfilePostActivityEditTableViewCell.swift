@@ -362,7 +362,7 @@ extension RecruitProfilePostActivityEditTableViewCell {
             $0.textContainer.lineFragmentPadding = 0
         }
         descriptionPlaceholderLabel.do {
-            $0.text = "활동 내용을 입력해주세요."
+            $0.text = "활동 내용을 간단히 작성해주세요."
             $0.font = .appFont(.pretendardRegular, size: 14)
             $0.textColor = .appColor(.neutral500)
         }

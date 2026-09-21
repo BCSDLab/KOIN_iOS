@@ -21,7 +21,12 @@ final class RecruitProfilePostSecondStepView: UIScrollView {
 
     // MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()
+    
+    var isEditing: Bool {
+        activityTableView.hasEditingRow
+    }
 
+    // MARK: - UI Components
     private let contentStackView = UIStackView()
     private let stepView = RecruitStepView(
         firstStepTitle: "기본 정보",
@@ -32,7 +37,7 @@ final class RecruitProfilePostSecondStepView: UIScrollView {
         title: "선호 역할",
         isRequired: true,
         limit: 20,
-        placeholder: "선호 역할을 작서해주세요."
+        placeholder: "선호 역할을 작성해주세요."
     )
     private let skillSectionStackView = UIStackView()
     private let skillHeaderView = RecruitSectionHeaderView(
@@ -50,7 +55,7 @@ final class RecruitProfilePostSecondStepView: UIScrollView {
         title: "자기소개",
         isRequired: true,
         limit: 1000,
-        placeholder: "자기소개를 입력해주세요."
+        placeholder: "자기소개를 작성해주세요."
     )
 
     init() {

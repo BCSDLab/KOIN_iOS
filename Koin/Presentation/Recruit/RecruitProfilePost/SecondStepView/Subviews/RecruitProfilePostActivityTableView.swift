@@ -38,6 +38,13 @@ final class RecruitProfilePostActivityTableView: UITableView {
     private var lastContentHeight: CGFloat = 0
     private var pendingSizeChange: PendingSizeChange?
     
+    var hasEditingRow: Bool {
+        if let _ = rows.first(where: { $0.mode == .editing }) {
+            return true
+        }
+        return false
+    }
+    
     // MARK: - Initializer
     init() {
         super.init(frame: .zero, style: .plain)

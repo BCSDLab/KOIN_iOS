@@ -90,7 +90,7 @@ extension RecruitProfilePostSkillTableViewCell {
             $0.font = .appFont(.pretendardRegular, size: 14)
             $0.textColor = .appColor(.neutral800)
             $0.attributedPlaceholder = NSAttributedString(
-                string: "보유기술 또는 자격증을 입력해주세요.",
+                string: "기술 또는 자격증을 입력해주세요.",
                 attributes: [
                     .font: UIFont.appFont(.pretendardRegular, size: 14),
                     .foregroundColor: UIColor.appColor(.neutral500)

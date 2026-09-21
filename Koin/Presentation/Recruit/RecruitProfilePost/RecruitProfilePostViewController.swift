@@ -303,6 +303,7 @@ extension RecruitProfilePostViewController {
                     options: [.beginFromCurrentState, .allowUserInteraction]
                 ) {
                     self.secondStepView.applyPendingSizeChange()
+                    self.updateCompleteButtonState()
                     self.view.layoutIfNeeded()
                 }
             }
@@ -318,7 +319,7 @@ extension RecruitProfilePostViewController {
     }
 
     private func updateCompleteButtonState() {
-        completeButton.updateState(isEnabled: request.isValid)
+        completeButton.updateState(isEnabled: request.isValid && !secondStepView.isEditing)
     }
 
     private func updateLoading(_ isLoading: Bool) {

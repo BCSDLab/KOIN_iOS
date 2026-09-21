@@ -16,9 +16,9 @@ struct BasicInfo {
 extension BasicInfo {
     var isValid: Bool {
         guard let nickname,
-              !nickname.isEmpty,
+              !nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               let department,
-              !department.isEmpty,
+              !department.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
               let studentNumber,
               !studentNumber.isEmpty else {
             return false
