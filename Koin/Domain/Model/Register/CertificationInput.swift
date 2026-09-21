@@ -19,43 +19,30 @@ struct NameInput: Equatable {
     static let minimumCharacterCount = 2
 
     let acceptedText: String
-    let koreanCharacterCount: Int
-    let englishCharacterCount: Int
 
     init(_ rawText: String) {
-        var koreanCharacterCount = 0
-        var englishCharacterCount = 0
-        var acceptedText = ""
+        let isKoreanName = rawText.first { Self.isKorean($0) || Self.isEnglish($0) }.map(Self.isKorean) ?? true
+        let accepted = rawText.filter(isKoreanName ? Self.isKorean : Self.isEnglish)
+        let limit = isKoreanName ? Self.koreanCharacterLimit : Self.englishCharacterLimit
 
-        for character in rawText {
-            guard let scalar = character.unicodeScalars.first else { continue }
-
-            if (0xAC00...0xD7A3).contains(scalar.value) {
-                if koreanCharacterCount >= Self.koreanCharacterLimit { break }
-                koreanCharacterCount += 1
-                acceptedText.append(character)
-            } else if CharacterSet.letters.contains(scalar) {
-                if englishCharacterCount >= Self.englishCharacterLimit { break }
-                englishCharacterCount += 1
-                acceptedText.append(character)
-            } else {
-                if koreanCharacterCount >= Self.koreanCharacterLimit { break }
-                koreanCharacterCount += 1
-                acceptedText.append(character)
-            }
-        }
-
-        self.acceptedText = acceptedText
-        self.koreanCharacterCount = koreanCharacterCount
-        self.englishCharacterCount = englishCharacterCount
+        self.acceptedText = String(accepted.prefix(limit))
     }
 
     var isTooShort: Bool {
-        return koreanCharacterCount + englishCharacterCount < Self.minimumCharacterCount
+        return acceptedText.count < Self.minimumCharacterCount
     }
 
     var canProceedToPhoneNumber: Bool {
-        return (Self.minimumCharacterCount...Self.koreanCharacterLimit).contains(acceptedText.count)
+        return !isTooShort
+    }
+
+    private static func isKorean(_ character: Character) -> Bool {
+        guard let scalar = character.unicodeScalars.first else { return false }
+        return (0xAC00...0xD7A3).contains(scalar.value) || (0x3131...0x318E).contains(scalar.value)
+    }
+
+    private static func isEnglish(_ character: Character) -> Bool {
+        return character.isASCII && character.isLetter
     }
 }
 

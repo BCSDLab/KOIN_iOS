@@ -74,16 +74,31 @@ final class CertificationFormViewController: UIViewController {
     )
     
     private let nameHelpLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
+        $0.setImageText(
+            image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
+            text: "올바른 양식이 아닙니다. 다시 입력해 주세요.",
+            font: .appFont(.pretendardRegular, size: 12),
+            textColor: .appColor(.new600)
+        )
         $0.isHidden = true
     }
     
     private let femaleButton = UIButton().then {
-        $0.applyRadioStyle(title: "여성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), foregroundColor: .black)
+        $0.applyRadioStyle(
+            title: "여성",
+            font: .appFont(.pretendardRegular, size: 16),
+            image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal),
+            foregroundColor: .black
+        )
     }
     
     private let maleButton = UIButton().then {
-        $0.applyRadioStyle(title: "남성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), foregroundColor: .black)
+        $0.applyRadioStyle(
+            title: "남성",
+            font: .appFont(.pretendardRegular, size: 16),
+            image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal),
+            foregroundColor: .black
+        )
     }
     
     private let phoneNumberLabel = UILabel().then {
@@ -114,7 +129,12 @@ final class CertificationFormViewController: UIViewController {
     }
 
     private let phoneNumberReponseLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
+        $0.setImageText(
+            image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
+            text: "",
+            font: .appFont(.pretendardRegular, size: 12),
+            textColor: .appColor(.new600)
+        )
         $0.numberOfLines = 2
         $0.isHidden = true
     }
@@ -169,7 +189,12 @@ final class CertificationFormViewController: UIViewController {
     }
     
     private let verificationHelpLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
+        $0.setImageText(
+            image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
+            text: "",
+            font: .appFont(.pretendardRegular, size: 12),
+            textColor: .appColor(.new600)
+        )
         $0.isHidden = true
     }
     
@@ -210,6 +235,8 @@ final class CertificationFormViewController: UIViewController {
         super.viewDidLayoutSubviews()
         setUpTextFieldUnderline()
     }
+    
+    // MARK: - Bind
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
