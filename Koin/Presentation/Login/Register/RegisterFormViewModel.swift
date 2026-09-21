@@ -39,12 +39,12 @@ final class RegisterFormViewModel: ViewModelProtocol {
     
     enum Output {
         case showHttpResult(String, ColorAsset)
-        case showIdHttpResult(String, ColorAsset)
+        case showIdHttpResult(loginId: String, message: String, color: ColorAsset)
         case showNicknameHttpResult(String, ColorAsset)
         case changeSendVerificationButtonStatus
         case sendVerificationCodeSuccess(response: SendVerificationCodeDto)
         case correctVerificationCode
-        case successCheckDuplicatedId
+        case successCheckDuplicatedId(loginId: String)
         case showDeptDropDownList([String])
         case changeCheckButtonStatus
         case succesRegister
@@ -149,10 +149,10 @@ extension RegisterFormViewModel {
     private func checkDuplicatedId(loginId: String) {
         checkDuplicatedIdUseCase.execute(loginId: loginId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showIdHttpResult(error.message, .sub500))
+                self?.outputSubject.send(.showIdHttpResult(loginId: loginId, message: error.message, color: .sub500))
             }
         } receiveValue: { [weak self] (_: Void) in
-            self?.outputSubject.send(.successCheckDuplicatedId)
+            self?.outputSubject.send(.successCheckDuplicatedId(loginId: loginId))
         }
         .store(in: &subscriptions)
     }

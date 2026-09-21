@@ -17,7 +17,6 @@ final class EnterFormViewController: UIViewController {
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var formState = EnterFormState()
-    private var requestedLoginId: String?
     private var isUserTypeConstraintsSet = false
     
     // MARK: - UI Components
@@ -279,8 +278,8 @@ final class EnterFormViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let strongSelf = self else { return }
             switch output {
-            case let .showIdHttpResult(message, color):
-                guard !message.isEmpty else { return }
+            case let .showIdHttpResult(loginId, message, _):
+                guard loginId == strongSelf.formState.loginId, !message.isEmpty else { return }
                 self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
@@ -288,8 +287,8 @@ final class EnterFormViewController: UIViewController {
                     font: UIFont.appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.new600)
                 )
-            case .successCheckDuplicatedId:
-                guard strongSelf.requestedLoginId == strongSelf.formState.loginId else { return }
+            case let .successCheckDuplicatedId(loginId):
+                guard loginId == strongSelf.formState.loginId else { return }
                 strongSelf.formState.markIdChecked()
                 strongSelf.updateNextButton()
                 self?.checkIdResponseLabel.isHidden = false
@@ -429,7 +428,6 @@ extension EnterFormViewController {
     }
     
     @objc private func checkDuplicateButtonTapped() {
-        requestedLoginId = formState.loginId
         inputSubject.send(.checkDuplicatedId(formState.loginId))
     }
     
