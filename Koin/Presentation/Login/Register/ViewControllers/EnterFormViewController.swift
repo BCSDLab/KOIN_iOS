@@ -18,6 +18,7 @@ final class EnterFormViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     private var formState = EnterFormState()
     private var requestedLoginId: String?
+    private var isUserTypeConstraintsSet = false
     
     // MARK: - UI Components
     
@@ -403,22 +404,21 @@ extension EnterFormViewController {
         passwordTextField2.isHidden = !isValid
 
         formState.updateFirstPassword(text)
-        updateNextButton()
+        updatePasswordMatch()
     }
     
     @objc private func passwordTextField2DidChange(_ textField: UITextField) {
         guard let secondText = passwordTextField2.text else { return }
 
         formState.updateSecondPassword(secondText)
+        updatePasswordMatch()
+    }
 
-        if formState.isPasswordMatched {
-            correctPasswordLabel.isHidden = false
+    private func updatePasswordMatch() {
+        correctPasswordLabel.isHidden = !formState.isPasswordMatched
 
-            if let userType = viewModel.userType {
-                configureUserTypeSpecificUI(for: userType)
-            }
-        } else {
-            correctPasswordLabel.isHidden = true
+        if let userType = viewModel.userType {
+            setUserTypeSpecificUIHidden(!formState.isPasswordMatched, for: userType)
         }
         updateNextButton()
     }
@@ -581,13 +581,28 @@ extension EnterFormViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [idLabel, idTextField, checkIdDuplicateButton,
-         checkIdResponseLabel, passwordLabel, passwordTextField1,
-         passwordInfoLabel, passwordTextField2, correctPasswordLabel,
-         studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
-         studentIdTextField, studentIdWarningLabel, nicknameTextField,
-         nicknameDuplicateButton, nicknameResponseLabel, studentEmailTextField,
-         koreatechEmailLabel, generalEmailTextField, generalEmailResponseLabel
+        [
+            idLabel,
+            idTextField,
+            checkIdDuplicateButton,
+            checkIdResponseLabel,
+            passwordLabel,
+            passwordTextField1,
+            passwordInfoLabel,
+            passwordTextField2,
+            correctPasswordLabel,
+            studentInfoGuideLabel,
+            departmentDropdownButton,
+            deptDropDown,
+            studentIdTextField,
+            studentIdWarningLabel,
+            nicknameTextField,
+            nicknameDuplicateButton,
+            nicknameResponseLabel,
+            studentEmailTextField,
+            koreatechEmailLabel,
+            generalEmailTextField,
+            generalEmailResponseLabel
         ].forEach {
             contentView.addSubview($0)
         }
@@ -786,21 +801,30 @@ extension EnterFormViewController {
         }
     }
     
-    private func configureUserTypeSpecificUI(for userType: RegisterFormViewModel.UserType) {
+    private func setUserTypeSpecificUIHidden(_ isHidden: Bool, for userType: RegisterFormViewModel.UserType) {
+        if !isHidden && !isUserTypeConstraintsSet {
+            switch userType {
+            case .student: setUpStudentConstraints()
+            case .general: setUpGeneralConstraints()
+            }
+            isUserTypeConstraintsSet = true
+        }
+
+        let fields: [UIView]
+        
         switch userType {
         case .student:
-            [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
-             studentIdTextField, nicknameTextField, nicknameDuplicateButton,
-             studentEmailTextField, koreatechEmailLabel].forEach {
-                $0.isHidden = false
-            }
-            setUpStudentConstraints()
-
+            fields = [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
+                      studentIdTextField, nicknameTextField, nicknameDuplicateButton,
+                      studentEmailTextField, koreatechEmailLabel]
         case .general:
-            [nicknameTextField, nicknameDuplicateButton, generalEmailTextField].forEach {
-                $0.isHidden = false
-            }
-            setUpGeneralConstraints()
+            fields = [nicknameTextField, nicknameDuplicateButton, generalEmailTextField]
+        }
+        
+        fields.forEach { $0.isHidden = isHidden }
+
+        if isHidden {
+            [studentIdWarningLabel, nicknameResponseLabel, generalEmailResponseLabel].forEach { $0.isHidden = true }
         }
 
         view.layoutIfNeeded()
