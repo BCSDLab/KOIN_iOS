@@ -55,6 +55,14 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad:
                 fetchDepartments()
+            
+                switch mode {
+                case .post:
+                    return
+                case .modify(let recruitProfile):
+                    let basicInfo = recruitProfile.toBasicInfo()
+                    self.outputSubject.send(.updateBasicInfo(basicInfo))
+                }
             case .loadUserData:
                 fetchUserData()
             }

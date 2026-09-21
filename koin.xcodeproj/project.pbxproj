@@ -482,8 +482,6 @@
 		7CDCD0E2305602F6004204DA /* RecruitProfileActivityRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E1305602F6004204DA /* RecruitProfileActivityRequest.swift */; };
 		7CDCD0E430560758004204DA /* BasicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E330560758004204DA /* BasicInfo.swift */; };
 		7CDCD0E6305695E8004204DA /* RecruitSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E5305695E8004204DA /* RecruitSectionHeaderView.swift */; };
-		7CDCD0E83056A000004204DA /* RecruitProfilePostDepartmentTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E73056A000004204DA /* RecruitProfilePostDepartmentTableView.swift */; };
-		7CDCD0EA3056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CDCD0E93056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift */; };
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
@@ -1594,8 +1592,6 @@
 		7CDCD0E1305602F6004204DA /* RecruitProfileActivityRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfileActivityRequest.swift; sourceTree = "<group>"; };
 		7CDCD0E330560758004204DA /* BasicInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasicInfo.swift; sourceTree = "<group>"; };
 		7CDCD0E5305695E8004204DA /* RecruitSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitSectionHeaderView.swift; sourceTree = "<group>"; };
-		7CDCD0E73056A000004204DA /* RecruitProfilePostDepartmentTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostDepartmentTableView.swift; sourceTree = "<group>"; };
-		7CDCD0E93056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostDepartmentTableViewCell.swift; sourceTree = "<group>"; };
 		7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeviceTokenUseCase.swift; sourceTree = "<group>"; };
 		7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EC42EF2D1F900457128 /* ShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -3533,8 +3529,6 @@
 				EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */,
 				7CDCD0E5305695E8004204DA /* RecruitSectionHeaderView.swift */,
 				2DEABD714DCF0FD2D5DBACD9 /* RecruitProfilePostDepartmentDropdownView.swift */,
-				7CDCD0E73056A000004204DA /* RecruitProfilePostDepartmentTableView.swift */,
-				7CDCD0E93056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift */,
 				7CB8EB47305857A800300E99 /* RecruitDropdownTriggerButton.swift */,
 			);
 			path = Subviews;
@@ -7348,8 +7342,6 @@
 				F7F814BB370C922B6D8AA6EF /* RecruitStepView.swift in Sources */,
 				247DF973D072E88901E5C249 /* RecruitProfilePostDepartmentDropdownView.swift in Sources */,
 				7CDCD0E6305695E8004204DA /* RecruitSectionHeaderView.swift in Sources */,
-				7CDCD0E83056A000004204DA /* RecruitProfilePostDepartmentTableView.swift in Sources */,
-				7CDCD0EA3056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift in Sources */,
 				A51C00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift in Sources */,
 				A51C00000000000000000002 /* RecruitProfilePostSkillTableView.swift in Sources */,
 				A51C00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift in Sources */,
