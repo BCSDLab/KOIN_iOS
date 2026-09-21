@@ -17,6 +17,7 @@ final class CertificationFormViewController: UIViewController {
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var timer: Timer?
+    private var resendCooldownWorkItem: DispatchWorkItem?
     private var verificationTimer = VerificationTimer()
     private var sendPolicy = VerificationSendPolicy()
     private var selectedGender: Gender?
@@ -252,8 +253,9 @@ final class CertificationFormViewController: UIViewController {
                     self?.showHttpResult(message, labelColor)
                 }
             case .changeSendVerificationButtonStatus:
-                self?.phoneNumberReponseLabel.isHidden = true
-                self?.sendVerificationButton.updateState(isEnabled: true)
+                guard let self else { return }
+                self.phoneNumberReponseLabel.isHidden = true
+                self.sendVerificationButton.updateState(isEnabled: self.sendPolicy.canSend(at: Date()))
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
             case .correctVerificationCode:
@@ -261,6 +263,7 @@ final class CertificationFormViewController: UIViewController {
                 self?.timer?.invalidate()
                 self?.timer = nil
                 self?.timerLabel.isHidden = true
+                self?.resendCooldownWorkItem?.cancel()
                 self?.sendVerificationButton.updateState(isEnabled: false)
                 self?.verificationButton.updateState(isEnabled: false)
                 self?.verificationHelpLabel.setImageText(
@@ -458,6 +461,7 @@ extension CertificationFormViewController {
         
         sendPolicy.markSent(at: Date())
         sendVerificationButton.setTitle(sendPolicy.buttonTitle, for: .normal)
+        startResendCooldown()
         verificationHelpLabel.text = "인증번호 발송이 안 되시나요?"
         verificationHelpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         verificationHelpLabel.textColor = UIColor.appColor(.neutral500)
@@ -471,6 +475,20 @@ extension CertificationFormViewController {
         inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, "인증번호 발송", customSessionId))
     }
     
+    private func startResendCooldown() {
+        sendVerificationButton.updateState(isEnabled: false)
+        resendCooldownWorkItem?.cancel()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self,
+                  self.sendPolicy.canSend(at: Date()),
+                  !(self.phoneNumberTextField.text ?? "").isEmpty else { return }
+            self.sendVerificationButton.updateState(isEnabled: true)
+        }
+        resendCooldownWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + VerificationSendPolicy.resendCooldown, execute: workItem)
+    }
+
     private func startTimer() {
         timerLabel.text = verificationTimer.formattedRemainingTime
         verificationHelpLabel.isHidden = true
