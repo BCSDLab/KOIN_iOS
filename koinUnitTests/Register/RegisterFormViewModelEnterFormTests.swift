@@ -28,30 +28,42 @@ struct RegisterFormViewModelEnterFormTests {
         #expect(spy.receivedLoginIds == [loginId])
     }
 
-    @Test("사용 가능한 아이디면 성공을 알린다")
-    func 사용_가능한_아이디면_성공을_알린다() {
+    @Test("사용 가능한 아이디면 확인한 아이디와 함께 성공을 알린다")
+    func 사용_가능한_아이디면_확인한_아이디와_함께_성공을_알린다() {
         let spy = SpyCheckDuplicatedIdUseCase()
         spy.stubbedResult = .success(())
         let recorder = OutputRecorder(.makeForEnterForm(checkDuplicatedIdUseCase: spy))
 
         recorder.send(.checkDuplicatedId(loginId))
 
-        #expect(recorder.outputs.contains { if case .successCheckDuplicatedId = $0 { return true } else { return false } })
+        #expect(checkedLoginIds(in: recorder) == [loginId])
     }
 
-    @Test("중복된 아이디면 오류 문구를 그대로 전달한다")
-    func 중복된_아이디면_오류_문구를_그대로_전달한다() {
+    @Test("중복된 아이디면 확인한 아이디와 함께 오류 문구를 전달한다")
+    func 중복된_아이디면_확인한_아이디와_함께_오류_문구를_전달한다() {
         let spy = SpyCheckDuplicatedIdUseCase()
         spy.stubbedResult = .failure(ErrorResponse(statusCode: 409, code: "409", message: "이미 사용 중인 아이디입니다."))
         let recorder = OutputRecorder(.makeForEnterForm(checkDuplicatedIdUseCase: spy))
 
         recorder.send(.checkDuplicatedId(loginId))
 
-        let messages = recorder.outputs.compactMap { output -> String? in
-            if case let .showIdHttpResult(message, _) = output { return message }
+        let results = recorder.outputs.compactMap { output -> [String]? in
+            if case let .showIdHttpResult(loginId, message, _) = output { return [loginId, message] }
             return nil
         }
-        #expect(messages == ["이미 사용 중인 아이디입니다."])
+        #expect(results == [[loginId, "이미 사용 중인 아이디입니다."]])
+    }
+
+    @Test("여러 아이디를 확인하면 각 응답이 자기 아이디를 담는다")
+    func 여러_아이디를_확인하면_각_응답이_자기_아이디를_담는다() {
+        let spy = SpyCheckDuplicatedIdUseCase()
+        spy.stubbedResult = .success(())
+        let recorder = OutputRecorder(.makeForEnterForm(checkDuplicatedIdUseCase: spy))
+
+        recorder.send(.checkDuplicatedId("koinusera"))
+        recorder.send(.checkDuplicatedId("koinuserb"))
+
+        #expect(checkedLoginIds(in: recorder) == ["koinusera", "koinuserb"])
     }
 
     // MARK: - 학부 목록
@@ -119,6 +131,15 @@ struct RegisterFormViewModelEnterFormTests {
             return nil
         }
         #expect(messages == ["이미 존재하는 닉네임입니다."])
+    }
+}
+
+extension RegisterFormViewModelEnterFormTests {
+    private func checkedLoginIds(in recorder: OutputRecorder) -> [String] {
+        recorder.outputs.compactMap { output -> String? in
+            if case let .successCheckDuplicatedId(loginId) = output { return loginId }
+            return nil
+        }
     }
 }
 
@@ -235,7 +256,11 @@ struct RegisterFormViewModelRegisterTests {
 
         recorder.send(.tryStudentRegister(studentRequest()))
 
-        #expect(recorder.httpResultMessages == ["서버 오류가 발생했습니다."])
+        let messages = recorder.outputs.compactMap { output -> String? in
+            if case let .failRegister(message) = output { return message }
+            return nil
+        }
+        #expect(messages == ["서버 오류가 발생했습니다."])
     }
 
     @Test("외부인 가입에 실패하면 오류 문구를 전달한다")
@@ -246,7 +271,11 @@ struct RegisterFormViewModelRegisterTests {
 
         recorder.send(.tryGeneralRegister(generalRequest()))
 
-        #expect(recorder.httpResultMessages == ["서버 오류가 발생했습니다."])
+        let messages = recorder.outputs.compactMap { output -> String? in
+            if case let .failRegister(message) = output { return message }
+            return nil
+        }
+        #expect(messages == ["서버 오류가 발생했습니다."])
     }
 
     @Test("가입에 실패하면 성공을 알리지 않는다")
