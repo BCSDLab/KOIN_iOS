@@ -319,6 +319,7 @@ final class EnterFormViewController: UIViewController {
                     text: "사용 가능한 닉네임입니다.",
                     font: .appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.success700))
+                self?.nicknameResponseLabel.isHidden = false
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
                 self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
             case let .failRegister(message):
@@ -499,8 +500,8 @@ extension EnterFormViewController {
     
     @objc private func checkStudentNicknameDuplicateButtonTapped() {
         guard let nicknameText = nicknameTextField.text else { return }
+        nicknameResponseLabel.isHidden = true
         inputSubject.send(.checkDuplicatedNickname(nicknameText))
-        nicknameResponseLabel.isHidden = false
     }
     
     @objc private func studentEmailTextFieldDidChange(_ textField: UITextField) {
