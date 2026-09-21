@@ -13,7 +13,6 @@ struct EnterFormState: Equatable {
     private(set) var isIdChecked = false
     private(set) var firstPassword = ""
     private(set) var secondPassword = ""
-    private(set) var isPasswordMatched = false
     private(set) var studentNumber = ""
 
     mutating func updateLoginId(_ rawText: String) {
@@ -34,11 +33,14 @@ struct EnterFormState: Equatable {
 
     mutating func updateSecondPassword(_ text: String) {
         secondPassword = text
-        isPasswordMatched = !text.isEmpty && text == firstPassword
     }
 
     mutating func updateStudentNumber(_ rawText: String) {
         studentNumber = StudentNumberInput.acceptedDigits(from: rawText)
+    }
+
+    var isPasswordMatched: Bool {
+        return !secondPassword.isEmpty && secondPassword == firstPassword
     }
 
     var canCheckIdDuplicate: Bool {
