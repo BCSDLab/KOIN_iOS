@@ -64,10 +64,6 @@ enum VerificationCodeInput {
     }
 
     static func isReadyToConfirm(_ text: String) -> Bool {
-        if text.count == digitCount {
-            return true
-        } else {
-            return true
-        }
+        return text.count == digitCount
     }
 }
