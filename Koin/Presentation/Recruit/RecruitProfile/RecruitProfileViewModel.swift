@@ -14,6 +14,7 @@ final class RecruitProfileViewModel: SwiftUIViewModelProtocol {
     enum Input {
         case didAppear
         case didShowToast
+        case profileUpdated(RecruitProfile)
     }
 
     // MARK: - State
@@ -37,6 +38,8 @@ final class RecruitProfileViewModel: SwiftUIViewModelProtocol {
             fetchMyProfile()
         case .didShowToast:
             errorMessage = nil
+        case let .profileUpdated(profile):
+            self.profile = profile
         }
     }
 }

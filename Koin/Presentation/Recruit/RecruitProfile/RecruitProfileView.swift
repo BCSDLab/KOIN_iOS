@@ -24,6 +24,11 @@ struct RecruitProfileView: ActionBindableView {
     init(viewModel: RecruitProfileViewModel) {
         self.viewModel = viewModel
     }
+    
+    // MARK: - Public
+    func updateProfile(_ profile: RecruitProfile) {
+        viewModel.execute(.profileUpdated(profile))
+    }
 
     // MARK: - Body
     var body: some View {
@@ -65,7 +70,7 @@ struct RecruitProfileView: ActionBindableView {
         }
         .background(Color.appColor(.newBackground).ignoresSafeArea())
         .loadingOverlay(viewModel.isLoading)
-        .onAppear {
+        .onFirstAppear {
             viewModel.execute(.didAppear)
         }
         .onChange(of: viewModel.errorMessage) {

@@ -852,6 +852,8 @@
 		BAD01845AA334A648E2FA2BD /* RecruitDataHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBC0EF8E0FE44F48744BEC7 /* RecruitDataHeaderView.swift */; };
 		C0DE00000000000000000001 /* RecruitProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000002 /* RecruitProfile.swift */; };
 		C0DE00000000000000000003 /* FetchMyProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000004 /* FetchMyProfileUseCase.swift */; };
+		A11B00000000000000000001 /* PostBasicInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B00000000000000000002 /* PostBasicInfoUseCase.swift */; };
+		A11B00000000000000000003 /* PostRecruitProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B00000000000000000004 /* PostRecruitProfileUseCase.swift */; };
 		C1838F7A4424DEA14DB2D107 /* RecruitPostCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5F05DAB30AABDF79BC780 /* RecruitPostCategoryView.swift */; };
 		CD3000000000000000000001 /* RecruitPostCategoryDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */; };
 		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
@@ -1965,6 +1967,8 @@
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
 		C0DE00000000000000000002 /* RecruitProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfile.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000004 /* FetchMyProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyProfileUseCase.swift; sourceTree = "<group>"; };
+		A11B00000000000000000002 /* PostBasicInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBasicInfoUseCase.swift; sourceTree = "<group>"; };
+		A11B00000000000000000004 /* PostRecruitProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitProfileUseCase.swift; sourceTree = "<group>"; };
 		CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostCategoryDropdownView.swift; sourceTree = "<group>"; };
 		D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownHost.swift; sourceTree = "<group>"; };
 		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
@@ -5220,6 +5224,8 @@
 			isa = PBXGroup;
 			children = (
 				C0DE00000000000000000004 /* FetchMyProfileUseCase.swift */,
+				A11B00000000000000000002 /* PostBasicInfoUseCase.swift */,
+				A11B00000000000000000004 /* PostRecruitProfileUseCase.swift */,
 			);
 			path = RecruitProfile;
 			sourceTree = "<group>";
@@ -6358,6 +6364,8 @@
 				7CDCD0CB3055D63F004204DA /* RecruitProfileViewModel.swift in Sources */,
 				C0DE00000000000000000001 /* RecruitProfile.swift in Sources */,
 				C0DE00000000000000000003 /* FetchMyProfileUseCase.swift in Sources */,
+				A11B00000000000000000001 /* PostBasicInfoUseCase.swift in Sources */,
+				A11B00000000000000000003 /* PostRecruitProfileUseCase.swift in Sources */,
 				D2D7C0DD2C282E2700C85A85 /* DefaultLandRepository.swift in Sources */,
 				7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */,
 				7CC42B132F56AB9D00940CE1 /* CallVanListCollectionView.swift in Sources */,

@@ -8,6 +8,34 @@
 import Foundation
 
 final class MockRecruitRepository: RecruitRepository {
+    func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo {
+        try await Task.sleep(nanoseconds: 300_000_000)
+        return basicInfo
+    }
+
+    func postRecruitProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        return RecruitProfile(
+            nickname: "홍길동",
+            department: "컴퓨터공학부",
+            studentNumber: "2023100000",
+            preferredRole: request.preferredRole ?? "",
+            skills: request.skills,
+            activities: request.activities.enumerated().map { index, activity in
+                RecruitProfileActivity(
+                    id: index + 1,
+                    title: activity.title ?? "",
+                    startedAt: activity.startedAt ?? Date(),
+                    endedAt: activity.endedAt,
+                    isOngoing: activity.isOngoing,
+                    description: activity.description ?? ""
+                )
+            },
+            selfIntroduction: request.introduction ?? ""
+        )
+    }
+
     func fetchMyProfile() async throws -> RecruitProfile {
         guard UserDataManager.shared.isLoggedIn else {
             throw ErrorResponse(

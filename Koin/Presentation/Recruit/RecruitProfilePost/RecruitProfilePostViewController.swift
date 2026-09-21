@@ -14,6 +14,7 @@ final class RecruitProfilePostViewController: UIViewController {
 
     // MARK: - Properties
     private let viewModel: RecruitProfilePostViewModel
+    private let onCompleted: (RecruitProfile) -> Void
     private let inputSubject = PassthroughSubject<RecruitProfilePostViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
     
@@ -51,6 +52,14 @@ final class RecruitProfilePostViewController: UIViewController {
             return "저장하기"
         case .modify:
             return "수정하기"
+        }
+    }
+    private var completionMessage: String {
+        switch viewModel.mode {
+        case .post:
+            return "프로필이 저장되었습니다."
+        case .modify:
+            return "프로필이 수정되었습니다."
         }
     }
 
@@ -99,8 +108,12 @@ final class RecruitProfilePostViewController: UIViewController {
     )
 
     // MARK: - Initializer
-    init(viewModel: RecruitProfilePostViewModel) {
+    init(
+        viewModel: RecruitProfilePostViewModel,
+        onCompleted: @escaping (RecruitProfile) -> Void
+    ) {
         self.viewModel = viewModel
+        self.onCompleted = onCompleted
         switch viewModel.mode {
         case .post:
             self.request = RecruitProfileRequest()
@@ -157,7 +170,8 @@ extension RecruitProfilePostViewController {
             return
         }
         let rightButtonAction = { [weak self] in
-            /* do something */
+            guard let self else { return }
+            inputSubject.send(.submit(basicInfo: basicInfo, request: request))
         }
         let modalViewController = KoinModalViewController(
             configuration: .init(
@@ -206,6 +220,10 @@ extension RecruitProfilePostViewController {
                     configureBasicInfo(info)
                 case let .updateDepartments(departments):
                     departmentDropdownContentView.configure(departments: departments)
+                case let .updateLoading(isLoading):
+                    updateLoading(isLoading)
+                case let .postCompleted(profile):
+                    handleCompletion(profile)
                 case let .showToast(message):
                     showToastMessage(message: message, bottomInset: 72)
                 }
@@ -301,6 +319,23 @@ extension RecruitProfilePostViewController {
 
     private func updateCompleteButtonState() {
         completeButton.updateState(isEnabled: request.isValid)
+    }
+
+    private func updateLoading(_ isLoading: Bool) {
+        view.isUserInteractionEnabled = !isLoading
+        navigationController?.view.isUserInteractionEnabled = !isLoading
+
+        if isLoading {
+            IndicatorView.show()
+        } else {
+            IndicatorView.dismiss()
+        }
+    }
+    
+    private func handleCompletion(_ profile: RecruitProfile) {
+        onCompleted(profile)
+        navigationController?.popViewController(animated: true)
+        showToastMessage(message: completionMessage)
     }
 }
 

@@ -18,11 +18,14 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case loadUserData
+        case submit(basicInfo: BasicInfo, request: RecruitProfileRequest)
     }
 
     enum Output {
         case updateBasicInfo(BasicInfo)
         case updateDepartments([String])
+        case updateLoading(Bool)
+        case postCompleted(RecruitProfile)
         case showToast(String)
     }
 
@@ -32,19 +35,26 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
     // MARK: - UseCase
     private let fetchDeptListUseCase: FetchDeptListUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
+    private let postBasicInfoUseCase: PostBasicInfoUseCase
+    private let postRecruitProfileUseCase: PostRecruitProfileUseCase
 
     // MARK: - Publisher
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
+    private var isSubmitting = false
 
     // MARK: - Initializer
     init(
         fetchDeptListUseCase: FetchDeptListUseCase,
         fetchUserDataUseCase: FetchUserDataUseCase,
+        postBasicInfoUseCase: PostBasicInfoUseCase,
+        postRecruitProfileUseCase: PostRecruitProfileUseCase,
         mode: Mode
     ) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
+        self.postBasicInfoUseCase = postBasicInfoUseCase
+        self.postRecruitProfileUseCase = postRecruitProfileUseCase
         self.mode = mode
     }
 
@@ -65,6 +75,8 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
                 }
             case .loadUserData:
                 fetchUserData()
+            case let .submit(basicInfo, request):
+                submit(basicInfo: basicInfo, request: request)
             }
         }
         .store(in: &subscriptions)
@@ -107,5 +119,30 @@ extension RecruitProfilePostViewModel {
                 }
             )
             .store(in: &subscriptions)
+    }
+
+    private func submit(
+        basicInfo: BasicInfo,
+        request: RecruitProfileRequest
+    ) {
+        guard !isSubmitting else { return }
+
+        isSubmitting = true
+        outputSubject.send(.updateLoading(true))
+
+        Task {
+            do {
+                _ = try await postBasicInfoUseCase.execute(basicInfo: basicInfo)
+                let profile = try await postRecruitProfileUseCase.execute(request: request)
+                isSubmitting = false
+                outputSubject.send(.updateLoading(false))
+                outputSubject.send(.postCompleted(profile))
+            } catch {
+                isSubmitting = false
+                outputSubject.send(.updateLoading(false))
+                let message = (error as? ErrorResponse)?.message ?? "프로필 저장에 실패했습니다."
+                outputSubject.send(.showToast(message))
+            }
+        }
     }
 }
