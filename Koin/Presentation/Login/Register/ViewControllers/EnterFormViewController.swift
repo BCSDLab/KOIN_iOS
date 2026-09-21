@@ -12,11 +12,13 @@ import Combine
 final class EnterFormViewController: UIViewController {
     
     // MARK: - Properties
+    
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
     }
@@ -25,19 +27,19 @@ final class EnterFormViewController: UIViewController {
     
     private let stepTextLabel = UILabel().then {
         $0.text = "4. 정보 입력"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let stepLabel = UILabel().then {
         $0.text = "4 / 4"
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = UIFont.appFont(.pretendardMedium, size: 16)
     }
     
     private let progressView = UIProgressView().then {
         $0.trackTintColor = UIColor.appColor(.neutral200)
-        $0.progressTintColor = UIColor.appColor(.primary500)
+        $0.progressTintColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 4
         $0.clipsToBounds = true
         $0.progress = 1
@@ -65,12 +67,15 @@ final class EnterFormViewController: UIViewController {
         placeholder: "5~13자리로 입력해 주세요.",
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
-    )
+    ).then {
+        $0.autocorrectionType = .no
+        $0.textContentType = .oneTimeCode
+    }
     
     private let checkIdDuplicateButton = StatefulButton(
         title: "중복 확인",
         font: .appFont(.pretendardRegular, size: 10),
-        enabledColor: .appColor(.primary500),
+        enabledColor: .appColor(.new500),
         disabledColor: .appColor(.neutral300),
         cornerRadius: 4
     ).then {
@@ -99,10 +104,12 @@ final class EnterFormViewController: UIViewController {
         font: UIFont.appFont(.pretendardRegular, size: 13)
     ).then {
         $0.isSecureTextEntry = true
+        $0.autocorrectionType = .no
+        $0.textContentType = .oneTimeCode
     }
     
     private let passwordInfoLabel: UILabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 비밀번호 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
@@ -112,6 +119,8 @@ final class EnterFormViewController: UIViewController {
         font: UIFont.appFont(.pretendardRegular, size: 13)
     ).then {
         $0.isSecureTextEntry = true
+        $0.autocorrectionType = .no
+        $0.textContentType = .oneTimeCode
         $0.isHidden = true
     }
     
@@ -159,11 +168,12 @@ final class EnterFormViewController: UIViewController {
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
     ).then {
+        $0.keyboardType = .numberPad
         $0.isHidden = true
     }
     
     private let studentIdWarningLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 학번 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 학번 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
@@ -178,7 +188,7 @@ final class EnterFormViewController: UIViewController {
     private let nicknameDuplicateButton = StatefulButton(
         title: "중복 확인",
         font: .appFont(.pretendardRegular, size: 10),
-        enabledColor: .appColor(.primary500),
+        enabledColor: .appColor(.new500),
         disabledColor: .appColor(.neutral300),
         cornerRadius: 4
     ).then {
@@ -187,7 +197,7 @@ final class EnterFormViewController: UIViewController {
     }
     
     private let nicknameResponseLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "중복된 닉네임입니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "이미 존재하는 닉네임입니다..", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
@@ -215,11 +225,12 @@ final class EnterFormViewController: UIViewController {
     }
     
     private let generalEmailResponseLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange), text: "올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.sub500))
+        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 이메일 형식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
         $0.isHidden = true
     }
     
     // MARK: - Init
+    
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -231,6 +242,7 @@ final class EnterFormViewController: UIViewController {
     }
 
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -257,6 +269,8 @@ final class EnterFormViewController: UIViewController {
         setUpTextFieldUnderline()
     }
     
+    // MARK: - Bind
+    
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
@@ -266,10 +280,10 @@ final class EnterFormViewController: UIViewController {
                 guard !message.isEmpty else { return }
                 self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
-                    image: UIImage.appImage(asset: .warningOrange),
+                    image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
                     text: message,
                     font: UIFont.appFont(.pretendardRegular, size: 12),
-                    textColor: .appColor(.sub500)
+                    textColor: .appColor(.new600)
                 )
             case .successCheckDuplicatedId:
                 self?.checkIdResponseLabel.isHidden = false
@@ -285,13 +299,13 @@ final class EnterFormViewController: UIViewController {
             case let .showDeptDropDownList(deptList):
                 self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
             case let .showNicknameHttpResult(message, color):
-                self?.nicknameResponseLabel.isHidden = false
                 self?.nicknameResponseLabel.setImageText(
-                    image: UIImage.appImage(asset: .warningOrange),
+                    image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
                     text: message,
                     font: UIFont.appFont(.pretendardRegular, size: 12),
-                    textColor: .appColor(.sub500)
+                    textColor: .appColor(.new600)
                 )
+                self?.nicknameResponseLabel.isHidden = false
             case .changeCheckButtonStatus:
                 self?.nicknameDuplicateButton.updateState(isEnabled: false)
                 self?.nicknameResponseLabel.setImageText(
@@ -301,8 +315,6 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.success700))
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
                 self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
-            case let .showUserType(type):
-                self?.configureUserTypeSpecificUI(for: type)
             case .succesRegister:
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
@@ -334,56 +346,6 @@ final class EnterFormViewController: UIViewController {
         generalEmailTextField.addTarget(self, action: #selector(generalEmailTextFieldDidChange(_:)), for: .editingChanged)
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
-    
-    func tryRegister() {
-        guard let loginId = idTextField.text,
-              let password = passwordTextField1.text,
-              let userType = viewModel.userType else { return }
-
-        let nicknameText = nicknameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let nickname = (nicknameText?.isEmpty == true) ? nil : nicknameText
-
-        switch userType {
-        case .student:
-            guard let dept = departmentDropdownButton.titleLabel?.text,
-                  let studentNumber = studentIdTextField.text else { return }
-
-            let emailText = studentEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let email = (emailText?.isEmpty == true) ? nil : emailText
-
-            let request = StudentRegisterFormRequest(
-                name: viewModel.tempName ?? "",
-                phoneNumber: viewModel.tempPhoneNumber ?? "",
-                loginId: loginId,
-                password: password,
-                department: dept,
-                studentNumber: studentNumber,
-                gender: viewModel.tempGender ?? "",
-                email: email,
-                nickname: nickname
-            )
-
-            viewModel.transform(with: Just(.tryStudentRegister(request)).eraseToAnyPublisher())
-                .sink { _ in }.store(in: &subscriptions)
-
-        case .general:
-            let emailText = generalEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let email = (emailText?.isEmpty == true) ? nil : emailText
-
-            let request = GeneralRegisterFormRequest(
-                name: viewModel.tempName ?? "",
-                phoneNumber: viewModel.tempPhoneNumber ?? "",
-                loginId: loginId,
-                gender: viewModel.tempGender ?? "",
-                password: password,
-                email: email,
-                nickname: nickname
-            )
-
-            viewModel.transform(with: Just(.tryGeneralRegister(request)).eraseToAnyPublisher())
-                .sink { _ in }.store(in: &subscriptions)
-        }
-    }
 }
 
 extension EnterFormViewController {
@@ -399,10 +361,13 @@ extension EnterFormViewController {
 
     @objc private func keyboardWillShow(_ notification: Notification) {
         guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+            return
+        }
+        let bottomInset = keyboardFrame.height - (view.frame.height - nextButton.frame.minY)
         
-        scrollView.contentInset.bottom = keyboardFrame.height
-        scrollView.verticalScrollIndicatorInsets.bottom = keyboardFrame.height
+        scrollView.contentInset.bottom = bottomInset
+        scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
     }
 
     @objc private func keyboardWillHide(_ notification: Notification) {
@@ -413,24 +378,16 @@ extension EnterFormViewController {
     @objc private func idTextFieldDidChange(_ textField: UITextField) {
         guard let input = textField.text else { return }
 
-        let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789_.-")
-        let filtered = input.lowercased().filter {
-            guard let scalar = $0.unicodeScalars.first else { return false }
-            return allowedCharacterSet.contains(scalar)
-        }
+        let acceptedText = LoginIdInput.acceptedText(from: input)
+        textField.text = acceptedText
 
-        let trimmed = String(filtered.prefix(13))
-        textField.text = trimmed
-
-        let isValid = textField.isValidIdFormat()
-
-        checkIdDuplicateButton.updateState(isEnabled: isValid)
+        checkIdDuplicateButton.updateState(isEnabled: LoginIdInput.isValid(acceptedText))
     }
     
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let isValid = textField.isValidPasswordFormat()
+        let isValid = PasswordInput.isValid(text)
 
         passwordInfoLabel.isHidden = isValid
         passwordTextField2.isHidden = !isValid
@@ -492,24 +449,15 @@ extension EnterFormViewController {
     @objc private func studentIdTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let numericText = text.filter { $0.isNumber }
-        let trimmedText = String(numericText.prefix(10))
-        textField.text = trimmedText
+        let acceptedDigits = StudentNumberInput.acceptedDigits(from: text)
+        textField.text = acceptedDigits
 
-        let yearPart = String(trimmedText.prefix(4))
-        let isYearValid: Bool = {
-            guard let year = Int(yearPart) else { return false }
-            let currentYear = Calendar.current.component(.year, from: Date())
-            return (1991...currentYear).contains(year)
-        }()
-
-        let isLengthValid = trimmedText.count >= 8 && trimmedText.count <= 10
-        let isValid = isLengthValid && isYearValid
+        let isValid = StudentNumberInput.isValid(acceptedDigits)
         studentIdWarningLabel.isHidden = isValid
         
         if isValid {
             nextButton.isEnabled = true
-            nextButton.backgroundColor = UIColor.appColor(.primary500)
+            nextButton.backgroundColor = UIColor.appColor(.new500)
             nextButton.setTitleColor(.white, for: .normal)
         } else {
             nextButton.isEnabled = false
@@ -525,11 +473,10 @@ extension EnterFormViewController {
     @objc private func nicknameTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let trimmedText = String(text.prefix(10))
-        textField.text = trimmedText
+        let acceptedText = NicknameInput.acceptedText(from: text)
+        textField.text = acceptedText
 
-        let isValid = !trimmedText.isEmpty && trimmedText.count <= 10
-        nicknameDuplicateButton.updateState(isEnabled: isValid)
+        nicknameDuplicateButton.updateState(isEnabled: NicknameInput.canCheckDuplicate(acceptedText))
     }
     
     @objc private func checkStudentNicknameDuplicateButtonTapped() {
@@ -540,19 +487,16 @@ extension EnterFormViewController {
     
     @objc private func studentEmailTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789._-")
-        let filteredText = text.filter { String($0).rangeOfCharacter(from: allowedCharacterSet) != nil }
-        let trimmedText = String(filteredText.prefix(30))
-        textField.text = trimmedText
+        textField.text = StudentEmailInput.acceptedText(from: text)
     }
     
     @objc private func generalEmailTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         
-        let trimmedText = String(text.prefix(30))
-        textField.text = trimmedText
+        let acceptedText = GeneralEmailInput.acceptedText(from: text)
+        textField.text = acceptedText
 
-        generalEmailResponseLabel.isHidden = trimmedText.isValidEmailFormat
+        generalEmailResponseLabel.isHidden = GeneralEmailInput.isValid(acceptedText)
     }
     
     @objc private func nextButtonTapped() {
@@ -608,11 +552,12 @@ extension EnterFormViewController {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = textField.text ?? ""
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
-        return newText.count <= 18
+        return newText.count <= PasswordInput.maxLength
     }
 }
 
-// MARK: UI Settings
+// MARK: - UI Settings
+
 extension EnterFormViewController {
     private func setUpLayouts() {
         [stepTextLabel, stepLabel, progressView, nextButton].forEach {
@@ -690,7 +635,7 @@ extension EnterFormViewController {
         }
         
         checkIdResponseLabel.snp.makeConstraints {
-            $0.top.equalTo(idTextField.snp.bottom).offset(8)
+            $0.top.equalTo(idTextField.snp.bottom)
             $0.leading.equalTo(idTextField.snp.leading).offset(4)
             $0.height.equalTo(20)
         }
@@ -757,7 +702,7 @@ extension EnterFormViewController {
         }
         
         nicknameTextField.snp.makeConstraints {
-            $0.top.equalTo(studentIdTextField.snp.bottom).offset(8)
+            $0.top.equalTo(studentIdTextField.snp.bottom).offset(20)
             $0.leading.equalTo(departmentDropdownButton.snp.leading)
             $0.trailing.equalTo(nicknameDuplicateButton.snp.leading).offset(-16)
             $0.height.equalTo(40)
@@ -777,7 +722,7 @@ extension EnterFormViewController {
         }
         
         studentEmailTextField.snp.makeConstraints {
-            $0.top.equalTo(nicknameTextField.snp.bottom).offset(8)
+            $0.top.equalTo(nicknameTextField.snp.bottom).offset(20)
             $0.leading.equalTo(departmentDropdownButton.snp.leading)
             $0.trailing.equalToSuperview().offset(-126)
             $0.height.equalTo(40)
@@ -844,7 +789,7 @@ extension EnterFormViewController {
             setUpGeneralConstraints()
 
             nextButton.isEnabled = true
-            nextButton.backgroundColor = UIColor.appColor(.primary500)
+            nextButton.backgroundColor = UIColor.appColor(.new500)
             nextButton.setTitleColor(.white, for: .normal)
         }
 

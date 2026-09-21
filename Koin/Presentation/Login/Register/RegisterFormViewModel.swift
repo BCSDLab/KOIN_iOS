@@ -10,7 +10,7 @@ import Combine
 final class RegisterFormViewModel: ViewModelProtocol {
     var tempName: String?
     var tempPhoneNumber: String?
-    var tempGender: String? // "0" = 남성, "1" = 여성
+    var tempGender: String?
     private(set) var userType: UserType?
 
     func selectUserType(_ type: UserType) {
@@ -48,7 +48,6 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case showDeptDropDownList([String])
         case changeCheckButtonStatus
         case succesRegister
-        case showUserType(UserType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -106,7 +105,7 @@ extension RegisterFormViewModel {
     private func checkDuplicatedPhoneNumber(phone: String) {
         checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showHttpResult(error.message, .sub500))
+                self?.outputSubject.send(.showHttpResult(error.message, .new600))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.changeSendVerificationButtonStatus)
@@ -169,7 +168,7 @@ extension RegisterFormViewModel {
     private func checkDuplicatedNickname(nickname: String) {
         checkDuplicatedNicknameUseCase.execute(nickname: nickname).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showHttpResult(error.message, .danger700))
+                self?.outputSubject.send(.showNicknameHttpResult(error.message, .new600))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.changeCheckButtonStatus)

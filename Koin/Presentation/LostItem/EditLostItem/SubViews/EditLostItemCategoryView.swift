@@ -13,7 +13,6 @@ final class EditLostItemCategoryView: UIView {
     // MARK: - Properties
     @Published private(set) var selectedCategory: String = ""
     private var subscriptions: Set<AnyCancellable> = []
-    let dismissDropDownPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     private let categoryLabel = UILabel().then {
@@ -84,7 +83,6 @@ extension EditLostItemCategoryView {
     
     @objc private func buttonTapped(_ sender: EditLostItemButton) {
         selectedCategory = sender.title
-        dismissDropDownPublisher.send()
         endEditing(true)
     }
 }

@@ -22,6 +22,12 @@ enum LostItemAPI {
     case fetchKeywordSuggestion
     case fetchMyKeyword
     case unsubscribeKeyword(Int)
+
+    case fetchChatRoom
+    case fetchChatDetail(Int, Int)
+    case blockUser(Int, Int)
+    case createChatRoom(Int)
+    case postChatDetail(Int, Int, LostItemPostChatDetailRequest)
 }
 
 extension LostItemAPI: Router, URLRequestConvertible {
@@ -44,6 +50,12 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .fetchKeywordSuggestion: return "/articles/keyword/suggestions?type=LOST_ITEM"
         case .fetchMyKeyword: return "/articles/keyword/me?type=LOST_ITEM"
         case .unsubscribeKeyword(let id): return "/articles/keyword/\(id)"
+
+        case .fetchChatRoom: return "/chatroom/lost-item"
+        case .fetchChatDetail(let articleId, let chatRoomId): return "/chatroom/lost-item/\(articleId)/\(chatRoomId)/messages"
+        case .blockUser(let articleId, let chatRoomId): return "/chatroom/lost-item/\(articleId)/\(chatRoomId)/block"
+        case .createChatRoom(let articleId): return "/chatroom/lost-item/\(articleId)"
+        case .postChatDetail(let articleId, let chatRoomId, _): return "/v2/chatroom/lost-item/\(articleId)/\(chatRoomId)/messages"
         }
     }
     
@@ -62,11 +74,19 @@ extension LostItemAPI: Router, URLRequestConvertible {
         case .fetchKeywordSuggestion: return .get
         case .fetchMyKeyword: return .get
         case .unsubscribeKeyword: return .delete
+
+        case .fetchChatRoom, .fetchChatDetail: return .get
+        case .blockUser, .createChatRoom, .postChatDetail: return .post
         }
     }
     
     public var headers: [String: String] {
-        return [:]
+        switch self {
+        case .createChatRoom, .postChatDetail:
+            return ["Content-Type": "application/json"]
+        default:
+            return [:]
+        }
     }
     
     public var parameters: Any? {
@@ -86,6 +106,11 @@ extension LostItemAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .fetchKeywordSuggestion, .fetchMyKeyword, .unsubscribeKeyword:
             return nil
+
+        case .fetchChatRoom, .fetchChatDetail, .blockUser, .createChatRoom:
+            return nil
+        case .postChatDetail(_, _, let request):
+            return try? JSONEncoder().encode(request)
         }
     }
     
@@ -104,6 +129,10 @@ extension LostItemAPI: Router, URLRequestConvertible {
             return JSONEncoding.default
         case .fetchKeywordSuggestion, .fetchMyKeyword, .unsubscribeKeyword:
             return nil
+
+        case .fetchChatRoom: return URLEncoding.default
+        case .postChatDetail: return JSONEncoding.default
+        case .fetchChatDetail, .blockUser, .createChatRoom: return nil
         }
     }
 }

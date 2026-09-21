@@ -16,9 +16,11 @@ enum HomeCategoryItem: Identifiable {
     case busTimetable
     case busRoute
     case callVan
+    case chat
     case land
     case business
     case department
+    case recruit
 
     var id: String { title }
 
@@ -42,17 +44,21 @@ enum HomeCategoryItem: Identifiable {
             return "교통편 조회하기"
         case .callVan:
             return "콜밴팟 모집"
+        case .chat:
+            return "채팅"
         case .land:
             return "복덕방"
         case .business:
             return "코인 for Business"
+        case .recruit:
+            return "팀원모집"
         }
     }
 
     var subtitle: String? {
         switch self {
-        case .timetable:
-            return "내 강의 정보 확인하기"
+        case .recruit:
+            return "교내 활동 팀원 구하기"
         case .lostItem:
             return "분실물 신고 / 조회하기"
         default:
@@ -80,10 +86,14 @@ enum HomeCategoryItem: Identifiable {
             return .categoryBusSearch
         case .callVan:
             return .categoryCallVan
+        case .chat:
+            return .categoryChat
         case .land:
             return .categoryLand
         case .business:
             return .categoryBusiness
+        case .recruit:
+            return .categoryRecruit
         }
     }
 }

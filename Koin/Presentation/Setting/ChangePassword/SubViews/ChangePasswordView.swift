@@ -22,6 +22,7 @@ final class ChangePasswordView: UIView {
     let passwordTextField = UITextField().then { textField in
         textField.placeholder = "새 비밀번호를 입력해주세요."
         textField.isSecureTextEntry = true
+        textField.rightViewMode = .never
     }
     
     private let englishStackView = UIStackView().then { stackView in
@@ -44,8 +45,9 @@ final class ChangePasswordView: UIView {
     
     let passwordCheckTextField = UITextField().then { textField in
         textField.placeholder = "새 비밀번호를 다시 입력해주세요."
-        textField.layer.borderColor = UIColor.appColor(.sub500).cgColor
+        textField.layer.borderColor = UIColor.appColor(.new600).cgColor
         textField.isSecureTextEntry = true
+        textField.rightViewMode = .never
     }
     
     private let changeSecureButton1 = UIButton().then { button in
@@ -57,7 +59,7 @@ final class ChangePasswordView: UIView {
     }
     
     private let errorResponseLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.sub500)
+        $0.textColor = UIColor.appColor(.new600)
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
     }
     

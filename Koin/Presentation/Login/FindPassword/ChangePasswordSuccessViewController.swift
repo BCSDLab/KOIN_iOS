@@ -15,7 +15,7 @@ final class ChangePasswordSuccessViewController: UIViewController {
     
     // MARK: - UI Components
     private let circleImageView = UIImageView().then {
-        $0.image = UIImage(named: "checkFilledCircle")
+        $0.image = .appImage(asset: .checkEmptyCircle)?.withTintColor(.appColor(.new600))
     }
     
     private let messageLabel = UILabel().then {
@@ -29,6 +29,8 @@ final class ChangePasswordSuccessViewController: UIViewController {
     private let goLoginButton = StateButton(font: UIFont.appFont(.pretendardBold, size: 15)).then {
         $0.setState(state: .usable)
         $0.setTitle("로그인 화면 바로가기", for: .normal)
+    }.then {
+        $0.layer.cornerRadius = 8
     }
     
     init() {
@@ -154,8 +156,12 @@ extension ChangePasswordSuccessViewController {
     }
     
     private func makeCategoryHostingController() -> UIViewController {
+        let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let categoryRootView = CategoryView(viewModel: CategoryViewModel(logAnalyticsEventUseCase: logAnalyticsEventUseCase))
+        let categoryRootView = CategoryView(
+            viewModel: CategoryViewModel(
+                checkLoginUseCase: checkLoginUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase))
         return CategoryHostingController(rootView: categoryRootView)
     }
     
@@ -228,7 +234,7 @@ extension ChangePasswordSuccessViewController {
     
     private func setupComponents() {
         messageLabel.font = UIFont.appFont(.pretendardBold, size: 24)
-        messageLabel.textColor = UIColor.appColor(.primary500)
+        messageLabel.textColor = UIColor.appColor(.new500)
         subMessageLabel.font = UIFont.appFont(.pretendardMedium, size: 16)
         subMessageLabel.textColor = UIColor.appColor(.gray)
     }

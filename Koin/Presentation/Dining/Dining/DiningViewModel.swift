@@ -24,7 +24,6 @@ final class DiningViewModel: ViewModelProtocol {
         case updateDiningList([DiningItem], DiningType)
         case initCalendar(Date)
         case showBottomSheet((Bool, Bool))
-        case showLoginModal
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()

@@ -15,14 +15,18 @@ struct CategoryView: ActionBindableView {
         case showTimetable
         case showLostItem
         case showFacility
+        case showDepartment
         case showDining
         case showShop
         case showBusTimetable
         case showBusRoute
         case showCallVan
+        case showChatList
         case showLand
         case showBusiness
-        case showDepartment
+        case showRecruit
+        
+        case showLoginToast
     }
 
     // MARK: - Properties
@@ -48,8 +52,8 @@ struct CategoryView: ActionBindableView {
         ScrollView(.vertical) {
             VStack(alignment: .leading, spacing: 16) {
                 HStack(spacing: 12) {
-                    CategoryFeaturedButton(item: .timetable) {
-                        didTapItem(.timetable)
+                    CategoryFeaturedButton(item: .recruit) {
+                        didTapItem(.recruit)
                     }
                     CategoryFeaturedButton(item: .lostItem) {
                         didTapItem(.lostItem)
@@ -61,7 +65,8 @@ struct CategoryView: ActionBindableView {
                         .facility,
                         .department,
                         .dining,
-                        .shop
+                        .shop,
+                        .timetable
                     ],
                     action: { item in
                         didTapItem(item)
@@ -81,8 +86,9 @@ struct CategoryView: ActionBindableView {
                 CategorySection(
                     title: "기타",
                     items: [
+                        .chat,
                         .land,
-                        .business,
+                        .business
                     ],
                     action: { item in
                         didTapItem(item)
@@ -96,17 +102,28 @@ struct CategoryView: ActionBindableView {
         }
         .scrollIndicators(.hidden)
         .background(Color.appColor(.newBackground))
+        .onAppear {
+            viewModel.execute(.checkAuth)
+        }
     }
 }
 
 private extension CategoryView {
     
     private func didTapItem(_ item: HomeCategoryItem) {
+        if case item = .chat {
+            guard viewModel.isLoggedIn else {
+                sendAction(.showLoginToast)
+                return
+            }
+        }
+        
         let action = action(for: item)
         sendAction(action)
         
-        let loggingInfo = loggingInfo(for: action)
-        viewModel.execute(.logEvent(loggingInfo.label, .click, loggingInfo.value))
+        if let loggingInfo = loggingInfo(for: action) {
+            viewModel.execute(.logEvent(loggingInfo.label, .click, loggingInfo.value))
+        }
     }
 
     private func action(for item: HomeCategoryItem) -> Action {
@@ -129,17 +146,21 @@ private extension CategoryView {
             return .showBusRoute
         case .callVan:
             return .showCallVan
+        case .chat:
+            return .showChatList
         case .land:
             return .showLand
         case .business:
             return .showBusiness
+        case .recruit:
+            return .showRecruit
         }
     }
 
-    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus, value: String) {
+    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus, value: String)? {
         switch action {
-        case .showTimetable:
-            return (.categoryTimetable, "시간표")
+        case .showRecruit:
+            return nil // TODO: 로깅 추가
         case .showLostItem:
             return (.categoryLostProperty, "분실물")
         case .showFacility:
@@ -150,16 +171,22 @@ private extension CategoryView {
             return (.categoryCampus, "식단")
         case .showShop:
             return (.categoryCampus, "주변상점")
+        case .showTimetable:
+            return (.categoryTimetable, "시간표") // TODO: 로깅 수정
         case .showBusTimetable:
             return (.categoryTransportation, "버스 시간표")
         case .showBusRoute:
             return (.categoryTransportation, "교통편 조회하기")
         case .showCallVan:
             return (.categoryTransportation, "콜밴팟 모집")
+        case .showChatList:
+            return (.categoryEtc, "채팅")
         case .showLand:
             return (.categoryEtc, "복덕방")
         case .showBusiness:
             return (.categoryEtc, "코인 for Business")
+        case .showLoginToast:
+            return nil
         }
     }
 }

@@ -101,12 +101,12 @@ final class LostItemDataViewController: UIViewController {
         lostItemDataTableView.cellTappedPublisher.sink { [weak self] id in
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
-            let chatRepository = DefaultChatRepository(service: DefaultChatService())
+            let chatRepository = DefaultLostItemRepository(service: DefaultLostItemService())
             let checkLoginUseCase = DefaultCheckLoginUseCase(userRepository: userRepository)
             let fetchLostItemDataUseCase = DefaultFetchLostItemDataUseCase(repository: lostItemRepository)
             let fetchLostItemListUseCase = DefaultFetchLostItemListUseCase(repository: lostItemRepository)
             let changeLostItemStateUseCase = DefaultChangeLostItemStateUseCase(repository: lostItemRepository)
-            let createChatRoomUseCase = DefaultCreateChatRoomUseCase(chatRepository: chatRepository)
+            let createChatRoomUseCase = DefaultLostItemCreateChatRoomUseCase(chatRepository: chatRepository)
             let deleteLostItemUseCase = DefaultDeleteLostItemUseCase(repository: lostItemRepository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
             let viewModel = LostItemDataViewModel(
@@ -246,9 +246,15 @@ extension LostItemDataViewController {
             self?.inputSubject.send(.deleteData)
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, EventParameter.EventCategory.click, "확인"))
         }
-        let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
-        modalViewController.modalPresentationStyle = .overFullScreen
-        modalViewController.modalTransitionStyle = .crossDissolve
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .singleTitle(text: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?"),
+            button: .buttons(
+                leftButtonTitle: "취소",
+                rightButtonTitle: "확인",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
         navigationController?.present(modalViewController, animated: true)
     }
     
@@ -271,19 +277,25 @@ extension LostItemDataViewController {
             inputSubject.send(.changeState(viewModel.id))
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemFound, .click, "\(type.description)물"))
         }
-        let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 162, title: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", titleColor: .appColor(.neutral600), rightButtonText: "확인")
-        modalViewController.modalTransitionStyle = .crossDissolve
-        modalViewController.modalPresentationStyle = .overFullScreen
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .singleTitle(text: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?"),
+            button: .buttons(
+                leftButtonTitle: "취소",
+                rightButtonTitle: "확인",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
         navigationController?.present(modalViewController, animated: true)
     }
     
-    private func navigateToChat(_ createChatRoomResponse: CreateChatRoomResponse) {
-        let chatViewModel = ChatViewModel(
+    private func navigateToChat(_ createChatRoomResponse: LostItemCreateChatRoomResponse) {
+        let chatViewModel = LostItemChatViewModel(
             articleId: createChatRoomResponse.articleId,
             chatRoomId: createChatRoomResponse.chatRoomId,
             articleTitle: createChatRoomResponse.articleTitle
         )
-        let viewController = ChatViewController(viewModel: chatViewModel)
+        let viewController = LostItemChatViewController(viewModel: chatViewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -313,9 +325,19 @@ extension LostItemDataViewController {
             let loginViewController = LoginViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
-        let modalViewController = ModalViewControllerB(onLeftButtonTapped: onLeftButtonTapped, onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "쪽지를 보내려면\n로그인이 필요해요.", subTitle: "로그인 후 대화를 시작하세요!", titleColor: .appColor(.neutral600), subTitleColor: .appColor(.gray))
-        modalViewController.modalTransitionStyle = .crossDissolve
-        modalViewController.modalPresentationStyle = .overFullScreen
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "쪽지를 보내려면\n로그인이 필요해요.",
+                subTitleText: "로그인 후 대화를 시작하세요!"
+            ),
+            button: .buttons(
+                leftButtonTitle: "닫기",
+                leftButtonAction: onLeftButtonTapped,
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
         navigationController?.present(modalViewController, animated: true)
     }
     
@@ -340,9 +362,18 @@ extension LostItemDataViewController {
             let loginViewController = LoginViewController(viewModel: viewModel)
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
-        let modalViewController = ModalViewControllerB(onRightButtonTapped: onRightButtonTapped, width: 301, height: 208, paddingBetweenLabels: 16, title: "게시글을 신고하려면\n로그인이 필요해요.", subTitle: "로그인 후 이용해주세요.", titleColor: .appColor(.neutral600), subTitleColor: .appColor(.gray))
-        modalViewController.modalTransitionStyle = .crossDissolve
-        modalViewController.modalPresentationStyle = .overFullScreen
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .primary,
+            content: .titles(
+                mainTitleText: "게시글을 신고하려면\n로그인이 필요해요.",
+                subTitleText: "로그인 후 이용해주세요."
+            ),
+            button: .buttons(
+                leftButtonTitle: "닫기",
+                rightButtonTitle: "로그인하기",
+                rightButtonAction: onRightButtonTapped
+            )
+        ))
         navigationController?.present(modalViewController, animated: true)
     }
     

@@ -15,7 +15,6 @@ final class EditLostItemContentView: UIView {
     private var content: String?
     private let maxCharacters = 1000
     private lazy var textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
-    let shouldDismissDropDownPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
     private let contentLabel = UILabel().then {
@@ -72,8 +71,6 @@ extension EditLostItemContentView: UITextViewDelegate {
             
     // MARK: 내용 수정 시작
     func textViewDidBeginEditing(_ textView: UITextView) {
-        shouldDismissDropDownPublisher.send()
-        
         // placeholder 비우기
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""

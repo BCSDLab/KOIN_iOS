@@ -31,22 +31,13 @@
       shouldAutocreateTestPlan = "YES">
       <Testables>
          <TestableReference
-            skipped = "NO">
+            skipped = "NO"
+            parallelizable = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A001E2C32845091F00D6C310"
-               BuildableName = "koinTests.xctest"
-               BlueprintName = "koinTests"
-               ReferencedContainer = "container:koin.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A001E2CD2845091F00D6C310"
-               BuildableName = "koinUITests.xctest"
-               BlueprintName = "koinUITests"
+               BlueprintIdentifier = "EC692284302700A400EE26ED"
+               BuildableName = "koinUnitTests.xctest"
+               BlueprintName = "koinUnitTests"
                ReferencedContainer = "container:koin.xcodeproj">
             </BuildableReference>
          </TestableReference>

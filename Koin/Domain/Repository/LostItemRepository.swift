@@ -23,4 +23,10 @@ protocol LostItemRepository {
     func fetchKeywordSuggestion() -> AnyPublisher<[String], ErrorResponse>
     func fetchMyKeyword() -> AnyPublisher<LostItemKeywords, ErrorResponse>
     func unsubscribeKeyword(id: Int) -> AnyPublisher<Void, ErrorResponse>
+
+    func fetchChatRoom() -> AnyPublisher<[LostItemChatRoomDto], ErrorResponse>
+    func fetchChatDetail(articleId: Int, chatRoomId: Int) -> AnyPublisher<[LostItemChatDetailDto], ErrorResponse>
+    func blockUser(articleId: Int, chatRoomId: Int) -> AnyPublisher<Void, ErrorResponse>
+    func createChatRoom(articleId: Int) -> AnyPublisher<LostItemCreateChatRoomResponse, ErrorResponse>
+    func postChatDetail(articleId: Int, chatRoomId: Int, request: LostItemPostChatDetailRequest) -> AnyPublisher<LostItemChatDetailDto, ErrorResponse>
 }

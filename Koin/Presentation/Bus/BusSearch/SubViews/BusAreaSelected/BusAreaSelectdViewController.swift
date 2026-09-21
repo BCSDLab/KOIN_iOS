@@ -11,12 +11,10 @@ import UIKit
 
 final class BusAreaSelectedViewController: UIViewController {
     //MARK: - Properties
-    let departureBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
-    let arrivalBusAreaPublisher = PassthroughSubject<BusPlace, Never>()
-    let dismissWithoutConfirmPublisher = PassthroughSubject<((BusPlace?, BusPlace?), Any?), Never>()
+    private let onDepartureBusAreaSelected: (BusPlace) -> Void
+    private let onArrivalBusAreaSelected: (BusPlace) -> Void
     private var buttonState: BusAreaButtonState = .departureSelect
     private var busRouteType: BusAreaButtonType = .departure
-    private var subscriptions = Set<AnyCancellable>()
     
     //MARK: - UI Components
     private let busRouteDescriptionlabel = UILabel().then {
@@ -41,7 +39,12 @@ final class BusAreaSelectedViewController: UIViewController {
     }
     
     //MARK: - Initialization
-    init() {
+    init(
+        onDepartureBusAreaSelected: @escaping (BusPlace) -> Void,
+        onArrivalBusAreaSelected: @escaping (BusPlace) -> Void
+    ) {
+        self.onDepartureBusAreaSelected = onDepartureBusAreaSelected
+        self.onArrivalBusAreaSelected = onArrivalBusAreaSelected
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -55,34 +58,19 @@ final class BusAreaSelectedViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         confirmButton.addTarget(self, action: #selector(tapConfirmButton), for: .touchUpInside)
-        
-        dismissWithoutConfirmPublisher.sink { [weak self] busPlace, currentBusPlace in
-            let departure = busPlace.0
-            let arrival = busPlace.1
-            if departure != self?.busAreaCollectionView.departureBusAreaPublisher.value {
-                self?.busAreaCollectionView.departureBusAreaPublisher.send(departure)
-            }
-            
-            if arrival != self?.busAreaCollectionView.arrivalBusAreaPublisher.value {
-                self?.busAreaCollectionView.arrivalBusAreaPublisher.send(arrival)
-            }
-            
-            if (departure != nil && self?.busRouteType == .arrival) || (departure == nil && self?.busRouteType == .departure) {
-                self?.busRouteType = departure != nil ? .departure : .arrival
-                self?.buttonState = departure != nil ? .departureSelect : .arrivalSelect
-            }
-        
-        }.store(in: &subscriptions)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.post(name: NSNotification.Name("DismissBusAreaSelectedView"), object: busRouteType, userInfo: nil)
     }
 }
 
 extension BusAreaSelectedViewController {
-    func configure(busAreaLists: [(BusPlace, Bool)], buttonState: BusAreaButtonState) {
+    func configure(
+        busAreaLists: [(BusPlace, Bool)],
+        buttonState: BusAreaButtonState,
+        departure: BusPlace?,
+        arrival: BusPlace?
+    ) {
+        busAreaCollectionView.departureBusAreaPublisher.send(departure)
+        busAreaCollectionView.arrivalBusAreaPublisher.send(arrival)
+
         if buttonState == .departureSelect {
             busRouteType = .departure
         }
@@ -94,11 +82,6 @@ extension BusAreaSelectedViewController {
         }
         setUpView(buttonState: self.buttonState)
         busAreaCollectionView.configure(busAreaLists: busAreaLists, buttonState: busRouteType)
-    }
-    
-    func swap(departure: BusPlace, arrival: BusPlace) {
-        busAreaCollectionView.departureBusAreaPublisher.send(arrival)
-        busAreaCollectionView.arrivalBusAreaPublisher.send(departure)
     }
     
     private func setUpView(buttonState: BusAreaButtonState) {
@@ -117,11 +100,11 @@ extension BusAreaSelectedViewController {
     
     @objc private func tapConfirmButton() {
         if let departure = busAreaCollectionView.departureBusAreaPublisher.value, busRouteType == .departure {
-            departureBusAreaPublisher.send(departure)
+            onDepartureBusAreaSelected(departure)
         }
         
         if let arrival = busAreaCollectionView.arrivalBusAreaPublisher.value, busRouteType == .arrival {
-            arrivalBusAreaPublisher.send(arrival)
+            onArrivalBusAreaSelected(arrival)
         }
 
         if buttonState == .allSelected {
@@ -174,4 +157,3 @@ extension BusAreaSelectedViewController {
         self.view.backgroundColor = .systemBackground
     }
 }
-

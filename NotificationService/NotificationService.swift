@@ -70,7 +70,7 @@ extension NotificationService {
             throw NotificationHistoryError.parsingError
         }
         
-        let notificationRecord = NotificationRecord(
+        let notificationRecord = NotificationHistoryRecord(
             body: body,
             title: title,
             category: appPath,
