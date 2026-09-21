@@ -12,11 +12,13 @@ import Combine
 final class EnterFormViewController: UIViewController {
     
     // MARK: - Properties
+    
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
+    
     private let scrollView = UIScrollView().then {
         $0.showsVerticalScrollIndicator = false
     }
@@ -228,6 +230,7 @@ final class EnterFormViewController: UIViewController {
     }
     
     // MARK: - Init
+    
     init(viewModel: RegisterFormViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
@@ -239,6 +242,7 @@ final class EnterFormViewController: UIViewController {
     }
 
     // MARK: - Life Cycle
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -264,6 +268,8 @@ final class EnterFormViewController: UIViewController {
         super.viewDidLayoutSubviews()
         setUpTextFieldUnderline()
     }
+    
+    // MARK: - Bind
     
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
@@ -309,8 +315,6 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.success700))
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
                 self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
-            case let .showUserType(type):
-                self?.configureUserTypeSpecificUI(for: type)
             case .succesRegister:
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
@@ -341,56 +345,6 @@ final class EnterFormViewController: UIViewController {
         studentEmailTextField.addTarget(self, action: #selector(studentEmailTextFieldDidChange(_:)), for: .editingChanged)
         generalEmailTextField.addTarget(self, action: #selector(generalEmailTextFieldDidChange(_:)), for: .editingChanged)
         nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
-    }
-    
-    func tryRegister() {
-        guard let loginId = idTextField.text,
-              let password = passwordTextField1.text,
-              let userType = viewModel.userType else { return }
-
-        let nicknameText = nicknameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-        let nickname = (nicknameText?.isEmpty == true) ? nil : nicknameText
-
-        switch userType {
-        case .student:
-            guard let dept = departmentDropdownButton.titleLabel?.text,
-                  let studentNumber = studentIdTextField.text else { return }
-
-            let emailText = studentEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let email = (emailText?.isEmpty == true) ? nil : emailText
-
-            let request = StudentRegisterFormRequest(
-                name: viewModel.tempName ?? "",
-                phoneNumber: viewModel.tempPhoneNumber ?? "",
-                loginId: loginId,
-                password: password,
-                department: dept,
-                studentNumber: studentNumber,
-                gender: viewModel.tempGender ?? "",
-                email: email,
-                nickname: nickname
-            )
-
-            viewModel.transform(with: Just(.tryStudentRegister(request)).eraseToAnyPublisher())
-                .sink { _ in }.store(in: &subscriptions)
-
-        case .general:
-            let emailText = generalEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
-            let email = (emailText?.isEmpty == true) ? nil : emailText
-
-            let request = GeneralRegisterFormRequest(
-                name: viewModel.tempName ?? "",
-                phoneNumber: viewModel.tempPhoneNumber ?? "",
-                loginId: loginId,
-                gender: viewModel.tempGender ?? "",
-                password: password,
-                email: email,
-                nickname: nickname
-            )
-
-            viewModel.transform(with: Just(.tryGeneralRegister(request)).eraseToAnyPublisher())
-                .sink { _ in }.store(in: &subscriptions)
-        }
     }
 }
 
@@ -424,24 +378,16 @@ extension EnterFormViewController {
     @objc private func idTextFieldDidChange(_ textField: UITextField) {
         guard let input = textField.text else { return }
 
-        let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789_.-")
-        let filtered = input.lowercased().filter {
-            guard let scalar = $0.unicodeScalars.first else { return false }
-            return allowedCharacterSet.contains(scalar)
-        }
+        let acceptedText = LoginIdInput.acceptedText(from: input)
+        textField.text = acceptedText
 
-        let trimmed = String(filtered.prefix(13))
-        textField.text = trimmed
-
-        let isValid = textField.isValidIdFormat()
-
-        checkIdDuplicateButton.updateState(isEnabled: isValid)
+        checkIdDuplicateButton.updateState(isEnabled: LoginIdInput.isValid(acceptedText))
     }
     
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let isValid = textField.isValidPasswordFormat()
+        let isValid = PasswordInput.isValid(text)
 
         passwordInfoLabel.isHidden = isValid
         passwordTextField2.isHidden = !isValid
@@ -503,19 +449,10 @@ extension EnterFormViewController {
     @objc private func studentIdTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let numericText = text.filter { $0.isNumber }
-        let trimmedText = String(numericText.prefix(10))
-        textField.text = trimmedText
+        let acceptedDigits = StudentNumberInput.acceptedDigits(from: text)
+        textField.text = acceptedDigits
 
-        let yearPart = String(trimmedText.prefix(4))
-        let isYearValid: Bool = {
-            guard let year = Int(yearPart) else { return false }
-            let currentYear = Calendar.current.component(.year, from: Date())
-            return (1991...currentYear).contains(year)
-        }()
-
-        let isLengthValid = trimmedText.count >= 8 && trimmedText.count <= 10
-        let isValid = isLengthValid && isYearValid
+        let isValid = StudentNumberInput.isValid(acceptedDigits)
         studentIdWarningLabel.isHidden = isValid
         
         if isValid {
@@ -536,11 +473,10 @@ extension EnterFormViewController {
     @objc private func nicknameTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let trimmedText = String(text.prefix(10))
-        textField.text = trimmedText
+        let acceptedText = NicknameInput.acceptedText(from: text)
+        textField.text = acceptedText
 
-        let isValid = !trimmedText.isEmpty && trimmedText.count <= 10
-        nicknameDuplicateButton.updateState(isEnabled: isValid)
+        nicknameDuplicateButton.updateState(isEnabled: NicknameInput.canCheckDuplicate(acceptedText))
     }
     
     @objc private func checkStudentNicknameDuplicateButtonTapped() {
@@ -551,19 +487,16 @@ extension EnterFormViewController {
     
     @objc private func studentEmailTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
-        let allowedCharacterSet = CharacterSet(charactersIn: "abcdefghijklmnopqrstuvwxyz0123456789._-")
-        let filteredText = text.filter { String($0).rangeOfCharacter(from: allowedCharacterSet) != nil }
-        let trimmedText = String(filteredText.prefix(30))
-        textField.text = trimmedText
+        textField.text = StudentEmailInput.acceptedText(from: text)
     }
     
     @objc private func generalEmailTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         
-        let trimmedText = String(text.prefix(30))
-        textField.text = trimmedText
+        let acceptedText = GeneralEmailInput.acceptedText(from: text)
+        textField.text = acceptedText
 
-        generalEmailResponseLabel.isHidden = trimmedText.isValidEmailFormat
+        generalEmailResponseLabel.isHidden = GeneralEmailInput.isValid(acceptedText)
     }
     
     @objc private func nextButtonTapped() {
@@ -619,11 +552,12 @@ extension EnterFormViewController {
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         let currentText = textField.text ?? ""
         let newText = (currentText as NSString).replacingCharacters(in: range, with: string)
-        return newText.count <= 18
+        return newText.count <= PasswordInput.maxLength
     }
 }
 
-// MARK: UI Settings
+// MARK: - UI Settings
+
 extension EnterFormViewController {
     private func setUpLayouts() {
         [stepTextLabel, stepLabel, progressView, nextButton].forEach {

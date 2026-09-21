@@ -10,7 +10,7 @@ import Combine
 final class RegisterFormViewModel: ViewModelProtocol {
     var tempName: String?
     var tempPhoneNumber: String?
-    var tempGender: String? // "0" = 남성, "1" = 여성
+    var tempGender: String?
     private(set) var userType: UserType?
 
     func selectUserType(_ type: UserType) {
@@ -48,7 +48,6 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case showDeptDropDownList([String])
         case changeCheckButtonStatus
         case succesRegister
-        case showUserType(UserType)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()

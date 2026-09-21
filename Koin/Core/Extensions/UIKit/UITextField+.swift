@@ -34,20 +34,6 @@ extension UITextField {
         self.rightViewMode = .always
     }
     
-    // 아이디 정규식
-    func isValidIdFormat() -> Bool {
-        guard let text = self.text else { return false }
-        let regex = "^[a-z0-9_.-]{5,13}$"
-        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: text)
-    }
-    
-    // 비밀번호 정규식
-    func isValidPasswordFormat() -> Bool {
-        guard let text = self.text else { return false }
-        let regex = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*])[A-Za-z\\d!@#$%^&*]{6,18}$"
-        return NSPredicate(format: "SELF MATCHES %@", regex).evaluate(with: text)
-    }
-    
     // 텍스트 필드 underline
     func setUnderline(color: UIColor, thickness: CGFloat = 1.0, leftPadding: CGFloat = 0, rightPadding: CGFloat = 0) {
 
