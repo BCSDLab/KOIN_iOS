@@ -17,7 +17,11 @@ struct EnterFormState: Equatable {
     private(set) var studentNumber = ""
 
     mutating func updateLoginId(_ rawText: String) {
-        loginId = LoginIdInput.acceptedText(from: rawText)
+        let acceptedText = LoginIdInput.acceptedText(from: rawText)
+        if acceptedText != loginId {
+            isIdChecked = false
+        }
+        loginId = acceptedText
     }
 
     mutating func markIdChecked() {
@@ -42,6 +46,7 @@ struct EnterFormState: Equatable {
     }
 
     func canSubmit(isStudent: Bool) -> Bool {
-        return isStudent ? StudentNumberInput.isValid(studentNumber) : isPasswordMatched
+        guard isIdChecked, isPasswordMatched else { return false }
+        return isStudent ? StudentNumberInput.isValid(studentNumber) : true
     }
 }

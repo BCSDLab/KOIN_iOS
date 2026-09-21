@@ -16,6 +16,8 @@ final class EnterFormViewController: UIViewController {
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    private var formState = EnterFormState()
+    private var requestedLoginId: String?
     
     // MARK: - UI Components
     
@@ -286,6 +288,9 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.new600)
                 )
             case .successCheckDuplicatedId:
+                guard strongSelf.requestedLoginId == strongSelf.formState.loginId else { return }
+                strongSelf.formState.markIdChecked()
+                strongSelf.updateNextButton()
                 self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .checkGreenCircle),
@@ -378,10 +383,15 @@ extension EnterFormViewController {
     @objc private func idTextFieldDidChange(_ textField: UITextField) {
         guard let input = textField.text else { return }
 
-        let acceptedText = LoginIdInput.acceptedText(from: input)
-        textField.text = acceptedText
+        let wasChecked = formState.isIdChecked
+        formState.updateLoginId(input)
+        textField.text = formState.loginId
 
-        checkIdDuplicateButton.updateState(isEnabled: LoginIdInput.isValid(acceptedText))
+        if wasChecked && !formState.isIdChecked {
+            checkIdResponseLabel.isHidden = true
+        }
+        checkIdDuplicateButton.updateState(isEnabled: formState.canCheckIdDuplicate && !formState.isIdChecked)
+        updateNextButton()
     }
     
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
@@ -391,13 +401,17 @@ extension EnterFormViewController {
 
         passwordInfoLabel.isHidden = isValid
         passwordTextField2.isHidden = !isValid
+
+        formState.updateFirstPassword(text)
+        updateNextButton()
     }
     
     @objc private func passwordTextField2DidChange(_ textField: UITextField) {
-        guard let firstText = passwordTextField1.text,
-              let secondText = passwordTextField2.text else { return }
+        guard let secondText = passwordTextField2.text else { return }
 
-        if firstText == secondText {
+        formState.updateSecondPassword(secondText)
+
+        if formState.isPasswordMatched {
             correctPasswordLabel.isHidden = false
 
             if let userType = viewModel.userType {
@@ -406,11 +420,12 @@ extension EnterFormViewController {
         } else {
             correctPasswordLabel.isHidden = true
         }
+        updateNextButton()
     }
     
     @objc private func checkDuplicateButtonTapped() {
-        guard let loginId = idTextField.text else { return }
-        inputSubject.send(.checkDuplicatedId(loginId))
+        requestedLoginId = formState.loginId
+        inputSubject.send(.checkDuplicatedId(formState.loginId))
     }
     
     @objc private func changeSecureButtonTapped1() {
@@ -449,21 +464,20 @@ extension EnterFormViewController {
     @objc private func studentIdTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let acceptedDigits = StudentNumberInput.acceptedDigits(from: text)
-        textField.text = acceptedDigits
+        formState.updateStudentNumber(text)
+        textField.text = formState.studentNumber
 
-        let isValid = StudentNumberInput.isValid(acceptedDigits)
-        studentIdWarningLabel.isHidden = isValid
-        
-        if isValid {
-            nextButton.isEnabled = true
-            nextButton.backgroundColor = UIColor.appColor(.new500)
-            nextButton.setTitleColor(.white, for: .normal)
-        } else {
-            nextButton.isEnabled = false
-            nextButton.backgroundColor = UIColor.appColor(.neutral300)
-            nextButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        }
+        studentIdWarningLabel.isHidden = StudentNumberInput.isValid(formState.studentNumber)
+        updateNextButton()
+    }
+
+    private func updateNextButton() {
+        guard let userType = viewModel.userType else { return }
+        let canSubmit = formState.canSubmit(isStudent: userType == .student)
+
+        nextButton.isEnabled = canSubmit
+        nextButton.backgroundColor = canSubmit ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
+        nextButton.setTitleColor(canSubmit ? .white : UIColor.appColor(.neutral600), for: .normal)
     }
     
     @objc private func clearStudentNicknameTextField() {
@@ -787,10 +801,6 @@ extension EnterFormViewController {
                 $0.isHidden = false
             }
             setUpGeneralConstraints()
-
-            nextButton.isEnabled = true
-            nextButton.backgroundColor = UIColor.appColor(.new500)
-            nextButton.setTitleColor(.white, for: .normal)
         }
 
         view.layoutIfNeeded()
