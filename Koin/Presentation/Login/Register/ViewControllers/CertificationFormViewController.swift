@@ -167,6 +167,7 @@ final class CertificationFormViewController: UIViewController {
         font: UIFont.appFont(.pretendardRegular, size: 14)
     ).then {
         $0.keyboardType = .numberPad
+        $0.textContentType = .oneTimeCode
         $0.isHidden = true
     }
     
