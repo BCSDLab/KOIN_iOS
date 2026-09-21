@@ -53,19 +53,19 @@ extension RecruitStepView {
 
     private func setUpStyles() {
         firstCircleView.do {
-            $0.backgroundColor = .appColor(.new400)
+            $0.backgroundColor = .appColor(isFirstStep ? .new400 : .neutral300)
             $0.layer.cornerRadius = 16
         }
         secondCircleView.do {
             $0.backgroundColor = .appColor(isFirstStep ? .neutral300 : .new400)
             $0.layer.cornerRadius = 16
         }
-        connectorView.backgroundColor = .appColor(isFirstStep ? .neutral300 : .new400)
+        connectorView.backgroundColor = .appColor(.neutral300)
 
         firstNumberLabel.do {
             $0.text = "1"
             $0.font = .appFont(.pretendardSemiBold, size: 15)
-            $0.textColor = .appColor(.neutral0)
+            $0.textColor = .appColor(isFirstStep ? .neutral0 : .neutral800)
             $0.textAlignment = .center
         }
         secondNumberLabel.do {

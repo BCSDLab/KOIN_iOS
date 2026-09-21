@@ -54,7 +54,6 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
             guard let self else { return }
             switch input {
             case .viewDidLoad:
-                sendBasicInfo()
                 fetchDepartments()
             case .loadUserData:
                 fetchUserData()
@@ -63,25 +62,6 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
         .store(in: &subscriptions)
         
         return outputSubject.eraseToAnyPublisher()
-    }
-}
-
-extension RecruitProfilePostViewModel {
-    private func sendBasicInfo() {
-        switch mode {
-        case .post:
-            outputSubject.send(.updateBasicInfo(.init(
-                nickname: nil,
-                department: nil,
-                studentNumber: nil
-            )))
-        case let .modify(profile):
-            outputSubject.send(.updateBasicInfo(.init(
-                nickname: profile.nickname,
-                department: profile.department,
-                studentNumber: profile.studentNumber
-            )))
-        }
     }
 }
 

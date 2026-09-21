@@ -15,3 +15,15 @@ struct RecruitProfileActivity: Identifiable, Equatable {
     let isOngoing: Bool
     let description: String
 }
+
+extension RecruitProfileActivity {
+    func toRequest() -> RecruitProfileActivityRequest {
+        RecruitProfileActivityRequest(
+            title: title,
+            startedAt: startedAt,
+            endedAt: endedAt,
+            isOngoing: isOngoing,
+            description: description
+        )
+    }
+}

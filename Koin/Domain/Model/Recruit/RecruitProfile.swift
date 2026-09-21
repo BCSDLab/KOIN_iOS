@@ -16,3 +16,22 @@ struct RecruitProfile {
     let activities: [RecruitProfileActivity]
     let selfIntroduction: String
 }
+
+extension RecruitProfile {
+    func toBasicInfo() -> BasicInfo {
+        BasicInfo(
+            nickname: nickname,
+            department: department,
+            studentNumber: studentNumber
+        )
+    }
+    
+    func toRequest() -> RecruitProfileRequest {
+        RecruitProfileRequest(
+            preferredRole: preferredRole,
+            skills: skills,
+            activities: activities.map { $0.toRequest() },
+            introduction: selfIntroduction
+        )
+    }
+}

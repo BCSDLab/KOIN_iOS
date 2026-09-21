@@ -806,6 +806,12 @@
 		A0B343754988C9398C4FE726 /* ModifyRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */; };
 		A1D000010000000000000001 /* FetchRecruitDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D000010000000000000002 /* FetchRecruitDataUseCase.swift */; };
 		A1E000010000000000000001 /* RecruitPostRoleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E000010000000000000002 /* RecruitPostRoleTableView.swift */; };
+		A51C00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift */; };
+		A51C00000000000000000002 /* RecruitProfilePostSkillTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000002 /* RecruitProfilePostSkillTableView.swift */; };
+		A51C00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift */; };
+		A51C00000000000000000004 /* RecruitProfilePostActivityTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000004 /* RecruitProfilePostActivityTableView.swift */; };
+		A51C00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift */; };
+		A51C00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */; };
 		AA20000000000000000001 /* PublisherTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* PublisherTestSupport.swift */; };
 		AA20000000000000000002 /* DiningFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000002 /* DiningFixtures.swift */; };
 		AA20000000000000000003 /* SpyDiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000003 /* SpyDiningRepository.swift */; };
@@ -1916,6 +1922,12 @@
 		A001E2B42845091D00D6C310 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A1D000010000000000000002 /* FetchRecruitDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitDataUseCase.swift; sourceTree = "<group>"; };
 		A1E000010000000000000002 /* RecruitPostRoleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleTableView.swift; sourceTree = "<group>"; };
+		A51B00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostAddTableFooterView.swift; sourceTree = "<group>"; };
+		A51B00000000000000000002 /* RecruitProfilePostSkillTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostSkillTableView.swift; sourceTree = "<group>"; };
+		A51B00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostSkillTableViewCell.swift; sourceTree = "<group>"; };
+		A51B00000000000000000004 /* RecruitProfilePostActivityTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityTableView.swift; sourceTree = "<group>"; };
+		A51B00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityDisplayTableViewCell.swift; sourceTree = "<group>"; };
+		A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityEditTableViewCell.swift; sourceTree = "<group>"; };
 		AA10000000000000000001 /* PublisherTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherTestSupport.swift; sourceTree = "<group>"; };
 		AA10000000000000000002 /* DiningFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningFixtures.swift; sourceTree = "<group>"; };
 		AA10000000000000000003 /* SpyDiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyDiningRepository.swift; sourceTree = "<group>"; };
@@ -3497,6 +3509,50 @@
 			path = LostItemKeywordLeftAlignedCollectionView;
 			sourceTree = "<group>";
 		};
+		7CB8EB4A30615FC500300E99 /* FirstStepView */ = {
+			isa = PBXGroup;
+			children = (
+				7CB8EB4C30615FCE00300E99 /* Subviews */,
+				7CB8EB4230584FC100300E99 /* RecruitProfilePostFirstStepView.swift */,
+			);
+			path = FirstStepView;
+			sourceTree = "<group>";
+		};
+		7CB8EB4B30615FCB00300E99 /* SecondStepView */ = {
+			isa = PBXGroup;
+			children = (
+				7CB8EB4D30615FDB00300E99 /* Subviews */,
+				7CB8EB4430584FC500300E99 /* RecruitProfilePostSecondStepView.swift */,
+			);
+			path = SecondStepView;
+			sourceTree = "<group>";
+		};
+		7CB8EB4C30615FCE00300E99 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */,
+				7CDCD0E5305695E8004204DA /* RecruitSectionHeaderView.swift */,
+				2DEABD714DCF0FD2D5DBACD9 /* RecruitProfilePostDepartmentDropdownView.swift */,
+				7CDCD0E73056A000004204DA /* RecruitProfilePostDepartmentTableView.swift */,
+				7CDCD0E93056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift */,
+				7CB8EB47305857A800300E99 /* RecruitDropdownTriggerButton.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CB8EB4D30615FDB00300E99 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				A51B00000000000000000002 /* RecruitProfilePostSkillTableView.swift */,
+				A51B00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift */,
+				A51B00000000000000000004 /* RecruitProfilePostActivityTableView.swift */,
+				A51B00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift */,
+				A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */,
+				A51B00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
 		7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */ = {
 			isa = PBXGroup;
 			children = (
@@ -3770,26 +3826,12 @@
 		7CDCD0D93055EF87004204DA /* RecruitProfilePost */ = {
 			isa = PBXGroup;
 			children = (
-				7CDCD0DE3055EFB1004204DA /* Subviews */,
+				7CB8EB4A30615FC500300E99 /* FirstStepView */,
+				7CB8EB4B30615FCB00300E99 /* SecondStepView */,
 				7CDCD0DA3055EFA7004204DA /* RecruitProfilePostViewController.swift */,
 				7CDCD0DC3055EFA9004204DA /* RecruitProfilePostViewModel.swift */,
 			);
 			path = RecruitProfilePost;
-			sourceTree = "<group>";
-		};
-		7CDCD0DE3055EFB1004204DA /* Subviews */ = {
-			isa = PBXGroup;
-			children = (
-				7CB8EB4230584FC100300E99 /* RecruitProfilePostFirstStepView.swift */,
-				7CB8EB4430584FC500300E99 /* RecruitProfilePostSecondStepView.swift */,
-				EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */,
-				7CDCD0E5305695E8004204DA /* RecruitSectionHeaderView.swift */,
-				2DEABD714DCF0FD2D5DBACD9 /* RecruitProfilePostDepartmentDropdownView.swift */,
-				7CDCD0E73056A000004204DA /* RecruitProfilePostDepartmentTableView.swift */,
-				7CDCD0E93056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift */,
-				7CB8EB47305857A800300E99 /* RecruitDropdownTriggerButton.swift */,
-			);
-			path = Subviews;
 			sourceTree = "<group>";
 		};
 		7CED8EC52EF2D1F900457128 /* ShopCollectionView */ = {
@@ -7308,6 +7350,12 @@
 				7CDCD0E6305695E8004204DA /* RecruitSectionHeaderView.swift in Sources */,
 				7CDCD0E83056A000004204DA /* RecruitProfilePostDepartmentTableView.swift in Sources */,
 				7CDCD0EA3056A000004204DA /* RecruitProfilePostDepartmentTableViewCell.swift in Sources */,
+				A51C00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift in Sources */,
+				A51C00000000000000000002 /* RecruitProfilePostSkillTableView.swift in Sources */,
+				A51C00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift in Sources */,
+				A51C00000000000000000004 /* RecruitProfilePostActivityTableView.swift in Sources */,
+				A51C00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift in Sources */,
+				A51C00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift in Sources */,
 				B154A7D97E6AAEC2ED3D8119 /* MockFetchDeptListUseCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

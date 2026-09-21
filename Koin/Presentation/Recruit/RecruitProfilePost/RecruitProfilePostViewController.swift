@@ -18,7 +18,7 @@ final class RecruitProfilePostViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     
     private var basicInfo = BasicInfo()
-//    private var request = RecruitProfileRequest()
+    private var request = RecruitProfileRequest()
     private var isFirstStep = true
 
     private var titleText: String {
@@ -37,12 +37,31 @@ final class RecruitProfilePostViewController: UIViewController {
             return "수정하기"
         }
     }
+    private var completeModalTitle: String {
+        switch viewModel.mode {
+        case .post:
+            return "프로필을 저장하시겠어요?"
+        case .modify:
+            return "프로필을 수정하시겠어요?"
+        }
+    }
+    private var completeModalButtonTitle: String {
+        switch viewModel.mode {
+        case .post:
+            return "저장하기"
+        case .modify:
+            return "수정하기"
+        }
+    }
 
     // MARK: - UI Components
     private let scrollView = UIScrollView()
     private let stackView = UIStackView()
+    private let firstPageView = UIView()
+    private let secondPageView = UIView()
     private let firstStepView = RecruitProfilePostFirstStepView()
     private let secondStepView = RecruitProfilePostSecondStepView()
+    private let secondStepButtonStackView = UIStackView()
     
     private let nextButton = StatefulButton(
         title: "다음",
@@ -53,15 +72,7 @@ final class RecruitProfilePostViewController: UIViewController {
         disabledTextColor: .appColor(.neutral0),
         cornerRadius: 16
     )
-    private let prevButton = StatefulButton(
-        title: "이전",
-        font: .appFont(.pretendardSemiBold, size: 15),
-        enabledColor: .appColor(.new500),
-        disabledColor: .appColor(.neutral400),
-        enabledTextColor: .appColor(.neutral0),
-        disabledTextColor: .appColor(.neutral0),
-        cornerRadius: 16
-    )
+    private let prevButton = UIButton()
     private lazy var completeButton = StatefulButton(
         title: completeButtonTitle,
         font: .appFont(.pretendardSemiBold, size: 15),
@@ -73,14 +84,15 @@ final class RecruitProfilePostViewController: UIViewController {
     )
 
     // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: firstStepView)
+    private lazy var firstStepDropdownHost = KoinDropdownHost(scrollView: firstStepView)
+    private lazy var secondStepDropdownHost = KoinDropdownHost(scrollView: secondStepView)
     private lazy var departmentDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
         guard let self else { return }
         basicInfo.department = department
         firstStepView.configure(department: department)
         nextButton.updateState(isEnabled: basicInfo.isValid)
     }
-    private lazy var departmentDropdown = dropdownHost.makeDropdown(
+    private lazy var departmentDropdown = firstStepDropdownHost.makeDropdown(
         anchor: firstStepView.departmentDropdownAnchor,
         contentView: departmentDropdownContentView,
         configuration: .init(topPadding: 12, shadow: .shadow2)
@@ -89,6 +101,13 @@ final class RecruitProfilePostViewController: UIViewController {
     // MARK: - Initializer
     init(viewModel: RecruitProfilePostViewModel) {
         self.viewModel = viewModel
+        switch viewModel.mode {
+        case .post:
+            self.request = RecruitProfileRequest()
+        case let .modify(profile):
+            self.basicInfo = profile.toBasicInfo()
+            self.request = profile.toRequest()
+        }
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -100,6 +119,9 @@ final class RecruitProfilePostViewController: UIViewController {
         super.viewDidLoad()
         title = titleText
         configureView()
+        secondStepView.prepareDropdown(host: secondStepDropdownHost)
+        secondStepView.configure(request)
+        completeButton.updateState(isEnabled: request.isValid)
         setAddTargets()
         bind()
         observeKeyboard()
@@ -131,7 +153,24 @@ extension RecruitProfilePostViewController {
     }
     
     @objc private func completeButtonTapped() {
-        // TODO: todo
+        guard basicInfo.isValid && request.isValid else {
+            return
+        }
+        let rightButtonAction = { [weak self] in
+            /* do something */
+        }
+        let modalViewController = KoinModalViewController(
+            configuration: .init(
+                appearance: .new,
+                content: .singleTitle(text: completeModalTitle),
+                button: .buttons(
+                    leftButtonTitle: "취소하기",
+                    rightButtonTitle: completeModalButtonTitle,
+                    rightButtonAction: rightButtonAction
+                )
+            )
+        )
+        present(modalViewController, animated: true)
     }
     
     private func showFirstStep() {
@@ -144,7 +183,8 @@ extension RecruitProfilePostViewController {
     
     private func showStep(isFirstStep: Bool) {
         view.endEditing(true)
-        dropdownHost.dismissPresented()
+        firstStepDropdownHost.dismissPresented()
+        secondStepDropdownHost.dismissPresented()
         self.isFirstStep = isFirstStep
         
         view.layoutIfNeeded()
@@ -203,6 +243,52 @@ extension RecruitProfilePostViewController {
                 nextButton.updateState(isEnabled: basicInfo.isValid)
             }
             .store(in: &subscriptions)
+
+        secondStepView.preferredRoleChangedPublisher
+            .sink { [weak self] preferredRole in
+                guard let self else { return }
+                request.preferredRole = preferredRole
+                updateCompleteButtonState()
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.skillsChangedPublisher
+            .sink { [weak self] skills in
+                guard let self else { return }
+                request.skills = skills
+                updateCompleteButtonState()
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.activitiesChangedPublisher
+            .sink { [weak self] activities in
+                guard let self else { return }
+                request.activities = activities
+                updateCompleteButtonState()
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.introductionChangedPublisher
+            .sink { [weak self] introduction in
+                guard let self else { return }
+                request.introduction = introduction
+                updateCompleteButtonState()
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.didChangeHeightPublisher
+            .sink { [weak self] in
+                guard let self else { return }
+                view.layoutIfNeeded()
+                UIView.animate(
+                    springDuration: 0.25,
+                    options: [.beginFromCurrentState, .allowUserInteraction]
+                ) {
+                    self.secondStepView.applyPendingSizeChange()
+                    self.view.layoutIfNeeded()
+                }
+            }
+            .store(in: &subscriptions)
     }
 }
 
@@ -211,6 +297,10 @@ extension RecruitProfilePostViewController {
         self.basicInfo = basicInfo
         firstStepView.configure(basicInfo)
         nextButton.updateState(isEnabled: basicInfo.isValid)
+    }
+
+    private func updateCompleteButtonState() {
+        completeButton.updateState(isEnabled: request.isValid)
     }
 }
 
@@ -238,15 +328,41 @@ extension RecruitProfilePostViewController {
             $0.distribution = .fill
             $0.spacing = 0
         }
+        secondStepButtonStackView.do {
+            $0.axis = .horizontal
+            $0.alignment = .fill
+            $0.distribution = .fillEqually
+            $0.spacing = 12
+        }
+        prevButton.do {
+            $0.setAttributedTitle(NSAttributedString(
+                string: "이전",
+                attributes: [
+                    .font: UIFont.appFont(.pretendardSemiBold, size: 15),
+                    .foregroundColor: UIColor.appColor(.new500)
+                ]), for: .normal)
+            $0.backgroundColor = .clear
+            $0.layer.borderColor = UIColor.appColor(.new500).cgColor
+            $0.layer.borderWidth = 1
+            $0.layer.cornerRadius = 16
+        }
     }
     
     private func setUpLayouts() {
-        [firstStepView, secondStepView].forEach {
+        [firstStepView, nextButton].forEach {
+            firstPageView.addSubview($0)
+        }
+        [prevButton, completeButton].forEach {
+            secondStepButtonStackView.addArrangedSubview($0)
+        }
+        [secondStepView, secondStepButtonStackView].forEach {
+            secondPageView.addSubview($0)
+        }
+        [firstPageView, secondPageView].forEach {
             stackView.addArrangedSubview($0)
         }
         scrollView.addSubview(stackView)
         view.addSubview(scrollView)
-        view.addSubview(nextButton)
     }
     
     private func setUpConstraints() {
@@ -254,7 +370,7 @@ extension RecruitProfilePostViewController {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
             $0.height.equalTo(scrollView.frameLayoutGuide)
         }
-        [firstStepView, secondStepView].forEach {
+        [firstPageView, secondPageView].forEach {
             $0.snp.makeConstraints {
                 $0.width.equalTo(scrollView.frameLayoutGuide)
             }
@@ -262,11 +378,24 @@ extension RecruitProfilePostViewController {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+        }
+        firstStepView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(nextButton.snp.top).offset(-16)
         }
         nextButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(32)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide).offset(-16)
+            $0.bottom.equalToSuperview().offset(-16)
+            $0.height.equalTo(48)
+        }
+        secondStepView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(secondStepButtonStackView.snp.top).offset(-16)
+        }
+        secondStepButtonStackView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.bottom.equalToSuperview().offset(-16)
             $0.height.equalTo(48)
         }
     }
@@ -282,15 +411,16 @@ extension RecruitProfilePostViewController {
                 let keyboardMinY = keyboardFrame.map { [weak self] in
                     self?.view.convert($0, from: nil).minY ?? 0
                 } ?? firstStepView.convert(firstStepView.bounds, to: view).maxY
-                let firstStepMaxY = firstStepView.convert(firstStepView.bounds, to: view).maxY
-                firstStepView.contentInset.bottom = max(16, firstStepMaxY - keyboardMinY + 16)
+                let activeStepView: UIScrollView = isFirstStep ? firstStepView : secondStepView
+                let activeStepMaxY = activeStepView.convert(activeStepView.bounds, to: view).maxY
+                activeStepView.contentInset.bottom = max(16, activeStepMaxY - keyboardMinY + 16)
             }
             .store(in: &subscriptions)
 
         NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.restoreFirstStepContentInsetBottom()
+                self?.restoreStepContentInsetBottom()
             }
             .store(in: &subscriptions)
     }
@@ -303,6 +433,16 @@ extension RecruitProfilePostViewController {
             self?.firstStepView.contentInset.bottom = 16
         } completion: { _ in
             completion?()
+        }
+    }
+
+    private func restoreStepContentInsetBottom() {
+        UIView.animate(
+            springDuration: 0.1,
+            options: [.beginFromCurrentState]
+        ) { [weak self] in
+            self?.firstStepView.contentInset.bottom = 16
+            self?.secondStepView.contentInset.bottom = 16
         }
     }
 }

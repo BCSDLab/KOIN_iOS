@@ -151,6 +151,7 @@ extension RecruitProfilePostFirstStepView {
             $0.layer.cornerRadius = 16
             $0.layer.borderWidth = 1
             $0.layer.borderColor = UIColor.appColor(.new500).cgColor
+            $0.backgroundColor = .appColor(.neutral0)
         }
         configure(department: nil)
     }
