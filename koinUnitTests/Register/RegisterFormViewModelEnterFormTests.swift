@@ -235,7 +235,11 @@ struct RegisterFormViewModelRegisterTests {
 
         recorder.send(.tryStudentRegister(studentRequest()))
 
-        #expect(recorder.httpResultMessages == ["서버 오류가 발생했습니다."])
+        let messages = recorder.outputs.compactMap { output -> String? in
+            if case let .failRegister(message) = output { return message }
+            return nil
+        }
+        #expect(messages == ["서버 오류가 발생했습니다."])
     }
 
     @Test("외부인 가입에 실패하면 오류 문구를 전달한다")
@@ -246,7 +250,11 @@ struct RegisterFormViewModelRegisterTests {
 
         recorder.send(.tryGeneralRegister(generalRequest()))
 
-        #expect(recorder.httpResultMessages == ["서버 오류가 발생했습니다."])
+        let messages = recorder.outputs.compactMap { output -> String? in
+            if case let .failRegister(message) = output { return message }
+            return nil
+        }
+        #expect(messages == ["서버 오류가 발생했습니다."])
     }
 
     @Test("가입에 실패하면 성공을 알리지 않는다")
