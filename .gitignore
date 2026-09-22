@@ -111,11 +111,6 @@ iOSInjectionProject/
 .DS_Store
 *.xcuserstate
 *.xcconfig
-xcuserdata/
-DerivedData/
 koin.xcworkspace/
-xcshareddata/xcschemes/*
-xcuserdata/*
-Pods/
 GoogleService-Info.plist
 GoogleService-Info-Stage.plist
