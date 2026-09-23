@@ -13,7 +13,7 @@ jobs:
   unit-test:
     runs-on: macos-26
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
       - name: Secrets 복원
         env:
@@ -29,7 +29,7 @@ jobs:
         run: sudo xcode-select -s /Applications/Xcode_26.4.1.app
 
       - name: SPM 캐시
-        uses: actions/cache@v4
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
         with:
           path: SourcePackages
           key: spm-${{ hashFiles('koin.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
