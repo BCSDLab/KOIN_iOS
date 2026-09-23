@@ -9,7 +9,12 @@ concurrency:
   group: pr-build-and-test-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
+# 코드를 읽기만 하면 되므로 최소 권한만 부여
+permissions:
+  contents: read
+
 jobs:
+  # fork에서 올린 PR에는 Secrets가 전달되지 않아 실행되지 않음 (같은 레포 브랜치 PR만 지원)
   unit-test:
     runs-on: macos-26
     steps:
