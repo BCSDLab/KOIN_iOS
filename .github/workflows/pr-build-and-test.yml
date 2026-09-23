@@ -6,7 +6,7 @@ on:
 
 # 같은 PR에 새 커밋이 올라오면 이전 실행은 취소
 concurrency:
-  group: pr-build-and-test-${{ github.head_ref }}
+  group: pr-build-and-test-${{ github.event.pull_request.number }}
   cancel-in-progress: true
 
 jobs:
