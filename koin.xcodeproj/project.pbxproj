@@ -783,8 +783,6 @@
 		B68D2CE72EA505B000F3B479 /* ToastMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE62EA505B000F3B479 /* ToastMessageView.swift */; };
 		B68D2CE92EA505B800F3B479 /* ToastVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE82EA505B800F3B479 /* ToastVariant.swift */; };
 		B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */; };
-		B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D6292EEB01E600A19521 /* Debug.xcconfig */; };
-		B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */; };
 		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
 		D19A00013000000000000002 /* NotificationRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000001 /* NotificationRowModel.swift */; };
 		D19A00013000000000000004 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000003 /* NotificationListView.swift */; };
@@ -5831,10 +5829,8 @@
 				D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */,
 				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
 				83D5E9C82CCB844D00C6D4CD /* (null) in Resources */,
-				B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */,
 				D261BBAB2D7B456A00A67F06 /* PrivacyInfo.xcprivacy in Resources */,
 				D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */,
-				B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */,
 				D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */,
 				7C50F8DC300FC03B00A87BAE /* AppIcon.icon in Resources */,
 			);
