@@ -39,5 +39,5 @@ jobs:
           xcodebuild test \
             -project koin.xcodeproj \
             -scheme koin-stage \
-            -destination 'platform=iOS Simulator,name=iPhone 17,OS=26.4' \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
             -clonedSourcePackagesDirPath SourcePackages
