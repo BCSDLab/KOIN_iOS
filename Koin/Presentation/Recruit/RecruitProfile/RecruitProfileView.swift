@@ -12,7 +12,7 @@ struct RecruitProfileView: ActionBindableView {
         case showProfilePost
         case showProfileModify(profile: RecruitProfile)
         case showMyPost
-        case showMyApplications
+        case showMyApplication
         case showToast(message: String)
     }
     
@@ -58,7 +58,7 @@ struct RecruitProfileView: ActionBindableView {
                         title: viewModel.profile == nil ? "내가 지원한 모집글 모아보기" : "내가 지원한 모집글",
                         description: "지원한 모집글과 지원 상태를 확인 할 수 있어요."
                     ) {
-                        sendAction(.showMyApplications)
+                        sendAction(.showMyApplication)
                     }
                 }
                 .padding(.top, 16)

@@ -39,8 +39,8 @@ final class RecruitProfileHostingController: UIHostingController<RecruitProfileV
             navigateToProfileModify(profile: profile)
         case .showMyPost:
             navigateToMyPost()
-        case .showMyApplications:
-            navigateToMyApplications()
+        case .showMyApplication:
+            navigateToMyApplication()
         case let .showToast(message):
             showToastMessage(message: message)
         }
@@ -72,8 +72,16 @@ extension RecruitProfileHostingController {
         navigationController?.pushViewController(controller, animated: true)
     }
     
-    private func navigateToMyApplications() {
-        // TODO: navigate
+    private func navigateToMyApplication() {
+        let repository = MockRecruitRepository()
+        let useCase = DefaultFetchRecruitMyApplicationListUseCase(repository: repository)
+        let viewModel = RecruitMyApplicationListViewModel(
+            fetchRecruitMyApplicationListUseCase: useCase
+        )
+        let controller = RecruitMyApplicationListHostingController(
+            rootView: RecruitMyApplicationListView(viewModel: viewModel)
+        )
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     private func makeProfilePostViewController(
