@@ -11,7 +11,7 @@ struct RecruitProfileView: ActionBindableView {
     enum Action {
         case showProfilePost
         case showProfileModify(profile: RecruitProfile)
-        case showMyPosts
+        case showMyPost
         case showMyApplications
         case showToast(message: String)
     }
@@ -50,7 +50,7 @@ struct RecruitProfileView: ActionBindableView {
                         title: viewModel.profile == nil ? "내가 작성한 모집글 모아보기" : "내가 작성한 모집글",
                         description: "작성자 모집글과 지원자를 한눈에 확인할 수 있어요."
                     ) {
-                        sendAction(.showMyPosts)
+                        sendAction(.showMyPost)
                     }
                     
                     RecruitProfileActionCardView(

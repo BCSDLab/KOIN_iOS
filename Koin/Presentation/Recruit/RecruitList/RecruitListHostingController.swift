@@ -11,7 +11,7 @@ final class RecruitListHostingController: UIHostingController<RecruitListView>, 
     
     // MARK: - Layout
     private var toastMessageBottomInset: CGFloat {
-        23 + 43 + 12
+        24 + 43 + 12
     }
     
     // MARK: - UI Components

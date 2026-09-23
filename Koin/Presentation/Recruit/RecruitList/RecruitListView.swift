@@ -82,7 +82,8 @@ struct RecruitListView: ActionBindableView {
                 
                 ProgressView()
                     .frame(maxWidth: .infinity, alignment: .center)
-                    .frame(height: 77)
+                    .frame(height: 24 + 43)
+                    .padding(.top, 12)
                     .isHidden(!(viewModel.hasNextPage && viewModel.isLoading), shouldOccupySpace: true)
             }
             .padding(.horizontal, 22)
@@ -98,7 +99,7 @@ struct RecruitListView: ActionBindableView {
         .background(Color.appColor(.newBackground))
         .overlay(alignment: .bottomTrailing) {
             postButton
-                .padding(EdgeInsets(top: 0, leading: 0, bottom: 23, trailing: 30))
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 30))
         }
         .onFirstAppear {
             viewModel.execute(.onFirstAppear)

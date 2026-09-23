@@ -152,6 +152,54 @@ final class MockRecruitRepository: RecruitRepository {
             currentPage: 1
         )
     }
+
+    func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList {
+        let list = try await fetchList(RecruitListFilter())
+        var recruits = list.recruits.map { summary in
+            RecruitMyPostSummary(
+                id: summary.id,
+                category: summary.category,
+                title: summary.title,
+                meetingType: summary.meetingType,
+                startDate: summary.startDate,
+                endDate: summary.endDate,
+                deadline: summary.deadline,
+                dDay: summary.dDay,
+                currentParticipants: summary.currentParticipants,
+                maximumParticipants: summary.maximumParticipants,
+                type: summary.type,
+                roles: summary.roles,
+                state: summary.id == 3 ? .closed : .recruiting,
+                canClose: summary.id != 3,
+                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil
+            )
+        }
+
+        if filter.state != .all {
+            recruits = recruits.filter { $0.state == filter.state }
+        }
+        if filter.sort == .deadlineAscending {
+            recruits.sort { $0.deadline < $1.deadline }
+        }
+
+        let totalCount = recruits.count
+        let limit = max(filter.limit ?? totalCount, 1)
+        let totalPage = max(Int(ceil(Double(totalCount) / Double(limit))), 1)
+        let currentPage = min(max(filter.page, 1), totalPage)
+        let startIndex = min((currentPage - 1) * limit, totalCount)
+        let endIndex = min(startIndex + limit, totalCount)
+
+        return RecruitMyPostList(
+            recruits: Array(recruits[startIndex..<endIndex]),
+            totalCount: totalCount,
+            totalPage: totalPage,
+            currentPage: currentPage
+        )
+    }
+
+    func closeMyPost(id: Int) async throws -> Bool {
+        true
+    }
     
     func fetchData(_ id: Int) async throws -> RecruitData {
         try await Task.sleep(nanoseconds: 300_000_000)
