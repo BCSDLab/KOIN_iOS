@@ -79,7 +79,7 @@ final class MockRecruitRepository: RecruitRepository {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
         
-        let contest = RecruitSummary(
+        let contest = RecruitListSummary(
             id: 1,
             category: .contest,
             title: "AI 아이디어 공모전 팀원 모집",
@@ -98,7 +98,7 @@ final class MockRecruitRepository: RecruitRepository {
             ]
         )
         
-        let externalActivity = RecruitSummary(
+        let externalActivity = RecruitListSummary(
             id: 2,
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
@@ -113,7 +113,7 @@ final class MockRecruitRepository: RecruitRepository {
             roles: []
         )
         
-        let closedExternalActivity = RecruitSummary(
+        let closedExternalActivity = RecruitListSummary(
             id: 3,
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
@@ -129,7 +129,7 @@ final class MockRecruitRepository: RecruitRepository {
         )
         
         let studies = (4...7).map { id in
-            RecruitSummary(
+            RecruitListSummary(
                 id: id,
                 category: .study,
                 title: "2026 스터디 팀원 모집",

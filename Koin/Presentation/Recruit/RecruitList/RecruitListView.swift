@@ -21,7 +21,7 @@ struct RecruitListView: ActionBindableView {
     var sendAction: ((Action) -> Void) = { _ in }
     @State private var viewModel: RecruitListViewModel
     
-    var recruits: [RecruitSummary] {
+    var recruits: [RecruitListSummary] {
         viewModel.recruitList?.recruits ?? []
     }
     
