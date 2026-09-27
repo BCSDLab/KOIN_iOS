@@ -85,35 +85,34 @@ extension RecruitMyApplicationListRowView {
 
 extension RecruitMyApplicationListRowView {
     private var dataView: some View {
-        HStack(spacing: 24) {
-            LeftAlignedLayout(interitemSpacing: 8, interlineSpacing: 4) {
-                Group {
-                    HStack(alignment: .center, spacing: 2) {
-                        Image.appImage(asset: .recruitLocation)
-                        Text(model.meetingType.rawValue)
-                            .font(.appFont(.pretendardRegular, size: 10))
-                            .foregroundStyle(Color.appColor(.neutral500))
-                    }
-
-                    HStack(alignment: .center, spacing: 2) {
-                        Image.appImage(asset: .recruitDate)
-                        Text("\(model.startDate.formatDateToYYYYMMDD(separator: ".")) ~ \(model.endDate.formatDateToYYYYMMDD(separator: "."))")
-                            .font(.appFont(.pretendardRegular, size: 10))
-                            .foregroundStyle(Color.appColor(.neutral500))
-                    }
-
-                    HStack(alignment: .center, spacing: 2) {
-                        Image.appImage(asset: .recruitMember)
-                        Text("\(model.currentParticipants)/\(model.maximumParticipants)명")
-                            .font(.appFont(.pretendardRegular, size: 10))
-                            .foregroundStyle(Color.appColor(.neutral500))
-                    }
+        LeftAlignedLayout(interitemSpacing: 8, interlineSpacing: 4) {
+            Group {
+                HStack(alignment: .center, spacing: 2) {
+                    Image.appImage(asset: .recruitLocation)
+                    Text(model.meetingType.rawValue)
+                        .font(.appFont(.pretendardRegular, size: 10))
+                        .foregroundStyle(Color.appColor(.neutral500))
                 }
-                .frame(height: 16)
+
+                HStack(alignment: .center, spacing: 2) {
+                    Image.appImage(asset: .recruitDate)
+                    Text("\(model.startDate.formatDateToYYYYMMDD(separator: ".")) ~ \(model.endDate.formatDateToYYYYMMDD(separator: "."))")
+                        .font(.appFont(.pretendardRegular, size: 10))
+                        .foregroundStyle(Color.appColor(.neutral500))
+                }
+
+                HStack(alignment: .center, spacing: 2) {
+                    Image.appImage(asset: .recruitMember)
+                    Text("\(model.currentParticipants)/\(model.maximumParticipants)명")
+                        .font(.appFont(.pretendardRegular, size: 10))
+                        .foregroundStyle(Color.appColor(.neutral500))
+                }
             }
-
-            Spacer(minLength: 0)
-
+            .frame(height: 16)
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .padding(.trailing, model.chatRoomId == nil ? 0 : 60)
+        .overlay(alignment: .trailing) {
             if let chatRoomId = model.chatRoomId {
                 Button {
                     onShowChat(chatRoomId)
@@ -128,6 +127,5 @@ extension RecruitMyApplicationListRowView {
                 .buttonStyle(.plain)
             }
         }
-        .frame(maxWidth: .infinity)
     }
 }
