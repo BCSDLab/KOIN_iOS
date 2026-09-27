@@ -17,6 +17,7 @@ struct RecruitListSummary: Identifiable, Equatable {
     let endDate: Date
     let deadline: Date
     let dDay: String
+    let state: RecruitState
     
     let currentParticipants: Int
     let maximumParticipants: Int

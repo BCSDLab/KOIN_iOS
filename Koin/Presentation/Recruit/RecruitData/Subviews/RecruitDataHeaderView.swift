@@ -17,9 +17,9 @@ struct RecruitDataHeaderView: View {
                     .padding(.horizontal, 8)
                     .frame(height: 18)
                     .background(Color.appColor(data.category.backgroundColor), in: Capsule())
-                Text(data.dDay)
+                Text(data.state == .closed ? "모집완료" : data.dDay)
                     .font(.appFont(.pretendardMedium, size: 10))
-                    .foregroundStyle(Color.appColor(.danger700))
+                    .foregroundStyle(Color.appColor(data.state == .closed ? .new600 : .danger700))
             }
             .frame(minHeight: 18)
             

@@ -48,9 +48,9 @@ extension RecruitListRowView {
                 .background(Color.appColor(model.category.backgroundColor))
                 .clipShape(.capsule)
             
-            Text(model.dDay)
+            Text(model.state == .closed ? "모집완료" : model.dDay)
                 .font(.appFont(.pretendardMedium, size: 10))
-                .foregroundStyle(Color.appColor(.danger700))
+                .foregroundStyle(Color.appColor(model.state == .closed ? .new600 : .danger700))
         }
     }
     

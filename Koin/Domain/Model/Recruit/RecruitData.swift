@@ -12,6 +12,7 @@ struct RecruitData: Identifiable, Equatable {
     
     let category: RecruitCategory
     let dDay: String
+    let state: RecruitState
     let title: String
     
     let meetingType: RecruitMeetingType
@@ -44,6 +45,7 @@ extension RecruitData {
             id: id,
             category: category,
             dDay: dDay,
+            state: state,
             title: title,
             meetingType: meetingType,
             startDate: startDate,
