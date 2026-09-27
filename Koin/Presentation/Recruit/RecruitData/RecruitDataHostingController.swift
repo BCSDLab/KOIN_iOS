@@ -51,7 +51,7 @@ final class RecruitDataHostingController: UIHostingController<RecruitDataView>, 
         case .didDelete:
             handleDelete()
         case let .showToast(message):
-            showToastMessage(message: message)
+            showToastMessage(message: message, bottomInset: 72)
         case .showLoginToast:
             showLoginToast()
         case .isAuthor(let isAuthor):
@@ -80,7 +80,8 @@ extension RecruitDataHostingController {
     private func showLoginToast() {
         showToastMessageWithButton(
             message: "로그인이 필요한 기능입니다.",
-            buttonTitle: "로그인하기"
+            buttonTitle: "로그인하기",
+            bottomInset: 72
         ) { [weak self] in
             self?.navigateToLogin()
         }
@@ -130,10 +131,21 @@ extension RecruitDataHostingController {
         // TODO: show applicant
     }
     private func navigateToApply() {
-        guard let id = rootView.id else {
+        guard let recruit = rootView.data else {
             return
         }
-        // TODO: show apply
+        let recruitRepository = MockRecruitRepository()
+        let viewModel = RecruitApplyViewModel(
+            fetchDeptListUseCase: MockFetchDeptListUseCase(),
+            fetchMyProfileUseCase: DefaultFetchMyProfileUseCase(repository: recruitRepository),
+            applyRecruitUseCase: DefaultApplyRecruitUseCase(repository: recruitRepository)
+        )
+        let viewController = RecruitApplyViewController(
+            viewModel: viewModel,
+            recruit: recruit,
+            delegate: self
+        )
+        navigationController?.pushViewController(viewController, animated: true)
     }
     
     private func handleDelete() {
@@ -158,5 +170,12 @@ extension RecruitDataHostingController {
         )
         let viewController = RecruitPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension RecruitDataHostingController: RecruitApplyViewControllerDelegate {
+    func didApply() {
+        rootView.didSubmitApplication()
+        showToastMessage(message: "지원서가 제출되었습니다.", bottomInset: 72)
     }
 }

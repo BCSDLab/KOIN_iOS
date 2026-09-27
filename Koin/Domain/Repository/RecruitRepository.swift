@@ -24,4 +24,5 @@ protocol RecruitRepository {
     func fetchMyProfile() async throws -> RecruitProfile
     func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo
     func postRecruitProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile
+    func apply(_ request: RecruitApplyRequest) async throws -> Void
 }

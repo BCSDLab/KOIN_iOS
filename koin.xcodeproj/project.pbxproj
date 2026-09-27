@@ -168,31 +168,14 @@
 		7C50A20B304324F500897A6F /* RecruitNotification.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C50A20A304324F500897A6F /* RecruitNotification.swift */; };
 		7C50A20D3043273A00897A6F /* RecruitNotificationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C50A20C3043273A00897A6F /* RecruitNotificationList.swift */; };
 		7C50A20F3043278300897A6F /* FetchRecruitNotificationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C50A20E3043278300897A6F /* FetchRecruitNotificationListUseCase.swift */; };
-		BEEF20000000000000000001 /* RecruitMyPostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000001 /* RecruitMyPostList.swift */; };
-		BEEF20000000000000000002 /* RecruitMyPostSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000002 /* RecruitMyPostSummary.swift */; };
-		BEEF20000000000000000003 /* RecruitMyPostFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000003 /* RecruitMyPostFilter.swift */; };
-		BEEF20000000000000000004 /* FetchRecruitMyPostListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000004 /* FetchRecruitMyPostListUseCase.swift */; };
-		BEEF20000000000000000005 /* RecruitMyPostFilter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000005 /* RecruitMyPostFilter+.swift */; };
-		BEEF20000000000000000006 /* RecruitMyPostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000006 /* RecruitMyPostListViewModel.swift */; };
-		BEEF20000000000000000007 /* RecruitMyPostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000007 /* RecruitMyPostListView.swift */; };
-		BEEF20000000000000000008 /* RecruitMyPostListHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000008 /* RecruitMyPostListHostingController.swift */; };
-		BEEF20000000000000000009 /* RecruitMyPostListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000009 /* RecruitMyPostListHeaderView.swift */; };
-		BEEF2000000000000000000A /* RecruitMyPostListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF1000000000000000000A /* RecruitMyPostListRowView.swift */; };
-		BEEF2000000000000000000B /* RecruitMyPostListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF1000000000000000000B /* RecruitMyPostListEmptyView.swift */; };
-		BEEF2000000000000000000C /* CloseRecruitMyPostUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */; };
-		CAFE20000000000000000001 /* RecruitMyApplicationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000001 /* RecruitMyApplicationList.swift */; };
-		CAFE20000000000000000002 /* RecruitMyApplicationSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000002 /* RecruitMyApplicationSummary.swift */; };
-		CAFE20000000000000000003 /* RecruitMyApplicationFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000003 /* RecruitMyApplicationFilter.swift */; };
-		CAFE20000000000000000004 /* RecruitMyApplicationStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000004 /* RecruitMyApplicationStatus.swift */; };
-		CAFE20000000000000000005 /* FetchRecruitMyApplicationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000005 /* FetchRecruitMyApplicationListUseCase.swift */; };
-		CAFE20000000000000000006 /* RecruitMyApplicationFilter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000006 /* RecruitMyApplicationFilter+.swift */; };
-		CAFE20000000000000000007 /* RecruitMyApplicationListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000007 /* RecruitMyApplicationListViewModel.swift */; };
-		CAFE20000000000000000008 /* RecruitMyApplicationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000008 /* RecruitMyApplicationListView.swift */; };
-		CAFE20000000000000000009 /* RecruitMyApplicationListHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000009 /* RecruitMyApplicationListHostingController.swift */; };
-		CAFE2000000000000000000A /* RecruitMyApplicationListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000A /* RecruitMyApplicationListHeaderView.swift */; };
-		CAFE2000000000000000000B /* RecruitMyApplicationListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000B /* RecruitMyApplicationListRowView.swift */; };
-		CAFE2000000000000000000C /* RecruitMyApplicationListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000C /* RecruitMyApplicationListEmptyView.swift */; };
 		7C50F8DC300FC03B00A87BAE /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = 7C50F8DB300FC03B00A87BAE /* AppIcon.icon */; };
+		7C52086130692C150009BDD3 /* ApplyRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C52086030692C150009BDD3 /* ApplyRecruitUseCase.swift */; };
+		7C520863306902C10009BDD3 /* RecruitApplyViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C52085E306902C10009BDD3 /* RecruitApplyViewModel.swift */; };
+		7C520864306902C10009BDD3 /* RecruitApplyFirstStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C52085F306902C10009BDD3 /* RecruitApplyFirstStepView.swift */; };
+		7C520865306902C10009BDD3 /* RecruitApplyRoleSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C520860306902C10009BDD3 /* RecruitApplyRoleSelectionView.swift */; };
+		7C520866306902C10009BDD3 /* RecruitApplySecondStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C520861306902C10009BDD3 /* RecruitApplySecondStepView.swift */; };
+		7C520867306902C10009BDD3 /* RecruitApplyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C520862306902C10009BDD3 /* RecruitApplyViewController.swift */; };
+		7C520869306902C10009BDD3 /* RecruitApplyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C520868306902C10009BDD3 /* RecruitApplyRequest.swift */; };
 		7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */; };
 		7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */; };
 		7C58FE862F5F9CDD00A2737B /* CallVanDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE852F5F9CDD00A2737B /* CallVanDataViewController.swift */; };
@@ -826,6 +809,8 @@
 		8A7B1679CC9945559E674584 /* RecruitDataRolesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945FF00E918646E5AB601057 /* RecruitDataRolesView.swift */; };
 		9C95E190C98F440DADB6F91B /* RecruitDataMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DADCC36CEEA42EC86AB75B6 /* RecruitDataMetadataView.swift */; };
 		A0B343754988C9398C4FE726 /* ModifyRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */; };
+		A11B00000000000000000001 /* PostBasicInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B00000000000000000002 /* PostBasicInfoUseCase.swift */; };
+		A11B00000000000000000003 /* PostRecruitProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B00000000000000000004 /* PostRecruitProfileUseCase.swift */; };
 		A1D000010000000000000001 /* FetchRecruitDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D000010000000000000002 /* FetchRecruitDataUseCase.swift */; };
 		A1E000010000000000000001 /* RecruitPostRoleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E000010000000000000002 /* RecruitPostRoleTableView.swift */; };
 		A51C00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift */; };
@@ -874,11 +859,33 @@
 		B6A0D62A2EEB01E600A19521 /* Debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D6292EEB01E600A19521 /* Debug.xcconfig */; };
 		B6A0D62C2EEB01F100A19521 /* Release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = B6A0D62B2EEB01F100A19521 /* Release.xcconfig */; };
 		BAD01845AA334A648E2FA2BD /* RecruitDataHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBC0EF8E0FE44F48744BEC7 /* RecruitDataHeaderView.swift */; };
+		BEEF20000000000000000001 /* RecruitMyPostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000001 /* RecruitMyPostList.swift */; };
+		BEEF20000000000000000002 /* RecruitMyPostSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000002 /* RecruitMyPostSummary.swift */; };
+		BEEF20000000000000000003 /* RecruitMyPostFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000003 /* RecruitMyPostFilter.swift */; };
+		BEEF20000000000000000004 /* FetchRecruitMyPostListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000004 /* FetchRecruitMyPostListUseCase.swift */; };
+		BEEF20000000000000000005 /* RecruitMyPostFilter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000005 /* RecruitMyPostFilter+.swift */; };
+		BEEF20000000000000000006 /* RecruitMyPostListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000006 /* RecruitMyPostListViewModel.swift */; };
+		BEEF20000000000000000007 /* RecruitMyPostListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000007 /* RecruitMyPostListView.swift */; };
+		BEEF20000000000000000008 /* RecruitMyPostListHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000008 /* RecruitMyPostListHostingController.swift */; };
+		BEEF20000000000000000009 /* RecruitMyPostListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000009 /* RecruitMyPostListHeaderView.swift */; };
+		BEEF2000000000000000000A /* RecruitMyPostListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF1000000000000000000A /* RecruitMyPostListRowView.swift */; };
+		BEEF2000000000000000000B /* RecruitMyPostListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF1000000000000000000B /* RecruitMyPostListEmptyView.swift */; };
+		BEEF2000000000000000000C /* CloseRecruitMyPostUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */; };
 		C0DE00000000000000000001 /* RecruitProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000002 /* RecruitProfile.swift */; };
 		C0DE00000000000000000003 /* FetchMyProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0DE00000000000000000004 /* FetchMyProfileUseCase.swift */; };
-		A11B00000000000000000001 /* PostBasicInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B00000000000000000002 /* PostBasicInfoUseCase.swift */; };
-		A11B00000000000000000003 /* PostRecruitProfileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B00000000000000000004 /* PostRecruitProfileUseCase.swift */; };
 		C1838F7A4424DEA14DB2D107 /* RecruitPostCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4EE5F05DAB30AABDF79BC780 /* RecruitPostCategoryView.swift */; };
+		CAFE20000000000000000001 /* RecruitMyApplicationList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000001 /* RecruitMyApplicationList.swift */; };
+		CAFE20000000000000000002 /* RecruitMyApplicationSummary.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000002 /* RecruitMyApplicationSummary.swift */; };
+		CAFE20000000000000000003 /* RecruitMyApplicationFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000003 /* RecruitMyApplicationFilter.swift */; };
+		CAFE20000000000000000004 /* RecruitMyApplicationStatus.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000004 /* RecruitMyApplicationStatus.swift */; };
+		CAFE20000000000000000005 /* FetchRecruitMyApplicationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000005 /* FetchRecruitMyApplicationListUseCase.swift */; };
+		CAFE20000000000000000006 /* RecruitMyApplicationFilter+.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000006 /* RecruitMyApplicationFilter+.swift */; };
+		CAFE20000000000000000007 /* RecruitMyApplicationListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000007 /* RecruitMyApplicationListViewModel.swift */; };
+		CAFE20000000000000000008 /* RecruitMyApplicationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000008 /* RecruitMyApplicationListView.swift */; };
+		CAFE20000000000000000009 /* RecruitMyApplicationListHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE10000000000000000009 /* RecruitMyApplicationListHostingController.swift */; };
+		CAFE2000000000000000000A /* RecruitMyApplicationListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000A /* RecruitMyApplicationListHeaderView.swift */; };
+		CAFE2000000000000000000B /* RecruitMyApplicationListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000B /* RecruitMyApplicationListRowView.swift */; };
+		CAFE2000000000000000000C /* RecruitMyApplicationListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000C /* RecruitMyApplicationListEmptyView.swift */; };
 		CD3000000000000000000001 /* RecruitPostCategoryDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */; };
 		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
 		D19A00013000000000000002 /* NotificationRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000001 /* NotificationRowModel.swift */; };
@@ -1323,31 +1330,14 @@
 		7C50A20A304324F500897A6F /* RecruitNotification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitNotification.swift; sourceTree = "<group>"; };
 		7C50A20C3043273A00897A6F /* RecruitNotificationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitNotificationList.swift; sourceTree = "<group>"; };
 		7C50A20E3043278300897A6F /* FetchRecruitNotificationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitNotificationListUseCase.swift; sourceTree = "<group>"; };
-		BEEF10000000000000000001 /* RecruitMyPostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostList.swift; sourceTree = "<group>"; };
-		BEEF10000000000000000002 /* RecruitMyPostSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostSummary.swift; sourceTree = "<group>"; };
-		BEEF10000000000000000003 /* RecruitMyPostFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostFilter.swift; sourceTree = "<group>"; };
-		BEEF10000000000000000004 /* FetchRecruitMyPostListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitMyPostListUseCase.swift; sourceTree = "<group>"; };
-		BEEF10000000000000000005 /* RecruitMyPostFilter+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecruitMyPostFilter+.swift"; sourceTree = "<group>"; };
-		BEEF10000000000000000006 /* RecruitMyPostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListViewModel.swift; sourceTree = "<group>"; };
-		BEEF10000000000000000007 /* RecruitMyPostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListView.swift; sourceTree = "<group>"; };
-		BEEF10000000000000000008 /* RecruitMyPostListHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListHostingController.swift; sourceTree = "<group>"; };
-		BEEF10000000000000000009 /* RecruitMyPostListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListHeaderView.swift; sourceTree = "<group>"; };
-		BEEF1000000000000000000A /* RecruitMyPostListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListRowView.swift; sourceTree = "<group>"; };
-		BEEF1000000000000000000B /* RecruitMyPostListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListEmptyView.swift; sourceTree = "<group>"; };
-		BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseRecruitMyPostUseCase.swift; sourceTree = "<group>"; };
-		CAFE10000000000000000001 /* RecruitMyApplicationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationList.swift; sourceTree = "<group>"; };
-		CAFE10000000000000000002 /* RecruitMyApplicationSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationSummary.swift; sourceTree = "<group>"; };
-		CAFE10000000000000000003 /* RecruitMyApplicationFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationFilter.swift; sourceTree = "<group>"; };
-		CAFE10000000000000000004 /* RecruitMyApplicationStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationStatus.swift; sourceTree = "<group>"; };
-		CAFE10000000000000000005 /* FetchRecruitMyApplicationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitMyApplicationListUseCase.swift; sourceTree = "<group>"; };
-		CAFE10000000000000000006 /* RecruitMyApplicationFilter+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecruitMyApplicationFilter+.swift"; sourceTree = "<group>"; };
-		CAFE10000000000000000007 /* RecruitMyApplicationListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListViewModel.swift; sourceTree = "<group>"; };
-		CAFE10000000000000000008 /* RecruitMyApplicationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListView.swift; sourceTree = "<group>"; };
-		CAFE10000000000000000009 /* RecruitMyApplicationListHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListHostingController.swift; sourceTree = "<group>"; };
-		CAFE1000000000000000000A /* RecruitMyApplicationListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListHeaderView.swift; sourceTree = "<group>"; };
-		CAFE1000000000000000000B /* RecruitMyApplicationListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListRowView.swift; sourceTree = "<group>"; };
-		CAFE1000000000000000000C /* RecruitMyApplicationListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListEmptyView.swift; sourceTree = "<group>"; };
 		7C50F8DB300FC03B00A87BAE /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		7C52085E306902C10009BDD3 /* RecruitApplyViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplyViewModel.swift; sourceTree = "<group>"; };
+		7C52085F306902C10009BDD3 /* RecruitApplyFirstStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplyFirstStepView.swift; sourceTree = "<group>"; };
+		7C520860306902C10009BDD3 /* RecruitApplyRoleSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplyRoleSelectionView.swift; sourceTree = "<group>"; };
+		7C52086030692C150009BDD3 /* ApplyRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApplyRecruitUseCase.swift; sourceTree = "<group>"; };
+		7C520861306902C10009BDD3 /* RecruitApplySecondStepView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplySecondStepView.swift; sourceTree = "<group>"; };
+		7C520862306902C10009BDD3 /* RecruitApplyViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplyViewController.swift; sourceTree = "<group>"; };
+		7C520868306902C10009BDD3 /* RecruitApplyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplyRequest.swift; sourceTree = "<group>"; };
 		7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoHeaderView.swift; sourceTree = "<group>"; };
 		7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoFooterView.swift; sourceTree = "<group>"; };
 		7C58FE852F5F9CDD00A2737B /* CallVanDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanDataViewController.swift; sourceTree = "<group>"; };
@@ -1966,6 +1956,8 @@
 		8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostScheduleView.swift; sourceTree = "<group>"; };
 		945FF00E918646E5AB601057 /* RecruitDataRolesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataRolesView.swift; sourceTree = "<group>"; };
 		A001E2B42845091D00D6C310 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A11B00000000000000000002 /* PostBasicInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBasicInfoUseCase.swift; sourceTree = "<group>"; };
+		A11B00000000000000000004 /* PostRecruitProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitProfileUseCase.swift; sourceTree = "<group>"; };
 		A1D000010000000000000002 /* FetchRecruitDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitDataUseCase.swift; sourceTree = "<group>"; };
 		A1E000010000000000000002 /* RecruitPostRoleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleTableView.swift; sourceTree = "<group>"; };
 		A51B00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostAddTableFooterView.swift; sourceTree = "<group>"; };
@@ -2013,10 +2005,32 @@
 		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		B6A0D6292EEB01E600A19521 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		BEEF10000000000000000001 /* RecruitMyPostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostList.swift; sourceTree = "<group>"; };
+		BEEF10000000000000000002 /* RecruitMyPostSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostSummary.swift; sourceTree = "<group>"; };
+		BEEF10000000000000000003 /* RecruitMyPostFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostFilter.swift; sourceTree = "<group>"; };
+		BEEF10000000000000000004 /* FetchRecruitMyPostListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitMyPostListUseCase.swift; sourceTree = "<group>"; };
+		BEEF10000000000000000005 /* RecruitMyPostFilter+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecruitMyPostFilter+.swift"; sourceTree = "<group>"; };
+		BEEF10000000000000000006 /* RecruitMyPostListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListViewModel.swift; sourceTree = "<group>"; };
+		BEEF10000000000000000007 /* RecruitMyPostListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListView.swift; sourceTree = "<group>"; };
+		BEEF10000000000000000008 /* RecruitMyPostListHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListHostingController.swift; sourceTree = "<group>"; };
+		BEEF10000000000000000009 /* RecruitMyPostListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListHeaderView.swift; sourceTree = "<group>"; };
+		BEEF1000000000000000000A /* RecruitMyPostListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListRowView.swift; sourceTree = "<group>"; };
+		BEEF1000000000000000000B /* RecruitMyPostListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListEmptyView.swift; sourceTree = "<group>"; };
+		BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseRecruitMyPostUseCase.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000002 /* RecruitProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfile.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000004 /* FetchMyProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyProfileUseCase.swift; sourceTree = "<group>"; };
-		A11B00000000000000000002 /* PostBasicInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBasicInfoUseCase.swift; sourceTree = "<group>"; };
-		A11B00000000000000000004 /* PostRecruitProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitProfileUseCase.swift; sourceTree = "<group>"; };
+		CAFE10000000000000000001 /* RecruitMyApplicationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationList.swift; sourceTree = "<group>"; };
+		CAFE10000000000000000002 /* RecruitMyApplicationSummary.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationSummary.swift; sourceTree = "<group>"; };
+		CAFE10000000000000000003 /* RecruitMyApplicationFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationFilter.swift; sourceTree = "<group>"; };
+		CAFE10000000000000000004 /* RecruitMyApplicationStatus.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationStatus.swift; sourceTree = "<group>"; };
+		CAFE10000000000000000005 /* FetchRecruitMyApplicationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitMyApplicationListUseCase.swift; sourceTree = "<group>"; };
+		CAFE10000000000000000006 /* RecruitMyApplicationFilter+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecruitMyApplicationFilter+.swift"; sourceTree = "<group>"; };
+		CAFE10000000000000000007 /* RecruitMyApplicationListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListViewModel.swift; sourceTree = "<group>"; };
+		CAFE10000000000000000008 /* RecruitMyApplicationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListView.swift; sourceTree = "<group>"; };
+		CAFE10000000000000000009 /* RecruitMyApplicationListHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListHostingController.swift; sourceTree = "<group>"; };
+		CAFE1000000000000000000A /* RecruitMyApplicationListHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListHeaderView.swift; sourceTree = "<group>"; };
+		CAFE1000000000000000000B /* RecruitMyApplicationListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListRowView.swift; sourceTree = "<group>"; };
+		CAFE1000000000000000000C /* RecruitMyApplicationListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListEmptyView.swift; sourceTree = "<group>"; };
 		CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostCategoryDropdownView.swift; sourceTree = "<group>"; };
 		D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownHost.swift; sourceTree = "<group>"; };
 		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
@@ -2855,6 +2869,7 @@
 				7CDCD0AE30556C89004204DA /* RecruitData */,
 				7CDCD0C43055D58B004204DA /* RecruitProfile */,
 				7CDCD0D93055EF87004204DA /* RecruitProfilePost */,
+				7C52085D306902C10009BDD3 /* RecruitApply */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2897,6 +2912,7 @@
 				7CDCD0DF305602A2004204DA /* RecruitProfileRequest.swift */,
 				7CDCD0E1305602F6004204DA /* RecruitProfileActivityRequest.swift */,
 				7CDCD0E330560758004204DA /* BasicInfo.swift */,
+				7C520868306902C10009BDD3 /* RecruitApplyRequest.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2954,8 +2970,37 @@
 				BEEF30000000000000000004 /* RecruitMyPostList */,
 				CAFE30000000000000000004 /* RecruitMyApplicationList */,
 				7CACF86E3044097800AC2828 /* RecruitNotificationList */,
+				7C52085F30692C000009BDD3 /* RecruitApply */,
 			);
 			path = Recruit;
+			sourceTree = "<group>";
+		};
+		7C52085D306902C10009BDD3 /* RecruitApply */ = {
+			isa = PBXGroup;
+			children = (
+				7C52085E30690E9F0009BDD3 /* Subviews */,
+				7C520862306902C10009BDD3 /* RecruitApplyViewController.swift */,
+				7C52085E306902C10009BDD3 /* RecruitApplyViewModel.swift */,
+			);
+			path = RecruitApply;
+			sourceTree = "<group>";
+		};
+		7C52085E30690E9F0009BDD3 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C52085F306902C10009BDD3 /* RecruitApplyFirstStepView.swift */,
+				7C520861306902C10009BDD3 /* RecruitApplySecondStepView.swift */,
+				7C520860306902C10009BDD3 /* RecruitApplyRoleSelectionView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C52085F30692C000009BDD3 /* RecruitApply */ = {
+			isa = PBXGroup;
+			children = (
+				7C52086030692C150009BDD3 /* ApplyRecruitUseCase.swift */,
+			);
+			path = RecruitApply;
 			sourceTree = "<group>";
 		};
 		7C58FE842F5F9CC700A2737B /* CallVanData */ = {
@@ -3454,83 +3499,6 @@
 				7C50A1FC3042E9AB00897A6F /* FetchRecruitListUseCase.swift */,
 			);
 			path = RecruitList;
-			sourceTree = "<group>";
-		};
-		BEEF30000000000000000001 /* RecruitMyPostList */ = {
-			isa = PBXGroup;
-			children = (
-				BEEF30000000000000000002 /* Mapper */,
-				BEEF30000000000000000003 /* Subviews */,
-				BEEF10000000000000000008 /* RecruitMyPostListHostingController.swift */,
-				BEEF10000000000000000007 /* RecruitMyPostListView.swift */,
-				BEEF10000000000000000006 /* RecruitMyPostListViewModel.swift */,
-			);
-			path = RecruitMyPostList;
-			sourceTree = "<group>";
-		};
-		BEEF30000000000000000002 /* Mapper */ = {
-			isa = PBXGroup;
-			children = (
-				BEEF10000000000000000005 /* RecruitMyPostFilter+.swift */,
-			);
-			path = Mapper;
-			sourceTree = "<group>";
-		};
-		BEEF30000000000000000003 /* Subviews */ = {
-			isa = PBXGroup;
-			children = (
-				BEEF10000000000000000009 /* RecruitMyPostListHeaderView.swift */,
-				BEEF1000000000000000000A /* RecruitMyPostListRowView.swift */,
-				BEEF1000000000000000000B /* RecruitMyPostListEmptyView.swift */,
-			);
-			path = Subviews;
-			sourceTree = "<group>";
-		};
-		BEEF30000000000000000004 /* RecruitMyPostList */ = {
-			isa = PBXGroup;
-			children = (
-				BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */,
-				BEEF10000000000000000004 /* FetchRecruitMyPostListUseCase.swift */,
-			);
-			path = RecruitMyPostList;
-			sourceTree = "<group>";
-		};
-		CAFE30000000000000000001 /* RecruitMyApplicationList */ = {
-			isa = PBXGroup;
-			children = (
-				CAFE30000000000000000002 /* Mapper */,
-				CAFE30000000000000000003 /* Subviews */,
-				CAFE10000000000000000009 /* RecruitMyApplicationListHostingController.swift */,
-				CAFE10000000000000000008 /* RecruitMyApplicationListView.swift */,
-				CAFE10000000000000000007 /* RecruitMyApplicationListViewModel.swift */,
-			);
-			path = RecruitMyApplicationList;
-			sourceTree = "<group>";
-		};
-		CAFE30000000000000000002 /* Mapper */ = {
-			isa = PBXGroup;
-			children = (
-				CAFE10000000000000000006 /* RecruitMyApplicationFilter+.swift */,
-			);
-			path = Mapper;
-			sourceTree = "<group>";
-		};
-		CAFE30000000000000000003 /* Subviews */ = {
-			isa = PBXGroup;
-			children = (
-				CAFE1000000000000000000A /* RecruitMyApplicationListHeaderView.swift */,
-				CAFE1000000000000000000B /* RecruitMyApplicationListRowView.swift */,
-				CAFE1000000000000000000C /* RecruitMyApplicationListEmptyView.swift */,
-			);
-			path = Subviews;
-			sourceTree = "<group>";
-		};
-		CAFE30000000000000000004 /* RecruitMyApplicationList */ = {
-			isa = PBXGroup;
-			children = (
-				CAFE10000000000000000005 /* FetchRecruitMyApplicationListUseCase.swift */,
-			);
-			path = RecruitMyApplicationList;
 			sourceTree = "<group>";
 		};
 		7CACF86E3044097800AC2828 /* RecruitNotificationList */ = {
@@ -5356,6 +5324,45 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		BEEF30000000000000000001 /* RecruitMyPostList */ = {
+			isa = PBXGroup;
+			children = (
+				BEEF30000000000000000002 /* Mapper */,
+				BEEF30000000000000000003 /* Subviews */,
+				BEEF10000000000000000008 /* RecruitMyPostListHostingController.swift */,
+				BEEF10000000000000000007 /* RecruitMyPostListView.swift */,
+				BEEF10000000000000000006 /* RecruitMyPostListViewModel.swift */,
+			);
+			path = RecruitMyPostList;
+			sourceTree = "<group>";
+		};
+		BEEF30000000000000000002 /* Mapper */ = {
+			isa = PBXGroup;
+			children = (
+				BEEF10000000000000000005 /* RecruitMyPostFilter+.swift */,
+			);
+			path = Mapper;
+			sourceTree = "<group>";
+		};
+		BEEF30000000000000000003 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				BEEF10000000000000000009 /* RecruitMyPostListHeaderView.swift */,
+				BEEF1000000000000000000A /* RecruitMyPostListRowView.swift */,
+				BEEF1000000000000000000B /* RecruitMyPostListEmptyView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		BEEF30000000000000000004 /* RecruitMyPostList */ = {
+			isa = PBXGroup;
+			children = (
+				BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */,
+				BEEF10000000000000000004 /* FetchRecruitMyPostListUseCase.swift */,
+			);
+			path = RecruitMyPostList;
+			sourceTree = "<group>";
+		};
 		C0DE00000000000000000005 /* RecruitProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -5373,6 +5380,44 @@
 				7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */,
 			);
 			path = RecruitPost;
+			sourceTree = "<group>";
+		};
+		CAFE30000000000000000001 /* RecruitMyApplicationList */ = {
+			isa = PBXGroup;
+			children = (
+				CAFE30000000000000000002 /* Mapper */,
+				CAFE30000000000000000003 /* Subviews */,
+				CAFE10000000000000000009 /* RecruitMyApplicationListHostingController.swift */,
+				CAFE10000000000000000008 /* RecruitMyApplicationListView.swift */,
+				CAFE10000000000000000007 /* RecruitMyApplicationListViewModel.swift */,
+			);
+			path = RecruitMyApplicationList;
+			sourceTree = "<group>";
+		};
+		CAFE30000000000000000002 /* Mapper */ = {
+			isa = PBXGroup;
+			children = (
+				CAFE10000000000000000006 /* RecruitMyApplicationFilter+.swift */,
+			);
+			path = Mapper;
+			sourceTree = "<group>";
+		};
+		CAFE30000000000000000003 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				CAFE1000000000000000000A /* RecruitMyApplicationListHeaderView.swift */,
+				CAFE1000000000000000000B /* RecruitMyApplicationListRowView.swift */,
+				CAFE1000000000000000000C /* RecruitMyApplicationListEmptyView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		CAFE30000000000000000004 /* RecruitMyApplicationList */ = {
+			isa = PBXGroup;
+			children = (
+				CAFE10000000000000000005 /* FetchRecruitMyApplicationListUseCase.swift */,
+			);
+			path = RecruitMyApplicationList;
 			sourceTree = "<group>";
 		};
 		D19A00013000000000000007 /* Shared */ = {
@@ -6495,6 +6540,12 @@
 				D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */,
 				D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */,
 				7CDCD0DB3055EFA7004204DA /* RecruitProfilePostViewController.swift in Sources */,
+				7C520863306902C10009BDD3 /* RecruitApplyViewModel.swift in Sources */,
+				7C520864306902C10009BDD3 /* RecruitApplyFirstStepView.swift in Sources */,
+				7C520865306902C10009BDD3 /* RecruitApplyRoleSelectionView.swift in Sources */,
+				7C520866306902C10009BDD3 /* RecruitApplySecondStepView.swift in Sources */,
+				7C520867306902C10009BDD3 /* RecruitApplyViewController.swift in Sources */,
+				7C520869306902C10009BDD3 /* RecruitApplyRequest.swift in Sources */,
 				D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */,
 				7C0C189F2F68AB33001781B3 /* CallVanChatRequest.swift in Sources */,
 				7CDCD0CB3055D63F004204DA /* RecruitProfileViewModel.swift in Sources */,
@@ -7179,6 +7230,7 @@
 				7CC42B602F59D06C00940CE1 /* CallVanPostParticipantsView.swift in Sources */,
 				7CED91E32EF2D1F900457128 /* AddClassCollectionViewCell.swift in Sources */,
 				7C61D3492F220EAC005FAC3A /* EditLostItemFoundDateView.swift in Sources */,
+				7C52086130692C150009BDD3 /* ApplyRecruitUseCase.swift in Sources */,
 				7CC42B202F56F3C400940CE1 /* CallVanState.swift in Sources */,
 				7C8ADD382F20C0B200F85BDE /* LostItemListDto.swift in Sources */,
 				7C640409300F3F7700A9589F /* FetchDepartmentRequestDto.swift in Sources */,

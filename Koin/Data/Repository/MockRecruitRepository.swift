@@ -8,6 +8,10 @@
 import Foundation
 
 final class MockRecruitRepository: RecruitRepository {
+    func apply(_ request: RecruitApplyRequest) async throws -> Void {
+        try await Task.sleep(nanoseconds: 300_000_000)
+    }
+
     func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo {
         try await Task.sleep(nanoseconds: 300_000_000)
         return basicInfo
@@ -273,7 +277,7 @@ final class MockRecruitRepository: RecruitRepository {
             description: "소개소개소개소개소개소개소개소개소개소개소개소개소개소개",
             relatedUrl: URL(string: "https://bcsdlab.com"),
             qualification: "2학년이상\n참여율 높은 사람\n@@@",
-            isAuthor: UserDataManager.shared.isLoggedIn && item.id % 2 == 1,
+            isAuthor: UserDataManager.shared.isLoggedIn && item.id % 2 == 0,
             canApply: true,
             applyBlockReason: nil,
             canManageApplicants: false,

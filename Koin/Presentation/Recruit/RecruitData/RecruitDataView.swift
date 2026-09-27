@@ -66,6 +66,10 @@ struct RecruitDataView: ActionBindableView {
     func didTapDelete() {
         viewModel.execute(.delete)
     }
+
+    func didSubmitApplication() {
+        viewModel.execute(.applicationSubmitted)
+    }
 }
 
 extension RecruitDataView {
