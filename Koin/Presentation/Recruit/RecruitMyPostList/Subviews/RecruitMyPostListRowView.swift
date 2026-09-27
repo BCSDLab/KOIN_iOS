@@ -56,7 +56,9 @@ extension RecruitMyPostListRowView {
                 .foregroundStyle(Color.appColor(model.state == .closed ? .new600 : .danger700))
 
             Spacer()
-
+        }
+        .padding(.trailing, model.chatRoomId == nil ? 0 : 44)
+        .overlay(alignment: .trailing) {
             if let chatRoomId = model.chatRoomId {
                 Button {
                     onShowChat(chatRoomId)
