@@ -499,6 +499,7 @@
 		7CE13427306A40000011B052 /* RecruitMyPostApplicantProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE13426306A40000011B052 /* RecruitMyPostApplicantProfileView.swift */; };
 		7CE1342B306A40000011B052 /* RecruitMyPostApplicantActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE1342A306A40000011B052 /* RecruitMyPostApplicantActivityView.swift */; };
 		7CE1342D306A40000011B052 /* RecruitMyPostApplicantBottomActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE1342C306A40000011B052 /* RecruitMyPostApplicantBottomActionView.swift */; };
+		7CE13430306ABEB90011B052 /* Publisher+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* Publisher+.swift */; };
 		7CE13431306A40000011B052 /* RecruitMyPostApplicantRoleChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE13430306A40000011B052 /* RecruitMyPostApplicantRoleChipView.swift */; };
 		7CE13433306A40000011B052 /* RecruitMyPostApplicantTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE13432306A40000011B052 /* RecruitMyPostApplicantTextView.swift */; };
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
@@ -839,7 +840,7 @@
 		A51C00000000000000000004 /* RecruitProfilePostActivityTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000004 /* RecruitProfilePostActivityTableView.swift */; };
 		A51C00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift */; };
 		A51C00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */; };
-		AA20000000000000000001 /* PublisherTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* PublisherTestSupport.swift */; };
+		AA20000000000000000001 /* Publisher+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* Publisher+.swift */; };
 		AA20000000000000000002 /* DiningFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000002 /* DiningFixtures.swift */; };
 		AA20000000000000000003 /* SpyDiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000003 /* SpyDiningRepository.swift */; };
 		AA20000000000000000004 /* DateProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000004 /* DateProviderTests.swift */; };
@@ -2006,7 +2007,7 @@
 		A51B00000000000000000004 /* RecruitProfilePostActivityTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityTableView.swift; sourceTree = "<group>"; };
 		A51B00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityDisplayTableViewCell.swift; sourceTree = "<group>"; };
 		A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityEditTableViewCell.swift; sourceTree = "<group>"; };
-		AA10000000000000000001 /* PublisherTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherTestSupport.swift; sourceTree = "<group>"; };
+		AA10000000000000000001 /* Publisher+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+.swift"; sourceTree = "<group>"; };
 		AA10000000000000000002 /* DiningFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningFixtures.swift; sourceTree = "<group>"; };
 		AA10000000000000000003 /* SpyDiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyDiningRepository.swift; sourceTree = "<group>"; };
 		AA10000000000000000004 /* DateProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateProviderTests.swift; sourceTree = "<group>"; };
@@ -3261,6 +3262,7 @@
 		7C7F56B52FFB9F4A00847151 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				7CE1342F306ABEAC0011B052 /* Support */,
 				7CA686742FFCB6D8007937E9 /* Core */,
 				7CA686732FFCB6BE007937E9 /* NotificationHistory */,
 			);
@@ -4013,6 +4015,14 @@
 				7CE1342C306A40000011B052 /* RecruitMyPostApplicantBottomActionView.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CE1342F306ABEAC0011B052 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				AA10000000000000000001 /* Publisher+.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		7CED8EC52EF2D1F900457128 /* ShopCollectionView */ = {
@@ -5311,7 +5321,6 @@
 		AA30000000000000000001 /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				AA10000000000000000001 /* PublisherTestSupport.swift */,
 				AA10000000000000000002 /* DiningFixtures.swift */,
 				AA10000000000000000007 /* DiningLoggingTestSupport.swift */,
 			);
@@ -7228,6 +7237,7 @@
 				7C4D5A4B2F01638800B40128 /* BusTimetableViewModel.swift in Sources */,
 				7C4D5A4C2F01638800B40128 /* BusAreaSelectedCollectionView.swift in Sources */,
 				7CA63A252F1AF7F900226F86 /* LostItemListViewController.swift in Sources */,
+				7CE13430306ABEB90011B052 /* Publisher+.swift in Sources */,
 				7C58FE942F5FB69E00A2737B /* CallVanDataViewModel.swift in Sources */,
 				7C4D5A4D2F01638800B40128 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
 				7C7F432A2F65F42300CC5860 /* CallVanRecruitmentState.swift in Sources */,
@@ -7688,7 +7698,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA20000000000000000001 /* PublisherTestSupport.swift in Sources */,
+				AA20000000000000000001 /* Publisher+.swift in Sources */,
 				AA20000000000000000002 /* DiningFixtures.swift in Sources */,
 				AA20000000000000000003 /* SpyDiningRepository.swift in Sources */,
 				AA20000000000000000004 /* DateProviderTests.swift in Sources */,
