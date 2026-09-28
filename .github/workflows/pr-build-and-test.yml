@@ -1,0 +1,48 @@
+name: PR Build & Test
+
+on:
+  pull_request:
+    branches: [develop]
+
+# 같은 PR에 새 커밋이 올라오면 이전 실행은 취소
+concurrency:
+  group: pr-build-and-test-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+# 코드를 읽기만 하면 되므로 최소 권한만 부여
+permissions:
+  contents: read
+
+jobs:
+  # fork에서 올린 PR에는 Secrets가 전달되지 않아 실행되지 않음 (같은 레포 브랜치 PR만 지원)
+  unit-test:
+    runs-on: macos-26
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Secrets 복원
+        env:
+          DEBUG_XCCONFIG: ${{ secrets.DEBUG_XCCONFIG }}
+          GOOGLE_SERVICE_STAGE_PLIST: ${{ secrets.GOOGLE_SERVICE_STAGE_PLIST }}
+        run: |
+          # xcconfig만 있는 폴더라 클론 시 존재하지 않음
+          mkdir -p Koin/Core/Configuration
+          echo "$DEBUG_XCCONFIG" | base64 --decode > Koin/Core/Configuration/Debug.xcconfig
+          echo "$GOOGLE_SERVICE_STAGE_PLIST" | base64 --decode > GoogleService-Info-Stage.plist
+
+      - name: Xcode 버전 고정
+        run: sudo xcode-select -s /Applications/Xcode_26.4.1.app
+
+      - name: SPM 캐시
+        uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: SourcePackages
+          key: spm-${{ hashFiles('koin.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+
+      - name: 빌드 & 테스트
+        run: |
+          xcodebuild test \
+            -project koin.xcodeproj \
+            -scheme koin-stage \
+            -destination 'platform=iOS Simulator,name=iPhone 17 Pro,OS=latest' \
+            -clonedSourcePackagesDirPath SourcePackages
