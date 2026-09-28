@@ -28,5 +28,5 @@ struct RecruitMyPostSummary: Identifiable, Equatable {
     let canClose: Bool?
     let chatRoomId: Int?
 
-    let applications: [RecruitApplication]
+    let applications: [RecruitApplicationSummary]
 }

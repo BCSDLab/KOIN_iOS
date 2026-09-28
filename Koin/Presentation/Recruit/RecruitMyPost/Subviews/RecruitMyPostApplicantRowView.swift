@@ -11,10 +11,10 @@ struct RecruitMyPostApplicantRowView: View {
 
     let onApplicationTapped: ()->Void
     let onDirectChatTapped: ()->Void
-    let model: RecruitApplication
+    let model: RecruitApplicationSummary
     
     init(
-        model: RecruitApplication,
+        model: RecruitApplicationSummary,
         onApplicationTapped: @escaping () -> Void,
         onDirectChatTapped: @escaping () -> Void
     ) {

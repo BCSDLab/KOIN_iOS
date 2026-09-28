@@ -11,6 +11,8 @@ struct RecruitMyPostView: ActionBindableView {
 
     enum Action {
         case showToast(message: String)
+        case showApplicant(recruitmentId: Int, applicationId: Int)
+        case showDirectChat
     }
 
     // MARK: - Properties
@@ -70,8 +72,15 @@ extension RecruitMyPostView {
                             ForEach(data.applications) { applicant in
                                 RecruitMyPostApplicantRowView(
                                     model: applicant,
-                                    onApplicationTapped: {}, // TODO
-                                    onDirectChatTapped: {} // TODO
+                                    onApplicationTapped: {
+                                        sendAction(.showApplicant(
+                                            recruitmentId: data.id,
+                                            applicationId: applicant.applicationId
+                                        ))
+                                    },
+                                    onDirectChatTapped: {
+                                        sendAction(.showDirectChat)
+                                    }
                                 )
                             }
                         }

@@ -11,6 +11,15 @@ protocol RecruitRepository {
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList
     func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList
     func fetchMyPost(_ id: Int) async throws -> RecruitMyPostSummary
+    func fetchMyPostApplication(
+        recruitmentId: Int,
+        applicationId: Int
+    ) async throws -> RecruitApplication
+    func decideMyPostApplication(
+        recruitmentId: Int,
+        applicationId: Int,
+        decision: RecruitApplicationDecision
+    ) async throws -> Void
     func fetchMyApplicationList(_ filter: RecruitMyApplicationFilter) async throws -> RecruitMyApplicationList
     func closeMyPost(id: Int) async throws -> Bool
     func fetchNotificationList() async throws -> RecruitNotificationList

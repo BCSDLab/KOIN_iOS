@@ -2,23 +2,29 @@
 //  RecruitApplication.swift
 //  koin
 //
-//  Created by 홍기정 on 9/28/26.
+//  Created by 홍기정 on 9/27/26.
 //
 
 import Foundation
 
-struct RecruitApplication: Identifiable, Equatable {
+struct RecruitApplication {
     let applicationId: Int
-    let nickname: String
-    let department: String
-    let studentYear: Int
-    let role: String
-    let status: RecruitMyApplicationStatus
-    let canChat: Bool
+    var status: RecruitMyApplicationStatus
+    let profile: RecruitProfile
+    let motivation: String
+    let availableTime: String
+    let role: String?
+    let canDecide: Bool
+    let canDirectChat: Bool
 }
 
 extension RecruitApplication {
-    var id: Int {
-        return applicationId
+    mutating func decided(as decision: RecruitApplicationDecision) {
+        switch decision {
+        case .accepted:
+            self.status = .accepted
+        case .denied:
+            self.status = .denied
+        }
     }
 }

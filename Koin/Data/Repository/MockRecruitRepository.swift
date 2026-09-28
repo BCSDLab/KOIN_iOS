@@ -234,16 +234,80 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
+    func fetchMyPostApplication(
+        recruitmentId: Int,
+        applicationId: Int
+    ) async throws -> RecruitApplication {
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        let recruitment = try await fetchMyPost(recruitmentId)
+        guard let application = recruitment.applications.first(where: {
+            $0.applicationId == applicationId
+        }) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        guard let startedAt = dateFormatter.date(from: "2026.03.23"),
+              let endedAt = dateFormatter.date(from: "2026.04.06") else {
+            throw ErrorResponse.dateFormatterFailedConvert
+        }
+
+        let role = application.role.isEmpty ? nil : application.role
+        return RecruitApplication(
+            applicationId: application.applicationId,
+            status: application.status,
+            profile: RecruitProfile(
+                nickname: application.nickname,
+                department: application.department,
+                studentNumber: String(format: "20%02d000000", application.studentYear),
+                preferredRole: role ?? "",
+                skills: ["정보처리기사"],
+                activities: [
+                    RecruitProfileActivity(
+                        id: 1,
+                        title: "AI 공모전",
+                        startedAt: startedAt,
+                        endedAt: endedAt,
+                        isOngoing: false,
+                        description: "AI 공모전에서 기획을 담당했고 @@@를 주제로 @@@를 만들었습니다"
+                    )
+                ],
+                selfIntroduction: "안녕하세요."
+            ),
+            motivation: "안녕하세요.",
+            availableTime: "월 수 금 20시 이후",
+            role: role,
+            canDecide: application.status == .pending,
+            canDirectChat: application.status == .accepted && application.canChat
+        )
+    }
+
+    func decideMyPostApplication(
+        recruitmentId: Int,
+        applicationId: Int,
+        decision: RecruitApplicationDecision
+    ) async throws -> Void {
+        let recruitment = try await fetchMyPost(recruitmentId)
+        guard recruitment.applications.contains(where: {
+            $0.applicationId == applicationId && $0.status == .pending
+        }) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        try await Task.sleep(nanoseconds: 300_000_000)
+    }
+
     private func mockApplications(
         recruitId: Int,
         includesRole: Bool
-    ) -> [RecruitApplication] {
+    ) -> [RecruitApplicationSummary] {
         guard recruitId == 1 || recruitId == 2 else {
             return []
         }
 
         return [
-            RecruitApplication(
+            RecruitApplicationSummary(
                 applicationId: recruitId * 100 + 1,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
@@ -252,7 +316,7 @@ final class MockRecruitRepository: RecruitRepository {
                 status: .denied,
                 canChat: false
             ),
-            RecruitApplication(
+            RecruitApplicationSummary(
                 applicationId: recruitId * 100 + 2,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
@@ -261,7 +325,7 @@ final class MockRecruitRepository: RecruitRepository {
                 status: .accepted,
                 canChat: true
             ),
-            RecruitApplication(
+            RecruitApplicationSummary(
                 applicationId: recruitId * 100 + 3,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
