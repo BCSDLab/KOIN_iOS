@@ -25,6 +25,8 @@ struct RecruitMyPostSummary: Identifiable, Equatable {
     let roles: [RecruitRole]
 
     let state: RecruitState
-    let canClose: Bool
+    let canClose: Bool?
     let chatRoomId: Int?
+
+    let applications: [RecruitApplication]
 }

@@ -179,7 +179,11 @@ final class MockRecruitRepository: RecruitRepository {
                 roles: summary.roles,
                 state: summary.state,
                 canClose: summary.id != 3,
-                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil
+                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil,
+                applications: mockApplications(
+                    recruitId: summary.id,
+                    includesRole: summary.type == .roleBased
+                )
             )
         }
 
@@ -203,6 +207,70 @@ final class MockRecruitRepository: RecruitRepository {
             totalPage: totalPage,
             currentPage: currentPage
         )
+    }
+
+    func fetchMyPost(_ id: Int) async throws -> RecruitMyPostSummary {
+        let response = try await fetchMyPostList(RecruitMyPostFilter())
+        guard let recruit = response.recruits.first(where: { $0.id == id }) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        return RecruitMyPostSummary(
+            id: recruit.id,
+            category: recruit.category,
+            title: recruit.title,
+            meetingType: recruit.meetingType,
+            startDate: recruit.startDate,
+            endDate: recruit.endDate,
+            deadline: recruit.deadline,
+            dDay: recruit.dDay,
+            currentParticipants: recruit.currentParticipants,
+            maximumParticipants: recruit.maximumParticipants,
+            type: recruit.type,
+            roles: recruit.roles,
+            state: recruit.state,
+            canClose: recruit.canClose,
+            chatRoomId: recruit.chatRoomId ?? recruit.id,
+            applications: recruit.applications
+        )
+    }
+
+    private func mockApplications(
+        recruitId: Int,
+        includesRole: Bool
+    ) -> [RecruitApplication] {
+        guard recruitId == 1 || recruitId == 2 else {
+            return []
+        }
+
+        return [
+            RecruitApplication(
+                applicationId: recruitId * 100 + 1,
+                nickname: "김철수",
+                department: "컴퓨터공학부",
+                studentYear: 23,
+                role: includesRole ? "백엔드" : "",
+                status: .denied,
+                canChat: false
+            ),
+            RecruitApplication(
+                applicationId: recruitId * 100 + 2,
+                nickname: "김철수",
+                department: "컴퓨터공학부",
+                studentYear: 23,
+                role: includesRole ? "디자인" : "",
+                status: .accepted,
+                canChat: true
+            ),
+            RecruitApplication(
+                applicationId: recruitId * 100 + 3,
+                nickname: "김철수",
+                department: "컴퓨터공학부",
+                studentYear: 23,
+                role: includesRole ? "프론트엔드" : "",
+                status: .pending,
+                canChat: false
+            )
+        ]
     }
 
     func closeMyPost(id: Int) async throws -> Bool {

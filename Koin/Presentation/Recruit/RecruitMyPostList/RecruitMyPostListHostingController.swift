@@ -31,7 +31,7 @@ final class RecruitMyPostListHostingController: UIHostingController<RecruitMyPos
         case .showFilterBottomSheet(let filterState, let onApplyTapped):
             showFilterBottomSheet(filterState, onApplyTapped)
         case .showToast(let message):
-            showToastMessage(message: message, bottomInset: 24)
+            showToastMessage(message: message)
         case .showRecruitData(let id):
             showRecruitData(id: id)
         case .showChat(let chatRoomId):
@@ -70,7 +70,16 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     }
 
     private func showApplicants(recruitId: Int) {
-        // TODO: 지원자 관리 화면 연결
+        let repository = MockRecruitRepository()
+        let fetchRecruitMyPostUseCase = DefaultFetchRecruitMyPostUseCase(repository: repository)
+        let viewModel = RecruitMyPostViewModel(
+            fetchRecruitMyPostUseCase: fetchRecruitMyPostUseCase,
+            recruitId: recruitId
+        )
+        let controller = RecruitMyPostHostingController(
+            rootView: RecruitMyPostView(viewModel: viewModel)
+        )
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     private func showCloseModal(recruitId: Int) {

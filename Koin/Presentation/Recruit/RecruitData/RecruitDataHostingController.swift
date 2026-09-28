@@ -128,7 +128,16 @@ extension RecruitDataHostingController {
         guard let id = rootView.id else {
             return
         }
-        // TODO: show applicant
+        let repository = MockRecruitRepository()
+        let fetchRecruitMyPostUseCase = DefaultFetchRecruitMyPostUseCase(repository: repository)
+        let viewModel = RecruitMyPostViewModel(
+            fetchRecruitMyPostUseCase: fetchRecruitMyPostUseCase,
+            recruitId: id
+        )
+        let controller = RecruitMyPostHostingController(
+            rootView: RecruitMyPostView(viewModel: viewModel)
+        )
+        navigationController?.pushViewController(controller, animated: true)
     }
     private func navigateToApply() {
         guard let recruit = rootView.data else {

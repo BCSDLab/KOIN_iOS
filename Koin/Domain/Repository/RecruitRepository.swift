@@ -10,6 +10,7 @@ import Foundation
 protocol RecruitRepository {
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList
     func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList
+    func fetchMyPost(_ id: Int) async throws -> RecruitMyPostSummary
     func fetchMyApplicationList(_ filter: RecruitMyApplicationFilter) async throws -> RecruitMyApplicationList
     func closeMyPost(id: Int) async throws -> Bool
     func fetchNotificationList() async throws -> RecruitNotificationList

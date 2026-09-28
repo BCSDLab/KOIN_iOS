@@ -31,7 +31,7 @@ final class RecruitMyApplicationListHostingController: UIHostingController<Recru
         case .showFilterBottomSheet(let filterState, let onApplyTapped):
             showFilterBottomSheet(filterState, onApplyTapped)
         case .showToast(let message):
-            showToastMessage(message: message, bottomInset: 24)
+            showToastMessage(message: message)
         case .showRecruitData(let id):
             showRecruitData(id: id)
         case .showChat(let chatRoomId):

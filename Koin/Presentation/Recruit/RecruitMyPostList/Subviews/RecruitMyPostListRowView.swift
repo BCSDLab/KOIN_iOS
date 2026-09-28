@@ -134,7 +134,7 @@ extension RecruitMyPostListRowView {
             }
             .buttonStyle(.plain)
 
-            if model.canClose {
+            if model.canClose == true {
                 Button(action: onCloseRecruit) {
                     manageButtonLabel("모집 마감")
                 }
