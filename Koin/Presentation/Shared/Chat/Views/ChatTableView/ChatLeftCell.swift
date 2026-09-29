@@ -116,8 +116,10 @@ extension ChatLeftCell {
     }
     
     private func setUpStyles() {
-        transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
-        
+        UIView.performWithoutAnimation { [weak self] in
+            self?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+        }
+                
         contentsStackView.do {
             $0.axis = .vertical
             $0.spacing = 8

@@ -39,7 +39,9 @@ extension ChatDateHeaderView {
     }
     
     private func setUpStyles() {
-        transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+        UIView.performWithoutAnimation { [weak self] in
+            self?.transform = CGAffineTransform(rotationAngle: CGFloat(Double.pi))
+        }
         
         dateView.do {
             $0.backgroundColor = UIColor.appColor(.neutral100)
