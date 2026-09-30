@@ -107,8 +107,8 @@ extension RecruitApplyViewModel {
                 try await applyRecruitUseCase.execute(request: request)
                 outputSubject.send(.applyCompleted)
             } catch {
-                guard let error = error as? ErrorResponse else { return }
-                outputSubject.send(.showToast(error.message))
+                let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                outputSubject.send(.showToast(errorMessage))
             }
         }
     }
