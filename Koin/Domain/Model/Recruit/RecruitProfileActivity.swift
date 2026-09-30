@@ -14,6 +14,22 @@ struct RecruitProfileActivity: Identifiable, Equatable {
     let endedAt: Date?
     let isOngoing: Bool
     let description: String
+
+    var periodText: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.dateFormat = "yyyy.MM.dd"
+
+        let start = formatter.string(from: startedAt)
+        if isOngoing {
+            return "\(start) - 진행 중"
+        }
+        guard let endedAt else {
+            return start
+        }
+
+        return "\(start) - \(formatter.string(from: endedAt))"
+    }
 }
 
 extension RecruitProfileActivity {

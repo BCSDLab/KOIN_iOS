@@ -36,6 +36,7 @@ final class RecruitTextFieldView: UIView {
         self.limit = limit
         super.init(frame: .zero)
         configureView()
+        textField.delegate = self
         setAddTargets()
         setUpPlaceholder(placeholder)
         textField.keyboardType = keyboardType
@@ -50,6 +51,13 @@ final class RecruitTextFieldView: UIView {
             textField.text = text
         }
         updateCounter(text: text)
+    }
+}
+
+extension RecruitTextFieldView: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 

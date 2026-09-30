@@ -1,5 +1,5 @@
 //
-//  RecruitSummary.swift
+//  RecruitListSummary.swift
 //  koin
 //
 //  Created by 홍기정 on 9/12/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecruitSummary: Identifiable, Equatable {
+struct RecruitListSummary: Identifiable, Equatable {
     let id: Int
     let category: RecruitCategory
     let title: String
@@ -17,6 +17,7 @@ struct RecruitSummary: Identifiable, Equatable {
     let endDate: Date
     let deadline: Date
     let dDay: String
+    let state: RecruitState
     
     let currentParticipants: Int
     let maximumParticipants: Int

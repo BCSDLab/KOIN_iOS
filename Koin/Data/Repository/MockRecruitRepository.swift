@@ -8,6 +8,10 @@
 import Foundation
 
 final class MockRecruitRepository: RecruitRepository {
+    func apply(_ request: RecruitApplyRequest) async throws -> Void {
+        try await Task.sleep(nanoseconds: 300_000_000)
+    }
+
     func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo {
         try await Task.sleep(nanoseconds: 300_000_000)
         return basicInfo
@@ -79,7 +83,7 @@ final class MockRecruitRepository: RecruitRepository {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
         
-        let contest = RecruitSummary(
+        let contest = RecruitListSummary(
             id: 1,
             category: .contest,
             title: "AI 아이디어 공모전 팀원 모집",
@@ -88,6 +92,7 @@ final class MockRecruitRepository: RecruitRepository {
             endDate: dateFormatter.date(from: "2026.08.26") ?? Date(),
             deadline: dateFormatter.date(from: "2026.08.26") ?? Date(),
             dDay: "D-5",
+            state: .recruiting,
             currentParticipants: 0,
             maximumParticipants: 3,
             type: .roleBased,
@@ -98,7 +103,7 @@ final class MockRecruitRepository: RecruitRepository {
             ]
         )
         
-        let externalActivity = RecruitSummary(
+        let externalActivity = RecruitListSummary(
             id: 2,
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
@@ -107,13 +112,14 @@ final class MockRecruitRepository: RecruitRepository {
             endDate: dateFormatter.date(from: "2026.08.26") ?? Date(),
             deadline: dateFormatter.date(from: "2026.08.26") ?? Date(),
             dDay: "D-1",
+            state: .recruiting,
             currentParticipants: 2,
             maximumParticipants: 3,
             type: .general,
             roles: []
         )
         
-        let closedExternalActivity = RecruitSummary(
+        let closedExternalActivity = RecruitListSummary(
             id: 3,
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
@@ -122,6 +128,7 @@ final class MockRecruitRepository: RecruitRepository {
             endDate: dateFormatter.date(from: "2026.08.26") ?? Date(),
             deadline: dateFormatter.date(from: "2026.08.26") ?? Date(),
             dDay: "D-day",
+            state: .closed,
             currentParticipants: 5,
             maximumParticipants: 5,
             type: .general,
@@ -129,7 +136,7 @@ final class MockRecruitRepository: RecruitRepository {
         )
         
         let studies = (4...7).map { id in
-            RecruitSummary(
+            RecruitListSummary(
                 id: id,
                 category: .study,
                 title: "2026 스터디 팀원 모집",
@@ -138,6 +145,7 @@ final class MockRecruitRepository: RecruitRepository {
                 endDate: dateFormatter.date(from: "2026.08.26") ?? Date(),
                 deadline: dateFormatter.date(from: "2026.08.26") ?? Date(),
                 dDay: "D-1",
+                state: .recruiting,
                 currentParticipants: 2,
                 maximumParticipants: 3,
                 type: .general,
@@ -150,6 +158,233 @@ final class MockRecruitRepository: RecruitRepository {
             totalCount: 7,
             totalPage: 1,
             currentPage: 1
+        )
+    }
+
+    func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList {
+        let list = try await fetchList(RecruitListFilter())
+        var recruits = list.recruits.map { summary in
+            RecruitMyPostSummary(
+                id: summary.id,
+                category: summary.category,
+                title: summary.title,
+                meetingType: summary.meetingType,
+                startDate: summary.startDate,
+                endDate: summary.endDate,
+                deadline: summary.deadline,
+                dDay: summary.dDay,
+                currentParticipants: summary.currentParticipants,
+                maximumParticipants: summary.maximumParticipants,
+                type: summary.type,
+                roles: summary.roles,
+                state: summary.state,
+                canClose: summary.id != 3,
+                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil,
+                applications: mockApplications(
+                    recruitId: summary.id,
+                    includesRole: summary.type == .roleBased
+                )
+            )
+        }
+
+        if filter.state != .all {
+            recruits = recruits.filter { $0.state == filter.state }
+        }
+        if filter.sort == .deadlineAscending {
+            recruits.sort { $0.deadline < $1.deadline }
+        }
+
+        let totalCount = recruits.count
+        let limit = max(filter.limit ?? totalCount, 1)
+        let totalPage = max(Int(ceil(Double(totalCount) / Double(limit))), 1)
+        let currentPage = min(max(filter.page, 1), totalPage)
+        let startIndex = min((currentPage - 1) * limit, totalCount)
+        let endIndex = min(startIndex + limit, totalCount)
+
+        return RecruitMyPostList(
+            recruits: Array(recruits[startIndex..<endIndex]),
+            totalCount: totalCount,
+            totalPage: totalPage,
+            currentPage: currentPage
+        )
+    }
+
+    func fetchMyPost(_ id: Int) async throws -> RecruitMyPostSummary {
+        let response = try await fetchMyPostList(RecruitMyPostFilter())
+        guard let recruit = response.recruits.first(where: { $0.id == id }) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        return RecruitMyPostSummary(
+            id: recruit.id,
+            category: recruit.category,
+            title: recruit.title,
+            meetingType: recruit.meetingType,
+            startDate: recruit.startDate,
+            endDate: recruit.endDate,
+            deadline: recruit.deadline,
+            dDay: recruit.dDay,
+            currentParticipants: recruit.currentParticipants,
+            maximumParticipants: recruit.maximumParticipants,
+            type: recruit.type,
+            roles: recruit.roles,
+            state: recruit.state,
+            canClose: recruit.canClose,
+            chatRoomId: recruit.chatRoomId ?? recruit.id,
+            applications: recruit.applications
+        )
+    }
+
+    func fetchMyPostApplication(
+        recruitmentId: Int,
+        applicationId: Int
+    ) async throws -> RecruitApplication {
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        let recruitment = try await fetchMyPost(recruitmentId)
+        guard let application = recruitment.applications.first(where: {
+            $0.applicationId == applicationId
+        }) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy.MM.dd"
+        guard let startedAt = dateFormatter.date(from: "2026.03.23"),
+              let endedAt = dateFormatter.date(from: "2026.04.06") else {
+            throw ErrorResponse.dateFormatterFailedConvert
+        }
+
+        let role = application.role.isEmpty ? nil : application.role
+        return RecruitApplication(
+            applicationId: application.applicationId,
+            status: application.status,
+            profile: RecruitProfile(
+                nickname: application.nickname,
+                department: application.department,
+                studentNumber: String(format: "20%02d000000", application.studentYear),
+                preferredRole: role ?? "",
+                skills: ["정보처리기사"],
+                activities: [
+                    RecruitProfileActivity(
+                        id: 1,
+                        title: "AI 공모전",
+                        startedAt: startedAt,
+                        endedAt: endedAt,
+                        isOngoing: false,
+                        description: "AI 공모전에서 기획을 담당했고 @@@를 주제로 @@@를 만들었습니다"
+                    )
+                ],
+                selfIntroduction: "안녕하세요."
+            ),
+            motivation: "안녕하세요.",
+            availableTime: "월 수 금 20시 이후",
+            role: role,
+            canDecide: application.status == .pending,
+            canDirectChat: application.status == .accepted && application.canChat
+        )
+    }
+
+    func decideMyPostApplication(
+        recruitmentId: Int,
+        applicationId: Int,
+        decision: RecruitApplicationDecision
+    ) async throws -> Void {
+        let recruitment = try await fetchMyPost(recruitmentId)
+        guard recruitment.applications.contains(where: {
+            $0.applicationId == applicationId && $0.status == .pending
+        }) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        try await Task.sleep(nanoseconds: 300_000_000)
+    }
+
+    private func mockApplications(
+        recruitId: Int,
+        includesRole: Bool
+    ) -> [RecruitApplicationSummary] {
+        guard recruitId == 1 || recruitId == 2 else {
+            return []
+        }
+
+        return [
+            RecruitApplicationSummary(
+                applicationId: recruitId * 100 + 1,
+                nickname: "김철수",
+                department: "컴퓨터공학부",
+                studentYear: 23,
+                role: includesRole ? "백엔드" : "",
+                status: .denied,
+                canChat: false
+            ),
+            RecruitApplicationSummary(
+                applicationId: recruitId * 100 + 2,
+                nickname: "김철수",
+                department: "컴퓨터공학부",
+                studentYear: 23,
+                role: includesRole ? "디자인" : "",
+                status: .accepted,
+                canChat: true
+            ),
+            RecruitApplicationSummary(
+                applicationId: recruitId * 100 + 3,
+                nickname: "김철수",
+                department: "컴퓨터공학부",
+                studentYear: 23,
+                role: includesRole ? "프론트엔드" : "",
+                status: .pending,
+                canChat: false
+            )
+        ]
+    }
+
+    func closeMyPost(id: Int) async throws -> Bool {
+        true
+    }
+
+    func fetchMyApplicationList(
+        _ filter: RecruitMyApplicationFilter
+    ) async throws -> RecruitMyApplicationList {
+        let list = try await fetchList(RecruitListFilter())
+        let statuses = RecruitMyApplicationStatus.allCases
+        var recruits = list.recruits.enumerated().map { index, summary in
+            RecruitMyApplicationSummary(
+                id: summary.id,
+                category: summary.category,
+                title: summary.title,
+                meetingType: summary.meetingType,
+                startDate: summary.startDate,
+                endDate: summary.endDate,
+                deadline: summary.deadline,
+                dDay: summary.dDay,
+                state: summary.state,
+                currentParticipants: summary.currentParticipants,
+                maximumParticipants: summary.maximumParticipants,
+                type: summary.type,
+                roles: summary.roles,
+                status: statuses[index % statuses.count],
+                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil
+            )
+        }
+
+        if let status = filter.status {
+            recruits = recruits.filter { $0.status == status }
+        }
+        if filter.sort == .deadlineAscending {
+            recruits.sort { $0.deadline < $1.deadline }
+        }
+
+        let totalCount = recruits.count
+        let limit = max(filter.limit ?? totalCount, 1)
+        let totalPage = max(Int(ceil(Double(totalCount) / Double(limit))), 1)
+        let currentPage = min(max(filter.page, 1), totalPage)
+        let startIndex = min((currentPage - 1) * limit, totalCount)
+        let endIndex = min(startIndex + limit, totalCount)
+
+        return RecruitMyApplicationList(
+            recruits: Array(recruits[startIndex..<endIndex]),
+            totalCount: totalCount,
+            totalPage: totalPage,
+            currentPage: currentPage
         )
     }
     
@@ -165,6 +400,7 @@ final class MockRecruitRepository: RecruitRepository {
             id: item.id,
             category: item.category,
             dDay: item.dDay,
+            state: item.state,
             title: item.title,
             meetingType: item.meetingType,
             startDate: item.startDate,
@@ -179,7 +415,7 @@ final class MockRecruitRepository: RecruitRepository {
             description: "소개소개소개소개소개소개소개소개소개소개소개소개소개소개",
             relatedUrl: URL(string: "https://bcsdlab.com"),
             qualification: "2학년이상\n참여율 높은 사람\n@@@",
-            isAuthor: UserDataManager.shared.isLoggedIn && item.id % 2 == 1,
+            isAuthor: UserDataManager.shared.isLoggedIn && item.id % 2 == 0,
             canApply: true,
             applyBlockReason: nil,
             canManageApplicants: false,

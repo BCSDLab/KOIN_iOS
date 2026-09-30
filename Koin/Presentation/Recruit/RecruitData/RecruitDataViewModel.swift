@@ -15,6 +15,7 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
     enum Input {
         case load
         case delete
+        case applicationSubmitted
         case didShowToast
     }
     
@@ -23,6 +24,7 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
     private(set) var isLoading = false
     private(set) var errorMessage: String?
     private(set) var didDelete = false
+    private var didSubmitApplication = false
     
     // MARK: - Properties
     private let recruitId: Int
@@ -46,6 +48,8 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
             load()
         case .delete:
             delete()
+        case .applicationSubmitted:
+            applicationSubmitted()
         case .didShowToast:
             errorMessage = nil
         }
@@ -63,7 +67,7 @@ extension RecruitDataViewModel {
                     isLoading = false
                 }
                 let data = try await fetchRecruitDataUseCase.execute(id: recruitId)
-                self.data = data
+                self.data = didSubmitApplication ? data.disablingApplication() : data
             } catch {
                 if let error = error as? ErrorResponse {
                     errorMessage = error.message
@@ -96,5 +100,11 @@ extension RecruitDataViewModel {
                 self.didDelete = false
             }
         }
+    }
+
+    private func applicationSubmitted() {
+        didSubmitApplication = true
+        data = data?.disablingApplication()
+        load()
     }
 }

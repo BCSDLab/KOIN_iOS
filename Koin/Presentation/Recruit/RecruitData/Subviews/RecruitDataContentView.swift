@@ -43,7 +43,7 @@ struct RecruitDataContentView: View {
 
     var body: some View {
         if let data {
-            GeometryReader { proxy in
+            VStack(spacing: 16) {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 0) {
                         RecruitDataHeaderView(data: data)
@@ -76,18 +76,17 @@ struct RecruitDataContentView: View {
                         .padding(.horizontal, 36)
                         
                         Spacer(minLength: 32)
-                
-                        RecruitDataButton(
-                            text: buttonText,
-                            isEnabled: isButtonEnabled,
-                            action: onButtonTapped
-                        )
-                        .padding(.horizontal, 32)
                     }
-                    .frame(minHeight: proxy.size.height)
                 }
                 .scrollIndicators(.hidden)
                 .scrollBounceBehavior(.basedOnSize, axes: .vertical)
+
+                RecruitDataButton(
+                    text: buttonText,
+                    isEnabled: isButtonEnabled,
+                    action: onButtonTapped
+                )
+                .padding(.horizontal, 32)
             }
         } else {
             Color.appColor(.newBackground)

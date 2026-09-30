@@ -37,10 +37,10 @@ final class RecruitProfileHostingController: UIHostingController<RecruitProfileV
             navigateToProfilePost()
         case .showProfileModify(let profile):
             navigateToProfileModify(profile: profile)
-        case .showMyPosts:
-            navigateToMyPosts()
-        case .showMyApplications:
-            navigateToMyApplications()
+        case .showMyPost:
+            navigateToMyPost()
+        case .showMyApplication:
+            navigateToMyApplication()
         case let .showToast(message):
             showToastMessage(message: message)
         }
@@ -58,12 +58,30 @@ extension RecruitProfileHostingController {
         navigationController?.pushViewController(controller, animated: true)
     }
     
-    private func navigateToMyPosts() {
-        // TODO: navigate
+    private func navigateToMyPost() {
+        let repository = MockRecruitRepository()
+        let fetchUseCase = DefaultFetchRecruitMyPostListUseCase(repository: repository)
+        let closeUseCase = DefaultCloseRecruitMyPostUseCase(repository: repository)
+        let viewModel = RecruitMyPostListViewModel(
+            fetchRecruitMyPostListUseCase: fetchUseCase,
+            closeRecruitMyPostUseCase: closeUseCase
+        )
+        let controller = RecruitMyPostListHostingController(
+            rootView: RecruitMyPostListView(viewModel: viewModel)
+        )
+        navigationController?.pushViewController(controller, animated: true)
     }
     
-    private func navigateToMyApplications() {
-        // TODO: navigate
+    private func navigateToMyApplication() {
+        let repository = MockRecruitRepository()
+        let useCase = DefaultFetchRecruitMyApplicationListUseCase(repository: repository)
+        let viewModel = RecruitMyApplicationListViewModel(
+            fetchRecruitMyApplicationListUseCase: useCase
+        )
+        let controller = RecruitMyApplicationListHostingController(
+            rootView: RecruitMyApplicationListView(viewModel: viewModel)
+        )
+        navigationController?.pushViewController(controller, animated: true)
     }
 
     private func makeProfilePostViewController(

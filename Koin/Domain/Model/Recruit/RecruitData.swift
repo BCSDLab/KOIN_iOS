@@ -12,6 +12,7 @@ struct RecruitData: Identifiable, Equatable {
     
     let category: RecruitCategory
     let dDay: String
+    let state: RecruitState
     let title: String
     
     let meetingType: RecruitMeetingType
@@ -36,4 +37,35 @@ struct RecruitData: Identifiable, Equatable {
     let canManageApplicants: Bool
     let teamChatAvailable: Bool
     let teamChatRoomId: Int?
+}
+
+extension RecruitData {
+    func disablingApplication() -> RecruitData {
+        RecruitData(
+            id: id,
+            category: category,
+            dDay: dDay,
+            state: state,
+            title: title,
+            meetingType: meetingType,
+            startDate: startDate,
+            endDate: endDate,
+            deadlineDate: deadlineDate,
+            currentParticipants: currentParticipants,
+            maximumParticipants: maximumParticipants,
+            createdAt: createdAt,
+            author: author,
+            type: type,
+            roles: roles,
+            description: description,
+            relatedUrl: relatedUrl,
+            qualification: qualification,
+            isAuthor: isAuthor,
+            canApply: false,
+            applyBlockReason: "이미 지원한 모집글입니다.",
+            canManageApplicants: canManageApplicants,
+            teamChatAvailable: teamChatAvailable,
+            teamChatRoomId: teamChatRoomId
+        )
+    }
 }
