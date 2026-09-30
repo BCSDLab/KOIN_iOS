@@ -8,6 +8,112 @@
 import Foundation
 
 final class MockRecruitRepository: RecruitRepository {
+    private var postedChatMessages: [RecruitChatMessage] = []
+
+    func fetchTeamChatData(
+        recruitmentId: Int,
+        chatRoomId: Int
+    ) async throws -> RecruitChatData {
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        return RecruitChatData(
+            chatRoomId: chatRoomId,
+            chatRoomName: "AI 아이디어 공모전 팀원 모집",
+            chatRoomType: .team,
+            currentMemberCount: 3,
+            maximumMemberCount: 6
+        )
+    }
+
+    func fetchDirectChatData(
+        recruitmentId: Int,
+        applicationId: Int
+    ) async throws -> RecruitChatData {
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        return RecruitChatData(
+            chatRoomId: applicationId + 20,
+            chatRoomName: "김철수",
+            chatRoomType: .direct,
+            currentMemberCount: nil,
+            maximumMemberCount: nil
+        )
+    }
+
+    func fetchChatMessages(
+        recruitmentId: Int,
+        chatRoomId: Int
+    ) async throws -> RecruitChatMessages {
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        let messages = [
+            RecruitChatMessage(
+                messageId: 901,
+                userId: 22,
+                userNickname: "김철수",
+                content: "안녕하세요!",
+                timestamp: Date().addingTimeInterval(-120),
+                isImage: false,
+                unreadCount: 2,
+                isMine: false,
+                showProfile: true,
+                profileImage: .callVanProfile0
+            ),
+            RecruitChatMessage(
+                messageId: 902,
+                userId: 23,
+                userNickname: "이영희",
+                content: "반갑습니다.",
+                timestamp: Date().addingTimeInterval(-60),
+                isImage: false,
+                unreadCount: 1,
+                isMine: true,
+                showProfile: true,
+                profileImage: .callVanProfile1
+            ),
+            RecruitChatMessage(
+                messageId: 903,
+                userId: 22,
+                userNickname: "김철수",
+                content: "https://placehold.co/600x400/000000/FFFFFF/png",
+                timestamp: Date().addingTimeInterval(-30),
+                isImage: true,
+                unreadCount: 0,
+                isMine: false,
+                showProfile: true,
+                profileImage: .callVanProfile0
+            )
+        ] + postedChatMessages
+
+        return RecruitChatMessages(
+            dates: [Date().formatDateToYYYY년M월D일()],
+            messages: [Array(messages.reversed())]
+        )
+    }
+
+    func postChatMessage(
+        recruitmentId: Int,
+        chatRoomId: Int,
+        request: RecruitChatPostRequest
+    ) async throws {
+        try await Task.sleep(nanoseconds: 300_000_000)
+
+        postedChatMessages.append(
+            RecruitChatMessage(
+                messageId: 904 + postedChatMessages.count,
+                userId: 1,
+                userNickname: "나",
+                content: request.content,
+                timestamp: Date(),
+                isImage: request.isImage,
+                unreadCount: 0,
+                isMine: true,
+                showProfile: true,
+                profileImage: .callVanProfile2
+            )
+        )
+    }
+
     func apply(_ request: RecruitApplyRequest) async throws -> Void {
         try await Task.sleep(nanoseconds: 300_000_000)
     }
@@ -436,7 +542,10 @@ final class MockRecruitRepository: RecruitRepository {
         return RecruitNotificationList(notifications: [
             RecruitNotification(
                 id: 1,
+                recruitmentId: 101,
                 chatRoomId: 1,
+                roomType: .team,
+                applicationId: nil,
                 type: .chat,
                 title: "팀원모집 @@님의 메시지",
                 content: "메세지메세지",
@@ -445,7 +554,10 @@ final class MockRecruitRepository: RecruitRepository {
             ),
             RecruitNotification(
                 id: 2,
+                recruitmentId: 0,
                 chatRoomId: 0,
+                roomType: .team,
+                applicationId: nil,
                 type: .default,
                 title: "팀원 모집 지원 승인",
                 content: "지원했던 AI 공모전 팀원 모집에 승인되었어요.",
@@ -454,7 +566,10 @@ final class MockRecruitRepository: RecruitRepository {
             ),
             RecruitNotification(
                 id: 3,
+                recruitmentId: 0,
                 chatRoomId: 0,
+                roomType: .team,
+                applicationId: nil,
                 type: .default,
                 title: "팀원 모집 지원 거절",
                 content: "지원했던 AI 공모전 팀원 모집에 승인 거절되었어요.\n다른 모집글에 지원해보세요.",
@@ -463,7 +578,10 @@ final class MockRecruitRepository: RecruitRepository {
             ),
             RecruitNotification(
                 id: 4,
+                recruitmentId: 0,
                 chatRoomId: 0,
+                roomType: .team,
+                applicationId: nil,
                 type: .default,
                 title: "팀원 모집글 삭제",
                 content: "지원했던 AI 공모전 팀원 모집글이 삭제되었어요.\n다른 모집글에 지원해보세요.",
@@ -472,7 +590,10 @@ final class MockRecruitRepository: RecruitRepository {
             ),
             RecruitNotification(
                 id: 5,
+                recruitmentId: 0,
                 chatRoomId: 0,
+                roomType: .team,
+                applicationId: nil,
                 type: .default,
                 title: "팀원 모집기간 종료",
                 content: "작성했던 AI 공모전 팀원 모집 기간이 종료되었어요.",

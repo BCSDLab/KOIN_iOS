@@ -9,10 +9,13 @@ import Foundation
 
 struct RecruitNotification {
     let id: Int
+    let recruitmentId: Int
     let chatRoomId: Int
-    
+    let roomType: RecruitChatRoomType
+    let applicationId: Int?
+
     let type: RecruitNotificationType
-    
+
     let title: String
     let content: String
     let dateText: String

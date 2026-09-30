@@ -43,4 +43,6 @@ extension ErrorResponse {
     static let createKeywordError = ErrorResponse(statusCode: nil, code: "CREATE_KEYWORD_ERROR", message: "로그인에 실패하여 코어데이터에서 키워드 저장")
     
     static let dateFormatterFailedConvert = ErrorResponse(code: "DATEFORMATTER_FAILED_CONVERT", message: "날짜 변환 실패")
+    
+    static let imageUploadError = ErrorResponse(statusCode: nil, code: "IMAGE_UPLOAD_ERROR", message: "이미지 전송 실패")
 }

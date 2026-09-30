@@ -24,7 +24,7 @@ final class RecruitMyPostApplicantViewModel: SwiftUIViewModelProtocol {
     private(set) var errorMessage: String?
 
     // MARK: - Properties
-    private let recruitmentId: Int
+    let recruitmentId: Int
     private let applicationId: Int
     private let fetchUseCase: FetchRecruitMyPostApplicationUseCase
     private let decideUseCase: DecideRecruitMyPostApplicationUseCase

@@ -22,4 +22,5 @@ enum UploadDomain: String {
     case club = "CLUB"
     case callVanReport = "CALLVAN_REPORT"
     case callVanChat = "CALLVAN_CHAT"
+    case recruit = "TEAM_RECRUITMENT"
 }

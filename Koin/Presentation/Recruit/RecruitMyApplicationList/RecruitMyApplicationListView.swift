@@ -16,7 +16,7 @@ struct RecruitMyApplicationListView: ActionBindableView {
         )
         case showToast(message: String)
         case showRecruitData(id: Int)
-        case showChat(chatRoomId: Int)
+        case showChat(recruitmentId: Int, chatRoomId: Int)
         case showAllRecruitList
     }
 
@@ -58,7 +58,7 @@ struct RecruitMyApplicationListView: ActionBindableView {
                                 sendAction(.showRecruitData(id: recruit.id))
                             },
                             onShowChat: { chatRoomId in
-                                sendAction(.showChat(chatRoomId: chatRoomId))
+                                sendAction(.showChat(recruitmentId: recruit.id, chatRoomId: chatRoomId))
                             }
                         )
                         .frame(maxWidth: .infinity)
