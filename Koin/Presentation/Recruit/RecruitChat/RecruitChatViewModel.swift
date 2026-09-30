@@ -18,7 +18,7 @@ final class RecruitChatViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case viewWillAppear
-        case viewWillDisappear
+        case viewDidDisappear
         case sendText(text: String)
         case sendImage(image: Data)
     }
@@ -83,7 +83,7 @@ final class RecruitChatViewModel: ViewModelProtocol {
                     self?.fetchChatRoomData()
                 case .viewWillAppear:
                     self?.startPolling()
-                case .viewWillDisappear:
+                case .viewDidDisappear:
                     self?.stopPolling()
                 case .sendText(let text):
                     self?.postMessage(text: text)
@@ -175,6 +175,8 @@ extension RecruitChatViewModel {
                 chatRoomId: chatRoomId
             )
             outputSubject.send(.updateMessages(messages))
+        } catch is CancellationError {
+            return
         } catch {
             outputSubject.send(.showToast(errorMessage(from: error)))
         }

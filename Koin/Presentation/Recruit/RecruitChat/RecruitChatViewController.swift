@@ -51,9 +51,9 @@ final class RecruitChatViewController: UIViewController {
         inputSubject.send(.viewWillAppear)
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
+    override func viewDidDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        inputSubject.send(.viewWillDisappear)
+        inputSubject.send(.viewDidDisappear)
     }
 }
 
@@ -107,7 +107,7 @@ extension RecruitChatViewController {
         
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
-                self?.inputSubject.send(.viewWillDisappear)
+                self?.inputSubject.send(.viewDidDisappear)
             }
             .store(in: &subscriptions)
     }
