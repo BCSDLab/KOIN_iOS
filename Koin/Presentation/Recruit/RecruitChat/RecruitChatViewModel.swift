@@ -16,7 +16,6 @@ final class RecruitChatViewModel: ViewModelProtocol {
     }
 
     enum Input {
-        case viewDidLoad
         case viewWillAppear
         case viewDidDisappear
         case sendText(text: String)
@@ -48,6 +47,7 @@ final class RecruitChatViewModel: ViewModelProtocol {
             return recruitmentId
         }
     }
+    private var didUpdateData = false
 
     // MARK: - Initializer
     init(
@@ -79,8 +79,6 @@ final class RecruitChatViewModel: ViewModelProtocol {
         input
             .sink { [weak self] input in
                 switch input {
-                case .viewDidLoad:
-                    self?.fetchChatRoomData()
                 case .viewWillAppear:
                     self?.startPolling()
                 case .viewDidDisappear:
@@ -98,45 +96,43 @@ final class RecruitChatViewModel: ViewModelProtocol {
 }
 
 extension RecruitChatViewModel {
-    
-    private func fetchChatRoomData() {
-        switch roomSource {
-        case .direct(_, let applicationId):
-            fetchDirectChatData(applicationId)
-        case .team:
-            fetchTeamChatData()
+    private func fetchChatRoomDataIfNeeded() async {
+        guard !didUpdateData else {
+            return
+        }
+        
+        do {
+            switch roomSource {
+            case .direct(_, let applicationId):
+                try await fetchDirectChatData(applicationId)
+            case .team:
+                try await fetchTeamChatData()
+            }
+            didUpdateData = true
+        } catch {
+            outputSubject.send(.showToast(errorMessage(from: error)))
         }
     }
     
-    private func fetchDirectChatData(_ applicationId: Int) {
-        Task { [weak self] in
-            guard let self else { return }
-            do {
-                let chatData = try await fetchDirectChatDataUseCase.execute(
-                    recruitmentId: recruitmentId,
-                    applicationId: applicationId
-                )
-                self.chatRoomId = chatData.chatRoomId
-                outputSubject.send(.updateData(chatData))
-            } catch {
-                outputSubject.send(.showToast(errorMessage(from: error)))
-            }
-        }
+    private func fetchDirectChatData(_ applicationId: Int) async throws {
+        let chatData = try await fetchDirectChatDataUseCase.execute(
+            recruitmentId: recruitmentId,
+            applicationId: applicationId
+        )
+        self.chatRoomId = chatData.chatRoomId
+        outputSubject.send(.updateData(chatData))
     }
     
-    private func fetchTeamChatData() {
-        Task { [weak self] in
-            guard let self, let chatRoomId else { return }
-            do {
-                let chatData = try await fetchTeamChatDataUseCase.execute(
-                    recruitmentId: recruitmentId,
-                    chatRoomId: chatRoomId
-                )
-                outputSubject.send(.updateData(chatData))
-            } catch {
-                outputSubject.send(.showToast(errorMessage(from: error)))
-            }
+    private func fetchTeamChatData() async throws {
+        guard let chatRoomId else {
+            throw ErrorResponse.unexpectedInternalError
         }
+        
+        let chatData = try await fetchTeamChatDataUseCase.execute(
+            recruitmentId: recruitmentId,
+            chatRoomId: chatRoomId
+        )
+        outputSubject.send(.updateData(chatData))
     }
 }
 
@@ -148,9 +144,16 @@ extension RecruitChatViewModel {
         }
         
         pollingTask = Task { [weak self] in
+            guard let self else {
+                return
+            }
+            
+            await fetchChatRoomDataIfNeeded()
+            
             while !Task.isCancelled {
-                guard let self else { return }
-                guard let chatRoomId else { continue }
+                guard let chatRoomId else {
+                    continue
+                }
                 
                 await fetchChatMessages(chatRoomId: chatRoomId)
                 
@@ -184,7 +187,6 @@ extension RecruitChatViewModel {
 }
 
 extension RecruitChatViewModel {
-    
     private func postMessage(text: String) {
         Task { [weak self] in
             guard let self else { return }
@@ -227,15 +229,11 @@ extension RecruitChatViewModel {
             return
         }
         
-        do {
-            try await postChatMessageUseCase.execute(
-                recruitmentId: recruitmentId,
-                chatRoomId: chatRoomId,
-                request: request
-            )
-        } catch {
-            outputSubject.send(.showToast(errorMessage(from: error)))
-        }
+        try await postChatMessageUseCase.execute(
+            recruitmentId: recruitmentId,
+            chatRoomId: chatRoomId,
+            request: request
+        )
     }
 }
 

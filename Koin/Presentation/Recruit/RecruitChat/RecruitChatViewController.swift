@@ -43,7 +43,6 @@ final class RecruitChatViewController: UIViewController {
         bind()
         setUpObservers()
         configureNavigationBar(style: .empty)
-        inputSubject.send(.viewDidLoad)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -52,7 +51,7 @@ final class RecruitChatViewController: UIViewController {
     }
 
     override func viewDidDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
+        super.viewDidDisappear(animated)
         inputSubject.send(.viewDidDisappear)
     }
 }
