@@ -12,7 +12,8 @@ struct RecruitMyPostView: ActionBindableView {
     enum Action {
         case showToast(message: String)
         case showApplicant(recruitmentId: Int, applicationId: Int)
-        case showDirectChat
+        case showDirectChat(recruitmentId: Int, applicationId: Int)
+        case showChat(recruitmentId: Int, chatRoomId: Int)
     }
 
     // MARK: - Properties
@@ -53,7 +54,8 @@ extension RecruitMyPostView {
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
                     RecruitMyPostSummaryView(model: data) {
-                        // TODO
+                        guard let chatRoomId = data.chatRoomId else { return }
+                        sendAction(.showChat(recruitmentId: data.id, chatRoomId: chatRoomId))
                     }
 
                     applicantListHeader
@@ -79,7 +81,10 @@ extension RecruitMyPostView {
                                         ))
                                     },
                                     onDirectChatTapped: {
-                                        sendAction(.showDirectChat)
+                                        sendAction(.showDirectChat(
+                                            recruitmentId: data.id,
+                                            applicationId: applicant.applicationId
+                                        ))
                                     }
                                 )
                             }

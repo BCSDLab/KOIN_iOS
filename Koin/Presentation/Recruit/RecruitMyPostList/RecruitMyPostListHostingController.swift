@@ -34,8 +34,8 @@ final class RecruitMyPostListHostingController: UIHostingController<RecruitMyPos
             showToastMessage(message: message)
         case .showRecruitData(let id):
             showRecruitData(id: id)
-        case .showChat(let chatRoomId):
-            showChat(chatRoomId: chatRoomId)
+        case .showChat(let recruitmentId, let chatRoomId):
+            showChat(recruitmentId: recruitmentId, chatRoomId: chatRoomId)
         case .showApplicants(let recruitId):
             showApplicants(recruitId: recruitId)
         case .showCloseModal(let recruitId):
@@ -65,8 +65,17 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
         navigationController?.pushViewController(controller, animated: true)
     }
 
-    private func showChat(chatRoomId: Int) {
-        // TODO: 채팅 화면 연결
+    private func showChat(recruitmentId: Int, chatRoomId: Int) {
+        let repository = MockRecruitRepository()
+        let viewModel = RecruitChatViewModel(
+            roomSource: .team(recruitmentId: recruitmentId, chatRoomId: chatRoomId),
+            fetchTeamChatDataUseCase: DefaultFetchRecruitTeamChatDataUseCase(repository: repository),
+            fetchDirectChatDataUseCase: DefaultFetchRecruitDirectChatDataUseCase(repository: repository),
+            fetchChatMessagesUseCase: DefaultFetchRecruitChatMessagesUseCase(repository: repository),
+            postChatMessageUseCase: DefaultPostRecruitChatMessageUseCase(repository: repository),
+            uploadFileUseCase: DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+        )
+        navigationController?.pushViewController(RecruitChatViewController(viewModel: viewModel), animated: true)
     }
 
     private func showApplicants(recruitId: Int) {

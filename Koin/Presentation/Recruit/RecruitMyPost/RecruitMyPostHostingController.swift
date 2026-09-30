@@ -36,8 +36,10 @@ final class RecruitMyPostHostingController: UIHostingController<RecruitMyPostVie
                 recruitmentId: recruitmentId,
                 applicationId: applicationId
             )
-        case .showDirectChat:
-            showDirectChat()
+        case .showDirectChat(let recruitmentId, let applicationId):
+            showDirectChat(recruitmentId: recruitmentId, applicationId: applicationId)
+        case .showChat(let recruitmentId, let chatRoomId):
+            showChat(recruitmentId: recruitmentId, chatRoomId: chatRoomId)
         }
     }
 }
@@ -59,7 +61,24 @@ extension RecruitMyPostHostingController {
         navigationController?.pushViewController(controller, animated: true)
     }
 
-    private func showDirectChat() {
-        // TODO: 지원자와의 1:1 채팅 화면 연결
+    private func showDirectChat(recruitmentId: Int, applicationId: Int) {
+        pushRecruitChat(roomSource: .direct(recruitmentId: recruitmentId, applicationId: applicationId))
+    }
+
+    private func showChat(recruitmentId: Int, chatRoomId: Int) {
+        pushRecruitChat(roomSource: .team(recruitmentId: recruitmentId, chatRoomId: chatRoomId))
+    }
+
+    private func pushRecruitChat(roomSource: RecruitChatViewModel.RoomSource) {
+        let repository = MockRecruitRepository()
+        let viewModel = RecruitChatViewModel(
+            roomSource: roomSource,
+            fetchTeamChatDataUseCase: DefaultFetchRecruitTeamChatDataUseCase(repository: repository),
+            fetchDirectChatDataUseCase: DefaultFetchRecruitDirectChatDataUseCase(repository: repository),
+            fetchChatMessagesUseCase: DefaultFetchRecruitChatMessagesUseCase(repository: repository),
+            postChatMessageUseCase: DefaultPostRecruitChatMessageUseCase(repository: repository),
+            uploadFileUseCase: DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+        )
+        navigationController?.pushViewController(RecruitChatViewController(viewModel: viewModel), animated: true)
     }
 }

@@ -499,7 +499,10 @@
 		7CE13427306A40000011B052 /* RecruitMyPostApplicantProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE13426306A40000011B052 /* RecruitMyPostApplicantProfileView.swift */; };
 		7CE1342B306A40000011B052 /* RecruitMyPostApplicantActivityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE1342A306A40000011B052 /* RecruitMyPostApplicantActivityView.swift */; };
 		7CE1342D306A40000011B052 /* RecruitMyPostApplicantBottomActionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE1342C306A40000011B052 /* RecruitMyPostApplicantBottomActionView.swift */; };
+		7CE1342E306A980D0011B052 /* FetchRecruitTeamChatDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE1342D306A980D0011B052 /* FetchRecruitTeamChatDataUseCase.swift */; };
+		7CE13430306ABEB90011B052 /* Publisher+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* Publisher+.swift */; };
 		7CE13431306A40000011B052 /* RecruitMyPostApplicantRoleChipView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE13430306A40000011B052 /* RecruitMyPostApplicantRoleChipView.swift */; };
+		7CE13432306C01BC0011B052 /* RecruitChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE13431306C01BC0011B052 /* RecruitChatMessage.swift */; };
 		7CE13433306A40000011B052 /* RecruitMyPostApplicantTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CE13432306A40000011B052 /* RecruitMyPostApplicantTextView.swift */; };
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
@@ -833,13 +836,22 @@
 		A11F00000000000000000004 /* RecruitMyPostEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11E00000000000000000004 /* RecruitMyPostEmptyView.swift */; };
 		A1D000010000000000000001 /* FetchRecruitDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D000010000000000000002 /* FetchRecruitDataUseCase.swift */; };
 		A1E000010000000000000001 /* RecruitPostRoleTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1E000010000000000000002 /* RecruitPostRoleTableView.swift */; };
+		A2C110000000000000000001 /* RecruitChatData.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C110000000000000000002 /* RecruitChatData.swift */; };
+		A2C110000000000000000003 /* RecruitChatMessages.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C110000000000000000004 /* RecruitChatMessages.swift */; };
+		A2C110000000000000000005 /* RecruitChatPostRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C110000000000000000006 /* RecruitChatPostRequest.swift */; };
+		A2C120000000000000000005 /* FetchRecruitChatMessagesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C120000000000000000006 /* FetchRecruitChatMessagesUseCase.swift */; };
+		A2C120000000000000000007 /* PostRecruitChatMessageUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C120000000000000000008 /* PostRecruitChatMessageUseCase.swift */; };
+		A2C130000000000000000001 /* FetchRecruitDirectChatDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C130000000000000000002 /* FetchRecruitDirectChatDataUseCase.swift */; };
+		A2C140000000000000000001 /* RecruitChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C140000000000000000002 /* RecruitChatViewController.swift */; };
+		A2C140000000000000000003 /* RecruitChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C140000000000000000004 /* RecruitChatViewModel.swift */; };
+		A2C140000000000000000005 /* ChatListModel+RecruitChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A2C140000000000000000006 /* ChatListModel+RecruitChat.swift */; };
 		A51C00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift */; };
 		A51C00000000000000000002 /* RecruitProfilePostSkillTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000002 /* RecruitProfilePostSkillTableView.swift */; };
 		A51C00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift */; };
 		A51C00000000000000000004 /* RecruitProfilePostActivityTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000004 /* RecruitProfilePostActivityTableView.swift */; };
 		A51C00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift */; };
 		A51C00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */; };
-		AA20000000000000000001 /* PublisherTestSupport.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* PublisherTestSupport.swift */; };
+		AA20000000000000000001 /* Publisher+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* Publisher+.swift */; };
 		AA20000000000000000002 /* DiningFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000002 /* DiningFixtures.swift */; };
 		AA20000000000000000003 /* SpyDiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000003 /* SpyDiningRepository.swift */; };
 		AA20000000000000000004 /* DateProviderTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000004 /* DateProviderTests.swift */; };
@@ -1662,7 +1674,9 @@
 		7CE13426306A40000011B052 /* RecruitMyPostApplicantProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostApplicantProfileView.swift; sourceTree = "<group>"; };
 		7CE1342A306A40000011B052 /* RecruitMyPostApplicantActivityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostApplicantActivityView.swift; sourceTree = "<group>"; };
 		7CE1342C306A40000011B052 /* RecruitMyPostApplicantBottomActionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostApplicantBottomActionView.swift; sourceTree = "<group>"; };
+		7CE1342D306A980D0011B052 /* FetchRecruitTeamChatDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitTeamChatDataUseCase.swift; sourceTree = "<group>"; };
 		7CE13430306A40000011B052 /* RecruitMyPostApplicantRoleChipView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostApplicantRoleChipView.swift; sourceTree = "<group>"; };
+		7CE13431306C01BC0011B052 /* RecruitChatMessage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitChatMessage.swift; sourceTree = "<group>"; };
 		7CE13432306A40000011B052 /* RecruitMyPostApplicantTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostApplicantTextView.swift; sourceTree = "<group>"; };
 		7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteDeviceTokenUseCase.swift; sourceTree = "<group>"; };
 		7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopCollectionView.swift; sourceTree = "<group>"; };
@@ -2000,13 +2014,22 @@
 		A11E00000000000000000004 /* RecruitMyPostEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostEmptyView.swift; sourceTree = "<group>"; };
 		A1D000010000000000000002 /* FetchRecruitDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitDataUseCase.swift; sourceTree = "<group>"; };
 		A1E000010000000000000002 /* RecruitPostRoleTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleTableView.swift; sourceTree = "<group>"; };
+		A2C110000000000000000002 /* RecruitChatData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitChatData.swift; sourceTree = "<group>"; };
+		A2C110000000000000000004 /* RecruitChatMessages.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitChatMessages.swift; sourceTree = "<group>"; };
+		A2C110000000000000000006 /* RecruitChatPostRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitChatPostRequest.swift; sourceTree = "<group>"; };
+		A2C120000000000000000006 /* FetchRecruitChatMessagesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitChatMessagesUseCase.swift; sourceTree = "<group>"; };
+		A2C120000000000000000008 /* PostRecruitChatMessageUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitChatMessageUseCase.swift; sourceTree = "<group>"; };
+		A2C130000000000000000002 /* FetchRecruitDirectChatDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitDirectChatDataUseCase.swift; sourceTree = "<group>"; };
+		A2C140000000000000000002 /* RecruitChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitChatViewController.swift; sourceTree = "<group>"; };
+		A2C140000000000000000004 /* RecruitChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitChatViewModel.swift; sourceTree = "<group>"; };
+		A2C140000000000000000006 /* ChatListModel+RecruitChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatListModel+RecruitChat.swift"; sourceTree = "<group>"; };
 		A51B00000000000000000001 /* RecruitProfilePostAddTableFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostAddTableFooterView.swift; sourceTree = "<group>"; };
 		A51B00000000000000000002 /* RecruitProfilePostSkillTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostSkillTableView.swift; sourceTree = "<group>"; };
 		A51B00000000000000000003 /* RecruitProfilePostSkillTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostSkillTableViewCell.swift; sourceTree = "<group>"; };
 		A51B00000000000000000004 /* RecruitProfilePostActivityTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityTableView.swift; sourceTree = "<group>"; };
 		A51B00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityDisplayTableViewCell.swift; sourceTree = "<group>"; };
 		A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityEditTableViewCell.swift; sourceTree = "<group>"; };
-		AA10000000000000000001 /* PublisherTestSupport.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PublisherTestSupport.swift; sourceTree = "<group>"; };
+		AA10000000000000000001 /* Publisher+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+.swift"; sourceTree = "<group>"; };
 		AA10000000000000000002 /* DiningFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningFixtures.swift; sourceTree = "<group>"; };
 		AA10000000000000000003 /* SpyDiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyDiningRepository.swift; sourceTree = "<group>"; };
 		AA10000000000000000004 /* DateProviderTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateProviderTests.swift; sourceTree = "<group>"; };
@@ -2912,6 +2935,7 @@
 				7C52085D306902C10009BDD3 /* RecruitApply */,
 				7C520862306947220009BDD3 /* RecruitMyPost */,
 				7CE13413306A2BA20011B052 /* RecruitMyPostApplicant */,
+				A2C140000000000000000007 /* RecruitChat */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -2958,6 +2982,10 @@
 				7CF1D58E3069772700295ED9 /* RecruitApplicationSummary.swift */,
 				7CE13419306A2D100011B052 /* RecruitApplication.swift */,
 				7CE1341D306A2FA30011B052 /* RecruitApplicationDecision.swift */,
+				A2C110000000000000000002 /* RecruitChatData.swift */,
+				A2C110000000000000000004 /* RecruitChatMessages.swift */,
+				7CE13431306C01BC0011B052 /* RecruitChatMessage.swift */,
+				A2C110000000000000000006 /* RecruitChatPostRequest.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -3016,6 +3044,7 @@
 				CAFE30000000000000000004 /* RecruitMyApplicationList */,
 				7CACF86E3044097800AC2828 /* RecruitNotificationList */,
 				7C52085F30692C000009BDD3 /* RecruitApply */,
+				A2C120000000000000000009 /* RecruitChat */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -3261,6 +3290,7 @@
 		7C7F56B52FFB9F4A00847151 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				7CE1342F306ABEAC0011B052 /* Support */,
 				7CA686742FFCB6D8007937E9 /* Core */,
 				7CA686732FFCB6BE007937E9 /* NotificationHistory */,
 			);
@@ -4013,6 +4043,14 @@
 				7CE1342C306A40000011B052 /* RecruitMyPostApplicantBottomActionView.swift */,
 			);
 			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7CE1342F306ABEAC0011B052 /* Support */ = {
+			isa = PBXGroup;
+			children = (
+				AA10000000000000000001 /* Publisher+.swift */,
+			);
+			path = Support;
 			sourceTree = "<group>";
 		};
 		7CED8EC52EF2D1F900457128 /* ShopCollectionView */ = {
@@ -5308,10 +5346,38 @@
 			path = RecruitData;
 			sourceTree = "<group>";
 		};
+		A2C120000000000000000009 /* RecruitChat */ = {
+			isa = PBXGroup;
+			children = (
+				7CE1342D306A980D0011B052 /* FetchRecruitTeamChatDataUseCase.swift */,
+				A2C130000000000000000002 /* FetchRecruitDirectChatDataUseCase.swift */,
+				A2C120000000000000000006 /* FetchRecruitChatMessagesUseCase.swift */,
+				A2C120000000000000000008 /* PostRecruitChatMessageUseCase.swift */,
+			);
+			path = RecruitChat;
+			sourceTree = "<group>";
+		};
+		A2C140000000000000000007 /* RecruitChat */ = {
+			isa = PBXGroup;
+			children = (
+				A2C140000000000000000008 /* Mapper */,
+				A2C140000000000000000002 /* RecruitChatViewController.swift */,
+				A2C140000000000000000004 /* RecruitChatViewModel.swift */,
+			);
+			path = RecruitChat;
+			sourceTree = "<group>";
+		};
+		A2C140000000000000000008 /* Mapper */ = {
+			isa = PBXGroup;
+			children = (
+				A2C140000000000000000006 /* ChatListModel+RecruitChat.swift */,
+			);
+			path = Mapper;
+			sourceTree = "<group>";
+		};
 		AA30000000000000000001 /* Support */ = {
 			isa = PBXGroup;
 			children = (
-				AA10000000000000000001 /* PublisherTestSupport.swift */,
 				AA10000000000000000002 /* DiningFixtures.swift */,
 				AA10000000000000000007 /* DiningLoggingTestSupport.swift */,
 			);
@@ -6580,6 +6646,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A2C140000000000000000001 /* RecruitChatViewController.swift in Sources */,
+				A2C140000000000000000003 /* RecruitChatViewModel.swift in Sources */,
+				A2C140000000000000000005 /* ChatListModel+RecruitChat.swift in Sources */,
+				A2C110000000000000000001 /* RecruitChatData.swift in Sources */,
+				A2C110000000000000000003 /* RecruitChatMessages.swift in Sources */,
+				A2C110000000000000000005 /* RecruitChatPostRequest.swift in Sources */,
+				A2C120000000000000000005 /* FetchRecruitChatMessagesUseCase.swift in Sources */,
+				A2C120000000000000000007 /* PostRecruitChatMessageUseCase.swift in Sources */,
 				F0F216EDAA69B52CBEC0E606 /* RecruitPostViewModel.swift in Sources */,
 				004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */,
 				E5DD3F6BE6C501B7B3BD659C /* RecruitPostRoleView.swift in Sources */,
@@ -7228,6 +7302,7 @@
 				7C4D5A4B2F01638800B40128 /* BusTimetableViewModel.swift in Sources */,
 				7C4D5A4C2F01638800B40128 /* BusAreaSelectedCollectionView.swift in Sources */,
 				7CA63A252F1AF7F900226F86 /* LostItemListViewController.swift in Sources */,
+				7CE13430306ABEB90011B052 /* Publisher+.swift in Sources */,
 				7C58FE942F5FB69E00A2737B /* CallVanDataViewModel.swift in Sources */,
 				7C4D5A4D2F01638800B40128 /* ManyBusTimetableCollectionViewHeaderCell.swift in Sources */,
 				7C7F432A2F65F42300CC5860 /* CallVanRecruitmentState.swift in Sources */,
@@ -7392,6 +7467,7 @@
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
 				7C372EE62F1C0CC400149729 /* LostItemListData.swift in Sources */,
 				7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */,
+				7CE13432306C01BC0011B052 /* RecruitChatMessage.swift in Sources */,
 				7CDCD0E2305602F6004204DA /* RecruitProfileActivityRequest.swift in Sources */,
 				7CED921A2EF2D1F900457128 /* ShopViewController.swift in Sources */,
 				D86E2E152E7D860E006D63AF /* ShuttleBusTimetable.swift in Sources */,
@@ -7449,6 +7525,8 @@
 				7CF77B3E300254CD003642C1 /* ProfileViewModel.swift in Sources */,
 				D2FB234F2BFD46DE0098BA2B /* FetchShopListUseCase.swift in Sources */,
 				7CC42B4B2F59941200940CE1 /* FetchCallVanListUseCase.swift in Sources */,
+				7CE1342E306A980D0011B052 /* FetchRecruitTeamChatDataUseCase.swift in Sources */,
+				A2C130000000000000000001 /* FetchRecruitDirectChatDataUseCase.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				7CB11C0C2FB198A6004E0C80 /* LostItemKeywordCollectionViewKeywordCell.swift in Sources */,
 				7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */,
@@ -7688,7 +7766,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AA20000000000000000001 /* PublisherTestSupport.swift in Sources */,
+				AA20000000000000000001 /* Publisher+.swift in Sources */,
 				AA20000000000000000002 /* DiningFixtures.swift in Sources */,
 				AA20000000000000000003 /* SpyDiningRepository.swift in Sources */,
 				AA20000000000000000004 /* DateProviderTests.swift in Sources */,

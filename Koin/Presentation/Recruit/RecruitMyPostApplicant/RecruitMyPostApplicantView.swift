@@ -11,7 +11,7 @@ struct RecruitMyPostApplicantView: ActionBindableView {
 
     enum Action {
         case showDecisionModal(RecruitApplicationDecision)
-        case showDirectChat
+        case showDirectChat(recruitmentId: Int, applicationId: Int)
         case showToast(message: String)
     }
 
@@ -107,7 +107,10 @@ extension RecruitMyPostApplicantView {
                     sendAction(.showDecisionModal(decision))
                 },
                 onDirectChatTapped: {
-                    sendAction(.showDirectChat)
+                    sendAction(.showDirectChat(
+                        recruitmentId: viewModel.recruitmentId,
+                        applicationId: application.applicationId
+                    ))
                 }
             )
             .padding(.horizontal, 32)

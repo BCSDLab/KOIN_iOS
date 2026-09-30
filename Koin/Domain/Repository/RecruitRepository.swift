@@ -8,6 +8,23 @@
 import Foundation
 
 protocol RecruitRepository {
+    func fetchTeamChatData(
+        recruitmentId: Int,
+        chatRoomId: Int
+    ) async throws -> RecruitChatData
+    func fetchDirectChatData(
+        recruitmentId: Int,
+        applicationId: Int
+    ) async throws -> RecruitChatData
+    func fetchChatMessages(
+        recruitmentId: Int,
+        chatRoomId: Int
+    ) async throws -> RecruitChatMessages
+    func postChatMessage(
+        recruitmentId: Int,
+        chatRoomId: Int,
+        request: RecruitChatPostRequest
+    ) async throws
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList
     func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList
     func fetchMyPost(_ id: Int) async throws -> RecruitMyPostSummary

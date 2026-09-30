@@ -31,8 +31,8 @@ final class RecruitMyPostApplicantHostingController: UIHostingController<Recruit
         switch action {
         case .showDecisionModal(let decision):
             showDecisionModal(decision)
-        case .showDirectChat:
-            showDirectChat()
+        case .showDirectChat(let recruitmentId, let applicationId):
+            showDirectChat(recruitmentId: recruitmentId, applicationId: applicationId)
         case .showToast(let message):
             showToastMessage(message: message, bottomInset: 80)
         }
@@ -99,7 +99,16 @@ extension RecruitMyPostApplicantHostingController {
         present(modalViewController, animated: true)
     }
 
-    private func showDirectChat() {
-        // TODO: 지원자와의 1:1 채팅 화면 연결
+    private func showDirectChat(recruitmentId: Int, applicationId: Int) {
+        let repository = MockRecruitRepository()
+        let viewModel = RecruitChatViewModel(
+            roomSource: .direct(recruitmentId: recruitmentId, applicationId: applicationId),
+            fetchTeamChatDataUseCase: DefaultFetchRecruitTeamChatDataUseCase(repository: repository),
+            fetchDirectChatDataUseCase: DefaultFetchRecruitDirectChatDataUseCase(repository: repository),
+            fetchChatMessagesUseCase: DefaultFetchRecruitChatMessagesUseCase(repository: repository),
+            postChatMessageUseCase: DefaultPostRecruitChatMessageUseCase(repository: repository),
+            uploadFileUseCase: DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+        )
+        navigationController?.pushViewController(RecruitChatViewController(viewModel: viewModel), animated: true)
     }
 }
