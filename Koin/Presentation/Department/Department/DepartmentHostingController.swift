@@ -21,7 +21,7 @@ final class DepartmentHostingController: UIHostingController<DepartmentView>, Ho
     // MARK: - Life Cycle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .order)
+        configureNavigationBar(style: .newBackground)
     }
     
     // MARK: - Execute

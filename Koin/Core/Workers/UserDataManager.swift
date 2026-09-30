@@ -9,6 +9,7 @@ import FirebaseAnalytics
 
 final class UserDataManager {
     static let shared = UserDataManager()
+    private(set) var isLoggedIn: Bool = false
     private(set) var userId: String = ""
     private(set) var id: Int = 0
     private(set) var gender: Any = ""
@@ -18,6 +19,8 @@ final class UserDataManager {
     private init() {}
     
     func setUserData(userData: UserDto) {
+        isLoggedIn = true
+        
         guard let id = userData.id else {
             self.id = 0
             self.userId = "anonymous"
@@ -46,6 +49,7 @@ final class UserDataManager {
     }
 
     func resetUserData() {
+        isLoggedIn = false
         userId = ""
         id = 0
         gender = ""

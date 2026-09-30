@@ -12,7 +12,7 @@ extension UIViewController {
     enum NavigationBarStyle {
         case fill
         case empty
-        case order
+        case newBackground
         case transparentWhite
         case shuttleTicket
         
@@ -22,7 +22,7 @@ extension UIViewController {
                 return UIColor.appColor(.primary500)
             case .empty:
                 return UIColor.appColor(.neutral0)
-            case .order:
+            case .newBackground:
                 return UIColor.appColor(.newBackground)
             case .transparentWhite:
                 return UIColor.clear
@@ -35,7 +35,7 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty, .order, .shuttleTicket:
+            case .empty, .newBackground, .shuttleTicket:
                 return UIColor.appColor(.neutral800)
             }
         }
@@ -48,7 +48,7 @@ extension UIViewController {
             switch self {
             case .fill, .transparentWhite:
                 return UIColor.appColor(.neutral0)
-            case .empty, .order, .shuttleTicket:
+            case .empty, .newBackground, .shuttleTicket:
                 return UIColor.appColor(.neutral800)
             }
         }

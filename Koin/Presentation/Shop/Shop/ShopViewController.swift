@@ -42,7 +42,7 @@ final class ShopViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .order)
+        configureNavigationBar(style: .newBackground)
         inputSubject.send(.getUserScreenAction(Date(), .enterVC))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
         inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))

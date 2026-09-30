@@ -39,12 +39,12 @@ final class CallVanPostViewController: UIViewController {
     // MARK: - Dropdown
     private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
     private lazy var dateDropdown = dropdownHost.makeDropdown(
-        trigger: dateView.dropdownTrigger,
+        anchor: dateView.dropdownTrigger,
         contentView: dateView.dropdownContentView,
         configuration: .init(topPadding: 12, shadow: .shadow2)
     )
     private lazy var timeDropdown = dropdownHost.makeDropdown(
-        trigger: timeView.dropdownTrigger,
+        anchor: timeView.dropdownTrigger,
         contentView: timeView.dropdownContentView,
         configuration: .init(topPadding: 12, shadow: .shadow2)
     )
