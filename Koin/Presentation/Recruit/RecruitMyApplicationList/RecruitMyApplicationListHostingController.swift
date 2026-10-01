@@ -44,7 +44,7 @@ final class RecruitMyApplicationListHostingController: UIHostingController<Recru
 
 extension RecruitMyApplicationListHostingController {
     private func showRecruitData(id: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
         let viewModel = RecruitDataViewModel(
@@ -60,7 +60,7 @@ extension RecruitMyApplicationListHostingController {
     }
 
     private func showChat(recruitmentId: Int, chatRoomId: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let viewModel = RecruitChatViewModel(
             roomSource: .team(recruitmentId: recruitmentId, chatRoomId: chatRoomId),
             fetchTeamChatDataUseCase: DefaultFetchRecruitTeamChatDataUseCase(repository: repository),

@@ -298,7 +298,7 @@ extension RecruitPostViewController {
     }
     
     private func handlePostCompleted(id: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
         let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)
@@ -315,7 +315,7 @@ extension RecruitPostViewController {
             return
         }
         
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
         let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)

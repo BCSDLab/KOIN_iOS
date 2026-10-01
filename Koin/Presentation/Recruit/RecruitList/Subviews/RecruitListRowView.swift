@@ -48,9 +48,15 @@ extension RecruitListRowView {
                 .background(Color.appColor(model.category.backgroundColor))
                 .clipShape(.capsule)
             
-            Text(model.state == .closed ? "모집완료" : model.dDay)
-                .font(.appFont(.pretendardMedium, size: 10))
-                .foregroundStyle(Color.appColor(model.state == .closed ? .new600 : .danger700))
+            if model.state == .closed {
+                Text("모집완료")
+                    .font(.appFont(.pretendardMedium, size: 10))
+                    .foregroundStyle(Color.appColor(.new600))
+            } else if let dDay = model.dDay {
+                Text(dDay)
+                    .font(.appFont(.pretendardMedium, size: 10))
+                    .foregroundStyle(Color.appColor(.danger700))
+            }
         }
     }
     
@@ -91,7 +97,7 @@ extension RecruitListRowView {
                 
                 HStack(alignment: .center, spacing: 2) {
                     Image.appImage(asset: .recruitDate)
-                    Text("\(model.startDate.formatDateToYYYYMMDD(separator: ".")) ~ \(model.endDate.formatDateToYYYYMMDD(separator: "."))")
+                    Text("\(model.startDate?.formatDateToYYYYMMDD(separator: ".") ?? "") ~ \(model.endDate?.formatDateToYYYYMMDD(separator: ".") ?? "")")
                         .font(.appFont(.pretendardRegular, size: 10))
                         .foregroundStyle(Color.appColor(.neutral500))
                 }

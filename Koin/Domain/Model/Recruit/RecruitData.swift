@@ -11,7 +11,7 @@ struct RecruitData: Identifiable, Equatable {
     let id: Int
     
     let category: RecruitCategory
-    let dDay: String
+    let dDay: String?
     let state: RecruitState
     let title: String
     

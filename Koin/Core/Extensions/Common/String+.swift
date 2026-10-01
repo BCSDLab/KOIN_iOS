@@ -267,6 +267,8 @@ extension String {
     func toDateFromYYYYMMDD() -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
+        dateFormatter.locale = Locale(identifier: "ko_KR")
+        dateFormatter.calendar = Calendar(identifier: .gregorian)
         return dateFormatter.date(from: self)
     }
     

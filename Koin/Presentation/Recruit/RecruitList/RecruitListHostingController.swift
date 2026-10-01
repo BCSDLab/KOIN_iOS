@@ -67,7 +67,7 @@ extension RecruitListHostingController: RecruitDataHostingControllerDelegate {
     }
     
     private func showRecruitData(id: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
         let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)
@@ -108,7 +108,7 @@ extension RecruitListHostingController {
         return
     }
     private func showRecruitNotificationList() {
-        let recruitRepository = MockRecruitRepository()
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
         let markAsReadRecruitNotificationUseCase = DefaultMarkAsReadRecruitNotificationUseCase(repository: recruitRepository)
         let deleteRecruitNotificationUseCase = DefaultDeleteRecruitNotificationUseCase(repository: recruitRepository)
@@ -121,7 +121,7 @@ extension RecruitListHostingController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     private func showRecruitProfile() {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchMyProfileUseCase = DefaultFetchMyProfileUseCase(repository: repository)
         let viewModel = RecruitProfileViewModel(fetchMyProfileUseCase: fetchMyProfileUseCase)
         let viewController = RecruitProfileHostingController(
@@ -130,7 +130,7 @@ extension RecruitListHostingController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     private func showRecruitPost() {
-        let recruitRepository = MockRecruitRepository()
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
         let viewModel = RecruitPostViewModel(

@@ -201,7 +201,7 @@ extension CategoryHostingController {
     }
     
     private func makeRecruitListViewController() -> UIViewController {
-        let recruitRepository = MockRecruitRepository()
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitListUseCase = DefaultFetchRecruitListUseCase(repository: recruitRepository)
         let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
         let viewModel = RecruitListViewModel(

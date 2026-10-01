@@ -46,7 +46,7 @@ final class RecruitMyPostHostingController: UIHostingController<RecruitMyPostVie
 
 extension RecruitMyPostHostingController {
     private func showApplicant(recruitmentId: Int, applicationId: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitApplicantUseCase(repository: repository)
         let decideUseCase = DefaultDecideRecruitApplicantUseCase(repository: repository)
         let viewModel = RecruitMyPostApplicantViewModel(
@@ -70,7 +70,7 @@ extension RecruitMyPostHostingController {
     }
 
     private func pushRecruitChat(roomSource: RecruitChatViewModel.RoomSource) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let viewModel = RecruitChatViewModel(
             roomSource: roomSource,
             fetchTeamChatDataUseCase: DefaultFetchRecruitTeamChatDataUseCase(repository: repository),

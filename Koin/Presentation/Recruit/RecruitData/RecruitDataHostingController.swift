@@ -128,7 +128,7 @@ extension RecruitDataHostingController {
         guard let id = rootView.id else {
             return
         }
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitMyPostDataUseCase = DefaultFetchRecruitMyPostDataUseCase(repository: repository)
         let viewModel = RecruitMyPostViewModel(
             fetchRecruitMyPostDataUseCase: fetchRecruitMyPostDataUseCase,
@@ -143,7 +143,7 @@ extension RecruitDataHostingController {
         guard let recruit = rootView.data else {
             return
         }
-        let recruitRepository = MockRecruitRepository()
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let viewModel = RecruitApplyViewModel(
             fetchDeptListUseCase: MockFetchDeptListUseCase(),
             fetchMyProfileUseCase: DefaultFetchMyProfileUseCase(repository: recruitRepository),
@@ -169,7 +169,7 @@ extension RecruitDataHostingController {
         guard let data = rootView.data else {
             return
         }
-        let recruitRepository = MockRecruitRepository()
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
         let viewModel = RecruitPostViewModel(
