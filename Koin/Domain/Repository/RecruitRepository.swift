@@ -27,7 +27,7 @@ protocol RecruitRepository {
     ) async throws
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList
     func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList
-    func fetchMyPost(_ id: Int) async throws -> RecruitMyPostRow
+    func fetchMyPostData(_ id: Int) async throws -> RecruitMyPostData
     func fetchApplicant(
         recruitmentId: Int,
         applicationId: Int

@@ -1,13 +1,13 @@
 //
-//  RecruitMyPostRow.swift
+//  RecruitMyPostData.swift
 //  koin
 //
-//  Created by 홍기정 on 9/24/26.
+//  Created by 홍기정 on 10/1/26.
 //
 
 import Foundation
 
-struct RecruitMyPostRow: Identifiable, Equatable {
+struct RecruitMyPostData: Identifiable, Equatable {
     let id: Int
     let category: RecruitCategory
     let title: String
@@ -25,6 +25,8 @@ struct RecruitMyPostRow: Identifiable, Equatable {
     let roles: [RecruitRole]
 
     let state: RecruitState
-    let canClose: Bool?
     let chatRoomId: Int?
+
+    let applicants: [RecruitApplicantRow]
+    let totalCount: Int
 }

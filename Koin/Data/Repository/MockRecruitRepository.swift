@@ -285,11 +285,7 @@ final class MockRecruitRepository: RecruitRepository {
                 roles: summary.roles,
                 state: summary.state,
                 canClose: summary.id != 3,
-                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil,
-                applications: mockApplications(
-                    recruitId: summary.id,
-                    includesRole: summary.type == .roleBased
-                )
+                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil
             )
         }
 
@@ -315,12 +311,16 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
-    func fetchMyPost(_ id: Int) async throws -> RecruitMyPostRow {
+    func fetchMyPostData(_ id: Int) async throws -> RecruitMyPostData {
         let response = try await fetchMyPostList(RecruitMyPostFilter())
         guard let recruit = response.recruits.first(where: { $0.id == id }) else {
             throw ErrorResponse.unexpectedInternalError
         }
-        return RecruitMyPostRow(
+        let applicants = mockApplicants(
+            recruitId: recruit.id,
+            includesRole: recruit.type == .roleBased
+        )
+        return RecruitMyPostData(
             id: recruit.id,
             category: recruit.category,
             title: recruit.title,
@@ -334,9 +334,9 @@ final class MockRecruitRepository: RecruitRepository {
             type: recruit.type,
             roles: recruit.roles,
             state: recruit.state,
-            canClose: recruit.canClose,
             chatRoomId: recruit.chatRoomId ?? recruit.id,
-            applications: recruit.applications
+            applicants: applicants,
+            totalCount: applicants.count
         )
     }
 
@@ -346,8 +346,8 @@ final class MockRecruitRepository: RecruitRepository {
     ) async throws -> RecruitApplicantData {
         try await Task.sleep(nanoseconds: 300_000_000)
 
-        let recruitment = try await fetchMyPost(recruitmentId)
-        guard let application = recruitment.applications.first(where: {
+        let recruitment = try await fetchMyPostData(recruitmentId)
+        guard let application = recruitment.applicants.first(where: {
             $0.applicationId == applicationId
         }) else {
             throw ErrorResponse.unexpectedInternalError
@@ -395,8 +395,8 @@ final class MockRecruitRepository: RecruitRepository {
         applicationId: Int,
         decision: RecruitApplicantDecision
     ) async throws -> Void {
-        let recruitment = try await fetchMyPost(recruitmentId)
-        guard recruitment.applications.contains(where: {
+        let recruitment = try await fetchMyPostData(recruitmentId)
+        guard recruitment.applicants.contains(where: {
             $0.applicationId == applicationId && $0.status == .pending
         }) else {
             throw ErrorResponse.unexpectedInternalError
@@ -404,7 +404,7 @@ final class MockRecruitRepository: RecruitRepository {
         try await Task.sleep(nanoseconds: 300_000_000)
     }
 
-    private func mockApplications(
+    private func mockApplicants(
         recruitId: Int,
         includesRole: Bool
     ) -> [RecruitApplicantRow] {

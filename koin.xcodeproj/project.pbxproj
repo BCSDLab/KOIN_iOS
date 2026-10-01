@@ -729,7 +729,7 @@
 		7CF1D58B30695E7900295ED9 /* RecruitMyPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58A30695E7900295ED9 /* RecruitMyPostViewModel.swift */; };
 		7CF1D58D30695E8A00295ED9 /* RecruitMyPostHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58C30695E8A00295ED9 /* RecruitMyPostHostingController.swift */; };
 		7CF1D58F3069772700295ED9 /* RecruitApplicantRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58E3069772700295ED9 /* RecruitApplicantRow.swift */; };
-		7CF1D5913069772700295ED9 /* FetchRecruitMyPostUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D5903069772700295ED9 /* FetchRecruitMyPostUseCase.swift */; };
+		7CF1D5913069772700295ED9 /* FetchRecruitMyPostDataUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D5903069772700295ED9 /* FetchRecruitMyPostDataUseCase.swift */; };
 		7CF77B3A300254BE003642C1 /* ProfileHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B39300254BE003642C1 /* ProfileHostingController.swift */; };
 		7CF77B3C300254C8003642C1 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B3B300254C8003642C1 /* ProfileView.swift */; };
 		7CF77B3E300254CD003642C1 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B3D300254CD003642C1 /* ProfileViewModel.swift */; };
@@ -826,6 +826,7 @@
 		83EBB87A2D0FDFD700346018 /* KoinPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8792D0FDFD700346018 /* KoinPickerView.swift */; };
 		83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */; };
 		8A7B1679CC9945559E674584 /* RecruitDataRolesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945FF00E918646E5AB601057 /* RecruitDataRolesView.swift */; };
+		91E82A6B67BF5BF911535B1C /* RecruitMyPostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */; };
 		9C95E190C98F440DADB6F91B /* RecruitDataMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DADCC36CEEA42EC86AB75B6 /* RecruitDataMetadataView.swift */; };
 		A0B343754988C9398C4FE726 /* ModifyRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */; };
 		A11B00000000000000000001 /* PostBasicInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B00000000000000000002 /* PostBasicInfoUseCase.swift */; };
@@ -1917,7 +1918,7 @@
 		7CF1D58A30695E7900295ED9 /* RecruitMyPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostViewModel.swift; sourceTree = "<group>"; };
 		7CF1D58C30695E8A00295ED9 /* RecruitMyPostHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostHostingController.swift; sourceTree = "<group>"; };
 		7CF1D58E3069772700295ED9 /* RecruitApplicantRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplicantRow.swift; sourceTree = "<group>"; };
-		7CF1D5903069772700295ED9 /* FetchRecruitMyPostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitMyPostUseCase.swift; sourceTree = "<group>"; };
+		7CF1D5903069772700295ED9 /* FetchRecruitMyPostDataUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecruitMyPostDataUseCase.swift; sourceTree = "<group>"; };
 		7CF77B39300254BE003642C1 /* ProfileHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHostingController.swift; sourceTree = "<group>"; };
 		7CF77B3B300254C8003642C1 /* ProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileView.swift; sourceTree = "<group>"; };
 		7CF77B3D300254CD003642C1 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
@@ -2017,6 +2018,7 @@
 		83E96DB72BBC6FBF00164914 /* BusSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDto.swift; sourceTree = "<group>"; };
 		83EBB8792D0FDFD700346018 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
+		87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitMyPostData.swift; sourceTree = "<group>"; };
 		8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostScheduleView.swift; sourceTree = "<group>"; };
 		945FF00E918646E5AB601057 /* RecruitDataRolesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataRolesView.swift; sourceTree = "<group>"; };
 		A001E2B42845091D00D6C310 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3015,6 +3017,7 @@
 				7CE13431306C01BC0011B052 /* RecruitChatMessage.swift */,
 				A2C110000000000000000006 /* RecruitChatPostRequest.swift */,
 				645CEE62E516B130B4E2D784 /* RecruitMyApplication.swift */,
+				87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -5552,7 +5555,7 @@
 			isa = PBXGroup;
 			children = (
 				BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */,
-				7CF1D5903069772700295ED9 /* FetchRecruitMyPostUseCase.swift */,
+				7CF1D5903069772700295ED9 /* FetchRecruitMyPostDataUseCase.swift */,
 				BEEF10000000000000000004 /* FetchRecruitMyPostListUseCase.swift */,
 				7CE13417306A2CBF0011B052 /* FetchRecruitApplicantUseCase.swift */,
 				7CE1341B306A2F930011B052 /* DecideRecruitApplicantUseCase.swift */,
@@ -7031,7 +7034,7 @@
 				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
 				7C8A942F2FD2C15400DEA6F5 /* ShopEventCountDto.swift in Sources */,
 				7CF1D58F3069772700295ED9 /* RecruitApplicantRow.swift in Sources */,
-				7CF1D5913069772700295ED9 /* FetchRecruitMyPostUseCase.swift in Sources */,
+				7CF1D5913069772700295ED9 /* FetchRecruitMyPostDataUseCase.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
 				83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */,
@@ -7801,6 +7804,7 @@
 				A51C00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift in Sources */,
 				B154A7D97E6AAEC2ED3D8119 /* MockFetchDeptListUseCase.swift in Sources */,
 				A5F8FD7A714E689BC4F3321B /* RecruitMyApplication.swift in Sources */,
+				91E82A6B67BF5BF911535B1C /* RecruitMyPostData.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -129,9 +129,9 @@ extension RecruitDataHostingController {
             return
         }
         let repository = MockRecruitRepository()
-        let fetchRecruitMyPostUseCase = DefaultFetchRecruitMyPostUseCase(repository: repository)
+        let fetchRecruitMyPostDataUseCase = DefaultFetchRecruitMyPostDataUseCase(repository: repository)
         let viewModel = RecruitMyPostViewModel(
-            fetchRecruitMyPostUseCase: fetchRecruitMyPostUseCase,
+            fetchRecruitMyPostDataUseCase: fetchRecruitMyPostDataUseCase,
             recruitId: id
         )
         let controller = RecruitMyPostHostingController(

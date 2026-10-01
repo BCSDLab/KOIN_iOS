@@ -80,9 +80,9 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
 
     private func showApplicants(recruitId: Int) {
         let repository = MockRecruitRepository()
-        let fetchRecruitMyPostUseCase = DefaultFetchRecruitMyPostUseCase(repository: repository)
+        let fetchRecruitMyPostDataUseCase = DefaultFetchRecruitMyPostDataUseCase(repository: repository)
         let viewModel = RecruitMyPostViewModel(
-            fetchRecruitMyPostUseCase: fetchRecruitMyPostUseCase,
+            fetchRecruitMyPostDataUseCase: fetchRecruitMyPostDataUseCase,
             recruitId: recruitId
         )
         let controller = RecruitMyPostHostingController(
