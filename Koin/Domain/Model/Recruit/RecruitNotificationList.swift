@@ -8,7 +8,7 @@
 import Foundation
 
 struct RecruitNotificationList {
-    var notifications: [RecruitNotification]
+    var notifications: [RecruitNotificationRow]
 }
 
 extension RecruitNotificationList {

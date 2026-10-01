@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RecruitMyApplicationListRowView: View {
 
-    let model: RecruitMyApplicationSummary
+    let model: RecruitMyApplicationRow
     let onShowDetail: () -> Void
     let onShowChat: (Int) -> Void
 

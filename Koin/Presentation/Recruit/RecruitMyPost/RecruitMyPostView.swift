@@ -49,7 +49,7 @@ struct RecruitMyPostView: ActionBindableView {
 }
 
 extension RecruitMyPostView {
-    private func contentView(data: RecruitMyPostSummary) -> some View {
+    private func contentView(data: RecruitMyPostRow) -> some View {
         GeometryReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {

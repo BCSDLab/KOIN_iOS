@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchRecruitMyPostUseCase {
-    func execute(id: Int) async throws -> RecruitMyPostSummary
+    func execute(id: Int) async throws -> RecruitMyPostRow
 }
 
 final class DefaultFetchRecruitMyPostUseCase: FetchRecruitMyPostUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchRecruitMyPostUseCase: FetchRecruitMyPostUseCase {
         self.repository = repository
     }
 
-    func execute(id: Int) async throws -> RecruitMyPostSummary {
+    func execute(id: Int) async throws -> RecruitMyPostRow {
         try await repository.fetchMyPost(id)
     }
 }

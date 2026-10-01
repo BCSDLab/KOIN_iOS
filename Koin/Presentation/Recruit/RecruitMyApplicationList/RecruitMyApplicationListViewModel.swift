@@ -28,7 +28,7 @@ final class RecruitMyApplicationListViewModel: SwiftUIViewModelProtocol {
     // MARK: - Properties
     private let fetchRecruitMyApplicationListUseCase: FetchRecruitMyApplicationListUseCase
 
-    var recruits: [RecruitMyApplicationSummary] {
+    var recruits: [RecruitMyApplicationRow] {
         recruitList?.recruits ?? []
     }
 

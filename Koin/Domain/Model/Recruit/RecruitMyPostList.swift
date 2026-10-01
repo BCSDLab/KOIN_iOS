@@ -8,7 +8,7 @@
 import Foundation
 
 struct RecruitMyPostList {
-    var recruits: [RecruitMyPostSummary]
+    var recruits: [RecruitMyPostRow]
 
     var totalCount: Int
     let totalPage: Int

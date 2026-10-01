@@ -18,7 +18,7 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
     }
 
     // MARK: - State
-    private(set) var data: RecruitMyPostSummary?
+    private(set) var data: RecruitMyPostRow?
     private(set) var isLoading = false
     private(set) var errorMessage: String?
 

@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RecruitMyPostSummaryView: View {
 
-    let model: RecruitMyPostSummary
+    let model: RecruitMyPostRow
     let onGroupChatTapped: ()->Void
 
     var body: some View {

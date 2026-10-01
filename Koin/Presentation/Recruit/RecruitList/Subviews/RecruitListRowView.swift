@@ -9,9 +9,9 @@ import SwiftUI
 
 struct RecruitListRowView: View {
     
-    let model: RecruitListSummary
+    let model: RecruitRow
     
-    init(model: RecruitListSummary) {
+    init(model: RecruitRow) {
         self.model = model
     }
     
