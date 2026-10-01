@@ -40,7 +40,7 @@ final class RecruitMyPostApplicantHostingController: UIHostingController<Recruit
 }
 
 extension RecruitMyPostApplicantHostingController {
-    private func showDecisionModal(_ decision: RecruitApplicationDecision) {
+    private func showDecisionModal(_ decision: RecruitApplicantDecision) {
         let copy: (title: String, subtitle: String, action: String)
         switch decision {
         case .accepted:

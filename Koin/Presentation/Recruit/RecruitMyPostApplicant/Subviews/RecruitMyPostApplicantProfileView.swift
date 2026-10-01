@@ -9,7 +9,7 @@ import SwiftUI
 
 struct RecruitMyPostApplicantProfileView: View {
 
-    let application: RecruitApplication
+    let application: RecruitApplicantData
 
     var body: some View {
         HStack(spacing: 12) {

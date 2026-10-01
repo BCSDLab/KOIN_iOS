@@ -1,5 +1,5 @@
 //
-//  RecruitApplicationSummary.swift
+//  RecruitApplicantRow.swift
 //  koin
 //
 //  Created by 홍기정 on 9/28/26.
@@ -7,17 +7,17 @@
 
 import Foundation
 
-struct RecruitApplicationSummary: Identifiable, Equatable {
+struct RecruitApplicantRow: Identifiable, Equatable {
     let applicationId: Int
     let nickname: String
     let department: String
     let studentYear: Int
     let role: String
-    let status: RecruitMyApplicationStatus
+    let status: RecruitApplicationStatus
     let canChat: Bool
 }
 
-extension RecruitApplicationSummary {
+extension RecruitApplicantRow {
     var id: Int {
         return applicationId
     }

@@ -14,27 +14,27 @@ final class RecruitMyPostApplicantViewModel: SwiftUIViewModelProtocol {
 
     enum Input {
         case onFirstAppear
-        case decide(RecruitApplicationDecision)
+        case decide(RecruitApplicantDecision)
         case didShowToast
     }
 
     // MARK: - State
-    private(set) var application: RecruitApplication?
+    private(set) var application: RecruitApplicantData?
     private(set) var isLoading = false
     private(set) var errorMessage: String?
 
     // MARK: - Properties
     let recruitmentId: Int
     private let applicationId: Int
-    private let fetchUseCase: FetchRecruitMyPostApplicationUseCase
-    private let decideUseCase: DecideRecruitMyPostApplicationUseCase
+    private let fetchUseCase: FetchRecruitApplicantUseCase
+    private let decideUseCase: DecideRecruitApplicantUseCase
 
     // MARK: - Initializer
     init(
         recruitmentId: Int,
         applicationId: Int,
-        fetchUseCase: FetchRecruitMyPostApplicationUseCase,
-        decideUseCase: DecideRecruitMyPostApplicationUseCase
+        fetchUseCase: FetchRecruitApplicantUseCase,
+        decideUseCase: DecideRecruitApplicantUseCase
     ) {
         self.recruitmentId = recruitmentId
         self.applicationId = applicationId
@@ -83,7 +83,7 @@ extension RecruitMyPostApplicantViewModel {
         }
     }
 
-    private func decideApplication(_ decision: RecruitApplicationDecision) {
+    private func decideApplication(_ decision: RecruitApplicantDecision) {
         guard !isLoading, let application, application.canDecide else {
             return
         }

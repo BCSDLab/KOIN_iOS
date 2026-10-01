@@ -47,8 +47,8 @@ final class RecruitMyPostHostingController: UIHostingController<RecruitMyPostVie
 extension RecruitMyPostHostingController {
     private func showApplicant(recruitmentId: Int, applicationId: Int) {
         let repository = MockRecruitRepository()
-        let fetchUseCase = DefaultFetchRecruitMyPostApplicationUseCase(repository: repository)
-        let decideUseCase = DefaultDecideRecruitMyPostApplicationUseCase(repository: repository)
+        let fetchUseCase = DefaultFetchRecruitApplicantUseCase(repository: repository)
+        let decideUseCase = DefaultDecideRecruitApplicantUseCase(repository: repository)
         let viewModel = RecruitMyPostApplicantViewModel(
             recruitmentId: recruitmentId,
             applicationId: applicationId,

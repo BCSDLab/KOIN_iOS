@@ -340,10 +340,10 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
-    func fetchMyPostApplication(
+    func fetchApplicant(
         recruitmentId: Int,
         applicationId: Int
-    ) async throws -> RecruitApplication {
+    ) async throws -> RecruitApplicantData {
         try await Task.sleep(nanoseconds: 300_000_000)
 
         let recruitment = try await fetchMyPost(recruitmentId)
@@ -361,7 +361,7 @@ final class MockRecruitRepository: RecruitRepository {
         }
 
         let role = application.role.isEmpty ? nil : application.role
-        return RecruitApplication(
+        return RecruitApplicantData(
             applicationId: application.applicationId,
             status: application.status,
             profile: RecruitProfile(
@@ -390,10 +390,10 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
-    func decideMyPostApplication(
+    func decideApplicant(
         recruitmentId: Int,
         applicationId: Int,
-        decision: RecruitApplicationDecision
+        decision: RecruitApplicantDecision
     ) async throws -> Void {
         let recruitment = try await fetchMyPost(recruitmentId)
         guard recruitment.applications.contains(where: {
@@ -407,13 +407,13 @@ final class MockRecruitRepository: RecruitRepository {
     private func mockApplications(
         recruitId: Int,
         includesRole: Bool
-    ) -> [RecruitApplicationSummary] {
+    ) -> [RecruitApplicantRow] {
         guard recruitId == 1 || recruitId == 2 else {
             return []
         }
 
         return [
-            RecruitApplicationSummary(
+            RecruitApplicantRow(
                 applicationId: recruitId * 100 + 1,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
@@ -422,7 +422,7 @@ final class MockRecruitRepository: RecruitRepository {
                 status: .denied,
                 canChat: false
             ),
-            RecruitApplicationSummary(
+            RecruitApplicantRow(
                 applicationId: recruitId * 100 + 2,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
@@ -431,7 +431,7 @@ final class MockRecruitRepository: RecruitRepository {
                 status: .accepted,
                 canChat: true
             ),
-            RecruitApplicationSummary(
+            RecruitApplicantRow(
                 applicationId: recruitId * 100 + 3,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
@@ -451,7 +451,7 @@ final class MockRecruitRepository: RecruitRepository {
         _ filter: RecruitMyApplicationFilter
     ) async throws -> RecruitMyApplicationList {
         let list = try await fetchList(RecruitListFilter())
-        let statuses = RecruitMyApplicationStatus.allCases
+        let statuses = RecruitApplicationStatus.allCases
         var recruits = list.recruits.enumerated().map { index, summary in
             RecruitMyApplicationRow(
                 id: summary.id,

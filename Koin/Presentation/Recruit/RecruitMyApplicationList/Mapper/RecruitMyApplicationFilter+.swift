@@ -13,7 +13,7 @@ extension RecruitMyApplicationFilter {
             FilterGroupModel(
                 title: "지원 상태",
                 hasAllButton: true,
-                items: RecruitMyApplicationStatus.allCases.map(\.rawValue),
+                items: RecruitApplicationStatus.allCases.map(\.rawValue),
                 behavior: .single
             ),
             FilterGroupModel(
@@ -28,7 +28,7 @@ extension RecruitMyApplicationFilter {
         ]
 
         if let status,
-           let statusIndex = RecruitMyApplicationStatus.allCases.firstIndex(of: status) {
+           let statusIndex = RecruitApplicationStatus.allCases.firstIndex(of: status) {
             groupModels[0].didTap(itemAt: statusIndex + 1)
         }
         groupModels[1].didTap(itemAt: sort.index)
@@ -41,7 +41,7 @@ extension RecruitMyApplicationFilter {
             return nil
         }
 
-        status = RecruitMyApplicationStatus(
+        status = RecruitApplicationStatus(
             rawValue: groupModels[0].selectedItems.first?.title ?? ""
         )
         self.sort = sort
