@@ -43,7 +43,7 @@ final class MockRecruitRepository: RecruitRepository {
     func fetchChatMessages(
         recruitmentId: Int,
         chatRoomId: Int
-    ) async throws -> RecruitChatMessages {
+    ) async throws -> RecruitChatMessageList {
         try await Task.sleep(nanoseconds: 300_000_000)
 
         let messages = [
@@ -85,7 +85,7 @@ final class MockRecruitRepository: RecruitRepository {
             )
         ] + postedChatMessages
 
-        return RecruitChatMessages(
+        return RecruitChatMessageList(
             dates: [Date().formatDateToYYYY년M월D일()],
             messages: [Array(messages.reversed())]
         )
@@ -189,7 +189,7 @@ final class MockRecruitRepository: RecruitRepository {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy.MM.dd"
         
-        let contest = RecruitListSummary(
+        let contest = RecruitRow(
             id: 1,
             category: .contest,
             title: "AI 아이디어 공모전 팀원 모집",
@@ -209,7 +209,7 @@ final class MockRecruitRepository: RecruitRepository {
             ]
         )
         
-        let externalActivity = RecruitListSummary(
+        let externalActivity = RecruitRow(
             id: 2,
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
@@ -225,7 +225,7 @@ final class MockRecruitRepository: RecruitRepository {
             roles: []
         )
         
-        let closedExternalActivity = RecruitListSummary(
+        let closedExternalActivity = RecruitRow(
             id: 3,
             category: .externalActivity,
             title: "2026 대외활동 팀원 모집",
@@ -242,7 +242,7 @@ final class MockRecruitRepository: RecruitRepository {
         )
         
         let studies = (4...7).map { id in
-            RecruitListSummary(
+            RecruitRow(
                 id: id,
                 category: .study,
                 title: "2026 스터디 팀원 모집",
@@ -270,7 +270,7 @@ final class MockRecruitRepository: RecruitRepository {
     func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList {
         let list = try await fetchList(RecruitListFilter())
         var recruits = list.recruits.map { summary in
-            RecruitMyPostSummary(
+            RecruitMyPostRow(
                 id: summary.id,
                 category: summary.category,
                 title: summary.title,
@@ -285,11 +285,7 @@ final class MockRecruitRepository: RecruitRepository {
                 roles: summary.roles,
                 state: summary.state,
                 canClose: summary.id != 3,
-                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil,
-                applications: mockApplications(
-                    recruitId: summary.id,
-                    includesRole: summary.type == .roleBased
-                )
+                chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil
             )
         }
 
@@ -315,12 +311,16 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
-    func fetchMyPost(_ id: Int) async throws -> RecruitMyPostSummary {
+    func fetchMyPostData(_ id: Int) async throws -> RecruitMyPostData {
         let response = try await fetchMyPostList(RecruitMyPostFilter())
         guard let recruit = response.recruits.first(where: { $0.id == id }) else {
             throw ErrorResponse.unexpectedInternalError
         }
-        return RecruitMyPostSummary(
+        let applicants = mockApplicants(
+            recruitId: recruit.id,
+            includesRole: recruit.type == .roleBased
+        )
+        return RecruitMyPostData(
             id: recruit.id,
             category: recruit.category,
             title: recruit.title,
@@ -334,20 +334,20 @@ final class MockRecruitRepository: RecruitRepository {
             type: recruit.type,
             roles: recruit.roles,
             state: recruit.state,
-            canClose: recruit.canClose,
             chatRoomId: recruit.chatRoomId ?? recruit.id,
-            applications: recruit.applications
+            applicants: applicants,
+            totalCount: applicants.count
         )
     }
 
-    func fetchMyPostApplication(
+    func fetchApplicant(
         recruitmentId: Int,
         applicationId: Int
-    ) async throws -> RecruitApplication {
+    ) async throws -> RecruitApplicantData {
         try await Task.sleep(nanoseconds: 300_000_000)
 
-        let recruitment = try await fetchMyPost(recruitmentId)
-        guard let application = recruitment.applications.first(where: {
+        let recruitment = try await fetchMyPostData(recruitmentId)
+        guard let application = recruitment.applicants.first(where: {
             $0.applicationId == applicationId
         }) else {
             throw ErrorResponse.unexpectedInternalError
@@ -361,7 +361,7 @@ final class MockRecruitRepository: RecruitRepository {
         }
 
         let role = application.role.isEmpty ? nil : application.role
-        return RecruitApplication(
+        return RecruitApplicantData(
             applicationId: application.applicationId,
             status: application.status,
             profile: RecruitProfile(
@@ -390,13 +390,13 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
-    func decideMyPostApplication(
+    func decideApplicant(
         recruitmentId: Int,
         applicationId: Int,
-        decision: RecruitApplicationDecision
+        decision: RecruitApplicantDecision
     ) async throws -> Void {
-        let recruitment = try await fetchMyPost(recruitmentId)
-        guard recruitment.applications.contains(where: {
+        let recruitment = try await fetchMyPostData(recruitmentId)
+        guard recruitment.applicants.contains(where: {
             $0.applicationId == applicationId && $0.status == .pending
         }) else {
             throw ErrorResponse.unexpectedInternalError
@@ -404,16 +404,16 @@ final class MockRecruitRepository: RecruitRepository {
         try await Task.sleep(nanoseconds: 300_000_000)
     }
 
-    private func mockApplications(
+    private func mockApplicants(
         recruitId: Int,
         includesRole: Bool
-    ) -> [RecruitApplicationSummary] {
+    ) -> [RecruitApplicantRow] {
         guard recruitId == 1 || recruitId == 2 else {
             return []
         }
 
         return [
-            RecruitApplicationSummary(
+            RecruitApplicantRow(
                 applicationId: recruitId * 100 + 1,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
@@ -422,7 +422,7 @@ final class MockRecruitRepository: RecruitRepository {
                 status: .denied,
                 canChat: false
             ),
-            RecruitApplicationSummary(
+            RecruitApplicantRow(
                 applicationId: recruitId * 100 + 2,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
@@ -431,7 +431,7 @@ final class MockRecruitRepository: RecruitRepository {
                 status: .accepted,
                 canChat: true
             ),
-            RecruitApplicationSummary(
+            RecruitApplicantRow(
                 applicationId: recruitId * 100 + 3,
                 nickname: "김철수",
                 department: "컴퓨터공학부",
@@ -451,9 +451,9 @@ final class MockRecruitRepository: RecruitRepository {
         _ filter: RecruitMyApplicationFilter
     ) async throws -> RecruitMyApplicationList {
         let list = try await fetchList(RecruitListFilter())
-        let statuses = RecruitMyApplicationStatus.allCases
+        let statuses = RecruitApplicationStatus.allCases
         var recruits = list.recruits.enumerated().map { index, summary in
-            RecruitMyApplicationSummary(
+            RecruitMyApplicationRow(
                 id: summary.id,
                 category: summary.category,
                 title: summary.title,
@@ -467,13 +467,16 @@ final class MockRecruitRepository: RecruitRepository {
                 maximumParticipants: summary.maximumParticipants,
                 type: summary.type,
                 roles: summary.roles,
-                status: statuses[index % statuses.count],
+                application: RecruitMyApplication(
+                    id: summary.id * 100 + index,
+                    status: statuses[index % statuses.count]
+                ),
                 chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil
             )
         }
 
         if let status = filter.status {
-            recruits = recruits.filter { $0.status == status }
+            recruits = recruits.filter { $0.application.status == status }
         }
         if filter.sort == .deadlineAscending {
             recruits.sort { $0.deadline < $1.deadline }
@@ -521,6 +524,7 @@ final class MockRecruitRepository: RecruitRepository {
             description: "소개소개소개소개소개소개소개소개소개소개소개소개소개소개",
             relatedUrl: URL(string: "https://bcsdlab.com"),
             qualification: "2학년이상\n참여율 높은 사람\n@@@",
+            application: nil,
             isAuthor: UserDataManager.shared.isLoggedIn && item.id % 2 == 0,
             canApply: true,
             applyBlockReason: nil,
@@ -540,7 +544,7 @@ final class MockRecruitRepository: RecruitRepository {
     
     func fetchNotificationList() async throws -> RecruitNotificationList {
         return RecruitNotificationList(notifications: [
-            RecruitNotification(
+            RecruitNotificationRow(
                 id: 1,
                 recruitmentId: 101,
                 chatRoomId: 1,
@@ -552,7 +556,7 @@ final class MockRecruitRepository: RecruitRepository {
                 dateText: "2시간 전",
                 isRead: false
             ),
-            RecruitNotification(
+            RecruitNotificationRow(
                 id: 2,
                 recruitmentId: 0,
                 chatRoomId: 0,
@@ -564,7 +568,7 @@ final class MockRecruitRepository: RecruitRepository {
                 dateText: "2시간 전",
                 isRead: false
             ),
-            RecruitNotification(
+            RecruitNotificationRow(
                 id: 3,
                 recruitmentId: 0,
                 chatRoomId: 0,
@@ -576,7 +580,7 @@ final class MockRecruitRepository: RecruitRepository {
                 dateText: "2시간 전",
                 isRead: false
             ),
-            RecruitNotification(
+            RecruitNotificationRow(
                 id: 4,
                 recruitmentId: 0,
                 chatRoomId: 0,
@@ -588,7 +592,7 @@ final class MockRecruitRepository: RecruitRepository {
                 dateText: "2시간 전",
                 isRead: false
             ),
-            RecruitNotification(
+            RecruitNotificationRow(
                 id: 5,
                 recruitmentId: 0,
                 chatRoomId: 0,

@@ -1,5 +1,5 @@
 //
-//  RecruitMyApplicationStatus.swift
+//  RecruitApplicationStatus.swift
 //  koin
 //
 //  Created by 홍기정 on 9/24/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RecruitMyApplicationStatus: String, CaseIterable, Equatable {
+enum RecruitApplicationStatus: String, CaseIterable, Equatable {
     case accepted = "승인"
     case denied = "거절"
     case pending = "대기"

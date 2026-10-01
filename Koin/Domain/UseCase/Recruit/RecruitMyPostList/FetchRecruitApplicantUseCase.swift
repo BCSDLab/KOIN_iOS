@@ -1,5 +1,5 @@
 //
-//  FetchRecruitMyPostApplicationUseCase.swift
+//  FetchRecruitApplicantUseCase.swift
 //  koin
 //
 //  Created by 홍기정 on 9/28/26.
@@ -7,14 +7,14 @@
 
 import Foundation
 
-protocol FetchRecruitMyPostApplicationUseCase {
+protocol FetchRecruitApplicantUseCase {
     func execute(
         recruitmentId: Int,
         applicationId: Int
-    ) async throws -> RecruitApplication
+    ) async throws -> RecruitApplicantData
 }
 
-final class DefaultFetchRecruitMyPostApplicationUseCase: FetchRecruitMyPostApplicationUseCase {
+final class DefaultFetchRecruitApplicantUseCase: FetchRecruitApplicantUseCase {
 
     private let repository: RecruitRepository
 
@@ -25,8 +25,8 @@ final class DefaultFetchRecruitMyPostApplicationUseCase: FetchRecruitMyPostAppli
     func execute(
         recruitmentId: Int,
         applicationId: Int
-    ) async throws -> RecruitApplication {
-        try await repository.fetchMyPostApplication(
+    ) async throws -> RecruitApplicantData {
+        try await repository.fetchApplicant(
             recruitmentId: recruitmentId,
             applicationId: applicationId
         )

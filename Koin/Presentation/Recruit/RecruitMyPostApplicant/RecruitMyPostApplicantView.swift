@@ -10,7 +10,7 @@ import SwiftUI
 struct RecruitMyPostApplicantView: ActionBindableView {
 
     enum Action {
-        case showDecisionModal(RecruitApplicationDecision)
+        case showDecisionModal(RecruitApplicantDecision)
         case showDirectChat(recruitmentId: Int, applicationId: Int)
         case showToast(message: String)
     }
@@ -47,14 +47,14 @@ struct RecruitMyPostApplicantView: ActionBindableView {
     }
     
     // MARK: - Public
-    func decide(_ decision: RecruitApplicationDecision) {
+    func decide(_ decision: RecruitApplicantDecision) {
         viewModel.execute(.decide(decision))
     }
 }
 
 
 extension RecruitMyPostApplicantView {
-    private func contentView(_ application: RecruitApplication) -> some View {
+    private func contentView(_ application: RecruitApplicantData) -> some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
                 RecruitMyPostApplicantProfileView(application: application)

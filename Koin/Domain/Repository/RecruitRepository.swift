@@ -19,7 +19,7 @@ protocol RecruitRepository {
     func fetchChatMessages(
         recruitmentId: Int,
         chatRoomId: Int
-    ) async throws -> RecruitChatMessages
+    ) async throws -> RecruitChatMessageList
     func postChatMessage(
         recruitmentId: Int,
         chatRoomId: Int,
@@ -27,15 +27,15 @@ protocol RecruitRepository {
     ) async throws
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList
     func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList
-    func fetchMyPost(_ id: Int) async throws -> RecruitMyPostSummary
-    func fetchMyPostApplication(
+    func fetchMyPostData(_ id: Int) async throws -> RecruitMyPostData
+    func fetchApplicant(
         recruitmentId: Int,
         applicationId: Int
-    ) async throws -> RecruitApplication
-    func decideMyPostApplication(
+    ) async throws -> RecruitApplicantData
+    func decideApplicant(
         recruitmentId: Int,
         applicationId: Int,
-        decision: RecruitApplicationDecision
+        decision: RecruitApplicantDecision
     ) async throws -> Void
     func fetchMyApplicationList(_ filter: RecruitMyApplicationFilter) async throws -> RecruitMyApplicationList
     func closeMyPost(id: Int) async throws -> Bool

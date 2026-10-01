@@ -1,5 +1,5 @@
 //
-//  RecruitNotification.swift
+//  RecruitNotificationRow.swift
 //  koin
 //
 //  Created by 홍기정 on 8/29/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecruitNotification {
+struct RecruitNotificationRow {
     let id: Int
     let recruitmentId: Int
     let chatRoomId: Int

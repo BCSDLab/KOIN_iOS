@@ -49,7 +49,7 @@ struct RecruitMyPostView: ActionBindableView {
 }
 
 extension RecruitMyPostView {
-    private func contentView(data: RecruitMyPostSummary) -> some View {
+    private func contentView(data: RecruitMyPostData) -> some View {
         GeometryReader { proxy in
             ScrollView {
                 VStack(alignment: .leading, spacing: 0) {
@@ -62,7 +62,7 @@ extension RecruitMyPostView {
                         .padding(.top, 24)
                         .padding(.leading, 4)
 
-                    if data.applications.isEmpty {
+                    if data.applicants.isEmpty {
                         Spacer(minLength: 0)
 
                         RecruitMyPostEmptyView()
@@ -71,7 +71,7 @@ extension RecruitMyPostView {
                         Spacer(minLength: 0)
                     } else {
                         LazyVStack(spacing: 12) {
-                            ForEach(data.applications) { applicant in
+                            ForEach(data.applicants) { applicant in
                                 RecruitMyPostApplicantRowView(
                                     model: applicant,
                                     onApplicationTapped: {
@@ -108,7 +108,7 @@ extension RecruitMyPostView {
                 .foregroundStyle(Color.appColor(.neutral800))
                 .frame(height: 26)
 
-            Text("총 \(viewModel.data?.applications.count ?? 0)명")
+            Text("총 \(viewModel.data?.totalCount ?? 0)명")
                 .font(.appFont(.pretendardRegular, size: 12))
                 .foregroundStyle(Color.appColor(.neutral500))
                 .frame(height: 19)

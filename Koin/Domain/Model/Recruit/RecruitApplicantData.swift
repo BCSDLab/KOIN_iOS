@@ -1,5 +1,5 @@
 //
-//  RecruitApplication.swift
+//  RecruitApplicantData.swift
 //  koin
 //
 //  Created by 홍기정 on 9/27/26.
@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct RecruitApplication {
+struct RecruitApplicantData {
     let applicationId: Int
-    var status: RecruitMyApplicationStatus
+    var status: RecruitApplicationStatus
     let profile: RecruitProfile
     let motivation: String
     let availableTime: String
@@ -18,8 +18,8 @@ struct RecruitApplication {
     let canDirectChat: Bool
 }
 
-extension RecruitApplication {
-    mutating func decided(as decision: RecruitApplicationDecision) {
+extension RecruitApplicantData {
+    mutating func decided(as decision: RecruitApplicantDecision) {
         switch decision {
         case .accepted:
             self.status = .accepted

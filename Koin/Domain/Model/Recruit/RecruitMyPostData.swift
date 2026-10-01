@@ -1,13 +1,13 @@
 //
-//  RecruitMyApplicationSummary.swift
+//  RecruitMyPostData.swift
 //  koin
 //
-//  Created by 홍기정 on 9/24/26.
+//  Created by 홍기정 on 10/1/26.
 //
 
 import Foundation
 
-struct RecruitMyApplicationSummary: Identifiable, Equatable {
+struct RecruitMyPostData: Identifiable, Equatable {
     let id: Int
     let category: RecruitCategory
     let title: String
@@ -17,7 +17,6 @@ struct RecruitMyApplicationSummary: Identifiable, Equatable {
     let endDate: Date
     let deadline: Date
     let dDay: String
-    let state: RecruitState
 
     let currentParticipants: Int
     let maximumParticipants: Int
@@ -25,6 +24,9 @@ struct RecruitMyApplicationSummary: Identifiable, Equatable {
     let type: RecruitRoleType
     let roles: [RecruitRole]
 
-    let status: RecruitMyApplicationStatus
+    let state: RecruitState
     let chatRoomId: Int?
+
+    let applicants: [RecruitApplicantRow]
+    let totalCount: Int
 }

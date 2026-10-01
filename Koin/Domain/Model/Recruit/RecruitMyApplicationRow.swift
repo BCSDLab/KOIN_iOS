@@ -1,5 +1,5 @@
 //
-//  RecruitMyPostSummary.swift
+//  RecruitMyApplicationRow.swift
 //  koin
 //
 //  Created by 홍기정 on 9/24/26.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecruitMyPostSummary: Identifiable, Equatable {
+struct RecruitMyApplicationRow: Identifiable, Equatable {
     let id: Int
     let category: RecruitCategory
     let title: String
@@ -17,6 +17,7 @@ struct RecruitMyPostSummary: Identifiable, Equatable {
     let endDate: Date
     let deadline: Date
     let dDay: String
+    let state: RecruitState
 
     let currentParticipants: Int
     let maximumParticipants: Int
@@ -24,9 +25,6 @@ struct RecruitMyPostSummary: Identifiable, Equatable {
     let type: RecruitRoleType
     let roles: [RecruitRole]
 
-    let state: RecruitState
-    let canClose: Bool?
+    let application: RecruitMyApplication
     let chatRoomId: Int?
-
-    let applications: [RecruitApplicationSummary]
 }

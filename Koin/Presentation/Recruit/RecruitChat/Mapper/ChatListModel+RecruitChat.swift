@@ -8,7 +8,7 @@
 import UIKit
 
 extension ChatListModel {
-    init(from data: RecruitChatMessages) {
+    init(from data: RecruitChatMessageList) {
         self.init(
             dates: data.dates,
             messages: data.messages.map { messages in

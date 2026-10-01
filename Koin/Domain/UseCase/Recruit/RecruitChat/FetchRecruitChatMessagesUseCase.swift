@@ -11,7 +11,7 @@ protocol FetchRecruitChatMessagesUseCase {
     func execute(
         recruitmentId: Int,
         chatRoomId: Int
-    ) async throws -> RecruitChatMessages
+    ) async throws -> RecruitChatMessageList
 }
 
 final class DefaultFetchRecruitChatMessagesUseCase: FetchRecruitChatMessagesUseCase {
@@ -25,7 +25,7 @@ final class DefaultFetchRecruitChatMessagesUseCase: FetchRecruitChatMessagesUseC
     func execute(
         recruitmentId: Int,
         chatRoomId: Int
-    ) async throws -> RecruitChatMessages {
+    ) async throws -> RecruitChatMessageList {
         try await repository.fetchChatMessages(
             recruitmentId: recruitmentId,
             chatRoomId: chatRoomId

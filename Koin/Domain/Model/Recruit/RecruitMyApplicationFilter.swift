@@ -8,7 +8,7 @@
 import Foundation
 
 struct RecruitMyApplicationFilter: Equatable {
-    var status: RecruitMyApplicationStatus? = nil
+    var status: RecruitApplicationStatus? = nil
     var sort: RecruitListSort = .latestDescending
     var page: Int = 1
     var limit: Int? = 10

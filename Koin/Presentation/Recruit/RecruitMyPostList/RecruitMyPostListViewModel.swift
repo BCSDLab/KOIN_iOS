@@ -32,7 +32,7 @@ final class RecruitMyPostListViewModel: SwiftUIViewModelProtocol {
     private let fetchRecruitMyPostListUseCase: FetchRecruitMyPostListUseCase
     private let closeRecruitMyPostUseCase: CloseRecruitMyPostUseCase
 
-    var recruits: [RecruitMyPostSummary] {
+    var recruits: [RecruitMyPostRow] {
         recruitList?.recruits ?? []
     }
 

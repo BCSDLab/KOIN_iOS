@@ -1,5 +1,5 @@
 //
-//  DecideRecruitMyPostApplicationUseCase.swift
+//  DecideRecruitApplicantUseCase.swift
 //  koin
 //
 //  Created by 홍기정 on 9/28/26.
@@ -7,15 +7,15 @@
 
 import Foundation
 
-protocol DecideRecruitMyPostApplicationUseCase {
+protocol DecideRecruitApplicantUseCase {
     func execute(
         recruitmentId: Int,
         applicationId: Int,
-        decision: RecruitApplicationDecision
+        decision: RecruitApplicantDecision
     ) async throws -> Void
 }
 
-final class DefaultDecideRecruitMyPostApplicationUseCase: DecideRecruitMyPostApplicationUseCase {
+final class DefaultDecideRecruitApplicantUseCase: DecideRecruitApplicantUseCase {
 
     private let repository: RecruitRepository
 
@@ -26,9 +26,9 @@ final class DefaultDecideRecruitMyPostApplicationUseCase: DecideRecruitMyPostApp
     func execute(
         recruitmentId: Int,
         applicationId: Int,
-        decision: RecruitApplicationDecision
+        decision: RecruitApplicantDecision
     ) async throws -> Void {
-        try await repository.decideMyPostApplication(
+        try await repository.decideApplicant(
             recruitmentId: recruitmentId,
             applicationId: applicationId,
             decision: decision

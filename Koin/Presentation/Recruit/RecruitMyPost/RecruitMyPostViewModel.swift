@@ -18,20 +18,20 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
     }
 
     // MARK: - State
-    private(set) var data: RecruitMyPostSummary?
+    private(set) var data: RecruitMyPostData?
     private(set) var isLoading = false
     private(set) var errorMessage: String?
 
     // MARK: - Properties
     private let recruitId: Int
-    private let fetchRecruitMyPostUseCase: FetchRecruitMyPostUseCase
+    private let fetchRecruitMyPostDataUseCase: FetchRecruitMyPostDataUseCase
 
     // MARK: - Initializer
     init(
-        fetchRecruitMyPostUseCase: FetchRecruitMyPostUseCase,
+        fetchRecruitMyPostDataUseCase: FetchRecruitMyPostDataUseCase,
         recruitId: Int
     ) {
-        self.fetchRecruitMyPostUseCase = fetchRecruitMyPostUseCase
+        self.fetchRecruitMyPostDataUseCase = fetchRecruitMyPostDataUseCase
         self.recruitId = recruitId
     }
 
@@ -59,7 +59,7 @@ extension RecruitMyPostViewModel {
             }
 
             do {
-                let data = try await fetchRecruitMyPostUseCase.execute(id: recruitId)
+                let data = try await fetchRecruitMyPostDataUseCase.execute(id: recruitId)
                 try Task.checkCancellation()
                 self.data = data
             } catch is CancellationError {

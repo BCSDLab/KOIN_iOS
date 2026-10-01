@@ -9,9 +9,9 @@ import SwiftUI
 
 struct RecruitMyPostApplicantBottomActionView: View {
 
-    let application: RecruitApplication
+    let application: RecruitApplicantData
     let isLoading: Bool
-    let onDecisionTapped: (RecruitApplicationDecision) -> Void
+    let onDecisionTapped: (RecruitApplicantDecision) -> Void
     let onDirectChatTapped: () -> Void
 
     @ViewBuilder

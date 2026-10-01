@@ -24,7 +24,7 @@ final class RecruitChatViewModel: ViewModelProtocol {
 
     enum Output {
         case updateData(RecruitChatData)
-        case updateMessages(RecruitChatMessages)
+        case updateMessages(RecruitChatMessageList)
         case showToast(String)
     }
 

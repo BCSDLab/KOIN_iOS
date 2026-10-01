@@ -8,7 +8,7 @@
 import Foundation
 
 struct RecruitMyApplicationList {
-    var recruits: [RecruitMyApplicationSummary]
+    var recruits: [RecruitMyApplicationRow]
 
     let totalCount: Int
     let totalPage: Int
