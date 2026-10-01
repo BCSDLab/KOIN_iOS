@@ -31,6 +31,8 @@ struct RecruitData: Identifiable, Equatable {
     let relatedUrl: URL?
     let qualification: String?
     
+    let application: RecruitMyApplication?
+    
     let isAuthor: Bool
     let canApply: Bool
     let applyBlockReason: String?
@@ -60,6 +62,7 @@ extension RecruitData {
             description: description,
             relatedUrl: relatedUrl,
             qualification: qualification,
+            application: application,
             isAuthor: isAuthor,
             canApply: false,
             applyBlockReason: "이미 지원한 모집글입니다.",

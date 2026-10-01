@@ -25,6 +25,6 @@ struct RecruitMyApplicationRow: Identifiable, Equatable {
     let type: RecruitRoleType
     let roles: [RecruitRole]
 
-    let status: RecruitApplicationStatus
+    let application: RecruitMyApplication
     let chatRoomId: Int?
 }

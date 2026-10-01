@@ -53,9 +53,9 @@ extension RecruitMyApplicationListRowView {
 
             Spacer()
 
-            Text(model.status.rawValue)
+            Text(model.application.status.rawValue)
                 .font(.appFont(.pretendardMedium, size: 10))
-                .foregroundStyle(Color.appColor(model.status.textColor))
+                .foregroundStyle(Color.appColor(model.application.status.textColor))
                 .padding(.trailing, 8)
         }
     }

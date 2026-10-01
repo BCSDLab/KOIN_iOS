@@ -467,13 +467,16 @@ final class MockRecruitRepository: RecruitRepository {
                 maximumParticipants: summary.maximumParticipants,
                 type: summary.type,
                 roles: summary.roles,
-                status: statuses[index % statuses.count],
+                application: RecruitMyApplication(
+                    id: summary.id * 100 + index,
+                    status: statuses[index % statuses.count]
+                ),
                 chatRoomId: summary.id.isMultiple(of: 2) ? summary.id : nil
             )
         }
 
         if let status = filter.status {
-            recruits = recruits.filter { $0.status == status }
+            recruits = recruits.filter { $0.application.status == status }
         }
         if filter.sort == .deadlineAscending {
             recruits.sort { $0.deadline < $1.deadline }
@@ -521,6 +524,7 @@ final class MockRecruitRepository: RecruitRepository {
             description: "소개소개소개소개소개소개소개소개소개소개소개소개소개소개",
             relatedUrl: URL(string: "https://bcsdlab.com"),
             qualification: "2학년이상\n참여율 높은 사람\n@@@",
+            application: nil,
             isAuthor: UserDataManager.shared.isLoggedIn && item.id % 2 == 0,
             canApply: true,
             applyBlockReason: nil,
