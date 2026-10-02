@@ -21,15 +21,22 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
     
     // MARK: - State
     private(set) var data: RecruitData?
-    private(set) var isLoading = false
     private(set) var errorMessage: String?
     private(set) var didDelete = false
-    private var didSubmitApplication = false
+    
+    var isLoading: Bool {
+        if fetchTask == nil && deleteTask == nil {
+            return false
+        }
+        return true
+    }
     
     // MARK: - Properties
     private let recruitId: Int
     private let fetchRecruitDataUseCase: FetchRecruitDataUseCase
     private let deleteRecruitDataUseCase: DeleteRecruitDataUseCase
+    private var fetchTask: Task<Void, Never>?
+    private var deleteTask: Task<Void, Never>?
     
     // MARK: - Initializer
     init(
@@ -42,6 +49,7 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
         self.recruitId = recruitId
     }
     
+    // MARK: - Public
     func execute(_ input: Input) {
         switch input {
         case .load:
@@ -60,36 +68,28 @@ extension RecruitDataViewModel {
     private func load() {
         guard !isLoading else { return }
         
-        Task {
+        fetchTask = Task {
+            defer {
+                fetchTask = nil
+            }
             do {
-                isLoading = true
-                defer {
-                    isLoading = false
-                }
-                var data = try await fetchRecruitDataUseCase.execute(id: recruitId)
-                if didSubmitApplication {
-                    data.markAsAlreadyApplied()
-                }
+                let data = try await fetchRecruitDataUseCase.execute(id: recruitId)
                 self.data = data
             } catch {
-                if let error = error as? ErrorResponse {
-                    errorMessage = error.message
-                }
+                errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
     }
     
     private func delete() {
-        guard let data else {
+        guard let data, !isLoading else {
             return
         }
-        Task {
+        deleteTask = Task {
+            defer {
+                deleteTask = nil
+            }
             do {
-                isLoading = true
-                defer {
-                    isLoading = false
-                }
-                
                 let result = try await deleteRecruitDataUseCase.execute(id: data.id)
                 guard result == true else {
                     errorMessage = "오류가 발생했습니다."
@@ -97,16 +97,15 @@ extension RecruitDataViewModel {
                 }
                 self.didDelete = true
             } catch {
-                if let error = error as? ErrorResponse {
-                    errorMessage = error.message
-                }
+                errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
                 self.didDelete = false
             }
         }
     }
+}
 
+extension RecruitDataViewModel {
     private func applicationSubmitted() {
-        didSubmitApplication = true
         data?.markAsAlreadyApplied()
         load()
     }
