@@ -73,6 +73,7 @@ final class RecruitPostViewController: UIViewController {
         isRequired: false,
         limit: nil,
         placeholder: "공모전/대외활동 등 모집글 관련 Url을 작성해주세요.",
+        keyboardType: .URL
     )
     private let qualificationView = RecruitPostTextViewView(
         title: "지원 자격",
@@ -289,12 +290,14 @@ extension RecruitPostViewController {
 extension RecruitPostViewController {
     
     private func updateLoading(_ isLoading: Bool) {
-        guard var configuration = postButton.configuration else {
-            return
-        }
-        configuration.showsActivityIndicator = isLoading
-        postButton.configuration = configuration
         postButton.isUserInteractionEnabled = !isLoading
+        if isLoading {
+            IndicatorView.show()
+            postButton.backgroundColor = .appColor(.neutral400)
+        } else {
+            IndicatorView.dismiss()
+            validate()
+        }
     }
     
     private func handlePostCompleted(id: Int) {

@@ -32,7 +32,7 @@ struct RecruitPostRequest {
               let deadline,
               let description,
               !description.isEmpty,
-              !(startDate < endDate),
+              !(endDate < startDate),
               !(endDate < deadline) else {
             return false
         }
