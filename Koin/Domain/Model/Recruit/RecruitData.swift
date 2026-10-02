@@ -47,3 +47,27 @@ extension RecruitData {
         applyBlockReason = .alreadyApplied
     }
 }
+
+extension RecruitData {
+    var buttonText: String {
+        if isAuthor {
+            return "지원자 확인하기"
+        }
+        if canApply {
+            return "지원하기"
+        }
+        return applyBlockReason?.buttonText ?? "모집완료"
+    }
+    
+    var isButtonEnabled: Bool {
+        if isAuthor || canApply {
+            return true
+        }
+        switch applyBlockReason {
+        case .loginRequired, .profileRequired:
+            return true
+        default:
+            return false
+        }
+    }
+}

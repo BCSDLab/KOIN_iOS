@@ -17,3 +17,16 @@ enum RecruitApplyBlockReason {
     case roleClosed
     case profileRequired
 }
+
+extension RecruitApplyBlockReason {
+    var buttonText: String {
+        switch self {
+        case .loginRequired, .profileRequired:
+            return "지원하기"
+        case .alreadyApplied:
+            return "지원완료"
+        case .recruitmentDeleted, .ownRecruitment, .recruitmentClosed, .deadlinePassed, .roleClosed:
+            return "모집완료"
+        }
+    }
+}

@@ -9,30 +9,6 @@ struct RecruitDataContentView: View {
     let data: RecruitData?
     let onButtonTapped: () -> Void
     
-    private var buttonText: String {
-        guard let data else {
-            return ""
-        }
-        if data.isAuthor {
-            return "지원자 확인하기"
-        } else if data.canApply {
-            return "지원하기"
-        } else {
-            return "모집 마감"
-        }
-    }
-    
-    private var isButtonEnabled: Bool {
-        guard let data else {
-            return false
-        }
-        if data.isAuthor || data.canApply {
-            return true
-        } else {
-            return false
-        }
-    }
-    
     init(
         data: RecruitData?,
         onButtonTapped: @escaping () -> Void
@@ -82,8 +58,8 @@ struct RecruitDataContentView: View {
                 .scrollBounceBehavior(.basedOnSize, axes: .vertical)
 
                 RecruitDataButton(
-                    text: buttonText,
-                    isEnabled: isButtonEnabled,
+                    text: data.buttonText,
+                    isEnabled: data.isButtonEnabled,
                     action: onButtonTapped
                 )
                 .padding(.horizontal, 32)
