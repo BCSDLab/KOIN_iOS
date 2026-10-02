@@ -20,6 +20,8 @@ final class DefaultModifyRecruitUseCase: ModifyRecruitUseCase {
     }
     
     func execute(id: Int, request: RecruitPostRequest) async throws -> Void {
+        var request = request
+        try request.normalizeRelatedUrl()
         try await repository.modify(id, request)
     }
 }
