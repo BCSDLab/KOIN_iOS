@@ -13,6 +13,7 @@ struct RecruitDataView: ActionBindableView {
         case showApplicant
         case didDelete
         case showLoginToast
+        case showProfileRequiredToast
         case showToast(message: String)
         case isAuthor(Bool)
     }
@@ -67,6 +68,10 @@ struct RecruitDataView: ActionBindableView {
         viewModel.execute(.delete)
     }
 
+    func reload() {
+        viewModel.execute(.load)
+    }
+
     func didSubmitApplication() {
         viewModel.execute(.applicationSubmitted)
     }
@@ -77,17 +82,30 @@ extension RecruitDataView {
         guard let data = viewModel.data else {
             return
         }
-        guard UserDataManager.shared.isLoggedIn else {
-            sendAction(.showLoginToast)
-            return
-        }
+        
         if data.isAuthor {
             sendAction(.showApplicant)
+            return
         } else if data.canApply {
             sendAction(.showApply)
+            return
+        }
+        
+        guard let applyBlockReason = data.applyBlockReason else {
+            return
+        }
+        switch applyBlockReason {
+        case .loginRequired:
+            sendAction(.showLoginToast)
+        case .profileRequired:
+            sendAction(.showProfileRequiredToast)
+        default:
+            sendAction(.showToast(message: applyBlockReason.toastMessage))
         }
     }
-    
+}
+
+extension RecruitDataView {
     private func handleDelete() {
         guard viewModel.didDelete else {
             return

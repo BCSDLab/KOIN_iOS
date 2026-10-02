@@ -54,6 +54,8 @@ final class RecruitDataHostingController: UIHostingController<RecruitDataView>, 
             showToastMessage(message: message, bottomInset: 72)
         case .showLoginToast:
             showLoginToast()
+        case .showProfileRequiredToast:
+            showProfileRequiredToast()
         case .isAuthor(let isAuthor):
             configureRightBarButton(isAuthor)
         }
@@ -84,6 +86,16 @@ extension RecruitDataHostingController {
             bottomInset: 72
         ) { [weak self] in
             self?.navigateToLogin()
+        }
+    }
+    
+    private func showProfileRequiredToast() {
+        showToastMessageWithButton(
+            message: RecruitApplyBlockReason.profileRequired.toastMessage,
+            buttonTitle: "작성하기",
+            bottomInset: 72
+        ) { [weak self] in
+            self?.navigateToProfilePost()
         }
     }
 }
@@ -154,6 +166,22 @@ extension RecruitDataHostingController {
             recruit: recruit,
             delegate: self
         )
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func navigateToProfilePost() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let viewModel = RecruitProfilePostViewModel(
+            fetchDeptListUseCase: MockFetchDeptListUseCase(),
+            fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: userRepository),
+            postBasicInfoUseCase: DefaultPostBasicInfoUseCase(repository: recruitRepository),
+            postRecruitProfileUseCase: DefaultPostRecruitProfileUseCase(repository: recruitRepository),
+            mode: .post
+        )
+        let viewController = RecruitProfilePostViewController(viewModel: viewModel) { [weak self] _ in
+            self?.rootView.reload()
+        }
         navigationController?.pushViewController(viewController, animated: true)
     }
     
