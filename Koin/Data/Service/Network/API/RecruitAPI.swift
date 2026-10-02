@@ -14,6 +14,7 @@ enum RecruitAPI {
     case deleteData(Int)
     case post(RecruitPostRequestDto)
     case modify(Int, RecruitPostRequestDto)
+    case fetchMyProfile
 }
 
 extension RecruitAPI: Router, URLRequestConvertible {
@@ -29,6 +30,7 @@ extension RecruitAPI: Router, URLRequestConvertible {
         case .deleteData(let id): return "/team-recruitments/\(id)"
         case .post: return "/team-recruitments"
         case .modify(let id, _): return "/team-recruitments/\(id)"
+        case .fetchMyProfile: return "/team-recruitment-profiles/me"
         }
     }
 
@@ -39,13 +41,14 @@ extension RecruitAPI: Router, URLRequestConvertible {
         case .deleteData: return .delete
         case .post: return .post
         case .modify: return .put
+        case .fetchMyProfile: return .get
         }
     }
 
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchList, .fetchData, .deleteData:
+        case .fetchList, .fetchData, .deleteData, .fetchMyProfile:
             break
         case .post, .modify:
             baseHeaders["Content-Type"] = "application/json"
@@ -57,7 +60,7 @@ extension RecruitAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchList(let request):
             return try? request.toDictionary()
-        case .fetchData, .deleteData:
+        case .fetchData, .deleteData, .fetchMyProfile:
             return nil
         case .post(let request), .modify(_, let request):
             return try? request.toDictionary()
@@ -68,7 +71,7 @@ extension RecruitAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchList:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .fetchData, .deleteData:
+        case .fetchData, .deleteData, .fetchMyProfile:
             return nil
         case .post, .modify:
             return JSONEncoding.default

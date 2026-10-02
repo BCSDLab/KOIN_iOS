@@ -58,15 +58,7 @@ extension RecruitProfileViewModel {
                 profile = try await fetchMyProfileUseCase.execute()
                 didLoad = true
             } catch {
-                guard let error = error as? ErrorResponse else {
-                    return
-                }
-                if error.statusCode == 404 {
-                    profile = nil
-                    didLoad = true
-                } else {
-                    errorMessage = error.message
-                }
+                errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
     }

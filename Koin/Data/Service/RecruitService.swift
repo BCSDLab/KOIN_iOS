@@ -13,6 +13,7 @@ protocol RecruitService {
     func deleteData(_ id: Int) async throws
     func post(_ request: RecruitPostRequestDto) async throws -> RecruitPostResultDto
     func modify(_ id: Int, _ request: RecruitPostRequestDto) async throws
+    func fetchMyProfile() async throws -> RecruitProfileDto
 }
 
 final class DefaultRecruitService: RecruitService {
@@ -37,5 +38,9 @@ final class DefaultRecruitService: RecruitService {
 
     func modify(_ id: Int, _ request: RecruitPostRequestDto) async throws {
         try await networkService.request(api: RecruitAPI.modify(id, request))
+    }
+
+    func fetchMyProfile() async throws -> RecruitProfileDto {
+        try await networkService.requestWithResponse(api: RecruitAPI.fetchMyProfile)
     }
 }

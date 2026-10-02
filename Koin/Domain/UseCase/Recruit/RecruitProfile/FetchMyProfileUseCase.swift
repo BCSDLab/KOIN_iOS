@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchMyProfileUseCase {
-    func execute() async throws -> RecruitProfile
+    func execute() async throws -> RecruitProfile?
 }
 
 final class DefaultFetchMyProfileUseCase: FetchMyProfileUseCase {
@@ -18,7 +18,11 @@ final class DefaultFetchMyProfileUseCase: FetchMyProfileUseCase {
         self.repository = repository
     }
 
-    func execute() async throws -> RecruitProfile {
-        try await repository.fetchMyProfile()
+    func execute() async throws -> RecruitProfile? {
+        do {
+            return try await repository.fetchMyProfile()
+        } catch let error as ErrorResponse where error.statusCode == 404 {
+            return nil
+        }
     }
 }

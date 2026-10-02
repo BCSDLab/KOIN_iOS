@@ -44,6 +44,10 @@ final class DefaultRecruitRepository: RecruitRepository {
         }
         try await service.modify(id, request)
     }
+
+    func fetchMyProfile() async throws -> RecruitProfile {
+        try await service.fetchMyProfile().toDomain()
+    }
 }
 
 extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
@@ -126,10 +130,6 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
 
     func markAllAsReadNotification() async throws -> Void {
         try await mockRepository.markAllAsReadNotification()
-    }
-
-    func fetchMyProfile() async throws -> RecruitProfile {
-        try await mockRepository.fetchMyProfile()
     }
 
     func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo {

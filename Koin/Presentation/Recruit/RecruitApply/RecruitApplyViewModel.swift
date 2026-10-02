@@ -86,7 +86,11 @@ extension RecruitApplyViewModel {
             defer { isLoadingProfile = false }
 
             do {
-                let profile = try await fetchMyProfileUseCase.execute()
+                guard let profile = try await fetchMyProfileUseCase.execute() else {
+                    let message = "프로필을 불러오지 못했습니다."
+                    outputSubject.send(.showToast(message))
+                    return
+                }
                 outputSubject.send(.updateRecruitProfile(profile))
             } catch {
                 let message = (error as? ErrorResponse)?.message ?? "프로필을 불러오지 못했습니다."
