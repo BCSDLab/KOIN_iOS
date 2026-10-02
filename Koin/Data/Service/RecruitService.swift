@@ -10,6 +10,7 @@ import Foundation
 protocol RecruitService {
     func fetchList(_ request: RecruitListRequestDto) async throws -> RecruitListDto
     func fetchData(_ id: Int) async throws -> RecruitDataDto
+    func deleteData(_ id: Int) async throws
 }
 
 final class DefaultRecruitService: RecruitService {
@@ -22,5 +23,9 @@ final class DefaultRecruitService: RecruitService {
 
     func fetchData(_ id: Int) async throws -> RecruitDataDto {
         try await networkService.requestWithResponse(api: RecruitAPI.fetchData(id))
+    }
+
+    func deleteData(_ id: Int) async throws {
+        try await networkService.request(api: RecruitAPI.deleteData(id))
     }
 }

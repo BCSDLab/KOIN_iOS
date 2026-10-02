@@ -11,6 +11,7 @@ import Alamofire
 enum RecruitAPI {
     case fetchList(RecruitListRequestDto)
     case fetchData(Int)
+    case deleteData(Int)
 }
 
 extension RecruitAPI: Router, URLRequestConvertible {
@@ -23,6 +24,7 @@ extension RecruitAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchList: return "/team-recruitments"
         case .fetchData(let id): return "/team-recruitments/\(id)"
+        case .deleteData(let id): return "/team-recruitments/\(id)"
         }
     }
 
@@ -30,13 +32,14 @@ extension RecruitAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchList: return .get
         case .fetchData: return .get
+        case .deleteData: return .delete
         }
     }
 
     public var headers: [String: String] {
         let baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchList, .fetchData:
+        case .fetchList, .fetchData, .deleteData:
             break
         }
         return baseHeaders
@@ -46,7 +49,7 @@ extension RecruitAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchList(let request):
             return try? request.toDictionary()
-        case .fetchData:
+        case .fetchData, .deleteData:
             return nil
         }
     }
@@ -55,7 +58,7 @@ extension RecruitAPI: Router, URLRequestConvertible {
         switch self {
         case .fetchList:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .fetchData:
+        case .fetchData, .deleteData:
             return nil
         }
     }
