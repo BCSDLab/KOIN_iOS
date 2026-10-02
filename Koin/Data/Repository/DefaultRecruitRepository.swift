@@ -30,6 +30,20 @@ final class DefaultRecruitRepository: RecruitRepository {
         try await service.deleteData(id)
         return true
     }
+
+    func post(_ request: RecruitPostRequest) async throws -> Int {
+        guard let request = RecruitPostRequestDto(from: request) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        return try await service.post(request).id
+    }
+
+    func modify(_ id: Int, _ request: RecruitPostRequest) async throws -> Void {
+        guard let request = RecruitPostRequestDto(from: request) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        try await service.modify(id, request)
+    }
 }
 
 extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
@@ -112,14 +126,6 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
 
     func markAllAsReadNotification() async throws -> Void {
         try await mockRepository.markAllAsReadNotification()
-    }
-
-    func post(_ request: RecruitPostRequest) async throws -> Int {
-        try await mockRepository.post(request)
-    }
-
-    func modify(_ id: Int, _ request: RecruitPostRequest) async throws -> Void {
-        try await mockRepository.modify(id, request)
     }
 
     func fetchMyProfile() async throws -> RecruitProfile {

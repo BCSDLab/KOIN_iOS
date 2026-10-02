@@ -55,6 +55,7 @@ struct RecruitPostRequest {
 }
 
 struct RecruitRoleRequest {
+    var id: Int? = nil
     var name: String = ""
     var maximumParticipants: Int = 1
     
@@ -82,6 +83,7 @@ extension RecruitPostRequest {
 
 extension RecruitRoleRequest {
     init(from form: RecruitRole) {
+        self.id = form.id
         self.name = form.name
         self.maximumParticipants = form.maximumParticipants
     }

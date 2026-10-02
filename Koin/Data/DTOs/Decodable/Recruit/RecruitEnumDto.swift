@@ -26,7 +26,7 @@ enum RecruitStatusDto: String, Decodable {
     case closed = "CLOSED"
 }
 
-enum RecruitRoleTypeDto: String, Decodable {
+enum RecruitRoleTypeDto: String, Codable {
     case roleBased = "ROLE_BASED"
     case general = "GENERAL"
 }
@@ -116,6 +116,15 @@ extension RecruitStatusDto {
 }
 
 extension RecruitRoleTypeDto {
+    init(from model: RecruitRoleType) {
+        switch model {
+        case .roleBased:
+            self = .roleBased
+        case .general:
+            self = .general
+        }
+    }
+
     func toDomain() -> RecruitRoleType {
         switch self {
         case .roleBased:
