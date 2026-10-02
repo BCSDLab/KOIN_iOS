@@ -47,20 +47,12 @@ extension RecruitListSummaryDto {
             startDate: activityStartDate.toDateFromYYYYMMDD(),
             endDate: activityEndDate.toDateFromYYYYMMDD(),
             deadline: deadlineDate.toDateFromYYYYMMDD(),
-            dDay: displayDDay(dDay),
+            dDay: dDay?.toDDay(),
             state: status.toDomain(),
             currentParticipants: currentParticipants,
             maximumParticipants: maxParticipants,
             type: recruitmentType.toDomain(),
             roles: roles.map { $0.toDomain() }
         )
-    }
-
-    private func displayDDay(_ dDay: Int?) -> String? {
-        guard let dDay else {
-            return nil
-        }
-        
-        return "D-" + (dDay == 0 ? "day" : "\(dDay)")
     }
 }

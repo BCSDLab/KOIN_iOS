@@ -14,6 +14,7 @@
 		239837C1CD4A0D7A5D1D36C7 /* RecruitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC394F2327076B2F9AEE2A4 /* RecruitService.swift */; };
 		247DF973D072E88901E5C249 /* RecruitProfilePostDepartmentDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEABD714DCF0FD2D5DBACD9 /* RecruitProfilePostDepartmentDropdownView.swift */; };
 		2E6336C1CDB4445BA858DA5A /* RecruitDataContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673826738C364FB68ECE18FE /* RecruitDataContentView.swift */; };
+		3DDE20379881F001713618FC /* RecruitDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA92583628DDFBC3545C197B /* RecruitDataDto.swift */; };
 		5006987DEF4B5F454D7EA2D5 /* RecruitPostTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */; };
 		515B96092C6730C797C1F837 /* PostRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */; };
 		678D20761DEF461CA6D4728A /* RecruitDataTextSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FBEEB767094CE8B219095B /* RecruitDataTextSectionView.swift */; };
@@ -833,6 +834,7 @@
 		8A7B1679CC9945559E674584 /* RecruitDataRolesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945FF00E918646E5AB601057 /* RecruitDataRolesView.swift */; };
 		91E82A6B67BF5BF911535B1C /* RecruitMyPostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */; };
 		9059A862F4E9CDA304B2F082 /* RecruitEnumDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E31EA58151824C938383893 /* RecruitEnumDto.swift */; };
+		999FC904C4F9ED4E2B829341 /* RecruitApplyBlockReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6A15BFD7B896A787835F8E /* RecruitApplyBlockReason.swift */; };
 		9C95E190C98F440DADB6F91B /* RecruitDataMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DADCC36CEEA42EC86AB75B6 /* RecruitDataMetadataView.swift */; };
 		A0B343754988C9398C4FE726 /* ModifyRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */; };
 		A11B00000000000000000001 /* PostBasicInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = A11B00000000000000000002 /* PostBasicInfoUseCase.swift */; };
@@ -2382,6 +2384,7 @@
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		E1A70C002D9A4F1100AGSEL0 /* AgreementSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementSelection.swift; sourceTree = "<group>"; };
+		EA92583628DDFBC3545C197B /* RecruitDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitDataDto.swift; sourceTree = "<group>"; };
 		EC692285302700A400EE26ED /* koinUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED038AB5420C8C565688CF6B /* DefaultRecruitRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultRecruitRepository.swift; sourceTree = "<group>"; };
 		EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitStepView.swift; sourceTree = "<group>"; };
@@ -2389,6 +2392,7 @@
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
+		FB6A15BFD7B896A787835F8E /* RecruitApplyBlockReason.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplyBlockReason.swift; sourceTree = "<group>"; };
 		FE01000000000000000011 /* KoinDropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdown.swift; sourceTree = "<group>"; };
 		FE01000000000000000013 /* KoinDropdownAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownAnimator.swift; sourceTree = "<group>"; };
 		FE01000000000000000016 /* KoinDropdownConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownConfiguration.swift; sourceTree = "<group>"; };
@@ -2459,6 +2463,7 @@
 				21AA98431B25CB5914BC2598 /* RecruitListDto.swift */,
 				7C0D8CC2306E837F00F7CE08 /* RecruitListSummaryDto.swift */,
 				7C0D8CC4306E83A500F7CE08 /* RecruitRoleDto.swift */,
+				EA92583628DDFBC3545C197B /* RecruitDataDto.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -3029,6 +3034,7 @@
 				7C50A20C3043273A00897A6F /* RecruitNotificationList.swift */,
 				7C50A20A304324F500897A6F /* RecruitNotificationRow.swift */,
 				7C50A1D63041F91400897A6F /* RecruitData.swift */,
+				FB6A15BFD7B896A787835F8E /* RecruitApplyBlockReason.swift */,
 				7CAC2DDB304C34E900AC2828 /* RecruitPostRequest.swift */,
 				C0DE00000000000000000002 /* RecruitProfile.swift */,
 				7CDCD0D73055EECF004204DA /* RecruitProfileActivity.swift */,
@@ -7853,6 +7859,8 @@
 				C2B6232F34E3251E7E182808 /* RecruitAPI.swift in Sources */,
 				239837C1CD4A0D7A5D1D36C7 /* RecruitService.swift in Sources */,
 				CE3D147031BC1F6BDD25184B /* DefaultRecruitRepository.swift in Sources */,
+				3DDE20379881F001713618FC /* RecruitDataDto.swift in Sources */,
+				999FC904C4F9ED4E2B829341 /* RecruitApplyBlockReason.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

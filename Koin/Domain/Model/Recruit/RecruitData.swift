@@ -16,9 +16,9 @@ struct RecruitData: Identifiable, Equatable {
     let title: String
     
     let meetingType: RecruitMeetingType
-    let startDate: Date
-    let endDate: Date
-    let deadlineDate: Date
+    let startDate: Date?
+    let endDate: Date?
+    let deadlineDate: Date?
     let currentParticipants: Int
     let maximumParticipants: Int
     let createdAt: Date?
@@ -34,41 +34,16 @@ struct RecruitData: Identifiable, Equatable {
     let application: RecruitMyApplication?
     
     let isAuthor: Bool
-    let canApply: Bool
-    let applyBlockReason: String?
+    private(set) var canApply: Bool
+    private(set) var applyBlockReason: RecruitApplyBlockReason?
     let canManageApplicants: Bool
     let teamChatAvailable: Bool
     let teamChatRoomId: Int?
 }
 
 extension RecruitData {
-    func disablingApplication() -> RecruitData {
-        RecruitData(
-            id: id,
-            category: category,
-            dDay: dDay,
-            state: state,
-            title: title,
-            meetingType: meetingType,
-            startDate: startDate,
-            endDate: endDate,
-            deadlineDate: deadlineDate,
-            currentParticipants: currentParticipants,
-            maximumParticipants: maximumParticipants,
-            createdAt: createdAt,
-            author: author,
-            type: type,
-            roles: roles,
-            description: description,
-            relatedUrl: relatedUrl,
-            qualification: qualification,
-            application: application,
-            isAuthor: isAuthor,
-            canApply: false,
-            applyBlockReason: "이미 지원한 모집글입니다.",
-            canManageApplicants: canManageApplicants,
-            teamChatAvailable: teamChatAvailable,
-            teamChatRoomId: teamChatRoomId
-        )
+    mutating func markAsAlreadyApplied() {
+        canApply = false
+        applyBlockReason = .alreadyApplied
     }
 }

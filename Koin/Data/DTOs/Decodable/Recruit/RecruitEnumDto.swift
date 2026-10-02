@@ -31,6 +31,23 @@ enum RecruitRoleTypeDto: String, Decodable {
     case general = "GENERAL"
 }
 
+enum RecruitApplicationStatusDto: String, Decodable {
+    case pending = "PENDING"
+    case accepted = "ACCEPTED"
+    case rejected = "REJECTED"
+}
+
+enum RecruitApplyBlockReasonDto: String, Decodable {
+    case recruitmentDeleted = "RECRUITMENT_DELETED"
+    case loginRequired = "LOGIN_REQUIRED"
+    case ownRecruitment = "OWN_RECRUITMENT"
+    case alreadyApplied = "ALREADY_APPLIED"
+    case recruitmentClosed = "RECRUITMENT_CLOSED"
+    case deadlinePassed = "DEADLINE_PASSED"
+    case roleClosed = "ROLE_CLOSED"
+    case profileRequired = "PROFILE_REQUIRED"
+}
+
 extension RecruitCategoryDto {
     init(from model: RecruitCategory) {
         switch model {
@@ -105,6 +122,42 @@ extension RecruitRoleTypeDto {
             return .roleBased
         case .general:
             return .general
+        }
+    }
+}
+
+extension RecruitApplicationStatusDto {
+    func toDomain() -> RecruitApplicationStatus {
+        switch self {
+        case .pending:
+            return .pending
+        case .accepted:
+            return .accepted
+        case .rejected:
+            return .denied
+        }
+    }
+}
+
+extension RecruitApplyBlockReasonDto {
+    func toDomain() -> RecruitApplyBlockReason {
+        switch self {
+        case .recruitmentDeleted:
+            return .recruitmentDeleted
+        case .loginRequired:
+            return .loginRequired
+        case .ownRecruitment:
+            return .ownRecruitment
+        case .alreadyApplied:
+            return .alreadyApplied
+        case .recruitmentClosed:
+            return .recruitmentClosed
+        case .deadlinePassed:
+            return .deadlinePassed
+        case .roleClosed:
+            return .roleClosed
+        case .profileRequired:
+            return .profileRequired
         }
     }
 }

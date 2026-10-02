@@ -66,8 +66,11 @@ extension RecruitDataViewModel {
                 defer {
                     isLoading = false
                 }
-                let data = try await fetchRecruitDataUseCase.execute(id: recruitId)
-                self.data = didSubmitApplication ? data.disablingApplication() : data
+                var data = try await fetchRecruitDataUseCase.execute(id: recruitId)
+                if didSubmitApplication {
+                    data.markAsAlreadyApplied()
+                }
+                self.data = data
             } catch {
                 if let error = error as? ErrorResponse {
                     errorMessage = error.message
@@ -104,7 +107,7 @@ extension RecruitDataViewModel {
 
     private func applicationSubmitted() {
         didSubmitApplication = true
-        data = data?.disablingApplication()
+        data?.markAsAlreadyApplied()
         load()
     }
 }

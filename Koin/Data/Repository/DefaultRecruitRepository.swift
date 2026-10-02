@@ -21,6 +21,10 @@ final class DefaultRecruitRepository: RecruitRepository {
         let request = RecruitListRequestDto(from: filter)
         return try await service.fetchList(request).toDomain()
     }
+
+    func fetchData(_ id: Int) async throws -> RecruitData {
+        try await service.fetchData(id).toDomain()
+    }
 }
 
 extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
@@ -111,10 +115,6 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
 
     func modify(_ id: Int, _ request: RecruitPostRequest) async throws -> Void {
         try await mockRepository.modify(id, request)
-    }
-
-    func fetchData(_ id: Int) async throws -> RecruitData {
-        try await mockRepository.fetchData(id)
     }
 
     func deleteData(id: Int) async throws -> Bool {
