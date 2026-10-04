@@ -27,7 +27,7 @@ struct RecruitDataHeaderView: View {
                         .foregroundStyle(Color.appColor(.danger700))
                 }
             }
-            .frame(minHeight: 18)
+            .frame(maxWidth: .infinity, minHeight: 18, alignment: .leading)
             
             Text(data.title)
                 .font(.appFont(.pretendardSemiBold, size: 18))
