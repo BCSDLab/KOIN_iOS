@@ -453,10 +453,10 @@ final class MockRecruitRepository: RecruitRepository {
                 category: summary.category,
                 title: summary.title,
                 meetingType: summary.meetingType,
-                startDate: summary.startDate ?? Date(),
-                endDate: summary.endDate ?? Date(),
-                deadline: summary.deadline ?? Date(),
-                dDay: summary.dDay ?? "",
+                startDate: summary.startDate,
+                endDate: summary.endDate,
+                deadline: summary.deadline,
+                dDay: summary.dDay,
                 state: summary.state,
                 currentParticipants: summary.currentParticipants,
                 maximumParticipants: summary.maximumParticipants,
@@ -474,7 +474,7 @@ final class MockRecruitRepository: RecruitRepository {
             recruits = recruits.filter { $0.application.status == status }
         }
         if filter.sort == .deadlineAscending {
-            recruits.sort { $0.deadline < $1.deadline }
+            recruits.sort { ($0.deadline ?? .distantFuture) < ($1.deadline ?? .distantFuture) }
         }
 
         let totalCount = recruits.count
