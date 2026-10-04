@@ -34,7 +34,8 @@ extension Array where Element == RecruitChatMessageDto {
         ]
         let timestampFormatter = DateFormatter().then {
             $0.dateFormat = "yyyy-MM-dd'T'HH:mm:ss"
-            $0.locale = Locale(identifier: "ko_KR")
+            $0.locale = Locale(identifier: "en_US_POSIX")
+            $0.timeZone = TimeZone(identifier: "Asia/Seoul")
             $0.calendar = Calendar(identifier: .gregorian)
         }
 

@@ -15,6 +15,6 @@ struct RecruitNotificationListRequestDto: Encodable {
 extension RecruitNotificationListRequestDto {
     init(page: Int) {
         self.page = page
-        self.limit = 5
+        self.limit = 50
     }
 }
