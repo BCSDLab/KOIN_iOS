@@ -17,11 +17,17 @@ struct RecruitDataHeaderView: View {
                     .padding(.horizontal, 8)
                     .frame(height: 18)
                     .background(Color.appColor(data.category.backgroundColor), in: Capsule())
-                Text(data.state == .closed ? "모집완료" : data.dDay)
-                    .font(.appFont(.pretendardMedium, size: 10))
-                    .foregroundStyle(Color.appColor(data.state == .closed ? .new600 : .danger700))
+                if data.state == .closed {
+                    Text("모집완료")
+                        .font(.appFont(.pretendardMedium, size: 10))
+                        .foregroundStyle(Color.appColor(.new600))
+                } else if let dDay = data.dDay {
+                    Text(dDay)
+                        .font(.appFont(.pretendardMedium, size: 10))
+                        .foregroundStyle(Color.appColor(.danger700))
+                }
             }
-            .frame(minHeight: 18)
+            .frame(maxWidth: .infinity, minHeight: 18, alignment: .leading)
             
             Text(data.title)
                 .font(.appFont(.pretendardSemiBold, size: 18))

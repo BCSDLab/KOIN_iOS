@@ -59,7 +59,7 @@ extension RecruitProfileHostingController {
     }
     
     private func navigateToMyPost() {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitMyPostListUseCase(repository: repository)
         let closeUseCase = DefaultCloseRecruitMyPostUseCase(repository: repository)
         let viewModel = RecruitMyPostListViewModel(
@@ -73,7 +73,7 @@ extension RecruitProfileHostingController {
     }
     
     private func navigateToMyApplication() {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let useCase = DefaultFetchRecruitMyApplicationListUseCase(repository: repository)
         let viewModel = RecruitMyApplicationListViewModel(
             fetchRecruitMyApplicationListUseCase: useCase
@@ -88,16 +88,16 @@ extension RecruitProfileHostingController {
         mode: RecruitProfilePostViewModel.Mode
     ) -> RecruitProfilePostViewController {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
-        let recruitRepository = MockRecruitRepository()
-        let fetchDeptListUseCase = MockFetchDeptListUseCase()
-        let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
-        let postBasicInfoUseCase = DefaultPostBasicInfoUseCase(repository: recruitRepository)
-        let postRecruitProfileUseCase = DefaultPostRecruitProfileUseCase(repository: recruitRepository)
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
+        let fetchBasicInfoUseCase = DefaultFetchBasicInfoUseCase(repository: userRepository)
+        let modifyBasicInfoUseCase = DefaultModifyBasicInfoUseCase(repository: userRepository)
+        let upsertMyRecruitProfileUseCase = DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository)
         let viewModel = RecruitProfilePostViewModel(
             fetchDeptListUseCase: fetchDeptListUseCase,
-            fetchUserDataUseCase: fetchUserDataUseCase,
-            postBasicInfoUseCase: postBasicInfoUseCase,
-            postRecruitProfileUseCase: postRecruitProfileUseCase,
+            fetchBasicInfoUseCase: fetchBasicInfoUseCase,
+            modifyBasicInfoUseCase: modifyBasicInfoUseCase,
+            upsertMyRecruitProfileUseCase: upsertMyRecruitProfileUseCase,
             mode: mode
         )
         return RecruitProfilePostViewController(viewModel: viewModel) { [weak self] profile in

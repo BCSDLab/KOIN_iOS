@@ -54,6 +54,8 @@ final class RecruitDataHostingController: UIHostingController<RecruitDataView>, 
             showToastMessage(message: message, bottomInset: 72)
         case .showLoginToast:
             showLoginToast()
+        case .showProfileRequiredToast:
+            showProfileRequiredToast()
         case .isAuthor(let isAuthor):
             configureRightBarButton(isAuthor)
         }
@@ -84,6 +86,16 @@ extension RecruitDataHostingController {
             bottomInset: 72
         ) { [weak self] in
             self?.navigateToLogin()
+        }
+    }
+    
+    private func showProfileRequiredToast() {
+        showToastMessageWithButton(
+            message: RecruitApplyBlockReason.profileRequired.toastMessage,
+            buttonTitle: "작성하기",
+            bottomInset: 72
+        ) { [weak self] in
+            self?.navigateToProfilePost()
         }
     }
 }
@@ -128,7 +140,7 @@ extension RecruitDataHostingController {
         guard let id = rootView.id else {
             return
         }
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitMyPostDataUseCase = DefaultFetchRecruitMyPostDataUseCase(repository: repository)
         let viewModel = RecruitMyPostViewModel(
             fetchRecruitMyPostDataUseCase: fetchRecruitMyPostDataUseCase,
@@ -143,10 +155,13 @@ extension RecruitDataHostingController {
         guard let recruit = rootView.data else {
             return
         }
-        let recruitRepository = MockRecruitRepository()
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let viewModel = RecruitApplyViewModel(
-            fetchDeptListUseCase: MockFetchDeptListUseCase(),
-            fetchMyProfileUseCase: DefaultFetchMyProfileUseCase(repository: recruitRepository),
+            fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
+            fetchMyRecruitProfileUseCase: DefaultFetchMyRecruitProfileUseCase(repository: recruitRepository),
+            modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
+            upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
             applyRecruitUseCase: DefaultApplyRecruitUseCase(repository: recruitRepository)
         )
         let viewController = RecruitApplyViewController(
@@ -154,6 +169,22 @@ extension RecruitDataHostingController {
             recruit: recruit,
             delegate: self
         )
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func navigateToProfilePost() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let viewModel = RecruitProfilePostViewModel(
+            fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
+            fetchBasicInfoUseCase: DefaultFetchBasicInfoUseCase(repository: userRepository),
+            modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
+            upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
+            mode: .post
+        )
+        let viewController = RecruitProfilePostViewController(viewModel: viewModel) { [weak self] _ in
+            self?.rootView.reload()
+        }
         navigationController?.pushViewController(viewController, animated: true)
     }
     
@@ -169,7 +200,7 @@ extension RecruitDataHostingController {
         guard let data = rootView.data else {
             return
         }
-        let recruitRepository = MockRecruitRepository()
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
         let viewModel = RecruitPostViewModel(

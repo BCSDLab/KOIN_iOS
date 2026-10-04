@@ -8,7 +8,7 @@
 import Foundation
 
 protocol ApplyRecruitUseCase {
-    func execute(request: RecruitApplyRequest) async throws -> Void
+    func execute(recruitmentId: Int, request: RecruitApplyRequest) async throws -> Void
 }
 
 final class DefaultApplyRecruitUseCase: ApplyRecruitUseCase {
@@ -18,7 +18,7 @@ final class DefaultApplyRecruitUseCase: ApplyRecruitUseCase {
         self.repository = repository
     }
 
-    func execute(request: RecruitApplyRequest) async throws -> Void {
-        try await repository.apply(request)
+    func execute(recruitmentId: Int, request: RecruitApplyRequest) async throws -> Void {
+        try await repository.apply(recruitmentId: recruitmentId, request)
     }
 }

@@ -114,16 +114,11 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
-    func apply(_ request: RecruitApplyRequest) async throws -> Void {
+    func apply(recruitmentId: Int, _ request: RecruitApplyRequest) async throws -> Void {
         try await Task.sleep(nanoseconds: 300_000_000)
     }
 
-    func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo {
-        try await Task.sleep(nanoseconds: 300_000_000)
-        return basicInfo
-    }
-
-    func postRecruitProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
+    func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
         try await Task.sleep(nanoseconds: 300_000_000)
 
         return RecruitProfile(
@@ -293,7 +288,7 @@ final class MockRecruitRepository: RecruitRepository {
             recruits = recruits.filter { $0.state == filter.state }
         }
         if filter.sort == .deadlineAscending {
-            recruits.sort { $0.deadline < $1.deadline }
+            recruits.sort { ($0.deadline ?? .distantFuture) < ($1.deadline ?? .distantFuture) }
         }
 
         let totalCount = recruits.count
@@ -311,7 +306,7 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
-    func fetchMyPostData(_ id: Int) async throws -> RecruitMyPostData {
+    func fetchMyPostData(_ id: Int, page: Int) async throws -> RecruitMyPostData {
         let response = try await fetchMyPostList(RecruitMyPostFilter())
         guard let recruit = response.recruits.first(where: { $0.id == id }) else {
             throw ErrorResponse.unexpectedInternalError
@@ -336,7 +331,9 @@ final class MockRecruitRepository: RecruitRepository {
             state: recruit.state,
             chatRoomId: recruit.chatRoomId ?? recruit.id,
             applicants: applicants,
-            totalCount: applicants.count
+            totalCount: applicants.count,
+            totalPage: 1,
+            currentPage: page
         )
     }
 
@@ -346,7 +343,7 @@ final class MockRecruitRepository: RecruitRepository {
     ) async throws -> RecruitApplicantData {
         try await Task.sleep(nanoseconds: 300_000_000)
 
-        let recruitment = try await fetchMyPostData(recruitmentId)
+        let recruitment = try await fetchMyPostData(recruitmentId, page: 1)
         guard let application = recruitment.applicants.first(where: {
             $0.applicationId == applicationId
         }) else {
@@ -395,7 +392,7 @@ final class MockRecruitRepository: RecruitRepository {
         applicationId: Int,
         decision: RecruitApplicantDecision
     ) async throws -> Void {
-        let recruitment = try await fetchMyPostData(recruitmentId)
+        let recruitment = try await fetchMyPostData(recruitmentId, page: 1)
         guard recruitment.applicants.contains(where: {
             $0.applicationId == applicationId && $0.status == .pending
         }) else {
@@ -479,7 +476,7 @@ final class MockRecruitRepository: RecruitRepository {
             recruits = recruits.filter { $0.application.status == status }
         }
         if filter.sort == .deadlineAscending {
-            recruits.sort { $0.deadline < $1.deadline }
+            recruits.sort { ($0.deadline ?? .distantFuture) < ($1.deadline ?? .distantFuture) }
         }
 
         let totalCount = recruits.count

@@ -57,9 +57,9 @@ final class RecruitProfilePostViewController: UIViewController {
     private var completionMessage: String {
         switch viewModel.mode {
         case .post:
-            return "프로필이 저장되었습니다."
+            return "프로필을 저장했습니다."
         case .modify:
-            return "프로필이 수정되었습니다."
+            return "프로필을 수정했습니다."
         }
     }
 
@@ -232,7 +232,7 @@ extension RecruitProfilePostViewController {
 
         firstStepView.loadInfoButtonTappedPublisher
             .sink { [weak self] in
-                self?.inputSubject.send(.loadUserData)
+                self?.inputSubject.send(.fetchBasicInfo)
             }
             .store(in: &subscriptions)
 

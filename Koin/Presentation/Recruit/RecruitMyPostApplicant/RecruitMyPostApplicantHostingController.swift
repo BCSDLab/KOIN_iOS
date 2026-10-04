@@ -100,7 +100,7 @@ extension RecruitMyPostApplicantHostingController {
     }
 
     private func showDirectChat(recruitmentId: Int, applicationId: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let viewModel = RecruitChatViewModel(
             roomSource: .direct(recruitmentId: recruitmentId, applicationId: applicationId),
             fetchTeamChatDataUseCase: DefaultFetchRecruitTeamChatDataUseCase(repository: repository),

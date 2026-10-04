@@ -20,6 +20,8 @@ final class DefaultPostRecruitUseCase: PostRecruitUseCase {
     }
     
     func execute(request: RecruitPostRequest) async throws -> Int {
+        var request = request
+        try request.normalizeRelatedUrl()
         return try await repository.post(request)
     }
 }

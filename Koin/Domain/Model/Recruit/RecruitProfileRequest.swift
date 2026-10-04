@@ -8,6 +8,7 @@
 import Foundation
 
 struct RecruitProfileRequest {
+    var nickname: String? = nil
     var preferredRole: String? = nil
     var skills: [String] = []
     var activities: [RecruitProfileActivityRequest] = []
@@ -16,10 +17,9 @@ struct RecruitProfileRequest {
 
 extension RecruitProfileRequest {
     var isValid: Bool {
-        guard let preferredRole,
-              !preferredRole.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              let introduction,
-              !introduction.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
+        guard let nickname, !nickname.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              let preferredRole, !preferredRole.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
+              let introduction, !introduction.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return false
         }
 

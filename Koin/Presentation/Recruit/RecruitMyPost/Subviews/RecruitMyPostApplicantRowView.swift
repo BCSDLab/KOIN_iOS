@@ -88,11 +88,11 @@ extension RecruitMyPostApplicantRowView {
             HStack(spacing: 0) {
                 Text(model.role)
                     .foregroundStyle(Color.appColor(.new500))
-                Text(" |  \(model.department) · \(model.studentYear)학번")
+                Text(" |  \(model.department) · \(String(format: "%02d", model.studentYear % 100))학번")
                     .foregroundStyle(Color.appColor(.neutral500))
             }
         } else {
-            Text("\(model.department) · \(model.studentYear)학번")
+            Text("\(model.department) · \(String(format: "%02d", model.studentYear % 100))학번")
                 .foregroundStyle(Color.appColor(.neutral500))
         }
     }

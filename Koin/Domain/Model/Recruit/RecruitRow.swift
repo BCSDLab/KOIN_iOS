@@ -13,10 +13,10 @@ struct RecruitRow: Identifiable, Equatable {
     let title: String
     let meetingType: RecruitMeetingType
     
-    let startDate: Date
-    let endDate: Date
-    let deadline: Date
-    let dDay: String
+    let startDate: Date?
+    let endDate: Date?
+    let deadline: Date?
+    let dDay: String?
     let state: RecruitState
     
     let currentParticipants: Int

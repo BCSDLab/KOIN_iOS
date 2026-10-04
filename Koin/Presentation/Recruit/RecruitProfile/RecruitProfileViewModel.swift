@@ -24,11 +24,11 @@ final class RecruitProfileViewModel: SwiftUIViewModelProtocol {
     private(set) var errorMessage: String?
 
     // MARK: - UseCase
-    private let fetchMyProfileUseCase: FetchMyProfileUseCase
+    private let fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
 
     // MARK: - Initializer
-    init(fetchMyProfileUseCase: FetchMyProfileUseCase) {
-        self.fetchMyProfileUseCase = fetchMyProfileUseCase
+    init(fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase) {
+        self.fetchMyRecruitProfileUseCase = fetchMyRecruitProfileUseCase
     }
 
     // MARK: - Public
@@ -55,18 +55,10 @@ extension RecruitProfileViewModel {
             }
 
             do {
-                profile = try await fetchMyProfileUseCase.execute()
+                profile = try await fetchMyRecruitProfileUseCase.execute()
                 didLoad = true
             } catch {
-                guard let error = error as? ErrorResponse else {
-                    return
-                }
-                if error.statusCode == 404 {
-                    profile = nil
-                    didLoad = true
-                } else {
-                    errorMessage = error.message
-                }
+                errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
     }

@@ -50,7 +50,7 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     }
 
     private func showRecruitData(id: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
         let viewModel = RecruitDataViewModel(
@@ -66,7 +66,7 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     }
 
     private func showChat(recruitmentId: Int, chatRoomId: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let viewModel = RecruitChatViewModel(
             roomSource: .team(recruitmentId: recruitmentId, chatRoomId: chatRoomId),
             fetchTeamChatDataUseCase: DefaultFetchRecruitTeamChatDataUseCase(repository: repository),
@@ -79,7 +79,7 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     }
 
     private func showApplicants(recruitId: Int) {
-        let repository = MockRecruitRepository()
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitMyPostDataUseCase = DefaultFetchRecruitMyPostDataUseCase(repository: repository)
         let viewModel = RecruitMyPostViewModel(
             fetchRecruitMyPostDataUseCase: fetchRecruitMyPostDataUseCase,

@@ -13,19 +13,27 @@ final class RecruitApplyViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case loadRecruitProfile
-        case apply(RecruitApplyRequest)
+        case apply(
+            recruitmentId: Int,
+            basicInfo: BasicInfo,
+            profileRequest: RecruitProfileRequest,
+            applyRequest: RecruitApplyRequest
+        )
     }
 
     enum Output {
         case updateRecruitProfile(RecruitProfile)
         case updateDepartments([String])
+        case updateLoading(Bool)
         case applyCompleted
         case showToast(String)
     }
 
     // MARK: - Properties
     private let fetchDeptListUseCase: FetchDeptListUseCase
-    private let fetchMyProfileUseCase: FetchMyProfileUseCase
+    private let fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
+    private let modifyBasicInfoUseCase: ModifyBasicInfoUseCase
+    private let upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase
     private let applyRecruitUseCase: ApplyRecruitUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
@@ -35,11 +43,15 @@ final class RecruitApplyViewModel: ViewModelProtocol {
     // MARK: - Initializer
     init(
         fetchDeptListUseCase: FetchDeptListUseCase,
-        fetchMyProfileUseCase: FetchMyProfileUseCase,
+        fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase,
+        modifyBasicInfoUseCase: ModifyBasicInfoUseCase,
+        upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase,
         applyRecruitUseCase: ApplyRecruitUseCase
     ) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
-        self.fetchMyProfileUseCase = fetchMyProfileUseCase
+        self.fetchMyRecruitProfileUseCase = fetchMyRecruitProfileUseCase
+        self.modifyBasicInfoUseCase = modifyBasicInfoUseCase
+        self.upsertMyRecruitProfileUseCase = upsertMyRecruitProfileUseCase
         self.applyRecruitUseCase = applyRecruitUseCase
     }
 
@@ -51,8 +63,13 @@ final class RecruitApplyViewModel: ViewModelProtocol {
                     self?.fetchDepartments()
                 case .loadRecruitProfile:
                     self?.fetchRecruitProfile()
-                case let .apply(request):
-                    self?.apply(request)
+                case let .apply(recruitmentId, basicInfo, profileRequest, applyRequest):
+                    self?.apply(
+                        recruitmentId: recruitmentId,
+                        basicInfo: basicInfo,
+                        profileRequest: profileRequest,
+                        applyRequest: applyRequest
+                    )
                 }
             }
             .store(in: &subscriptions)
@@ -86,7 +103,11 @@ extension RecruitApplyViewModel {
             defer { isLoadingProfile = false }
 
             do {
-                let profile = try await fetchMyProfileUseCase.execute()
+                guard let profile = try await fetchMyRecruitProfileUseCase.execute() else {
+                    let message = "프로필을 불러오지 못했습니다."
+                    outputSubject.send(.showToast(message))
+                    return
+                }
                 outputSubject.send(.updateRecruitProfile(profile))
             } catch {
                 let message = (error as? ErrorResponse)?.message ?? "프로필을 불러오지 못했습니다."
@@ -95,16 +116,27 @@ extension RecruitApplyViewModel {
         }
     }
 
-    private func apply(_ request: RecruitApplyRequest) {
+    private func apply(
+        recruitmentId: Int,
+        basicInfo: BasicInfo,
+        profileRequest: RecruitProfileRequest,
+        applyRequest: RecruitApplyRequest
+    ) {
         guard !isApplying else { return }
 
         isApplying = true
+        outputSubject.send(.updateLoading(true))
         Task { [weak self] in
             guard let self else { return }
-            defer { isApplying = false }
+            defer {
+                isApplying = false
+                outputSubject.send(.updateLoading(false))
+            }
 
             do {
-                try await applyRecruitUseCase.execute(request: request)
+                try await modifyBasicInfoUseCase.execute(basicInfo: basicInfo)
+                _ = try await upsertMyRecruitProfileUseCase.execute(request: profileRequest)
+                try await applyRecruitUseCase.execute(recruitmentId: recruitmentId, request: applyRequest)
                 outputSubject.send(.applyCompleted)
             } catch {
                 let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription

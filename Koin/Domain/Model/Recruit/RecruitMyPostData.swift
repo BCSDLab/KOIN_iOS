@@ -13,10 +13,10 @@ struct RecruitMyPostData: Identifiable, Equatable {
     let title: String
     let meetingType: RecruitMeetingType
 
-    let startDate: Date
-    let endDate: Date
-    let deadline: Date
-    let dDay: String
+    let startDate: Date?
+    let endDate: Date?
+    let deadline: Date?
+    let dDay: String?
 
     let currentParticipants: Int
     let maximumParticipants: Int
@@ -27,6 +27,14 @@ struct RecruitMyPostData: Identifiable, Equatable {
     let state: RecruitState
     let chatRoomId: Int?
 
-    let applicants: [RecruitApplicantRow]
+    var applicants: [RecruitApplicantRow]
     let totalCount: Int
+    let totalPage: Int
+    let currentPage: Int
+}
+
+extension RecruitMyPostData {
+    var hasNextPage: Bool {
+        currentPage < totalPage
+    }
 }

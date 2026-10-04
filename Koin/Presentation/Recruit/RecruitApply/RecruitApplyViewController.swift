@@ -22,7 +22,10 @@ final class RecruitApplyViewController: UIViewController {
     private let inputSubject = PassthroughSubject<RecruitApplyViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
 
-    private var request: RecruitApplyRequest
+    private let recruit: RecruitData
+    private var basicInfo = BasicInfo()
+    private var profileRequest = RecruitProfileRequest()
+    private var applyRequest = RecruitApplyRequest()
     private var isFirstStep = true
 
     // MARK: - UI Components
@@ -59,7 +62,7 @@ final class RecruitApplyViewController: UIViewController {
     private lazy var dropdownHost = KoinDropdownHost(scrollView: firstStepView)
     private lazy var departmentDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
         guard let self else { return }
-        request.basicInfo.department = department
+        basicInfo.department = department
         firstStepView.configure(department: department)
         updateNextButtonState()
     }
@@ -77,7 +80,7 @@ final class RecruitApplyViewController: UIViewController {
     ) {
         self.viewModel = viewModel
         self.delegate = delegate
-        self.request = RecruitApplyRequest(recruit: recruit)
+        self.recruit = recruit
         self.secondStepView = RecruitApplySecondStepView(recruit: recruit)
         super.init(nibName: nil, bundle: nil)
     }
@@ -111,14 +114,13 @@ extension RecruitApplyViewController {
             .sink { [weak self] output in
                 switch output {
                 case let .updateRecruitProfile(profile):
-                    self?.request.basicInfo = profile.toBasicInfo()
-                    self?.request.skills = profile.skills
-                    self?.request.activities = profile.activities.map { $0.toRequest() }
-                    self?.request.introduction = profile.selfIntroduction
+                    self?.updateRecruitProfile(profile)
                     self?.firstStepView.configure(profile)
                     self?.updateNextButtonState()
                 case let .updateDepartments(departments):
                     self?.departmentDropdownContentView.configure(departments: departments)
+                case let .updateLoading(isLoading):
+                    self?.updateLoading(isLoading)
                 case .applyCompleted:
                     self?.handleApplyCompleted()
                 case let .showToast(message):
@@ -131,26 +133,42 @@ extension RecruitApplyViewController {
             .sink { [weak self] in self?.inputSubject.send(.loadRecruitProfile) }
             .store(in: &subscriptions)
         firstStepView.nicknameChangedPublisher
-            .sink { [weak self] value in self?.request.basicInfo.nickname = value; self?.updateNextButtonState() }
+            .sink { [weak self] value in
+                self?.basicInfo.nickname = value
+                self?.profileRequest.nickname = value
+                self?.updateNextButtonState()
+            }
             .store(in: &subscriptions)
         firstStepView.departmentButtonTappedPublisher
             .sink { [weak self] in
                 guard let self else { return }
                 view.endEditing(true)
-                restoreFirstStepContentInsetBottom { [weak self] in self?.departmentDropdown.toggle() }
+                restoreFirstStepContentInsetBottom { [weak self] in
+                    self?.departmentDropdown.toggle()
+                }
             }
             .store(in: &subscriptions)
         firstStepView.studentNumberChangedPublisher
-            .sink { [weak self] value in self?.request.basicInfo.studentNumber = value; self?.updateNextButtonState() }
+            .sink { [weak self] value in self?.basicInfo.studentNumber = value
+                self?.updateNextButtonState()
+            }
             .store(in: &subscriptions)
         firstStepView.skillsChangedPublisher
-            .sink { [weak self] value in self?.request.skills = value; self?.updateNextButtonState() }
+            .sink { [weak self] value in self?.profileRequest.skills = value
+                self?.updateNextButtonState()
+            }
             .store(in: &subscriptions)
         firstStepView.activitiesChangedPublisher
-            .sink { [weak self] value in self?.request.activities = value; self?.updateNextButtonState() }
+            .sink { [weak self] value in
+                self?.profileRequest.activities = value
+                self?.updateNextButtonState()
+            }
             .store(in: &subscriptions)
         firstStepView.introductionChangedPublisher
-            .sink { [weak self] value in self?.request.introduction = value; self?.updateNextButtonState() }
+            .sink { [weak self] value in
+                self?.profileRequest.introduction = value
+                self?.updateNextButtonState()
+            }
             .store(in: &subscriptions)
         firstStepView.didChangeHeightPublisher
             .sink { [weak self] in
@@ -168,13 +186,22 @@ extension RecruitApplyViewController {
             .store(in: &subscriptions)
 
         secondStepView.selectedRoleChangedPublisher
-            .sink { [weak self] value in self?.request.selectedRole = value; self?.updateApplyButtonState() }
+            .sink { [weak self] value
+                in self?.applyRequest.selectedRole = value
+                self?.updateApplyButtonState()
+            }
             .store(in: &subscriptions)
         secondStepView.motivationChangedPublisher
-            .sink { [weak self] value in self?.request.motivation = value; self?.updateApplyButtonState() }
+            .sink { [weak self] value in
+                self?.applyRequest.motivation = value
+                self?.updateApplyButtonState()
+            }
             .store(in: &subscriptions)
         secondStepView.availableTimeChangedPublisher
-            .sink { [weak self] value in self?.request.availableTime = value; self?.updateApplyButtonState() }
+            .sink { [weak self] value in
+                self?.applyRequest.availableTime = value
+                self?.updateApplyButtonState()
+            }
             .store(in: &subscriptions)
     }
 }
@@ -187,7 +214,7 @@ extension RecruitApplyViewController {
     }
 
     @objc private func nextButtonTapped() {
-        guard request.isFirstStepValid, !firstStepView.isEditingActivity else { return }
+        guard isFirstStepValid, !firstStepView.isEditingActivity else { return }
         isFirstStep = false
         view.endEditing(true)
         dropdownHost.dismissPresented()
@@ -204,17 +231,23 @@ extension RecruitApplyViewController {
     }
 
     @objc private func applyButtonTapped() {
-        guard request.isSecondStepValid else { return }
+        guard isSecondStepValid else { return }
+        let apply = { [weak self] in
+            guard let self else { return }
+            inputSubject.send(.apply(
+                recruitmentId: recruit.id,
+                basicInfo: basicInfo,
+                profileRequest: profileRequest,
+                applyRequest: applyRequest
+            ))
+        }
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .new,
             content: .singleTitle(text: "해당 팀원 모집에 지원하시겠어요?"),
             button: .buttons(
                 leftButtonTitle: "취소하기",
                 rightButtonTitle: "지원하기",
-                rightButtonAction: { [weak self] in
-                    guard let self else { return }
-                    inputSubject.send(.apply(request))
-                }
+                rightButtonAction: apply
             )
         ))
         present(modalViewController, animated: true)
@@ -309,14 +342,39 @@ extension RecruitApplyViewController {
 }
 
 extension RecruitApplyViewController {
+    private func updateRecruitProfile(_ profile: RecruitProfile) {
+        basicInfo = profile.toBasicInfo()
+        profileRequest = profile.toRequest()
+    }
+}
+
+extension RecruitApplyViewController {
+    private func updateLoading(_ isLoading: Bool) {
+        if isLoading {
+            IndicatorView.show()
+        } else {
+            IndicatorView.dismiss()
+        }
+    }
+}
+
+extension RecruitApplyViewController {
+    private var isFirstStepValid: Bool {
+        basicInfo.isValid && profileRequest.isValid
+    }
+
+    private var isSecondStepValid: Bool {
+        applyRequest.isValid(for: recruit.type)
+    }
+
     private func updateNextButtonState() {
         nextButton.updateState(
-            isEnabled: request.isFirstStepValid && !firstStepView.isEditingActivity
+            isEnabled: isFirstStepValid && !firstStepView.isEditingActivity
         )
     }
 
     private func updateApplyButtonState() {
-        applyButton.updateState(isEnabled: request.isSecondStepValid)
+        applyButton.updateState(isEnabled: isSecondStepValid)
     }
 }
 

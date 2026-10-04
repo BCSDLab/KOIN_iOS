@@ -32,7 +32,7 @@ struct RecruitPostRequest {
               let deadline,
               let description,
               !description.isEmpty,
-              !(startDate < endDate),
+              !(endDate < startDate),
               !(endDate < deadline) else {
             return false
         }
@@ -55,6 +55,7 @@ struct RecruitPostRequest {
 }
 
 struct RecruitRoleRequest {
+    var id: Int? = nil
     var name: String = ""
     var maximumParticipants: Int = 1
     
@@ -82,7 +83,27 @@ extension RecruitPostRequest {
 
 extension RecruitRoleRequest {
     init(from form: RecruitRole) {
+        self.id = form.id
         self.name = form.name
         self.maximumParticipants = form.maximumParticipants
+    }
+}
+
+extension RecruitPostRequest {
+    mutating func normalizeRelatedUrl() throws {
+        guard let url = relatedUrl?.trimmingCharacters(in: .whitespacesAndNewlines),
+              !url.isEmpty else {
+            relatedUrl = nil
+            return
+        }
+        
+        let scheme = "https://"
+        if url.lowercased().hasPrefix(scheme) {
+            relatedUrl = scheme + url.dropFirst(scheme.count)
+        } else if url.contains("://") {
+            throw ErrorResponse.recruitRelatedUrlSchemeError
+        } else {
+            relatedUrl = scheme + url
+        }
     }
 }

@@ -27,7 +27,7 @@ protocol RecruitRepository {
     ) async throws
     func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList
     func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList
-    func fetchMyPostData(_ id: Int) async throws -> RecruitMyPostData
+    func fetchMyPostData(_ id: Int, page: Int) async throws -> RecruitMyPostData
     func fetchApplicant(
         recruitmentId: Int,
         applicationId: Int
@@ -49,7 +49,6 @@ protocol RecruitRepository {
     func fetchData(_ id: Int) async throws -> RecruitData
     func deleteData(id: Int) async throws -> Bool
     func fetchMyProfile() async throws -> RecruitProfile
-    func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo
-    func postRecruitProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile
-    func apply(_ request: RecruitApplyRequest) async throws -> Void
+    func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile
+    func apply(recruitmentId: Int, _ request: RecruitApplyRequest) async throws -> Void
 }

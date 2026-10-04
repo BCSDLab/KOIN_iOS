@@ -91,7 +91,7 @@ struct RecruitMyPostListView: ActionBindableView {
             .padding(.horizontal, 22)
             .background {
                 RecruitMyPostListEmptyView()
-                    .isHidden(!(viewModel.recruitList?.isEmpty ?? true))
+                    .isHidden(!(viewModel.recruitList?.isEmpty ?? true) || viewModel.isLoading)
             }
             .refreshable {
                 viewModel.execute(.refresh)
