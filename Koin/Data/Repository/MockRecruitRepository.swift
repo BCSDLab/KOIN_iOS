@@ -118,11 +118,6 @@ final class MockRecruitRepository: RecruitRepository {
         try await Task.sleep(nanoseconds: 300_000_000)
     }
 
-    func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo {
-        try await Task.sleep(nanoseconds: 300_000_000)
-        return basicInfo
-    }
-
     func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
         try await Task.sleep(nanoseconds: 300_000_000)
 

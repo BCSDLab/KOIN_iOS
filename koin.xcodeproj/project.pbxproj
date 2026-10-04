@@ -18,8 +18,10 @@
 		3E56520894546C11EB8F99B3 /* RecruitPostRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE562D9FEDE6181748BE67B /* RecruitPostRequestDto.swift */; };
 		5006987DEF4B5F454D7EA2D5 /* RecruitPostTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */; };
 		515B96092C6730C797C1F837 /* PostRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */; };
+		57B70985D5DEFF4D774733F6 /* StudentAcademicInfoRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D3B08333D4FA77CC935917B /* StudentAcademicInfoRequestDto.swift */; };
 		678D20761DEF461CA6D4728A /* RecruitDataTextSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FBEEB767094CE8B219095B /* RecruitDataTextSectionView.swift */; };
 		682DA9853EC4F396EFEEF876 /* RecruitListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA98431B25CB5914BC2598 /* RecruitListDto.swift */; };
+		7231A38A9BEC1DFBB8C2D978 /* RecruitProfileRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C8CD337DB4DF4456561F92 /* RecruitProfileRequestDto.swift */; };
 		75EBF253F4468B2060B79212 /* RecruitPostSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3694E3ACBE05B8C7F15357 /* RecruitPostSectionHeaderView.swift */; };
 		79759F6CDB325A7914C75CBE /* RecruitListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4067CAF18D134F99A04BBA0D /* RecruitListRequestDto.swift */; };
 		7C016540300A88940013DD7B /* ShuttleTicketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */; };
@@ -837,6 +839,7 @@
 		9059A862F4E9CDA304B2F082 /* RecruitEnumDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2E31EA58151824C938383893 /* RecruitEnumDto.swift */; };
 		91E82A6B67BF5BF911535B1C /* RecruitMyPostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */; };
 		9419498912D565DE98568476 /* RecruitPostResultDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 267C5F2D082AC60FDA16F85C /* RecruitPostResultDto.swift */; };
+		98672455503C7463C3E5BA15 /* FetchBasicInfoUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D2525B9C0134B21C89671CB /* FetchBasicInfoUseCase.swift */; };
 		999FC904C4F9ED4E2B829341 /* RecruitApplyBlockReason.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB6A15BFD7B896A787835F8E /* RecruitApplyBlockReason.swift */; };
 		9C95E190C98F440DADB6F91B /* RecruitDataMetadataView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DADCC36CEEA42EC86AB75B6 /* RecruitDataMetadataView.swift */; };
 		A0B343754988C9398C4FE726 /* ModifyRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */; };
@@ -1188,6 +1191,7 @@
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 		F7F814BB370C922B6D8AA6EF /* RecruitStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */; };
+		FC40DDB1CAB3573658F94721 /* StudentAcademicInfoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */; };
 		FE01000000000000000021 /* KoinDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000011 /* KoinDropdown.swift */; };
 		FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000013 /* KoinDropdownAnimator.swift */; };
 		FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000016 /* KoinDropdownConfiguration.swift */; };
@@ -2042,7 +2046,10 @@
 		87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitMyPostData.swift; sourceTree = "<group>"; };
 		8AC394F2327076B2F9AEE2A4 /* RecruitService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitService.swift; sourceTree = "<group>"; };
 		8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostScheduleView.swift; sourceTree = "<group>"; };
+		8D2525B9C0134B21C89671CB /* FetchBasicInfoUseCase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = FetchBasicInfoUseCase.swift; sourceTree = "<group>"; };
 		945FF00E918646E5AB601057 /* RecruitDataRolesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataRolesView.swift; sourceTree = "<group>"; };
+		99C8CD337DB4DF4456561F92 /* RecruitProfileRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitProfileRequestDto.swift; sourceTree = "<group>"; };
+		9D3B08333D4FA77CC935917B /* StudentAcademicInfoRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StudentAcademicInfoRequestDto.swift; sourceTree = "<group>"; };
 		A001E2B42845091D00D6C310 /* koin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = koin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A11B00000000000000000002 /* PostBasicInfoUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostBasicInfoUseCase.swift; sourceTree = "<group>"; };
 		A11B00000000000000000004 /* UpsertMyRecruitProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpsertMyRecruitProfileUseCase.swift; sourceTree = "<group>"; };
@@ -2396,6 +2403,7 @@
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
+		FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StudentAcademicInfoDto.swift; sourceTree = "<group>"; };
 		FB6A15BFD7B896A787835F8E /* RecruitApplyBlockReason.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplyBlockReason.swift; sourceTree = "<group>"; };
 		FE01000000000000000011 /* KoinDropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdown.swift; sourceTree = "<group>"; };
 		FE01000000000000000013 /* KoinDropdownAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownAnimator.swift; sourceTree = "<group>"; };
@@ -5565,6 +5573,7 @@
 			children = (
 				4067CAF18D134F99A04BBA0D /* RecruitListRequestDto.swift */,
 				2FE562D9FEDE6181748BE67B /* RecruitPostRequestDto.swift */,
+				99C8CD337DB4DF4456561F92 /* RecruitProfileRequestDto.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -5615,7 +5624,6 @@
 			isa = PBXGroup;
 			children = (
 				C0DE00000000000000000004 /* FetchMyRecruitProfileUseCase.swift */,
-				A11B00000000000000000002 /* PostBasicInfoUseCase.swift */,
 				A11B00000000000000000004 /* UpsertMyRecruitProfileUseCase.swift */,
 			);
 			path = RecruitProfile;
@@ -6065,6 +6073,7 @@
 				D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */,
 				D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */,
 				D2C163D52E252C1200DC68A8 /* ChangePasswordRequest.swift */,
+				9D3B08333D4FA77CC935917B /* StudentAcademicInfoRequestDto.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -6120,6 +6129,7 @@
 				D874DB502DBF200C0098EED0 /* SendVerificationCodeDto.swift */,
 				D20AD6F82E02A11D0067760A /* FindIdSmsResponse.swift */,
 				D20AD6FA2E02A1280067760A /* FindIdEmailResponse.swift */,
+				FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -6190,6 +6200,8 @@
 				D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */,
 				D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */,
 				D2C163D72E252DB500DC68A8 /* ChangePasswordUseCase.swift */,
+				8D2525B9C0134B21C89671CB /* FetchBasicInfoUseCase.swift */,
+				A11B00000000000000000002 /* PostBasicInfoUseCase.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -7869,6 +7881,10 @@
 				3E56520894546C11EB8F99B3 /* RecruitPostRequestDto.swift in Sources */,
 				9419498912D565DE98568476 /* RecruitPostResultDto.swift in Sources */,
 				8CBCEFF4A1B4841D6B422B46 /* RecruitProfileDto.swift in Sources */,
+				FC40DDB1CAB3573658F94721 /* StudentAcademicInfoDto.swift in Sources */,
+				57B70985D5DEFF4D774733F6 /* StudentAcademicInfoRequestDto.swift in Sources */,
+				98672455503C7463C3E5BA15 /* FetchBasicInfoUseCase.swift in Sources */,
+				7231A38A9BEC1DFBB8C2D978 /* RecruitProfileRequestDto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

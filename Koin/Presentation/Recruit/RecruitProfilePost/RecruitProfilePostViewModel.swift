@@ -17,7 +17,7 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
 
     enum Input {
         case viewDidLoad
-        case loadUserData
+        case fetchBasicInfo
         case submit(basicInfo: BasicInfo, request: RecruitProfileRequest)
     }
 
@@ -34,8 +34,8 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
 
     // MARK: - UseCase
     private let fetchDeptListUseCase: FetchDeptListUseCase
-    private let fetchUserDataUseCase: FetchUserDataUseCase
-    private let postBasicInfoUseCase: PostBasicInfoUseCase
+    private let fetchBasicInfoUseCase: FetchBasicInfoUseCase
+    private let modifyBasicInfoUseCase: ModifyBasicInfoUseCase
     private let upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase
 
     // MARK: - Publisher
@@ -46,14 +46,14 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
     // MARK: - Initializer
     init(
         fetchDeptListUseCase: FetchDeptListUseCase,
-        fetchUserDataUseCase: FetchUserDataUseCase,
-        postBasicInfoUseCase: PostBasicInfoUseCase,
+        fetchBasicInfoUseCase: FetchBasicInfoUseCase,
+        modifyBasicInfoUseCase: ModifyBasicInfoUseCase,
         upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase,
         mode: Mode
     ) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
-        self.fetchUserDataUseCase = fetchUserDataUseCase
-        self.postBasicInfoUseCase = postBasicInfoUseCase
+        self.fetchBasicInfoUseCase = fetchBasicInfoUseCase
+        self.modifyBasicInfoUseCase = modifyBasicInfoUseCase
         self.upsertMyRecruitProfileUseCase = upsertMyRecruitProfileUseCase
         self.mode = mode
     }
@@ -73,8 +73,8 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
                     let basicInfo = recruitProfile.toBasicInfo()
                     self.outputSubject.send(.updateBasicInfo(basicInfo))
                 }
-            case .loadUserData:
-                fetchUserData()
+            case .fetchBasicInfo:
+                fetchBasicInfo()
             case let .submit(basicInfo, request):
                 submit(basicInfo: basicInfo, request: request)
             }
@@ -101,24 +101,16 @@ extension RecruitProfilePostViewModel {
             .store(in: &subscriptions)
     }
 
-    private func fetchUserData() {
-        fetchUserDataUseCase.execute()
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { [weak self] completion in
-                    guard case let .failure(error) = completion else { return }
-                    self?.outputSubject.send(.showToast(error.message))
-                },
-                receiveValue: { [weak self] user in
-                    guard let self else { return }
-                    self.outputSubject.send(.updateBasicInfo(.init(
-                        nickname: user.nickname ?? user.anonymousNickname,
-                        department: user.major,
-                        studentNumber: user.studentNumber
-                    )))
-                }
-            )
-            .store(in: &subscriptions)
+    private func fetchBasicInfo() {
+        Task {
+            do {
+                let basicInfo = try await fetchBasicInfoUseCase.execute()
+                outputSubject.send(.updateBasicInfo(basicInfo))
+            } catch {
+                let message = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                outputSubject.send(.showToast(message))
+            }
+        }
     }
 
     private func submit(
@@ -126,21 +118,21 @@ extension RecruitProfilePostViewModel {
         request: RecruitProfileRequest
     ) {
         guard !isSubmitting else { return }
-
-        isSubmitting = true
-        outputSubject.send(.updateLoading(true))
-
         Task {
-            do {
-                _ = try await postBasicInfoUseCase.execute(basicInfo: basicInfo)
-                let profile = try await upsertMyRecruitProfileUseCase.execute(request: request)
+            isSubmitting = true
+            outputSubject.send(.updateLoading(true))
+            defer {
                 isSubmitting = false
                 outputSubject.send(.updateLoading(false))
+            }
+            do {
+                var request = request
+                request.nickname = basicInfo.nickname
+                try await modifyBasicInfoUseCase.execute(basicInfo: basicInfo)
+                let profile = try await upsertMyRecruitProfileUseCase.execute(request: request)
                 outputSubject.send(.postCompleted(profile))
             } catch {
-                isSubmitting = false
-                outputSubject.send(.updateLoading(false))
-                let message = (error as? ErrorResponse)?.message ?? "프로필 저장에 실패했습니다."
+                let message = (error as? ErrorResponse)?.message ?? error.localizedDescription
                 outputSubject.send(.showToast(message))
             }
         }

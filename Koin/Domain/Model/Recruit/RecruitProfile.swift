@@ -28,6 +28,7 @@ extension RecruitProfile {
     
     func toRequest() -> RecruitProfileRequest {
         RecruitProfileRequest(
+            nickname: nickname,
             preferredRole: preferredRole,
             skills: skills,
             activities: activities.map { $0.toRequest() },

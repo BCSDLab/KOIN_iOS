@@ -106,4 +106,15 @@ final class DefaultUserRepository: UserRepository {
     func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
         service.generalRegisterForm(requestModel: requestModel)
     }
+
+    func fetchBasicInfo() async throws -> BasicInfo {
+        try await service.fetchStudentAcademicInfo().toDomain()
+    }
+
+    func modifyBasicInfo(_ basicInfo: BasicInfo) async throws {
+        guard let request = StudentAcademicInfoRequestDto(from: basicInfo) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        try await service.modifyStudentAcademicInfo(request)
+    }
 }

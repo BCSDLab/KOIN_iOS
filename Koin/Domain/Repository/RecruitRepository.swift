@@ -49,7 +49,6 @@ protocol RecruitRepository {
     func fetchData(_ id: Int) async throws -> RecruitData
     func deleteData(id: Int) async throws -> Bool
     func fetchMyProfile() async throws -> RecruitProfile
-    func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo
     func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile
     func apply(_ request: RecruitApplyRequest) async throws -> Void
 }

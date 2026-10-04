@@ -31,4 +31,6 @@ protocol UserRepository {
     func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse>
     func resetPasswordEmail(requestModel: ResetPasswordEmailRequest) -> AnyPublisher<Void, ErrorResponse>
     func changePassword(requestModel: ChangePasswordRequest) -> AnyPublisher<Void, ErrorResponse>
+    func fetchBasicInfo() async throws -> BasicInfo
+    func modifyBasicInfo(_ basicInfo: BasicInfo) async throws
 }

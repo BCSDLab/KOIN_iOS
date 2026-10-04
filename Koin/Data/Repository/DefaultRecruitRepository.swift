@@ -48,6 +48,13 @@ final class DefaultRecruitRepository: RecruitRepository {
     func fetchMyProfile() async throws -> RecruitProfile {
         try await service.fetchMyProfile().toDomain()
     }
+
+    func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
+        guard let request = RecruitProfileRequestDto(from: request) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        return try await service.upsertMyProfile(request).toDomain()
+    }
 }
 
 extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
@@ -130,14 +137,6 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
 
     func markAllAsReadNotification() async throws -> Void {
         try await mockRepository.markAllAsReadNotification()
-    }
-
-    func postBasicInfo(_ basicInfo: BasicInfo) async throws -> BasicInfo {
-        try await mockRepository.postBasicInfo(basicInfo)
-    }
-
-    func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
-        try await mockRepository.upsertMyProfile(request)
     }
 
     func apply(_ request: RecruitApplyRequest) async throws -> Void {
