@@ -89,7 +89,7 @@ extension RecruitProfileHostingController {
     ) -> RecruitProfilePostViewController {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
-        let fetchDeptListUseCase = MockFetchDeptListUseCase()
+        let fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService()))
         let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
         let postBasicInfoUseCase = DefaultPostBasicInfoUseCase(repository: recruitRepository)
         let upsertMyRecruitProfileUseCase = DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository)

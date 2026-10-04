@@ -893,7 +893,6 @@
 		AA20000000000000000041 /* EnterFormState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000041 /* EnterFormState.swift */; };
 		AA20000000000000000042 /* EnterFormStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000042 /* EnterFormStateTests.swift */; };
 		B0495459FC164809B16A96B6 /* RecruitPostTextViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54351A8A0C1A4046C3155481 /* RecruitPostTextViewView.swift */; };
-		B154A7D97E6AAEC2ED3D8119 /* MockFetchDeptListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = F0E10C78030CB500BD595276 /* MockFetchDeptListUseCase.swift */; };
 		B438AEE42E756AB600E889C4 /* OrderImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* OrderImage.swift */; };
 		B46B8CC22E76CB7300A8E797 /* ShopSummaryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC12E76CB7300A8E797 /* ShopSummaryDto.swift */; };
 		B46B8CC42E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46B8CC32E76CC6300A8E797 /* FetchOrderShopSummaryFromShopUseCase.swift */; };
@@ -2394,7 +2393,6 @@
 		EC692285302700A400EE26ED /* koinUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED038AB5420C8C565688CF6B /* DefaultRecruitRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultRecruitRepository.swift; sourceTree = "<group>"; };
 		EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitStepView.swift; sourceTree = "<group>"; };
-		F0E10C78030CB500BD595276 /* MockFetchDeptListUseCase.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = MockFetchDeptListUseCase.swift; sourceTree = "<group>"; };
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
@@ -6039,7 +6037,6 @@
 				D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */,
 				D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */,
 				7CF77B863005F642003642C1 /* FetchMainFrameUseCase.swift */,
-				F0E10C78030CB500BD595276 /* MockFetchDeptListUseCase.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -7859,7 +7856,6 @@
 				A51C00000000000000000004 /* RecruitProfilePostActivityTableView.swift in Sources */,
 				A51C00000000000000000005 /* RecruitProfilePostActivityDisplayTableViewCell.swift in Sources */,
 				A51C00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift in Sources */,
-				B154A7D97E6AAEC2ED3D8119 /* MockFetchDeptListUseCase.swift in Sources */,
 				A5F8FD7A714E689BC4F3321B /* RecruitMyApplication.swift in Sources */,
 				91E82A6B67BF5BF911535B1C /* RecruitMyPostData.swift in Sources */,
 				9059A862F4E9CDA304B2F082 /* RecruitEnumDto.swift in Sources */,
