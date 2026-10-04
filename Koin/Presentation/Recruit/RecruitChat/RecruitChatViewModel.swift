@@ -110,7 +110,8 @@ extension RecruitChatViewModel {
             }
             didUpdateData = true
         } catch {
-            outputSubject.send(.showToast(errorMessage(from: error)))
+            let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            outputSubject.send(.showToast(errorMessage))
         }
     }
     
@@ -181,7 +182,8 @@ extension RecruitChatViewModel {
         } catch is CancellationError {
             return
         } catch {
-            outputSubject.send(.showToast(errorMessage(from: error)))
+            let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            outputSubject.send(.showToast(errorMessage))
         }
     }
 }
@@ -194,7 +196,8 @@ extension RecruitChatViewModel {
                 let request = RecruitChatPostRequest(content: text, isImage: false)
                 try await postMessage(request: request)
             } catch {
-                outputSubject.send(.showToast(errorMessage(from: error)))
+                let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                outputSubject.send(.showToast(errorMessage))
             }
         }
     }
@@ -207,7 +210,8 @@ extension RecruitChatViewModel {
                 let request = RecruitChatPostRequest(content: imageUrl, isImage: true)
                 try await postMessage(request: request)
             } catch {
-                outputSubject.send(.showToast(errorMessage(from: error)))
+                let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                outputSubject.send(.showToast(errorMessage))
             }
         }
     }
@@ -234,11 +238,5 @@ extension RecruitChatViewModel {
             chatRoomId: chatRoomId,
             request: request
         )
-    }
-}
-
-extension RecruitChatViewModel {
-    private func errorMessage(from error: Error) -> String {
-        (error as? ErrorResponse)?.message ?? error.localizedDescription
     }
 }

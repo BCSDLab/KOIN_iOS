@@ -8,12 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */; };
+		0D3DC4E723268AE45A326D07 /* RecruitChatDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */; };
 		0E2253358E42231BE436FA27 /* RecruitPostScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */; };
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
 		1537B6CFD3D7AF52A2E9E944 /* RecruitPostMeetingTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F70BC5F3AA1A34663C32CA /* RecruitPostMeetingTypeView.swift */; };
 		1AD09EAFA1CF9EE0B81E886D /* RecruitMyPostListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC82D6E2A559FEFE43E63F24 /* RecruitMyPostListRequestDto.swift */; };
 		239837C1CD4A0D7A5D1D36C7 /* RecruitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC394F2327076B2F9AEE2A4 /* RecruitService.swift */; };
 		247DF973D072E88901E5C249 /* RecruitProfilePostDepartmentDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2DEABD714DCF0FD2D5DBACD9 /* RecruitProfilePostDepartmentDropdownView.swift */; };
+		2C154F14B8028973E780375B /* RecruitChatPostRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */; };
 		2E6336C1CDB4445BA858DA5A /* RecruitDataContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673826738C364FB68ECE18FE /* RecruitDataContentView.swift */; };
 		3DDE20379881F001713618FC /* RecruitDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA92583628DDFBC3545C197B /* RecruitDataDto.swift */; };
 		3E56520894546C11EB8F99B3 /* RecruitPostRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE562D9FEDE6181748BE67B /* RecruitPostRequestDto.swift */; };
@@ -1172,6 +1174,7 @@
 		D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */; };
 		D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */; };
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
+		D6728313D8B09F12DCB47D44 /* RecruitChatMessageDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C07F15438785121E093249 /* RecruitChatMessageDto.swift */; };
 		D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */; };
 		D85939752DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85939742DC12C9D00CE4CB2 /* CheckDuplicatedIdUsecase.swift */; };
@@ -1240,6 +1243,7 @@
 
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
+		135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatPostRequestDto.swift; sourceTree = "<group>"; };
 		1A900DEA87E917C84BCD7E04 /* RecruitProfileDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitProfileDto.swift; sourceTree = "<group>"; };
 		1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostTextFieldView.swift; sourceTree = "<group>"; };
 		1FC1A22BED5A1C53E5ED9903 /* RecruitApplicantDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplicantDataDto.swift; sourceTree = "<group>"; };
@@ -2143,6 +2147,7 @@
 		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		B6A0D6292EEB01E600A19521 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		B7C07F15438785121E093249 /* RecruitChatMessageDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatMessageDto.swift; sourceTree = "<group>"; };
 		BEEF10000000000000000001 /* RecruitMyPostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostList.swift; sourceTree = "<group>"; };
 		BEEF10000000000000000002 /* RecruitMyPostRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostRow.swift; sourceTree = "<group>"; };
 		BEEF10000000000000000003 /* RecruitMyPostFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostFilter.swift; sourceTree = "<group>"; };
@@ -2157,6 +2162,7 @@
 		BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseRecruitMyPostUseCase.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000002 /* RecruitProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfile.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000004 /* FetchMyRecruitProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyRecruitProfileUseCase.swift; sourceTree = "<group>"; };
+		C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatDataDto.swift; sourceTree = "<group>"; };
 		C8FC035A1EC83BD077A6AFCA /* RecruitApplyRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplyRequestDto.swift; sourceTree = "<group>"; };
 		CAFE10000000000000000001 /* RecruitMyApplicationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationList.swift; sourceTree = "<group>"; };
 		CAFE10000000000000000002 /* RecruitMyApplicationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationRow.swift; sourceTree = "<group>"; };
@@ -2500,6 +2506,8 @@
 				A064C42647B4EBB3454B2CA3 /* RecruitMyPostListDto.swift */,
 				E1A5115E53734B28CC6EBED6 /* RecruitMyPostDataDto.swift */,
 				1FC1A22BED5A1C53E5ED9903 /* RecruitApplicantDataDto.swift */,
+				C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */,
+				B7C07F15438785121E093249 /* RecruitChatMessageDto.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -5601,6 +5609,7 @@
 				DC82D6E2A559FEFE43E63F24 /* RecruitMyPostListRequestDto.swift */,
 				827BD7E96347F476DB1BD966 /* RecruitApplicantListRequestDto.swift */,
 				4D7BF08E4E28887C9FB48DA1 /* RecruitApplicantDecisionRequestDto.swift */,
+				135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -7921,6 +7930,9 @@
 				8F73C145755D31960169BE61 /* RecruitMyPostListDto.swift in Sources */,
 				5F6F2CE2D04FA793C2A5FD33 /* RecruitMyPostDataDto.swift in Sources */,
 				E3DB42C328CC0291FC430D89 /* RecruitApplicantDataDto.swift in Sources */,
+				2C154F14B8028973E780375B /* RecruitChatPostRequestDto.swift in Sources */,
+				0D3DC4E723268AE45A326D07 /* RecruitChatDataDto.swift in Sources */,
+				D6728313D8B09F12DCB47D44 /* RecruitChatMessageDto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

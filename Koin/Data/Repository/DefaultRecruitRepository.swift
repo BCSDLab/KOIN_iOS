@@ -98,29 +98,27 @@ final class DefaultRecruitRepository: RecruitRepository {
         }
         return try await service.upsertMyProfile(request).toDomain()
     }
-}
-
-extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
 
     func fetchTeamChatData(
         recruitmentId: Int,
         chatRoomId: Int
     ) async throws -> RecruitChatData {
-        try await mockRepository.fetchTeamChatData(recruitmentId: recruitmentId, chatRoomId: chatRoomId)
+        try await service.fetchChatData(recruitmentId: recruitmentId, chatRoomId: chatRoomId).toDomain()
     }
 
     func fetchDirectChatData(
         recruitmentId: Int,
         applicationId: Int
     ) async throws -> RecruitChatData {
-        try await mockRepository.fetchDirectChatData(recruitmentId: recruitmentId, applicationId: applicationId)
+        try await service.fetchDirectChatData(recruitmentId: recruitmentId, applicationId: applicationId).toDomain()
     }
 
     func fetchChatMessages(
         recruitmentId: Int,
         chatRoomId: Int
     ) async throws -> RecruitChatMessageList {
-        try await mockRepository.fetchChatMessages(recruitmentId: recruitmentId, chatRoomId: chatRoomId)
+        let messages = try await service.fetchChatMessages(recruitmentId: recruitmentId, chatRoomId: chatRoomId)
+        return messages.toDomain(myUserId: UserDataManager.shared.id)
     }
 
     func postChatMessage(
@@ -128,8 +126,12 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
         chatRoomId: Int,
         request: RecruitChatPostRequest
     ) async throws {
-        try await mockRepository.postChatMessage(recruitmentId: recruitmentId, chatRoomId: chatRoomId, request: request)
+        let request = RecruitChatPostRequestDto(from: request)
+        try await service.postChatMessage(recruitmentId: recruitmentId, chatRoomId: chatRoomId, request)
     }
+}
+
+extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
 
     func fetchNotificationList() async throws -> RecruitNotificationList {
         try await mockRepository.fetchNotificationList()
