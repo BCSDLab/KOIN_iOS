@@ -89,7 +89,7 @@ struct RecruitListView: ActionBindableView {
             .padding(.horizontal, 22)
             .background {
                 RecruitListEmptyView()
-                    .isHidden(!viewModel.isEmpty)
+                    .isHidden(!viewModel.isEmpty || viewModel.isLoading)
             }
             .refreshable {
                 viewModel.execute(.refresh)

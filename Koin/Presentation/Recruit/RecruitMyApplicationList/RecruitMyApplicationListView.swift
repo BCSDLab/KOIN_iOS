@@ -86,7 +86,7 @@ struct RecruitMyApplicationListView: ActionBindableView {
                 RecruitMyApplicationListEmptyView {
                     sendAction(.showAllRecruitList)
                 }
-                .isHidden(!(viewModel.recruitList?.isEmpty ?? true))
+                .isHidden(!(viewModel.recruitList?.isEmpty ?? true) || viewModel.isLoading)
             }
             .refreshable {
                 viewModel.execute(.refresh)
