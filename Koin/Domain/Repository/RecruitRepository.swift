@@ -39,7 +39,7 @@ protocol RecruitRepository {
     ) async throws -> Void
     func fetchMyApplicationList(_ filter: RecruitMyApplicationFilter) async throws -> RecruitMyApplicationList
     func closeMyPost(id: Int) async throws -> Bool
-    func fetchNotificationList() async throws -> RecruitNotificationList
+    func fetchNotificationList(page: Int) async throws -> RecruitNotificationList
     func deleteNotification(_ id: Int) async throws -> Void
     func deleteAllNotification() async throws -> Void
     func markAsReadNotification(_ id: Int) async throws -> Void

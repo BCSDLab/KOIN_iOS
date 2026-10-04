@@ -13,6 +13,7 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case reload
+        case loadNextPage
         case didTapNotification(id: Int)
         case deleteNotification(id: Int)
         case deleteAllNotifications
@@ -31,6 +32,8 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
     private let deleteRecruitNotificationUseCase: DeleteRecruitNotificationUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
+    private var notificationList: RecruitNotificationList?
+    private var isLoading = false
 
     // MARK: - Initializer
     init(
@@ -50,14 +53,20 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
             .sink { [weak self] input in
             switch input {
             case .viewDidLoad, .reload:
-                self?.fetchNotificationList()
+                self?.fetchNotificationList(page: 1)
+            case .loadNextPage:
+                self?.loadNextPage()
             case .didTapNotification(let id):
+                self?.notificationList?.markAsRead(id: id)
                 self?.markAsRead(id: id)
             case .deleteNotification(let id):
+                self?.notificationList?.delete(id: id)
                 self?.deleteNotification(id: id)
             case .deleteAllNotifications:
+                self?.notificationList?.deleteAll()
                 self?.deleteAllNotifications()
             case .markAllAsRead:
+                self?.notificationList?.markAllAsRead()
                 self?.markAllAsRead()
             }
         }
@@ -69,11 +78,34 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
 
 private extension RecruitNotificationListViewModel {
     
-    private func fetchNotificationList() {
-        Task {
+    private func loadNextPage() {
+        guard let notificationList, notificationList.hasNextPage else {
+            return
+        }
+        fetchNotificationList(page: notificationList.currentPage + 1)
+    }
+    
+    private func fetchNotificationList(page: Int) {
+        guard !isLoading else {
+            return
+        }
+        isLoading = true
+        Task { @MainActor in
+            defer {
+                isLoading = false
+            }
             do {
-                let notificationList = try await fetchRecruitNotificationListUseCase.execute()
-                outputSubject.send(.updateNotifications(notificationList))
+                var response = try await fetchRecruitNotificationListUseCase.execute(page: page)
+                guard response.currentPage == page else {
+                    return
+                }
+                if page > 1 {
+                    let loadedIds = Set(notificationList?.notifications.map(\.id) ?? [])
+                    response.notifications = (notificationList?.notifications ?? [])
+                        + response.notifications.filter { !loadedIds.contains($0.id) }
+                }
+                notificationList = response
+                outputSubject.send(.updateNotifications(response))
             } catch {
                 if let message = (error as? ErrorResponse)?.message {
                     outputSubject.send(.showToast(message))

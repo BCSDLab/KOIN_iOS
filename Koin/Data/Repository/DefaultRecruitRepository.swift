@@ -10,8 +10,6 @@ import Foundation
 final class DefaultRecruitRepository: RecruitRepository {
 
     private let service: RecruitService
-    
-    private let mockRepository = MockRecruitRepository() // TODO: API 연결 후 mock 위임 제거
 
     init(service: RecruitService) {
         self.service = service
@@ -129,27 +127,25 @@ final class DefaultRecruitRepository: RecruitRepository {
         let request = RecruitChatPostRequestDto(from: request)
         try await service.postChatMessage(recruitmentId: recruitmentId, chatRoomId: chatRoomId, request)
     }
-}
 
-extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
-
-    func fetchNotificationList() async throws -> RecruitNotificationList {
-        try await mockRepository.fetchNotificationList()
+    func fetchNotificationList(page: Int) async throws -> RecruitNotificationList {
+        let request = RecruitNotificationListRequestDto(page: page)
+        return try await service.fetchNotificationList(request).toDomain()
     }
 
     func deleteNotification(_ id: Int) async throws -> Void {
-        try await mockRepository.deleteNotification(id)
+        try await service.deleteNotification(id)
     }
 
     func deleteAllNotification() async throws -> Void {
-        try await mockRepository.deleteAllNotification()
+        try await service.deleteAllNotification()
     }
 
     func markAsReadNotification(_ id: Int) async throws -> Void {
-        try await mockRepository.markAsReadNotification(id)
+        try await service.markAsReadNotification(id)
     }
 
     func markAllAsReadNotification() async throws -> Void {
-        try await mockRepository.markAllAsReadNotification()
+        try await service.markAllAsReadNotification()
     }
 }

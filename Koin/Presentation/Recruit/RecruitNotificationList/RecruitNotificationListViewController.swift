@@ -93,6 +93,12 @@ private extension RecruitNotificationListViewController {
                 self?.inputSubject.send(.reload)
             }
             .store(in: &subscriptions)
+        
+        notificationListView.reachedBottomPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.loadNextPage)
+            }
+            .store(in: &subscriptions)
     }
 }
 
@@ -103,14 +109,64 @@ extension RecruitNotificationListViewController {
         notificationListView.update(
             items: notificationList.notifications.map {
                 $0.toNotificationRowModel()
-            }
+            },
+            hasNextPage: notificationList.hasNextPage
         )
     }
     private func handleNavigation(id: Int) {
         guard let notification = notificationList?.notifications.first(where: { $0.id == id }) else {
             return
         }
-        // TODO
+        switch notification.targetType {
+        case .chatRoom:
+            if notification.type == .newChatMessage, let applicationId = notification.applicationId {
+                navigateToChat(roomSource: .direct(recruitmentId: notification.recruitmentId, applicationId: applicationId))
+            } else if let chatRoomId = notification.chatRoomId {
+                navigateToChat(roomSource: .team(recruitmentId: notification.recruitmentId, chatRoomId: chatRoomId))
+            }
+        case .applicantManagement:
+            navigateToApplicantManagement(recruitmentId: notification.recruitmentId)
+        case .myApplications:
+            navigateToMyApplications()
+        case .none:
+            return
+        }
+    }
+    
+    private func navigateToChat(roomSource: RecruitChatViewModel.RoomSource) {
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let viewModel = RecruitChatViewModel(
+            roomSource: roomSource,
+            fetchTeamChatDataUseCase: DefaultFetchRecruitTeamChatDataUseCase(repository: repository),
+            fetchDirectChatDataUseCase: DefaultFetchRecruitDirectChatDataUseCase(repository: repository),
+            fetchChatMessagesUseCase: DefaultFetchRecruitChatMessagesUseCase(repository: repository),
+            postChatMessageUseCase: DefaultPostRecruitChatMessageUseCase(repository: repository),
+            uploadFileUseCase: DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
+        )
+        navigationController?.pushViewController(RecruitChatViewController(viewModel: viewModel), animated: true)
+    }
+    
+    private func navigateToApplicantManagement(recruitmentId: Int) {
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let viewModel = RecruitMyPostViewModel(
+            fetchRecruitMyPostDataUseCase: DefaultFetchRecruitMyPostDataUseCase(repository: repository),
+            recruitId: recruitmentId
+        )
+        let controller = RecruitMyPostHostingController(
+            rootView: RecruitMyPostView(viewModel: viewModel)
+        )
+        navigationController?.pushViewController(controller, animated: true)
+    }
+    
+    private func navigateToMyApplications() {
+        let repository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let viewModel = RecruitMyApplicationListViewModel(
+            fetchRecruitMyApplicationListUseCase: DefaultFetchRecruitMyApplicationListUseCase(repository: repository)
+        )
+        let controller = RecruitMyApplicationListHostingController(
+            rootView: RecruitMyApplicationListView(viewModel: viewModel)
+        )
+        navigationController?.pushViewController(controller, animated: true)
     }
 }
 
