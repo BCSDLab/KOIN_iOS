@@ -18,6 +18,8 @@ enum RecruitAPI {
     case upsertMyProfile(RecruitProfileRequestDto)
     case apply(Int, RecruitApplyRequestDto)
     case fetchMyApplicationList(RecruitMyApplicationListRequestDto)
+    case fetchMyPostList(RecruitMyPostListRequestDto)
+    case closeMyPost(Int)
 }
 
 extension RecruitAPI: Router, URLRequestConvertible {
@@ -37,6 +39,8 @@ extension RecruitAPI: Router, URLRequestConvertible {
         case .upsertMyProfile: return "/team-recruitment-profiles/me"
         case .apply(let id, _): return "/team-recruitments/\(id)/applications"
         case .fetchMyApplicationList: return "/team-recruitments/me/applications"
+        case .fetchMyPostList: return "/team-recruitments/me/created"
+        case .closeMyPost(let id): return "/team-recruitments/\(id)/close"
         }
     }
 
@@ -51,13 +55,15 @@ extension RecruitAPI: Router, URLRequestConvertible {
         case .upsertMyProfile: return .put
         case .apply: return .post
         case .fetchMyApplicationList: return .get
+        case .fetchMyPostList: return .get
+        case .closeMyPost: return .put
         }
     }
 
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchList, .fetchData, .deleteData, .fetchMyProfile, .fetchMyApplicationList:
+        case .fetchList, .fetchData, .deleteData, .fetchMyProfile, .fetchMyApplicationList, .fetchMyPostList, .closeMyPost:
             break
         case .post, .modify, .upsertMyProfile, .apply:
             baseHeaders["Content-Type"] = "application/json"
@@ -79,13 +85,19 @@ extension RecruitAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .fetchMyApplicationList(let request):
             return try? request.toDictionary()
+        case .fetchMyPostList(let request):
+            return try? request.toDictionary()
+        case .closeMyPost:
+            return nil
         }
     }
 
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchList, .fetchMyApplicationList:
+        case .fetchList, .fetchMyApplicationList, .fetchMyPostList:
             return URLEncoding(arrayEncoding: .noBrackets)
+        case .closeMyPost:
+            return nil
         case .fetchData, .deleteData, .fetchMyProfile:
             return nil
         case .post, .modify, .upsertMyProfile, .apply:

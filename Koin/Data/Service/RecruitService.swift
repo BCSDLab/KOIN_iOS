@@ -17,6 +17,8 @@ protocol RecruitService {
     func upsertMyProfile(_ request: RecruitProfileRequestDto) async throws -> RecruitProfileDto
     func apply(_ id: Int, _ request: RecruitApplyRequestDto) async throws
     func fetchMyApplicationList(_ request: RecruitMyApplicationListRequestDto) async throws -> RecruitMyApplicationListDto
+    func fetchMyPostList(_ request: RecruitMyPostListRequestDto) async throws -> RecruitMyPostListDto
+    func closeMyPost(_ id: Int) async throws
 }
 
 final class DefaultRecruitService: RecruitService {
@@ -57,5 +59,13 @@ final class DefaultRecruitService: RecruitService {
 
     func fetchMyApplicationList(_ request: RecruitMyApplicationListRequestDto) async throws -> RecruitMyApplicationListDto {
         try await networkService.requestWithResponse(api: RecruitAPI.fetchMyApplicationList(request))
+    }
+
+    func fetchMyPostList(_ request: RecruitMyPostListRequestDto) async throws -> RecruitMyPostListDto {
+        try await networkService.requestWithResponse(api: RecruitAPI.fetchMyPostList(request))
+    }
+
+    func closeMyPost(_ id: Int) async throws {
+        try await networkService.request(api: RecruitAPI.closeMyPost(id))
     }
 }

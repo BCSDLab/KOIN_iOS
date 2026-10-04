@@ -61,6 +61,16 @@ final class DefaultRecruitRepository: RecruitRepository {
         return try await service.fetchMyApplicationList(request).toDomain()
     }
 
+    func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList {
+        let request = RecruitMyPostListRequestDto(from: filter)
+        return try await service.fetchMyPostList(request).toDomain()
+    }
+
+    func closeMyPost(id: Int) async throws -> Bool {
+        try await service.closeMyPost(id)
+        return true
+    }
+
     func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
         guard let request = RecruitProfileRequestDto(from: request) else {
             throw ErrorResponse.unexpectedInternalError
@@ -100,10 +110,6 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
         try await mockRepository.postChatMessage(recruitmentId: recruitmentId, chatRoomId: chatRoomId, request: request)
     }
 
-    func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList {
-        try await mockRepository.fetchMyPostList(filter)
-    }
-
     func fetchMyPostData(_ id: Int, page: Int) async throws -> RecruitMyPostData {
         try await mockRepository.fetchMyPostData(id, page: page)
     }
@@ -121,10 +127,6 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
         decision: RecruitApplicantDecision
     ) async throws -> Void {
         try await mockRepository.decideApplicant(recruitmentId: recruitmentId, applicationId: applicationId, decision: decision)
-    }
-
-    func closeMyPost(id: Int) async throws -> Bool {
-        try await mockRepository.closeMyPost(id: id)
     }
 
     func fetchNotificationList() async throws -> RecruitNotificationList {
