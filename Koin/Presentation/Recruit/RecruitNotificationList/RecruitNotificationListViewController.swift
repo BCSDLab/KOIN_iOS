@@ -18,7 +18,7 @@ final class RecruitNotificationListViewController: UIViewController {
     private var notificationList: RecruitNotificationList?
 
     // MARK: - UI Components
-    private let notificationListView = NotificationListView()
+    private let notificationListView = NotificationListView(behavior: .pagination)
 
     // MARK: - Initialization
     init(viewModel: RecruitNotificationListViewModel) {

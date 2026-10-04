@@ -316,7 +316,6 @@
 		7C8A941E2FD0A94F00DEA6F5 /* NotificationViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */; };
 		7C8A941F2FD0A94F00DEA6F5 /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */; };
 		7C8A94222FD0A96400DEA6F5 /* NotificationEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94212FD0A96400DEA6F5 /* NotificationEmptyView.swift */; };
-		7C8A94272FD0A97400DEA6F5 /* NotificationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94242FD0A97400DEA6F5 /* NotificationFooterView.swift */; };
 		7C8A94282FD0A97400DEA6F5 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94262FD0A97400DEA6F5 /* NotificationTableViewCell.swift */; };
 		7C8A94292FD0A97400DEA6F5 /* NotificationTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A94252FD0A97400DEA6F5 /* NotificationTableView.swift */; };
 		7C8A942B2FD2B55F00DEA6F5 /* FetchCallVanRecruitingCountUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8A942A2FD2B55F00DEA6F5 /* FetchCallVanRecruitingCountUseCase.swift */; };
@@ -956,6 +955,7 @@
 		CAFE2000000000000000000A /* RecruitMyApplicationListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000A /* RecruitMyApplicationListHeaderView.swift */; };
 		CAFE2000000000000000000B /* RecruitMyApplicationListRowView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000B /* RecruitMyApplicationListRowView.swift */; };
 		CAFE2000000000000000000C /* RecruitMyApplicationListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAFE1000000000000000000C /* RecruitMyApplicationListEmptyView.swift */; };
+		CC6BE28EE54649DEEBF56B9B /* NotificationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097425ADD10086931A8789D /* NotificationFooterView.swift */; };
 		CD3000000000000000000001 /* RecruitPostCategoryDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */; };
 		CE3D147031BC1F6BDD25184B /* DefaultRecruitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED038AB5420C8C565688CF6B /* DefaultRecruitRepository.swift */; };
 		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
@@ -1548,7 +1548,6 @@
 		7C8A941C2FD0A94F00DEA6F5 /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		7C8A941D2FD0A94F00DEA6F5 /* NotificationViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewModel.swift; sourceTree = "<group>"; };
 		7C8A94212FD0A96400DEA6F5 /* NotificationEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationEmptyView.swift; sourceTree = "<group>"; };
-		7C8A94242FD0A97400DEA6F5 /* NotificationFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationFooterView.swift; sourceTree = "<group>"; };
 		7C8A94252FD0A97400DEA6F5 /* NotificationTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableView.swift; sourceTree = "<group>"; };
 		7C8A94262FD0A97400DEA6F5 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
 		7C8A942A2FD2B55F00DEA6F5 /* FetchCallVanRecruitingCountUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCallVanRecruitingCountUseCase.swift; sourceTree = "<group>"; };
@@ -2160,6 +2159,7 @@
 		BEEF1000000000000000000A /* RecruitMyPostListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListRowView.swift; sourceTree = "<group>"; };
 		BEEF1000000000000000000B /* RecruitMyPostListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListEmptyView.swift; sourceTree = "<group>"; };
 		BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseRecruitMyPostUseCase.swift; sourceTree = "<group>"; };
+		C097425ADD10086931A8789D /* NotificationFooterView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = NotificationFooterView.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000002 /* RecruitProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfile.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000004 /* FetchMyRecruitProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyRecruitProfileUseCase.swift; sourceTree = "<group>"; };
 		C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatDataDto.swift; sourceTree = "<group>"; };
@@ -3476,7 +3476,7 @@
 			children = (
 				7C8A94252FD0A97400DEA6F5 /* NotificationTableView.swift */,
 				7C8A94262FD0A97400DEA6F5 /* NotificationTableViewCell.swift */,
-				7C8A94242FD0A97400DEA6F5 /* NotificationFooterView.swift */,
+				C097425ADD10086931A8789D /* NotificationFooterView.swift */,
 			);
 			path = NotificationTableView;
 			sourceTree = "<group>";
@@ -7511,7 +7511,6 @@
 				7C6790952FCC48A60045E163 /* UIButton+.swift in Sources */,
 				7C50A1D13041F8BF00897A6F /* RecruitState.swift in Sources */,
 				7C50A1F43042CB4100897A6F /* RecruitListSort.swift in Sources */,
-				7C8A94272FD0A97400DEA6F5 /* NotificationFooterView.swift in Sources */,
 				7C8A94282FD0A97400DEA6F5 /* NotificationTableViewCell.swift in Sources */,
 				7C8A94292FD0A97400DEA6F5 /* NotificationTableView.swift in Sources */,
 				7C6790962FCC48A60045E163 /* UIImageView+.swift in Sources */,
@@ -7933,6 +7932,7 @@
 				2C154F14B8028973E780375B /* RecruitChatPostRequestDto.swift in Sources */,
 				0D3DC4E723268AE45A326D07 /* RecruitChatDataDto.swift in Sources */,
 				D6728313D8B09F12DCB47D44 /* RecruitChatMessageDto.swift in Sources */,
+				CC6BE28EE54649DEEBF56B9B /* NotificationFooterView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
