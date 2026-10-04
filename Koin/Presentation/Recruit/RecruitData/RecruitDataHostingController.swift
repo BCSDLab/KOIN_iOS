@@ -155,10 +155,13 @@ extension RecruitDataHostingController {
         guard let recruit = rootView.data else {
             return
         }
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let viewModel = RecruitApplyViewModel(
             fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
             fetchMyRecruitProfileUseCase: DefaultFetchMyRecruitProfileUseCase(repository: recruitRepository),
+            modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
+            upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
             applyRecruitUseCase: DefaultApplyRecruitUseCase(repository: recruitRepository)
         )
         let viewController = RecruitApplyViewController(

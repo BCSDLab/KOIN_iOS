@@ -31,6 +31,8 @@ final class RecruitApplyViewModel: ViewModelProtocol {
     // MARK: - Properties
     private let fetchDeptListUseCase: FetchDeptListUseCase
     private let fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
+    private let modifyBasicInfoUseCase: ModifyBasicInfoUseCase
+    private let upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase
     private let applyRecruitUseCase: ApplyRecruitUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
@@ -41,10 +43,14 @@ final class RecruitApplyViewModel: ViewModelProtocol {
     init(
         fetchDeptListUseCase: FetchDeptListUseCase,
         fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase,
+        modifyBasicInfoUseCase: ModifyBasicInfoUseCase,
+        upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase,
         applyRecruitUseCase: ApplyRecruitUseCase
     ) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.fetchMyRecruitProfileUseCase = fetchMyRecruitProfileUseCase
+        self.modifyBasicInfoUseCase = modifyBasicInfoUseCase
+        self.upsertMyRecruitProfileUseCase = upsertMyRecruitProfileUseCase
         self.applyRecruitUseCase = applyRecruitUseCase
     }
 
@@ -123,6 +129,8 @@ extension RecruitApplyViewModel {
             defer { isApplying = false }
 
             do {
+                try await modifyBasicInfoUseCase.execute(basicInfo: basicInfo)
+                _ = try await upsertMyRecruitProfileUseCase.execute(request: profileRequest)
                 try await applyRecruitUseCase.execute(recruitmentId: recruitmentId, request: applyRequest)
                 outputSubject.send(.applyCompleted)
             } catch {

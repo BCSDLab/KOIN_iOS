@@ -919,6 +919,7 @@
 		B68D2CE92EA505B800F3B479 /* ToastVariant.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CE82EA505B800F3B479 /* ToastVariant.swift */; };
 		B68D2CEB2EA50C1E00F3B479 /* UIViewController+Toast.swift in Sources */ = {isa = PBXBuildFile; fileRef = B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */; };
 		BAD01845AA334A648E2FA2BD /* RecruitDataHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CBC0EF8E0FE44F48744BEC7 /* RecruitDataHeaderView.swift */; };
+		BD72DD59230BE11B09BF075F /* RecruitApplyRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C8FC035A1EC83BD077A6AFCA /* RecruitApplyRequestDto.swift */; };
 		BEEF20000000000000000001 /* RecruitMyPostList.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000001 /* RecruitMyPostList.swift */; };
 		BEEF20000000000000000002 /* RecruitMyPostRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000002 /* RecruitMyPostRow.swift */; };
 		BEEF20000000000000000003 /* RecruitMyPostFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEEF10000000000000000003 /* RecruitMyPostFilter.swift */; };
@@ -2142,6 +2143,7 @@
 		BEEF1000000000000000000C /* CloseRecruitMyPostUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloseRecruitMyPostUseCase.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000002 /* RecruitProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfile.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000004 /* FetchMyRecruitProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyRecruitProfileUseCase.swift; sourceTree = "<group>"; };
+		C8FC035A1EC83BD077A6AFCA /* RecruitApplyRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplyRequestDto.swift; sourceTree = "<group>"; };
 		CAFE10000000000000000001 /* RecruitMyApplicationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationList.swift; sourceTree = "<group>"; };
 		CAFE10000000000000000002 /* RecruitMyApplicationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationRow.swift; sourceTree = "<group>"; };
 		CAFE10000000000000000003 /* RecruitMyApplicationFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationFilter.swift; sourceTree = "<group>"; };
@@ -5574,6 +5576,7 @@
 				4067CAF18D134F99A04BBA0D /* RecruitListRequestDto.swift */,
 				2FE562D9FEDE6181748BE67B /* RecruitPostRequestDto.swift */,
 				99C8CD337DB4DF4456561F92 /* RecruitProfileRequestDto.swift */,
+				C8FC035A1EC83BD077A6AFCA /* RecruitApplyRequestDto.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -7885,6 +7888,7 @@
 				57B70985D5DEFF4D774733F6 /* StudentAcademicInfoRequestDto.swift in Sources */,
 				98672455503C7463C3E5BA15 /* FetchBasicInfoUseCase.swift in Sources */,
 				7231A38A9BEC1DFBB8C2D978 /* RecruitProfileRequestDto.swift in Sources */,
+				BD72DD59230BE11B09BF075F /* RecruitApplyRequestDto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
