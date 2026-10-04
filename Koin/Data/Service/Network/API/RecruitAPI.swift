@@ -20,6 +20,9 @@ enum RecruitAPI {
     case fetchMyApplicationList(RecruitMyApplicationListRequestDto)
     case fetchMyPostList(RecruitMyPostListRequestDto)
     case closeMyPost(Int)
+    case fetchMyPostData(Int, RecruitApplicantListRequestDto)
+    case fetchApplicant(recruitmentId: Int, applicationId: Int)
+    case decideApplicant(recruitmentId: Int, applicationId: Int, RecruitApplicantDecisionRequestDto)
 }
 
 extension RecruitAPI: Router, URLRequestConvertible {
@@ -41,6 +44,9 @@ extension RecruitAPI: Router, URLRequestConvertible {
         case .fetchMyApplicationList: return "/team-recruitments/me/applications"
         case .fetchMyPostList: return "/team-recruitments/me/created"
         case .closeMyPost(let id): return "/team-recruitments/\(id)/close"
+        case .fetchMyPostData(let id, _): return "/team-recruitments/\(id)/applications"
+        case .fetchApplicant(let recruitmentId, let applicationId): return "/team-recruitments/\(recruitmentId)/applications/\(applicationId)"
+        case .decideApplicant(let recruitmentId, let applicationId, _): return "/team-recruitments/\(recruitmentId)/applications/\(applicationId)/status"
         }
     }
 
@@ -57,15 +63,18 @@ extension RecruitAPI: Router, URLRequestConvertible {
         case .fetchMyApplicationList: return .get
         case .fetchMyPostList: return .get
         case .closeMyPost: return .put
+        case .fetchMyPostData: return .get
+        case .fetchApplicant: return .get
+        case .decideApplicant: return .put
         }
     }
 
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchList, .fetchData, .deleteData, .fetchMyProfile, .fetchMyApplicationList, .fetchMyPostList, .closeMyPost:
+        case .fetchList, .fetchData, .deleteData, .fetchMyProfile, .fetchMyApplicationList, .fetchMyPostList, .closeMyPost, .fetchMyPostData, .fetchApplicant:
             break
-        case .post, .modify, .upsertMyProfile, .apply:
+        case .post, .modify, .upsertMyProfile, .apply, .decideApplicant:
             baseHeaders["Content-Type"] = "application/json"
         }
         return baseHeaders
@@ -87,20 +96,24 @@ extension RecruitAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .fetchMyPostList(let request):
             return try? request.toDictionary()
-        case .closeMyPost:
+        case .fetchMyPostData(_, let request):
+            return try? request.toDictionary()
+        case .decideApplicant(_, _, let request):
+            return try? request.toDictionary()
+        case .closeMyPost, .fetchApplicant:
             return nil
         }
     }
 
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchList, .fetchMyApplicationList, .fetchMyPostList:
+        case .fetchList, .fetchMyApplicationList, .fetchMyPostList, .fetchMyPostData:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .closeMyPost:
+        case .closeMyPost, .fetchApplicant:
             return nil
         case .fetchData, .deleteData, .fetchMyProfile:
             return nil
-        case .post, .modify, .upsertMyProfile, .apply:
+        case .post, .modify, .upsertMyProfile, .apply, .decideApplicant:
             return JSONEncoding.default
         }
     }

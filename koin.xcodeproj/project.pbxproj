@@ -17,10 +17,13 @@
 		2E6336C1CDB4445BA858DA5A /* RecruitDataContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 673826738C364FB68ECE18FE /* RecruitDataContentView.swift */; };
 		3DDE20379881F001713618FC /* RecruitDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = EA92583628DDFBC3545C197B /* RecruitDataDto.swift */; };
 		3E56520894546C11EB8F99B3 /* RecruitPostRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FE562D9FEDE6181748BE67B /* RecruitPostRequestDto.swift */; };
+		408BFAF3EBEEF0B6899C434F /* RecruitApplicantDecisionRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D7BF08E4E28887C9FB48DA1 /* RecruitApplicantDecisionRequestDto.swift */; };
 		4AAF0644AD43FD83CE4E5E32 /* RecruitMyApplicationListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 756A97197501167BE3516430 /* RecruitMyApplicationListDto.swift */; };
 		5006987DEF4B5F454D7EA2D5 /* RecruitPostTextFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */; };
 		515B96092C6730C797C1F837 /* PostRecruitUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */; };
 		57B70985D5DEFF4D774733F6 /* StudentAcademicInfoRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D3B08333D4FA77CC935917B /* StudentAcademicInfoRequestDto.swift */; };
+		5AE5AB8D26086C14A37D8929 /* RecruitApplicantListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BD7E96347F476DB1BD966 /* RecruitApplicantListRequestDto.swift */; };
+		5F6F2CE2D04FA793C2A5FD33 /* RecruitMyPostDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5115E53734B28CC6EBED6 /* RecruitMyPostDataDto.swift */; };
 		678D20761DEF461CA6D4728A /* RecruitDataTextSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FBEEB767094CE8B219095B /* RecruitDataTextSectionView.swift */; };
 		682DA9853EC4F396EFEEF876 /* RecruitListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA98431B25CB5914BC2598 /* RecruitListDto.swift */; };
 		7231A38A9BEC1DFBB8C2D978 /* RecruitProfileRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C8CD337DB4DF4456561F92 /* RecruitProfileRequestDto.swift */; };
@@ -1191,6 +1194,7 @@
 		D8F5C5562E6F144300FB6708 /* floatingLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D8F5C5532E6F144300FB6708 /* floatingLogo.json */; };
 		DE8E26BC32390F246B7F4CF1 /* RecruitMyApplicationListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3143194BD51D3A85C2A959EB /* RecruitMyApplicationListRequestDto.swift */; };
 		E1A70C012D9A4F1100AGSEL1 /* AgreementSelection.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A70C002D9A4F1100AGSEL0 /* AgreementSelection.swift */; };
+		E3DB42C328CC0291FC430D89 /* RecruitApplicantDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FC1A22BED5A1C53E5ED9903 /* RecruitApplicantDataDto.swift */; };
 		E5DD3F6BE6C501B7B3BD659C /* RecruitPostRoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */; };
 		F0F216EDAA69B52CBEC0E606 /* RecruitPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */; };
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
@@ -1238,6 +1242,7 @@
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		1A900DEA87E917C84BCD7E04 /* RecruitProfileDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitProfileDto.swift; sourceTree = "<group>"; };
 		1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostTextFieldView.swift; sourceTree = "<group>"; };
+		1FC1A22BED5A1C53E5ED9903 /* RecruitApplicantDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplicantDataDto.swift; sourceTree = "<group>"; };
 		21AA98431B25CB5914BC2598 /* RecruitListDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitListDto.swift; sourceTree = "<group>"; };
 		267C5F2D082AC60FDA16F85C /* RecruitPostResultDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitPostResultDto.swift; sourceTree = "<group>"; };
 		288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostViewModel.swift; sourceTree = "<group>"; };
@@ -1247,6 +1252,7 @@
 		3143194BD51D3A85C2A959EB /* RecruitMyApplicationListRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListRequestDto.swift; sourceTree = "<group>"; };
 		3C3694E3ACBE05B8C7F15357 /* RecruitPostSectionHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostSectionHeaderView.swift; sourceTree = "<group>"; };
 		4067CAF18D134F99A04BBA0D /* RecruitListRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitListRequestDto.swift; sourceTree = "<group>"; };
+		4D7BF08E4E28887C9FB48DA1 /* RecruitApplicantDecisionRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplicantDecisionRequestDto.swift; sourceTree = "<group>"; };
 		4EE5F05DAB30AABDF79BC780 /* RecruitPostCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostCategoryView.swift; sourceTree = "<group>"; };
 		5231222D2717BC99A6697EAB /* ModifyRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ModifyRecruitUseCase.swift; sourceTree = "<group>"; };
 		54351A8A0C1A4046C3155481 /* RecruitPostTextViewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostTextViewView.swift; sourceTree = "<group>"; };
@@ -1973,6 +1979,7 @@
 		7CF77B863005F642003642C1 /* FetchMainFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMainFrameUseCase.swift; sourceTree = "<group>"; };
 		7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitUseCase.swift; sourceTree = "<group>"; };
 		7DADCC36CEEA42EC86AB75B6 /* RecruitDataMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataMetadataView.swift; sourceTree = "<group>"; };
+		827BD7E96347F476DB1BD966 /* RecruitApplicantListRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplicantListRequestDto.swift; sourceTree = "<group>"; };
 		82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostViewController.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
@@ -2405,6 +2412,7 @@
 		D8F5C54B2E6F012500FB6708 /* LottieAnimationManageable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieAnimationManageable.swift; sourceTree = "<group>"; };
 		D8F5C5532E6F144300FB6708 /* floatingLogo.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = floatingLogo.json; sourceTree = "<group>"; };
 		DC82D6E2A559FEFE43E63F24 /* RecruitMyPostListRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitMyPostListRequestDto.swift; sourceTree = "<group>"; };
+		E1A5115E53734B28CC6EBED6 /* RecruitMyPostDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitMyPostDataDto.swift; sourceTree = "<group>"; };
 		E1A70C002D9A4F1100AGSEL0 /* AgreementSelection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementSelection.swift; sourceTree = "<group>"; };
 		EA92583628DDFBC3545C197B /* RecruitDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitDataDto.swift; sourceTree = "<group>"; };
 		EC692285302700A400EE26ED /* koinUnitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = koinUnitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -2490,6 +2498,8 @@
 				1A900DEA87E917C84BCD7E04 /* RecruitProfileDto.swift */,
 				756A97197501167BE3516430 /* RecruitMyApplicationListDto.swift */,
 				A064C42647B4EBB3454B2CA3 /* RecruitMyPostListDto.swift */,
+				E1A5115E53734B28CC6EBED6 /* RecruitMyPostDataDto.swift */,
+				1FC1A22BED5A1C53E5ED9903 /* RecruitApplicantDataDto.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -5589,6 +5599,8 @@
 				C8FC035A1EC83BD077A6AFCA /* RecruitApplyRequestDto.swift */,
 				3143194BD51D3A85C2A959EB /* RecruitMyApplicationListRequestDto.swift */,
 				DC82D6E2A559FEFE43E63F24 /* RecruitMyPostListRequestDto.swift */,
+				827BD7E96347F476DB1BD966 /* RecruitApplicantListRequestDto.swift */,
+				4D7BF08E4E28887C9FB48DA1 /* RecruitApplicantDecisionRequestDto.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -7904,7 +7916,11 @@
 				DE8E26BC32390F246B7F4CF1 /* RecruitMyApplicationListRequestDto.swift in Sources */,
 				4AAF0644AD43FD83CE4E5E32 /* RecruitMyApplicationListDto.swift in Sources */,
 				1AD09EAFA1CF9EE0B81E886D /* RecruitMyPostListRequestDto.swift in Sources */,
+				5AE5AB8D26086C14A37D8929 /* RecruitApplicantListRequestDto.swift in Sources */,
+				408BFAF3EBEEF0B6899C434F /* RecruitApplicantDecisionRequestDto.swift in Sources */,
 				8F73C145755D31960169BE61 /* RecruitMyPostListDto.swift in Sources */,
+				5F6F2CE2D04FA793C2A5FD33 /* RecruitMyPostDataDto.swift in Sources */,
+				E3DB42C328CC0291FC430D89 /* RecruitApplicantDataDto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

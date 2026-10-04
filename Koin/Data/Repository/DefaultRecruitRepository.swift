@@ -66,6 +66,27 @@ final class DefaultRecruitRepository: RecruitRepository {
         return try await service.fetchMyPostList(request).toDomain()
     }
 
+    func fetchMyPostData(_ id: Int, page: Int) async throws -> RecruitMyPostData {
+        let request = RecruitApplicantListRequestDto(statuses: nil, page: page, limit: 10)
+        return try await service.fetchMyPostData(id, request).toDomain()
+    }
+
+    func fetchApplicant(
+        recruitmentId: Int,
+        applicationId: Int
+    ) async throws -> RecruitApplicantData {
+        try await service.fetchApplicant(recruitmentId: recruitmentId, applicationId: applicationId).toDomain()
+    }
+
+    func decideApplicant(
+        recruitmentId: Int,
+        applicationId: Int,
+        decision: RecruitApplicantDecision
+    ) async throws -> Void {
+        let request = RecruitApplicantDecisionRequestDto(from: decision)
+        try await service.decideApplicant(recruitmentId: recruitmentId, applicationId: applicationId, request)
+    }
+
     func closeMyPost(id: Int) async throws -> Bool {
         try await service.closeMyPost(id)
         return true
@@ -108,25 +129,6 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
         request: RecruitChatPostRequest
     ) async throws {
         try await mockRepository.postChatMessage(recruitmentId: recruitmentId, chatRoomId: chatRoomId, request: request)
-    }
-
-    func fetchMyPostData(_ id: Int, page: Int) async throws -> RecruitMyPostData {
-        try await mockRepository.fetchMyPostData(id, page: page)
-    }
-
-    func fetchApplicant(
-        recruitmentId: Int,
-        applicationId: Int
-    ) async throws -> RecruitApplicantData {
-        try await mockRepository.fetchApplicant(recruitmentId: recruitmentId, applicationId: applicationId)
-    }
-
-    func decideApplicant(
-        recruitmentId: Int,
-        applicationId: Int,
-        decision: RecruitApplicantDecision
-    ) async throws -> Void {
-        try await mockRepository.decideApplicant(recruitmentId: recruitmentId, applicationId: applicationId, decision: decision)
     }
 
     func fetchNotificationList() async throws -> RecruitNotificationList {

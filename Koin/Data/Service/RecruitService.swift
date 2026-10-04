@@ -19,6 +19,9 @@ protocol RecruitService {
     func fetchMyApplicationList(_ request: RecruitMyApplicationListRequestDto) async throws -> RecruitMyApplicationListDto
     func fetchMyPostList(_ request: RecruitMyPostListRequestDto) async throws -> RecruitMyPostListDto
     func closeMyPost(_ id: Int) async throws
+    func fetchMyPostData(_ id: Int, _ request: RecruitApplicantListRequestDto) async throws -> RecruitMyPostDataDto
+    func fetchApplicant(recruitmentId: Int, applicationId: Int) async throws -> RecruitApplicantDataDto
+    func decideApplicant(recruitmentId: Int, applicationId: Int, _ request: RecruitApplicantDecisionRequestDto) async throws
 }
 
 final class DefaultRecruitService: RecruitService {
@@ -67,5 +70,17 @@ final class DefaultRecruitService: RecruitService {
 
     func closeMyPost(_ id: Int) async throws {
         try await networkService.request(api: RecruitAPI.closeMyPost(id))
+    }
+
+    func fetchMyPostData(_ id: Int, _ request: RecruitApplicantListRequestDto) async throws -> RecruitMyPostDataDto {
+        try await networkService.requestWithResponse(api: RecruitAPI.fetchMyPostData(id, request))
+    }
+
+    func fetchApplicant(recruitmentId: Int, applicationId: Int) async throws -> RecruitApplicantDataDto {
+        try await networkService.requestWithResponse(api: RecruitAPI.fetchApplicant(recruitmentId: recruitmentId, applicationId: applicationId))
+    }
+
+    func decideApplicant(recruitmentId: Int, applicationId: Int, _ request: RecruitApplicantDecisionRequestDto) async throws {
+        try await networkService.request(api: RecruitAPI.decideApplicant(recruitmentId: recruitmentId, applicationId: applicationId, request))
     }
 }
