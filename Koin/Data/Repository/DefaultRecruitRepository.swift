@@ -136,8 +136,8 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
         try await mockRepository.postBasicInfo(basicInfo)
     }
 
-    func postRecruitProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
-        try await mockRepository.postRecruitProfile(request)
+    func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
+        try await mockRepository.upsertMyProfile(request)
     }
 
     func apply(_ request: RecruitApplyRequest) async throws -> Void {

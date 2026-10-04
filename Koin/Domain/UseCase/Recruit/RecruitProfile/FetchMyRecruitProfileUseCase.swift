@@ -1,5 +1,5 @@
 //
-//  FetchMyProfileUseCase.swift
+//  FetchMyRecruitProfileUseCase.swift
 //  koin
 //
 //  Created by 홍기정 on 9/13/26.
@@ -7,11 +7,11 @@
 
 import Foundation
 
-protocol FetchMyProfileUseCase {
+protocol FetchMyRecruitProfileUseCase {
     func execute() async throws -> RecruitProfile?
 }
 
-final class DefaultFetchMyProfileUseCase: FetchMyProfileUseCase {
+final class DefaultFetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase {
     private let repository: RecruitRepository
 
     init(repository: RecruitRepository) {

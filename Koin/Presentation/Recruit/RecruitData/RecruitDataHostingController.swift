@@ -158,7 +158,7 @@ extension RecruitDataHostingController {
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let viewModel = RecruitApplyViewModel(
             fetchDeptListUseCase: MockFetchDeptListUseCase(),
-            fetchMyProfileUseCase: DefaultFetchMyProfileUseCase(repository: recruitRepository),
+            fetchMyRecruitProfileUseCase: DefaultFetchMyRecruitProfileUseCase(repository: recruitRepository),
             applyRecruitUseCase: DefaultApplyRecruitUseCase(repository: recruitRepository)
         )
         let viewController = RecruitApplyViewController(
@@ -176,7 +176,7 @@ extension RecruitDataHostingController {
             fetchDeptListUseCase: MockFetchDeptListUseCase(),
             fetchUserDataUseCase: DefaultFetchUserDataUseCase(userRepository: userRepository),
             postBasicInfoUseCase: DefaultPostBasicInfoUseCase(repository: recruitRepository),
-            postRecruitProfileUseCase: DefaultPostRecruitProfileUseCase(repository: recruitRepository),
+            upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
             mode: .post
         )
         let viewController = RecruitProfilePostViewController(viewModel: viewModel) { [weak self] _ in

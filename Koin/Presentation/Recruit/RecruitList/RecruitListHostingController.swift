@@ -122,8 +122,8 @@ extension RecruitListHostingController {
     }
     private func showRecruitProfile() {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
-        let fetchMyProfileUseCase = DefaultFetchMyProfileUseCase(repository: repository)
-        let viewModel = RecruitProfileViewModel(fetchMyProfileUseCase: fetchMyProfileUseCase)
+        let fetchMyRecruitProfileUseCase = DefaultFetchMyRecruitProfileUseCase(repository: repository)
+        let viewModel = RecruitProfileViewModel(fetchMyRecruitProfileUseCase: fetchMyRecruitProfileUseCase)
         let viewController = RecruitProfileHostingController(
             rootView: RecruitProfileView(viewModel: viewModel)
         )

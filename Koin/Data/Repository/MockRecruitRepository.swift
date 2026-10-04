@@ -123,7 +123,7 @@ final class MockRecruitRepository: RecruitRepository {
         return basicInfo
     }
 
-    func postRecruitProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
+    func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
         try await Task.sleep(nanoseconds: 300_000_000)
 
         return RecruitProfile(

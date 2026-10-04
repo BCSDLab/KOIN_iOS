@@ -92,12 +92,12 @@ extension RecruitProfileHostingController {
         let fetchDeptListUseCase = MockFetchDeptListUseCase()
         let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
         let postBasicInfoUseCase = DefaultPostBasicInfoUseCase(repository: recruitRepository)
-        let postRecruitProfileUseCase = DefaultPostRecruitProfileUseCase(repository: recruitRepository)
+        let upsertMyRecruitProfileUseCase = DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository)
         let viewModel = RecruitProfilePostViewModel(
             fetchDeptListUseCase: fetchDeptListUseCase,
             fetchUserDataUseCase: fetchUserDataUseCase,
             postBasicInfoUseCase: postBasicInfoUseCase,
-            postRecruitProfileUseCase: postRecruitProfileUseCase,
+            upsertMyRecruitProfileUseCase: upsertMyRecruitProfileUseCase,
             mode: mode
         )
         return RecruitProfilePostViewController(viewModel: viewModel) { [weak self] profile in

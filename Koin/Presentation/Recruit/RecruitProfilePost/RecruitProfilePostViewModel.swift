@@ -36,7 +36,7 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
     private let fetchDeptListUseCase: FetchDeptListUseCase
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private let postBasicInfoUseCase: PostBasicInfoUseCase
-    private let postRecruitProfileUseCase: PostRecruitProfileUseCase
+    private let upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase
 
     // MARK: - Publisher
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -48,13 +48,13 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
         fetchDeptListUseCase: FetchDeptListUseCase,
         fetchUserDataUseCase: FetchUserDataUseCase,
         postBasicInfoUseCase: PostBasicInfoUseCase,
-        postRecruitProfileUseCase: PostRecruitProfileUseCase,
+        upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase,
         mode: Mode
     ) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.postBasicInfoUseCase = postBasicInfoUseCase
-        self.postRecruitProfileUseCase = postRecruitProfileUseCase
+        self.upsertMyRecruitProfileUseCase = upsertMyRecruitProfileUseCase
         self.mode = mode
     }
 
@@ -133,7 +133,7 @@ extension RecruitProfilePostViewModel {
         Task {
             do {
                 _ = try await postBasicInfoUseCase.execute(basicInfo: basicInfo)
-                let profile = try await postRecruitProfileUseCase.execute(request: request)
+                let profile = try await upsertMyRecruitProfileUseCase.execute(request: request)
                 isSubmitting = false
                 outputSubject.send(.updateLoading(false))
                 outputSubject.send(.postCompleted(profile))

@@ -25,7 +25,7 @@ final class RecruitApplyViewModel: ViewModelProtocol {
 
     // MARK: - Properties
     private let fetchDeptListUseCase: FetchDeptListUseCase
-    private let fetchMyProfileUseCase: FetchMyProfileUseCase
+    private let fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
     private let applyRecruitUseCase: ApplyRecruitUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
@@ -35,11 +35,11 @@ final class RecruitApplyViewModel: ViewModelProtocol {
     // MARK: - Initializer
     init(
         fetchDeptListUseCase: FetchDeptListUseCase,
-        fetchMyProfileUseCase: FetchMyProfileUseCase,
+        fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase,
         applyRecruitUseCase: ApplyRecruitUseCase
     ) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
-        self.fetchMyProfileUseCase = fetchMyProfileUseCase
+        self.fetchMyRecruitProfileUseCase = fetchMyRecruitProfileUseCase
         self.applyRecruitUseCase = applyRecruitUseCase
     }
 
@@ -86,7 +86,7 @@ extension RecruitApplyViewModel {
             defer { isLoadingProfile = false }
 
             do {
-                guard let profile = try await fetchMyProfileUseCase.execute() else {
+                guard let profile = try await fetchMyRecruitProfileUseCase.execute() else {
                     let message = "프로필을 불러오지 못했습니다."
                     outputSubject.send(.showToast(message))
                     return
