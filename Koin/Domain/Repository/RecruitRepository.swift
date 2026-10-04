@@ -50,5 +50,5 @@ protocol RecruitRepository {
     func deleteData(id: Int) async throws -> Bool
     func fetchMyProfile() async throws -> RecruitProfile
     func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile
-    func apply(_ request: RecruitApplyRequest) async throws -> Void
+    func apply(recruitmentId: Int, _ request: RecruitApplyRequest) async throws -> Void
 }

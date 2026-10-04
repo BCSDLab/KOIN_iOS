@@ -139,7 +139,7 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
         try await mockRepository.markAllAsReadNotification()
     }
 
-    func apply(_ request: RecruitApplyRequest) async throws -> Void {
-        try await mockRepository.apply(request)
+    func apply(recruitmentId: Int, _ request: RecruitApplyRequest) async throws -> Void {
+        try await mockRepository.apply(recruitmentId: recruitmentId, request)
     }
 }

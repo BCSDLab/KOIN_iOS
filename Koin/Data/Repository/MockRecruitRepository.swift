@@ -114,7 +114,7 @@ final class MockRecruitRepository: RecruitRepository {
         )
     }
 
-    func apply(_ request: RecruitApplyRequest) async throws -> Void {
+    func apply(recruitmentId: Int, _ request: RecruitApplyRequest) async throws -> Void {
         try await Task.sleep(nanoseconds: 300_000_000)
     }
 

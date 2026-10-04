@@ -13,7 +13,12 @@ final class RecruitApplyViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case loadRecruitProfile
-        case apply(RecruitApplyRequest)
+        case apply(
+            recruitmentId: Int,
+            basicInfo: BasicInfo,
+            profileRequest: RecruitProfileRequest,
+            applyRequest: RecruitApplyRequest
+        )
     }
 
     enum Output {
@@ -51,8 +56,13 @@ final class RecruitApplyViewModel: ViewModelProtocol {
                     self?.fetchDepartments()
                 case .loadRecruitProfile:
                     self?.fetchRecruitProfile()
-                case let .apply(request):
-                    self?.apply(request)
+                case let .apply(recruitmentId, basicInfo, profileRequest, applyRequest):
+                    self?.apply(
+                        recruitmentId: recruitmentId,
+                        basicInfo: basicInfo,
+                        profileRequest: profileRequest,
+                        applyRequest: applyRequest
+                    )
                 }
             }
             .store(in: &subscriptions)
@@ -99,7 +109,12 @@ extension RecruitApplyViewModel {
         }
     }
 
-    private func apply(_ request: RecruitApplyRequest) {
+    private func apply(
+        recruitmentId: Int,
+        basicInfo: BasicInfo,
+        profileRequest: RecruitProfileRequest,
+        applyRequest: RecruitApplyRequest
+    ) {
         guard !isApplying else { return }
 
         isApplying = true
@@ -108,7 +123,7 @@ extension RecruitApplyViewModel {
             defer { isApplying = false }
 
             do {
-                try await applyRecruitUseCase.execute(request: request)
+                try await applyRecruitUseCase.execute(recruitmentId: recruitmentId, request: applyRequest)
                 outputSubject.send(.applyCompleted)
             } catch {
                 let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
