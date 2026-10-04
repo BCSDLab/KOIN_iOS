@@ -104,8 +104,8 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
         try await mockRepository.fetchMyPostList(filter)
     }
 
-    func fetchMyPostData(_ id: Int) async throws -> RecruitMyPostData {
-        try await mockRepository.fetchMyPostData(id)
+    func fetchMyPostData(_ id: Int, page: Int) async throws -> RecruitMyPostData {
+        try await mockRepository.fetchMyPostData(id, page: page)
     }
 
     func fetchApplicant(

@@ -14,6 +14,7 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
 
     enum Input {
         case onFirstAppear
+        case loadNextPage
         case didShowToast
     }
 
@@ -40,6 +41,8 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
         switch input {
         case .onFirstAppear:
             fetchRecruitMyPost()
+        case .loadNextPage:
+            loadNextPage()
         case .didShowToast:
             errorMessage = nil
         }
@@ -47,7 +50,14 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
 }
 
 extension RecruitMyPostViewModel {
-    private func fetchRecruitMyPost() {
+    private func loadNextPage() {
+        guard let data, data.hasNextPage else {
+            return
+        }
+        fetchRecruitMyPost(page: data.currentPage + 1)
+    }
+
+    private func fetchRecruitMyPost(page: Int = 1) {
         guard !isLoading else {
             return
         }
@@ -59,9 +69,18 @@ extension RecruitMyPostViewModel {
             }
 
             do {
-                let data = try await fetchRecruitMyPostDataUseCase.execute(id: recruitId)
+                var response = try await fetchRecruitMyPostDataUseCase.execute(id: recruitId, page: page)
                 try Task.checkCancellation()
-                self.data = data
+
+                guard response.currentPage == page else {
+                    return
+                }
+
+                if page > 1 {
+                    response.applicants = (data?.applicants ?? []) + response.applicants
+                    response.applicants.removeDuplicates()
+                }
+                self.data = response
             } catch is CancellationError {
                 return
             } catch {

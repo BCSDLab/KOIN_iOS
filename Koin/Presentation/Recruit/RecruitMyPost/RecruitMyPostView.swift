@@ -33,7 +33,7 @@ struct RecruitMyPostView: ActionBindableView {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .loadingOverlay(viewModel.isLoading)
+        .loadingOverlay(viewModel.isLoading && viewModel.data == nil)
         .background(Color.appColor(.newBackground).ignoresSafeArea())
         .onFirstAppear {
             viewModel.execute(.onFirstAppear)
@@ -87,9 +87,18 @@ extension RecruitMyPostView {
                                         ))
                                     }
                                 )
+                                .onAppear {
+                                    loadNextPageIfNeeded(applicationId: applicant.applicationId)
+                                }
                             }
                         }
                         .padding(.top, 24)
+
+                        ProgressView()
+                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(height: 24)
+                            .padding(.top, 12)
+                            .isHidden(!(data.hasNextPage && viewModel.isLoading))
                     }
                 }
                 .padding(.horizontal, 24)
@@ -113,5 +122,17 @@ extension RecruitMyPostView {
                 .foregroundStyle(Color.appColor(.neutral500))
                 .frame(height: 19)
         }
+    }
+}
+
+extension RecruitMyPostView {
+    private func loadNextPageIfNeeded(applicationId: Int) {
+        guard let data = viewModel.data,
+              data.applicants.last?.applicationId == applicationId,
+              data.hasNextPage,
+              !viewModel.isLoading else {
+            return
+        }
+        viewModel.execute(.loadNextPage)
     }
 }
