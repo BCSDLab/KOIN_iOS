@@ -163,13 +163,13 @@ extension RecruitListViewModel {
     private func fetchHasUnreadNotification() {
         Task {
             do {
-                self.hasUnreadNotification = try await fetchRecruitNotificationListUseCase.execute().hasUnread
+                self.hasUnreadNotification = try await fetchRecruitNotificationListUseCase.execute(page: 1).hasUnread
+            } catch let error as ErrorResponse where error.statusCode == 401 {
+                return
             } catch {
-                if let error = (error as? ErrorResponse),
-                   error.statusCode != 401 {
-                    self.errorMessage = error.message
-                }
+                self.errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
     }
 }
+

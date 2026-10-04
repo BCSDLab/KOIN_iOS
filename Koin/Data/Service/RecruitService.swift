@@ -22,6 +22,15 @@ protocol RecruitService {
     func fetchMyPostData(_ id: Int, _ request: RecruitApplicantListRequestDto) async throws -> RecruitMyPostDataDto
     func fetchApplicant(recruitmentId: Int, applicationId: Int) async throws -> RecruitApplicantDataDto
     func decideApplicant(recruitmentId: Int, applicationId: Int, _ request: RecruitApplicantDecisionRequestDto) async throws
+    func fetchChatData(recruitmentId: Int, chatRoomId: Int) async throws -> RecruitChatDataDto
+    func fetchDirectChatData(recruitmentId: Int, applicationId: Int) async throws -> RecruitChatDataDto
+    func fetchChatMessages(recruitmentId: Int, chatRoomId: Int) async throws -> [RecruitChatMessageDto]
+    func postChatMessage(recruitmentId: Int, chatRoomId: Int, _ request: RecruitChatPostRequestDto) async throws
+    func fetchNotificationList(_ request: RecruitNotificationListRequestDto) async throws -> RecruitNotificationListDto
+    func markAsReadNotification(_ id: Int) async throws
+    func markAllAsReadNotification() async throws
+    func deleteNotification(_ id: Int) async throws
+    func deleteAllNotification() async throws
 }
 
 final class DefaultRecruitService: RecruitService {
@@ -82,5 +91,41 @@ final class DefaultRecruitService: RecruitService {
 
     func decideApplicant(recruitmentId: Int, applicationId: Int, _ request: RecruitApplicantDecisionRequestDto) async throws {
         try await networkService.request(api: RecruitAPI.decideApplicant(recruitmentId: recruitmentId, applicationId: applicationId, request))
+    }
+
+    func fetchChatData(recruitmentId: Int, chatRoomId: Int) async throws -> RecruitChatDataDto {
+        try await networkService.requestWithResponse(api: RecruitAPI.fetchChatData(recruitmentId: recruitmentId, chatRoomId: chatRoomId))
+    }
+
+    func fetchDirectChatData(recruitmentId: Int, applicationId: Int) async throws -> RecruitChatDataDto {
+        try await networkService.requestWithResponse(api: RecruitAPI.fetchDirectChatData(recruitmentId: recruitmentId, applicationId: applicationId))
+    }
+
+    func fetchChatMessages(recruitmentId: Int, chatRoomId: Int) async throws -> [RecruitChatMessageDto] {
+        try await networkService.requestWithResponse(api: RecruitAPI.fetchChatMessages(recruitmentId: recruitmentId, chatRoomId: chatRoomId))
+    }
+
+    func postChatMessage(recruitmentId: Int, chatRoomId: Int, _ request: RecruitChatPostRequestDto) async throws {
+        try await networkService.request(api: RecruitAPI.postChatMessage(recruitmentId: recruitmentId, chatRoomId: chatRoomId, request))
+    }
+
+    func fetchNotificationList(_ request: RecruitNotificationListRequestDto) async throws -> RecruitNotificationListDto {
+        try await networkService.requestWithResponse(api: RecruitAPI.fetchNotificationList(request))
+    }
+
+    func markAsReadNotification(_ id: Int) async throws {
+        try await networkService.request(api: RecruitAPI.markAsReadNotification(id))
+    }
+
+    func markAllAsReadNotification() async throws {
+        try await networkService.request(api: RecruitAPI.markAllAsReadNotification)
+    }
+
+    func deleteNotification(_ id: Int) async throws {
+        try await networkService.request(api: RecruitAPI.deleteNotification(id))
+    }
+
+    func deleteAllNotification() async throws {
+        try await networkService.request(api: RecruitAPI.deleteAllNotification)
     }
 }

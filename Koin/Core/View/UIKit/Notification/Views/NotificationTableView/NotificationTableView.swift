@@ -21,33 +21,70 @@ final class NotificationTableView: UITableView {
     // MARK: - Publisher
     let deletePublisher = PassthroughSubject<String, Never>()
     let tapNotificationPublisher = PassthroughSubject<String, Never>()
+    let reachedBottomPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
-    private let realFooterView = NotificationFooterView()
+    private let footerView = NotificationFooterView()
     
     // MARK: - Properties
+    private let behavior: NotificationListView.Behavior
+    private var hasNextPage = false
+    private var wasAtBottom = false
     private var notifications: [NotificationRowModel] = []
     var isEmpty: Bool {
         notifications.isEmpty
+    }
+    private var footerState: NotificationFooterView.State {
+        behavior == .pagination && hasNextPage ? .loading : .info
     }
     private var lastBoundsSize: CGSize = .zero
     private var lastFooterHeight: CGFloat = 0
     
     // MARK: - Initialization
-    init() {
+    init(behavior: NotificationListView.Behavior) {
+        self.behavior = behavior
         super.init(frame: .zero, style: .grouped)
-        setUpStyles()
+        configureView()
+        commonInit()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     // MARK: - Public
-    func update(notifications: [NotificationRowModel]) {
+    func canAppend(_ notifications: [NotificationRowModel]) -> Bool {
+        let oldIds = self.notifications.map(\.id)
+        let newIds = notifications.map(\.id)
+        return behavior == .pagination
+            && !oldIds.isEmpty
+            && newIds.count > oldIds.count
+            && newIds.starts(with: oldIds)
+    }
+    
+    func reload(notifications: [NotificationRowModel], hasNextPage: Bool) {
         performBatchUpdates {
             self.notifications = notifications
+            self.hasNextPage = hasNextPage
+            footerView.update(state: footerState)
             recalculateFooterHeightIfNeeded()
             reloadSections([0], with: refreshControl?.isRefreshing == true ? .fade : .top)
+        } completion: { [weak self] _ in
+            self?.requestNextPageIfContentFits()
+        }
+    }
+    
+    func append(notifications: [NotificationRowModel], hasNextPage: Bool) {
+        let indexPaths = (self.notifications.count..<notifications.count).map {
+            IndexPath(row: $0, section: 0)
+        }
+        performBatchUpdates {
+            self.notifications = notifications
+            self.hasNextPage = hasNextPage
+            footerView.update(state: footerState)
+            recalculateFooterHeightIfNeeded()
+            insertRows(at: indexPaths, with: .fade)
+        } completion: { [weak self] _ in
+            self?.requestNextPageIfContentFits()
         }
     }
     
@@ -111,7 +148,13 @@ extension NotificationTableView {
     private func recalculateFooterHeightIfNeeded() {
         guard bounds.width > 0, bounds.height > 0 else { return }
         
-        let desiredHeight = desiredFooterHeight(for: notifications.count)
+        let desiredHeight: CGFloat
+        switch footerState {
+        case .info:
+            desiredHeight = desiredFooterHeight(for: notifications.count)
+        case .loading:
+            desiredHeight = Layout.footerMinHeight
+        }
         guard abs(lastFooterHeight - desiredHeight) > Layout.zeroTolerance else { return }
         
         lastFooterHeight = desiredHeight
@@ -151,22 +194,22 @@ extension NotificationTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         .leastNormalMagnitude
     }
-
+    
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         UIView()
     }
-
+    
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         notifications.isEmpty ? .leastNormalMagnitude : lastFooterHeight
     }
-
+    
     func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
         notifications.isEmpty ? .leastNormalMagnitude : lastFooterHeight
     }
-
+    
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         guard !notifications.isEmpty else { return nil }
-        return realFooterView
+        return footerView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -177,7 +220,7 @@ extension NotificationTableView: UITableViewDelegate {
         tapNotificationPublisher.send(id)
         didSelectNotification(id: id)
     }
-
+    
     func tableView(
         _ tableView: UITableView,
         trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath
@@ -185,7 +228,7 @@ extension NotificationTableView: UITableViewDelegate {
         guard notifications.indices.contains(indexPath.row) else {
             return nil
         }
-
+        
         let item = notifications[indexPath.row]
         
         let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
@@ -204,22 +247,49 @@ extension NotificationTableView: UITableViewDelegate {
         configuration.performsFirstActionWithFullSwipe = true
         return configuration
     }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard behavior == .pagination, hasNextPage else {
+            wasAtBottom = false
+            return
+        }
+        
+        let isAtBottom = contentOffset.y + bounds.height - adjustedContentInset.bottom
+        >= contentSize.height - Layout.zeroTolerance
+        
+        if isAtBottom && !wasAtBottom {
+            reachedBottomPublisher.send()
+        }
+        wasAtBottom = isAtBottom
+    }
+}
+
+extension NotificationTableView {
+    private func requestNextPageIfContentFits() {
+        guard behavior == .pagination,
+              hasNextPage,
+              !notifications.isEmpty else {
+            return
+        }
+        let visibleHeight = bounds.height - adjustedContentInset.top - adjustedContentInset.bottom
+        guard contentSize.height <= visibleHeight else {
+            return
+        }
+        reachedBottomPublisher.send()
+    }
 }
 
 // MARK: - Configure
 
 extension NotificationTableView {
 
-    private func setUpStyles() {
+    private func configureView() {
         backgroundColor = UIColor.ColorSystem.Neutral.gray0
         separatorStyle = .none
         showsVerticalScrollIndicator = false
         
         rowHeight = Layout.rowHeight
     
-        dataSource = self
-        delegate = self
-
         tableFooterView = UIView(
             frame: .init(
                 origin: .zero,
@@ -229,7 +299,11 @@ extension NotificationTableView {
                 )
             )
         )
-        
+    }
+    
+    private func commonInit() {
+        dataSource = self
+        delegate = self
         register(
             NotificationTableViewCell.self,
             forCellReuseIdentifier: NotificationTableViewCell.identifier

@@ -9,9 +9,15 @@ import Foundation
 
 struct RecruitNotificationList {
     var notifications: [RecruitNotificationRow]
+    let totalPage: Int
+    let currentPage: Int
 }
 
 extension RecruitNotificationList {
+    var hasNextPage: Bool {
+        currentPage < totalPage
+    }
+    
     var hasUnread: Bool {
         !notifications.filter({ !$0.isRead }).isEmpty
     }

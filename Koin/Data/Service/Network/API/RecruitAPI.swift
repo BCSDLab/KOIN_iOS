@@ -23,6 +23,15 @@ enum RecruitAPI {
     case fetchMyPostData(Int, RecruitApplicantListRequestDto)
     case fetchApplicant(recruitmentId: Int, applicationId: Int)
     case decideApplicant(recruitmentId: Int, applicationId: Int, RecruitApplicantDecisionRequestDto)
+    case fetchChatData(recruitmentId: Int, chatRoomId: Int)
+    case fetchDirectChatData(recruitmentId: Int, applicationId: Int)
+    case fetchChatMessages(recruitmentId: Int, chatRoomId: Int)
+    case postChatMessage(recruitmentId: Int, chatRoomId: Int, RecruitChatPostRequestDto)
+    case fetchNotificationList(RecruitNotificationListRequestDto)
+    case markAsReadNotification(Int)
+    case markAllAsReadNotification
+    case deleteNotification(Int)
+    case deleteAllNotification
 }
 
 extension RecruitAPI: Router, URLRequestConvertible {
@@ -47,6 +56,13 @@ extension RecruitAPI: Router, URLRequestConvertible {
         case .fetchMyPostData(let id, _): return "/team-recruitments/\(id)/applications"
         case .fetchApplicant(let recruitmentId, let applicationId): return "/team-recruitments/\(recruitmentId)/applications/\(applicationId)"
         case .decideApplicant(let recruitmentId, let applicationId, _): return "/team-recruitments/\(recruitmentId)/applications/\(applicationId)/status"
+        case .fetchChatData(let recruitmentId, let chatRoomId): return "/chatroom/team-recruitment/\(recruitmentId)/\(chatRoomId)"
+        case .fetchDirectChatData(let recruitmentId, let applicationId): return "/chatroom/team-recruitment/\(recruitmentId)/applications/\(applicationId)/direct"
+        case .fetchChatMessages(let recruitmentId, let chatRoomId), .postChatMessage(let recruitmentId, let chatRoomId, _): return "/chatroom/team-recruitment/\(recruitmentId)/\(chatRoomId)/messages"
+        case .fetchNotificationList, .deleteAllNotification: return "/team-recruitments/notifications"
+        case .markAsReadNotification(let id): return "/team-recruitments/notifications/\(id)/read"
+        case .markAllAsReadNotification: return "/team-recruitments/notifications/mark-all-read"
+        case .deleteNotification(let id): return "/team-recruitments/notifications/\(id)"
         }
     }
 
@@ -66,15 +82,22 @@ extension RecruitAPI: Router, URLRequestConvertible {
         case .fetchMyPostData: return .get
         case .fetchApplicant: return .get
         case .decideApplicant: return .put
+        case .fetchChatData: return .get
+        case .fetchDirectChatData: return .post
+        case .fetchChatMessages: return .get
+        case .postChatMessage: return .post
+        case .fetchNotificationList: return .get
+        case .markAsReadNotification, .markAllAsReadNotification: return .post
+        case .deleteNotification, .deleteAllNotification: return .delete
         }
     }
 
     public var headers: [String: String] {
         var baseHeaders: [String: String] = [:]
         switch self {
-        case .fetchList, .fetchData, .deleteData, .fetchMyProfile, .fetchMyApplicationList, .fetchMyPostList, .closeMyPost, .fetchMyPostData, .fetchApplicant:
+        case .fetchList, .fetchData, .deleteData, .fetchMyProfile, .fetchMyApplicationList, .fetchMyPostList, .closeMyPost, .fetchMyPostData, .fetchApplicant, .fetchChatData, .fetchDirectChatData, .fetchChatMessages, .fetchNotificationList, .markAsReadNotification, .markAllAsReadNotification, .deleteNotification, .deleteAllNotification:
             break
-        case .post, .modify, .upsertMyProfile, .apply, .decideApplicant:
+        case .post, .modify, .upsertMyProfile, .apply, .decideApplicant, .postChatMessage:
             baseHeaders["Content-Type"] = "application/json"
         }
         return baseHeaders
@@ -100,20 +123,28 @@ extension RecruitAPI: Router, URLRequestConvertible {
             return try? request.toDictionary()
         case .decideApplicant(_, _, let request):
             return try? request.toDictionary()
-        case .closeMyPost, .fetchApplicant:
+        case .postChatMessage(_, _, let request):
+            return try? request.toDictionary()
+        case .fetchNotificationList(let request):
+            return try? request.toDictionary()
+        case .markAsReadNotification, .markAllAsReadNotification, .deleteNotification, .deleteAllNotification:
+            return nil
+        case .closeMyPost, .fetchApplicant, .fetchChatData, .fetchDirectChatData, .fetchChatMessages:
             return nil
         }
     }
 
     public var encoding: ParameterEncoding? {
         switch self {
-        case .fetchList, .fetchMyApplicationList, .fetchMyPostList, .fetchMyPostData:
+        case .fetchList, .fetchMyApplicationList, .fetchMyPostList, .fetchMyPostData, .fetchNotificationList:
             return URLEncoding(arrayEncoding: .noBrackets)
-        case .closeMyPost, .fetchApplicant:
+        case .markAsReadNotification, .markAllAsReadNotification, .deleteNotification, .deleteAllNotification:
+            return nil
+        case .closeMyPost, .fetchApplicant, .fetchChatData, .fetchDirectChatData, .fetchChatMessages:
             return nil
         case .fetchData, .deleteData, .fetchMyProfile:
             return nil
-        case .post, .modify, .upsertMyProfile, .apply, .decideApplicant:
+        case .post, .modify, .upsertMyProfile, .apply, .decideApplicant, .postChatMessage:
             return JSONEncoding.default
         }
     }

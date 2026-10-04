@@ -8,7 +8,7 @@
 import Foundation
 
 protocol FetchRecruitNotificationListUseCase {
-    func execute() async throws -> RecruitNotificationList
+    func execute(page: Int) async throws -> RecruitNotificationList
 }
 
 final class DefaultFetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase {
@@ -19,7 +19,7 @@ final class DefaultFetchRecruitNotificationListUseCase: FetchRecruitNotification
         self.repository = repository
     }
     
-    func execute() async throws -> RecruitNotificationList {
-        try await repository.fetchNotificationList()
+    func execute(page: Int) async throws -> RecruitNotificationList {
+        try await repository.fetchNotificationList(page: page)
     }
 }
