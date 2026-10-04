@@ -56,6 +56,11 @@ final class DefaultRecruitRepository: RecruitRepository {
         try await service.apply(recruitmentId, dto)
     }
 
+    func fetchMyApplicationList(_ filter: RecruitMyApplicationFilter) async throws -> RecruitMyApplicationList {
+        let request = RecruitMyApplicationListRequestDto(from: filter)
+        return try await service.fetchMyApplicationList(request).toDomain()
+    }
+
     func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
         guard let request = RecruitProfileRequestDto(from: request) else {
             throw ErrorResponse.unexpectedInternalError
@@ -116,10 +121,6 @@ extension DefaultRecruitRepository { // TODO: API 연결 후 mock 위임 제거
         decision: RecruitApplicantDecision
     ) async throws -> Void {
         try await mockRepository.decideApplicant(recruitmentId: recruitmentId, applicationId: applicationId, decision: decision)
-    }
-
-    func fetchMyApplicationList(_ filter: RecruitMyApplicationFilter) async throws -> RecruitMyApplicationList {
-        try await mockRepository.fetchMyApplicationList(filter)
     }
 
     func closeMyPost(id: Int) async throws -> Bool {

@@ -31,7 +31,7 @@ enum RecruitRoleTypeDto: String, Codable {
     case general = "GENERAL"
 }
 
-enum RecruitApplicationStatusDto: String, Decodable {
+enum RecruitApplicationStatusDto: String, Codable {
     case pending = "PENDING"
     case accepted = "ACCEPTED"
     case rejected = "REJECTED"
@@ -136,6 +136,17 @@ extension RecruitRoleTypeDto {
 }
 
 extension RecruitApplicationStatusDto {
+    init(from model: RecruitApplicationStatus) {
+        switch model {
+        case .pending:
+            self = .pending
+        case .accepted:
+            self = .accepted
+        case .denied:
+            self = .rejected
+        }
+    }
+
     func toDomain() -> RecruitApplicationStatus {
         switch self {
         case .pending:
