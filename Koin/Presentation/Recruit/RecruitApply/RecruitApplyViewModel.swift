@@ -24,6 +24,7 @@ final class RecruitApplyViewModel: ViewModelProtocol {
     enum Output {
         case updateRecruitProfile(RecruitProfile)
         case updateDepartments([String])
+        case updateLoading(Bool)
         case applyCompleted
         case showToast(String)
     }
@@ -124,9 +125,13 @@ extension RecruitApplyViewModel {
         guard !isApplying else { return }
 
         isApplying = true
+        outputSubject.send(.updateLoading(true))
         Task { [weak self] in
             guard let self else { return }
-            defer { isApplying = false }
+            defer {
+                isApplying = false
+                outputSubject.send(.updateLoading(false))
+            }
 
             do {
                 try await modifyBasicInfoUseCase.execute(basicInfo: basicInfo)

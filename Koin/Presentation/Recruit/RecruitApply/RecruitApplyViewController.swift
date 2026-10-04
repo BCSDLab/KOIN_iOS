@@ -119,6 +119,8 @@ extension RecruitApplyViewController {
                     self?.updateNextButtonState()
                 case let .updateDepartments(departments):
                     self?.departmentDropdownContentView.configure(departments: departments)
+                case let .updateLoading(isLoading):
+                    self?.updateLoading(isLoading)
                 case .applyCompleted:
                     self?.handleApplyCompleted()
                 case let .showToast(message):
@@ -343,6 +345,16 @@ extension RecruitApplyViewController {
     private func updateRecruitProfile(_ profile: RecruitProfile) {
         basicInfo = profile.toBasicInfo()
         profileRequest = profile.toRequest()
+    }
+}
+
+extension RecruitApplyViewController {
+    private func updateLoading(_ isLoading: Bool) {
+        if isLoading {
+            IndicatorView.show()
+        } else {
+            IndicatorView.dismiss()
+        }
     }
 }
 
