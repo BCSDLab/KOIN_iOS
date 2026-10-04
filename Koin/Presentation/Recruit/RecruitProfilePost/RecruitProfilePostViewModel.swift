@@ -118,9 +118,9 @@ extension RecruitProfilePostViewModel {
         request: RecruitProfileRequest
     ) {
         guard !isSubmitting else { return }
+        isSubmitting = true
+        outputSubject.send(.updateLoading(true))
         Task {
-            isSubmitting = true
-            outputSubject.send(.updateLoading(true))
             defer {
                 isSubmitting = false
                 outputSubject.send(.updateLoading(false))

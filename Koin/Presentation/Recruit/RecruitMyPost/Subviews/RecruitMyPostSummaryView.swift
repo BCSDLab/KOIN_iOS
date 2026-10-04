@@ -87,7 +87,9 @@ extension RecruitMyPostSummaryView {
                 )
                 metadataView(
                     image: .recruitDate,
-                    text: "\(model.startDate?.formatDateToYYYYMMDD(separator: ".") ?? "") ~ \(model.endDate?.formatDateToYYYYMMDD(separator: ".") ?? "")"
+                    text: [model.startDate, model.endDate]
+                        .compactMap { $0?.formatDateToYYYYMMDD(separator: ".") }
+                        .joined(separator: " ~ ")
                 )
                 metadataView(
                     image: .recruitMember,

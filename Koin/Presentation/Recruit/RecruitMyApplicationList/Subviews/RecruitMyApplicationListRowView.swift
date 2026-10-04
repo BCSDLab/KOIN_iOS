@@ -102,9 +102,13 @@ extension RecruitMyApplicationListRowView {
 
                 HStack(alignment: .center, spacing: 2) {
                     Image.appImage(asset: .recruitDate)
-                    Text("\(model.startDate?.formatDateToYYYYMMDD(separator: ".") ?? "") ~ \(model.endDate?.formatDateToYYYYMMDD(separator: ".") ?? "")")
-                        .font(.appFont(.pretendardRegular, size: 10))
-                        .foregroundStyle(Color.appColor(.neutral500))
+                    Text(
+                        [model.startDate, model.endDate]
+                            .compactMap { $0?.formatDateToYYYYMMDD(separator: ".") }
+                            .joined(separator: " ~ ")
+                    )
+                    .font(.appFont(.pretendardRegular, size: 10))
+                    .foregroundStyle(Color.appColor(.neutral500))
                 }
 
                 HStack(alignment: .center, spacing: 2) {
