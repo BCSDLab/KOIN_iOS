@@ -17,7 +17,7 @@ final class NotificationViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - UI Components
-    private let notificationListView = NotificationListView()
+    private let notificationListView = NotificationListView(behavior: .allAtOnce)
 
     // MARK: - Initialization
     init(viewModel: NotificationViewModel) {

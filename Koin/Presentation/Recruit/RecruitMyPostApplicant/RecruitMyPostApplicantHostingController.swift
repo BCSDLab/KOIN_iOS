@@ -41,59 +41,18 @@ final class RecruitMyPostApplicantHostingController: UIHostingController<Recruit
 
 extension RecruitMyPostApplicantHostingController {
     private func showDecisionModal(_ decision: RecruitApplicantDecision) {
-        let copy: (title: String, subtitle: String, action: String)
-        switch decision {
-        case .accepted:
-            copy = (
-                "해당 지원자를 승인하시겠어요?",
-                "승인 후에는 ‘승인’ 상태로 변경되며\n지원자에게 승인 알림이 전송됩니다.",
-                "승인하기"
-            )
-        case .denied:
-            copy = (
-                "해당 지원자를 거절하시겠어요?",
-                "거절 후에는 ‘거절’ 상태로 변경되며\n지원자에게 거절 알림이 전송됩니다.",
-                "거절하기"
-            )
-        }
-
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .new,
             content: .titles(
-                mainTitleText: copy.title,
-                mainTitleStyle: .init(
-                    textColor: .neutral600,
-                    font: .pretendardMedium,
-                    fontSize: 15
-                ),
-                subTitleText: copy.subtitle,
-                subTitleStyle: .init(
-                    textColor: .neutral500,
-                    font: .pretendardRegular,
-                    fontSize: 13
-                )
+                mainTitleText: "해당 지원자를 \(decision.rawValue)하시겠어요?",
+                subTitleText: "\(decision.rawValue) 후에는 '\(decision.rawValue)' 상태로 변경되며\n지원자에게 \(decision.rawValue) 알림이 전송됩니다.",
             ),
             button: .buttons(
                 leftButtonTitle: "취소하기",
-                leftButtonStyle: .init(
-                    textColor: .neutral600,
-                    font: .pretendardMedium,
-                    fontSize: 15,
-                    borderColor: .neutral400,
-                    borderWidth: 1,
-                    cornerRadius: 8
-                ),
-                rightButtonTitle: copy.action,
+                rightButtonTitle: "\(decision.rawValue)하기",
                 rightButtonAction: { [weak self] in
                     self?.rootView.decide(decision)
-                },
-                rightButtonStyle: .init(
-                    textColor: .neutral0,
-                    font: .pretendardMedium,
-                    fontSize: 15,
-                    backgroundColor: .new500,
-                    cornerRadius: 8
-                )
+                }
             )
         ))
         present(modalViewController, animated: true)

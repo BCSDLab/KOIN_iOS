@@ -107,6 +107,9 @@ extension RecruitMyPostView {
                 .padding(.bottom, 24)
             }
             .scrollIndicators(.hidden)
+            .refreshable {
+                viewModel.execute(.onFirstAppear)
+            }
         }
     }
 

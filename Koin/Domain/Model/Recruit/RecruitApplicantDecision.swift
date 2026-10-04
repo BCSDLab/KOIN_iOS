@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum RecruitApplicantDecision: Equatable {
-    case accepted
-    case denied
+enum RecruitApplicantDecision: String, Equatable {
+    case accepted = "승인"
+    case denied = "거절"
 }

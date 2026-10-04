@@ -12,21 +12,28 @@ import Then
 
 final class NotificationListView: UIView {
     
+    enum Behavior {
+        case allAtOnce
+        case pagination
+    }
+    
     // MARK: - Properties
     let refreshPublisher = PassthroughSubject<Void, Never>()
     let itemTappedPublisher = PassthroughSubject<String, Never>()
     let deletePublisher = PassthroughSubject<String, Never>()
+    let reachedBottomPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - UI Components
-    private let tableView = NotificationTableView()
+    private let tableView: NotificationTableView
     private let refreshControl = UIRefreshControl()
     private let loadingIndicator = UIActivityIndicatorView(style: .medium)
     private let emptyView = NotificationEmptyView()
     
     // MARK: - Initialization
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    init(behavior: Behavior) {
+        self.tableView = NotificationTableView(behavior: behavior)
+        super.init(frame: .zero)
         configureView()
         bind()
     }
@@ -43,8 +50,12 @@ final class NotificationListView: UIView {
         loadingIndicator.stopAnimating()
     }
     
-    func update(items: [NotificationRowModel]) {
-        tableView.update(notifications: items)
+    func update(items: [NotificationRowModel], hasNextPage: Bool = false) {
+        if tableView.canAppend(items) {
+            tableView.append(notifications: items, hasNextPage: hasNextPage)
+        } else {
+            tableView.reload(notifications: items, hasNextPage: hasNextPage)
+        }
         updateStateViews(isEmpty: items.isEmpty)
     }
     
@@ -73,6 +84,12 @@ private extension NotificationListView {
                 guard let self else { return }
                 updateStateViews(isEmpty: tableView.isEmpty)
                 deletePublisher.send(id)
+            }
+            .store(in: &subscriptions)
+        
+        tableView.reachedBottomPublisher
+            .sink { [weak self] in
+                self?.reachedBottomPublisher.send()
             }
             .store(in: &subscriptions)
     }

@@ -9,13 +9,13 @@ import Foundation
 
 struct RecruitApplicantData {
     let applicationId: Int
-    var status: RecruitApplicationStatus
+    private(set) var status: RecruitApplicationStatus
     let profile: RecruitProfile
     let motivation: String
     let availableTime: String
     let role: String?
-    let canDecide: Bool
-    let canDirectChat: Bool
+    private(set) var canDecide: Bool
+    private(set) var canDirectChat: Bool
 }
 
 extension RecruitApplicantData {
@@ -23,8 +23,11 @@ extension RecruitApplicantData {
         switch decision {
         case .accepted:
             self.status = .accepted
+            self.canDirectChat = true
         case .denied:
             self.status = .denied
         }
+        
+        canDecide = false
     }
 }

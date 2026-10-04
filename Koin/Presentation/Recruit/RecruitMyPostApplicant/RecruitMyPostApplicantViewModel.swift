@@ -101,6 +101,7 @@ extension RecruitMyPostApplicantViewModel {
                     decision: decision
                 )
                 self.application?.decided(as: decision)
+                toastMessage = "지원자를 \(decision.rawValue)했어요."
             } catch {
                 if let error = error as? ErrorResponse {
                     errorMessage = error.message
