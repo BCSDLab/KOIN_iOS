@@ -16,6 +16,7 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
         case onFirstAppear
         case loadNextPage
         case didShowToast
+        case refresh
     }
 
     // MARK: - State
@@ -39,7 +40,7 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
     // MARK: - Public
     func execute(_ input: Input) {
         switch input {
-        case .onFirstAppear:
+        case .onFirstAppear, .refresh:
             fetchRecruitMyPost()
         case .loadNextPage:
             loadNextPage()
