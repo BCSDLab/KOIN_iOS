@@ -21,7 +21,7 @@ final class RecruitMyPostApplicantViewModel: SwiftUIViewModelProtocol {
     // MARK: - State
     private(set) var application: RecruitApplicantData?
     private(set) var isLoading = false
-    private(set) var errorMessage: String?
+    private(set) var toastMessage: String?
 
     // MARK: - Properties
     let recruitmentId: Int
@@ -50,7 +50,7 @@ final class RecruitMyPostApplicantViewModel: SwiftUIViewModelProtocol {
         case .decide(let decision):
             decideApplication(decision)
         case .didShowToast:
-            errorMessage = nil
+            toastMessage = nil
         }
     }
 }
@@ -74,11 +74,7 @@ extension RecruitMyPostApplicantViewModel {
                 )
                 self.application = application
             } catch {
-                if let error = error as? ErrorResponse {
-                    errorMessage = error.message
-                } else {
-                    errorMessage = error.localizedDescription
-                }
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
     }
@@ -101,12 +97,9 @@ extension RecruitMyPostApplicantViewModel {
                     decision: decision
                 )
                 self.application?.decided(as: decision)
+                toastMessage = "지원자를 \(decision.rawValue)했어요."
             } catch {
-                if let error = error as? ErrorResponse {
-                    errorMessage = error.message
-                } else {
-                    errorMessage = error.localizedDescription
-                }
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
     }

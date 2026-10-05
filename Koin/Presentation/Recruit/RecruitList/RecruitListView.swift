@@ -52,49 +52,60 @@ struct RecruitListView: ActionBindableView {
             )
             .padding(EdgeInsets(top: 20, leading: 0, bottom: 12, trailing: 0))
             
-            ScrollView {
-                Text("전체(\(viewModel.recruitList?.totalCount ?? 0))")
-                    .font(.appFont(.pretendardRegular, size: 12))
-                    .foregroundStyle(Color.appColor(.neutral500))
-                    .frame(height: 19)
-                    .padding(EdgeInsets(top: 0, leading: 4, bottom: 12, trailing: 0))
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
-                LazyVStack(spacing: 8) {
-                    ForEach(recruits) { recruit in
-                        Button {
-                            sendAction(.showRecruitData(id: recruit.id))
-                        } label: {
-                            RecruitListRowView(model: recruit)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .buttonStyle(.plain)
-                        .onAppear {
-                            if recruits.last?.id == recruit.id,
-                               viewModel.hasNextPage,
-                               !viewModel.isLoading {
-                                viewModel.execute(.loadNextPage)
+            ScrollViewReader { proxy in
+                ScrollView {
+                    Text("전체(\(viewModel.recruitList?.totalCount ?? 0))")
+                        .font(.appFont(.pretendardRegular, size: 12))
+                        .foregroundStyle(Color.appColor(.neutral500))
+                        .frame(height: 19)
+                        .padding(EdgeInsets(top: 0, leading: 4, bottom: 12, trailing: 0))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .id("TOP")
+                    
+                    LazyVStack(spacing: 8) {
+                        ForEach(recruits) { recruit in
+                            Button {
+                                sendAction(.showRecruitData(id: recruit.id))
+                            } label: {
+                                RecruitListRowView(model: recruit)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.plain)
+                            .onAppear {
+                                if recruits.last?.id == recruit.id,
+                                   viewModel.hasNextPage,
+                                   !viewModel.isLoading {
+                                    viewModel.execute(.loadNextPage)
+                                }
                             }
                         }
                     }
+                    .frame(maxWidth: .infinity)
+                    
+                    ProgressView()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(height: 24 + 43)
+                        .padding(.top, 12)
+                        .isHidden(!(viewModel.hasNextPage && viewModel.isLoading), shouldOccupySpace: true)
                 }
-                .frame(maxWidth: .infinity)
-                
-                ProgressView()
-                    .frame(maxWidth: .infinity, alignment: .center)
-                    .frame(height: 24 + 43)
-                    .padding(.top, 12)
-                    .isHidden(!(viewModel.hasNextPage && viewModel.isLoading), shouldOccupySpace: true)
+                .padding(.horizontal, 22)
+                .background {
+                    RecruitListEmptyView()
+                        .isHidden(!viewModel.isEmpty || viewModel.isLoading)
+                }
+                .refreshable {
+                    viewModel.execute(.refresh)
+                }
+                .scrollIndicators(.hidden)
+                .onChange(of: viewModel.shouldScrollToTop) {
+                    if viewModel.shouldScrollToTop {
+                        Task {
+                            try? await Task.sleep(for: .milliseconds(200))
+                            proxy.scrollTo("TOP", anchor: .top)
+                        }
+                    }
+                }
             }
-            .padding(.horizontal, 22)
-            .background {
-                RecruitListEmptyView()
-                    .isHidden(!viewModel.isEmpty || viewModel.isLoading)
-            }
-            .refreshable {
-                viewModel.execute(.refresh)
-            }
-            .scrollIndicators(.hidden)
         }
         .background(Color.appColor(.newBackground))
         .overlay(alignment: .bottomTrailing) {
