@@ -104,8 +104,8 @@ final class NotificationTableView: UITableView {
         reloadSections([0], with: .fade)
     }
 
-    func indexPath(forNotificationId id: String) -> IndexPath? {
-        guard let index = notifications.firstIndex(where: { $0.id == id }) else {
+    func indexPath(for notificationId: Int) -> IndexPath? {
+        guard let index = notifications.firstIndex(where: { $0.id == String(notificationId) }) else {
             return nil
         }
         return IndexPath(row: index, section: 0)

@@ -356,9 +356,10 @@ extension SceneDelegate {
         let viewModel = RecruitNotificationListViewModel(
             fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase,
             markAsReadRecruitNotificationUseCase: markAsReadRecruitNotificationUseCase,
-            deleteRecruitNotificationUseCase: deleteRecruitNotificationUseCase
+            deleteRecruitNotificationUseCase: deleteRecruitNotificationUseCase,
+            notificationId: notificationId
         )
-        return RecruitNotificationListViewController(viewModel: viewModel, notificationId: notificationId)
+        return RecruitNotificationListViewController(viewModel: viewModel)
     }
 
     private func makeCallVanDataViewController(postId: Int) -> CallVanDataViewController {

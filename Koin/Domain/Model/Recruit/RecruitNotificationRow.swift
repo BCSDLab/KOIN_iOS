@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecruitNotificationRow {
+struct RecruitNotificationRow: Equatable {
     let id: Int
     let type: RecruitNotificationType
     let targetType: RecruitNotificationTargetType

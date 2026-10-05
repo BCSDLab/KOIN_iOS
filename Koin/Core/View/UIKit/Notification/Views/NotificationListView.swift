@@ -68,8 +68,8 @@ final class NotificationListView: UIView {
         updateStateViews(isEmpty: true)
     }
 
-    func indexPath(forNotificationId id: String) -> IndexPath? {
-        tableView.indexPath(forNotificationId: id)
+    func indexPath(for notificationId: Int) -> IndexPath? {
+        tableView.indexPath(for: notificationId)
     }
 
     func tapRow(at indexPath: IndexPath) {

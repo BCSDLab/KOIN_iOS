@@ -16,15 +16,13 @@ final class RecruitNotificationListViewController: UIViewController {
     private let inputSubject = PassthroughSubject<RecruitNotificationListViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var notificationList: RecruitNotificationList?
-    private var notificationId: Int?
 
     // MARK: - UI Components
     private let notificationListView = NotificationListView(behavior: .pagination)
 
     // MARK: - Initialization
-    init(viewModel: RecruitNotificationListViewModel, notificationId: Int? = nil) {
+    init(viewModel: RecruitNotificationListViewModel) {
         self.viewModel = viewModel
-        self.notificationId = notificationId
         super.init(nibName: nil, bundle: nil)
     }
     required init?(coder: NSCoder) {
@@ -63,6 +61,8 @@ private extension RecruitNotificationListViewController {
                     showToastMessage(message: message)
                 case .didFinishLoading:
                     notificationListView.stopLoading()
+                case .tapNotification(let id):
+                    tapNotification(id: id)
                 }
             }
             .store(in: &subscriptions)
@@ -114,16 +114,11 @@ extension RecruitNotificationListViewController {
             },
             hasNextPage: notificationList.hasNextPage
         )
-        tapNotificationIfNeeded()
     }
 
-    /// 푸시알림으로 진입한 경우, 최초 1회 notificationId 와 일치하는 row 를 탭 처리한다.
-    private func tapNotificationIfNeeded() {
-        guard let notificationId else {
-            return
-        }
-        self.notificationId = nil
-        guard let indexPath = notificationListView.indexPath(forNotificationId: String(notificationId)) else {
+    /// 푸시알림으로 진입한 경우, notificationId 와 일치하는 row 를 탭 처리한다.
+    private func tapNotification(id notificationId: Int) {
+        guard let indexPath = notificationListView.indexPath(for: notificationId) else {
             return
         }
         notificationListView.tapRow(at: indexPath)
