@@ -240,6 +240,7 @@ extension RecruitProfilePostViewController {
             .sink { [weak self] nickname in
                 guard let self else { return }
                 basicInfo.nickname = nickname
+                request.nickname = nickname
                 nextButton.updateState(isEnabled: basicInfo.isValid)
             }
             .store(in: &subscriptions)
