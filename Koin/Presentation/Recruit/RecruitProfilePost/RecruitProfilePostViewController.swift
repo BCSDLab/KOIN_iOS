@@ -19,7 +19,7 @@ final class RecruitProfilePostViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
     
     private var basicInfo = BasicInfo()
-    private var request = RecruitProfileRequest()
+    private var request: RecruitProfileRequest
     private var isFirstStep = true
 
     private var titleText: String {
@@ -240,6 +240,7 @@ extension RecruitProfilePostViewController {
             .sink { [weak self] nickname in
                 guard let self else { return }
                 basicInfo.nickname = nickname
+                request.nickname = nickname
                 nextButton.updateState(isEnabled: basicInfo.isValid)
             }
             .store(in: &subscriptions)
@@ -314,8 +315,10 @@ extension RecruitProfilePostViewController {
 extension RecruitProfilePostViewController {
     private func configureBasicInfo(_ basicInfo: BasicInfo) {
         self.basicInfo = basicInfo
+        self.request.nickname = basicInfo.nickname
         firstStepView.configure(basicInfo)
         nextButton.updateState(isEnabled: basicInfo.isValid)
+        updateCompleteButtonState()
     }
 
     private func updateCompleteButtonState() {
