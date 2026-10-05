@@ -103,6 +103,17 @@ final class NotificationTableView: UITableView {
         notifications.removeAll()
         reloadSections([0], with: .fade)
     }
+
+    func indexPath(for notificationId: Int) -> IndexPath? {
+        guard let index = notifications.firstIndex(where: { $0.id == String(notificationId) }) else {
+            return nil
+        }
+        return IndexPath(row: index, section: 0)
+    }
+
+    func tapRow(at indexPath: IndexPath) {
+        tableView(self, didSelectRowAt: indexPath)
+    }
 }
 
 extension NotificationTableView {

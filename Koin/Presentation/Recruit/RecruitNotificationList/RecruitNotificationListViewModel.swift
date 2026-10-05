@@ -24,6 +24,7 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
         case updateNotifications(RecruitNotificationList)
         case showToast(String)
         case didFinishLoading
+        case tapNotification(id: Int)
     }
     
     // MARK: - Properties
@@ -34,16 +35,19 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
     private var subscriptions = Set<AnyCancellable>()
     private var notificationList: RecruitNotificationList?
     private var isLoading = false
+    private var notificationId: Int?
 
     // MARK: - Initializer
     init(
         fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase,
         markAsReadRecruitNotificationUseCase: MarkAsReadRecruitNotificationUseCase,
-        deleteRecruitNotificationUseCase: DeleteRecruitNotificationUseCase
+        deleteRecruitNotificationUseCase: DeleteRecruitNotificationUseCase,
+        notificationId: Int? = nil
     ) {
         self.fetchRecruitNotificationListUseCase = fetchRecruitNotificationListUseCase
         self.markAsReadRecruitNotificationUseCase = markAsReadRecruitNotificationUseCase
         self.deleteRecruitNotificationUseCase = deleteRecruitNotificationUseCase
+        self.notificationId = notificationId
     }
     
     // MARK: - Transform
@@ -90,27 +94,55 @@ private extension RecruitNotificationListViewModel {
             return
         }
         isLoading = true
-        Task { @MainActor in
+        Task {
             defer {
                 isLoading = false
             }
             do {
-                var response = try await fetchRecruitNotificationListUseCase.execute(page: page)
-                guard response.currentPage == page else {
+                guard try await fetchPage(page) else {
                     return
                 }
-                if page > 1 {
-                    let loadedIds = Set(notificationList?.notifications.map(\.id) ?? [])
-                    response.notifications = (notificationList?.notifications ?? [])
-                        + response.notifications.filter { !loadedIds.contains($0.id) }
-                }
-                notificationList = response
-                outputSubject.send(.updateNotifications(response))
+                try await searchNotificationIfNeeded()
             } catch {
-                if let message = (error as? ErrorResponse)?.message {
-                    outputSubject.send(.showToast(message))
-                }
+                notificationId = nil
+                let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                outputSubject.send(.showToast(errorMessage))
                 outputSubject.send(.didFinishLoading)
+            }
+        }
+    }
+    
+    /// 한 페이지를 조회해 기존 목록에 이어붙인다. 응답 페이지가 요청과 다르면 false.
+    private func fetchPage(_ page: Int) async throws -> Bool {
+        var response = try await fetchRecruitNotificationListUseCase.execute(page: page)
+        guard response.currentPage == page else {
+            return false
+        }
+        if page > 1 {
+            response.notifications = (notificationList?.notifications ?? []) + response.notifications
+            response.notifications.removeDuplicates()
+        }
+        notificationList = response
+        outputSubject.send(.updateNotifications(response))
+        return true
+    }
+    
+    /// 푸시알림으로 진입한 경우, notificationId 와 일치하는 알림을 찾을 때까지 다음 페이지를 호출한다.
+    private func searchNotificationIfNeeded() async throws {
+        guard let notificationId else {
+            return
+        }
+        defer {
+            self.notificationId = nil
+        }
+        while let notificationList {
+            if notificationList.notifications.contains(where: { $0.id == notificationId }) {
+                outputSubject.send(.tapNotification(id: notificationId))
+                return
+            }
+            guard notificationList.hasNextPage,
+                  try await fetchPage(notificationList.currentPage + 1) else {
+                return
             }
         }
     }

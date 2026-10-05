@@ -61,6 +61,8 @@ private extension RecruitNotificationListViewController {
                     showToastMessage(message: message)
                 case .didFinishLoading:
                     notificationListView.stopLoading()
+                case .tapNotification(let id):
+                    tapNotification(id: id)
                 }
             }
             .store(in: &subscriptions)
@@ -105,13 +107,21 @@ private extension RecruitNotificationListViewController {
 extension RecruitNotificationListViewController {
     private func updateNotificationList(_ notificationList: RecruitNotificationList) {
         self.notificationList = notificationList
-        
+
         notificationListView.update(
             items: notificationList.notifications.map {
                 $0.toNotificationRowModel()
             },
             hasNextPage: notificationList.hasNextPage
         )
+    }
+
+    /// 푸시알림으로 진입한 경우, notificationId 와 일치하는 row 를 탭 처리한다.
+    private func tapNotification(id notificationId: Int) {
+        guard let indexPath = notificationListView.indexPath(for: notificationId) else {
+            return
+        }
+        notificationListView.tapRow(at: indexPath)
     }
     private func handleNavigation(id: Int) {
         guard let notification = notificationList?.notifications.first(where: { $0.id == id }) else {

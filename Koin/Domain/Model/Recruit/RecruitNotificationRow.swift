@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct RecruitNotificationRow {
+struct RecruitNotificationRow: Equatable {
     let id: Int
     let type: RecruitNotificationType
     let targetType: RecruitNotificationTargetType
@@ -20,13 +20,13 @@ struct RecruitNotificationRow {
     var isRead: Bool
 }
 
-enum RecruitNotificationType {
-    case newApplication
-    case applicationAccepted
-    case applicationRejected
-    case recruitmentClosed
-    case recruitmentDeleted
-    case newChatMessage
+enum RecruitNotificationType: String {
+    case newApplication = "new_application"
+    case applicationAccepted = "application_accepted"
+    case applicationRejected = "application_rejected"
+    case recruitmentClosed = "recruitment_closed"
+    case recruitmentDeleted = "recruitment_deleted"
+    case newChatMessage = "new_chat_message"
 }
 
 enum RecruitNotificationTargetType {
