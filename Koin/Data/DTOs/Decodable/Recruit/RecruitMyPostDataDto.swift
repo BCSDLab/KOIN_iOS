@@ -63,8 +63,10 @@ struct RecruitApplicationRoleDto: Decodable {
 }
 
 extension RecruitMyPostDataDto {
-    func toDomain() -> RecruitMyPostData {
-        let recruit = recruitment.recruitment.toDomain()
+    func toDomain() throws -> RecruitMyPostData {
+        guard let recruit = recruitment.recruitment.toDomain() else {
+            throw ErrorResponse.deletedRecruitment
+        }
         return RecruitMyPostData(
             id: recruit.id,
             category: recruit.category,

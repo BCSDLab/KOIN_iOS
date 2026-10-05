@@ -40,7 +40,7 @@ struct RecruitMyApplicationRowDto: Decodable {
 extension RecruitMyApplicationListDto {
     func toDomain() -> RecruitMyApplicationList {
         return RecruitMyApplicationList(
-            recruits: applications.map { $0.toDomain() },
+            recruits: applications.compactMap { $0.toDomain() },
             totalCount: totalCount,
             totalPage: totalPage,
             currentPage: currentPage
@@ -49,8 +49,10 @@ extension RecruitMyApplicationListDto {
 }
 
 extension RecruitMyApplicationRowDto {
-    func toDomain() -> RecruitMyApplicationRow {
-        let recruit = recruitment.toDomain()
+    func toDomain() -> RecruitMyApplicationRow? {
+        guard let recruit = recruitment.toDomain() else {
+            return nil
+        }
         return RecruitMyApplicationRow(
             id: recruit.id,
             category: recruit.category,

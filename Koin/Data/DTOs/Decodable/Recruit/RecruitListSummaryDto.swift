@@ -38,7 +38,10 @@ struct RecruitListSummaryDto: Decodable {
 }
 
 extension RecruitListSummaryDto {
-    func toDomain() -> RecruitRow {
+    func toDomain() -> RecruitRow? {
+        guard let state = status.toDomain() else {
+            return nil
+        }
         return RecruitRow(
             id: id,
             category: category.toDomain(),
@@ -48,7 +51,7 @@ extension RecruitListSummaryDto {
             endDate: activityEndDate.toDateFromYYYYMMDD(),
             deadline: deadlineDate.toDateFromYYYYMMDD(),
             dDay: dDay?.toDDay(),
-            state: status.toDomain(),
+            state: state,
             currentParticipants: currentParticipants,
             maximumParticipants: maxParticipants,
             type: recruitmentType.toDomain(),
