@@ -115,7 +115,18 @@ extension SceneDelegate {
             return
         }
         handledMessageIds.append(messageId)
-        
+
+        // 팀원모집 알림은 aps.category / schemeUri 없이 type, notification_id 로 온다.
+        if let type = userInfo["type"] as? String,
+           RecruitNotificationType(rawValue: type) != nil {
+            guard let notificationId = Int(userInfo["notification_id"] as? String) else {
+                return
+            }
+            let recruitNotificationListViewController = makeRecruitNotificationListViewController(notificationId: notificationId)
+            navigationController?.pushViewController(recruitNotificationListViewController, animated: true)
+            return
+        }
+
         guard let aps = userInfo["aps"] as? [String: AnyObject],
               let category = aps["category"] as? String,
               let appPath = AppPath(rawValue: category),
@@ -337,6 +348,19 @@ extension SceneDelegate {
         navigationController?.pushViewController(diningViewController, animated: true)
     }
     
+    private func makeRecruitNotificationListViewController(notificationId: Int) -> RecruitNotificationListViewController {
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
+        let markAsReadRecruitNotificationUseCase = DefaultMarkAsReadRecruitNotificationUseCase(repository: recruitRepository)
+        let deleteRecruitNotificationUseCase = DefaultDeleteRecruitNotificationUseCase(repository: recruitRepository)
+        let viewModel = RecruitNotificationListViewModel(
+            fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase,
+            markAsReadRecruitNotificationUseCase: markAsReadRecruitNotificationUseCase,
+            deleteRecruitNotificationUseCase: deleteRecruitNotificationUseCase
+        )
+        return RecruitNotificationListViewController(viewModel: viewModel, notificationId: notificationId)
+    }
+
     private func makeCallVanDataViewController(postId: Int) -> CallVanDataViewController {
         let callVanRepository = DefaultCallVanRepository(service: DefaultCallVanService())
         let fetchCallVanDataUseCase = DefaultFetchCallVanDataUseCase(repository: callVanRepository)
