@@ -37,8 +37,8 @@ struct RecruitMyPostApplicantView: ActionBindableView {
         .onFirstAppear {
             viewModel.execute(.onFirstAppear)
         }
-        .onChange(of: viewModel.errorMessage) {
-            guard let message = viewModel.errorMessage else {
+        .onChange(of: viewModel.toastMessage) {
+            guard let message = viewModel.toastMessage else {
                 return
             }
             sendAction(.showToast(message: message))
