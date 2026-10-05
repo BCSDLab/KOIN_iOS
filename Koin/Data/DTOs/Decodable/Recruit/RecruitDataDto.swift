@@ -72,7 +72,10 @@ struct RecruitMyApplicationDto: Decodable {
 }
 
 extension RecruitDataDto {
-    func toDomain() -> RecruitData {
+    func toDomain() throws -> RecruitData {
+        guard let state = status.toDomain() else {
+            throw ErrorResponse.deletedRecruitment
+        }
         let createdAtFormatter = DateFormatter().then {
             $0.dateFormat = "yyyy-MM-dd HH:mm:ss"
             $0.locale = Locale(identifier: "ko_KR")
@@ -83,7 +86,7 @@ extension RecruitDataDto {
             id: id,
             category: category.toDomain(),
             dDay: dDay?.toDDay(),
-            state: status.toDomain(),
+            state: state,
             title: title,
             meetingType: meetingType.toDomain(),
             startDate: activityStartDate.toDateFromYYYYMMDD(),

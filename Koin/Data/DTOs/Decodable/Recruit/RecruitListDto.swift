@@ -26,7 +26,7 @@ struct RecruitListDto: Decodable {
 extension RecruitListDto {
     func toDomain() -> RecruitList {
         return RecruitList(
-            recruits: recruitments.map { $0.toDomain() },
+            recruits: recruitments.compactMap { $0.toDomain() },
             totalCount: totalCount,
             totalPage: totalPage,
             currentPage: currentPage

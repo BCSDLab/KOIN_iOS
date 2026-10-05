@@ -38,6 +38,7 @@ extension ErrorResponse {
     static let networkError = ErrorResponse(statusCode: nil, code: "NETWORK_ERROR", message: "서버 응답 오류")
     static let invalidUrl = ErrorResponse(statusCode: nil, code: "INVALID_URL", message: "URL이 유효하지 않습니다.")
     static let recruitRelatedUrlSchemeError = ErrorResponse(statusCode: nil, code: "RECRUIT_RELATED_URL_SCHEME_ERROR", message: "링크는 https:// 로 시작해야 합니다.")
+    static let deletedRecruitment = ErrorResponse(statusCode: nil, code: "DELETED_RECRUITMENT", message: "삭제된 모집글입니다.")
     static let invalidApi = ErrorResponse(statusCode: nil, code: "INVALID_API", message: "API가 유효하지 않습니다.")
     static let fileManagerFailedDirectory = ErrorResponse(statusCode: nil, code: "FILEMANAGER_FAILED_DIRECTORY", message: "파일 저장 위치 찾기 실패")
     static let deleteKeywordError = ErrorResponse(statusCode: nil, code: "DELETE_KEYWORD_ERROR", message: "로그인에 실패하여 코어데이터에서 키워드 삭제")

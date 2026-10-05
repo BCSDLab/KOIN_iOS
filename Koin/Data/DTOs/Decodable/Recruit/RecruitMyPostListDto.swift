@@ -44,7 +44,7 @@ struct RecruitMyPostRowDto: Decodable {
 extension RecruitMyPostListDto {
     func toDomain() -> RecruitMyPostList {
         return RecruitMyPostList(
-            recruits: recruitments.map { $0.toDomain() },
+            recruits: recruitments.compactMap { $0.toDomain() },
             totalCount: totalCount,
             totalPage: totalPage,
             currentPage: currentPage
@@ -53,8 +53,10 @@ extension RecruitMyPostListDto {
 }
 
 extension RecruitMyPostRowDto {
-    func toDomain() -> RecruitMyPostRow {
-        let recruit = recruitment.toDomain()
+    func toDomain() -> RecruitMyPostRow? {
+        guard let recruit = recruitment.toDomain() else {
+            return nil
+        }
         return RecruitMyPostRow(
             id: recruit.id,
             category: recruit.category,

@@ -24,6 +24,7 @@ enum RecruitMeetingTypeDto: String, Codable {
 enum RecruitStatusDto: String, Decodable {
     case recruiting = "RECRUITING"
     case closed = "CLOSED"
+    case deleted = "DELETED"
 }
 
 enum RecruitRoleTypeDto: String, Codable {
@@ -105,12 +106,14 @@ extension RecruitMeetingTypeDto {
 }
 
 extension RecruitStatusDto {
-    func toDomain() -> RecruitState {
+    func toDomain() -> RecruitState? {
         switch self {
         case .recruiting:
             return .recruiting
         case .closed:
             return .closed
+        case .deleted:
+            return nil
         }
     }
 }
