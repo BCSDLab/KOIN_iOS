@@ -64,9 +64,13 @@ struct RecruitListHeaderView: View {
                     .padding(.horizontal, 22)
                 }
                 .frame(height: 30)
-                .transition(.asymmetric(
-                    insertion: .push(from: .top).combined(with: .opacity),
-                    removal: .push(from: .bottom).combined(with: .opacity)))
+                .transition(
+                    .asymmetric(
+                        insertion: .push(from: .top).combined(with: .opacity),
+                        removal: .push(from: .bottom).combined(with: .opacity)
+                    )
+                    .animation(.easeInOut(duration: 0.2))
+                )
             }
         }
         .animation(.spring(duration: 0.2), value: filterState.nonDefaultItems)

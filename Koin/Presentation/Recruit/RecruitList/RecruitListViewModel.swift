@@ -29,6 +29,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
     private(set) var isLoading: Bool = false
     private(set) var hasUnreadNotification: Bool = false
     private(set) var errorMessage: String? = nil
+    private(set) var shouldScrollToTop: Bool = false
     private var fetchListTask: Task<Void, Never>?
     
     var isEmpty: Bool {
@@ -94,7 +95,7 @@ extension RecruitListViewModel {
     ) {
         defer {
             isLoading = false
-            fetchList()
+            fetchList(shouldScrollToTop: true)
         }
         if let keyword {
             self.filterState.keyword = keyword
@@ -108,7 +109,7 @@ extension RecruitListViewModel {
     private func deleteFilter(_ rawValue: String) {
         defer {
             isLoading = false
-            fetchList()
+            fetchList(shouldScrollToTop: true)
         }
         filterState.remove(item: rawValue)
     }
@@ -120,7 +121,7 @@ extension RecruitListViewModel {
     private func resetFilter() {
         defer {
             isLoading = false
-            fetchList()
+            fetchList(shouldScrollToTop: true)
         }
         let keyword = filterState.keyword
         filterState = .init(keyword: keyword)
@@ -128,7 +129,10 @@ extension RecruitListViewModel {
 }
 
 extension RecruitListViewModel {
-    private func fetchList(page: Int = 1) {
+    private func fetchList(
+        page: Int = 1,
+        shouldScrollToTop: Bool = false
+    ) {
         guard !isLoading else {
             return
         }
@@ -136,6 +140,8 @@ extension RecruitListViewModel {
         fetchListTask = Task {
             do {
                 isLoading = true
+                self.shouldScrollToTop = false
+                
                 defer {
                     isLoading = false
                 }
@@ -144,16 +150,16 @@ extension RecruitListViewModel {
                 filterState.page = page
                 var response = try await fetchRecruitListUseCase.execute(filter: filterState)
                 
-                guard response.currentPage == page else {
+                guard !Task.isCancelled, response.currentPage == page else {
                     filterState.page = cachedPage
                     return
                 }
-                
                 if 1 < page {
                     response.recruits = (recruitList?.recruits ?? []) + response.recruits
                     response.recruits.removeDuplicates()
                 }
                 self.recruitList = response
+                self.shouldScrollToTop = shouldScrollToTop
             } catch {
                 errorMessage = (error as? ErrorResponse)?.message
             }
