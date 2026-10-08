@@ -82,18 +82,18 @@ struct RecruitMyApplicationListView: ActionBindableView {
                 Spacer(minLength: 24)
             }
             .padding(.horizontal, 22)
-            .background {
-                RecruitMyApplicationListEmptyView {
-                    sendAction(.showAllRecruitList)
-                }
-                .isHidden(!(viewModel.recruitList?.isEmpty ?? true) || viewModel.isLoading)
-            }
             .refreshable {
                 viewModel.execute(.refresh)
             }
             .scrollIndicators(.hidden)
         }
         .background(Color.appColor(.newBackground))
+        .overlay {
+            RecruitMyApplicationListEmptyView {
+                sendAction(.showAllRecruitList)
+            }
+            .isHidden(!(viewModel.recruitList?.isEmpty ?? true) || viewModel.isLoading)
+        }
         .onFirstAppear {
             viewModel.execute(.onFirstAppear)
         }

@@ -74,9 +74,7 @@ extension RecruitMyApplicationListHostingController {
 
     private func showAllRecruitList() {
         guard let navigationController,
-              let recruitListController = navigationController.viewControllers
-                .compactMap({ $0 as? RecruitListHostingController })
-                .first else {
+              let recruitListController = navigationController.viewControllers.first(where: { $0 is RecruitListHostingController }) else {
             return
         }
         navigationController.popToViewController(recruitListController, animated: true)
