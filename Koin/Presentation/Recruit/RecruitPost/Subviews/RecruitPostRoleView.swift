@@ -16,6 +16,7 @@ final class RecruitPostRoleView: UIView {
     let rolesChangedPublisher = PassthroughSubject<[RecruitRoleRequest], Never>()
     let numberOfGeneralMembersChangedPublisher = PassthroughSubject<Int?, Never>()
     let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    let addRoleButtonTappedPublisher = PassthroughSubject<Void, Never>()
 
     // MARK: - Properties
     private var subscriptions: Set<AnyCancellable> = []
@@ -108,6 +109,7 @@ extension RecruitPostRoleView {
         guard roleType == .roleBased,
               roles.count < maximumNumberOfRoles,
               totalRoleMembers < maximumNumberOfMembers else { return }
+        addRoleButtonTappedPublisher.send()
         tableView.endEditing(true)
         roles.append(.init())
         pendingRowChangeIndex = roles.count - 1
