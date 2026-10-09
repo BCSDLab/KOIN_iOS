@@ -43,6 +43,7 @@ struct RecruitListView: ActionBindableView {
                     viewModel.execute(.updateFilter(keyword: keyword))
                 },
                 onFilterButtonTapped: {
+                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilter, .click, "필터"))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
                         onApplyTapped: { filterGroups in
