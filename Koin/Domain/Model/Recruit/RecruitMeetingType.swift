@@ -33,6 +33,17 @@ enum RecruitMeetingType: String, CaseIterable {
             return .recruitPostMeetingTypeMixed
         }
     }
+    
+    var logValue: String {
+        switch self {
+        case .online:
+            "온라인"
+        case .offline:
+            "오프라인"
+        case .mixed:
+            "온·오프라인"
+        }
+    }
 }
 
 extension RecruitMeetingType {

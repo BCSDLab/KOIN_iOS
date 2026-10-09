@@ -47,8 +47,8 @@ final class RecruitListHostingController: UIHostingController<RecruitListView>, 
         switch action {
         case .configureRightButtons(let hasNotification):
             updateNotificationBarButton(hasNotification)
-        case .showFilterBottomSheet(let filterState, let onApplyTapped):
-            showFilterBottomSheet(filterState, onApplyTapped)
+        case .showFilterBottomSheet(let filterState, let onFilterItemTapped, let onResetTapped, let onApplyTapped):
+            showFilterBottomSheet(filterState, onFilterItemTapped, onResetTapped, onApplyTapped)
         case .showToast(let message):
             showToastMessage(message: message, bottomInset: toastMessageBottomInset)
         case .showLoginToast:
@@ -176,10 +176,14 @@ extension RecruitListHostingController {
 extension RecruitListHostingController {
     private func showFilterBottomSheet(
         _ filterState: RecruitListFilter,
+        _ onFilterItemTapped: @escaping (Int, FilterItemModel)->Bool,
+        _ onResetTapped: @escaping ()->Void,
         _ onApplyTapped: @escaping ([FilterGroupModel])->Void
     ) {
         let filterBottomSheetView = FilterBottomSheetView(
             groupModels: filterState.toGroupModels(),
+            onFilterItemTapped: onFilterItemTapped,
+            onResetTapped: onResetTapped,
             onApplyTapped: onApplyTapped
         )
         let bottomSheetViewController = BottomSheetViewControllerB(contentView: filterBottomSheetView)

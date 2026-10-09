@@ -19,4 +19,13 @@ enum RecruitListSort: String {
             1
         }
     }
+    
+    var logValue: String {
+        switch self {
+        case .latestDescending:
+            "최신순"
+        case .deadlineAscending:
+            "마감 임박순"
+        }
+    }
 }

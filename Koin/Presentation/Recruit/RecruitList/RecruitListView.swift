@@ -10,7 +10,12 @@ import SwiftUI
 struct RecruitListView: ActionBindableView {
     enum Action {
         case configureRightButtons(hasUnreadNotification: Bool)
-        case showFilterBottomSheet(filterState: RecruitListFilter, onApplyTapped: ([FilterGroupModel])->Void)
+        case showFilterBottomSheet(
+            filterState: RecruitListFilter,
+            onFilterItemTapped: (Int, FilterItemModel)->Bool,
+            onResetTapped: ()->Void,
+            onApplyTapped: ([FilterGroupModel])->Void
+        )
         case showToast(message: String)
         case showLoginToast
         case showProfilePostToast
@@ -46,7 +51,17 @@ struct RecruitListView: ActionBindableView {
                     viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilter, .click, "필터"))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
+                        onFilterItemTapped: { groupIndex, item in
+                            if let event = RecruitListFilter.logEvent(groupIndex: groupIndex, title: item.title) {
+                                viewModel.execute(.logEvent(event.label, .click, event.value))
+                            }
+                            return true
+                        },
+                        onResetTapped: {
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilterReset, .click, "초기화"))
+                        },
                         onApplyTapped: { filterGroups in
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilterApply, .click, "적용하기"))
                             viewModel.execute(.updateFilter(filterState: RecruitListFilter(from: filterGroups)))
                         }
                     ))
