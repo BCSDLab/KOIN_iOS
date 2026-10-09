@@ -53,9 +53,11 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitDataViewModel(
             fetchRecruitDataUseCase: fetchUseCase,
             deleteRecruitDataUseCase: deleteUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             recruitId: id
         )
         let controller = RecruitDataHostingController(
