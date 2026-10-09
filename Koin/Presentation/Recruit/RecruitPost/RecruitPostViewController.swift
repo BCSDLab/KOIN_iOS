@@ -28,6 +28,22 @@ final class RecruitPostViewController: UIViewController {
             return "수정하기"
         }
     }
+    private var submitModalMessage: String {
+        switch viewModel.mode {
+        case .post:
+            return "해당 모집글을 등록하시겠습니까?"
+        case .modify:
+            return "해당 모집글을 수정하시겠습니까?"
+        }
+    }
+    private var submitLogValue: String {
+        switch viewModel.mode {
+        case .post:
+            return "등록하기"
+        case .modify:
+            return "수정 완료"
+        }
+    }
     private var completionMessage: String {
         switch viewModel.mode {
         case .post:
@@ -381,9 +397,36 @@ extension RecruitPostViewController {
     
     @objc private func postButtonTapped() {
         guard !dropdownHost.isPresenting else { return }
-        postButton.isUserInteractionEnabled = false
         view.endEditing(true)
+        showSubmitModal()
+    }
+    
+    private func submit() {
+        postButton.isUserInteractionEnabled = false
         inputSubject.send(.submit(request))
+    }
+    private func showSubmitModal() {
+        let onCancelButtonTapped: ()->Void = { [weak self] in
+            self?.logEvent(post: .teamRecruitmentRecruitSubmitCancel, modify: .teamRecruitmentPostEditSubmitCancel, value: "취소하기")
+        }
+        let onSubmitButtonTapped: ()->Void = { [weak self] in
+            guard let self else { return }
+            logEvent(post: .teamRecruitmentRecruitSubmitConfirm, modify: .teamRecruitmentPostEditSubmitConfirm, value: submitButtonTitle)
+            submit()
+        }
+        let modalViewController = KoinModalViewController(
+            configuration: .init(
+                appearance: .new,
+                content: .singleTitle(text: submitModalMessage),
+                button: .buttons(
+                    leftButtonTitle: "취소하기",
+                    leftButtonAction: onCancelButtonTapped,
+                    rightButtonTitle: submitButtonTitle,
+                    rightButtonAction: onSubmitButtonTapped
+                )
+            )
+        )
+        present(modalViewController, animated: true)
     }
 }
 
