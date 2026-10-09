@@ -53,6 +53,8 @@ final class RecruitListHostingController: UIHostingController<RecruitListView>, 
             showToastMessage(message: message, bottomInset: toastMessageBottomInset)
         case .showLoginToast:
             showLoginToast()
+        case .showProfilePostToast:
+            showProfilePostToast()
         case .showRecruitPost:
             showRecruitPost()
         case .showRecruitData(let id):
@@ -97,7 +99,6 @@ extension RecruitListHostingController {
     }
     
     private func showLoginToast() {
-        
         showToastMessageWithButton(
             message: "로그인이 필요한 기능입니다.",
             buttonTitle: "로그인",
@@ -107,6 +108,18 @@ extension RecruitListHostingController {
         }
         return
     }
+    
+    private func showProfilePostToast() {
+        showToastMessageWithButton(
+            message: "팀원 모집 프로필이 필요합니다.",
+            buttonTitle: "작성하기",
+            bottomInset: toastMessageBottomInset
+        ) { [weak self] in
+            self?.showProfilePost()
+        }
+        return
+    }
+    
     private func showRecruitNotificationList() {
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
@@ -139,6 +152,21 @@ extension RecruitListHostingController {
             modifyRecruitUseCase: modifyRecruitUseCase
         )
         let viewController = RecruitPostViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    private func showProfilePost() {
+        let userRepository = DefaultUserRepository(service: DefaultUserService())
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let viewModel = RecruitProfilePostViewModel(
+            fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
+            fetchBasicInfoUseCase: DefaultFetchBasicInfoUseCase(repository: userRepository),
+            modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
+            upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
+            mode: .post
+        )
+        let viewController = RecruitProfilePostViewController(viewModel: viewModel) { [weak self] profile in
+            self?.rootView.update(profile: profile)
+        }
         navigationController?.pushViewController(viewController, animated: true)
     }
 }

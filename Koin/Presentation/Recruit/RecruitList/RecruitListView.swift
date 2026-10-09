@@ -13,6 +13,7 @@ struct RecruitListView: ActionBindableView {
         case showFilterBottomSheet(filterState: RecruitListFilter, onApplyTapped: ([FilterGroupModel])->Void)
         case showToast(message: String)
         case showLoginToast
+        case showProfilePostToast
         case showRecruitPost
         case showRecruitData(id: Int)
     }
@@ -133,7 +134,15 @@ struct RecruitListView: ActionBindableView {
     @ViewBuilder
     private var postButton: some View {
         Button {
-            UserDataManager.shared.isLoggedIn ? sendAction(.showRecruitPost) : sendAction(.showLoginToast)
+            guard UserDataManager.shared.isLoggedIn else {
+                sendAction(.showLoginToast)
+                return
+            }
+            guard viewModel.canPost else {
+                sendAction(.showProfilePostToast)
+                return
+            }
+            sendAction(.showRecruitPost)
         } label: {
             HStack(alignment: .center, spacing: 4) {
                 Text("모집하기")
@@ -152,5 +161,9 @@ struct RecruitListView: ActionBindableView {
     // MARK: - Public
     func delete(id: Int) {
         viewModel.execute(.delete(id: id))
+    }
+    
+    func update(profile: RecruitProfile) {
+        viewModel.execute(.updateProfile(profile))
     }
 }

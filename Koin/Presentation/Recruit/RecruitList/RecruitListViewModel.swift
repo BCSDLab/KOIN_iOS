@@ -21,6 +21,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
         case loadNextPage
         case delete(id: Int)
         case didShowToast
+        case updateProfile(RecruitProfile)
     }
     
     // MARK: - State
@@ -30,7 +31,6 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
     private(set) var hasUnreadNotification: Bool = false
     private(set) var errorMessage: String? = nil
     private(set) var shouldScrollToTop: Bool = false
-    private var fetchListTask: Task<Void, Never>?
     
     var isEmpty: Bool {
         if let recruitList {
@@ -48,18 +48,27 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
     var hasNextPage: Bool {
         currentPage < totalPage
     }
+    var canPost: Bool {
+        myRecruitProfile != nil
+    }
     
-    // MARK: - UseCase
+    // MARK: - Properties
     private let fetchRecruitListUseCase: FetchRecruitListUseCase
     private let fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase
+    private let fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
+    
+    private var fetchListTask: Task<Void, Never>?
+    private var myRecruitProfile: RecruitProfile?
     
     // MARK: - Initializer
     init(
         fetchRecruitListUseCase: FetchRecruitListUseCase,
-        fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase
+        fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase,
+        fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
     ) {
         self.fetchRecruitListUseCase = fetchRecruitListUseCase
         self.fetchRecruitNotificationListUseCase = fetchRecruitNotificationListUseCase
+        self.fetchMyRecruitProfileUseCase = fetchMyRecruitProfileUseCase
     }
     
     // MARK: - Public
@@ -69,9 +78,11 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
             fetchList()
         case .onAppear:
             fetchHasUnreadNotification()
+            fetchMyRecruitProfile()
         case .refresh:
             fetchList()
             fetchHasUnreadNotification()
+            fetchMyRecruitProfile()
         case .updateFilter(let keyword, let filterState):
             updateFilter(keyword, filterState)
         case .deleteFilter(let rawvalue):
@@ -84,6 +95,8 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
             recruitList?.delete(id: id)
         case .didShowToast:
             errorMessage = nil
+        case .updateProfile(let profile):
+            myRecruitProfile = profile
         }
     }
 }
@@ -179,3 +192,14 @@ extension RecruitListViewModel {
     }
 }
 
+extension RecruitListViewModel {
+    private func fetchMyRecruitProfile() {
+        Task {
+            do {
+                myRecruitProfile = try await fetchMyRecruitProfileUseCase.execute()
+            } catch {
+                errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            }
+        }
+    }
+}
