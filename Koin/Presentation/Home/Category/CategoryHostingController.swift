@@ -204,9 +204,11 @@ extension CategoryHostingController {
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitListUseCase = DefaultFetchRecruitListUseCase(repository: recruitRepository)
         let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
+        let fetchMyRecruitProfileUseCase = DefaultFetchMyRecruitProfileUseCase(repository: recruitRepository)
         let viewModel = RecruitListViewModel(
             fetchRecruitListUseCase: fetchRecruitListUseCase,
-            fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase
+            fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase,
+            fetchMyRecruitProfileUseCase: fetchMyRecruitProfileUseCase
         )
         let rootView = RecruitListView(viewModel: viewModel)
         return RecruitListHostingController(rootView: rootView)
