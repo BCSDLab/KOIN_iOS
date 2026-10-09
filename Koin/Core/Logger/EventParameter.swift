@@ -236,6 +236,7 @@ enum EventParameter {
             
             // Recruit
             case teamRecruitmentNotification = "team_recruitment_notification"
+            case teamRecruitmentSearch = "team_recruitment_search"
             
             var team: String {
                 return "CAMPUS"

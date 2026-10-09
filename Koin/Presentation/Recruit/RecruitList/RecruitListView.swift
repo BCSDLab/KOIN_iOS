@@ -37,6 +37,9 @@ struct RecruitListView: ActionBindableView {
             RecruitListHeaderView(
                 filterState: viewModel.filterState,
                 onSearchTapped: { keyword in
+                    if !keyword.isEmpty {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentSearch, .click, keyword))
+                    }
                     viewModel.execute(.updateFilter(keyword: keyword))
                 },
                 onFilterButtonTapped: {
