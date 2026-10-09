@@ -16,6 +16,7 @@ final class RecruitNotificationListViewController: UIViewController {
     private let inputSubject = PassthroughSubject<RecruitNotificationListViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var notificationList: RecruitNotificationList?
+    private var isUserTap = true
 
     // MARK: - UI Components
     private let notificationListView = NotificationListView(behavior: .pagination)
@@ -84,6 +85,10 @@ private extension RecruitNotificationListViewController {
                       let id = Int(id) else {
                     return
                 }
+                if isUserTap,
+                   let title = notificationList?.notifications.first(where: { $0.id == id })?.title {
+                    inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, title))
+                }
                 self.notificationList?.markAsRead(id: id)
                 handleNavigation(id: id)
                 inputSubject.send(.didTapNotification(id: id))
@@ -120,6 +125,10 @@ extension RecruitNotificationListViewController {
     private func tapNotification(id notificationId: Int) {
         guard let indexPath = notificationListView.indexPath(for: notificationId) else {
             return
+        }
+        isUserTap = false
+        defer {
+            isUserTap = true
         }
         notificationListView.tapRow(at: indexPath)
     }
