@@ -166,4 +166,12 @@ struct RecruitListView: ActionBindableView {
     func update(profile: RecruitProfile) {
         viewModel.execute(.updateProfile(profile))
     }
+    
+    func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        viewModel.execute(.logEvent(label, category, value))
+    }
 }

@@ -197,6 +197,11 @@ extension RecruitListHostingController {
             showLoginToast()
             return
         }
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.teamRecruitmentNotification,
+            category: .click,
+            value: "알림"
+        )
         showRecruitNotificationList()
     }
     

@@ -234,6 +234,9 @@ enum EventParameter {
             case callvanWriteDone = "callvan_write_done"
             case callvanWriteBack = "callvan_write_back"
             
+            // Recruit
+            case teamRecruitmentNotification = "team_recruitment_notification"
+            
             var team: String {
                 return "CAMPUS"
             }
