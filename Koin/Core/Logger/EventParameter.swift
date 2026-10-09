@@ -257,6 +257,7 @@ enum EventParameter {
             case teamRecruitmentPostEditSubmit = "team_recruitment_post_edit_submit"
             case teamRecruitmentPostEditSubmitCancel = "team_recruitment_post_edit_submit_cancel"
             case teamRecruitmentPostEditSubmitConfirm = "team_recruitment_post_edit_submit_confirm"
+            case teamRecruitmentRecruit = "team_recruitment_recruit"
             case teamRecruitmentRecruitCategory = "team_recruitment_recruit_category"
             case teamRecruitmentRecruitMethod = "team_recruitment_recruit_method"
             case teamRecruitmentRecruitRole = "team_recruitment_recruit_role"

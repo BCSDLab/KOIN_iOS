@@ -154,6 +154,7 @@ struct RecruitListView: ActionBindableView {
     @ViewBuilder
     private var postButton: some View {
         Button {
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentRecruit, .click, "모집하기"))
             guard UserDataManager.shared.isLoggedIn else {
                 sendAction(.showLoginToast)
                 return
