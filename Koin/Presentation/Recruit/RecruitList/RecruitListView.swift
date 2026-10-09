@@ -85,6 +85,7 @@ struct RecruitListView: ActionBindableView {
                     LazyVStack(spacing: 8) {
                         ForEach(recruits) { recruit in
                             Button {
+                                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentPostSelect, .click, recruit.title))
                                 sendAction(.showRecruitData(id: recruit.id))
                             } label: {
                                 RecruitListRowView(model: recruit)
