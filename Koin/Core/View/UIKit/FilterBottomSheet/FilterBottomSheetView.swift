@@ -15,7 +15,8 @@ class FilterBottomSheetView: UIView {
     // MARK: - Properties
     weak var delegate: BottomSheetViewControllerBDelegate?
     private var groupModels: [FilterGroupModel]
-    private let onFilterItemTapped: ((FilterItemModel)->Bool)?
+    private let onFilterItemTapped: ((Int, FilterItemModel)->Bool)?
+    private let onResetTapped: (()->Void)?
     private let onApplyTapped: ([FilterGroupModel])->Void
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -36,11 +37,13 @@ class FilterBottomSheetView: UIView {
     // MARK: - Initializer
     init(
         groupModels: [FilterGroupModel],
-        onFilterItemTapped: ((FilterItemModel)->Bool)? = nil,
+        onFilterItemTapped: ((_ groupIndex: Int, _ item: FilterItemModel)->Bool)? = nil,
+        onResetTapped: (()->Void)? = nil,
         onApplyTapped: @escaping ([FilterGroupModel])->Void
     ) {
         self.groupModels = groupModels
         self.onFilterItemTapped = onFilterItemTapped
+        self.onResetTapped = onResetTapped
         self.onApplyTapped = onApplyTapped
         self.filterGroupViews = groupModels.map { group in
             FilterGroupView(filterGroup: group)
@@ -70,10 +73,10 @@ class FilterBottomSheetView: UIView {
     private func didTapItem(groupIndex: Int, itemIndex: Int) {
         let tappedItem = groupModels[groupIndex].items[itemIndex]
         if let onFilterItemTapped {
-            guard onFilterItemTapped(tappedItem) else {
+            guard onFilterItemTapped(groupIndex, tappedItem) else {
                 return
             }
-        }        
+        }
         let before = groupModels[groupIndex].items.map(\.isSelected)
         groupModels[groupIndex].didTap(itemAt: itemIndex)
         let after = groupModels[groupIndex].items.map(\.isSelected)
@@ -113,6 +116,7 @@ extension FilterBottomSheetView {
                 changed: Self.changedIndexPaths(before: before, after: after)
             )
         }
+        onResetTapped?()
     }
     
     @objc private func applyButtonTapped() {
