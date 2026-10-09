@@ -107,6 +107,11 @@ extension RecruitDataHostingController {
                 self?.navigateToEdit()
             },
             onDeleteButtonTapped: { [weak self] in
+                self?.rootView.makeLogAnalyticsEvent(
+                    label: EventParameter.EventLabel.Campus.teamRecruitmentPostDelete,
+                    category: .click,
+                    value: "삭제하기"
+                )
                 self?.showDeleteModal()
             }
         )
@@ -118,19 +123,33 @@ extension RecruitDataHostingController {
     }
     
     private func showDeleteModal() {
+        let onCancelButtonTapped: ()->Void = { [weak self] in
+            self?.rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.teamRecruitmentPostDeleteCancel,
+                category: .click,
+                value: "취소하기"
+            )
+        }
         let onDeleteButtonTapped: ()->Void = { [weak self] in
+            self?.rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.teamRecruitmentPostDeleteConfirm,
+                category: .click,
+                value: "삭제하기"
+            )
             self?.rootView.didTapDelete()
         }
-        let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .new,
-            content: .singleTitle(text: "해당 모집글을 삭제하시겠습니까?"),
-            button: .buttons(
-                leftButtonTitle: "취소하기",
-                leftButtonAction: nil,
-                rightButtonTitle: "삭제하기",
-                rightButtonAction: onDeleteButtonTapped
+        let modalViewController = KoinModalViewController(
+            configuration: .init(
+                appearance: .new,
+                content: .singleTitle(text: "해당 모집글을 삭제하시겠습니까?"),
+                button: .buttons(
+                    leftButtonTitle: "취소하기",
+                    leftButtonAction: onCancelButtonTapped,
+                    rightButtonTitle: "삭제하기",
+                    rightButtonAction: onDeleteButtonTapped
+                )
             )
-        ))
+        )
         present(modalViewController, animated: true)
     }
 }

@@ -75,6 +75,14 @@ struct RecruitDataView: ActionBindableView {
     func didSubmitApplication() {
         viewModel.execute(.applicationSubmitted)
     }
+    
+    func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        viewModel.execute(.logEvent(label, category, value))
+    }
 }
 
 extension RecruitDataView {
