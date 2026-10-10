@@ -202,8 +202,17 @@ extension RecruitPostViewController {
         }.store(in: &subscriptions)
         
         meetingTypeView.meetingTypeChangedPublisher.sink { [weak self] meetingType in
-            self?.logEvent(post: .teamRecruitmentRecruitMethod, modify: .teamRecruitmentPostEditMethod, value: meetingType.logValue)
-            self?.request.meetingType = meetingType
+            guard let self else {
+                return
+            }
+            logEvent(post: .teamRecruitmentRecruitMethod, modify: .teamRecruitmentPostEditMethod, value: meetingType.logValue)
+            request.meetingType = meetingType
+            
+            let rect = meetingTypeView.convert(
+                meetingTypeView.bounds,
+                to: self.scrollView
+            )
+            self.scrollView.scrollRectToVisible(rect.insetBy(dx: 0, dy: 12), animated: true)
         }.store(in: &subscriptions)
         
         scheduleView.startDateButtonTappedPublisher.sink { [weak self] in
@@ -268,15 +277,36 @@ extension RecruitPostViewController {
             self?.request.numberOfGeneralMembers = numberOfGeneralMembers
         }.store(in: &subscriptions)
 
-        roleView.didChangeHeightPublisher.sink { [weak self] in
-            guard let self else { return }
+        roleView.didChangeHeightPublisher.sink { [weak self] heightDifference in
+            guard let self else {
+                return
+            }
+            
             view.layoutIfNeeded()
+            
             UIView.animate(
                 springDuration: 0.25,
                 options: [.beginFromCurrentState, .allowUserInteraction]
-            ) {
-                self.roleView.applyPendingSizeChange()
-                self.view.layoutIfNeeded()
+            ) { [weak self] in
+                guard let self else {
+                    return
+                }
+                roleView.applyPendingSizeChange()
+                view.layoutIfNeeded()
+                
+                guard 0 < heightDifference else {
+                    return
+                }
+                let bottomRect = roleView.convert(
+                    CGRect(
+                        x: 0,
+                        y: roleView.bounds.maxY - 1,
+                        width: roleView.bounds.width,
+                        height: 1
+                    ),
+                    to: scrollView
+                )
+                scrollView.scrollRectToVisible(bottomRect, animated: false)
             }
         }.store(in: &subscriptions)
         
