@@ -12,12 +12,17 @@ import UIKit
 
 final class RecruitProfilePostSecondStepView: UIScrollView {
 
+    enum Section {
+        case skill
+        case activity
+    }
+
     // MARK: - Publishers
     let preferredRoleChangedPublisher = PassthroughSubject<String?, Never>()
     let skillsChangedPublisher = PassthroughSubject<[String], Never>()
     let activitiesChangedPublisher = PassthroughSubject<[RecruitProfileActivityRequest], Never>()
     let introductionChangedPublisher = PassthroughSubject<String?, Never>()
-    let didChangeHeightPublisher = PassthroughSubject<Int, Never>()
+    let didChangeHeightPublisher = PassthroughSubject<(Section, Int), Never>()
     var skillAddButtonTappedPublisher: AnyPublisher<Void, Never> {
         skillTableView.addButtonTappedPublisher.eraseToAnyPublisher()
     }
@@ -100,6 +105,20 @@ final class RecruitProfilePostSecondStepView: UIScrollView {
         activityTableView.applyPendingSizeChange()
     }
 
+    func scrollBottomToVisible(of section: Section) {
+        let tableView: UITableView = switch section {
+        case .skill:
+            skillTableView
+        case .activity:
+            activityTableView
+        }
+        let bottomRect = tableView.convert(
+            CGRect(x: 0, y: tableView.bounds.maxY - 1, width: tableView.bounds.width, height: 1),
+            to: self
+        )
+        scrollRectToVisible(bottomRect, animated: false)
+    }
+
     private func bind() {
         preferredRoleView.textChangedPublisher
             .subscribe(preferredRoleChangedPublisher)
@@ -115,8 +134,8 @@ final class RecruitProfilePostSecondStepView: UIScrollView {
             .store(in: &subscriptions)
 
         Publishers.Merge(
-            skillTableView.didChangeHeightPublisher,
-            activityTableView.didChangeHeightPublisher
+            skillTableView.didChangeHeightPublisher.map { (.skill, $0) },
+            activityTableView.didChangeHeightPublisher.map { (.activity, $0) }
         )
         .subscribe(didChangeHeightPublisher)
         .store(in: &subscriptions)
