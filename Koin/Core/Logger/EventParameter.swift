@@ -313,6 +313,11 @@ enum EventParameter {
             case teamRecruitmentCreatedPostCloseCancel = "team_recruitment_created_post_close_cancel"
             case teamRecruitmentCreatedPostCloseConfirm = "team_recruitment_created_post_close_confirm"
             case teamRecruitmentCreatedPostChat = "team_recruitment_created_post_chat"
+            case teamRecruitmentCreatedPostFilter = "team_recruitment_created_post_filter"
+            case teamRecruitmentCreatedPostFilterStatus = "team_recruitment_created_post_filter_status"
+            case teamRecruitmentCreatedPostFilterSort = "team_recruitment_created_post_filter_sort"
+            case teamRecruitmentCreatedPostFilterReset = "team_recruitment_created_post_filter_reset"
+            case teamRecruitmentCreatedPostFilterApply = "team_recruitment_created_post_filter_apply"
             
             var team: String {
                 return "CAMPUS"

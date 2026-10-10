@@ -12,6 +12,8 @@ struct RecruitMyPostListView: ActionBindableView {
     enum Action {
         case showFilterBottomSheet(
             filterState: RecruitMyPostFilter,
+            onFilterItemTapped: (Int, FilterItemModel) -> Bool,
+            onResetTapped: () -> Void,
             onApplyTapped: ([FilterGroupModel]) -> Void
         )
         case showToast(message: String)
@@ -36,9 +38,32 @@ struct RecruitMyPostListView: ActionBindableView {
             RecruitMyPostListHeaderView(
                 totalCount: viewModel.recruitList?.totalCount ?? 0,
                 onFilterButtonTapped: {
+                    viewModel.execute(.logEvent(
+                        EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostFilter,
+                        .click,
+                        "필터"
+                    ))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
+                        onFilterItemTapped: { groupIndex, item in
+                            if let event = RecruitMyPostFilter.logEvent(groupIndex: groupIndex, title: item.title) {
+                                viewModel.execute(.logEvent(event.label, .click, event.value))
+                            }
+                            return true
+                        },
+                        onResetTapped: {
+                            viewModel.execute(.logEvent(
+                                EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostFilterReset,
+                                .click,
+                                "초기화"
+                            ))
+                        },
                         onApplyTapped: { groupModels in
+                            viewModel.execute(.logEvent(
+                                EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostFilterApply,
+                                .click,
+                                "적용하기"
+                            ))
                             guard let filter = RecruitMyPostFilter(from: groupModels) else {
                                 return
                             }
