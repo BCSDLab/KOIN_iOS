@@ -75,12 +75,22 @@ extension RecruitMyPostView {
                                 RecruitMyPostApplicantRowView(
                                     model: applicant,
                                     onApplicationTapped: {
+                                        viewModel.execute(.logEvent(
+                                            EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostApplicantSelect,
+                                            .click,
+                                            "지원자 선택"
+                                        ))
                                         sendAction(.showApplicant(
                                             recruitmentId: data.id,
                                             applicationId: applicant.applicationId
                                         ))
                                     },
                                     onDirectChatTapped: {
+                                        viewModel.execute(.logEvent(
+                                            EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostApplicantChat,
+                                            .click,
+                                            "채팅"
+                                        ))
                                         sendAction(.showDirectChat(
                                             recruitmentId: data.id,
                                             applicationId: applicant.applicationId

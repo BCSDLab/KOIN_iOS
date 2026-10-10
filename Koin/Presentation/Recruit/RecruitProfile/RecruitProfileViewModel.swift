@@ -15,6 +15,7 @@ final class RecruitProfileViewModel: SwiftUIViewModelProtocol {
         case didAppear
         case didShowToast
         case profileUpdated(RecruitProfile)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -25,10 +26,15 @@ final class RecruitProfileViewModel: SwiftUIViewModelProtocol {
 
     // MARK: - UseCase
     private let fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
 
     // MARK: - Initializer
-    init(fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase) {
+    init(
+        fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    ) {
         self.fetchMyRecruitProfileUseCase = fetchMyRecruitProfileUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 
     // MARK: - Public
@@ -40,6 +46,8 @@ final class RecruitProfileViewModel: SwiftUIViewModelProtocol {
             errorMessage = nil
         case let .profileUpdated(profile):
             self.profile = profile
+        case let .logEvent(label, category, value):
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
         }
     }
 }

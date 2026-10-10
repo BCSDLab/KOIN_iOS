@@ -62,9 +62,11 @@ extension RecruitProfileHostingController {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitMyPostListUseCase(repository: repository)
         let closeUseCase = DefaultCloseRecruitMyPostUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyPostListViewModel(
             fetchRecruitMyPostListUseCase: fetchUseCase,
-            closeRecruitMyPostUseCase: closeUseCase
+            closeRecruitMyPostUseCase: closeUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let controller = RecruitMyPostListHostingController(
             rootView: RecruitMyPostListView(viewModel: viewModel)
@@ -75,8 +77,10 @@ extension RecruitProfileHostingController {
     private func navigateToMyApplication() {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let useCase = DefaultFetchRecruitMyApplicationListUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyApplicationListViewModel(
-            fetchRecruitMyApplicationListUseCase: useCase
+            fetchRecruitMyApplicationListUseCase: useCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let controller = RecruitMyApplicationListHostingController(
             rootView: RecruitMyApplicationListView(viewModel: viewModel)
@@ -93,11 +97,13 @@ extension RecruitProfileHostingController {
         let fetchBasicInfoUseCase = DefaultFetchBasicInfoUseCase(repository: userRepository)
         let modifyBasicInfoUseCase = DefaultModifyBasicInfoUseCase(repository: userRepository)
         let upsertMyRecruitProfileUseCase = DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitProfilePostViewModel(
             fetchDeptListUseCase: fetchDeptListUseCase,
             fetchBasicInfoUseCase: fetchBasicInfoUseCase,
             modifyBasicInfoUseCase: modifyBasicInfoUseCase,
             upsertMyRecruitProfileUseCase: upsertMyRecruitProfileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             mode: mode
         )
         return RecruitProfilePostViewController(viewModel: viewModel) { [weak self] profile in

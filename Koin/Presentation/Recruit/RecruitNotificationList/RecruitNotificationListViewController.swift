@@ -16,6 +16,7 @@ final class RecruitNotificationListViewController: UIViewController {
     private let inputSubject = PassthroughSubject<RecruitNotificationListViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var notificationList: RecruitNotificationList?
+    private var isUserTap = true
 
     // MARK: - UI Components
     private let notificationListView = NotificationListView(behavior: .pagination)
@@ -84,6 +85,10 @@ private extension RecruitNotificationListViewController {
                       let id = Int(id) else {
                     return
                 }
+                if isUserTap,
+                   let title = notificationList?.notifications.first(where: { $0.id == id })?.title {
+                    inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationList, .click, title))
+                }
                 self.notificationList?.markAsRead(id: id)
                 handleNavigation(id: id)
                 inputSubject.send(.didTapNotification(id: id))
@@ -120,6 +125,10 @@ extension RecruitNotificationListViewController {
     private func tapNotification(id notificationId: Int) {
         guard let indexPath = notificationListView.indexPath(for: notificationId) else {
             return
+        }
+        isUserTap = false
+        defer {
+            isUserTap = true
         }
         notificationListView.tapRow(at: indexPath)
     }
@@ -158,8 +167,10 @@ extension RecruitNotificationListViewController {
     
     private func navigateToApplicantManagement(recruitmentId: Int) {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyPostViewModel(
             fetchRecruitMyPostDataUseCase: DefaultFetchRecruitMyPostDataUseCase(repository: repository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             recruitId: recruitmentId
         )
         let controller = RecruitMyPostHostingController(
@@ -170,8 +181,10 @@ extension RecruitNotificationListViewController {
     
     private func navigateToMyApplications() {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyApplicationListViewModel(
-            fetchRecruitMyApplicationListUseCase: DefaultFetchRecruitMyApplicationListUseCase(repository: repository)
+            fetchRecruitMyApplicationListUseCase: DefaultFetchRecruitMyApplicationListUseCase(repository: repository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let controller = RecruitMyApplicationListHostingController(
             rootView: RecruitMyApplicationListView(viewModel: viewModel)

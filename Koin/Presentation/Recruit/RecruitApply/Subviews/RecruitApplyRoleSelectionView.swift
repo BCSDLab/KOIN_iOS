@@ -13,7 +13,7 @@ import UIKit
 final class RecruitApplyRoleSelectionView: UIView {
 
     // MARK: - Publisher
-    let selectedRoleChangedPublisher = PassthroughSubject<RecruitRole?, Never>()
+    let selectedRoleChangedPublisher = PassthroughSubject<RecruitRole, Never>()
 
     // MARK: - Properties
     private let roles: [RecruitRole]

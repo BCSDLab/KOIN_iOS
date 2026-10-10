@@ -18,6 +18,7 @@ final class RecruitPostViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case submit(RecruitPostRequest)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateLoading(Bool)
@@ -31,6 +32,7 @@ final class RecruitPostViewModel: ViewModelProtocol {
     // MARK: - Properties
     private let postRecruitUseCase: PostRecruitUseCase
     private let modifyRecruitUseCase: ModifyRecruitUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -42,10 +44,12 @@ final class RecruitPostViewModel: ViewModelProtocol {
         mode: Mode,
         postRecruitUseCase: PostRecruitUseCase,
         modifyRecruitUseCase: ModifyRecruitUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.mode = mode
         self.postRecruitUseCase = postRecruitUseCase
         self.modifyRecruitUseCase = modifyRecruitUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Public
@@ -57,6 +61,8 @@ final class RecruitPostViewModel: ViewModelProtocol {
                 applyDataIfModifying()
             case let .submit(form):
                 submit(form)
+            case let .logEvent(label, category, value):
+                logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
             }
         }.store(in: &subscriptions)
         

@@ -205,10 +205,12 @@ extension CategoryHostingController {
         let fetchRecruitListUseCase = DefaultFetchRecruitListUseCase(repository: recruitRepository)
         let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
         let fetchMyRecruitProfileUseCase = DefaultFetchMyRecruitProfileUseCase(repository: recruitRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitListViewModel(
             fetchRecruitListUseCase: fetchRecruitListUseCase,
             fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase,
-            fetchMyRecruitProfileUseCase: fetchMyRecruitProfileUseCase
+            fetchMyRecruitProfileUseCase: fetchMyRecruitProfileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let rootView = RecruitListView(viewModel: viewModel)
         return RecruitListHostingController(rootView: rootView)

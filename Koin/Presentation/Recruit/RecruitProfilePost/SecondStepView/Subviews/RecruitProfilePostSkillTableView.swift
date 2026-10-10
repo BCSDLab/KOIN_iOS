@@ -18,6 +18,7 @@ final class RecruitProfilePostSkillTableView: UITableView {
     // MARK: - Properties
     let skillsChangedPublisher = PassthroughSubject<[String], Never>()
     let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    let addButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     private var skills: [String] = []
     private var footerSubscriptions = Set<AnyCancellable>()
@@ -129,10 +130,13 @@ extension RecruitProfilePostSkillTableView: UITableViewDataSource {
             withIdentifier: RecruitProfilePostAddTableFooterView.identifier
         ) as? RecruitProfilePostAddTableFooterView else { return nil }
 
-        footer.configure(title: "보유기술/자격증 추가")
+        footer.configure(title: "기술 / 자격증 추가")
         footerSubscriptions.removeAll()
         footer.addButtonTappedPublisher
-            .sink { [weak self] in self?.addSkill() }
+            .sink { [weak self] in
+                self?.addButtonTappedPublisher.send()
+                self?.addSkill()
+            }
             .store(in: &footerSubscriptions)
         return footer
     }

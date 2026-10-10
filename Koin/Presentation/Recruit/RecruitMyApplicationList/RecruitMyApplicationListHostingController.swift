@@ -28,8 +28,8 @@ final class RecruitMyApplicationListHostingController: UIHostingController<Recru
     // MARK: - Public
     func execute(action: RootView.Action) {
         switch action {
-        case .showFilterBottomSheet(let filterState, let onApplyTapped):
-            showFilterBottomSheet(filterState, onApplyTapped)
+        case .showFilterBottomSheet(let filterState, let onFilterItemTapped, let onResetTapped, let onApplyTapped):
+            showFilterBottomSheet(filterState, onFilterItemTapped, onResetTapped, onApplyTapped)
         case .showToast(let message):
             showToastMessage(message: message)
         case .showRecruitData(let id):
@@ -47,9 +47,11 @@ extension RecruitMyApplicationListHostingController {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitDataViewModel(
             fetchRecruitDataUseCase: fetchUseCase,
             deleteRecruitDataUseCase: deleteUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             recruitId: id
         )
         let controller = RecruitDataHostingController(
@@ -84,10 +86,14 @@ extension RecruitMyApplicationListHostingController {
 extension RecruitMyApplicationListHostingController {
     private func showFilterBottomSheet(
         _ filterState: RecruitMyApplicationFilter,
+        _ onFilterItemTapped: @escaping (Int, FilterItemModel) -> Bool,
+        _ onResetTapped: @escaping () -> Void,
         _ onApplyTapped: @escaping ([FilterGroupModel]) -> Void
     ) {
         let filterBottomSheetView = FilterBottomSheetView(
             groupModels: filterState.toGroupModels(),
+            onFilterItemTapped: onFilterItemTapped,
+            onResetTapped: onResetTapped,
             onApplyTapped: onApplyTapped
         )
         let bottomSheetViewController = BottomSheetViewControllerB(contentView: filterBottomSheetView)

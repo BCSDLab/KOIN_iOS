@@ -13,7 +13,7 @@ import UIKit
 final class RecruitApplySecondStepView: UIScrollView {
 
     // MARK: - Publisher
-    let selectedRoleChangedPublisher = PassthroughSubject<RecruitRole?, Never>()
+    let selectedRoleChangedPublisher = PassthroughSubject<RecruitRole, Never>()
     var motivationChangedPublisher: AnyPublisher<String?, Never> {
         motivationView.textChangedPublisher.eraseToAnyPublisher()
     }

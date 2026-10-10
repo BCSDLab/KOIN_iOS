@@ -22,6 +22,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
         case delete(id: Int)
         case didShowToast
         case updateProfile(RecruitProfile)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - State
@@ -56,6 +57,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
     private let fetchRecruitListUseCase: FetchRecruitListUseCase
     private let fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase
     private let fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private var fetchListTask: Task<Void, Never>?
     private var myRecruitProfile: RecruitProfile?
@@ -64,11 +66,13 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
     init(
         fetchRecruitListUseCase: FetchRecruitListUseCase,
         fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase,
-        fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase
+        fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.fetchRecruitListUseCase = fetchRecruitListUseCase
         self.fetchRecruitNotificationListUseCase = fetchRecruitNotificationListUseCase
         self.fetchMyRecruitProfileUseCase = fetchMyRecruitProfileUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Public
@@ -97,6 +101,8 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
             errorMessage = nil
         case .updateProfile(let profile):
             myRecruitProfile = profile
+        case let .logEvent(label, category, value):
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
 }
@@ -201,5 +207,19 @@ extension RecruitListViewModel {
                 errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
+    }
+}
+
+extension RecruitListViewModel {
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(
+            label: label,
+            category: category,
+            value: value
+        )
     }
 }

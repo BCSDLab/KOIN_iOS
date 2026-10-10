@@ -19,6 +19,7 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
         case viewDidLoad
         case fetchBasicInfo
         case submit(basicInfo: BasicInfo, request: RecruitProfileRequest)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     enum Output {
@@ -37,6 +38,7 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
     private let fetchBasicInfoUseCase: FetchBasicInfoUseCase
     private let modifyBasicInfoUseCase: ModifyBasicInfoUseCase
     private let upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
 
     // MARK: - Publisher
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -49,12 +51,14 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
         fetchBasicInfoUseCase: FetchBasicInfoUseCase,
         modifyBasicInfoUseCase: ModifyBasicInfoUseCase,
         upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         mode: Mode
     ) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.fetchBasicInfoUseCase = fetchBasicInfoUseCase
         self.modifyBasicInfoUseCase = modifyBasicInfoUseCase
         self.upsertMyRecruitProfileUseCase = upsertMyRecruitProfileUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.mode = mode
     }
 
@@ -77,6 +81,8 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
                 fetchBasicInfo()
             case let .submit(basicInfo, request):
                 submit(basicInfo: basicInfo, request: request)
+            case let .logEvent(label, category, value):
+                makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }
         .store(in: &subscriptions)
@@ -136,5 +142,19 @@ extension RecruitProfilePostViewModel {
                 outputSubject.send(.showToast(message))
             }
         }
+    }
+}
+
+extension RecruitProfilePostViewModel {
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(
+            label: label,
+            category: category,
+            value: value
+        )
     }
 }

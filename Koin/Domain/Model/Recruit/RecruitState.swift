@@ -22,4 +22,15 @@ enum RecruitState: String {
             2
         }
     }
+    
+    var logValue: String {
+        switch self {
+        case .all:
+            "전체"
+        case .recruiting:
+            "모집 중"
+        case .closed:
+            "모집 완료"
+        }
+    }
 }

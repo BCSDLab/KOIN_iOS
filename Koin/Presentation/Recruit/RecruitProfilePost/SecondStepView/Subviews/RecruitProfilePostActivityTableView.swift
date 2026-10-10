@@ -28,6 +28,10 @@ final class RecruitProfilePostActivityTableView: UITableView {
     }
     
     // MARK: - Properties
+    let addButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let editButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let addCompleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    let editCompleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let activitiesChangedPublisher = PassthroughSubject<[RecruitProfileActivityRequest], Never>()
     let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
     
@@ -98,6 +102,7 @@ final class RecruitProfilePostActivityTableView: UITableView {
 
 extension RecruitProfilePostActivityTableView {
     private func addActivity() {
+        addButtonTappedPublisher.send()
         dropdownHost?.dismissPresented()
         let indexPath = IndexPath(row: rows.count, section: 0)
         rows.append(Row(
@@ -112,6 +117,7 @@ extension RecruitProfilePostActivityTableView {
     private func editActivity(at indexPath: IndexPath) {
         guard rows.indices.contains(indexPath.row),
               let committed = rows[indexPath.row].committed else { return }
+        editButtonTappedPublisher.send()
         dropdownHost?.dismissPresented()
         rows[indexPath.row].draft = committed
         rows[indexPath.row].mode = .editing
@@ -122,6 +128,11 @@ extension RecruitProfilePostActivityTableView {
     private func completeActivity(at indexPath: IndexPath) {
         guard rows.indices.contains(indexPath.row),
               rows[indexPath.row].draft.isValid else { return }
+        if rows[indexPath.row].committed == nil {
+            addCompleteButtonTappedPublisher.send()
+        } else {
+            editCompleteButtonTappedPublisher.send()
+        }
         dropdownHost?.dismissPresented()
         rows[indexPath.row].committed = rows[indexPath.row].draft
         rows[indexPath.row].mode = .display

@@ -97,6 +97,11 @@ final class RecruitProfilePostViewController: UIViewController {
     private lazy var secondStepDropdownHost = KoinDropdownHost(scrollView: secondStepView)
     private lazy var departmentDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
         guard let self else { return }
+        makeLogAnalyticsEvent(
+            post: .teamRecruitmentProfileCreateMajor,
+            modify: .teamRecruitmentProfileModifyMajorSelect,
+            value: department
+        )
         basicInfo.department = department
         firstStepView.configure(department: department)
         nextButton.updateState(isEnabled: basicInfo.isValid)
@@ -158,6 +163,11 @@ extension RecruitProfilePostViewController {
         guard isFirstStep && basicInfo.isValid else {
             return
         }
+        makeLogAnalyticsEvent(
+            post: .teamRecruitmentProfileCreateNext,
+            modify: .teamRecruitmentProfileModifyNext,
+            value: "다음"
+        )
         showSecondStep()
     }
     
@@ -169,8 +179,26 @@ extension RecruitProfilePostViewController {
         guard basicInfo.isValid && request.isValid else {
             return
         }
+        makeLogAnalyticsEvent(
+            post: .teamRecruitmentProfileCreateSubmit,
+            modify: .teamRecruitmentProfileModifySubmit,
+            value: completeButtonTitle
+        )
+        let leftButtonAction: ()->Void = { [weak self] in
+            self?.makeLogAnalyticsEvent(
+                post: .teamRecruitmentProfileCreateSubmitCancel,
+                modify: .teamRecruitmentProfileModifySubmitCancel,
+                value: "취소하기"
+            )
+        }
         let rightButtonAction = { [weak self] in
             guard let self else { return }
+            makeLogAnalyticsEvent(
+                post: .teamRecruitmentProfileCreateSubmitConfirm,
+                modify: .teamRecruitmentProfileModifySubmitConfirm,
+                modifyCategory: .result,
+                value: completeModalButtonTitle
+            )
             inputSubject.send(.submit(basicInfo: basicInfo, request: request))
         }
         let modalViewController = KoinModalViewController(
@@ -179,6 +207,7 @@ extension RecruitProfilePostViewController {
                 content: .singleTitle(text: completeModalTitle),
                 button: .buttons(
                     leftButtonTitle: "취소하기",
+                    leftButtonAction: leftButtonAction,
                     rightButtonTitle: completeModalButtonTitle,
                     rightButtonAction: rightButtonAction
                 )
@@ -232,6 +261,11 @@ extension RecruitProfilePostViewController {
 
         firstStepView.loadInfoButtonTappedPublisher
             .sink { [weak self] in
+                self?.makeLogAnalyticsEvent(
+                    post: .teamRecruitmentProfileCreateLoad,
+                    modify: .teamRecruitmentProfileModifyLoad,
+                    value: "회원정보 불러오기"
+                )
                 self?.inputSubject.send(.fetchBasicInfo)
             }
             .store(in: &subscriptions)
@@ -292,6 +326,56 @@ extension RecruitProfilePostViewController {
                 guard let self else { return }
                 request.introduction = introduction
                 updateCompleteButtonState()
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.skillAddButtonTappedPublisher
+            .sink { [weak self] in
+                self?.makeLogAnalyticsEvent(
+                    post: .teamRecruitmentProfileCreateSkillAdd,
+                    modify: .teamRecruitmentProfileModifySkillAdd,
+                    value: "기술 / 자격증 추가"
+                )
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.activityAddButtonTappedPublisher
+            .sink { [weak self] in
+                self?.makeLogAnalyticsEvent(
+                    post: .teamRecruitmentProfileCreateActivityAdd,
+                    modify: .teamRecruitmentProfileModifyActivityAdd,
+                    value: "활동 이력 추가"
+                )
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.activityEditButtonTappedPublisher
+            .sink { [weak self] in
+                self?.makeLogAnalyticsEvent(
+                    post: .teamRecruitmentProfileCreateActivityModify,
+                    modify: .teamRecruitmentProfileModifyActivityModify,
+                    value: "수정"
+                )
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.activityAddCompleteButtonTappedPublisher
+            .sink { [weak self] in
+                self?.makeLogAnalyticsEvent(
+                    post: .teamRecruitmentProfileCreateActivityAddComplete,
+                    modify: .teamRecruitmentProfileModifyActivityComplete,
+                    value: "완료"
+                )
+            }
+            .store(in: &subscriptions)
+
+        secondStepView.activityEditCompleteButtonTappedPublisher
+            .sink { [weak self] in
+                self?.makeLogAnalyticsEvent(
+                    post: .teamRecruitmentProfileCreateActivityModifyComplete,
+                    modify: .teamRecruitmentProfileModifyActivityModifyComplete,
+                    value: "수정하기"
+                )
             }
             .store(in: &subscriptions)
 
@@ -482,6 +566,22 @@ extension RecruitProfilePostViewController {
         ) { [weak self] in
             self?.firstStepView.contentInset.bottom = 16
             self?.secondStepView.contentInset.bottom = 16
+        }
+    }
+}
+
+extension RecruitProfilePostViewController {
+    private func makeLogAnalyticsEvent(
+        post postLabel: EventParameter.EventLabel.Campus,
+        modify modifyLabel: EventParameter.EventLabel.Campus,
+        modifyCategory: EventParameter.EventCategory = .click,
+        value: Any
+    ) {
+        switch viewModel.mode {
+        case .post:
+            inputSubject.send(.logEvent(postLabel, .click, value))
+        case .modify:
+            inputSubject.send(.logEvent(modifyLabel, modifyCategory, value))
         }
     }
 }

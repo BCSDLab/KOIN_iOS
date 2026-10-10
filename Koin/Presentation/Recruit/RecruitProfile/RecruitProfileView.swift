@@ -37,10 +37,12 @@ struct RecruitProfileView: ActionBindableView {
                 VStack(spacing: 24) {
                     if let profile = viewModel.profile {
                         RecruitProfileCardView(profile: profile) {
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentProfileModify, .click, "프로필 수정하기"))
                             sendAction(.showProfileModify(profile: profile))
                         }
                     } else {
                         RecruitProfileEmptyCardView {
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentProfileCreate, .click, "프로필 작성하기"))
                             sendAction(.showProfilePost)
                         }
                     }
@@ -50,6 +52,7 @@ struct RecruitProfileView: ActionBindableView {
                         title: viewModel.profile == nil ? "내가 작성한 모집글 모아보기" : "내가 작성한 모집글",
                         description: "작성자 모집글과 지원자를 한눈에 확인할 수 있어요."
                     ) {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentProfileCreated, .click, "내가 작성한 모집글"))
                         sendAction(.showMyPost)
                     }
                     
@@ -58,6 +61,7 @@ struct RecruitProfileView: ActionBindableView {
                         title: viewModel.profile == nil ? "내가 지원한 모집글 모아보기" : "내가 지원한 모집글",
                         description: "지원한 모집글과 지원 상태를 확인 할 수 있어요."
                     ) {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentProfileApplied, .click, "내가 지원한 모집글"))
                         sendAction(.showMyApplication)
                     }
                 }

@@ -47,8 +47,8 @@ final class RecruitListHostingController: UIHostingController<RecruitListView>, 
         switch action {
         case .configureRightButtons(let hasNotification):
             updateNotificationBarButton(hasNotification)
-        case .showFilterBottomSheet(let filterState, let onApplyTapped):
-            showFilterBottomSheet(filterState, onApplyTapped)
+        case .showFilterBottomSheet(let filterState, let onFilterItemTapped, let onResetTapped, let onApplyTapped):
+            showFilterBottomSheet(filterState, onFilterItemTapped, onResetTapped, onApplyTapped)
         case .showToast(let message):
             showToastMessage(message: message, bottomInset: toastMessageBottomInset)
         case .showLoginToast:
@@ -72,7 +72,13 @@ extension RecruitListHostingController: RecruitDataHostingControllerDelegate {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
-        let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = RecruitDataViewModel(
+            fetchRecruitDataUseCase: fetchUseCase,
+            deleteRecruitDataUseCase: deleteUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            recruitId: id
+        )
         let controller = RecruitDataHostingController(
             rootView: RecruitDataView(viewModel: viewModel),
             delegate: self
@@ -125,10 +131,12 @@ extension RecruitListHostingController {
         let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
         let markAsReadRecruitNotificationUseCase = DefaultMarkAsReadRecruitNotificationUseCase(repository: recruitRepository)
         let deleteRecruitNotificationUseCase = DefaultDeleteRecruitNotificationUseCase(repository: recruitRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitNotificationListViewModel(
             fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase,
             markAsReadRecruitNotificationUseCase: markAsReadRecruitNotificationUseCase,
-            deleteRecruitNotificationUseCase: deleteRecruitNotificationUseCase
+            deleteRecruitNotificationUseCase: deleteRecruitNotificationUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = RecruitNotificationListViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
@@ -136,7 +144,11 @@ extension RecruitListHostingController {
     private func showRecruitProfile() {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchMyRecruitProfileUseCase = DefaultFetchMyRecruitProfileUseCase(repository: repository)
-        let viewModel = RecruitProfileViewModel(fetchMyRecruitProfileUseCase: fetchMyRecruitProfileUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = RecruitProfileViewModel(
+            fetchMyRecruitProfileUseCase: fetchMyRecruitProfileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = RecruitProfileHostingController(
             rootView: RecruitProfileView(viewModel: viewModel)
         )
@@ -146,10 +158,12 @@ extension RecruitListHostingController {
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitPostViewModel(
             mode: .post,
             postRecruitUseCase: postRecruitUseCase,
-            modifyRecruitUseCase: modifyRecruitUseCase
+            modifyRecruitUseCase: modifyRecruitUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = RecruitPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
@@ -157,11 +171,13 @@ extension RecruitListHostingController {
     private func showProfilePost() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitProfilePostViewModel(
             fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
             fetchBasicInfoUseCase: DefaultFetchBasicInfoUseCase(repository: userRepository),
             modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
             upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             mode: .post
         )
         let viewController = RecruitProfilePostViewController(viewModel: viewModel) { [weak self] profile in
@@ -174,10 +190,14 @@ extension RecruitListHostingController {
 extension RecruitListHostingController {
     private func showFilterBottomSheet(
         _ filterState: RecruitListFilter,
+        _ onFilterItemTapped: @escaping (Int, FilterItemModel)->Bool,
+        _ onResetTapped: @escaping ()->Void,
         _ onApplyTapped: @escaping ([FilterGroupModel])->Void
     ) {
         let filterBottomSheetView = FilterBottomSheetView(
             groupModels: filterState.toGroupModels(),
+            onFilterItemTapped: onFilterItemTapped,
+            onResetTapped: onResetTapped,
             onApplyTapped: onApplyTapped
         )
         let bottomSheetViewController = BottomSheetViewControllerB(contentView: filterBottomSheetView)
@@ -197,6 +217,11 @@ extension RecruitListHostingController {
             showLoginToast()
             return
         }
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.teamRecruitmentNotification,
+            category: .click,
+            value: "알림"
+        )
         showRecruitNotificationList()
     }
     
@@ -205,6 +230,11 @@ extension RecruitListHostingController {
             showLoginToast()
             return
         }
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.teamRecruitmentProfile,
+            category: .click,
+            value: "프로필"
+        )
         showRecruitProfile()
     }
 }

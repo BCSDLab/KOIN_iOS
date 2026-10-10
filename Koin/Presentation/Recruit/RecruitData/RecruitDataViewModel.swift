@@ -17,6 +17,7 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
         case delete
         case applicationSubmitted
         case didShowToast
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - State
@@ -35,6 +36,7 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
     private let recruitId: Int
     private let fetchRecruitDataUseCase: FetchRecruitDataUseCase
     private let deleteRecruitDataUseCase: DeleteRecruitDataUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private var fetchTask: Task<Void, Never>?
     private var deleteTask: Task<Void, Never>?
     
@@ -42,10 +44,12 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
     init(
         fetchRecruitDataUseCase: FetchRecruitDataUseCase,
         deleteRecruitDataUseCase: DeleteRecruitDataUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         recruitId: Int
     ) {
         self.fetchRecruitDataUseCase = fetchRecruitDataUseCase
         self.deleteRecruitDataUseCase = deleteRecruitDataUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.recruitId = recruitId
     }
     
@@ -60,6 +64,8 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
             applicationSubmitted()
         case .didShowToast:
             errorMessage = nil
+        case let .logEvent(label, category, value):
+            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
         }
     }
 }

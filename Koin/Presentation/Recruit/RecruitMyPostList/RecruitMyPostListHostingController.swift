@@ -28,8 +28,8 @@ final class RecruitMyPostListHostingController: UIHostingController<RecruitMyPos
     // MARK: - Public
     func execute(action: RootView.Action) {
         switch action {
-        case .showFilterBottomSheet(let filterState, let onApplyTapped):
-            showFilterBottomSheet(filterState, onApplyTapped)
+        case .showFilterBottomSheet(let filterState, let onFilterItemTapped, let onResetTapped, let onApplyTapped):
+            showFilterBottomSheet(filterState, onFilterItemTapped, onResetTapped, onApplyTapped)
         case .showToast(let message):
             showToastMessage(message: message)
         case .showRecruitData(let id):
@@ -53,9 +53,11 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitDataViewModel(
             fetchRecruitDataUseCase: fetchUseCase,
             deleteRecruitDataUseCase: deleteUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             recruitId: id
         )
         let controller = RecruitDataHostingController(
@@ -81,8 +83,10 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     private func showApplicants(recruitId: Int) {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitMyPostDataUseCase = DefaultFetchRecruitMyPostDataUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyPostViewModel(
             fetchRecruitMyPostDataUseCase: fetchRecruitMyPostDataUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             recruitId: recruitId
         )
         let controller = RecruitMyPostHostingController(
@@ -92,6 +96,21 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     }
 
     private func showCloseModal(recruitId: Int) {
+        let onCancelButtonTapped: ()->Void = { [weak self] in
+            self?.rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostCloseCancel,
+                category: .click,
+                value: "취소하기"
+            )
+        }
+        let onCloseButtonTapped: ()->Void = { [weak self] in
+            self?.rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostCloseConfirm,
+                category: .click,
+                value: "마감하기"
+            )
+            self?.rootView.close(id: recruitId)
+        }
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .new,
             content: .titles(
@@ -100,10 +119,9 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
             ),
             button: .buttons(
                 leftButtonTitle: "취소하기",
+                leftButtonAction: onCancelButtonTapped,
                 rightButtonTitle: "마감하기",
-                rightButtonAction: { [weak self] in
-                    self?.rootView.close(id: recruitId)
-                }
+                rightButtonAction: onCloseButtonTapped
             ),
             layout: .init(width: 320)
         ))
@@ -114,10 +132,14 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
 extension RecruitMyPostListHostingController {
     private func showFilterBottomSheet(
         _ filterState: RecruitMyPostFilter,
+        _ onFilterItemTapped: @escaping (Int, FilterItemModel) -> Bool,
+        _ onResetTapped: @escaping () -> Void,
         _ onApplyTapped: @escaping ([FilterGroupModel]) -> Void
     ) {
         let filterBottomSheetView = FilterBottomSheetView(
             groupModels: filterState.toGroupModels(),
+            onFilterItemTapped: onFilterItemTapped,
+            onResetTapped: onResetTapped,
             onApplyTapped: onApplyTapped
         )
         let bottomSheetViewController = BottomSheetViewControllerB(contentView: filterBottomSheetView)

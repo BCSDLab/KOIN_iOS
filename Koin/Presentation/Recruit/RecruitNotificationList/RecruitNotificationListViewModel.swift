@@ -18,6 +18,7 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
         case deleteNotification(id: Int)
         case deleteAllNotifications
         case markAllAsRead
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     enum Output {
@@ -31,6 +32,7 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
     private let fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase
     private let markAsReadRecruitNotificationUseCase: MarkAsReadRecruitNotificationUseCase
     private let deleteRecruitNotificationUseCase: DeleteRecruitNotificationUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var notificationList: RecruitNotificationList?
@@ -42,11 +44,13 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
         fetchRecruitNotificationListUseCase: FetchRecruitNotificationListUseCase,
         markAsReadRecruitNotificationUseCase: MarkAsReadRecruitNotificationUseCase,
         deleteRecruitNotificationUseCase: DeleteRecruitNotificationUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         notificationId: Int? = nil
     ) {
         self.fetchRecruitNotificationListUseCase = fetchRecruitNotificationListUseCase
         self.markAsReadRecruitNotificationUseCase = markAsReadRecruitNotificationUseCase
         self.deleteRecruitNotificationUseCase = deleteRecruitNotificationUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.notificationId = notificationId
     }
     
@@ -72,6 +76,8 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
             case .markAllAsRead:
                 self?.notificationList?.markAllAsRead()
                 self?.markAllAsRead()
+            case let .logEvent(label, category, value):
+                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             }
         }
         .store(in: &subscriptions)
@@ -195,5 +201,9 @@ private extension RecruitNotificationListViewModel {
                 }
             }
         }
+    }
+    
+    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

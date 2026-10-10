@@ -28,6 +28,22 @@ final class RecruitPostViewController: UIViewController {
             return "수정하기"
         }
     }
+    private var submitModalMessage: String {
+        switch viewModel.mode {
+        case .post:
+            return "해당 모집글을 등록하시겠습니까?"
+        case .modify:
+            return "해당 모집글을 수정하시겠습니까?"
+        }
+    }
+    private var submitLogValue: String {
+        switch viewModel.mode {
+        case .post:
+            return "등록하기"
+        case .modify:
+            return "수정 완료"
+        }
+    }
     private var completionMessage: String {
         switch viewModel.mode {
         case .post:
@@ -90,6 +106,7 @@ final class RecruitPostViewController: UIViewController {
     private lazy var categoryDropdown = dropdownHost.makeDropdown(
         anchor: categoryView.dropdownAnchor,
         contentView: RecruitPostCategoryDropdownView { [weak self] category in
+            self?.logEvent(post: .teamRecruitmentRecruitCategory, modify: .teamRecruitmentPostEditCategory, value: category.rawValue)
             self?.request.category = category
             self?.categoryView.configure(category: category)
         },
@@ -185,6 +202,7 @@ extension RecruitPostViewController {
         }.store(in: &subscriptions)
         
         meetingTypeView.meetingTypeChangedPublisher.sink { [weak self] meetingType in
+            self?.logEvent(post: .teamRecruitmentRecruitMethod, modify: .teamRecruitmentPostEditMethod, value: meetingType.logValue)
             self?.request.meetingType = meetingType
         }.store(in: &subscriptions)
         
@@ -234,7 +252,12 @@ extension RecruitPostViewController {
         }.store(in: &subscriptions)
         
         roleView.roleTypeChangedPublisher.sink { [weak self] roleType in
+            self?.logEvent(post: .teamRecruitmentRecruitRole, modify: .teamRecruitmentPostEditRole, value: "역할 구분 없이 모집하기")
             self?.request.type = roleType
+        }.store(in: &subscriptions)
+        
+        roleView.addRoleButtonTappedPublisher.sink { [weak self] in
+            self?.logEvent(post: .teamRecruitmentRecruitRole, modify: .teamRecruitmentPostEditRole, value: "역할 추가")
         }.store(in: &subscriptions)
         
         roleView.rolesChangedPublisher.sink { [weak self] roles in
@@ -304,7 +327,13 @@ extension RecruitPostViewController {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
-        let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = RecruitDataViewModel(
+            fetchRecruitDataUseCase: fetchUseCase,
+            deleteRecruitDataUseCase: deleteUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            recruitId: id
+        )
         let viewController = RecruitDataHostingController(
             rootView: RecruitDataView(viewModel: viewModel),
             delegate: nil
@@ -321,7 +350,13 @@ extension RecruitPostViewController {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitDataUseCase(repository: repository)
         let deleteUseCase = DefaultDeleteRecruitDataUseCase(repository: repository)
-        let viewModel = RecruitDataViewModel(fetchRecruitDataUseCase: fetchUseCase, deleteRecruitDataUseCase: deleteUseCase, recruitId: id)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = RecruitDataViewModel(
+            fetchRecruitDataUseCase: fetchUseCase,
+            deleteRecruitDataUseCase: deleteUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            recruitId: id
+        )
         let viewController = RecruitDataHostingController(
             rootView: RecruitDataView(viewModel: viewModel),
             delegate: nil
@@ -369,9 +404,51 @@ extension RecruitPostViewController {
     
     @objc private func postButtonTapped() {
         guard !dropdownHost.isPresenting else { return }
-        postButton.isUserInteractionEnabled = false
         view.endEditing(true)
+        logEvent(post: .teamRecruitmentRecruitSubmit, modify: .teamRecruitmentPostEditSubmit, value: submitLogValue)
+        showSubmitModal()
+    }
+    
+    private func submit() {
+        postButton.isUserInteractionEnabled = false
         inputSubject.send(.submit(request))
+    }
+    
+    private func logEvent(
+        post postLabel: EventParameter.EventLabel.Campus,
+        modify modifyLabel: EventParameter.EventLabel.Campus,
+        value: Any
+    ) {
+        switch viewModel.mode {
+        case .post:
+            inputSubject.send(.logEvent(postLabel, .click, value))
+        case .modify:
+            inputSubject.send(.logEvent(modifyLabel, .click, value))
+        }
+    }
+    
+    private func showSubmitModal() {
+        let onCancelButtonTapped: ()->Void = { [weak self] in
+            self?.logEvent(post: .teamRecruitmentRecruitSubmitCancel, modify: .teamRecruitmentPostEditSubmitCancel, value: "취소하기")
+        }
+        let onSubmitButtonTapped: ()->Void = { [weak self] in
+            guard let self else { return }
+            logEvent(post: .teamRecruitmentRecruitSubmitConfirm, modify: .teamRecruitmentPostEditSubmitConfirm, value: submitButtonTitle)
+            submit()
+        }
+        let modalViewController = KoinModalViewController(
+            configuration: .init(
+                appearance: .new,
+                content: .singleTitle(text: submitModalMessage),
+                button: .buttons(
+                    leftButtonTitle: "취소하기",
+                    leftButtonAction: onCancelButtonTapped,
+                    rightButtonTitle: submitButtonTitle,
+                    rightButtonAction: onSubmitButtonTapped
+                )
+            )
+        )
+        present(modalViewController, animated: true)
     }
 }
 

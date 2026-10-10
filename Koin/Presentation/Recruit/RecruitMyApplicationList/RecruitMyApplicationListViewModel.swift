@@ -17,6 +17,7 @@ final class RecruitMyApplicationListViewModel: SwiftUIViewModelProtocol {
         case updateFilter(RecruitMyApplicationFilter)
         case loadNextPage
         case didShowToast
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -27,14 +28,19 @@ final class RecruitMyApplicationListViewModel: SwiftUIViewModelProtocol {
 
     // MARK: - Properties
     private let fetchRecruitMyApplicationListUseCase: FetchRecruitMyApplicationListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
 
     var recruits: [RecruitMyApplicationRow] {
         recruitList?.recruits ?? []
     }
 
     // MARK: - Initializer
-    init(fetchRecruitMyApplicationListUseCase: FetchRecruitMyApplicationListUseCase) {
+    init(
+        fetchRecruitMyApplicationListUseCase: FetchRecruitMyApplicationListUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    ) {
         self.fetchRecruitMyApplicationListUseCase = fetchRecruitMyApplicationListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 
     // MARK: - Public
@@ -50,6 +56,8 @@ final class RecruitMyApplicationListViewModel: SwiftUIViewModelProtocol {
             loadNextPage()
         case .didShowToast:
             errorMessage = nil
+        case let .logEvent(label, category, value):
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
 }
@@ -106,5 +114,19 @@ extension RecruitMyApplicationListViewModel {
                 errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
+    }
+}
+
+extension RecruitMyApplicationListViewModel {
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(
+            label: label,
+            category: category,
+            value: value
+        )
     }
 }

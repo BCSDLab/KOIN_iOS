@@ -18,6 +18,21 @@ final class RecruitProfilePostSecondStepView: UIScrollView {
     let activitiesChangedPublisher = PassthroughSubject<[RecruitProfileActivityRequest], Never>()
     let introductionChangedPublisher = PassthroughSubject<String?, Never>()
     let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    var skillAddButtonTappedPublisher: AnyPublisher<Void, Never> {
+        skillTableView.addButtonTappedPublisher.eraseToAnyPublisher()
+    }
+    var activityAddButtonTappedPublisher: AnyPublisher<Void, Never> {
+        activityTableView.addButtonTappedPublisher.eraseToAnyPublisher()
+    }
+    var activityEditButtonTappedPublisher: AnyPublisher<Void, Never> {
+        activityTableView.editButtonTappedPublisher.eraseToAnyPublisher()
+    }
+    var activityAddCompleteButtonTappedPublisher: AnyPublisher<Void, Never> {
+        activityTableView.addCompleteButtonTappedPublisher.eraseToAnyPublisher()
+    }
+    var activityEditCompleteButtonTappedPublisher: AnyPublisher<Void, Never> {
+        activityTableView.editCompleteButtonTappedPublisher.eraseToAnyPublisher()
+    }
 
     // MARK: - Properties
     private var subscriptions = Set<AnyCancellable>()

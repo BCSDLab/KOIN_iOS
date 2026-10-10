@@ -104,9 +104,19 @@ extension RecruitDataHostingController {
     @objc private func rightBarButtonItemTapped() {
         let popUpViewController = RecruitDataPopUpViewController(
             onEditButtonTapped: { [weak self] in
+                self?.rootView.makeLogAnalyticsEvent(
+                    label: EventParameter.EventLabel.Campus.teamRecruitmentPostEdit,
+                    category: .click,
+                    value: "편집하기"
+                )
                 self?.navigateToEdit()
             },
             onDeleteButtonTapped: { [weak self] in
+                self?.rootView.makeLogAnalyticsEvent(
+                    label: EventParameter.EventLabel.Campus.teamRecruitmentPostDelete,
+                    category: .click,
+                    value: "삭제하기"
+                )
                 self?.showDeleteModal()
             }
         )
@@ -118,19 +128,33 @@ extension RecruitDataHostingController {
     }
     
     private func showDeleteModal() {
+        let onCancelButtonTapped: ()->Void = { [weak self] in
+            self?.rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.teamRecruitmentPostDeleteCancel,
+                category: .click,
+                value: "취소하기"
+            )
+        }
         let onDeleteButtonTapped: ()->Void = { [weak self] in
+            self?.rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.teamRecruitmentPostDeleteConfirm,
+                category: .click,
+                value: "삭제하기"
+            )
             self?.rootView.didTapDelete()
         }
-        let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .new,
-            content: .singleTitle(text: "해당 모집글을 삭제하시겠습니까?"),
-            button: .buttons(
-                leftButtonTitle: "취소하기",
-                leftButtonAction: nil,
-                rightButtonTitle: "삭제하기",
-                rightButtonAction: onDeleteButtonTapped
+        let modalViewController = KoinModalViewController(
+            configuration: .init(
+                appearance: .new,
+                content: .singleTitle(text: "해당 모집글을 삭제하시겠습니까?"),
+                button: .buttons(
+                    leftButtonTitle: "취소하기",
+                    leftButtonAction: onCancelButtonTapped,
+                    rightButtonTitle: "삭제하기",
+                    rightButtonAction: onDeleteButtonTapped
+                )
             )
-        ))
+        )
         present(modalViewController, animated: true)
     }
 }
@@ -142,8 +166,10 @@ extension RecruitDataHostingController {
         }
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitMyPostDataUseCase = DefaultFetchRecruitMyPostDataUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyPostViewModel(
             fetchRecruitMyPostDataUseCase: fetchRecruitMyPostDataUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             recruitId: id
         )
         let controller = RecruitMyPostHostingController(
@@ -157,12 +183,14 @@ extension RecruitDataHostingController {
         }
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitApplyViewModel(
             fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
             fetchMyRecruitProfileUseCase: DefaultFetchMyRecruitProfileUseCase(repository: recruitRepository),
             modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
             upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
-            applyRecruitUseCase: DefaultApplyRecruitUseCase(repository: recruitRepository)
+            applyRecruitUseCase: DefaultApplyRecruitUseCase(repository: recruitRepository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = RecruitApplyViewController(
             viewModel: viewModel,
@@ -175,11 +203,13 @@ extension RecruitDataHostingController {
     private func navigateToProfilePost() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitProfilePostViewModel(
             fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
             fetchBasicInfoUseCase: DefaultFetchBasicInfoUseCase(repository: userRepository),
             modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
             upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             mode: .post
         )
         let viewController = RecruitProfilePostViewController(viewModel: viewModel) { [weak self] _ in
@@ -203,10 +233,12 @@ extension RecruitDataHostingController {
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitPostViewModel(
             mode: .modify(data: data),
             postRecruitUseCase: postRecruitUseCase,
-            modifyRecruitUseCase: modifyRecruitUseCase
+            modifyRecruitUseCase: modifyRecruitUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = RecruitPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)

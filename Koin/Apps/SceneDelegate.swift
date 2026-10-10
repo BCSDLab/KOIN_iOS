@@ -353,10 +353,12 @@ extension SceneDelegate {
         let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
         let markAsReadRecruitNotificationUseCase = DefaultMarkAsReadRecruitNotificationUseCase(repository: recruitRepository)
         let deleteRecruitNotificationUseCase = DefaultDeleteRecruitNotificationUseCase(repository: recruitRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitNotificationListViewModel(
             fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase,
             markAsReadRecruitNotificationUseCase: markAsReadRecruitNotificationUseCase,
             deleteRecruitNotificationUseCase: deleteRecruitNotificationUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             notificationId: notificationId
         )
         return RecruitNotificationListViewController(viewModel: viewModel)

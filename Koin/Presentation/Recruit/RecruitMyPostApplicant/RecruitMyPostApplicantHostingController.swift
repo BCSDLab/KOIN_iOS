@@ -29,8 +29,8 @@ final class RecruitMyPostApplicantHostingController: UIHostingController<Recruit
     // MARK: - Public
     func execute(action: RootView.Action) {
         switch action {
-        case .showDecisionModal(let decision):
-            showDecisionModal(decision)
+        case .showDecisionModal(let decision, let onCancelTapped, let onDecideTapped):
+            showDecisionModal(decision, onCancelTapped, onDecideTapped)
         case .showDirectChat(let recruitmentId, let applicationId):
             showDirectChat(recruitmentId: recruitmentId, applicationId: applicationId)
         case .showToast(let message):
@@ -40,7 +40,11 @@ final class RecruitMyPostApplicantHostingController: UIHostingController<Recruit
 }
 
 extension RecruitMyPostApplicantHostingController {
-    private func showDecisionModal(_ decision: RecruitApplicantDecision) {
+    private func showDecisionModal(
+        _ decision: RecruitApplicantDecision,
+        _ onCancelTapped: @escaping () -> Void,
+        _ onDecideTapped: @escaping () -> Void
+    ) {
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .new,
             content: .titles(
@@ -49,10 +53,9 @@ extension RecruitMyPostApplicantHostingController {
             ),
             button: .buttons(
                 leftButtonTitle: "취소하기",
+                leftButtonAction: onCancelTapped,
                 rightButtonTitle: "\(decision.rawValue)하기",
-                rightButtonAction: { [weak self] in
-                    self?.rootView.decide(decision)
-                }
+                rightButtonAction: onDecideTapped
             )
         ))
         present(modalViewController, animated: true)
