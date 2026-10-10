@@ -195,7 +195,7 @@ extension RecruitApplyViewController {
             }
             .store(in: &subscriptions)
         firstStepView.didChangeHeightPublisher
-            .sink { [weak self] in
+            .sink { [weak self] (section, heightChanged) in
                 guard let self else { return }
                 view.layoutIfNeeded()
                 UIView.animate(
@@ -205,6 +205,8 @@ extension RecruitApplyViewController {
                     self.firstStepView.applyPendingSizeChange()
                     self.updateNextButtonState()
                     self.view.layoutIfNeeded()
+                    guard heightChanged > 0 else { return }
+                    self.firstStepView.scrollBottomToVisible(of: section)
                 }
             }
             .store(in: &subscriptions)

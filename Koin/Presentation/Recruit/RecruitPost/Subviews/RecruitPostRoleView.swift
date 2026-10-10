@@ -15,7 +15,7 @@ final class RecruitPostRoleView: UIView {
     let roleTypeChangedPublisher = PassthroughSubject<RecruitRoleType, Never>()
     let rolesChangedPublisher = PassthroughSubject<[RecruitRoleRequest], Never>()
     let numberOfGeneralMembersChangedPublisher = PassthroughSubject<Int?, Never>()
-    let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    let didChangeHeightPublisher = PassthroughSubject<Int, Never>()
     let addRoleButtonTappedPublisher = PassthroughSubject<Void, Never>()
 
     // MARK: - Properties
@@ -109,11 +109,12 @@ extension RecruitPostRoleView {
         guard roleType == .roleBased,
               roles.count < maximumNumberOfRoles,
               totalRoleMembers < maximumNumberOfMembers else { return }
+        let previousRowCount = displayedRowCount
         addRoleButtonTappedPublisher.send()
         tableView.endEditing(true)
         roles.append(.init())
         pendingRowChangeIndex = roles.count - 1
-        didChangeHeightPublisher.send()
+        didChangeHeightPublisher.send(heightDifference(from: previousRowCount))
         rolesChangedPublisher.send(roles)
     }
 
@@ -127,7 +128,7 @@ extension RecruitPostRoleView {
             roles = []
             numberOfGeneralMembers = minimumNumberOfMembers
             if previousRowCount != displayedRowCount {
-                didChangeHeightPublisher.send()
+                didChangeHeightPublisher.send(heightDifference(from: previousRowCount))
             } else {
                 updateViews()
             }
@@ -139,7 +140,7 @@ extension RecruitPostRoleView {
             roles = [.init()]
             numberOfGeneralMembers = minimumNumberOfMembers
             if previousRowCount != displayedRowCount {
-                didChangeHeightPublisher.send()
+                didChangeHeightPublisher.send(heightDifference(from: previousRowCount))
             } else {
                 updateViews()
             }
@@ -181,10 +182,11 @@ extension RecruitPostRoleView {
 
     private func deleteRole(at index: Int) {
         guard roleType == .roleBased, roles.count > 1, roles.indices.contains(index) else { return }
+        let previousRowCount = displayedRowCount
         tableView.endEditing(true)
         roles.remove(at: index)
         pendingRowChangeIndex = index
-        didChangeHeightPublisher.send()
+        didChangeHeightPublisher.send(heightDifference(from: previousRowCount))
         rolesChangedPublisher.send(roles)
     }
 }
@@ -196,6 +198,11 @@ extension RecruitPostRoleView {
 
     private var totalRoleMembers: Int {
         roles.reduce(0) { $0 + $1.maximumParticipants }
+    }
+
+    private func heightDifference(from previousRowCount: Int) -> Int {
+        RecruitPostRoleTableView.contentHeight(for: displayedRowCount)
+            - RecruitPostRoleTableView.contentHeight(for: previousRowCount)
     }
 
     private func updateViews(rowChangeIndex: Int? = nil) {

@@ -33,7 +33,7 @@ final class RecruitProfilePostActivityTableView: UITableView {
     let addCompleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editCompleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let activitiesChangedPublisher = PassthroughSubject<[RecruitProfileActivityRequest], Never>()
-    let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    let didChangeHeightPublisher = PassthroughSubject<Int, Never>()
     
     private var rows: [Row] = []
     private var footerSubscriptions = Set<AnyCancellable>()
@@ -111,23 +111,25 @@ extension RecruitProfilePostActivityTableView {
             mode: .editing
         ))
         pendingSizeChange = .insert(indexPath)
-        didChangeHeightPublisher.send()
+        didChangeHeightPublisher.send(Int(height(for: rows[indexPath.row])))
     }
     
     private func editActivity(at indexPath: IndexPath) {
         guard rows.indices.contains(indexPath.row),
               let committed = rows[indexPath.row].committed else { return }
+        let previousHeight = rectForRow(at: indexPath).height
         editButtonTappedPublisher.send()
         dropdownHost?.dismissPresented()
         rows[indexPath.row].draft = committed
         rows[indexPath.row].mode = .editing
         pendingSizeChange = .reload(indexPath)
-        didChangeHeightPublisher.send()
+        didChangeHeightPublisher.send(Int(height(for: rows[indexPath.row]) - previousHeight))
     }
     
     private func completeActivity(at indexPath: IndexPath) {
         guard rows.indices.contains(indexPath.row),
               rows[indexPath.row].draft.isValid else { return }
+        let previousHeight = rectForRow(at: indexPath).height
         if rows[indexPath.row].committed == nil {
             addCompleteButtonTappedPublisher.send()
         } else {
@@ -137,19 +139,49 @@ extension RecruitProfilePostActivityTableView {
         rows[indexPath.row].committed = rows[indexPath.row].draft
         rows[indexPath.row].mode = .display
         pendingSizeChange = .reload(indexPath)
-        didChangeHeightPublisher.send()
+        didChangeHeightPublisher.send(Int(height(for: rows[indexPath.row]) - previousHeight))
         
         activitiesChangedPublisher.send(rows.compactMap(\.committed))
     }
     
     private func deleteActivity(at indexPath: IndexPath) {
         guard rows.indices.contains(indexPath.row) else { return }
+        let previousHeight = rectForRow(at: indexPath).height
         dropdownHost?.dismissPresented()
         rows.remove(at: indexPath.row)
         pendingSizeChange = .delete(indexPath)
-        didChangeHeightPublisher.send()
+        didChangeHeightPublisher.send(-Int(previousHeight))
         
         activitiesChangedPublisher.send(rows.compactMap(\.committed))
+    }
+
+    private func height(for row: Row) -> CGFloat {
+        let cell: UITableViewCell
+        switch row.mode {
+        case .display:
+            let displayCell = RecruitProfilePostActivityDisplayTableViewCell(
+                style: .default,
+                reuseIdentifier: nil
+            )
+            displayCell.configure(activity: row.draft)
+            cell = displayCell
+        case .editing:
+            let editCell = RecruitProfilePostActivityEditTableViewCell(
+                style: .default,
+                reuseIdentifier: nil
+            )
+            editCell.configure(activity: row.draft)
+            cell = editCell
+        }
+
+        cell.bounds.size.width = bounds.width
+        cell.setNeedsLayout()
+        cell.layoutIfNeeded()
+        return cell.contentView.systemLayoutSizeFitting(
+            CGSize(width: bounds.width, height: UIView.layoutFittingCompressedSize.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        ).height
     }
 }
 

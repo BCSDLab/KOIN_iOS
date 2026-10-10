@@ -17,7 +17,7 @@ final class RecruitProfilePostSkillTableView: UITableView {
     
     // MARK: - Properties
     let skillsChangedPublisher = PassthroughSubject<[String], Never>()
-    let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    let didChangeHeightPublisher = PassthroughSubject<Int, Never>()
     let addButtonTappedPublisher = PassthroughSubject<Void, Never>()
     
     private var skills: [String] = []
@@ -64,18 +64,20 @@ final class RecruitProfilePostSkillTableView: UITableView {
 
 extension RecruitProfilePostSkillTableView {
     private func addSkill() {
+        let previousHeight = intrinsicContentSize.height
         let indexPath = IndexPath(row: skills.count, section: 0)
         skills.append("")
         pendingSizeChange = .insert(indexPath)
-        didChangeHeightPublisher.send()
+        didChangeHeightPublisher.send(Int(intrinsicContentSize.height - previousHeight))
         skillsChangedPublisher.send(skills)
     }
     
     private func deleteSkill(at indexPath: IndexPath) {
         guard skills.indices.contains(indexPath.row) else { return }
+        let previousHeight = intrinsicContentSize.height
         skills.remove(at: indexPath.row)
         pendingSizeChange = .delete(indexPath)
-        didChangeHeightPublisher.send()
+        didChangeHeightPublisher.send(Int(intrinsicContentSize.height - previousHeight))
         skillsChangedPublisher.send(skills)
     }
 }
