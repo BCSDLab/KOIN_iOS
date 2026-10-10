@@ -17,7 +17,7 @@ final class RecruitProfilePostSecondStepView: UIScrollView {
     let skillsChangedPublisher = PassthroughSubject<[String], Never>()
     let activitiesChangedPublisher = PassthroughSubject<[RecruitProfileActivityRequest], Never>()
     let introductionChangedPublisher = PassthroughSubject<String?, Never>()
-    let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    let didChangeHeightPublisher = PassthroughSubject<Int, Never>()
     var skillAddButtonTappedPublisher: AnyPublisher<Void, Never> {
         skillTableView.addButtonTappedPublisher.eraseToAnyPublisher()
     }

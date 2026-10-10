@@ -380,7 +380,7 @@ extension RecruitProfilePostViewController {
             .store(in: &subscriptions)
 
         secondStepView.didChangeHeightPublisher
-            .sink { [weak self] in
+            .sink { [weak self] _ in
                 guard let self else { return }
                 view.layoutIfNeeded()
                 UIView.animate(

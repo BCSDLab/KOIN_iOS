@@ -12,10 +12,15 @@ import UIKit
 
 final class RecruitApplyFirstStepView: UIScrollView {
 
+    enum Section {
+        case skill
+        case activity
+    }
+
     // MARK: - Publisher
     let loadInfoButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let departmentButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    let didChangeHeightPublisher = PassthroughSubject<(Section, Int), Never>()
 
     var nicknameChangedPublisher: AnyPublisher<String?, Never> {
         nicknameView.textChangedPublisher.eraseToAnyPublisher()
@@ -163,13 +168,27 @@ final class RecruitApplyFirstStepView: UIScrollView {
         skillTableView.applyPendingSizeChange()
         activityTableView.applyPendingSizeChange()
     }
+
+    func scrollBottomToVisible(of section: Section) {
+        let tableView: UITableView = switch section {
+        case .skill:
+            skillTableView
+        case .activity:
+            activityTableView
+        }
+        let bottomRect = tableView.convert(
+            CGRect(x: 0, y: tableView.bounds.maxY - 1, width: tableView.bounds.width, height: 1),
+            to: self
+        )
+        scrollRectToVisible(bottomRect, animated: false)
+    }
 }
 
 extension RecruitApplyFirstStepView {
     private func bind() {
         Publishers.Merge(
-            skillTableView.didChangeHeightPublisher,
-            activityTableView.didChangeHeightPublisher
+            skillTableView.didChangeHeightPublisher.map { (.skill, $0) },
+            activityTableView.didChangeHeightPublisher.map { (.activity, $0) }
         )
         .subscribe(didChangeHeightPublisher)
         .store(in: &subscriptions)
