@@ -35,6 +35,11 @@ struct RecruitMyApplicationListView: ActionBindableView {
             RecruitMyApplicationListHeaderView(
                 totalCount: viewModel.recruitList?.totalCount ?? 0,
                 onFilterButtonTapped: {
+                    viewModel.execute(.logEvent(
+                        EventParameter.EventLabel.Campus.teamRecruitmentAppliedPostFilter,
+                        .click,
+                        "필터"
+                    ))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
                         onApplyTapped: { groupModels in

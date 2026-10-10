@@ -179,8 +179,10 @@ extension RecruitNotificationListViewController {
     
     private func navigateToMyApplications() {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyApplicationListViewModel(
-            fetchRecruitMyApplicationListUseCase: DefaultFetchRecruitMyApplicationListUseCase(repository: repository)
+            fetchRecruitMyApplicationListUseCase: DefaultFetchRecruitMyApplicationListUseCase(repository: repository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let controller = RecruitMyApplicationListHostingController(
             rootView: RecruitMyApplicationListView(viewModel: viewModel)

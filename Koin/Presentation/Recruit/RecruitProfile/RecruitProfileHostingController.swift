@@ -75,8 +75,10 @@ extension RecruitProfileHostingController {
     private func navigateToMyApplication() {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let useCase = DefaultFetchRecruitMyApplicationListUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyApplicationListViewModel(
-            fetchRecruitMyApplicationListUseCase: useCase
+            fetchRecruitMyApplicationListUseCase: useCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let controller = RecruitMyApplicationListHostingController(
             rootView: RecruitMyApplicationListView(viewModel: viewModel)
