@@ -181,12 +181,14 @@ extension RecruitDataHostingController {
         }
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitApplyViewModel(
             fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
             fetchMyRecruitProfileUseCase: DefaultFetchMyRecruitProfileUseCase(repository: recruitRepository),
             modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
             upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
-            applyRecruitUseCase: DefaultApplyRecruitUseCase(repository: recruitRepository)
+            applyRecruitUseCase: DefaultApplyRecruitUseCase(repository: recruitRepository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = RecruitApplyViewController(
             viewModel: viewModel,

@@ -19,6 +19,7 @@ final class RecruitApplyViewModel: ViewModelProtocol {
             profileRequest: RecruitProfileRequest,
             applyRequest: RecruitApplyRequest
         )
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     enum Output {
@@ -35,6 +36,7 @@ final class RecruitApplyViewModel: ViewModelProtocol {
     private let modifyBasicInfoUseCase: ModifyBasicInfoUseCase
     private let upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase
     private let applyRecruitUseCase: ApplyRecruitUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private var isLoadingProfile = false
@@ -46,13 +48,15 @@ final class RecruitApplyViewModel: ViewModelProtocol {
         fetchMyRecruitProfileUseCase: FetchMyRecruitProfileUseCase,
         modifyBasicInfoUseCase: ModifyBasicInfoUseCase,
         upsertMyRecruitProfileUseCase: UpsertMyRecruitProfileUseCase,
-        applyRecruitUseCase: ApplyRecruitUseCase
+        applyRecruitUseCase: ApplyRecruitUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
         self.fetchMyRecruitProfileUseCase = fetchMyRecruitProfileUseCase
         self.modifyBasicInfoUseCase = modifyBasicInfoUseCase
         self.upsertMyRecruitProfileUseCase = upsertMyRecruitProfileUseCase
         self.applyRecruitUseCase = applyRecruitUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -70,6 +74,8 @@ final class RecruitApplyViewModel: ViewModelProtocol {
                         profileRequest: profileRequest,
                         applyRequest: applyRequest
                     )
+                case let .logEvent(label, category, value):
+                    self?.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
                 }
             }
             .store(in: &subscriptions)

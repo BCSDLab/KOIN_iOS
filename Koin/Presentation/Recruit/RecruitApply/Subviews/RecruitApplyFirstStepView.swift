@@ -26,6 +26,18 @@ final class RecruitApplyFirstStepView: UIScrollView {
     var skillsChangedPublisher: AnyPublisher<[String], Never> {
         skillTableView.skillsChangedPublisher.eraseToAnyPublisher()
     }
+    var skillAddButtonTappedPublisher: AnyPublisher<Void, Never> {
+        skillTableView.addButtonTappedPublisher.eraseToAnyPublisher()
+    }
+    var activityAddButtonTappedPublisher: AnyPublisher<Void, Never> {
+        activityTableView.addButtonTappedPublisher.eraseToAnyPublisher()
+    }
+    var activityEditButtonTappedPublisher: AnyPublisher<Void, Never> {
+        activityTableView.editButtonTappedPublisher.eraseToAnyPublisher()
+    }
+    var activityEditCompleteButtonTappedPublisher: AnyPublisher<Void, Never> {
+        activityTableView.editCompleteButtonTappedPublisher.eraseToAnyPublisher()
+    }
     var activitiesChangedPublisher: AnyPublisher<[RecruitProfileActivityRequest], Never> {
         activityTableView.activitiesChangedPublisher.eraseToAnyPublisher()
     }

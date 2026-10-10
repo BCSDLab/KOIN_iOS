@@ -62,6 +62,7 @@ final class RecruitApplyViewController: UIViewController {
     private lazy var dropdownHost = KoinDropdownHost(scrollView: firstStepView)
     private lazy var departmentDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
         guard let self else { return }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplyMajorSelect, .click, department))
         basicInfo.department = department
         firstStepView.configure(department: department)
         updateNextButtonState()
@@ -130,7 +131,30 @@ extension RecruitApplyViewController {
             .store(in: &subscriptions)
 
         firstStepView.loadInfoButtonTappedPublisher
-            .sink { [weak self] in self?.inputSubject.send(.loadRecruitProfile) }
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplyLoad, .click, "회원정보 불러오기"))
+                self?.inputSubject.send(.loadRecruitProfile)
+            }
+            .store(in: &subscriptions)
+        firstStepView.skillAddButtonTappedPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplySkillAdd, .click, "기술 / 자격증 추가"))
+            }
+            .store(in: &subscriptions)
+        firstStepView.activityAddButtonTappedPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplyActivityAdd, .click, "활동 이력 추가"))
+            }
+            .store(in: &subscriptions)
+        firstStepView.activityEditButtonTappedPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplyActivityModify, .click, "수정"))
+            }
+            .store(in: &subscriptions)
+        firstStepView.activityEditCompleteButtonTappedPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplyActivityModifyComplete, .click, "수정하기"))
+            }
             .store(in: &subscriptions)
         firstStepView.nicknameChangedPublisher
             .sink { [weak self] value in
@@ -186,8 +210,9 @@ extension RecruitApplyViewController {
             .store(in: &subscriptions)
 
         secondStepView.selectedRoleChangedPublisher
-            .sink { [weak self] value
-                in self?.applyRequest.selectedRole = value
+            .sink { [weak self] value in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplyRoleSelect, .click, value.name))
+                self?.applyRequest.selectedRole = value
                 self?.updateApplyButtonState()
             }
             .store(in: &subscriptions)
@@ -215,6 +240,7 @@ extension RecruitApplyViewController {
 
     @objc private func nextButtonTapped() {
         guard isFirstStepValid, !firstStepView.isEditingActivity else { return }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplyNext, .click, "다음"))
         isFirstStep = false
         view.endEditing(true)
         dropdownHost.dismissPresented()
@@ -231,9 +257,19 @@ extension RecruitApplyViewController {
     }
 
     @objc private func applyButtonTapped() {
-        guard isSecondStepValid else { return }
-        let apply = { [weak self] in
-            guard let self else { return }
+        guard isSecondStepValid else {
+            return
+        }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplySubmit, .click, "지원하기"))
+        
+        let onCancelTapped: ()->Void = { [weak self] in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplySubmitCancel, .click, "취소하기"))
+        }
+        let onApplyTapped = { [weak self] in
+            guard let self else {
+                return
+            }
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentApplySubmitConfirm, .click, "지원하기"))
             inputSubject.send(.apply(
                 recruitmentId: recruit.id,
                 basicInfo: basicInfo,
@@ -241,15 +277,18 @@ extension RecruitApplyViewController {
                 applyRequest: applyRequest
             ))
         }
-        let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .new,
-            content: .singleTitle(text: "해당 팀원 모집에 지원하시겠어요?"),
-            button: .buttons(
-                leftButtonTitle: "취소하기",
-                rightButtonTitle: "지원하기",
-                rightButtonAction: apply
+        let modalViewController = KoinModalViewController(
+            configuration: .init(
+                appearance: .new,
+                content: .singleTitle(text: "해당 팀원 모집에 지원하시겠어요?"),
+                button: .buttons(
+                    leftButtonTitle: "취소하기",
+                    leftButtonAction: onCancelTapped,
+                    rightButtonTitle: "지원하기",
+                    rightButtonAction: onApplyTapped
+                )
             )
-        ))
+        )
         present(modalViewController, animated: true)
     }
 

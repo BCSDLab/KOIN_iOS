@@ -264,6 +264,17 @@ enum EventParameter {
             case teamRecruitmentRecruitSubmit = "team_recruitment_recruit_submit"
             case teamRecruitmentRecruitSubmitCancel = "team_recruitment_recruit_submit_cancel"
             case teamRecruitmentRecruitSubmitConfirm = "team_recruitment_recruit_submit_confirm"
+            case teamRecruitmentApplyLoad = "team_recruitment_apply_load"
+            case teamRecruitmentApplyMajorSelect = "team_recruitment_apply_major_select"
+            case teamRecruitmentApplySkillAdd = "team_recruitment_apply_skill_add"
+            case teamRecruitmentApplyActivityAdd = "team_recruitment_apply_activity_add"
+            case teamRecruitmentApplyActivityModify = "team_recruitment_apply_activity_modify"
+            case teamRecruitmentApplyActivityModifyComplete = "team_recruitment_apply_activity_modify_complete"
+            case teamRecruitmentApplyNext = "team_recruitment_apply_next"
+            case teamRecruitmentApplyRoleSelect = "team_recruitment_apply_role_select"
+            case teamRecruitmentApplySubmit = "team_recruitment_apply_submit"
+            case teamRecruitmentApplySubmitConfirm = "team_recruitment_apply_submit_confirm"
+            case teamRecruitmentApplySubmitCancel = "team_recruitment_apply_submit_cancel"
             
             var team: String {
                 return "CAMPUS"
