@@ -10,7 +10,11 @@ import SwiftUI
 struct RecruitMyPostApplicantView: ActionBindableView {
 
     enum Action {
-        case showDecisionModal(RecruitApplicantDecision)
+        case showDecisionModal(
+            decision: RecruitApplicantDecision,
+            onCancelTapped: () -> Void,
+            onDecideTapped: () -> Void
+        )
         case showDirectChat(recruitmentId: Int, applicationId: Int)
         case showToast(message: String)
     }
@@ -104,7 +108,8 @@ extension RecruitMyPostApplicantView {
                 application: application,
                 isLoading: viewModel.isLoading,
                 onDecisionTapped: { decision in
-                    sendAction(.showDecisionModal(decision))
+                    makeLogAnalyticsEvent(decision)
+                    showDecisionModal(decision)
                 },
                 onDirectChatTapped: {
                     sendAction(.showDirectChat(
@@ -132,5 +137,41 @@ extension RecruitMyPostApplicantView {
             .font(.appFont(.pretendardMedium, size: 14))
             .foregroundStyle(Color.appColor(.neutral800))
             .frame(maxWidth: .infinity, alignment: .leading)
+    }
+}
+
+extension RecruitMyPostApplicantView {
+    private func makeLogAnalyticsEvent(_ decision: RecruitApplicantDecision) {
+        let label: EventParameter.EventLabel.Campus
+        switch decision {
+        case .accepted:
+            label = .teamRecruitmentCreatedPostApplicantApprove
+        case .denied:
+            label = .teamRecruitmentCreatedPostApplicantReject
+        }
+        viewModel.execute(.logEvent(label, .click, "\(decision.rawValue)하기"))
+    }
+
+    private func showDecisionModal(_ decision: RecruitApplicantDecision) {
+        let cancelLabel: EventParameter.EventLabel.Campus
+        let decideLabel: EventParameter.EventLabel.Campus
+        switch decision {
+        case .accepted:
+            cancelLabel = .teamRecruitmentCreatedPostApplicantApproveCancel
+            decideLabel = .teamRecruitmentCreatedPostApplicantApproveConfirm
+        case .denied:
+            cancelLabel = .teamRecruitmentCreatedPostApplicantRejectCancel
+            decideLabel = .teamRecruitmentCreatedPostApplicantRejectConfirm
+        }
+        sendAction(.showDecisionModal(
+            decision: decision,
+            onCancelTapped: {
+                viewModel.execute(.logEvent(cancelLabel, .click, "취소하기"))
+            },
+            onDecideTapped: {
+                viewModel.execute(.logEvent(decideLabel, .click, "\(decision.rawValue)하기"))
+                decide(decision)
+            }
+        ))
     }
 }

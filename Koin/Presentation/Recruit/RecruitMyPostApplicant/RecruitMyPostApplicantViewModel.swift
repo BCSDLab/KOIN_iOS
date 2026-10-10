@@ -16,6 +16,7 @@ final class RecruitMyPostApplicantViewModel: SwiftUIViewModelProtocol {
         case onFirstAppear
         case decide(RecruitApplicantDecision)
         case didShowToast
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -28,18 +29,21 @@ final class RecruitMyPostApplicantViewModel: SwiftUIViewModelProtocol {
     private let applicationId: Int
     private let fetchUseCase: FetchRecruitApplicantUseCase
     private let decideUseCase: DecideRecruitApplicantUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
 
     // MARK: - Initializer
     init(
         recruitmentId: Int,
         applicationId: Int,
         fetchUseCase: FetchRecruitApplicantUseCase,
-        decideUseCase: DecideRecruitApplicantUseCase
+        decideUseCase: DecideRecruitApplicantUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.recruitmentId = recruitmentId
         self.applicationId = applicationId
         self.fetchUseCase = fetchUseCase
         self.decideUseCase = decideUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 
     // MARK: - Public
@@ -51,6 +55,8 @@ final class RecruitMyPostApplicantViewModel: SwiftUIViewModelProtocol {
             decideApplication(decision)
         case .didShowToast:
             toastMessage = nil
+        case let .logEvent(label, category, value):
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
 }
@@ -102,5 +108,19 @@ extension RecruitMyPostApplicantViewModel {
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
+    }
+}
+
+extension RecruitMyPostApplicantViewModel {
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(
+            label: label,
+            category: category,
+            value: value
+        )
     }
 }

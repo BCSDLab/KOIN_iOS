@@ -49,11 +49,13 @@ extension RecruitMyPostHostingController {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitApplicantUseCase(repository: repository)
         let decideUseCase = DefaultDecideRecruitApplicantUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyPostApplicantViewModel(
             recruitmentId: recruitmentId,
             applicationId: applicationId,
             fetchUseCase: fetchUseCase,
-            decideUseCase: decideUseCase
+            decideUseCase: decideUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let controller = RecruitMyPostApplicantHostingController(
             rootView: RecruitMyPostApplicantView(viewModel: viewModel)
