@@ -12,6 +12,8 @@ struct RecruitMyApplicationListView: ActionBindableView {
     enum Action {
         case showFilterBottomSheet(
             filterState: RecruitMyApplicationFilter,
+            onFilterItemTapped: (Int, FilterItemModel) -> Bool,
+            onResetTapped: () -> Void,
             onApplyTapped: ([FilterGroupModel]) -> Void
         )
         case showToast(message: String)
@@ -42,7 +44,25 @@ struct RecruitMyApplicationListView: ActionBindableView {
                     ))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
+                        onFilterItemTapped: { groupIndex, item in
+                            if let event = RecruitMyApplicationFilter.logEvent(groupIndex: groupIndex, title: item.title) {
+                                viewModel.execute(.logEvent(event.label, .click, event.value))
+                            }
+                            return true
+                        },
+                        onResetTapped: {
+                            viewModel.execute(.logEvent(
+                                EventParameter.EventLabel.Campus.teamRecruitmentAppliedPostFilterReset,
+                                .click,
+                                "초기화"
+                            ))
+                        },
                         onApplyTapped: { groupModels in
+                            viewModel.execute(.logEvent(
+                                EventParameter.EventLabel.Campus.teamRecruitmentAppliedPostFilterApply,
+                                .click,
+                                "적용하기"
+                            ))
                             guard let filter = RecruitMyApplicationFilter(from: groupModels) else {
                                 return
                             }

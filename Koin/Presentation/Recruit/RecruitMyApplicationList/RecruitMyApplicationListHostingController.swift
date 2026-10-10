@@ -28,8 +28,8 @@ final class RecruitMyApplicationListHostingController: UIHostingController<Recru
     // MARK: - Public
     func execute(action: RootView.Action) {
         switch action {
-        case .showFilterBottomSheet(let filterState, let onApplyTapped):
-            showFilterBottomSheet(filterState, onApplyTapped)
+        case .showFilterBottomSheet(let filterState, let onFilterItemTapped, let onResetTapped, let onApplyTapped):
+            showFilterBottomSheet(filterState, onFilterItemTapped, onResetTapped, onApplyTapped)
         case .showToast(let message):
             showToastMessage(message: message)
         case .showRecruitData(let id):
@@ -86,10 +86,14 @@ extension RecruitMyApplicationListHostingController {
 extension RecruitMyApplicationListHostingController {
     private func showFilterBottomSheet(
         _ filterState: RecruitMyApplicationFilter,
+        _ onFilterItemTapped: @escaping (Int, FilterItemModel) -> Bool,
+        _ onResetTapped: @escaping () -> Void,
         _ onApplyTapped: @escaping ([FilterGroupModel]) -> Void
     ) {
         let filterBottomSheetView = FilterBottomSheetView(
             groupModels: filterState.toGroupModels(),
+            onFilterItemTapped: onFilterItemTapped,
+            onResetTapped: onResetTapped,
             onApplyTapped: onApplyTapped
         )
         let bottomSheetViewController = BottomSheetViewControllerB(contentView: filterBottomSheetView)

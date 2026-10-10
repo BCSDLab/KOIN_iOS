@@ -47,3 +47,20 @@ extension RecruitMyApplicationFilter {
         self.sort = sort
     }
 }
+
+extension RecruitMyApplicationFilter {
+    static func logEvent(groupIndex: Int, title: String) -> (label: EventParameter.EventLabel.Campus, value: String)? {
+        switch groupIndex {
+        case 0:
+            return (
+                .teamRecruitmentAppliedPostFilterStatus, RecruitApplicationStatus(rawValue: title)?.rawValue ?? "전체")
+        case 1:
+            guard let sort = RecruitListSort(rawValue: title) else {
+                return nil
+            }
+            return (.teamRecruitmentAppliedPostFilterSort, sort.logValue)
+        default:
+            return nil
+        }
+    }
+}
