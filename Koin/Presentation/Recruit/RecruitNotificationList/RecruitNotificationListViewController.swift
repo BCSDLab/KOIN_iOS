@@ -167,8 +167,10 @@ extension RecruitNotificationListViewController {
     
     private func navigateToApplicantManagement(recruitmentId: Int) {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyPostViewModel(
             fetchRecruitMyPostDataUseCase: DefaultFetchRecruitMyPostDataUseCase(repository: repository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             recruitId: recruitmentId
         )
         let controller = RecruitMyPostHostingController(
