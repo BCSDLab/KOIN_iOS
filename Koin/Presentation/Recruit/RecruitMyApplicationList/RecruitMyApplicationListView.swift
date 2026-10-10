@@ -83,6 +83,11 @@ struct RecruitMyApplicationListView: ActionBindableView {
                                 sendAction(.showRecruitData(id: recruit.id))
                             },
                             onShowChat: { chatRoomId in
+                                viewModel.execute(.logEvent(
+                                    EventParameter.EventLabel.Campus.teamRecruitmentAppliedPostChat,
+                                    .click,
+                                    recruit.title
+                                ))
                                 sendAction(.showChat(recruitmentId: recruit.id, chatRoomId: chatRoomId))
                             }
                         )

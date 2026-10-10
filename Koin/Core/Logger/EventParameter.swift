@@ -307,6 +307,7 @@ enum EventParameter {
             case teamRecruitmentAppliedPostFilterSort = "team_recruitment_applied_post_filter_sort"
             case teamRecruitmentAppliedPostFilterReset = "team_recruitment_applied_post_filter_reset"
             case teamRecruitmentAppliedPostFilterApply = "team_recruitment_applied_post_filter_apply"
+            case teamRecruitmentAppliedPostChat = "team_recruitment_applied_post_chat"
             
             var team: String {
                 return "CAMPUS"
