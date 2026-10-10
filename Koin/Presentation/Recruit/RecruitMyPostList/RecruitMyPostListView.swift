@@ -59,12 +59,27 @@ struct RecruitMyPostListView: ActionBindableView {
                                 sendAction(.showRecruitData(id: recruit.id))
                             },
                             onShowChat: { chatRoomId in
+                                viewModel.execute(.logEvent(
+                                    EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostChat,
+                                    .click,
+                                    recruit.title
+                                ))
                                 sendAction(.showChat(recruitmentId: recruit.id, chatRoomId: chatRoomId))
                             },
                             onShowApplicants: {
+                                viewModel.execute(.logEvent(
+                                    EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostApplicant,
+                                    .click,
+                                    recruit.title
+                                ))
                                 sendAction(.showApplicants(recruitId: recruit.id))
                             },
                             onCloseRecruit: {
+                                viewModel.execute(.logEvent(
+                                    EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostClose,
+                                    .click,
+                                    recruit.title
+                                ))
                                 sendAction(.showCloseModal(recruitId: recruit.id))
                             }
                         )
@@ -135,5 +150,13 @@ extension RecruitMyPostListView {
 
     func close(id: Int) {
         viewModel.execute(.close(id: id))
+    }
+
+    func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        viewModel.execute(.logEvent(label, category, value))
     }
 }

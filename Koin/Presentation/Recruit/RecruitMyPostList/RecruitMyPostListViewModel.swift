@@ -19,6 +19,7 @@ final class RecruitMyPostListViewModel: SwiftUIViewModelProtocol {
         case close(id: Int)
         case delete(id: Int)
         case didShowToast
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -31,6 +32,7 @@ final class RecruitMyPostListViewModel: SwiftUIViewModelProtocol {
     // MARK: - Properties
     private let fetchRecruitMyPostListUseCase: FetchRecruitMyPostListUseCase
     private let closeRecruitMyPostUseCase: CloseRecruitMyPostUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
 
     var recruits: [RecruitMyPostRow] {
         recruitList?.recruits ?? []
@@ -39,10 +41,12 @@ final class RecruitMyPostListViewModel: SwiftUIViewModelProtocol {
     // MARK: - Initializer
     init(
         fetchRecruitMyPostListUseCase: FetchRecruitMyPostListUseCase,
-        closeRecruitMyPostUseCase: CloseRecruitMyPostUseCase
+        closeRecruitMyPostUseCase: CloseRecruitMyPostUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.fetchRecruitMyPostListUseCase = fetchRecruitMyPostListUseCase
         self.closeRecruitMyPostUseCase = closeRecruitMyPostUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 
     // MARK: - Public
@@ -63,6 +67,8 @@ final class RecruitMyPostListViewModel: SwiftUIViewModelProtocol {
         case .didShowToast:
             errorMessage = nil
             successMessage = nil
+        case let .logEvent(label, category, value):
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
 }
@@ -133,5 +139,19 @@ extension RecruitMyPostListViewModel {
                 errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
+    }
+}
+
+extension RecruitMyPostListViewModel {
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(
+            label: label,
+            category: category,
+            value: value
+        )
     }
 }

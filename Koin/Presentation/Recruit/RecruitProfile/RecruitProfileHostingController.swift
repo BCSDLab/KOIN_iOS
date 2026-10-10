@@ -62,9 +62,11 @@ extension RecruitProfileHostingController {
         let repository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchUseCase = DefaultFetchRecruitMyPostListUseCase(repository: repository)
         let closeUseCase = DefaultCloseRecruitMyPostUseCase(repository: repository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitMyPostListViewModel(
             fetchRecruitMyPostListUseCase: fetchUseCase,
-            closeRecruitMyPostUseCase: closeUseCase
+            closeRecruitMyPostUseCase: closeUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let controller = RecruitMyPostListHostingController(
             rootView: RecruitMyPostListView(viewModel: viewModel)

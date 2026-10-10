@@ -94,6 +94,21 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     }
 
     private func showCloseModal(recruitId: Int) {
+        let onCancelButtonTapped: ()->Void = { [weak self] in
+            self?.rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostCloseCancel,
+                category: .click,
+                value: "취소하기"
+            )
+        }
+        let onCloseButtonTapped: ()->Void = { [weak self] in
+            self?.rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostCloseConfirm,
+                category: .click,
+                value: "마감하기"
+            )
+            self?.rootView.close(id: recruitId)
+        }
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .new,
             content: .titles(
@@ -102,10 +117,9 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
             ),
             button: .buttons(
                 leftButtonTitle: "취소하기",
+                leftButtonAction: onCancelButtonTapped,
                 rightButtonTitle: "마감하기",
-                rightButtonAction: { [weak self] in
-                    self?.rootView.close(id: recruitId)
-                }
+                rightButtonAction: onCloseButtonTapped
             ),
             layout: .init(width: 320)
         ))
