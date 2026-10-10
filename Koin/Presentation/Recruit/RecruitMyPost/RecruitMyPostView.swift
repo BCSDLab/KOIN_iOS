@@ -55,6 +55,11 @@ extension RecruitMyPostView {
                 VStack(alignment: .leading, spacing: 0) {
                     RecruitMyPostSummaryView(model: data) {
                         guard let chatRoomId = data.chatRoomId else { return }
+                        viewModel.execute(.logEvent(
+                            EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostApplicantChat,
+                            .click,
+                            "채팅"
+                        ))
                         sendAction(.showChat(recruitmentId: data.id, chatRoomId: chatRoomId))
                     }
 
