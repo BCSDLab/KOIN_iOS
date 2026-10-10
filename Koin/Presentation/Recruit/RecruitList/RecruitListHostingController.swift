@@ -171,11 +171,13 @@ extension RecruitListHostingController {
     private func showProfilePost() {
         let userRepository = DefaultUserRepository(service: DefaultUserService())
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitProfilePostViewModel(
             fetchDeptListUseCase: DefaultFetchDeptListUseCase(timetableRepository: DefaultTimetableRepository(service: DefaultTimetableService())),
             fetchBasicInfoUseCase: DefaultFetchBasicInfoUseCase(repository: userRepository),
             modifyBasicInfoUseCase: DefaultModifyBasicInfoUseCase(repository: userRepository),
             upsertMyRecruitProfileUseCase: DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository),
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             mode: .post
         )
         let viewController = RecruitProfilePostViewController(viewModel: viewModel) { [weak self] profile in

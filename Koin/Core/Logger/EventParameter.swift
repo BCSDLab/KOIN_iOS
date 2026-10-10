@@ -280,6 +280,28 @@ enum EventParameter {
             case teamRecruitmentProfileCreate = "team_recruitment_profile_create"
             case teamRecruitmentProfileCreated = "team_recruitment_profile_created"
             case teamRecruitmentProfileApplied = "team_recruitment_profile_applied"
+            case teamRecruitmentProfileModifyLoad = "team_recruitment_profile_modify_load"
+            case teamRecruitmentProfileModifyMajorSelect = "team_recruitment_profile_modify_major_select"
+            case teamRecruitmentProfileModifyNext = "team_recruitment_profile_modify_next"
+            case teamRecruitmentProfileModifySkillAdd = "team_recruitment_profile_modify_skill_add"
+            case teamRecruitmentProfileModifyActivityModify = "team_recruitment_profile_modify_activity_modify"
+            case teamRecruitmentProfileModifyActivityModifyComplete = "team_recruitment_profile_modify_activity_modify_complete"
+            case teamRecruitmentProfileModifyActivityAdd = "team_recruitment_profile_modify_activity_add"
+            case teamRecruitmentProfileModifyActivityComplete = "team_recruitment_profile_modify_activity_complete"
+            case teamRecruitmentProfileModifySubmit = "team_recruitment_profile_modify_submit"
+            case teamRecruitmentProfileModifySubmitConfirm = "team_recruitment_profile_modify_submit_confirm"
+            case teamRecruitmentProfileModifySubmitCancel = "team_recruitment_profile_modify_submit_cancel"
+            case teamRecruitmentProfileCreateLoad = "team_recruitment_profile_create_load"
+            case teamRecruitmentProfileCreateMajor = "team_recruitment_profile_create_major"
+            case teamRecruitmentProfileCreateNext = "team_recruitment_profile_create_next"
+            case teamRecruitmentProfileCreateSkillAdd = "team_recruitment_profile_create_skill_add"
+            case teamRecruitmentProfileCreateActivityAdd = "team_recruitment_profile_create_activity_add"
+            case teamRecruitmentProfileCreateActivityAddComplete = "team_recruitment_profile_create_activity_add_complete"
+            case teamRecruitmentProfileCreateActivityModify = "team_recruitment_profile_create_activity_modify"
+            case teamRecruitmentProfileCreateActivityModifyComplete = "team_recruitment_profile_create_activity_modify_complete"
+            case teamRecruitmentProfileCreateSubmit = "team_recruitment_profile_create_submit"
+            case teamRecruitmentProfileCreateSubmitCancel = "team_recruitment_profile_create_submit_cancel"
+            case teamRecruitmentProfileCreateSubmitConfirm = "team_recruitment_profile_create_submit_confirm"
             
             var team: String {
                 return "CAMPUS"
@@ -324,6 +346,7 @@ enum EventParameter {
         case pageExit = "page_exit"
         case update = "update"
         case notification
+        case result
     }
     
     enum EventLabelNeededDuration: String {

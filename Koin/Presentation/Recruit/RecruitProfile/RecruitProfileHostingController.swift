@@ -93,11 +93,13 @@ extension RecruitProfileHostingController {
         let fetchBasicInfoUseCase = DefaultFetchBasicInfoUseCase(repository: userRepository)
         let modifyBasicInfoUseCase = DefaultModifyBasicInfoUseCase(repository: userRepository)
         let upsertMyRecruitProfileUseCase = DefaultUpsertMyRecruitProfileUseCase(repository: recruitRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = RecruitProfilePostViewModel(
             fetchDeptListUseCase: fetchDeptListUseCase,
             fetchBasicInfoUseCase: fetchBasicInfoUseCase,
             modifyBasicInfoUseCase: modifyBasicInfoUseCase,
             upsertMyRecruitProfileUseCase: upsertMyRecruitProfileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             mode: mode
         )
         return RecruitProfilePostViewController(viewModel: viewModel) { [weak self] profile in
