@@ -102,7 +102,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
         case .updateProfile(let profile):
             myRecruitProfile = profile
         case let .logEvent(label, category, value):
-            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
 }
@@ -207,5 +207,19 @@ extension RecruitListViewModel {
                 errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
+    }
+}
+
+extension RecruitListViewModel {
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(
+            label: label,
+            category: category,
+            value: value
+        )
     }
 }

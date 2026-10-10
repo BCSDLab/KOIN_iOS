@@ -224,6 +224,11 @@ extension RecruitListHostingController {
             showLoginToast()
             return
         }
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.teamRecruitmentProfile,
+            category: .click,
+            value: "프로필"
+        )
         showRecruitProfile()
     }
 }

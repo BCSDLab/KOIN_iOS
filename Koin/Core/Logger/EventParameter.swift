@@ -275,6 +275,7 @@ enum EventParameter {
             case teamRecruitmentApplySubmit = "team_recruitment_apply_submit"
             case teamRecruitmentApplySubmitConfirm = "team_recruitment_apply_submit_confirm"
             case teamRecruitmentApplySubmitCancel = "team_recruitment_apply_submit_cancel"
+            case teamRecruitmentProfile = "team_recruitment_profile"
             
             var team: String {
                 return "CAMPUS"
