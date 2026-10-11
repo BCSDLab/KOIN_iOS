@@ -2,7 +2,7 @@
 //  Image+.swift
 //  Koin
 //
-//  Created by Claude on 5/31/26.
+//  Created by 홍기정 on 5/31/26.
 //
 
 import SwiftUI

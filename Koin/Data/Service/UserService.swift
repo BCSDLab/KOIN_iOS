@@ -32,6 +32,8 @@ protocol UserService {
     func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse>
     func resetPasswordEmail(requestModel: ResetPasswordEmailRequest) -> AnyPublisher<Void, ErrorResponse>
     func changePassword(requestModel: ChangePasswordRequest) -> AnyPublisher<Void, ErrorResponse>
+    func fetchStudentAcademicInfo() async throws -> StudentAcademicInfoDto
+    func modifyStudentAcademicInfo(_ request: StudentAcademicInfoRequestDto) async throws
 }
 
 final class DefaultUserService: UserService {
@@ -149,5 +151,13 @@ final class DefaultUserService: UserService {
     
     func generalRegisterForm(requestModel: GeneralRegisterFormRequest) -> AnyPublisher<Void, ErrorResponse> {
         networkService.request(api: UserAPI.generalRegisterForm(requestModel))
+    }
+
+    func fetchStudentAcademicInfo() async throws -> StudentAcademicInfoDto {
+        try await networkService.requestWithResponse(api: UserAPI.fetchStudentAcademicInfo)
+    }
+
+    func modifyStudentAcademicInfo(_ request: StudentAcademicInfoRequestDto) async throws {
+        try await networkService.request(api: UserAPI.modifyStudentAcademicInfo(request))
     }
 }

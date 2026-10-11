@@ -1,0 +1,151 @@
+//
+//  DefaultRecruitRepository.swift
+//  koin
+//
+//  Created by 홍기정 on 10/1/26.
+//
+
+import Foundation
+
+final class DefaultRecruitRepository: RecruitRepository {
+
+    private let service: RecruitService
+
+    init(service: RecruitService) {
+        self.service = service
+    }
+
+    func fetchList(_ filter: RecruitListFilter) async throws -> RecruitList {
+        let request = RecruitListRequestDto(from: filter)
+        return try await service.fetchList(request).toDomain()
+    }
+
+    func fetchData(_ id: Int) async throws -> RecruitData {
+        try await service.fetchData(id).toDomain()
+    }
+
+    func deleteData(id: Int) async throws -> Bool {
+        try await service.deleteData(id)
+        return true
+    }
+
+    func post(_ request: RecruitPostRequest) async throws -> Int {
+        guard let request = RecruitPostRequestDto(from: request) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        return try await service.post(request).id
+    }
+
+    func modify(_ id: Int, _ request: RecruitPostRequest) async throws -> Void {
+        guard let request = RecruitPostRequestDto(from: request) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        try await service.modify(id, request)
+    }
+
+    func fetchMyProfile() async throws -> RecruitProfile {
+        try await service.fetchMyProfile().toDomain()
+    }
+
+    func apply(recruitmentId: Int, _ request: RecruitApplyRequest) async throws -> Void {
+        guard let dto = RecruitApplyRequestDto(from: request) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        try await service.apply(recruitmentId, dto)
+    }
+
+    func fetchMyApplicationList(_ filter: RecruitMyApplicationFilter) async throws -> RecruitMyApplicationList {
+        let request = RecruitMyApplicationListRequestDto(from: filter)
+        return try await service.fetchMyApplicationList(request).toDomain()
+    }
+
+    func fetchMyPostList(_ filter: RecruitMyPostFilter) async throws -> RecruitMyPostList {
+        let request = RecruitMyPostListRequestDto(from: filter)
+        return try await service.fetchMyPostList(request).toDomain()
+    }
+
+    func fetchMyPostData(_ id: Int, page: Int) async throws -> RecruitMyPostData {
+        let request = RecruitApplicantListRequestDto(statuses: nil, page: page, limit: 10)
+        return try await service.fetchMyPostData(id, request).toDomain()
+    }
+
+    func fetchApplicant(
+        recruitmentId: Int,
+        applicationId: Int
+    ) async throws -> RecruitApplicantData {
+        try await service.fetchApplicant(recruitmentId: recruitmentId, applicationId: applicationId).toDomain()
+    }
+
+    func decideApplicant(
+        recruitmentId: Int,
+        applicationId: Int,
+        decision: RecruitApplicantDecision
+    ) async throws -> Void {
+        let request = RecruitApplicantDecisionRequestDto(from: decision)
+        try await service.decideApplicant(recruitmentId: recruitmentId, applicationId: applicationId, request)
+    }
+
+    func closeMyPost(id: Int) async throws -> Bool {
+        try await service.closeMyPost(id)
+        return true
+    }
+
+    func upsertMyProfile(_ request: RecruitProfileRequest) async throws -> RecruitProfile {
+        guard let request = RecruitProfileRequestDto(from: request) else {
+            throw ErrorResponse.unexpectedInternalError
+        }
+        return try await service.upsertMyProfile(request).toDomain()
+    }
+
+    func fetchTeamChatData(
+        recruitmentId: Int,
+        chatRoomId: Int
+    ) async throws -> RecruitChatData {
+        try await service.fetchChatData(recruitmentId: recruitmentId, chatRoomId: chatRoomId).toDomain()
+    }
+
+    func fetchDirectChatData(
+        recruitmentId: Int,
+        applicationId: Int
+    ) async throws -> RecruitChatData {
+        try await service.fetchDirectChatData(recruitmentId: recruitmentId, applicationId: applicationId).toDomain()
+    }
+
+    func fetchChatMessages(
+        recruitmentId: Int,
+        chatRoomId: Int
+    ) async throws -> RecruitChatMessageList {
+        let messages = try await service.fetchChatMessages(recruitmentId: recruitmentId, chatRoomId: chatRoomId)
+        return messages.toDomain(myUserId: UserDataManager.shared.id)
+    }
+
+    func postChatMessage(
+        recruitmentId: Int,
+        chatRoomId: Int,
+        request: RecruitChatPostRequest
+    ) async throws {
+        let request = RecruitChatPostRequestDto(from: request)
+        try await service.postChatMessage(recruitmentId: recruitmentId, chatRoomId: chatRoomId, request)
+    }
+
+    func fetchNotificationList(page: Int) async throws -> RecruitNotificationList {
+        let request = RecruitNotificationListRequestDto(page: page)
+        return try await service.fetchNotificationList(request).toDomain()
+    }
+
+    func deleteNotification(_ id: Int) async throws -> Void {
+        try await service.deleteNotification(id)
+    }
+
+    func deleteAllNotification() async throws -> Void {
+        try await service.deleteAllNotification()
+    }
+
+    func markAsReadNotification(_ id: Int) async throws -> Void {
+        try await service.markAsReadNotification(id)
+    }
+
+    func markAllAsReadNotification() async throws -> Void {
+        try await service.markAllAsReadNotification()
+    }
+}

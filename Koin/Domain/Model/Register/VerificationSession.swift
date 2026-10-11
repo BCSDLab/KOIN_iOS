@@ -48,7 +48,9 @@ struct VerificationSendPolicy: Equatable {
     }
 
     func canSend(at now: Date) -> Bool {
-        return !isBlockedByDailyLimit
+        guard !isBlockedByDailyLimit else { return false }
+        guard let lastSentAt else { return true }
+        return now.timeIntervalSince(lastSentAt) >= Self.resendCooldown
     }
 
     mutating func markSent(at now: Date) {

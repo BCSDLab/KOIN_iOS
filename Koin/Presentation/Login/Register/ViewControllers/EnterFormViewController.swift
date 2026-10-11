@@ -16,6 +16,8 @@ final class EnterFormViewController: UIViewController {
     private let viewModel: RegisterFormViewModel
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
+    private var formState = EnterFormState()
+    private var isUserTypeConstraintsSet = false
     
     // MARK: - UI Components
     
@@ -276,8 +278,8 @@ final class EnterFormViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let strongSelf = self else { return }
             switch output {
-            case let .showIdHttpResult(message, color):
-                guard !message.isEmpty else { return }
+            case let .showIdHttpResult(loginId, message, _):
+                guard loginId == strongSelf.formState.loginId, !message.isEmpty else { return }
                 self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
@@ -285,7 +287,10 @@ final class EnterFormViewController: UIViewController {
                     font: UIFont.appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.new600)
                 )
-            case .successCheckDuplicatedId:
+            case let .successCheckDuplicatedId(loginId):
+                guard loginId == strongSelf.formState.loginId else { return }
+                strongSelf.formState.markIdChecked()
+                strongSelf.updateNextButton()
                 self?.checkIdResponseLabel.isHidden = false
                 self?.checkIdResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .checkGreenCircle),
@@ -313,8 +318,13 @@ final class EnterFormViewController: UIViewController {
                     text: "사용 가능한 닉네임입니다.",
                     font: .appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.success700))
+                self?.nicknameResponseLabel.isHidden = false
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
                 self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
+            case let .failRegister(message):
+                let alertController = UIAlertController(title: "회원가입 실패", message: message, preferredStyle: .alert)
+                alertController.addAction(UIAlertAction(title: "확인", style: .default))
+                self?.present(alertController, animated: true)
             case .succesRegister:
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
@@ -378,10 +388,15 @@ extension EnterFormViewController {
     @objc private func idTextFieldDidChange(_ textField: UITextField) {
         guard let input = textField.text else { return }
 
-        let acceptedText = LoginIdInput.acceptedText(from: input)
-        textField.text = acceptedText
+        let wasChecked = formState.isIdChecked
+        formState.updateLoginId(input)
+        textField.text = formState.loginId
 
-        checkIdDuplicateButton.updateState(isEnabled: LoginIdInput.isValid(acceptedText))
+        if wasChecked && !formState.isIdChecked {
+            checkIdResponseLabel.isHidden = true
+        }
+        checkIdDuplicateButton.updateState(isEnabled: formState.canCheckIdDuplicate && !formState.isIdChecked)
+        updateNextButton()
     }
     
     @objc private func passwordTextField1DidChange(_ textField: UITextField) {
@@ -391,26 +406,29 @@ extension EnterFormViewController {
 
         passwordInfoLabel.isHidden = isValid
         passwordTextField2.isHidden = !isValid
+
+        formState.updateFirstPassword(text)
+        updatePasswordMatch()
     }
     
     @objc private func passwordTextField2DidChange(_ textField: UITextField) {
-        guard let firstText = passwordTextField1.text,
-              let secondText = passwordTextField2.text else { return }
+        guard let secondText = passwordTextField2.text else { return }
 
-        if firstText == secondText {
-            correctPasswordLabel.isHidden = false
+        formState.updateSecondPassword(secondText)
+        updatePasswordMatch()
+    }
 
-            if let userType = viewModel.userType {
-                configureUserTypeSpecificUI(for: userType)
-            }
-        } else {
-            correctPasswordLabel.isHidden = true
+    private func updatePasswordMatch() {
+        correctPasswordLabel.isHidden = !formState.isPasswordMatched
+
+        if let userType = viewModel.userType {
+            setUserTypeSpecificUIHidden(!formState.isPasswordMatched, for: userType)
         }
+        updateNextButton()
     }
     
     @objc private func checkDuplicateButtonTapped() {
-        guard let loginId = idTextField.text else { return }
-        inputSubject.send(.checkDuplicatedId(loginId))
+        inputSubject.send(.checkDuplicatedId(formState.loginId))
     }
     
     @objc private func changeSecureButtonTapped1() {
@@ -449,21 +467,20 @@ extension EnterFormViewController {
     @objc private func studentIdTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
 
-        let acceptedDigits = StudentNumberInput.acceptedDigits(from: text)
-        textField.text = acceptedDigits
+        formState.updateStudentNumber(text)
+        textField.text = formState.studentNumber
 
-        let isValid = StudentNumberInput.isValid(acceptedDigits)
-        studentIdWarningLabel.isHidden = isValid
-        
-        if isValid {
-            nextButton.isEnabled = true
-            nextButton.backgroundColor = UIColor.appColor(.new500)
-            nextButton.setTitleColor(.white, for: .normal)
-        } else {
-            nextButton.isEnabled = false
-            nextButton.backgroundColor = UIColor.appColor(.neutral300)
-            nextButton.setTitleColor(UIColor.appColor(.neutral600), for: .normal)
-        }
+        studentIdWarningLabel.isHidden = StudentNumberInput.isValid(formState.studentNumber)
+        updateNextButton()
+    }
+
+    private func updateNextButton() {
+        guard let userType = viewModel.userType else { return }
+        let canSubmit = formState.canSubmit(isStudent: userType == .student)
+
+        nextButton.isEnabled = canSubmit
+        nextButton.backgroundColor = canSubmit ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
+        nextButton.setTitleColor(canSubmit ? .white : UIColor.appColor(.neutral600), for: .normal)
     }
     
     @objc private func clearStudentNicknameTextField() {
@@ -481,8 +498,8 @@ extension EnterFormViewController {
     
     @objc private func checkStudentNicknameDuplicateButtonTapped() {
         guard let nicknameText = nicknameTextField.text else { return }
+        nicknameResponseLabel.isHidden = true
         inputSubject.send(.checkDuplicatedNickname(nicknameText))
-        nicknameResponseLabel.isHidden = false
     }
     
     @objc private func studentEmailTextFieldDidChange(_ textField: UITextField) {
@@ -567,13 +584,28 @@ extension EnterFormViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         
-        [idLabel, idTextField, checkIdDuplicateButton,
-         checkIdResponseLabel, passwordLabel, passwordTextField1,
-         passwordInfoLabel, passwordTextField2, correctPasswordLabel,
-         studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
-         studentIdTextField, studentIdWarningLabel, nicknameTextField,
-         nicknameDuplicateButton, nicknameResponseLabel, studentEmailTextField,
-         koreatechEmailLabel, generalEmailTextField, generalEmailResponseLabel
+        [
+            idLabel,
+            idTextField,
+            checkIdDuplicateButton,
+            checkIdResponseLabel,
+            passwordLabel,
+            passwordTextField1,
+            passwordInfoLabel,
+            passwordTextField2,
+            correctPasswordLabel,
+            studentInfoGuideLabel,
+            departmentDropdownButton,
+            deptDropDown,
+            studentIdTextField,
+            studentIdWarningLabel,
+            nicknameTextField,
+            nicknameDuplicateButton,
+            nicknameResponseLabel,
+            studentEmailTextField,
+            koreatechEmailLabel,
+            generalEmailTextField,
+            generalEmailResponseLabel
         ].forEach {
             contentView.addSubview($0)
         }
@@ -772,25 +804,30 @@ extension EnterFormViewController {
         }
     }
     
-    private func configureUserTypeSpecificUI(for userType: RegisterFormViewModel.UserType) {
+    private func setUserTypeSpecificUIHidden(_ isHidden: Bool, for userType: RegisterFormViewModel.UserType) {
+        if !isHidden && !isUserTypeConstraintsSet {
+            switch userType {
+            case .student: setUpStudentConstraints()
+            case .general: setUpGeneralConstraints()
+            }
+            isUserTypeConstraintsSet = true
+        }
+
+        let fields: [UIView]
+        
         switch userType {
         case .student:
-            [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
-             studentIdTextField, nicknameTextField, nicknameDuplicateButton,
-             studentEmailTextField, koreatechEmailLabel].forEach {
-                $0.isHidden = false
-            }
-            setUpStudentConstraints()
-
+            fields = [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
+                      studentIdTextField, nicknameTextField, nicknameDuplicateButton,
+                      studentEmailTextField, koreatechEmailLabel]
         case .general:
-            [nicknameTextField, nicknameDuplicateButton, generalEmailTextField].forEach {
-                $0.isHidden = false
-            }
-            setUpGeneralConstraints()
+            fields = [nicknameTextField, nicknameDuplicateButton, generalEmailTextField]
+        }
+        
+        fields.forEach { $0.isHidden = isHidden }
 
-            nextButton.isEnabled = true
-            nextButton.backgroundColor = UIColor.appColor(.new500)
-            nextButton.setTitleColor(.white, for: .normal)
+        if isHidden {
+            [studentIdWarningLabel, nicknameResponseLabel, generalEmailResponseLabel].forEach { $0.isHidden = true }
         }
 
         view.layoutIfNeeded()

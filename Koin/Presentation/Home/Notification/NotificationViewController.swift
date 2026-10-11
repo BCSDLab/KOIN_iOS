@@ -17,7 +17,7 @@ final class NotificationViewController: UIViewController {
     private var subscriptions = Set<AnyCancellable>()
 
     // MARK: - UI Components
-    private let notificationListView = NotificationListView()
+    private let notificationListView = NotificationListView(behavior: .allAtOnce)
 
     // MARK: - Initialization
     init(viewModel: NotificationViewModel) {
@@ -56,7 +56,7 @@ private extension NotificationViewController {
                 
                 switch event {
                 case .updateNotifications(let notifications):
-                    notificationListView.update(items: notifications.map { NotificationRowModel(from: $0) })
+                    notificationListView.update(items: notifications.map { $0.toNotificationRowModel() })
                 case .selectedNotification(let notification):
                     handleNavigation(notification)
                 case .showToast(let message):

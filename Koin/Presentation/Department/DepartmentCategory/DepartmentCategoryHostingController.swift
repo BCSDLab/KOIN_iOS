@@ -22,7 +22,7 @@ final class DepartmentCategoryHostingController: UIHostingController<DepartmentC
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "학교 부서정보"
-        configureNavigationBar(style: .order)
+        configureNavigationBar(style: .newBackground)
     }
     
     // MARK: - Execute

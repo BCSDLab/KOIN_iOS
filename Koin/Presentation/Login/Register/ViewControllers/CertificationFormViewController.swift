@@ -17,6 +17,7 @@ final class CertificationFormViewController: UIViewController {
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var timer: Timer?
+    private var resendCooldownWorkItem: DispatchWorkItem?
     private var verificationTimer = VerificationTimer()
     private var sendPolicy = VerificationSendPolicy()
     private var selectedGender: Gender?
@@ -74,16 +75,31 @@ final class CertificationFormViewController: UIViewController {
     )
     
     private let nameHelpLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "올바른 양식이 아닙니다. 다시 입력해 주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
+        $0.setImageText(
+            image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
+            text: "올바른 양식이 아닙니다. 다시 입력해 주세요.",
+            font: .appFont(.pretendardRegular, size: 12),
+            textColor: .appColor(.new600)
+        )
         $0.isHidden = true
     }
     
     private let femaleButton = UIButton().then {
-        $0.applyRadioStyle(title: "여성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), foregroundColor: .black)
+        $0.applyRadioStyle(
+            title: "여성",
+            font: .appFont(.pretendardRegular, size: 16),
+            image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal),
+            foregroundColor: .black
+        )
     }
     
     private let maleButton = UIButton().then {
-        $0.applyRadioStyle(title: "남성", font: .appFont(.pretendardRegular, size: 16), image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), foregroundColor: .black)
+        $0.applyRadioStyle(
+            title: "남성",
+            font: .appFont(.pretendardRegular, size: 16),
+            image: .appImage(asset: .circlePrimary500)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal),
+            foregroundColor: .black
+        )
     }
     
     private let phoneNumberLabel = UILabel().then {
@@ -114,7 +130,12 @@ final class CertificationFormViewController: UIViewController {
     }
 
     private let phoneNumberReponseLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
+        $0.setImageText(
+            image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
+            text: "",
+            font: .appFont(.pretendardRegular, size: 12),
+            textColor: .appColor(.new600)
+        )
         $0.numberOfLines = 2
         $0.isHidden = true
     }
@@ -146,6 +167,7 @@ final class CertificationFormViewController: UIViewController {
         font: UIFont.appFont(.pretendardRegular, size: 14)
     ).then {
         $0.keyboardType = .numberPad
+        $0.textContentType = .oneTimeCode
         $0.isHidden = true
     }
     
@@ -169,7 +191,12 @@ final class CertificationFormViewController: UIViewController {
     }
     
     private let verificationHelpLabel = UILabel().then {
-        $0.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
+        $0.setImageText(
+            image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
+            text: "",
+            font: .appFont(.pretendardRegular, size: 12),
+            textColor: .appColor(.new600)
+        )
         $0.isHidden = true
     }
     
@@ -211,6 +238,8 @@ final class CertificationFormViewController: UIViewController {
         setUpTextFieldUnderline()
     }
     
+    // MARK: - Bind
+    
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         
@@ -225,8 +254,11 @@ final class CertificationFormViewController: UIViewController {
                     self?.showHttpResult(message, labelColor)
                 }
             case .changeSendVerificationButtonStatus:
-                self?.phoneNumberReponseLabel.isHidden = true
-                self?.sendVerificationButton.updateState(isEnabled: true)
+                guard let self else { return }
+                self.phoneNumberReponseLabel.isHidden = true
+                self.sendVerificationButton.updateState(
+                    isEnabled: self.sendPolicy.canSend(at: Date()) && PhoneNumberInput.isComplete(self.phoneNumberTextField.text ?? "")
+                )
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
             case .correctVerificationCode:
@@ -234,6 +266,7 @@ final class CertificationFormViewController: UIViewController {
                 self?.timer?.invalidate()
                 self?.timer = nil
                 self?.timerLabel.isHidden = true
+                self?.resendCooldownWorkItem?.cancel()
                 self?.sendVerificationButton.updateState(isEnabled: false)
                 self?.verificationButton.updateState(isEnabled: false)
                 self?.verificationHelpLabel.setImageText(
@@ -243,6 +276,7 @@ final class CertificationFormViewController: UIViewController {
                     textColor: UIColor.appColor(.success700)
                 )
                 self?.contactButton.isHidden = true
+                self?.lockCertificationInputs()
                 self?.viewModel.tempName = self?.nameTextField.text
                 self?.viewModel.tempPhoneNumber = self?.phoneNumberTextField.text
                 self?.viewModel.tempGender = self?.selectedGender?.rawValue
@@ -421,7 +455,9 @@ extension CertificationFormViewController {
     }
     
     @objc private func sendVerificationButtonTapped() {
-        guard sendPolicy.canSend(at: Date()) else { return }
+        guard let phoneNumber = phoneNumberTextField.text,
+              PhoneNumberInput.isComplete(phoneNumber),
+              sendPolicy.canSend(at: Date()) else { return }
 
         timer?.invalidate()
         verificationTimer.reset()
@@ -431,19 +467,37 @@ extension CertificationFormViewController {
         
         sendPolicy.markSent(at: Date())
         sendVerificationButton.setTitle(sendPolicy.buttonTitle, for: .normal)
+        startResendCooldown()
         verificationHelpLabel.text = "인증번호 발송이 안 되시나요?"
         verificationHelpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         verificationHelpLabel.textColor = UIColor.appColor(.neutral500)
-        
-        guard let phoneNumber = phoneNumberTextField.text, !phoneNumber.isEmpty else {
-            return
-        }
         
         inputSubject.send(.sendVerificationCode(phoneNumber))
         let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
         inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, "인증번호 발송", customSessionId))
     }
     
+    private func lockCertificationInputs() {
+        view.endEditing(true)
+        [nameTextField, femaleButton, maleButton, phoneNumberTextField, verificationTextField].forEach {
+            $0.isUserInteractionEnabled = false
+        }
+    }
+
+    private func startResendCooldown() {
+        sendVerificationButton.updateState(isEnabled: false)
+        resendCooldownWorkItem?.cancel()
+
+        let workItem = DispatchWorkItem { [weak self] in
+            guard let self,
+                  self.sendPolicy.canSend(at: Date()),
+                  PhoneNumberInput.isComplete(self.phoneNumberTextField.text ?? "") else { return }
+            self.sendVerificationButton.updateState(isEnabled: true)
+        }
+        resendCooldownWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + VerificationSendPolicy.resendCooldown, execute: workItem)
+    }
+
     private func startTimer() {
         timerLabel.text = verificationTimer.formattedRemainingTime
         verificationHelpLabel.isHidden = true

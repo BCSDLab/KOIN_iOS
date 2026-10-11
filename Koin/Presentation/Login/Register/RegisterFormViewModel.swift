@@ -39,15 +39,16 @@ final class RegisterFormViewModel: ViewModelProtocol {
     
     enum Output {
         case showHttpResult(String, ColorAsset)
-        case showIdHttpResult(String, ColorAsset)
+        case showIdHttpResult(loginId: String, message: String, color: ColorAsset)
         case showNicknameHttpResult(String, ColorAsset)
         case changeSendVerificationButtonStatus
         case sendVerificationCodeSuccess(response: SendVerificationCodeDto)
         case correctVerificationCode
-        case successCheckDuplicatedId
+        case successCheckDuplicatedId(loginId: String)
         case showDeptDropDownList([String])
         case changeCheckButtonStatus
         case succesRegister
+        case failRegister(String)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -148,10 +149,10 @@ extension RegisterFormViewModel {
     private func checkDuplicatedId(loginId: String) {
         checkDuplicatedIdUseCase.execute(loginId: loginId).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showIdHttpResult(error.message, .sub500))
+                self?.outputSubject.send(.showIdHttpResult(loginId: loginId, message: error.message, color: .sub500))
             }
         } receiveValue: { [weak self] (_: Void) in
-            self?.outputSubject.send(.successCheckDuplicatedId)
+            self?.outputSubject.send(.successCheckDuplicatedId(loginId: loginId))
         }
         .store(in: &subscriptions)
     }
@@ -192,7 +193,7 @@ extension RegisterFormViewModel {
         )
         .sink { [weak self] completion in
             if case let .failure(error) = completion {
-                print("❌ 학생 회원가입 실패: \(error.message), code: \(error.code)")
+                self?.outputSubject.send(.failRegister(error.message))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.succesRegister)
@@ -214,7 +215,7 @@ extension RegisterFormViewModel {
         )
         .sink { [weak self] completion in
             if case let .failure(error) = completion {
-                print("❌ 외부인 회원가입 실패: \(error.message), code: \(error.code)")
+                self?.outputSubject.send(.failRegister(error.message))
             }
         } receiveValue: { [weak self] _ in
             self?.outputSubject.send(.succesRegister)

@@ -44,6 +44,12 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
+    func formatDateToYYYY년M월D일() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy년 M월 d일"
+        return dateFormatter.string(from: self)
+    }
+    
     func formatDateToHHMM(isHH: Bool) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ko_KR")

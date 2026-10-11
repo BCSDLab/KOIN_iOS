@@ -1,0 +1,198 @@
+//
+//  RecruitListView.swift
+//  koin
+//
+//  Created by 홍기정 on 8/28/26.
+//
+
+import SwiftUI
+
+struct RecruitListView: ActionBindableView {
+    enum Action {
+        case configureRightButtons(hasUnreadNotification: Bool)
+        case showFilterBottomSheet(
+            filterState: RecruitListFilter,
+            onFilterItemTapped: (Int, FilterItemModel)->Bool,
+            onResetTapped: ()->Void,
+            onApplyTapped: ([FilterGroupModel])->Void
+        )
+        case showToast(message: String)
+        case showLoginToast
+        case showProfilePostToast
+        case showRecruitPost
+        case showRecruitData(id: Int)
+    }
+    
+    // MARK: - Properties
+    var sendAction: ((Action) -> Void) = { _ in }
+    @State private var viewModel: RecruitListViewModel
+    
+    var recruits: [RecruitRow] {
+        viewModel.recruitList?.recruits ?? []
+    }
+    
+    // MARK: - Initializer
+    init(viewModel: RecruitListViewModel) {
+        self.viewModel = viewModel
+    }
+    
+    // MARK: - Body
+    var body: some View {
+        VStack {
+            RecruitListHeaderView(
+                filterState: viewModel.filterState,
+                onSearchTapped: { keyword in
+                    if !keyword.isEmpty {
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentSearch, .click, keyword))
+                    }
+                    viewModel.execute(.updateFilter(keyword: keyword))
+                },
+                onFilterButtonTapped: {
+                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilter, .click, "필터"))
+                    sendAction(.showFilterBottomSheet(
+                        filterState: viewModel.filterState,
+                        onFilterItemTapped: { groupIndex, item in
+                            if let event = RecruitListFilter.logEvent(groupIndex: groupIndex, title: item.title) {
+                                viewModel.execute(.logEvent(event.label, .click, event.value))
+                            }
+                            return true
+                        },
+                        onResetTapped: {
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilterReset, .click, "초기화"))
+                        },
+                        onApplyTapped: { filterGroups in
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilterApply, .click, "적용하기"))
+                            viewModel.execute(.updateFilter(filterState: RecruitListFilter(from: filterGroups)))
+                        }
+                    ))
+                },
+                onFilterDeleted: { rawValue in
+                    viewModel.execute(.deleteFilter(rawvalue: rawValue))
+                }
+            )
+            .padding(EdgeInsets(top: 20, leading: 0, bottom: 12, trailing: 0))
+            
+            ScrollViewReader { proxy in
+                ScrollView {
+                    Text("전체(\(viewModel.recruitList?.totalCount ?? 0))")
+                        .font(.appFont(.pretendardRegular, size: 12))
+                        .foregroundStyle(Color.appColor(.neutral500))
+                        .frame(height: 19)
+                        .padding(EdgeInsets(top: 0, leading: 4, bottom: 12, trailing: 0))
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .id("TOP")
+                    
+                    LazyVStack(spacing: 8) {
+                        ForEach(recruits) { recruit in
+                            Button {
+                                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentPostSelect, .click, recruit.title))
+                                sendAction(.showRecruitData(id: recruit.id))
+                            } label: {
+                                RecruitListRowView(model: recruit)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .buttonStyle(.plain)
+                            .onAppear {
+                                if recruits.last?.id == recruit.id,
+                                   viewModel.hasNextPage,
+                                   !viewModel.isLoading {
+                                    viewModel.execute(.loadNextPage)
+                                }
+                            }
+                        }
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    ProgressView()
+                        .frame(maxWidth: .infinity, alignment: .center)
+                        .frame(height: 24 + 43)
+                        .padding(.top, 12)
+                        .isHidden(!(viewModel.hasNextPage && viewModel.isLoading), shouldOccupySpace: true)
+                }
+                .padding(.horizontal, 22)
+                .background {
+                    RecruitListEmptyView()
+                        .isHidden(!viewModel.isEmpty || viewModel.isLoading)
+                }
+                .refreshable {
+                    viewModel.execute(.refresh)
+                }
+                .scrollIndicators(.hidden)
+                .onChange(of: viewModel.shouldScrollToTop) {
+                    if viewModel.shouldScrollToTop {
+                        Task {
+                            try? await Task.sleep(for: .milliseconds(200))
+                            proxy.scrollTo("TOP", anchor: .top)
+                        }
+                    }
+                }
+            }
+        }
+        .background(Color.appColor(.newBackground))
+        .overlay(alignment: .bottomTrailing) {
+            postButton
+                .padding(EdgeInsets(top: 0, leading: 0, bottom: 24, trailing: 30))
+        }
+        .onFirstAppear {
+            viewModel.execute(.onFirstAppear)
+        }
+        .onAppear {
+            viewModel.execute(.onAppear)
+        }
+        .onChange(of: viewModel.errorMessage) {
+            if let message = viewModel.errorMessage {
+                sendAction(.showToast(message: message))
+                viewModel.execute(.didShowToast)
+            }
+        }
+        .onChange(of: viewModel.hasUnreadNotification) {
+            sendAction(.configureRightButtons(hasUnreadNotification: viewModel.hasUnreadNotification))
+        }
+        .hideKeyboardWhenTapAround()
+    }
+    
+    @ViewBuilder
+    private var postButton: some View {
+        Button {
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentRecruit, .click, "모집하기"))
+            guard UserDataManager.shared.isLoggedIn else {
+                sendAction(.showLoginToast)
+                return
+            }
+            guard viewModel.canPost else {
+                sendAction(.showProfilePostToast)
+                return
+            }
+            sendAction(.showRecruitPost)
+        } label: {
+            HStack(alignment: .center, spacing: 4) {
+                Text("모집하기")
+                    .font(.appFont(.pretendardSemiBold, size: 16))
+                    .foregroundStyle(Color.appColor(.neutral0))
+                Image.appImage(asset: .recruitPencil)
+            }
+            .padding(.horizontal, 22)
+            .frame(height: 43)
+            .background(Color.appColor(.new400))
+            .clipShape(RoundedRectangle(cornerRadius: 43/2))
+        }
+        .buttonStyle(.plain)
+    }
+    
+    // MARK: - Public
+    func delete(id: Int) {
+        viewModel.execute(.delete(id: id))
+    }
+    
+    func update(profile: RecruitProfile) {
+        viewModel.execute(.updateProfile(profile))
+    }
+    
+    func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        viewModel.execute(.logEvent(label, category, value))
+    }
+}

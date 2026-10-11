@@ -43,6 +43,17 @@ struct EnterFormStateIdTests {
 
         #expect(sut.isIdChecked == false)
     }
+
+    @Test("걸러진 뒤 아이디가 그대로면 확인 상태를 유지한다")
+    func 걸러진_뒤_아이디가_그대로면_확인_상태를_유지한다() {
+        var sut = EnterFormState()
+        sut.updateLoginId("koinuser")
+        sut.markIdChecked()
+
+        sut.updateLoginId("koinuser!")
+
+        #expect(sut.isIdChecked)
+    }
 }
 
 @Suite("EnterFormState - 비밀번호 일치 상태")
@@ -91,9 +102,7 @@ struct EnterFormStateSubmitTests {
         arguments: [true, false]
     )
     func 아이디_중복_확인을_하지_않으면_가입할_수_없다(isStudent: Bool) {
-        var sut = makeFilledState(isStudent: isStudent)
-
-        sut.updateLoginId("koinuser")
+        let sut = makeFilledState(isStudent: isStudent, isIdChecked: false)
 
         #expect(sut.canSubmit(isStudent: isStudent) == false)
     }
@@ -167,10 +176,12 @@ struct EnterFormStateSubmitTests {
 }
 
 extension EnterFormStateSubmitTests {
-    private func makeFilledState(isStudent: Bool) -> EnterFormState {
+    private func makeFilledState(isStudent: Bool, isIdChecked: Bool = true) -> EnterFormState {
         var state = EnterFormState()
         state.updateLoginId("koinuser")
-        state.markIdChecked()
+        if isIdChecked {
+            state.markIdChecked()
+        }
         state.updateFirstPassword("koin1234!")
         state.updateSecondPassword("koin1234!")
         if isStudent {
