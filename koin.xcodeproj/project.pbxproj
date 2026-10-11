@@ -1109,6 +1109,7 @@
 		D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */; };
 		D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */; };
 		D2A8F8BC2C4A71420090C7A4 /* CoopShopDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */; };
+		DA120000000000000000000B /* CoopOpenDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA110000000000000000000B /* CoopOpenDto.swift */; };
 		D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */; };
 		D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */; };
 		D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */; };
@@ -2332,6 +2333,7 @@
 		D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCoopShopListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopDto.swift; sourceTree = "<group>"; };
+		DA110000000000000000000B /* CoopOpenDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopOpenDto.swift; sourceTree = "<group>"; };
 		D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopData.swift; sourceTree = "<group>"; };
 		D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
@@ -5857,6 +5859,7 @@
 			children = (
 				D27DD07A2BA608310081FD36 /* DiningDto.swift */,
 				D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */,
+				DA110000000000000000000B /* CoopOpenDto.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6952,6 +6955,7 @@
 				7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */,
 				7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDto.swift in Sources */,
+				DA120000000000000000000B /* CoopOpenDto.swift in Sources */,
 				7CF77B6D30057468003642C1 /* NoticeKeywordAllButton.swift in Sources */,
 				7C7F43222F65F1F100CC5860 /* CallVanListRequest.swift in Sources */,
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,

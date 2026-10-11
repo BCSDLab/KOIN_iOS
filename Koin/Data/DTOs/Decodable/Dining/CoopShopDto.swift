@@ -34,19 +34,6 @@ struct CoopShopDto: Decodable {
     }
 }
 
-struct CoopOpenDto: Decodable {
-    let dayOfWeek: DayOfWeek
-    let type: MealType
-    let openTime, closeTime: String
-    
-    enum CodingKeys: String, CodingKey {
-        case dayOfWeek = "day_of_week"
-        case type
-        case openTime = "open_time"
-        case closeTime = "close_time"
-    }
-}
-
 enum DayOfWeek: String, Decodable {
     case weekday = "평일"
     case weekend = "주말"
