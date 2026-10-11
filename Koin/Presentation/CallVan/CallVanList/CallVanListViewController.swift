@@ -196,7 +196,7 @@ extension CallVanListViewController {
     }
     
     @objc private func filterButtonTapped() {
-        let onFilterItemTapped: (FilterItemModel)->Bool = { [weak self] filterItem in
+        let onFilterItemTapped: (Int, FilterItemModel)->Bool = { [weak self] _, filterItem in
             guard let self else { return false }
             if filterItem.title == CallVanMineOrJoined.mine.rawValue
                 || filterItem.title == CallVanMineOrJoined.joined.rawValue {

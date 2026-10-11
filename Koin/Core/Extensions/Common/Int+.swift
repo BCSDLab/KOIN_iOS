@@ -22,3 +22,9 @@ extension Int {
         self.init(string ?? "")
     }
 }
+
+extension Int {
+    func toDDay() -> String {
+        return "D-" + (self <= 0 ? "day" : "\(self)")
+    }
+}

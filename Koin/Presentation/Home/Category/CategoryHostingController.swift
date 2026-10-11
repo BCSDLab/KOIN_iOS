@@ -51,7 +51,7 @@ final class CategoryHostingController: UIHostingController<CategoryView>, Hostin
         case .showBusiness:
             presentBusiness()
         case .showRecruit:
-            showRecruit()
+            navigationController?.pushViewController(makeRecruitListViewController(), animated: true)
             
         case .showLoginToast:
             showToastMessageWithButton(
@@ -199,21 +199,27 @@ extension CategoryHostingController {
         let viewModel = LandViewModel(fetchLandListUseCase: fetchLandListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         return LandViewController(viewModel: viewModel)
     }
+    
+    private func makeRecruitListViewController() -> UIViewController {
+        let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
+        let fetchRecruitListUseCase = DefaultFetchRecruitListUseCase(repository: recruitRepository)
+        let fetchRecruitNotificationListUseCase = DefaultFetchRecruitNotificationListUseCase(repository: recruitRepository)
+        let fetchMyRecruitProfileUseCase = DefaultFetchMyRecruitProfileUseCase(repository: recruitRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = RecruitListViewModel(
+            fetchRecruitListUseCase: fetchRecruitListUseCase,
+            fetchRecruitNotificationListUseCase: fetchRecruitNotificationListUseCase,
+            fetchMyRecruitProfileUseCase: fetchMyRecruitProfileUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let rootView = RecruitListView(viewModel: viewModel)
+        return RecruitListHostingController(rootView: rootView)
+    }
 
     private func presentBusiness() {
         if let url = URL(string: "https://owner.koreatech.in/") {
             let safariViewController = SFSafariViewController(url: url)
             present(safariViewController, animated: true)
         }
-    }
-
-    private func showRecruit() {
-        guard var components = URLComponents(string: Bundle.main.baseUrl),
-              let host = components.host else { return }
-        components.host = host.hasPrefix("api.") ? String(host.dropFirst("api.".count)) : host
-        components.path = "/team"
-        guard let url = components.url else { return }
-        let safariViewController = SFSafariViewController(url: url)
-        present(safariViewController, animated: true)
     }
 }

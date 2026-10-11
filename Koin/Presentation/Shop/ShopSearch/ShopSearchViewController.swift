@@ -84,7 +84,7 @@ final class ShopSearchViewController: UIViewController {
     }
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .order)
+        configureNavigationBar(style: .newBackground)
     }
     
     override func viewDidAppear(_ animated: Bool) {
