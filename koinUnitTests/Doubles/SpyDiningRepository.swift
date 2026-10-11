@@ -11,22 +11,27 @@ import Foundation
 
 final class SpyDiningRepository: DiningRepository {
 
-    var stubbedDiningList: [DiningDto] = []
+    var stubbedDiningList: [DiningItem] = []
+    var stubbedCoopShopData = CoopShopData(
+        location: "", phone: "", remarks: "", name: "", semester: "", opens: [], updatedAt: ""
+    )
 
     private(set) var fetchDiningListCallCount = 0
-    private(set) var receivedFetchRequests: [FetchDiningListRequest] = []
+    private(set) var receivedFetchRequests: [Date] = []
     private(set) var receivedShareModels: [ShareDiningMenu] = []
 
-    func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDto], ErrorResponse> {
+    func fetchDiningList(date: Date) -> AnyPublisher<[DiningItem], ErrorResponse> {
         fetchDiningListCallCount += 1
-        receivedFetchRequests.append(requestModel)
+        receivedFetchRequests.append(date)
         return Just(stubbedDiningList)
             .setFailureType(to: ErrorResponse.self)
             .eraseToAnyPublisher()
     }
 
-    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, ErrorResponse> {
-        Empty<CoopShopDto, ErrorResponse>().eraseToAnyPublisher()
+    func fetchCoopShopList() -> AnyPublisher<CoopShopData, ErrorResponse> {
+        Just(stubbedCoopShopData)
+            .setFailureType(to: ErrorResponse.self)
+            .eraseToAnyPublisher()
     }
 
     func shareMenuList(shareModel: ShareDiningMenu) {

@@ -142,7 +142,7 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
     }
     
     func configure(info: DiningItem) {
-        diningPlaceLabel.text = info.place.rawValue
+        diningPlaceLabel.text = info.place.name
 
         let kcalText = info.kcal != 0 ? "\(info.kcal)kcal" : ""
         let priceCashText = (info.priceCash != nil && info.priceCash != 0) ? "\(info.priceCash!)원" : ""

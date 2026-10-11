@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class DefaultDiningRepository: DiningRepository {
     private let diningService: DiningService
@@ -16,12 +17,19 @@ final class DefaultDiningRepository: DiningRepository {
         self.shareService = shareService
     }
     
-    func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDto], ErrorResponse> {
+    func fetchDiningList(date: Date) -> AnyPublisher<[DiningItem], ErrorResponse> {
+        let requestModel = FetchDiningListRequest(date: date.formatDateToYYMMDD())
         return diningService.fetchDiningList(requestModel: requestModel)
+            .map { diningList in
+                diningList.compactMap { $0.toDomain() }
+            }
+            .eraseToAnyPublisher()
     }
     
-    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, ErrorResponse> {
+    func fetchCoopShopList() -> AnyPublisher<CoopShopData, ErrorResponse> {
         return diningService.fetchCoopShopList()
+            .map { $0.toDomain() }
+            .eraseToAnyPublisher()
     }
     
     func shareMenuList(shareModel: ShareDiningMenu) {

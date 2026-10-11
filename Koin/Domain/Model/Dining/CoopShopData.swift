@@ -13,7 +13,7 @@ struct CoopShopData {
     let remarks: String
     let name: String
     let semester: String
-    let opens: [CoopOpenDto]
+    let opens: [CoopOpen]
     let updatedAt: String
 }
                                 

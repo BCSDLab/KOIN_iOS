@@ -6,9 +6,10 @@
 //
 
 import Combine
+import Foundation
 
 protocol DiningRepository {
-    func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDto], ErrorResponse>
-    func fetchCoopShopList() -> AnyPublisher<CoopShopDto, ErrorResponse>
+    func fetchDiningList(date: Date) -> AnyPublisher<[DiningItem], ErrorResponse>
+    func fetchCoopShopList() -> AnyPublisher<CoopShopData, ErrorResponse>
     func shareMenuList(shareModel: ShareDiningMenu)
 }

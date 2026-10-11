@@ -21,7 +21,7 @@ final class DefaultFetchDiningListUseCase: FetchDiningListUseCase {
     }
     
     func execute(diningInfo: CurrentDiningTime) -> AnyPublisher<[DiningItem], ErrorResponse> {
-        return diningRepository.fetchDiningList(requestModel: FetchDiningListRequest(date: diningInfo.date.formatDateToYYMMDD()))
+        return diningRepository.fetchDiningList(date: diningInfo.date)
             .map { [weak self] diningList in
                 return self?.removeNonOperatingItems(from: diningList) ?? []
             }
@@ -31,43 +31,18 @@ final class DefaultFetchDiningListUseCase: FetchDiningListUseCase {
             .map { [weak self] diningList in
                 self?.sortDiningList(diningList) ?? []
             }
-            .map { diningList in
-                diningList.map { $0.toDomain() }
-            }
             .eraseToAnyPublisher()
     }
     
-    private func removeNonOperatingItems(from diningList: [DiningDto]) -> [DiningDto] {
-        return diningList.filter { $0.menu?.first != "미운영" }
+    private func removeNonOperatingItems(from diningList: [DiningItem]) -> [DiningItem] {
+        return diningList.filter { $0.menu.first != "미운영" }
     }
     
-    private func filterByDiningType(_ diningList: [DiningDto], type: DiningType) -> [DiningDto] {
+    private func filterByDiningType(_ diningList: [DiningItem], type: DiningType) -> [DiningItem] {
         return diningList.filter { $0.type == type }
     }
     
-    private func sortDiningList(_ diningList: [DiningDto]) -> [DiningDto] {
-        return diningList.sorted {
-            let order1 = $0.place.rawValue.first.map { sortOrder(of: $0) } ?? Int.max
-            let order2 = $1.place.rawValue.first.map { sortOrder(of: $0) } ?? Int.max
-            if order1 == order2 {
-                return ($0.place.rawValue) < ($1.place.rawValue)
-            } else {
-                return order1 < order2
-            }
-        }
-    }
-    
-    private func sortOrder(of char: Character) -> Int {
-        if char.isLetter {
-            if char.isASCII {
-                return 0
-            } else {
-                return 1
-            }
-        } else if char.isNumber {
-            return 2
-        } else {
-            return 3
-        }
+    private func sortDiningList(_ diningList: [DiningItem]) -> [DiningItem] {
+        return diningList.sorted { $0.place.sortOrder < $1.place.sortOrder }
     }
 }

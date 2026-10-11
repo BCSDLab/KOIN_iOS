@@ -1065,6 +1065,10 @@
 		D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27A5D9D2C6BE8B700C4275F /* Shop.swift */; };
 		D27DD0B22BA608310081FD36 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D27DD05C2BA608310081FD36 /* Assets.xcassets */; };
 		D27DD0CA2BA608310081FD36 /* DiningDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07A2BA608310081FD36 /* DiningDto.swift */; };
+		DA4200000000000000000001 /* DiningTypeDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4100000000000000000001 /* DiningTypeDto.swift */; };
+		DA4200000000000000000002 /* DiningPlaceDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4100000000000000000002 /* DiningPlaceDto.swift */; };
+		DA4200000000000000000003 /* DayOfWeekDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4100000000000000000003 /* DayOfWeekDto.swift */; };
+		DA4200000000000000000004 /* MealTypeDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA4100000000000000000004 /* MealTypeDto.swift */; };
 		D27DD0CB2BA608310081FD36 /* ShopCategoryDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07B2BA608310081FD36 /* ShopCategoryDto.swift */; };
 		D27DD0CC2BA608310081FD36 /* ShopsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07C2BA608310081FD36 /* ShopsDto.swift */; };
 		D27DD0CD2BA608310081FD36 /* Log.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD07F2BA608310081FD36 /* Log.swift */; };
@@ -1109,7 +1113,13 @@
 		D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */; };
 		D2A8F8BA2C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */; };
 		D2A8F8BC2C4A71420090C7A4 /* CoopShopDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */; };
+		DA120000000000000000000B /* CoopOpenDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA110000000000000000000B /* CoopOpenDto.swift */; };
 		D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */; };
+		DA2200000000000000000001 /* DiningType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2100000000000000000001 /* DiningType.swift */; };
+		DA2200000000000000000002 /* DiningPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2100000000000000000002 /* DiningPlace.swift */; };
+		DA2200000000000000000003 /* DayOfWeek.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2100000000000000000003 /* DayOfWeek.swift */; };
+		DA2200000000000000000004 /* MealType.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2100000000000000000004 /* MealType.swift */; };
+		DA2200000000000000000005 /* CoopOpen.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA2100000000000000000005 /* CoopOpen.swift */; };
 		D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */; };
 		D2A8F8C22C4BD36C0090C7A4 /* ShareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */; };
 		D2B2193B2D66626900EAF5B1 /* LostItemChatHistoryData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2B2193A2D66626900EAF5B1 /* LostItemChatHistoryData.swift */; };
@@ -2288,6 +2298,10 @@
 		D27DCD682BA5BADC0081FD36 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = Info.plist; path = Koin/Info.plist; sourceTree = "<group>"; };
 		D27DD05C2BA608310081FD36 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D27DD07A2BA608310081FD36 /* DiningDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DiningDto.swift; sourceTree = "<group>"; };
+		DA4100000000000000000001 /* DiningTypeDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningTypeDto.swift; sourceTree = "<group>"; };
+		DA4100000000000000000002 /* DiningPlaceDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningPlaceDto.swift; sourceTree = "<group>"; };
+		DA4100000000000000000003 /* DayOfWeekDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeekDto.swift; sourceTree = "<group>"; };
+		DA4100000000000000000004 /* MealTypeDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealTypeDto.swift; sourceTree = "<group>"; };
 		D27DD07B2BA608310081FD36 /* ShopCategoryDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopCategoryDto.swift; sourceTree = "<group>"; };
 		D27DD07C2BA608310081FD36 /* ShopsDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShopsDto.swift; sourceTree = "<group>"; };
 		D27DD07F2BA608310081FD36 /* Log.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Log.swift; sourceTree = "<group>"; };
@@ -2332,7 +2346,13 @@
 		D2A8F8B42C4A5A870090C7A4 /* UserRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRepository.swift; sourceTree = "<group>"; };
 		D2A8F8B92C4A70E80090C7A4 /* FetchCoopShopListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCoopShopListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopDto.swift; sourceTree = "<group>"; };
+		DA110000000000000000000B /* CoopOpenDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopOpenDto.swift; sourceTree = "<group>"; };
 		D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopShopData.swift; sourceTree = "<group>"; };
+		DA2100000000000000000001 /* DiningType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningType.swift; sourceTree = "<group>"; };
+		DA2100000000000000000002 /* DiningPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningPlace.swift; sourceTree = "<group>"; };
+		DA2100000000000000000003 /* DayOfWeek.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DayOfWeek.swift; sourceTree = "<group>"; };
+		DA2100000000000000000004 /* MealType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MealType.swift; sourceTree = "<group>"; };
+		DA2100000000000000000005 /* CoopOpen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoopOpen.swift; sourceTree = "<group>"; };
 		D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareMenuListUseCase.swift; sourceTree = "<group>"; };
 		D2A8F8C12C4BD36C0090C7A4 /* ShareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareService.swift; sourceTree = "<group>"; };
 		D2B2193A2D66626900EAF5B1 /* LostItemChatHistoryData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemChatHistoryData.swift; sourceTree = "<group>"; };
@@ -5856,7 +5876,12 @@
 			isa = PBXGroup;
 			children = (
 				D27DD07A2BA608310081FD36 /* DiningDto.swift */,
+				DA4100000000000000000001 /* DiningTypeDto.swift */,
+				DA4100000000000000000002 /* DiningPlaceDto.swift */,
+				DA4100000000000000000003 /* DayOfWeekDto.swift */,
+				DA4100000000000000000004 /* MealTypeDto.swift */,
 				D2A8F8BB2C4A71420090C7A4 /* CoopShopDto.swift */,
+				DA110000000000000000000B /* CoopOpenDto.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -5926,6 +5951,12 @@
 				D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */,
 				D2009F752C17270F00211D1B /* CalendarDate.swift */,
 				D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */,
+				DA2100000000000000000001 /* DiningType.swift */,
+				DA2100000000000000000002 /* DiningPlace.swift */,
+				DA2100000000000000000003 /* DayOfWeek.swift */,
+				DA2100000000000000000004 /* MealType.swift */,
+				DA2100000000000000000005 /* CoopOpen.swift */,
+				D2A513402C59FE860064941A /* ShareDiningMenu.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6136,7 +6167,6 @@
 			isa = PBXGroup;
 			children = (
 				D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */,
-				D2A513402C59FE860064941A /* ShareDiningMenu.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6887,6 +6917,11 @@
 				D874DB4B2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift in Sources */,
 				7CC42B682F5A9C0C00940CE1 /* KoinPickerDropDownView.swift in Sources */,
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
+				DA2200000000000000000001 /* DiningType.swift in Sources */,
+				DA2200000000000000000002 /* DiningPlace.swift in Sources */,
+				DA2200000000000000000003 /* DayOfWeek.swift in Sources */,
+				DA2200000000000000000004 /* MealType.swift in Sources */,
+				DA2200000000000000000005 /* CoopOpen.swift in Sources */,
 				7CF77B853005F105003642C1 /* NoticeSearchEmptyView.swift in Sources */,
 				83DD0DB72C53777800278ABD /* SearchBusInfoUseCase.swift in Sources */,
 				7CC42B2F2F58105B00940CE1 /* CallVanBottomSheetViewController.swift in Sources */,
@@ -6952,6 +6987,7 @@
 				7C61D3172F213D57005FAC3A /* ChangeLostItemStateUseCase.swift in Sources */,
 				7C16AA372F3E0DBE0071ABE6 /* Interceptor.swift in Sources */,
 				D2A8F8BC2C4A71420090C7A4 /* CoopShopDto.swift in Sources */,
+				DA120000000000000000000B /* CoopOpenDto.swift in Sources */,
 				7CF77B6D30057468003642C1 /* NoticeKeywordAllButton.swift in Sources */,
 				7C7F43222F65F1F100CC5860 /* CallVanListRequest.swift in Sources */,
 				D2B7EBDC2D382D5400EE46B0 /* CheckAuthUseCase.swift in Sources */,
@@ -7725,6 +7761,10 @@
 				7CACF86B3044093F00AC2828 /* DeleteRecruitNotificationUseCase.swift in Sources */,
 				7C58FE922F5FAC0100A2737B /* CallVanDataView.swift in Sources */,
 				D27DD0CA2BA608310081FD36 /* DiningDto.swift in Sources */,
+				DA4200000000000000000001 /* DiningTypeDto.swift in Sources */,
+				DA4200000000000000000002 /* DiningPlaceDto.swift in Sources */,
+				DA4200000000000000000003 /* DayOfWeekDto.swift in Sources */,
+				DA4200000000000000000004 /* MealTypeDto.swift in Sources */,
 				D20AB94E2C553427006BC684 /* NotiRepository.swift in Sources */,
 				833D9C3E2C705E9300982145 /* FetchNoticeArticlesRequest.swift in Sources */,
 				7CDCD0C93055D639004204DA /* RecruitProfileView.swift in Sources */,
