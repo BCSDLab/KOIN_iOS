@@ -114,7 +114,7 @@ extension RecruitPostRoleView {
         tableView.endEditing(true)
         roles.append(.init())
         pendingRowChangeIndex = roles.count - 1
-        didChangeHeightPublisher.send(heightDifference(from: previousRowCount))
+        didChangeHeightPublisher.send(heightChanged(from: previousRowCount))
         rolesChangedPublisher.send(roles)
     }
 
@@ -128,7 +128,7 @@ extension RecruitPostRoleView {
             roles = []
             numberOfGeneralMembers = minimumNumberOfMembers
             if previousRowCount != displayedRowCount {
-                didChangeHeightPublisher.send(heightDifference(from: previousRowCount))
+                didChangeHeightPublisher.send(heightChanged(from: previousRowCount))
             } else {
                 updateViews()
             }
@@ -140,7 +140,7 @@ extension RecruitPostRoleView {
             roles = [.init()]
             numberOfGeneralMembers = minimumNumberOfMembers
             if previousRowCount != displayedRowCount {
-                didChangeHeightPublisher.send(heightDifference(from: previousRowCount))
+                didChangeHeightPublisher.send(heightChanged(from: previousRowCount))
             } else {
                 updateViews()
             }
@@ -186,7 +186,7 @@ extension RecruitPostRoleView {
         tableView.endEditing(true)
         roles.remove(at: index)
         pendingRowChangeIndex = index
-        didChangeHeightPublisher.send(heightDifference(from: previousRowCount))
+        didChangeHeightPublisher.send(heightChanged(from: previousRowCount))
         rolesChangedPublisher.send(roles)
     }
 }
@@ -200,7 +200,7 @@ extension RecruitPostRoleView {
         roles.reduce(0) { $0 + $1.maximumParticipants }
     }
 
-    private func heightDifference(from previousRowCount: Int) -> Int {
+    private func heightChanged(from previousRowCount: Int) -> Int {
         RecruitPostRoleTableView.contentHeight(for: displayedRowCount)
             - RecruitPostRoleTableView.contentHeight(for: previousRowCount)
     }

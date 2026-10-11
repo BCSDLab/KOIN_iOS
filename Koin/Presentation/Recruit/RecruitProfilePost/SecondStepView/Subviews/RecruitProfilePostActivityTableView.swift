@@ -33,7 +33,7 @@ final class RecruitProfilePostActivityTableView: UITableView {
     let addCompleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let editCompleteButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let activitiesChangedPublisher = PassthroughSubject<[RecruitProfileActivityRequest], Never>()
-    let didChangeHeightPublisher = PassthroughSubject<Int, Never>()
+    let didChangeHeightPublisher = PassthroughSubject<(indexPath: IndexPath, heightChanged: Int), Never>()
     
     private var rows: [Row] = []
     private var footerSubscriptions = Set<AnyCancellable>()
@@ -111,7 +111,7 @@ extension RecruitProfilePostActivityTableView {
             mode: .editing
         ))
         pendingSizeChange = .insert(indexPath)
-        didChangeHeightPublisher.send(Int(height(for: rows[indexPath.row])))
+        didChangeHeightPublisher.send((indexPath, Int(height(for: rows[indexPath.row]))))
     }
     
     private func editActivity(at indexPath: IndexPath) {
@@ -123,7 +123,7 @@ extension RecruitProfilePostActivityTableView {
         rows[indexPath.row].draft = committed
         rows[indexPath.row].mode = .editing
         pendingSizeChange = .reload(indexPath)
-        didChangeHeightPublisher.send(Int(height(for: rows[indexPath.row]) - previousHeight))
+        didChangeHeightPublisher.send((indexPath, Int(height(for: rows[indexPath.row]) - previousHeight)))
     }
     
     private func completeActivity(at indexPath: IndexPath) {
@@ -139,7 +139,7 @@ extension RecruitProfilePostActivityTableView {
         rows[indexPath.row].committed = rows[indexPath.row].draft
         rows[indexPath.row].mode = .display
         pendingSizeChange = .reload(indexPath)
-        didChangeHeightPublisher.send(Int(height(for: rows[indexPath.row]) - previousHeight))
+        didChangeHeightPublisher.send((indexPath, Int(height(for: rows[indexPath.row]) - previousHeight)))
         
         activitiesChangedPublisher.send(rows.compactMap(\.committed))
     }
@@ -150,7 +150,7 @@ extension RecruitProfilePostActivityTableView {
         dropdownHost?.dismissPresented()
         rows.remove(at: indexPath.row)
         pendingSizeChange = .delete(indexPath)
-        didChangeHeightPublisher.send(-Int(previousHeight))
+        didChangeHeightPublisher.send((indexPath, -Int(previousHeight)))
         
         activitiesChangedPublisher.send(rows.compactMap(\.committed))
     }

@@ -277,7 +277,7 @@ extension RecruitPostViewController {
             self?.request.numberOfGeneralMembers = numberOfGeneralMembers
         }.store(in: &subscriptions)
 
-        roleView.didChangeHeightPublisher.sink { [weak self] heightDifference in
+        roleView.didChangeHeightPublisher.sink { [weak self] heightChanged in
             guard let self else {
                 return
             }
@@ -294,7 +294,7 @@ extension RecruitPostViewController {
                 roleView.applyPendingSizeChange()
                 view.layoutIfNeeded()
                 
-                guard 0 < heightDifference else {
+                guard 0 < heightChanged else {
                     return
                 }
                 let bottomRect = roleView.convert(

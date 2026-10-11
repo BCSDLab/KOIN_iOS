@@ -380,7 +380,7 @@ extension RecruitProfilePostViewController {
             .store(in: &subscriptions)
 
         secondStepView.didChangeHeightPublisher
-            .sink { [weak self] (section, heightChanged) in
+            .sink { [weak self] (section, indexPath, heightChanged) in
                 guard let self else { return }
                 view.layoutIfNeeded()
                 UIView.animate(
@@ -391,7 +391,7 @@ extension RecruitProfilePostViewController {
                     self.updateCompleteButtonState()
                     self.view.layoutIfNeeded()
                     guard heightChanged > 0 else { return }
-                    self.secondStepView.scrollBottomToVisible(of: section)
+                    self.secondStepView.scrollRowToVisible(at: indexPath, in: section)
                 }
             }
             .store(in: &subscriptions)

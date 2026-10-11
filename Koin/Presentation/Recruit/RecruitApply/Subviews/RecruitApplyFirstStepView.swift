@@ -20,7 +20,11 @@ final class RecruitApplyFirstStepView: UIScrollView {
     // MARK: - Publisher
     let loadInfoButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let departmentButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let didChangeHeightPublisher = PassthroughSubject<(Section, Int), Never>()
+    let didChangeHeightPublisher = PassthroughSubject<(
+        section: Section,
+        indexPath: IndexPath,
+        heightChanged: Int
+    ), Never>()
 
     var nicknameChangedPublisher: AnyPublisher<String?, Never> {
         nicknameView.textChangedPublisher.eraseToAnyPublisher()
@@ -169,26 +173,29 @@ final class RecruitApplyFirstStepView: UIScrollView {
         activityTableView.applyPendingSizeChange()
     }
 
-    func scrollBottomToVisible(of section: Section) {
+    func scrollRowToVisible(at indexPath: IndexPath, in section: Section) {
         let tableView: UITableView = switch section {
         case .skill:
             skillTableView
         case .activity:
             activityTableView
         }
-        let bottomRect = tableView.convert(
-            CGRect(x: 0, y: tableView.bounds.maxY - 1, width: tableView.bounds.width, height: 1),
-            to: self
-        )
-        scrollRectToVisible(bottomRect, animated: false)
+        guard indexPath.section < tableView.numberOfSections,
+              indexPath.row < tableView.numberOfRows(inSection: indexPath.section) else { return }
+        let rowRect = tableView.convert(tableView.rectForRow(at: indexPath), to: self)
+        scrollRectToVisible(rowRect, animated: false)
     }
 }
 
 extension RecruitApplyFirstStepView {
     private func bind() {
         Publishers.Merge(
-            skillTableView.didChangeHeightPublisher.map { (.skill, $0) },
-            activityTableView.didChangeHeightPublisher.map { (.activity, $0) }
+            skillTableView.didChangeHeightPublisher.map {
+                (section: .skill, indexPath: $0.indexPath, heightChanged: $0.heightChanged)
+            },
+            activityTableView.didChangeHeightPublisher.map {
+                (section: .activity, indexPath: $0.indexPath, heightChanged: $0.heightChanged)
+            }
         )
         .subscribe(didChangeHeightPublisher)
         .store(in: &subscriptions)
