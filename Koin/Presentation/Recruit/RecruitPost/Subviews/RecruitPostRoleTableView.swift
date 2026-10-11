@@ -9,6 +9,9 @@ import UIKit
 import Combine
 
 final class RecruitPostRoleTableView: UITableView {
+    static let roleRowHeight = 44
+    static let roleRowSpacing = 8
+
     // MARK: - Publishers
     let nameChangedPublisher = PassthroughSubject<(index: Int, text: String, isComposing: Bool), Never>()
     let nameEditingEndedPublisher = PassthroughSubject<(index: Int, text: String), Never>()
@@ -30,9 +33,16 @@ final class RecruitPostRoleTableView: UITableView {
     }
 
     override var intrinsicContentSize: CGSize {
-        let rows = displayedRowCount * 44
-        let spacing = max(0, displayedRowCount - 1) * 8
-        return CGSize(width: UIView.noIntrinsicMetric, height: CGFloat(rows + spacing))
+        CGSize(
+            width: UIView.noIntrinsicMetric,
+            height: CGFloat(Self.contentHeight(for: displayedRowCount))
+        )
+    }
+
+    static func contentHeight(for rowCount: Int) -> Int {
+        let rows = rowCount * roleRowHeight
+        let spacing = max(0, rowCount - 1) * roleRowSpacing
+        return rows + spacing
     }
 
     // MARK: - Initializer
@@ -218,7 +228,10 @@ extension RecruitPostRoleTableView: UITableViewDataSource, UITableViewDelegate {
     }
 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        indexPath.row == displayedRowCount - 1 ? 44 : 52
+        let height = indexPath.row == displayedRowCount - 1
+            ? Self.roleRowHeight
+            : Self.roleRowHeight + Self.roleRowSpacing
+        return CGFloat(height)
     }
 }
 
@@ -282,7 +295,7 @@ extension RecruitPostRoleTableView {
         separatorStyle = .none
         isScrollEnabled = false
         showsVerticalScrollIndicator = false
-        rowHeight = 44
+        rowHeight = CGFloat(Self.roleRowHeight)
         sectionHeaderHeight = 0
         sectionFooterHeight = 0
         dataSource = self

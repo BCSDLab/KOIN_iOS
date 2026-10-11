@@ -12,10 +12,19 @@ import UIKit
 
 final class RecruitApplyFirstStepView: UIScrollView {
 
+    enum Section {
+        case skill
+        case activity
+    }
+
     // MARK: - Publisher
     let loadInfoButtonTappedPublisher = PassthroughSubject<Void, Never>()
     let departmentButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let didChangeHeightPublisher = PassthroughSubject<Void, Never>()
+    let didChangeHeightPublisher = PassthroughSubject<(
+        section: Section,
+        indexPath: IndexPath,
+        heightChanged: Int
+    ), Never>()
 
     var nicknameChangedPublisher: AnyPublisher<String?, Never> {
         nicknameView.textChangedPublisher.eraseToAnyPublisher()
@@ -163,13 +172,30 @@ final class RecruitApplyFirstStepView: UIScrollView {
         skillTableView.applyPendingSizeChange()
         activityTableView.applyPendingSizeChange()
     }
+
+    func scrollRowToVisible(at indexPath: IndexPath, in section: Section) {
+        let tableView: UITableView = switch section {
+        case .skill:
+            skillTableView
+        case .activity:
+            activityTableView
+        }
+        guard indexPath.section < tableView.numberOfSections,
+              indexPath.row < tableView.numberOfRows(inSection: indexPath.section) else { return }
+        let rowRect = tableView.convert(tableView.rectForRow(at: indexPath), to: self)
+        scrollRectToVisible(rowRect, animated: false)
+    }
 }
 
 extension RecruitApplyFirstStepView {
     private func bind() {
         Publishers.Merge(
-            skillTableView.didChangeHeightPublisher,
-            activityTableView.didChangeHeightPublisher
+            skillTableView.didChangeHeightPublisher.map {
+                (section: .skill, indexPath: $0.indexPath, heightChanged: $0.heightChanged)
+            },
+            activityTableView.didChangeHeightPublisher.map {
+                (section: .activity, indexPath: $0.indexPath, heightChanged: $0.heightChanged)
+            }
         )
         .subscribe(didChangeHeightPublisher)
         .store(in: &subscriptions)

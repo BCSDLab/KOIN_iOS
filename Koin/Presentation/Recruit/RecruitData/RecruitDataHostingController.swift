@@ -51,7 +51,7 @@ final class RecruitDataHostingController: UIHostingController<RecruitDataView>, 
         case .didDelete:
             handleDelete()
         case let .showToast(message):
-            showToastMessage(message: message, bottomInset: 72)
+            showToastMessage(message: message)
         case .showLoginToast:
             showLoginToast()
         case .showProfileRequiredToast:
@@ -104,12 +104,20 @@ extension RecruitDataHostingController {
     @objc private func rightBarButtonItemTapped() {
         let popUpViewController = RecruitDataPopUpViewController(
             onEditButtonTapped: { [weak self] in
-                self?.rootView.makeLogAnalyticsEvent(
+                guard let self,
+                    let data = rootView.data else {
+                    return
+                }
+                rootView.makeLogAnalyticsEvent(
                     label: EventParameter.EventLabel.Campus.teamRecruitmentPostEdit,
                     category: .click,
                     value: "편집하기"
                 )
-                self?.navigateToEdit()
+                guard data.state == .recruiting else {
+                    showToastMessage(message: "마감된 팀원 모집글입니다.")
+                    return
+                }
+                navigateToEdit(data: data)
             },
             onDeleteButtonTapped: { [weak self] in
                 self?.rootView.makeLogAnalyticsEvent(
@@ -156,6 +164,10 @@ extension RecruitDataHostingController {
             )
         )
         present(modalViewController, animated: true)
+    }
+    
+    private func showToastMessage(message: String) {
+        showToastMessage(message: message, bottomInset: 72)
     }
 }
 
@@ -226,10 +238,7 @@ extension RecruitDataHostingController {
         navigationController?.popViewController(animated: true)
     }
     
-    private func navigateToEdit() {
-        guard let data = rootView.data else {
-            return
-        }
+    private func navigateToEdit(data: RecruitData) {
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let postRecruitUseCase = DefaultPostRecruitUseCase(repository: recruitRepository)
         let modifyRecruitUseCase = DefaultModifyRecruitUseCase(repository: recruitRepository)
