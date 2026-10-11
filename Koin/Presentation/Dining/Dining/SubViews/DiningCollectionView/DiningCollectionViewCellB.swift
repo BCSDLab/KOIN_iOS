@@ -197,16 +197,14 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
         menuImageView.layer.cornerRadius = info.imageUrl != nil ? 8 : 0
         menuImageView.clipsToBounds = info.imageUrl != nil ? true: false
         menuImageBackground.isUserInteractionEnabled = info.imageUrl != nil ? true: false
-        if let imageUrl = info.imageUrl { menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8) }
-        else {
-            var image = UIImage()
-            if info.date.isWeekend() {
-                menuImageView.image = UIImage.appImage(asset: .nonMenuWeekendImage)
-            }
-            else {
-                menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
-            }
+        switch info.image {
+        case .imageUrl(let imageUrl):
+            menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8)
+        case .empty(let imageAsset):
+            menuImageView.image = UIImage.appImage(asset: imageAsset)
             menuImageView.contentMode = .scaleToFill
+        case .none:
+            break
         }
         
         if info.place == .special || info.place == .secondCampus || info.type == .breakfast && info.imageUrl == nil {

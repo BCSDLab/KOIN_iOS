@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		577EDACE06C34CE5A40A6DD8 /* DiningImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDCC78E7D7CF4494A8E49B2F /* DiningImage.swift */; };
 		004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */; };
 		0D3DC4E723268AE45A326D07 /* RecruitChatDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */; };
 		0E2253358E42231BE436FA27 /* RecruitPostScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */; };
@@ -1253,6 +1254,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DDCC78E7D7CF4494A8E49B2F /* DiningImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningImage.swift; sourceTree = "<group>"; };
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatPostRequestDto.swift; sourceTree = "<group>"; };
 		1A900DEA87E917C84BCD7E04 /* RecruitProfileDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitProfileDto.swift; sourceTree = "<group>"; };
@@ -5948,6 +5950,7 @@
 			isa = PBXGroup;
 			children = (
 				D249CD3A2C158F49000813F9 /* DiningItem.swift */,
+				DDCC78E7D7CF4494A8E49B2F /* DiningImage.swift */,
 				D249CD3E2C159426000813F9 /* CurrentDiningTime.swift */,
 				D2009F752C17270F00211D1B /* CalendarDate.swift */,
 				D2A8F8BD2C4A78F20090C7A4 /* CoopShopData.swift */,
@@ -7162,6 +7165,7 @@
 				7C7BD71F302B2B37003C5A15 /* PostLostItemUseCase.swift in Sources */,
 				D29F21DB2C4E228D00994554 /* CheckDuplicatedNicknameRequest.swift in Sources */,
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
+				577EDACE06C34CE5A40A6DD8 /* DiningImage.swift in Sources */,
 				D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */,
 				E1A70C012D9A4F1100AGSEL1 /* AgreementSelection.swift in Sources */,
 				AA20000000000000000030 /* CertificationInput.swift in Sources */,
