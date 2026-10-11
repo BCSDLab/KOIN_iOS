@@ -32,8 +32,12 @@ struct DiningDto: Decodable {
     }
     
     func toDomain() -> DiningItem? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+
         guard let type = DiningTypeDto(rawValue: type)?.toDomain(),
-              let place = DiningPlaceDto(rawValue: place)?.toDomain() else {
+              let place = DiningPlaceDto(rawValue: place)?.toDomain(),
+              let date = inputFormatter.date(from: date) else {
             return nil
         }
         return .init(
@@ -44,8 +48,8 @@ struct DiningDto: Decodable {
             priceCash: priceCash,
             kcal: kcal ?? 0,
             menu: menu ?? [],
-            soldoutAt: soldoutAt,
-            changedAt: changedAt,
+            isSoldOut: soldoutAt != nil,
+            isChanged: changedAt != nil,
             imageUrl: imageURL,
             date: date
         )

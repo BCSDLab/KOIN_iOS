@@ -14,24 +14,12 @@ struct DiningItem {
     let priceCard, priceCash: Int?
     let kcal: Int
     let menu: [String]
-    let soldoutAt, changedAt: String?
+    let isSoldOut, isChanged: Bool
     let imageUrl: String?
-    let date: String
+    let date: Date
     
     func toShareDiningItem() -> ShareDiningMenu {
-        let formattedDate = dateStringToFormattedString(dateString: date)
-        return ShareDiningMenu(menuList: menu, imageUrl: imageUrl, date: formattedDate, type: type, place: place)
-    }
-    
-    private func dateStringToFormattedString(dateString: String) -> String {
-        let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy-MM-dd"
-        
-        if let date = inputFormatter.date(from: dateString) {
-            return date.formatDateToYYMMDD()
-        } else {
-            return dateString
-        }
+        return ShareDiningMenu(menuList: menu, imageUrl: imageUrl, date: date.formatDateToYYMMDD(), type: type, place: place)
     }
     
 }

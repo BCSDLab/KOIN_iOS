@@ -184,15 +184,15 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
         leftMenuListLabel.attributedText = leftAttributedString
         rightMenuListLabel.attributedText = rightAttributedString
 
-        soldOutLabel.isHidden = info.soldoutAt == nil
-        nonMealImageView.isHidden = info.soldoutAt == nil
-        nonMealText.isHidden = info.soldoutAt == nil
+        soldOutLabel.isHidden = !info.isSoldOut
+        nonMealImageView.isHidden = !info.isSoldOut
+        nonMealText.isHidden = !info.isSoldOut
         
-        if info.soldoutAt != nil { substitutionLabel.isHidden = true }
-            if info.soldoutAt == nil { menuImageBackground.isHidden = true }
+        if info.isSoldOut { substitutionLabel.isHidden = true }
+            if !info.isSoldOut { menuImageBackground.isHidden = true }
             else { menuImageBackground.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5) }
         
-        substitutionLabel.isHidden = info.changedAt == nil
+        substitutionLabel.isHidden = !info.isChanged
         menuImageView.isUserInteractionEnabled = info.imageUrl != nil ? true: false
         menuImageView.layer.cornerRadius = info.imageUrl != nil ? 8 : 0
         menuImageView.clipsToBounds = info.imageUrl != nil ? true: false
@@ -200,13 +200,11 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
         if let imageUrl = info.imageUrl { menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8) }
         else {
             var image = UIImage()
-            if let date = info.date.toDateFromYYYYMMDD() {
-                if date.isWeekend() {
-                    menuImageView.image = UIImage.appImage(asset: .nonMenuWeekendImage)
-                }
-                else {
-                    menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
-                }
+            if info.date.isWeekend() {
+                menuImageView.image = UIImage.appImage(asset: .nonMenuWeekendImage)
+            }
+            else {
+                menuImageView.image = UIImage.appImage(asset: .nonMenuImage)
             }
             menuImageView.contentMode = .scaleToFill
         }
@@ -227,7 +225,7 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
             }
         }
         
-        if info.type == .breakfast && info.imageUrl != nil && info.soldoutAt != nil {
+        if info.type == .breakfast && info.imageUrl != nil && info.isSoldOut {
             menuImageView.isHidden = true
             menuImageBackground.isUserInteractionEnabled = false
         }
