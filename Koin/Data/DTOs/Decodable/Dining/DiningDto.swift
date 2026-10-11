@@ -18,11 +18,9 @@ struct DiningDto: Decodable {
     let createdAt, updatedAt: String
     let soldoutAt, changedAt: String?
     let imageURL: String?
-    let likes: Int
-    let isLiked: Bool
     
     enum CodingKeys: String, CodingKey {
-        case id, date, type, place, likes
+        case id, date, type, place
         case priceCard = "price_card"
         case priceCash = "price_cash"
         case kcal, menu
@@ -31,7 +29,6 @@ struct DiningDto: Decodable {
         case updatedAt = "updated_at"
         case soldoutAt = "soldout_at"
         case changedAt = "changed_at"
-        case isLiked = "is_liked"
     }
     
     func toDomain() -> DiningItem? {
@@ -50,8 +47,6 @@ struct DiningDto: Decodable {
             soldoutAt: soldoutAt,
             changedAt: changedAt,
             imageUrl: imageURL,
-            likes: likes,
-            isLiked: isLiked,
             date: date
         )
     }

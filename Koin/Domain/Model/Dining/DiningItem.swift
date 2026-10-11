@@ -16,19 +16,7 @@ struct DiningItem {
     let menu: [String]
     let soldoutAt, changedAt: String?
     let imageUrl: String?
-    var likes: Int
-    var isLiked: Bool
     let date: String
-    
-    mutating func increaseLike() {
-        likes += 1
-        isLiked.toggle()
-    }
-    
-    mutating func decreaseLike() {
-        likes -= 1
-        isLiked.toggle()
-    }
     
     func toShareDiningItem() -> ShareDiningMenu {
         let formattedDate = dateStringToFormattedString(dateString: date)

@@ -13,7 +13,6 @@ final class DiningCollectionView: UICollectionView, UICollectionViewDataSource, 
     private var diningList: [DiningItem] = []
     let imageTapPublisher = PassthroughSubject<(UIImage, String), Never>()
     let shareButtonPublisher = PassthroughSubject<ShareDiningMenu, Never>()
-    let likeButtonPublisher = PassthroughSubject<(Int, Bool), Never>()
     let firstCardHeightPublisher = PassthroughSubject<CGFloat, Never>()
     
     let logScrollPublisher = PassthroughSubject<Void, Never>()

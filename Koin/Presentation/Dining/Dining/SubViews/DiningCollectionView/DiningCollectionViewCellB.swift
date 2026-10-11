@@ -14,7 +14,6 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
     // MARK: - Properties
     let imageTapPublisher = PassthroughSubject<(UIImage, String), Never>()
     let shareButtonPublisher = PassthroughSubject<Void, Never>()
-    let likeButtonPublisher = PassthroughSubject<Void, Never>()
     var cancellables = Set<AnyCancellable>()
     
     static let reuseIdentifier = "diningCollectionViewCellB"
