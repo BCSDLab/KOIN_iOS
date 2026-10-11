@@ -21,7 +21,7 @@ struct CoopShopDto: Decodable {
     }
     
     func toDomain() -> CoopShopData {
-        return .init(location: location, phone: phone, remarks: remarks ?? "", name: name, semester: semester, opens: opens ?? [], updatedAt: formatUpdatedAt(updatedAt))
+        return .init(location: location, phone: phone, remarks: remarks ?? "", name: name, semester: semester, opens: opens?.compactMap { $0.toDomain() } ?? [], updatedAt: formatUpdatedAt(updatedAt))
     }
     
     private func formatUpdatedAt(_ updatedAt: String) -> String {
@@ -31,28 +31,5 @@ struct CoopShopDto: Decodable {
             return updatedAt
         }
         return date.formatDateToCustom()
-    }
-}
-
-enum DayOfWeek: String, Decodable {
-    case weekday = "평일"
-    case weekend = "주말"
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        self = DayOfWeek(rawValue: rawValue) ?? .weekday
-    }
-}
-
-enum MealType: String, Decodable {
-    case breakfast = "아침"
-    case lunch = "점심"
-    case dinner = "저녁"
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        self = MealType(rawValue: rawValue) ?? .breakfast
     }
 }

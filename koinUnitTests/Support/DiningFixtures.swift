@@ -21,8 +21,8 @@ enum DiningFixture {
         DiningDto(
             id: id,
             date: date,
-            type: type,
-            place: place,
+            type: DiningTypeDto(from: type).rawValue,
+            place: DiningPlaceDto(from: place).rawValue,
             priceCard: nil,
             priceCash: nil,
             kcal: nil,

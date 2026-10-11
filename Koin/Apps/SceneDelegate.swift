@@ -340,7 +340,7 @@ extension SceneDelegate {
             changeNotiUseCase: changeNotiUseCase,
             fetchNotiListUsecase: fetchNotiListUseCase,
             changeNotiDetailUseCase: changeNotiDetailUseCase,
-            sharedDiningItem: CurrentDiningTime(date: date.toDateFromYYMMDD() ?? Date(), diningType: DiningType(rawValue: "\(type)") ?? .breakfast)
+            sharedDiningItem: CurrentDiningTime(date: date.toDateFromYYMMDD() ?? Date(), diningType: DiningTypeDto(rawValue: type)?.toDomain() ?? .breakfast)
         )
         let diningViewController = DiningViewController(viewModel: viewModel)
         diningViewController.title = "식단"

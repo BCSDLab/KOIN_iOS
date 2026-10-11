@@ -10,8 +10,8 @@ import Foundation
 struct DiningDto: Decodable {
     let id: Int
     let date: String
-    let type: DiningType
-    let place: DiningPlace
+    let type: String
+    let place: String
     let priceCard, priceCash: Int?
     let kcal: Int?
     let menu: [String]?
@@ -34,7 +34,11 @@ struct DiningDto: Decodable {
         case isLiked = "is_liked"
     }
     
-    func toDomain() -> DiningItem {
+    func toDomain() -> DiningItem? {
+        guard let type = DiningTypeDto(rawValue: type)?.toDomain(),
+              let place = DiningPlaceDto(rawValue: place)?.toDomain() else {
+            return nil
+        }
         return .init(
             id: id,
             type: type,
@@ -50,48 +54,5 @@ struct DiningDto: Decodable {
             isLiked: isLiked,
             date: date
         )
-    }
-}
-
-enum DiningType: String, Decodable {
-    case breakfast = "BREAKFAST"
-    case lunch = "LUNCH"
-    case dinner = "DINNER"
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        self = DiningType(rawValue: rawValue) ?? .breakfast
-    }
-
-    init?(segmentIndex: Int) {
-        switch segmentIndex {
-        case 0: self = .breakfast
-        case 1: self = .lunch
-        case 2: self = .dinner
-        default: return nil
-        }
-    }
-
-    var name: String {
-        switch self {
-        case .breakfast : "아침"
-        case .lunch : "점심"
-        case .dinner : "저녁"
-        }
-    }
-}
-
-enum DiningPlace: String, Decodable {
-    case cornerA = "A코너"
-    case cornerB = "B코너"
-    case cornerC = "C코너"
-    case special = "능수관"
-    case secondCampus = "2캠퍼스"
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        self = DiningPlace(rawValue: rawValue) ?? .cornerA
     }
 }

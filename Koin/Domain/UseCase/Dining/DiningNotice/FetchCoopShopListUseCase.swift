@@ -22,10 +22,6 @@ final class DefaultFetchCoopShopListUseCase: FetchCoopShopListUseCase {
     
     func execute() -> AnyPublisher<CoopShopData, ErrorResponse> {
         return diningRepository.fetchCoopShopList()
-            .map { coopShopDtos -> CoopShopData in
-                return coopShopDtos.toDomain()
-            }
-            .eraseToAnyPublisher()
     }
     
 }
