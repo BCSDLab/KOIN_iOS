@@ -26,11 +26,13 @@ class NotificationService: UNNotificationServiceExtension {
             contentHandler(request.content)
             return
         }
-        
+
+        self.bestAttemptContent = modifyBodyIfNeeded(of: bestAttemptContent)
+
         Task {
             // MARK: - SwiftData에 Notification 데이터를 기록한다.
             do {
-                try await saveNotificationIfAvailable(userInfo: bestAttemptContent.userInfo)
+                try await saveNotificationIfAvailable(content: bestAttemptContent)
             } catch {
                 print(error.localizedDescription)
             }
@@ -58,11 +60,20 @@ class NotificationService: UNNotificationServiceExtension {
 }
 
 extension NotificationService {
-    private func saveNotificationIfAvailable(userInfo: [AnyHashable: Any]) async throws {
+    // MARK: - 채팅 이미지 메시지의 경우 body에 이미지 URL이 담겨오므로 치환한다.
+    private func modifyBodyIfNeeded(of content: UNMutableNotificationContent) -> UNMutableNotificationContent {
+        if content.body.contains("static.koreatech.in") {
+            content.body = "사진을 보냈습니다."
+        }
+        return content
+    }
+
+    private func saveNotificationIfAvailable(content: UNNotificationContent) async throws {
+        let userInfo = content.userInfo
+        let body = content.body
+        let title = content.title
         guard let aps = userInfo["aps"] as? [String: Any],
-              let alert = aps["alert"] as? [String: Any],
-              let body = alert["body"] as? String,
-              let title = alert["title"] as? String,
+              aps["alert"] is [String: Any],
               let category = aps["category"] as? String,
               let appPath = AppPath(rawValue: category),
               let schemeUri = userInfo["schemeUri"] as? String,
