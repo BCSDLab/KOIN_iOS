@@ -27,6 +27,8 @@ class NotificationService: UNNotificationServiceExtension {
             return
         }
 
+        let originalBody = bestAttemptContent.body
+
         self.bestAttemptContent = modifyBodyIfNeeded(of: bestAttemptContent)
 
         Task {
@@ -38,10 +40,8 @@ class NotificationService: UNNotificationServiceExtension {
             }
             
             // MARK: - 푸시알림이 이미지를 포함하는 경우 처리
-            if let fcmOptionsUserInfo = bestAttemptContent.userInfo["fcm_options"] as? [String: Any],
-               let imageURLString = fcmOptionsUserInfo["image"] as? String,
-               let imageURL = URL(string: imageURLString),
-               let imageData = try? Data(contentsOf: imageURL),
+            if let imageURL = imageURL(fromFCMOptions: bestAttemptContent.userInfo) ?? imageURL(fromBody: originalBody),
+               let imageData = await downloadImage(from: imageURL),
                let attachment = UNNotificationAttachment.saveImageToDisk(identifier: "certificationImage.jpg", data: imageData, options: nil) {
                 bestAttemptContent.attachments = [attachment]
             }
@@ -66,6 +66,28 @@ extension NotificationService {
             content.body = "사진을 보냈습니다."
         }
         return content
+    }
+    
+    // MARK: - fcm_options에 담긴 이미지 URL을 꺼낸다.
+    private func imageURL(fromFCMOptions userInfo: [AnyHashable: Any]) -> URL? {
+        guard let fcmOptionsUserInfo = userInfo["fcm_options"] as? [String: Any],
+              let imageURLString = fcmOptionsUserInfo["image"] as? String else {
+            return nil
+        }
+        return URL(string: imageURLString)
+    }
+    
+    // MARK: - String 타입 ImageUrl을 URL 타입으로 변환한다.
+    private func imageURL(fromBody body: String) -> URL? {
+        guard body.contains("static.koreatech.in") else {
+            return nil
+        }
+        return URL(string: body.trimmingCharacters(in: .whitespacesAndNewlines))
+    }
+    
+    // MARK: - 이미지를 다운로드한다.
+    private func downloadImage(from url: URL) async -> Data? {
+        return try? await URLSession.shared.data(from: url).0
     }
 
     private func saveNotificationIfAvailable(content: UNNotificationContent) async throws {
