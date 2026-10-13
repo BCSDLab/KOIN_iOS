@@ -10,9 +10,11 @@ import FirebaseMessaging
 
 class NotificationService: UNNotificationServiceExtension {
 
+    // MARK: - Properties
     var contentHandler: ((UNNotificationContent) -> Void)?
     var bestAttemptContent: UNNotificationContent?
 
+    // MARK: - DidReceive
     override func didReceive(
         _ request: UNNotificationRequest,
         withContentHandler contentHandler: @escaping (UNNotificationContent) -> Void
@@ -20,15 +22,16 @@ class NotificationService: UNNotificationServiceExtension {
         self.contentHandler = contentHandler
         self.bestAttemptContent = request.content
         
+        // MARK: - TypeCasting
         guard let bestAttemptContent = request.content.mutableCopy() as? UNMutableNotificationContent else {
-            // 만약 mutableCopy가 UNMutableNotificationContent로 변환되지 않는다면,
-            // 바로 이 함수에서 빠져나갑니다.
             contentHandler(request.content)
             return
         }
 
+        // MARK: - Cache
         let originalBody = bestAttemptContent.body
 
+        // MARK: - Modify
         self.bestAttemptContent = modifyBodyIfNeeded(of: bestAttemptContent)
 
         Task {
@@ -50,9 +53,8 @@ class NotificationService: UNNotificationServiceExtension {
         }
     }
     
+    // MARK: - WillExpire
     override func serviceExtensionTimeWillExpire() {
-        // Called just before the extension will be terminated by the system.
-        // Use this as an opportunity to deliver your "best attempt" at modified content, otherwise the original push payload will be used.
         if let contentHandler = contentHandler, let bestAttemptContent =  bestAttemptContent {
             contentHandler(bestAttemptContent)
         }
@@ -60,7 +62,7 @@ class NotificationService: UNNotificationServiceExtension {
 }
 
 extension NotificationService {
-    // MARK: - 채팅 이미지 메시지의 경우 body에 이미지 URL이 담겨오므로 치환한다.
+    // MARK: - body에 담긴 Image URL을 텍스트로 치환한다.
     private func modifyBodyIfNeeded(of content: UNMutableNotificationContent) -> UNMutableNotificationContent {
         if content.body.contains("static.koreatech.in") {
             content.body = "사진을 보냈습니다."
@@ -89,7 +91,10 @@ extension NotificationService {
     private func downloadImage(from url: URL) async -> Data? {
         return try? await URLSession.shared.data(from: url).0
     }
+}
 
+extension NotificationService {
+    // MARK: - SwiftData에 푸시알림을 기록한다.
     private func saveNotificationIfAvailable(content: UNNotificationContent) async throws {
         let userInfo = content.userInfo
         let body = content.body
@@ -116,6 +121,7 @@ extension NotificationService {
 }
 
 extension UNNotificationAttachment {
+    // MARK: - 이미지를 Attachment로 변환한다.
     static func saveImageToDisk(identifier: String, data: Data, options: [AnyHashable : Any]? = nil) -> UNNotificationAttachment? {
         let fileManager = FileManager.default
         let folderName = ProcessInfo.processInfo.globallyUniqueString
