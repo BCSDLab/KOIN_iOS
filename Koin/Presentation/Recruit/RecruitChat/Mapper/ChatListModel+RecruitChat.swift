@@ -27,7 +27,8 @@ extension ChatMessageRowModel {
             timeText: message.displayTime,
             showsProfile: message.showProfile,
             isLeftUser: false,
-            profileImage: message.profileImage.flatMap { UIImage.appImage(asset: $0) }
+            profileImage: message.profileImage.flatMap { UIImage.appImage(asset: $0) },
+            unreadCount: message.unreadCount
         )
     }
 }

@@ -13,6 +13,7 @@ struct RecruitChatData {
     let chatRoomType: RecruitChatRoomType
     let currentMemberCount: Int?
     let maximumMemberCount: Int?
+    let unreadCount: Int?
 }
 
 enum RecruitChatRoomType: String {

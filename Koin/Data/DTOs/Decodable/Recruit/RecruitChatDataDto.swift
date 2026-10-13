@@ -13,6 +13,7 @@ struct RecruitChatDataDto: Decodable {
     let roomType: RecruitChatRoomTypeDto
     let memberCount: Int?
     let maxMemberCount: Int?
+    let unreadCount: Int?
 
     enum CodingKeys: String, CodingKey {
         case chatRoomId = "chat_room_id"
@@ -20,6 +21,7 @@ struct RecruitChatDataDto: Decodable {
         case roomType = "room_type"
         case memberCount = "member_count"
         case maxMemberCount = "max_member_count"
+        case unreadCount = "unread_count"
     }
 }
 
@@ -35,7 +37,8 @@ extension RecruitChatDataDto {
             chatRoomName: roomName,
             chatRoomType: roomType.toDomain(),
             currentMemberCount: memberCount,
-            maximumMemberCount: maxMemberCount
+            maximumMemberCount: maxMemberCount,
+            unreadCount: unreadCount
         )
     }
 }

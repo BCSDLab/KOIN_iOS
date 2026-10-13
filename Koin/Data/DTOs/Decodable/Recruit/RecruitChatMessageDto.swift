@@ -55,6 +55,8 @@ extension Array where Element == RecruitChatMessageDto {
             let showProfile = !(dto.userId == previousUserId && date == previousDate)
             previousUserId = dto.userId
             previousDate = date
+            
+            let unreadCount = dto.unreadCount == 0 ? nil : "\(dto.unreadCount)"
 
             return RecruitChatMessage(
                 messageId: dto.messageId,
@@ -63,7 +65,7 @@ extension Array where Element == RecruitChatMessageDto {
                 content: dto.content,
                 timestamp: timestamp,
                 isImage: dto.isImage,
-                unreadCount: dto.unreadCount,
+                unreadCount: unreadCount,
                 isMine: dto.userId == myUserId,
                 showProfile: showProfile,
                 profileImage: profileImages[profileIndex]
