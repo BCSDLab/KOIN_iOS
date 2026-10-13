@@ -10,13 +10,14 @@ import PhotosUI
 import UIKit
 
 final class LostItemChatViewController: UIViewController, UITextViewDelegate, PHPickerViewControllerDelegate {
-    //
+    
     // MARK: - Properties
     private let viewModel: LostItemChatViewModel
     private let inputSubject: PassthroughSubject<LostItemChatViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var messageInputBottomConstraint: NSLayoutConstraint!
     private var textViewHeightConstraint: NSLayoutConstraint!
+    var chatRoomId: Int { viewModel.chatRoomId }
     
     // MARK: - UI Components
     private let bottomBackgroundView = UIView().then {
