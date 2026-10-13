@@ -121,6 +121,8 @@ extension RecruitChatViewController {
            let currentMemberCount = data.currentMemberCount,
            let maximumMemberCount = data.maximumMemberCount {
             participantsLabel.text = "\(currentMemberCount)/\(maximumMemberCount)"
+            peopleImageView.isHidden = false
+            participantsLabel.isHidden = false
         } else {
             peopleImageView.isHidden = true
             participantsLabel.isHidden = true
