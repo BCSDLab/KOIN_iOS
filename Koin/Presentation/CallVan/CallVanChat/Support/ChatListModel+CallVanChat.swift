@@ -25,7 +25,8 @@ extension ChatMessageRowModel {
             timeText: message.time,
             showsProfile: message.showProfile,
             isLeftUser: message.isLeftUser,
-            profileImage: message.profileImage
+            profileImage: message.profileImage,
+            unreadCount: nil
         )
     }
 }

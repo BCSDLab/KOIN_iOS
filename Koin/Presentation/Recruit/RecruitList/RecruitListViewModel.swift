@@ -203,7 +203,10 @@ extension RecruitListViewModel {
         Task {
             do {
                 myRecruitProfile = try await fetchMyRecruitProfileUseCase.execute()
-            } catch {
+            } catch let error as ErrorResponse where error.statusCode == 401 {
+                return
+            }
+            catch {
                 errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }

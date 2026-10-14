@@ -35,11 +35,13 @@ final class ChatRightCell: UITableViewCell {
     private let messageImageWrapperView = UIView()
     private let messageImageView = UIImageView()
     private let messageImageTimeLabel = UILabel()
+    private let messageImageUnreadCountLabel = UILabel()
     
     private let messageTextWrapperView = UIView()
     private let messageTextView = UIView()
     private let messageTextLabel = UILabel()
     private let messageTextTimeLabel = UILabel()
+    private let messageTextUnreadCountLabel = UILabel()
     
     // MARK: - Initializer
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -65,6 +67,7 @@ final class ChatRightCell: UITableViewCell {
             self.imageUrl = imageUrl
             messageImageView.loadImageWithSpinner(from: imageUrl)
             messageImageTimeLabel.text = message.timeText
+            messageImageUnreadCountLabel.text = message.unreadCount ?? ""
         case .text(let text):
             messageImageWrapperView.isHidden = true
             messageTextWrapperView.isHidden = false
@@ -74,6 +77,7 @@ final class ChatRightCell: UITableViewCell {
                 attributes: messageTextLabelAttributes
             )
             messageTextTimeLabel.text = message.timeText
+            messageTextUnreadCountLabel.text = message.unreadCount ?? ""
         }
     }
 }
@@ -133,6 +137,10 @@ extension ChatRightCell {
             $0.font = UIFont.appFont(.pretendardRegular, size: 12)
             $0.textColor = UIColor.appColor(.neutral500)
         }
+        messageImageUnreadCountLabel.do {
+            $0.font = .appFont(.pretendardRegular, size: 12)
+            $0.textColor = .appColor(.neutral700)
+        }
         
         // MARK: 텍스트
         messageTextView.do {
@@ -146,13 +154,17 @@ extension ChatRightCell {
             $0.font = UIFont.appFont(.pretendardRegular, size: 12)
             $0.textColor = UIColor.appColor(.neutral500)
         }
+        messageTextUnreadCountLabel.do {
+            $0.font = .appFont(.pretendardRegular, size: 12)
+            $0.textColor = .appColor(.neutral700)
+        }
     }
     
     private func setUpLayouts() {
-        [messageImageView, messageImageTimeLabel].forEach {
+        [messageImageView, messageImageTimeLabel, messageImageUnreadCountLabel].forEach {
             messageImageWrapperView.addSubview($0)
         }
-        [messageTextView, messageTextLabel, messageTextTimeLabel].forEach {
+        [messageTextView, messageTextLabel, messageTextTimeLabel, messageTextUnreadCountLabel].forEach {
             messageTextWrapperView.addSubview($0)
         }
         [profileWrapperView, messageImageWrapperView, messageTextWrapperView].forEach {
@@ -181,9 +193,12 @@ extension ChatRightCell {
             $0.top.trailing.bottom.equalTo(messageImageWrapperView)
         }
         messageImageTimeLabel.snp.makeConstraints {
-            $0.height.equalTo(19)
             $0.trailing.equalTo(messageImageView.snp.leading).offset(-8)
             $0.bottom.leading.equalTo(messageImageWrapperView)
+        }
+        messageImageUnreadCountLabel.snp.makeConstraints {
+            $0.trailing.equalTo(messageImageTimeLabel)
+            $0.bottom.equalTo(messageImageTimeLabel.snp.top)
         }
         
         // MARK: 텍스트
@@ -196,9 +211,12 @@ extension ChatRightCell {
             $0.leading.trailing.equalTo(messageTextView).inset(12)
         }
         messageTextTimeLabel.snp.makeConstraints {
-            $0.height.equalTo(19)
             $0.trailing.equalTo(messageTextView.snp.leading).offset(-8)
             $0.bottom.leading.equalTo(messageTextWrapperView)
+        }
+        messageTextUnreadCountLabel.snp.makeConstraints {
+            $0.trailing.equalTo(messageTextTimeLabel)
+            $0.bottom.equalTo(messageTextTimeLabel.snp.top)
         }
     }
 }

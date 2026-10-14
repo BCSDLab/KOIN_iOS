@@ -14,7 +14,7 @@ struct RecruitChatMessage {
     let content: String
     let timestamp: Date
     let isImage: Bool
-    let unreadCount: Int
+    let unreadCount: String?
     let isMine: Bool
     let showProfile: Bool
     let profileImage: ImageAsset?
