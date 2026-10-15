@@ -15,22 +15,34 @@ struct DiningItem {
     let kcal: Int
     let menu: [String]
     let isSoldOut, isChanged: Bool
-    let imageUrl: String?
+    let image: DiningImage
     let date: Date
     
     func toShareDiningItem() -> ShareDiningMenu {
-        return ShareDiningMenu(menuList: menu, imageUrl: imageUrl, date: date.formatDateToYYMMDD(), type: type, place: place)
+        return ShareDiningMenu(menuList: menu, imageUrl: image.imageUrl, date: date.formatDateToYYMMDD(), type: type, place: place)
     }
     
 }
 
 extension DiningItem {
-    var image: DiningImage {
-        DiningImage(from: imageUrl, place: place, type: type, isWeekend: date.isWeekend)
-    }
-
     var diningPriceText: String? {
         guard let price = priceCash ?? priceCard, price > 0 else { return nil }
         return "₩\(price.formatted(.number))"
+    }
+
+    var kcalPriceText: String {
+        let kcalText = "\(kcal)kcal"
+        let priceText = [priceCard, priceCash].compactMap { price in
+            if let price {
+                return "\(price)원"
+            } else {
+                return nil
+            }
+        }
+        .joined(separator: "/")
+
+        return priceText.isEmpty
+        ? kcalText
+        : [kcalText, priceText].joined(separator: " • ")
     }
 }

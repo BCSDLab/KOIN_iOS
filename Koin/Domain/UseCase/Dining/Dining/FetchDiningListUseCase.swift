@@ -43,6 +43,6 @@ final class DefaultFetchDiningListUseCase: FetchDiningListUseCase {
     }
     
     private func sortDiningList(_ diningList: [DiningItem]) -> [DiningItem] {
-        return diningList.sorted { $0.place.sortOrder < $1.place.sortOrder }
+        return diningList.sorted { $0.place.order < $1.place.order }
     }
 }

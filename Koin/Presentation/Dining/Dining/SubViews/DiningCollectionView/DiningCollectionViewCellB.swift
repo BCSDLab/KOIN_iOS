@@ -193,10 +193,10 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
             else { menuImageBackground.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.5) }
         
         substitutionLabel.isHidden = !info.isChanged
-        menuImageView.isUserInteractionEnabled = info.imageUrl != nil ? true: false
-        menuImageView.layer.cornerRadius = info.imageUrl != nil ? 8 : 0
-        menuImageView.clipsToBounds = info.imageUrl != nil ? true: false
-        menuImageBackground.isUserInteractionEnabled = info.imageUrl != nil ? true: false
+        menuImageView.isUserInteractionEnabled = info.image.imageUrl != nil ? true: false
+        menuImageView.layer.cornerRadius = info.image.imageUrl != nil ? 8 : 0
+        menuImageView.clipsToBounds = info.image.imageUrl != nil ? true: false
+        menuImageBackground.isUserInteractionEnabled = info.image.imageUrl != nil ? true: false
         switch info.image {
         case .imageUrl(let imageUrl):
             menuImageView.loadImageFromBothDiskAndMemory(from: imageUrl, radius: 8, transitionTime: 0.8)
@@ -207,7 +207,7 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
             break
         }
         
-        if info.place == .special || info.place == .secondCampus || info.type == .breakfast && info.imageUrl == nil {
+        if info.place == .special || info.place == .secondCampus || info.type == .breakfast && info.image.imageUrl == nil {
             hideImageView()
         } else {
             menuImageView.isHidden = false
@@ -223,7 +223,7 @@ final class DiningCollectionViewCellB: UICollectionViewCell {
             }
         }
         
-        if info.type == .breakfast && info.imageUrl != nil && info.isSoldOut {
+        if info.type == .breakfast && info.image.imageUrl != nil && info.isSoldOut {
             menuImageView.isHidden = true
             menuImageBackground.isUserInteractionEnabled = false
         }

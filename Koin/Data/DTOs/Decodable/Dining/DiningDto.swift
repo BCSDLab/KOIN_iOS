@@ -30,6 +30,8 @@ struct DiningDto: Decodable {
     
     func toDomain() -> DiningItem? {
         let inputFormatter = DateFormatter()
+        inputFormatter.locale = Locale(identifier: "ko_KR")
+        inputFormatter.calendar = Calendar(identifier: .gregorian)
         inputFormatter.dateFormat = "yyyy-MM-dd"
 
         guard let type = DiningTypeDto(rawValue: type)?.toDomain(),
@@ -47,7 +49,12 @@ struct DiningDto: Decodable {
             menu: menu ?? [],
             isSoldOut: soldoutAt != nil,
             isChanged: changedAt != nil,
-            imageUrl: imageURL,
+            image: DiningImage(
+                imageURL,
+                place: place,
+                type: type,
+                isWeekend: date.isWeekend
+            ),
             date: date
         )
     }

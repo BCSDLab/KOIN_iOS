@@ -22,7 +22,7 @@ enum DiningPlace {
         }
     }
 
-    var sortOrder: Int {
+    var order: Int {
         switch self {
         case .cornerA: 0
         case .cornerB: 1

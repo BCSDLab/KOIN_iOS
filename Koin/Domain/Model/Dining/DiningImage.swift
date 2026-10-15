@@ -8,7 +8,15 @@ enum DiningImage {
     case empty(ImageAsset)
     case none
 
-    init(from imageUrl: String?, place: DiningPlace, type: DiningType, isWeekend: Bool) {
+    var imageUrl: String? {
+        if case .imageUrl(let string) = self {
+            return string
+        } else {
+            return nil
+        }
+    }
+
+    init(_ imageUrl: String?, place: DiningPlace, type: DiningType, isWeekend: Bool) {
         if place == .special || place == .secondCampus {
             self = .none
             return
