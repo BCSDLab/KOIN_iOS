@@ -442,6 +442,7 @@
 		7CBFAF152FBC48C6001D64E3 /* ShopBenefitEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFAF142FBC48C6001D64E3 /* ShopBenefitEmptyView.swift */; };
 		7CBFAF172FBC49C9001D64E3 /* ShopBenefitOpenCloseView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFAF162FBC49C9001D64E3 /* ShopBenefitOpenCloseView.swift */; };
 		7CBFAF192FBD393D001D64E3 /* ShopBenefitEmptyThumbnailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CBFAF182FBD393D001D64E3 /* ShopBenefitEmptyThumbnailView.swift */; };
+		7CC2E0E330805838006C6719 /* SwiftUIIntrospect in Frameworks */ = {isa = PBXBuildFile; productRef = 7CC2E0E230805838006C6719 /* SwiftUIIntrospect */; };
 		7CC42B052F56A78600940CE1 /* PaddingLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B042F56A78600940CE1 /* PaddingLabel.swift */; };
 		7CC42B0E2F56AB7900940CE1 /* CallVanListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B0D2F56AB7900940CE1 /* CallVanListViewController.swift */; };
 		7CC42B132F56AB9D00940CE1 /* CallVanListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B122F56AB9D00940CE1 /* CallVanListCollectionView.swift */; };
@@ -2478,6 +2479,7 @@
 				7CB061AA2F321C4900E83CA9 /* Kingfisher in Frameworks */,
 				7CB061BD2F32230B00E83CA9 /* SwiftRater in Frameworks */,
 				7CB061BA2F32223E00E83CA9 /* Lottie in Frameworks */,
+				7CC2E0E330805838006C6719 /* SwiftUIIntrospect in Frameworks */,
 				7CB061B22F321CB100E83CA9 /* SwiftSoup in Frameworks */,
 				7CB061B52F321D1B00E83CA9 /* RxSwift in Frameworks */,
 				7CB061992F32186800E83CA9 /* SnapKit in Frameworks */,
@@ -6738,6 +6740,7 @@
 				7CB061B32F321D1B00E83CA9 /* XCRemoteSwiftPackageReference "RxSwift" */,
 				7CB061B82F32223E00E83CA9 /* XCRemoteSwiftPackageReference "lottie-spm" */,
 				7CB061BB2F32230B00E83CA9 /* XCRemoteSwiftPackageReference "SwiftRater" */,
+				7CC2E0E130805838006C6719 /* XCRemoteSwiftPackageReference "swiftui-introspect" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = A001E2B52845091D00D6C310 /* Products */;
@@ -8485,6 +8488,14 @@
 				minimumVersion = 2.2.3;
 			};
 		};
+		7CC2E0E130805838006C6719 /* XCRemoteSwiftPackageReference "swiftui-introspect" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/siteline/swiftui-introspect";
+			requirement = {
+				kind = exactVersion;
+				version = 27.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -8567,6 +8578,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 7CB061BB2F32230B00E83CA9 /* XCRemoteSwiftPackageReference "SwiftRater" */;
 			productName = SwiftRater;
+		};
+		7CC2E0E230805838006C6719 /* SwiftUIIntrospect */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7CC2E0E130805838006C6719 /* XCRemoteSwiftPackageReference "swiftui-introspect" */;
+			productName = SwiftUIIntrospect;
 		};
 /* End XCSwiftPackageProductDependency section */
 
