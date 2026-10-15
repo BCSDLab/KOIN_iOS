@@ -26,7 +26,7 @@ struct DiningItem {
 
 extension DiningItem {
     var image: DiningImage {
-        DiningImage(from: imageUrl, place: place, type: type, isWeekend: date.isWeekend())
+        DiningImage(from: imageUrl, place: place, type: type, isWeekend: date.isWeekend)
     }
 
     var diningPriceText: String? {

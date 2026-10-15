@@ -69,7 +69,7 @@ final class CalendarCollectionViewCell: UICollectionViewCell {
     }
     
     func configure(date: CalendarDate, indexPath: IndexPath) {
-        weekLabel.text = date.date.dayOfWeek()
+        weekLabel.text = date.date.weekday
         dayLabel.text = date.date.dayOfMonth()
         switch indexPath.row {
         case 0,1,2: 
