@@ -15,7 +15,6 @@ struct DiningDto: Decodable {
     let priceCard, priceCash: Int?
     let kcal: Int?
     let menu: [String]?
-    let createdAt, updatedAt: String
     let soldoutAt, changedAt: String?
     let imageURL: String?
     
@@ -25,8 +24,6 @@ struct DiningDto: Decodable {
         case priceCash = "price_cash"
         case kcal, menu
         case imageURL = "image_url"
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
         case soldoutAt = "soldout_at"
         case changedAt = "changed_at"
     }
