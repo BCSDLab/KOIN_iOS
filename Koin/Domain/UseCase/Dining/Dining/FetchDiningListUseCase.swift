@@ -10,6 +10,7 @@ import Foundation
 
 protocol FetchDiningListUseCase {
     func execute(diningInfo: CurrentDiningTime) -> AnyPublisher<[DiningItem], ErrorResponse>
+    func execute(date: Date) -> AnyPublisher<[DiningList], ErrorResponse>
 }
 
 final class DefaultFetchDiningListUseCase: FetchDiningListUseCase {
@@ -30,6 +31,23 @@ final class DefaultFetchDiningListUseCase: FetchDiningListUseCase {
             }
             .map { [weak self] diningList in
                 self?.sortDiningList(diningList) ?? []
+            }
+            .eraseToAnyPublisher()
+    }
+    
+    func execute(date: Date) -> AnyPublisher<[DiningList], ErrorResponse> {
+        return diningRepository.fetchDiningList(date: date)
+            .map { [weak self] diningList in
+                return self?.removeNonOperatingItems(from: diningList) ?? []
+            }
+            .map { [weak self] diningList in
+                DiningType.allCases.map { type in
+                    let items = self?.filterByDiningType(diningList, type: type) ?? []
+                    return DiningList(
+                        diningType: type,
+                        items: self?.sortDiningList(items) ?? []
+                    )
+                }
             }
             .eraseToAnyPublisher()
     }

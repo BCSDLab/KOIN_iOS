@@ -14,6 +14,10 @@ final class StubFetchDiningListUseCase: FetchDiningListUseCase {
     func execute(diningInfo: CurrentDiningTime) -> AnyPublisher<[DiningItem], ErrorResponse> {
         Empty<[DiningItem], ErrorResponse>().eraseToAnyPublisher()
     }
+
+    func execute(date: Date) -> AnyPublisher<[DiningList], ErrorResponse> {
+        Empty<[DiningList], ErrorResponse>().eraseToAnyPublisher()
+    }
 }
 
 final class StubDateProvider: DateProvider {
