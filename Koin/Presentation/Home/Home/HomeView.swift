@@ -48,7 +48,7 @@ struct HomeView: ActionBindableView {
             VStack(spacing: 0) {
                 HomeHeaderView(header: viewModel.header)
 
-                DiningView(
+                HomeDiningView(
                     diningItems: viewModel.diningItems,
                     onTapAll: {
                         viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.todayMeal, .click, "전체보기"))

@@ -1,5 +1,5 @@
 //
-//  DiningView.swift
+//  HomeDiningView.swift
 //  koin
 //
 //  Created by 홍기정 on 6/1/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct DiningView: View {
+struct HomeDiningView: View {
     private let diningItems: [HomeDiningItem]
     private let onTapAll: () -> Void
     private let onTapCorner: (HomeDiningItem) -> Void
