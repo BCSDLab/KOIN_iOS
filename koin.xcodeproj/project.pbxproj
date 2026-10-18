@@ -769,6 +769,7 @@
 		7CF77B873005F642003642C1 /* FetchMainFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B863005F642003642C1 /* FetchMainFrameUseCase.swift */; };
 		7CF7D0DF30853D8D009AFDCB /* DiningNoti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0DE30853D8D009AFDCB /* DiningNoti.swift */; };
 		7CF7D0E330853DD4009AFDCB /* FetchDiningNotiUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */; };
+		7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */; };
 		7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441C30837E4900623C1F /* CancelableImage.swift */; };
 		7CFC442B3085217F00623C1F /* DiningNotiBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
@@ -2001,6 +2002,7 @@
 		7CF77B863005F642003642C1 /* FetchMainFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMainFrameUseCase.swift; sourceTree = "<group>"; };
 		7CF7D0DE30853D8D009AFDCB /* DiningNoti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNoti.swift; sourceTree = "<group>"; };
 		7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningNotiUseCase.swift; sourceTree = "<group>"; };
+		7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportAbTest.swift; sourceTree = "<group>"; };
 		7CFC441C30837E4900623C1F /* CancelableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImage.swift; sourceTree = "<group>"; };
 		7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiBottomSheetContentView.swift; sourceTree = "<group>"; };
 		7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitUseCase.swift; sourceTree = "<group>"; };
@@ -5965,6 +5967,7 @@
 				DA2100000000000000000004 /* MealType.swift */,
 				DA2100000000000000000005 /* CoopOpen.swift */,
 				D2A513402C59FE860064941A /* ShareDiningMenu.swift */,
+				7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6860,6 +6863,7 @@
 				FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */,
 				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
 				7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */,
+				7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */,
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
 				7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */,
