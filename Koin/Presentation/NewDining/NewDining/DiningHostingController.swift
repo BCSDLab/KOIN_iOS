@@ -40,6 +40,8 @@ final class DiningHostingController: UIHostingController<DiningView>, HostingCon
             showToastMessage(message: message)
         case .showZoomedImage(let imageUrl):
             showZoomedImage(imageUrl: imageUrl)
+        case .presentNotiBottomSheet(let initialValue):
+            presentNotiBottomSheet(initialValue)
         }
     }
 }
@@ -75,5 +77,30 @@ extension DiningHostingController {
         zoomedImageViewController.modalTransitionStyle = .coverVertical
         zoomedImageViewController.modalPresentationStyle = .overFullScreen
         present(zoomedImageViewController, animated: true)
+    }
+}
+
+extension DiningHostingController {
+    private func presentNotiBottomSheet(_ initialValue: DiningNoti) {
+        let contentView = DiningNotiBottomSheetContentView(
+            onSoldOutSwitchToggled: rootView.didTapSoldOutSwitch,
+            onImageUploadSwitchToggled: rootView.didTapImageUploadSwitch,
+            onNotiButtonTapped: navigateToNoti,
+            initialValue: initialValue
+        )
+        let bottomSheetViewController = BottomSheetViewControllerB(contentView: contentView)
+        contentView.delegate = bottomSheetViewController
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
+            self?.present(bottomSheetViewController, animated: false)
+        }
+    }
+    
+    private func navigateToNoti() {
+        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
+        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
+        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
+        let viewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }

@@ -13,6 +13,7 @@ struct DiningView: ActionBindableView {
     enum Action {
         case showToastMessage(String)
         case showZoomedImage(imageUrl: String)
+        case presentNotiBottomSheet(initialValue: DiningNoti)
     }
     var sendAction: ((Action) -> Void) = { _ in }
     
@@ -47,6 +48,21 @@ struct DiningView: ActionBindableView {
                 viewModel.execute(.didShowToast)
             }
         }
+        .onChange(of: viewModel.diningNoti) {
+            if let diningNoti = viewModel.diningNoti,
+               viewModel.shouldPresentNotiBottomSheet {
+                sendAction(.presentNotiBottomSheet(initialValue: diningNoti))
+            }
+        }
+    }
+    
+    // MARK: - Public
+    func didTapSoldOutSwitch(isOn: Bool) {
+        viewModel.execute(.didTapSoldOutSwitch(isOn))
+    }
+    
+    func didTapImageUploadSwitch(isOn: Bool) {
+        viewModel.execute(.didTapImageUploadSwitch(isOn))
     }
 }
 

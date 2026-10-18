@@ -18,12 +18,16 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
         case didShowToast
         case didTapCloseShareTooltip
         case didTapShare(DiningItem)
+        case didTapSoldOutSwitch(Bool)
+        case didTapImageUploadSwitch(Bool)
     }
     
     // MARK: - Proeprteis
     private let dateProvider: DateProvider
     private let fetchDiningListUseCase: FetchDiningListUseCase
     private let shareMenuListUseCase: ShareMenuListUseCase
+    private let fetchDiningNotiUseCase: FetchDiningNotiUseCase
+    private let changeNotiUseCase: ChangeNotiUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private var fetchDiningListTask: Task<Void, Never>?
@@ -35,12 +39,16 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
     private(set) var diningLists: [DiningList] = []
     private(set) var toastMessage: String?
     private(set) var shouldShowShareTooltip = !UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
+    private(set) var shouldPresentNotiBottomSheet = !UserDefaults.standard.bool(forKey: "hasShownBottomSheet") && UserDataManager.shared.isLoggedIn
+    private(set) var diningNoti: DiningNoti?
     
     // MARK: - Initializer
     init(
         dateProvider: DateProvider,
         fetchDiningListUseCase: FetchDiningListUseCase,
         shareMenuListUseCase: ShareMenuListUseCase,
+        fetchDiningNotiUseCase: FetchDiningNotiUseCase,
+        changeNotiUseCase: ChangeNotiUseCase,
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         selectedDate: Date? = nil,
         selectedDiningType: DiningType? = nil
@@ -48,6 +56,8 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
         self.dateProvider = dateProvider
         self.fetchDiningListUseCase = fetchDiningListUseCase
         self.shareMenuListUseCase = shareMenuListUseCase
+        self.fetchDiningNotiUseCase = fetchDiningNotiUseCase
+        self.changeNotiUseCase = changeNotiUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         initializeDates()
         fetchDiningDate(selectedDate: selectedDate, selectedDiningType: selectedDiningType)
@@ -61,6 +71,7 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
         switch input {
         case .onFirstAppear:
             fetchDiningList()
+            fetchNotiListIfNeeded()
         case .refresh:
             fetchDiningList()
         case let .changeSelectedDate(date):
@@ -73,6 +84,10 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
             hideShareTooltip()
         case let .didTapShare(selecteItem):
             shareMenuList(selectedItem: selecteItem)
+        case let .didTapSoldOutSwitch(isOn):
+            changeNoti(isOn: isOn, type: .diningSoldOut)
+        case let .didTapImageUploadSwitch(isOn):
+            changeNoti(isOn: isOn, type: .diningImageUpload)
         }
     }
 }
@@ -154,5 +169,39 @@ extension NewDiningViewModel {
         value: Any
     ) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    }
+}
+
+extension NewDiningViewModel {
+    private func fetchNotiListIfNeeded() {
+        guard shouldPresentNotiBottomSheet else {
+            return
+        }
+        Task {
+            do {
+                diningNoti = try await fetchDiningNotiUseCase.execute()
+            } catch let error as ErrorResponse where error.code == ErrorResponse.typeCastingError.code {
+                return
+            } catch let error as ErrorResponse where error.statusCode == 401 {
+                return
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            }
+        }
+    }
+}
+
+extension NewDiningViewModel {
+    private func changeNoti(isOn: Bool, type: SubscribeType) {
+        Task {
+            do {
+                try await changeNotiUseCase.execute(
+                    method: isOn ? .post : .delete,
+                    type: type
+                ).firstValue()
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            }
+        }
     }
 }
