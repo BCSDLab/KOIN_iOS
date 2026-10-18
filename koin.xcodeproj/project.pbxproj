@@ -771,6 +771,7 @@
 		7CF7D0E330853DD4009AFDCB /* FetchDiningNotiUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */; };
 		7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */; };
 		7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441C30837E4900623C1F /* CancelableImage.swift */; };
+		7CFC4425308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */; };
 		7CFC44273084111100623C1F /* ReportSoldoutDiningUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */; };
 		7CFC44293084131A00623C1F /* ReportSoldoutRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */; };
 		7CFC442B3085217F00623C1F /* DiningNotiBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */; };
@@ -2006,6 +2007,7 @@
 		7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningNotiUseCase.swift; sourceTree = "<group>"; };
 		7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportAbTest.swift; sourceTree = "<group>"; };
 		7CFC441C30837E4900623C1F /* CancelableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImage.swift; sourceTree = "<group>"; };
+		7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCurrentDiningItemsUseCase.swift; sourceTree = "<group>"; };
 		7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutDiningUseCase.swift; sourceTree = "<group>"; };
 		7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutRequestDto.swift; sourceTree = "<group>"; };
 		7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiBottomSheetContentView.swift; sourceTree = "<group>"; };
@@ -6609,6 +6611,7 @@
 			isa = PBXGroup;
 			children = (
 				D249CD3C2C159350000813F9 /* DateProvider.swift */,
+				7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */,
 				D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */,
 				D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */,
 				7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */,
@@ -7745,6 +7748,7 @@
 				7C50A1D33041F8CA00897A6F /* RecruitCategory.swift in Sources */,
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
+				7CFC4425308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift in Sources */,
 				B68D2CE52EA505AA00F3B479 /* ToastIntent.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,

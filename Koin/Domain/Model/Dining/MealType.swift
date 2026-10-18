@@ -18,3 +18,16 @@ enum MealType {
         }
     }
 }
+
+extension MealType {
+    func toDiningType() -> DiningType {
+        switch self {
+        case .breakfast:
+            return .breakfast
+        case .lunch:
+            return .lunch
+        case .dinner:
+            return .dinner
+        }
+    }
+}

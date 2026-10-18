@@ -7,5 +7,7 @@
 
 enum DayOfWeek {
     case weekday
-    case weekend
+    case weekend // TODO: 삭제
+    case saturday
+    case sunday
 }
