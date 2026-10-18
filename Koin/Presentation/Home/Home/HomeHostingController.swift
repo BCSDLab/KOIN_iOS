@@ -209,7 +209,7 @@ extension HomeHostingController {
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
         logAnalyticsEventUseCase.execute(
-            label: EventParameter.EventLabel.Campus.mainModalEntry,
+            label: EventParameter.EventLabel.Campus.Home.mainModalEntry,
             category: .entry,
             value: banner.banners.first?.title ?? ""
         )
@@ -222,7 +222,7 @@ extension HomeHostingController {
             repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
         )
         logAnalyticsEventUseCase.execute(
-            label: EventParameter.EventLabel.Campus.mainModal,
+            label: EventParameter.EventLabel.Campus.Home.mainModal,
             category: .click,
             value: banner.title
         )

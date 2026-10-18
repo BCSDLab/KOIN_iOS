@@ -43,12 +43,12 @@ struct RecruitListView: ActionBindableView {
                 filterState: viewModel.filterState,
                 onSearchTapped: { keyword in
                     if !keyword.isEmpty {
-                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentSearch, .click, keyword))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.teamRecruitmentSearch, .click, keyword))
                     }
                     viewModel.execute(.updateFilter(keyword: keyword))
                 },
                 onFilterButtonTapped: {
-                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilter, .click, "필터"))
+                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.teamRecruitmentFilter, .click, "필터"))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
                         onFilterItemTapped: { groupIndex, item in
@@ -58,10 +58,10 @@ struct RecruitListView: ActionBindableView {
                             return true
                         },
                         onResetTapped: {
-                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilterReset, .click, "초기화"))
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.teamRecruitmentFilterReset, .click, "초기화"))
                         },
                         onApplyTapped: { filterGroups in
-                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentFilterApply, .click, "적용하기"))
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.teamRecruitmentFilterApply, .click, "적용하기"))
                             viewModel.execute(.updateFilter(filterState: RecruitListFilter(from: filterGroups)))
                         }
                     ))
@@ -85,7 +85,7 @@ struct RecruitListView: ActionBindableView {
                     LazyVStack(spacing: 8) {
                         ForEach(recruits) { recruit in
                             Button {
-                                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentPostSelect, .click, recruit.title))
+                                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.teamRecruitmentPostSelect, .click, recruit.title))
                                 sendAction(.showRecruitData(id: recruit.id))
                             } label: {
                                 RecruitListRowView(model: recruit)
@@ -154,7 +154,7 @@ struct RecruitListView: ActionBindableView {
     @ViewBuilder
     private var postButton: some View {
         Button {
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.teamRecruitmentRecruit, .click, "모집하기"))
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.teamRecruitmentRecruit, .click, "모집하기"))
             guard UserDataManager.shared.isLoggedIn else {
                 sendAction(.showLoginToast)
                 return

@@ -140,7 +140,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         }.store(in: &subscriptions)
         
         recommendedSearchCollectionView.tapRecommendedWord.sink { [weak self] word in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.popularSearchingWord, .click, "\(word)"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.popularSearchingWord, .click, "\(word)"))
             self?.textField.text = word
         }.store(in: &subscriptions)
         
@@ -166,7 +166,7 @@ extension NoticeSearchViewController {
     @objc private func searchButtonTapped() {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeSearchEvent, .click, "검색하기"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeSearchEvent, .click, "검색하기"))
             inputSubject.send(.searchWord(text, Date(), 0))
             inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()
@@ -181,7 +181,7 @@ extension NoticeSearchViewController {
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeSearchEvent, .click, "검색하기"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeSearchEvent, .click, "검색하기"))
             inputSubject.send(.searchWord(text, Date(), 0))
             inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()

@@ -140,7 +140,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
         }.store(in: &subscriptions)
         
         shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] id, routeType, routeName in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.areaSpecificRoute, .click, "\(routeType.prefix(2))_\(routeName)"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.areaSpecificRoute, .click, "\(routeType.prefix(2))_\(routeName)"))
             let busRepository = DefaultBusRepository(service: DefaultBusService())
             let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel(fetchShuttleTimetableUseCase: DefaultFetchShuttleBusTimetableUseCase(repository: busRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), shuttleRouteId: id))
             viewController.title = "\(routeName) 시간표"
@@ -155,16 +155,16 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
         busTimetableRouteView.firstFilterPublisher.sink { [weak self] route in
             switch self?.currentBusType() {
             case .shuttleBus:
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.shuttleBusRoute, .click, route))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.shuttleBusRoute, .click, route))
             case .expressBus:
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.dsBusDirection, .click, route))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.dsBusDirection, .click, route))
             default:
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.cityBusDirection, .click, route))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.cityBusDirection, .click, route))
             }
         }.store(in: &subscriptions)
         
         busTimetableRouteView.secondFilterPublisher.sink { [weak self] busNumber in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.cityBusRoute, .click, busNumber))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.cityBusRoute, .click, busNumber))
         }.store(in: &subscriptions)
         
         expressOrCityTimetableTableView.heightPublisher.sink { [weak self] height in
@@ -206,7 +206,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
         default:
             logValue = "시내버스 시간표"
         }
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.errorFeedbackButton, .click, logValue))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.errorFeedbackButton, .click, logValue))
         if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -252,13 +252,13 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncementClose, .click, "\(currentBusType().koreanDescription) 시간표"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.busAnnouncementClose, .click, "\(currentBusType().koreanDescription) 시간표"))
         UserDefaults.standard.set(busNoticeWrappedView.tag, forKey: "busNoticeId")
         updateLayoutsByNotice(isDeleted: true)
     }
     
     @objc private func tapNoticeInfoButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.busAnnouncement, .click, "\(currentBusType().koreanDescription) 시간표"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.busAnnouncement, .click, "\(currentBusType().koreanDescription) 시간표"))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag, boardId: -1)
         let viewController = NoticeDataViewController(viewModel: viewModel)
@@ -289,7 +289,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate, 
             }
             logValue = "시내"
         }
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.timetableBusTypeTab, .click, logValue))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.timetableBusTypeTab, .click, logValue))
     }
     
     private func currentBusType() -> BusType {

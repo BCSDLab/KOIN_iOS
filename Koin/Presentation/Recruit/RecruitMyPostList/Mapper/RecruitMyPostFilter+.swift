@@ -48,7 +48,7 @@ extension RecruitMyPostFilter {
 }
 
 extension RecruitMyPostFilter {
-    static func logEvent(groupIndex: Int, title: String) -> (label: EventParameter.EventLabel.Campus, value: String)? {
+    static func logEvent(groupIndex: Int, title: String) -> (label: EventParameter.EventLabel.Campus.Recruit, value: String)? {
         switch groupIndex {
         case 0:
             guard let state = RecruitState(rawValue: title) else {

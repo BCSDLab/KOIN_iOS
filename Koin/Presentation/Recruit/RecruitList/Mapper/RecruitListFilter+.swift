@@ -80,7 +80,7 @@ extension RecruitListFilter {
 
 extension RecruitListFilter {
     /// 필터 바텀시트 항목 탭 로깅 label, value. groupIndex 순서는 toGroupModels()와 같다.
-    static func logEvent(groupIndex: Int, title: String) -> (label: EventParameter.EventLabel.Campus, value: String)? {
+    static func logEvent(groupIndex: Int, title: String) -> (label: EventParameter.EventLabel.Campus.Recruit, value: String)? {
         switch groupIndex {
         case 0:
             guard let state = RecruitState(rawValue: title) else {

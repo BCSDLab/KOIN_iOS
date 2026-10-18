@@ -109,7 +109,7 @@ extension RecruitDataHostingController {
                     return
                 }
                 rootView.makeLogAnalyticsEvent(
-                    label: EventParameter.EventLabel.Campus.teamRecruitmentPostEdit,
+                    label: EventParameter.EventLabel.Campus.Recruit.teamRecruitmentPostEdit,
                     category: .click,
                     value: "편집하기"
                 )
@@ -121,7 +121,7 @@ extension RecruitDataHostingController {
             },
             onDeleteButtonTapped: { [weak self] in
                 self?.rootView.makeLogAnalyticsEvent(
-                    label: EventParameter.EventLabel.Campus.teamRecruitmentPostDelete,
+                    label: EventParameter.EventLabel.Campus.Recruit.teamRecruitmentPostDelete,
                     category: .click,
                     value: "삭제하기"
                 )
@@ -138,14 +138,14 @@ extension RecruitDataHostingController {
     private func showDeleteModal() {
         let onCancelButtonTapped: ()->Void = { [weak self] in
             self?.rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.teamRecruitmentPostDeleteCancel,
+                label: EventParameter.EventLabel.Campus.Recruit.teamRecruitmentPostDeleteCancel,
                 category: .click,
                 value: "취소하기"
             )
         }
         let onDeleteButtonTapped: ()->Void = { [weak self] in
             self?.rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.teamRecruitmentPostDeleteConfirm,
+                label: EventParameter.EventLabel.Campus.Recruit.teamRecruitmentPostDeleteConfirm,
                 category: .click,
                 value: "삭제하기"
             )

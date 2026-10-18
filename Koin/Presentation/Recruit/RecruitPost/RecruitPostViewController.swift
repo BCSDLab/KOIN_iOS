@@ -445,8 +445,8 @@ extension RecruitPostViewController {
     }
     
     private func logEvent(
-        post postLabel: EventParameter.EventLabel.Campus,
-        modify modifyLabel: EventParameter.EventLabel.Campus,
+        post postLabel: EventParameter.EventLabel.Campus.Recruit,
+        modify modifyLabel: EventParameter.EventLabel.Campus.Recruit,
         value: Any
     ) {
         switch viewModel.mode {

@@ -56,7 +56,7 @@ extension RecruitMyPostView {
                     RecruitMyPostSummaryView(model: data) {
                         guard let chatRoomId = data.chatRoomId else { return }
                         viewModel.execute(.logEvent(
-                            EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostApplicantChat,
+                            EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostApplicantChat,
                             .click,
                             "채팅"
                         ))
@@ -81,7 +81,7 @@ extension RecruitMyPostView {
                                     model: applicant,
                                     onApplicationTapped: {
                                         viewModel.execute(.logEvent(
-                                            EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostApplicantSelect,
+                                            EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostApplicantSelect,
                                             .click,
                                             "지원자 선택"
                                         ))
@@ -92,7 +92,7 @@ extension RecruitMyPostView {
                                     },
                                     onDirectChatTapped: {
                                         viewModel.execute(.logEvent(
-                                            EventParameter.EventLabel.Campus.teamRecruitmentCreatedPostApplicantChat,
+                                            EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostApplicantChat,
                                             .click,
                                             "채팅"
                                         ))

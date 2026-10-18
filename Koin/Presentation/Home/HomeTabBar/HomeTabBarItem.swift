@@ -44,7 +44,7 @@ enum HomeTab: Int, CaseIterable {
         }
     }
 
-    var logLabel: EventParameter.EventLabel.Campus {
+    var logLabel: EventParameter.EventLabel.Campus.Home {
         switch self {
         case .home:
             return .navHome

@@ -78,12 +78,12 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         tableView.tapDepartTimeButtonPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchResultDepartureTime, .click, "출발 시간 설정"))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultDepartureTime, .click, "출발 시간 설정"))
                 self.presentBusSearchDatePickerViewController()
         }.store(in: &subscriptions)
         
         tableView.tapDepartBusTypeButtonPublisher.sink { [weak self] busType in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchResultBusType, .click, busType.koreanDescription))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultBusType, .click, busType.koreanDescription))
             self?.inputSubject.send(.getSearchedResult(nil, busType))
         }.store(in: &subscriptions)
     }
@@ -91,12 +91,12 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
 
 extension BusSearchResultViewController {
     @objc private func tapLeftBarButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchResultBack, .click, "뒤로가기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultBack, .click, "뒤로가기"))
         navigationController?.popViewController(animated: true)
     }
     
     @objc private func tapRightBarButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.searchResultClose, .click, "뒤로가기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultClose, .click, "뒤로가기"))
         navigationController?.popViewController(animated: true)
     }
     
@@ -133,7 +133,7 @@ extension BusSearchResultViewController {
             subTitle: datePickerSubTitle,
             onPickerDateChanged: { [weak self] isChanged in
                 let logValue = isChanged != nil ? "Y" : "N"
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureTimeSettingDone, .click, logValue))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.departureTimeSettingDone, .click, logValue))
             },
             onPickerItemsSelected: { [weak self] selectedItems in
                 guard selectedItems.count > 3 else { return }
@@ -142,7 +142,7 @@ extension BusSearchResultViewController {
                 self?.inputSubject.send(.getSearchedResult(time, nil))
             },
             onDepartureNowTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.departureNow, .click, "지금 출발"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.departureNow, .click, "지금 출발"))
             }
         )
         busSearchDatePickerViewController.setPickerItems(items: datePickerData.0, selectedItems: datePickerData.1)
