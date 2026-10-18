@@ -771,6 +771,8 @@
 		7CF7D0E330853DD4009AFDCB /* FetchDiningNotiUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */; };
 		7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */; };
 		7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441C30837E4900623C1F /* CancelableImage.swift */; };
+		7CFC44273084111100623C1F /* ReportSoldoutDiningUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */; };
+		7CFC44293084131A00623C1F /* ReportSoldoutRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */; };
 		7CFC442B3085217F00623C1F /* DiningNotiBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
@@ -2004,6 +2006,8 @@
 		7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningNotiUseCase.swift; sourceTree = "<group>"; };
 		7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportAbTest.swift; sourceTree = "<group>"; };
 		7CFC441C30837E4900623C1F /* CancelableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImage.swift; sourceTree = "<group>"; };
+		7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutDiningUseCase.swift; sourceTree = "<group>"; };
+		7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutRequestDto.swift; sourceTree = "<group>"; };
 		7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiBottomSheetContentView.swift; sourceTree = "<group>"; };
 		7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitUseCase.swift; sourceTree = "<group>"; };
 		7DADCC36CEEA42EC86AB75B6 /* RecruitDataMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataMetadataView.swift; sourceTree = "<group>"; };
@@ -6178,6 +6182,7 @@
 			isa = PBXGroup;
 			children = (
 				D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */,
+				7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6606,6 +6611,7 @@
 				D249CD3C2C159350000813F9 /* DateProvider.swift */,
 				D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */,
 				D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */,
+				7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6948,6 +6954,7 @@
 				7CED922B2EF2D25900457128 /* DIContainer+Notice.swift in Sources */,
 				7CF1D58B30695E7900295ED9 /* RecruitMyPostViewModel.swift in Sources */,
 				7CED922C2EF2D25900457128 /* DIContainer+Dining.swift in Sources */,
+				7CFC44293084131A00623C1F /* ReportSoldoutRequestDto.swift in Sources */,
 				7CED922D2EF2D25900457128 /* DIContainer+Land.swift in Sources */,
 				7CED922F2EF2D25900457128 /* DIContainer+TimeTable.swift in Sources */,
 				7CED92302EF2D25900457128 /* DIContainer+Home.swift in Sources */,
@@ -7350,6 +7357,7 @@
 				7C61D3432F220E8C005FAC3A /* EditLostItemHeaderView.swift in Sources */,
 				7CED913B2EF2D1F900457128 /* AddLostItemFooterView.swift in Sources */,
 				7C016569300AB67B0013DD7B /* DepartmentManyTasksView.swift in Sources */,
+				7CFC44273084111100623C1F /* ReportSoldoutDiningUseCase.swift in Sources */,
 				7CED913F2EF2D1F900457128 /* EventShopCollectionViewCell.swift in Sources */,
 				7CF77B4F30028737003642C1 /* TimeTableLectureContainerView.swift in Sources */,
 				7CBFAF112FBC44CA001D64E3 /* ShopBenefitPageControl.swift in Sources */,

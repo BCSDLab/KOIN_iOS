@@ -11,6 +11,7 @@ import Combine
 protocol DiningService {
     func fetchDiningList(requestModel: FetchDiningListRequest) -> AnyPublisher<[DiningDto], ErrorResponse>
     func fetchCoopShopList() -> AnyPublisher<CoopShopDto, ErrorResponse>
+    func reportSoldout(diningId: Int, request: ReportSoldoutRequestDto) async throws -> Void
 }
 
 final class DefaultDiningService: DiningService {
@@ -23,5 +24,9 @@ final class DefaultDiningService: DiningService {
     
     func fetchCoopShopList() -> AnyPublisher<CoopShopDto, ErrorResponse> {
         return networkService.requestWithResponse(api: DiningAPI.fetchCoopShopList)
+    }
+    
+    func reportSoldout(diningId: Int, request: ReportSoldoutRequestDto) async throws -> Void {
+        try await networkService.request(api: DiningAPI.reportSoldout(diningId: diningId, request: request))
     }
 }
