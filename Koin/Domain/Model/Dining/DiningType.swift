@@ -10,15 +10,6 @@ enum DiningType: CaseIterable, Equatable {
     case lunch
     case dinner
 
-    init?(segmentIndex: Int) {
-        switch segmentIndex {
-        case 0: self = .breakfast
-        case 1: self = .lunch
-        case 2: self = .dinner
-        default: return nil
-        }
-    }
-
     var name: String {
         switch self {
         case .breakfast : "아침"
