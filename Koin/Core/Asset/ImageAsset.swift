@@ -65,6 +65,7 @@ public enum ImageAsset: String {
     case diningReport
     case diningReportTooltipNav
     case diningReportTooltipCard
+    case diningReportImageEvidence
     
     // MARK: - Icon
     case add

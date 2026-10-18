@@ -771,6 +771,7 @@
 		7CF7D0E330853DD4009AFDCB /* FetchDiningNotiUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */; };
 		7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */; };
 		7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441C30837E4900623C1F /* CancelableImage.swift */; };
+		7CFC44233083DDA000623C1F /* DiningReportModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44223083DDA000623C1F /* DiningReportModalView.swift */; };
 		7CFC4425308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */; };
 		7CFC44273084111100623C1F /* ReportSoldoutDiningUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */; };
 		7CFC44293084131A00623C1F /* ReportSoldoutRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */; };
@@ -2007,6 +2008,7 @@
 		7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningNotiUseCase.swift; sourceTree = "<group>"; };
 		7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportAbTest.swift; sourceTree = "<group>"; };
 		7CFC441C30837E4900623C1F /* CancelableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImage.swift; sourceTree = "<group>"; };
+		7CFC44223083DDA000623C1F /* DiningReportModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportModalView.swift; sourceTree = "<group>"; };
 		7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCurrentDiningItemsUseCase.swift; sourceTree = "<group>"; };
 		7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutDiningUseCase.swift; sourceTree = "<group>"; };
 		7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutRequestDto.swift; sourceTree = "<group>"; };
@@ -3471,6 +3473,7 @@
 				7C7ECDC73074150600C7E768 /* DiningMenuListView.swift */,
 				7C41239C307E8AB300E27FCB /* DiningMenuRowView.swift */,
 				7C7ECDCB30771FAE00C7E768 /* DiningFooterView.swift */,
+				7CFC44223083DDA000623C1F /* DiningReportModalView.swift */,
 				7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */,
 			);
 			path = Subviews;
@@ -7468,6 +7471,7 @@
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,
 				7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */,
 				7CF77B7430058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift in Sources */,
+				7CFC44233083DDA000623C1F /* DiningReportModalView.swift in Sources */,
 				7CED91922EF2D1F900457128 /* ShopSummaryViewController.swift in Sources */,
 				7CED91932EF2D1F900457128 /* ReviewListCollectionView.swift in Sources */,
 				7C05D07F2FBC2A0E00F4D825 /* ShopBenefitTableViewCell.swift in Sources */,
