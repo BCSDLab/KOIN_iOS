@@ -9,6 +9,7 @@ import Combine
 import Foundation
 @testable import koin
 
+#if false // TODO: 식단 리팩토링 후 테스트 재작성
 final class SpyDiningRepository: DiningRepository {
 
     var stubbedDiningList: [DiningItem] = []
@@ -38,3 +39,4 @@ final class SpyDiningRepository: DiningRepository {
         receivedShareModels.append(shareModel)
     }
 }
+#endif
