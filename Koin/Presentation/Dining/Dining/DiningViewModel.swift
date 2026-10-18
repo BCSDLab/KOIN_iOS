@@ -1,5 +1,5 @@
 //
-//  NewDiningViewModel.swift
+//  DiningViewModel.swift
 //  koin
 //
 //  Created by 홍기정 on 10/5/26.
@@ -9,7 +9,7 @@ import Foundation
 import Combine
 
 @Observable
-final class NewDiningViewModel: SwiftUIViewModelProtocol {
+final class DiningViewModel: SwiftUIViewModelProtocol {
     enum Input {
         case onFirstAppear
         case changeSelectedDate(Date)
@@ -92,7 +92,7 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
     }
 }
 
-extension NewDiningViewModel {
+extension DiningViewModel {
     private func initializeDates() {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
@@ -127,7 +127,7 @@ extension NewDiningViewModel {
     }
 }
 
-extension NewDiningViewModel {
+extension DiningViewModel {
     private func changeSelectedDate(_ date: Date) {
         if selectedDate != date {
             selectedDate = date
@@ -142,14 +142,14 @@ extension NewDiningViewModel {
     }
 }
 
-extension NewDiningViewModel {
+extension DiningViewModel {
     private func hideShareTooltip() {
         UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
         shouldShowShareTooltip = false
     }
 }
 
-extension NewDiningViewModel {
+extension DiningViewModel {
     private func shareMenuList(selectedItem: DiningItem) {
         let shareModel = ShareDiningMenu(
             menuList: selectedItem.menu,
@@ -162,7 +162,7 @@ extension NewDiningViewModel {
     }
 }
 
-extension NewDiningViewModel {
+extension DiningViewModel {
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
         category: EventParameter.EventCategory,
@@ -172,7 +172,7 @@ extension NewDiningViewModel {
     }
 }
 
-extension NewDiningViewModel {
+extension DiningViewModel {
     private func fetchNotiListIfNeeded() {
         guard shouldPresentNotiBottomSheet else {
             return
@@ -191,7 +191,7 @@ extension NewDiningViewModel {
     }
 }
 
-extension NewDiningViewModel {
+extension DiningViewModel {
     private func changeNoti(isOn: Bool, type: SubscribeType) {
         Task {
             do {

@@ -64,7 +64,7 @@ extension HomeHostingController {
         let fetchDiningNotiUseCase = DefaultFetchDiningNotiUseCase(notiRepository: notiReposotiry)
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiReposotiry)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = NewDiningViewModel(
+        let viewModel = DiningViewModel(
             dateProvider: dateProvider,
             fetchDiningListUseCase: fetchDiningListUseCase,
             shareMenuListUseCase: shareMenuListUseCase,

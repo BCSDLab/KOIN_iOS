@@ -18,10 +18,10 @@ struct DiningView: ActionBindableView {
     var sendAction: ((Action) -> Void) = { _ in }
     
     // MARK: - Properties
-    @State private var viewModel: NewDiningViewModel
+    @State private var viewModel: DiningViewModel
     
     // MARK: - Initializer
-    init(viewModel: NewDiningViewModel) {
+    init(viewModel: DiningViewModel) {
         self.viewModel = viewModel
     }
     

@@ -291,7 +291,7 @@
 		7C7CCE762F86872F00E3A54B /* CallVanRestrictionDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE752F86872F00E3A54B /* CallVanRestrictionDto.swift */; };
 		7C7ECDBB3073D69500C7E768 /* DiningHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDBA3073D69500C7E768 /* DiningHostingController.swift */; };
 		7C7ECDBD3073D69A00C7E768 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDBC3073D69A00C7E768 /* DiningView.swift */; };
-		7C7ECDC13073D6AA00C7E768 /* NewDiningViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDC03073D6AA00C7E768 /* NewDiningViewModel.swift */; };
+		7C7ECDC13073D6AA00C7E768 /* DiningViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDC03073D6AA00C7E768 /* DiningViewModel.swift */; };
 		7C7ECDC43073D79A00C7E768 /* DiningDateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDC33073D79A00C7E768 /* DiningDateListView.swift */; };
 		7C7ECDC630740E7C00C7E768 /* DiningTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDC530740E7C00C7E768 /* DiningTypeView.swift */; };
 		7C7ECDC83074150600C7E768 /* DiningMenuListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDC73074150600C7E768 /* DiningMenuListView.swift */; };
@@ -1544,7 +1544,7 @@
 		7C7CCE752F86872F00E3A54B /* CallVanRestrictionDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanRestrictionDto.swift; sourceTree = "<group>"; };
 		7C7ECDBA3073D69500C7E768 /* DiningHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningHostingController.swift; sourceTree = "<group>"; };
 		7C7ECDBC3073D69A00C7E768 /* DiningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningView.swift; sourceTree = "<group>"; };
-		7C7ECDC03073D6AA00C7E768 /* NewDiningViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiningViewModel.swift; sourceTree = "<group>"; };
+		7C7ECDC03073D6AA00C7E768 /* DiningViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningViewModel.swift; sourceTree = "<group>"; };
 		7C7ECDC33073D79A00C7E768 /* DiningDateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningDateListView.swift; sourceTree = "<group>"; };
 		7C7ECDC530740E7C00C7E768 /* DiningTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningTypeView.swift; sourceTree = "<group>"; };
 		7C7ECDC73074150600C7E768 /* DiningMenuListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningMenuListView.swift; sourceTree = "<group>"; };
@@ -3433,24 +3433,24 @@
 			path = Core;
 			sourceTree = "<group>";
 		};
-		7C7ECDB53073D67900C7E768 /* NewDining */ = {
+		7C7ECDB53073D67900C7E768 /* Dining */ = {
 			isa = PBXGroup;
 			children = (
 				7CED907D2EF2D1F900457128 /* DiningNotice */,
-				7C7ECDB83073D68900C7E768 /* NewDining */,
+				7C7ECDB83073D68900C7E768 /* Dining */,
 			);
-			path = NewDining;
+			path = Dining;
 			sourceTree = "<group>";
 		};
-		7C7ECDB83073D68900C7E768 /* NewDining */ = {
+		7C7ECDB83073D68900C7E768 /* Dining */ = {
 			isa = PBXGroup;
 			children = (
 				7C7ECDC23073D6C500C7E768 /* Subviews */,
 				7C7ECDBA3073D69500C7E768 /* DiningHostingController.swift */,
 				7C7ECDBC3073D69A00C7E768 /* DiningView.swift */,
-				7C7ECDC03073D6AA00C7E768 /* NewDiningViewModel.swift */,
+				7C7ECDC03073D6AA00C7E768 /* DiningViewModel.swift */,
 			);
-			path = NewDining;
+			path = Dining;
 			sourceTree = "<group>";
 		};
 		7C7ECDC23073D6C500C7E768 /* Subviews */ = {
@@ -5218,7 +5218,7 @@
 				7CED8F722EF2D1F900457128 /* Notice */,
 				7C4D5A3B2F01638800B40128 /* Bus */,
 				7CED90662EF2D1F900457128 /* Shop */,
-				7C7ECDB53073D67900C7E768 /* NewDining */,
+				7C7ECDB53073D67900C7E768 /* Dining */,
 				7CED90A22EF2D1F900457128 /* TimeTable */,
 				7CED90A62EF2D1F900457128 /* Facility */,
 				7CED90BA2EF2D1F900457128 /* Land */,
@@ -7178,7 +7178,7 @@
 				5058DDE8BE5D40FF990DEC04 /* DiningList.swift in Sources */,
 				7C7ECDBB3073D69500C7E768 /* DiningHostingController.swift in Sources */,
 				7C7ECDBD3073D69A00C7E768 /* DiningView.swift in Sources */,
-				7C7ECDC13073D6AA00C7E768 /* NewDiningViewModel.swift in Sources */,
+				7C7ECDC13073D6AA00C7E768 /* DiningViewModel.swift in Sources */,
 				7C7ECDC43073D79A00C7E768 /* DiningDateListView.swift in Sources */,
 				7C7ECDC630740E7C00C7E768 /* DiningTypeView.swift in Sources */,
 				7C7ECDC83074150600C7E768 /* DiningMenuListView.swift in Sources */,
