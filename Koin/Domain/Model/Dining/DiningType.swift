@@ -5,7 +5,7 @@
 //  Created by 김나훈 on 3/9/24.
 //  Nullable 2024.04.26
 
-enum DiningType: CaseIterable {
+enum DiningType: CaseIterable, Equatable {
     case breakfast
     case lunch
     case dinner

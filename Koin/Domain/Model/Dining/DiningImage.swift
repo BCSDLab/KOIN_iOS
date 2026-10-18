@@ -3,7 +3,7 @@
 //  koin
 //
 
-enum DiningImage {
+enum DiningImage: Equatable {
     case imageUrl(String)
     case empty(ImageAsset)
     case none

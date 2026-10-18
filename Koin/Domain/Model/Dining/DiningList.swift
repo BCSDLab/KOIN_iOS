@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DiningList {
+struct DiningList: Equatable {
     let diningType: DiningType
     var items: [DiningItem]
 }

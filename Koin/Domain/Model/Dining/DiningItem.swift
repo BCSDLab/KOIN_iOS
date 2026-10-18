@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct DiningItem {
+struct DiningItem: Equatable {
     let id: Int
     let type: DiningType
     let place: DiningPlace
@@ -21,7 +21,6 @@ struct DiningItem {
     func toShareDiningItem() -> ShareDiningMenu {
         return ShareDiningMenu(menuList: menu, imageUrl: image.imageUrl, date: date.formatDateToYYMMDD(), type: type, place: place)
     }
-    
 }
 
 extension DiningItem {
