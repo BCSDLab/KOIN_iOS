@@ -289,6 +289,8 @@
 		7C7CCE722F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE712F86863200E3A54B /* FetchCallVanRestrictionUseCase.swift */; };
 		7C7CCE742F86866B00E3A54B /* CallVanRestriction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE732F86866B00E3A54B /* CallVanRestriction.swift */; };
 		7C7CCE762F86872F00E3A54B /* CallVanRestrictionDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7CCE752F86872F00E3A54B /* CallVanRestrictionDto.swift */; };
+		7C7ECDBB3073D69500C7E768 /* DiningHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDBA3073D69500C7E768 /* DiningHostingController.swift */; };
+		7C7ECDBD3073D69A00C7E768 /* DiningView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDBC3073D69A00C7E768 /* DiningView.swift */; };
 		7C7ECDC13073D6AA00C7E768 /* NewDiningViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDC03073D6AA00C7E768 /* NewDiningViewModel.swift */; };
 		7C7ECDC43073D79A00C7E768 /* DiningDateListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDC33073D79A00C7E768 /* DiningDateListView.swift */; };
 		7C7ECDC630740E7C00C7E768 /* DiningTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C7ECDC530740E7C00C7E768 /* DiningTypeView.swift */; };
@@ -1265,6 +1267,8 @@
 
 /* Begin PBXFileReference section */
 		7C41239C307E8AB300E27FCB /* DiningMenuRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningMenuRowView.swift; sourceTree = "<group>"; };
+		7C7ECDBA3073D69500C7E768 /* DiningHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningHostingController.swift; sourceTree = "<group>"; };
+		7C7ECDBC3073D69A00C7E768 /* DiningView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningView.swift; sourceTree = "<group>"; };
 		7C7ECDC03073D6AA00C7E768 /* NewDiningViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewDiningViewModel.swift; sourceTree = "<group>"; };
 		7C7ECDC33073D79A00C7E768 /* DiningDateListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningDateListView.swift; sourceTree = "<group>"; };
 		7C7ECDC530740E7C00C7E768 /* DiningTypeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningTypeView.swift; sourceTree = "<group>"; };
@@ -3454,6 +3458,8 @@
 			isa = PBXGroup;
 			children = (
 				7C7ECDC23073D6C500C7E768 /* Subviews */,
+				7C7ECDBA3073D69500C7E768 /* DiningHostingController.swift */,
+				7C7ECDBC3073D69A00C7E768 /* DiningView.swift */,
 				7C7ECDC03073D6AA00C7E768 /* NewDiningViewModel.swift */,
 			);
 			path = NewDining;
@@ -7221,6 +7227,8 @@
 				D249CD3B2C158F49000813F9 /* DiningItem.swift in Sources */,
 				577EDACE06C34CE5A40A6DD8 /* DiningImage.swift in Sources */,
 				5058DDE8BE5D40FF990DEC04 /* DiningList.swift in Sources */,
+				7C7ECDBB3073D69500C7E768 /* DiningHostingController.swift in Sources */,
+				7C7ECDBD3073D69A00C7E768 /* DiningView.swift in Sources */,
 				7C7ECDC13073D6AA00C7E768 /* NewDiningViewModel.swift in Sources */,
 				7C7ECDC43073D79A00C7E768 /* DiningDateListView.swift in Sources */,
 				7C7ECDC630740E7C00C7E768 /* DiningTypeView.swift in Sources */,
