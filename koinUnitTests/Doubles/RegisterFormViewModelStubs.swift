@@ -37,13 +37,6 @@ final class SpyLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
         durationTime: String?
     ) { }
 
-    func logEvent(
-        name: String,
-        label: String,
-        value: String,
-        category: String
-    ) { }
-
     func executeWithSessionId(
         label: EventLabelType,
         category: EventParameter.EventCategory,

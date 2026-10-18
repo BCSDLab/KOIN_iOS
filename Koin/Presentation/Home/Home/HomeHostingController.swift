@@ -208,11 +208,10 @@ extension HomeHostingController {
         )
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        logAnalyticsEventUseCase.logEvent(
-            name: "CAMPUS",
-            label: "main_modal_entry",
-            value: banner.banners.first?.title ?? "",
-            category: "entry"
+        logAnalyticsEventUseCase.execute(
+            label: EventParameter.EventLabel.Campus.mainModalEntry,
+            category: .entry,
+            value: banner.banners.first?.title ?? ""
         )
         present(bottomSheetViewController, animated: true)
     }
@@ -222,11 +221,10 @@ extension HomeHostingController {
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
             repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
         )
-        logAnalyticsEventUseCase.logEvent(
-            name: "CAMPUS",
-            label: "main_modal",
-            value: banner.title,
-            category: "click"
+        logAnalyticsEventUseCase.execute(
+            label: EventParameter.EventLabel.Campus.mainModal,
+            category: .click,
+            value: banner.title
         )
 
         if let version = banner.version,

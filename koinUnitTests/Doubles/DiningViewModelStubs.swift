@@ -53,7 +53,5 @@ final class StubLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
 
     func executeWithDuration(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?) {}
 
-    func logEvent(name: String, label: String, value: String, category: String) {}
-
     func executeWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {}
 }

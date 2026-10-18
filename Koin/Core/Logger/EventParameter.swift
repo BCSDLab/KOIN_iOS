@@ -128,6 +128,8 @@ enum EventParameter {
             case mainNextModal = "main_next_modal"
             case mainModalHide7d = "main_modal_hide_7d"
             case mainModalClose = "main_modal_close"
+            case mainModalEntry = "main_modal_entry"
+            case mainModal = "main_modal"
             case homeTimetable = "home_timetable"
             case homeLogin = "home_login"
             case homeLogout = "home_logout"
