@@ -16,6 +16,7 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
         case changeSelectedDiningType(DiningType)
         case refresh
         case didShowToast
+        case didTapCloseShareTooltip
         case didTapShare(DiningItem)
     }
     
@@ -33,6 +34,7 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
     private(set) var selectedDiningType: DiningType = .breakfast
     private(set) var diningLists: [DiningList] = []
     private(set) var toastMessage: String?
+    private(set) var shouldShowShareTooltip = !UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
     
     // MARK: - Initializer
     init(
@@ -49,6 +51,10 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         initializeDates()
         fetchDiningDate(selectedDate: selectedDate, selectedDiningType: selectedDiningType)
+        
+        #if DEBUG
+        shouldShowShareTooltip = true
+        #endif
     }
     
     func execute(_ input: Input) {
@@ -63,6 +69,8 @@ final class NewDiningViewModel: SwiftUIViewModelProtocol {
             changeSelectedDiningType(type)
         case .didShowToast:
             toastMessage = nil
+        case .didTapCloseShareTooltip:
+            hideShareTooltip()
         case let .didTapShare(selecteItem):
             shareMenuList(selectedItem: selecteItem)
         }
@@ -116,6 +124,13 @@ extension NewDiningViewModel {
         if selectedDiningType != type {
             selectedDiningType = type
         }
+    }
+}
+
+extension NewDiningViewModel {
+    private func hideShareTooltip() {
+        UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
+        shouldShowShareTooltip = false
     }
 }
 

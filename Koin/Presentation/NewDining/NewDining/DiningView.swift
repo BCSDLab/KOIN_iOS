@@ -124,8 +124,12 @@ extension DiningView {
             onImageTapped: { imageUrl in
                 sendAction(.showZoomedImage(imageUrl: imageUrl))
             },
+            shouldShowShareTooltip: viewModel.shouldShowShareTooltip,
             onShareTapped: { item in
                 viewModel.execute(.didTapShare(item))
+            },
+            onCloseShareTooltipTapped: {
+                viewModel.execute(.didTapCloseShareTooltip)
             }
         )
     }
