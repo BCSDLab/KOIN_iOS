@@ -17,6 +17,11 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case refresh
         case didShowToast
         case didTapCloseShareTooltip
+        case didTapCloseReportTooltip
+        case didTapReport(
+            selectedItem: DiningItem,
+            imageData: Data
+        )
         case didTapShare(DiningItem)
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
@@ -28,6 +33,10 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     private let shareMenuListUseCase: ShareMenuListUseCase
     private let fetchDiningNotiUseCase: FetchDiningNotiUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
+    private let fetchCurrentDiningItemsUseCase: FetchCurrentDiningItemsUseCase
+    private let reportSoldoutDiningUseCase: ReportSoldoutDiningUseCase
+    private let uploadFileUseCase: UploadFileUseCase
+    private let assignAbTestUseCase: AssignAbTestUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private var fetchDiningListTask: Task<Void, Never>?
@@ -37,10 +46,16 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     private(set) var selectedDate: Date = Date()
     private(set) var selectedDiningType: DiningType = .breakfast
     private(set) var diningLists: [DiningList] = []
+    private(set) var currentDiningItems: [DiningItem] = []
     private(set) var toastMessage: String?
+    private(set) var didFinishReporting: Int = 0
     private(set) var shouldShowShareTooltip = !UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
+    private(set) var shouldShowReportTooltip = !UserDefaults.standard.bool(forKey: "shouldHideReportTooltip")
     private(set) var shouldPresentNotiBottomSheet = !UserDefaults.standard.bool(forKey: "hasShownBottomSheet") && UserDataManager.shared.isLoggedIn
     private(set) var diningNoti: DiningNoti?
+    
+    // MARK: - AbTest
+    private(set) var reportAbTest: DiningReportAbTest?
     
     // MARK: - Initializer
     init(
@@ -49,6 +64,10 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         shareMenuListUseCase: ShareMenuListUseCase,
         fetchDiningNotiUseCase: FetchDiningNotiUseCase,
         changeNotiUseCase: ChangeNotiUseCase,
+        fetchCurrentDiningItemsUseCase: FetchCurrentDiningItemsUseCase,
+        reportSoldoutDiningUseCase: ReportSoldoutDiningUseCase,
+        uploadFileUseCase: UploadFileUseCase,
+        assignAbTestUseCase: AssignAbTestUseCase,
         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
         selectedDate: Date? = nil,
         selectedDiningType: DiningType? = nil
@@ -58,12 +77,17 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         self.shareMenuListUseCase = shareMenuListUseCase
         self.fetchDiningNotiUseCase = fetchDiningNotiUseCase
         self.changeNotiUseCase = changeNotiUseCase
+        self.fetchCurrentDiningItemsUseCase = fetchCurrentDiningItemsUseCase
+        self.reportSoldoutDiningUseCase = reportSoldoutDiningUseCase
+        self.uploadFileUseCase = uploadFileUseCase
+        self.assignAbTestUseCase = assignAbTestUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         initializeDates()
         fetchDiningDate(selectedDate: selectedDate, selectedDiningType: selectedDiningType)
         
         #if DEBUG
         shouldShowShareTooltip = true
+        shouldShowReportTooltip = true
         #endif
     }
     
@@ -71,9 +95,12 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         switch input {
         case .onFirstAppear:
             fetchDiningList()
+            fetchCurrnetDiningItems()
+            assignReportABTest()
             fetchNotiListIfNeeded()
         case .refresh:
             fetchDiningList()
+            fetchCurrnetDiningItems()
         case let .changeSelectedDate(date):
             changeSelectedDate(date)
         case let .changeSelectedDiningType(type):
@@ -82,6 +109,10 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
             toastMessage = nil
         case .didTapCloseShareTooltip:
             hideShareTooltip()
+        case .didTapCloseReportTooltip:
+            hideReportTooltip()
+        case let .didTapReport(selectedItem, imageData):
+            postReport(selectedItem, imageData)
         case let .didTapShare(selecteItem):
             shareMenuList(selectedItem: selecteItem)
         case let .didTapSoldOutSwitch(isOn):
@@ -125,6 +156,15 @@ extension DiningViewModel {
             }
         }
     }
+    private func fetchCurrnetDiningItems() {
+        Task {
+            do {
+                currentDiningItems = try await fetchCurrentDiningItemsUseCase.execute()
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            }
+        }
+    }
 }
 
 extension DiningViewModel {
@@ -143,9 +183,56 @@ extension DiningViewModel {
 }
 
 extension DiningViewModel {
+    private func assignReportABTest() {
+        Task {
+            do {
+                let request = AssignAbTestRequest(title: "icon_location")
+                let result = try await assignAbTestUseCase.execute(requestModel: request).firstValue()
+                reportAbTest = DiningReportAbTest(from: result.variableName.rawValue)
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            }
+        }
+    }
     private func hideShareTooltip() {
         UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
         shouldShowShareTooltip = false
+    }
+    
+    private func hideReportTooltip() {
+        UserDefaults.standard.set(true, forKey: "shouldHideReportTooltip")
+        shouldShowReportTooltip = false
+    }
+}
+
+extension DiningViewModel {
+    private func postReport(
+        _ selectedItem: DiningItem,
+        _ imageData: Data
+    ) {
+        Task {
+            do {
+                defer {
+                    didFinishReporting += 1
+                }
+                guard let imageUrl = try await uploadFileUseCase.execute(
+                    files: [imageData],
+                    domain: .coop
+                )
+                .firstValue()
+                .fileUrls
+                .first else {
+                    throw ErrorResponse.imageUploadError
+                }
+                try await reportSoldoutDiningUseCase.execute(
+                    diningId: selectedItem.id,
+                    imageUrl: imageUrl
+                )
+                toastMessage = "\(selectedItem.place.name) 품절을 제보했습니다."
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            }
+        }
     }
 }
 
