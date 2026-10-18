@@ -93,8 +93,9 @@ extension BottomSheetViewControllerB: BottomSheetViewControllerBDelegate {
                 view.layoutIfNeeded()
             },
             completion: { [weak self] _ in
-                self?.dismiss(animated: false)
-            })
+                self?.dismiss(animated: true)
+            }
+        )
     }
 }
 

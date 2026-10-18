@@ -1,183 +1,207 @@
 //
 //  DiningViewModel.swift
-//  Koin
+//  koin
 //
-//  Created by 김나훈 on 3/14/24.
+//  Created by 홍기정 on 10/5/26.
 //
 
-import Combine
 import Foundation
+import Combine
 
-final class DiningViewModel: ViewModelProtocol {
-    
+@Observable
+final class DiningViewModel: SwiftUIViewModelProtocol {
     enum Input {
-        case updateDisplayDateTime(Date?, DiningType?)
-        case shareMenuList(ShareDiningMenu)
-        case determineInitDate
-        case changeNoti(Bool, SubscribeType)
-        case fetchNotiList
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
-        case logEventWithSessionId(EventLabelType, EventParameter.EventCategory, Any, String)
+        case onFirstAppear
+        case changeSelectedDate(Date)
+        case changeSelectedDiningType(DiningType)
+        case refresh
+        case didShowToast
+        case didTapCloseShareTooltip
+        case didTapShare(DiningItem)
+        case didTapSoldOutSwitch(Bool)
+        case didTapImageUploadSwitch(Bool)
     }
     
-    enum Output {
-        case updateDiningList([DiningItem], DiningType)
-        case initCalendar(Date)
-        case showBottomSheet((Bool, Bool))
-    }
-    
-    private let outputSubject = PassthroughSubject<Output, Never>()
-    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    // MARK: - Proeprteis
+    private let dateProvider: DateProvider
     private let fetchDiningListUseCase: FetchDiningListUseCase
     private let shareMenuListUseCase: ShareMenuListUseCase
+    private let fetchDiningNotiUseCase: FetchDiningNotiUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
-    private let changeNotiDetailUseCase: ChangeNotiDetailUseCase
-    private let fetchNotiListUseCase: FetchNotiListUseCase
-    private let dateProvider: DateProvider
-    private var subscriptions: Set<AnyCancellable> = []
-    private var sharedDiningItem: CurrentDiningTime?
-    private var currentDate: CurrentDiningTime = .init(date: Date(), diningType: .breakfast) {
-        didSet {
-            updateDiningList()
-        }
-    }
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
-    init(fetchDiningListUseCase: FetchDiningListUseCase,
-         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-         dateProvder: DateProvider,
-         shareMenuListUseCase: ShareMenuListUseCase,
-         changeNotiUseCase: ChangeNotiUseCase,
-         fetchNotiListUsecase: FetchNotiListUseCase,
-         changeNotiDetailUseCase: ChangeNotiDetailUseCase,
-         sharedDiningItem: CurrentDiningTime? = nil) {
+    private var fetchDiningListTask: Task<Void, Never>?
+    
+    // MARK: - State
+    private(set) var dates: [Date] = []
+    private(set) var selectedDate: Date = Date()
+    private(set) var selectedDiningType: DiningType = .breakfast
+    private(set) var diningLists: [DiningList] = []
+    private(set) var toastMessage: String?
+    private(set) var shouldShowShareTooltip = !UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
+    private(set) var shouldPresentNotiBottomSheet = !UserDefaults.standard.bool(forKey: "hasShownBottomSheet") && UserDataManager.shared.isLoggedIn
+    private(set) var diningNoti: DiningNoti?
+    
+    // MARK: - Initializer
+    init(
+        dateProvider: DateProvider,
+        fetchDiningListUseCase: FetchDiningListUseCase,
+        shareMenuListUseCase: ShareMenuListUseCase,
+        fetchDiningNotiUseCase: FetchDiningNotiUseCase,
+        changeNotiUseCase: ChangeNotiUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
+        selectedDate: Date? = nil,
+        selectedDiningType: DiningType? = nil
+    ) {
+        self.dateProvider = dateProvider
         self.fetchDiningListUseCase = fetchDiningListUseCase
-        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.dateProvider = dateProvder
         self.shareMenuListUseCase = shareMenuListUseCase
+        self.fetchDiningNotiUseCase = fetchDiningNotiUseCase
         self.changeNotiUseCase = changeNotiUseCase
-        self.fetchNotiListUseCase = fetchNotiListUsecase
-        self.changeNotiDetailUseCase = changeNotiDetailUseCase
-        self.sharedDiningItem = sharedDiningItem
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
+        initializeDates()
+        fetchDiningDate(selectedDate: selectedDate, selectedDiningType: selectedDiningType)
+        
+        #if DEBUG
+        shouldShowShareTooltip = true
+        #endif
     }
     
-    func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input.sink { [weak self] input in
-            guard let self = self else { return }
-            switch input {
-            case let .updateDisplayDateTime(date, diningType):
-                self.updateDisplayDateTime(date: date, type: diningType)
-            case .determineInitDate:
-                self.currentDate = self.dateProvider.execute(date: Date())
-                if let sharedDiningItem {
-                    outputSubject.send(.initCalendar(sharedDiningItem.date))
-                } else {
-                    outputSubject.send(.initCalendar(self.currentDate.date))
-                }
-            case let .logEvent(label, category, value):
-                self.makeLogAnalyticsEvent(label: label, category: category, value: value)
-            case let .shareMenuList(shareModel):
-                self.shareMenuList(shareModel: shareModel)
-            case let .changeNoti(isOn, subscribeType):
-                self.changeNoti(isOn: isOn, type: subscribeType)
-            case .fetchNotiList:
-                self.fetchNotiList()
-            case let .logEventWithSessionId(label, category, value, sessionId):
-                self.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
-            }
-        }.store(in: &subscriptions)
-        return outputSubject.eraseToAnyPublisher()
+    func execute(_ input: Input) {
+        switch input {
+        case .onFirstAppear:
+            fetchDiningList()
+            fetchNotiListIfNeeded()
+        case .refresh:
+            fetchDiningList()
+        case let .changeSelectedDate(date):
+            changeSelectedDate(date)
+        case let .changeSelectedDiningType(type):
+            changeSelectedDiningType(type)
+        case .didShowToast:
+            toastMessage = nil
+        case .didTapCloseShareTooltip:
+            hideShareTooltip()
+        case let .didTapShare(selecteItem):
+            shareMenuList(selectedItem: selecteItem)
+        case let .didTapSoldOutSwitch(isOn):
+            changeNoti(isOn: isOn, type: .diningSoldOut)
+        case let .didTapImageUploadSwitch(isOn):
+            changeNoti(isOn: isOn, type: .diningImageUpload)
+        }
     }
 }
 
 extension DiningViewModel {
-    private func fetchNotiList() {
-        fetchNotiListUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                guard let self = self else { return }
-                let tuple = self.processSubscribes(response: response)
-                self.outputSubject.send(.showBottomSheet(tuple))
-            }
-        ).store(in: &subscriptions)
+    private func initializeDates() {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: Date())
+        dates = (-3...3).compactMap {
+            calendar.date(byAdding: .day, value: $0, to: today)
+        }
     }
-    
-    private func processSubscribes(response: NotiAgreementDto) -> (Bool, Bool) {
-        var diningSoldOutPermit: Bool = false
-        var diningImageUploadPermit: Bool = false
+    private func fetchDiningDate(selectedDate: Date?, selectedDiningType: DiningType?) {
+        if let selectedDate,
+           let selectedDiningType,
+           dates.contains(selectedDate) {
+            self.selectedDate = selectedDate
+            self.selectedDiningType = selectedDiningType
+        } else {
+            let currentDiningTime = dateProvider.execute(date: Date())
+            self.selectedDate = currentDiningTime.date
+            self.selectedDiningType = currentDiningTime.diningType
+        }
+    }
+    private func fetchDiningList() {
+        fetchDiningListTask?.cancel()
         
-        response.subscribes?.forEach { subscribe in
-            guard let type = subscribe.type, let isPermit = subscribe.isPermit else { return }
-            switch type {
-            case .diningSoldOut:
-                diningSoldOutPermit = isPermit
-            case .diningImageUpload:
-                diningImageUploadPermit = isPermit
-            default:
-                break
+        fetchDiningListTask = Task {
+            do {
+                let result = try await fetchDiningListUseCase.execute(date: selectedDate).firstValue()
+                guard !Task.isCancelled else { return }
+                diningLists = result
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
-        return (diningSoldOutPermit, diningImageUploadPermit)
+    }
+}
+
+extension DiningViewModel {
+    private func changeSelectedDate(_ date: Date) {
+        if selectedDate != date {
+            selectedDate = date
+            fetchDiningList()
+        }
     }
     
-    private func changeNoti(isOn: Bool, type: SubscribeType) {
-        changeNotiUseCase.execute(method: isOn ? .post : .delete , type: type).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                if type == .diningSoldOut && isOn {
-                    DetailSubscribeType.allCases.forEach {
-                        self?.changeNotiDetail(isOn: isOn, detailType: $0)
-                    }
-                }
-            }
-        ).store(in: &subscriptions)
+    private func changeSelectedDiningType(_ type: DiningType) {
+        if selectedDiningType != type {
+            selectedDiningType = type
+        }
     }
-    
-    private func changeNotiDetail(isOn: Bool, detailType: DetailSubscribeType) {
-        changeNotiDetailUseCase.execute(method: isOn ? .post : .delete , detailType: detailType).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { response in
-                print(response)
-            }
-        ).store(in: &subscriptions)
+}
+
+extension DiningViewModel {
+    private func hideShareTooltip() {
+        UserDefaults.standard.set(true, forKey: "hasShownDiningShareTooltip")
+        shouldShowShareTooltip = false
     }
-    
-    private func shareMenuList(shareModel: ShareDiningMenu) {
+}
+
+extension DiningViewModel {
+    private func shareMenuList(selectedItem: DiningItem) {
+        let shareModel = ShareDiningMenu(
+            menuList: selectedItem.menu,
+            imageUrl: selectedItem.image.imageUrl,
+            date: selectedItem.date.formatDateToYYMMDD(),
+            type: selectedItem.type,
+            place: selectedItem.place
+        )
         shareMenuListUseCase.execute(shareModel: shareModel)
     }
-    
-    // TODO: 로직 고치기.. 맘에 들지 않는다...
-    private func updateDiningList() {
-        let fetchDate: CurrentDiningTime
-        if let sharedDiningItem {
-            fetchDate = sharedDiningItem
-        } else {
-            fetchDate = currentDate
-        }
-        sharedDiningItem = nil
-        
-        fetchDiningListUseCase.execute(diningInfo: fetchDate).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] list in
-                guard let self = self else { return }
-                self.outputSubject.send(.updateDiningList(list, currentDate.diningType))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func updateDisplayDateTime(date: Date?, type: DiningType?) {
-        if let date = date {
-            currentDate.date = date
-        }
-        if let type = type {
-            currentDate.diningType = type
-        }
-    }
-    
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+}
+
+extension DiningViewModel {
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
-    
-    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
+}
+
+extension DiningViewModel {
+    private func fetchNotiListIfNeeded() {
+        guard shouldPresentNotiBottomSheet else {
+            return
+        }
+        Task {
+            do {
+                diningNoti = try await fetchDiningNotiUseCase.execute()
+            } catch let error as ErrorResponse where error.code == ErrorResponse.typeCastingError.code {
+                return
+            } catch let error as ErrorResponse where error.statusCode == 401 {
+                return
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            }
+        }
+    }
+}
+
+extension DiningViewModel {
+    private func changeNoti(isOn: Bool, type: SubscribeType) {
+        Task {
+            do {
+                try await changeNotiUseCase.execute(
+                    method: isOn ? .post : .delete,
+                    type: type
+                ).firstValue()
+            } catch {
+                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+            }
+        }
     }
 }

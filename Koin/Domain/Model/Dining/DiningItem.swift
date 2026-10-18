@@ -7,50 +7,41 @@
 
 import Foundation
 
-struct DiningItem {
+struct DiningItem: Equatable {
     let id: Int
     let type: DiningType
     let place: DiningPlace
     let priceCard, priceCash: Int?
     let kcal: Int
     let menu: [String]
-    let soldoutAt, changedAt: String?
-    let imageUrl: String?
-    var likes: Int
-    var isLiked: Bool
-    let date: String
-    
-    mutating func increaseLike() {
-        likes += 1
-        isLiked.toggle()
-    }
-    
-    mutating func decreaseLike() {
-        likes -= 1
-        isLiked.toggle()
-    }
+    let isSoldOut, isChanged: Bool
+    let image: DiningImage
+    let date: Date
     
     func toShareDiningItem() -> ShareDiningMenu {
-        let formattedDate = dateStringToFormattedString(dateString: date)
-        return ShareDiningMenu(menuList: menu, imageUrl: imageUrl, date: formattedDate, type: type, place: place)
+        return ShareDiningMenu(menuList: menu, imageUrl: image.imageUrl, date: date.formatDateToYYMMDD(), type: type, place: place)
     }
-    
-    private func dateStringToFormattedString(dateString: String) -> String {
-        let inputFormatter = DateFormatter()
-        inputFormatter.dateFormat = "yyyy-MM-dd"
-        
-        if let date = inputFormatter.date(from: dateString) {
-            return date.formatDateToYYMMDD()
-        } else {
-            return dateString
-        }
-    }
-    
 }
 
 extension DiningItem {
     var diningPriceText: String? {
         guard let price = priceCash ?? priceCard, price > 0 else { return nil }
         return "₩\(price.formatted(.number))"
+    }
+
+    var kcalPriceText: String {
+        let kcalText = "\(kcal)kcal"
+        let priceText = [priceCard, priceCash].compactMap { price in
+            if let price {
+                return "\(price)원"
+            } else {
+                return nil
+            }
+        }
+        .joined(separator: "/")
+
+        return priceText.isEmpty
+        ? kcalText
+        : [kcalText, priceText].joined(separator: " • ")
     }
 }

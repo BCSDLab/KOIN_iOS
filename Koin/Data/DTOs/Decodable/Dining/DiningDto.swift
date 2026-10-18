@@ -15,28 +15,28 @@ struct DiningDto: Decodable {
     let priceCard, priceCash: Int?
     let kcal: Int?
     let menu: [String]?
-    let createdAt, updatedAt: String
     let soldoutAt, changedAt: String?
     let imageURL: String?
-    let likes: Int
-    let isLiked: Bool
     
     enum CodingKeys: String, CodingKey {
-        case id, date, type, place, likes
+        case id, date, type, place
         case priceCard = "price_card"
         case priceCash = "price_cash"
         case kcal, menu
         case imageURL = "image_url"
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
         case soldoutAt = "soldout_at"
         case changedAt = "changed_at"
-        case isLiked = "is_liked"
     }
     
     func toDomain() -> DiningItem? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.locale = Locale(identifier: "ko_KR")
+        inputFormatter.calendar = Calendar(identifier: .gregorian)
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+
         guard let type = DiningTypeDto(rawValue: type)?.toDomain(),
-              let place = DiningPlaceDto(rawValue: place)?.toDomain() else {
+              let place = DiningPlaceDto(rawValue: place)?.toDomain(),
+              let date = inputFormatter.date(from: date) else {
             return nil
         }
         return .init(
@@ -47,11 +47,14 @@ struct DiningDto: Decodable {
             priceCash: priceCash,
             kcal: kcal ?? 0,
             menu: menu ?? [],
-            soldoutAt: soldoutAt,
-            changedAt: changedAt,
-            imageUrl: imageURL,
-            likes: likes,
-            isLiked: isLiked,
+            isSoldOut: soldoutAt != nil,
+            isChanged: changedAt != nil,
+            image: DiningImage(
+                imageURL,
+                place: place,
+                type: type,
+                isWeekend: date.isWeekend
+            ),
             date: date
         )
     }

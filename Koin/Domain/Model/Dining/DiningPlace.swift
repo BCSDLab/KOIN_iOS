@@ -5,7 +5,7 @@
 //  Created by 김나훈 on 3/9/24.
 //  Nullable 2024.04.26
 
-enum DiningPlace {
+enum DiningPlace: Equatable {
     case cornerA
     case cornerB
     case cornerC
@@ -22,7 +22,7 @@ enum DiningPlace {
         }
     }
 
-    var sortOrder: Int {
+    var order: Int {
         switch self {
         case .cornerA: 0
         case .cornerB: 1

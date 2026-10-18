@@ -320,32 +320,45 @@ extension SceneDelegate {
         isPresentingErrorViewController = true
     }
     
-    private func handleDiningNavigation(date: String, type: String, place: String, navigationController: UINavigationController?) {
+    private func handleDiningNavigation(
+        date: String,
+        type: String,
+        place: String,
+        navigationController: UINavigationController?
+    ) {
+        let date = {
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyMMdd"
+            dateFormatter.locale = Locale(identifier: "ko_KR")
+            return dateFormatter.date(from: date)
+        }()
+        let type = DiningType(rawValue: type)
+        
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
-        let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let dateProvider = DefaultDateProvider()
-        let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
-        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
-        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
-        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(
-            fetchDiningListUseCase: fetchDiningListUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            dateProvder: dateProvider,
-            shareMenuListUseCase: shareMenuListUseCase,
-            changeNotiUseCase: changeNotiUseCase,
-            fetchNotiListUsecase: fetchNotiListUseCase,
-            changeNotiDetailUseCase: changeNotiDetailUseCase,
-            sharedDiningItem: CurrentDiningTime(date: date.toDateFromYYMMDD() ?? Date(), diningType: DiningTypeDto(rawValue: type)?.toDomain() ?? .breakfast)
+        let diningRepository = DefaultDiningRepository(
+            diningService: diningService,
+            shareService: shareService
         )
-        let diningViewController = DiningViewController(viewModel: viewModel)
-        diningViewController.title = "식단"
+        let notiReposotiry = DefaultNotiRepository(service: DefaultNotiService())
+        let dateProvider = DefaultDateProvider()
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
+        let fetchDiningNotiUseCase = DefaultFetchDiningNotiUseCase(notiRepository: notiReposotiry)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiReposotiry)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = DiningViewModel(
+            dateProvider: dateProvider,
+            fetchDiningListUseCase: fetchDiningListUseCase,
+            shareMenuListUseCase: shareMenuListUseCase,
+            fetchDiningNotiUseCase: fetchDiningNotiUseCase,
+            changeNotiUseCase: changeNotiUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let rootView = DiningView(viewModel: viewModel)
+        let diningHostingController = DiningHostingController(rootView: rootView)
         
-        navigationController?.pushViewController(diningViewController, animated: true)
+        navigationController?.pushViewController(diningHostingController, animated: true)
     }
     
     private func makeRecruitNotificationListViewController(notificationId: Int) -> RecruitNotificationListViewController {
@@ -434,22 +447,30 @@ extension SceneDelegate {
         return NoticeDataViewController(viewModel: viewModel)
     }
     
-    private func makeDiningViewController() -> DiningViewController {
+    private func makeDiningViewController() -> UIViewController {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
-        let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let diningRepository = DefaultDiningRepository(
+            diningService: diningService,
+            shareService: shareService
+        )
+        let notiReposotiry = DefaultNotiRepository(service: DefaultNotiService())
         let dateProvider = DefaultDateProvider()
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
         let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
-        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
-        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
-        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
-        let diningViewController = DiningViewController(viewModel: viewModel)
-        diningViewController.title = "식단"
-        return diningViewController
+        let fetchDiningNotiUseCase = DefaultFetchDiningNotiUseCase(notiRepository: notiReposotiry)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiReposotiry)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = DiningViewModel(
+            dateProvider: dateProvider,
+            fetchDiningListUseCase: fetchDiningListUseCase,
+            shareMenuListUseCase: shareMenuListUseCase,
+            fetchDiningNotiUseCase: fetchDiningNotiUseCase,
+            changeNotiUseCase: changeNotiUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let rootView = DiningView(viewModel: viewModel)
+        return DiningHostingController(rootView: rootView)
     }
     
     private func makeShopSummaryViewController(shopId: Int) -> UIViewController {
