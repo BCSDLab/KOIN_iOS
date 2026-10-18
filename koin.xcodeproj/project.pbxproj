@@ -780,6 +780,7 @@
 		7CF7D0DF30853D8D009AFDCB /* DiningNoti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0DE30853D8D009AFDCB /* DiningNoti.swift */; };
 		7CF7D0E330853DD4009AFDCB /* FetchDiningNotiUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */; };
 		7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441C30837E4900623C1F /* CancelableImage.swift */; };
+		7CFC442B3085217F00623C1F /* DiningNotiBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
 		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
@@ -2023,6 +2024,7 @@
 		7CF7D0DE30853D8D009AFDCB /* DiningNoti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNoti.swift; sourceTree = "<group>"; };
 		7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningNotiUseCase.swift; sourceTree = "<group>"; };
 		7CFC441C30837E4900623C1F /* CancelableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImage.swift; sourceTree = "<group>"; };
+		7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiBottomSheetContentView.swift; sourceTree = "<group>"; };
 		7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitUseCase.swift; sourceTree = "<group>"; };
 		7DADCC36CEEA42EC86AB75B6 /* RecruitDataMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataMetadataView.swift; sourceTree = "<group>"; };
 		827BD7E96347F476DB1BD966 /* RecruitApplicantListRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplicantListRequestDto.swift; sourceTree = "<group>"; };
@@ -3482,6 +3484,7 @@
 				7C7ECDC73074150600C7E768 /* DiningMenuListView.swift */,
 				7C41239C307E8AB300E27FCB /* DiningMenuRowView.swift */,
 				7C7ECDCB30771FAE00C7E768 /* DiningFooterView.swift */,
+				7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -7279,6 +7282,7 @@
 				D20AB9412C550746006BC684 /* RevokeUseCase.swift in Sources */,
 				7C65FDC32FE69262007831CE /* NewBannerViewController.swift in Sources */,
 				7C65FDC72FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionViewProtocol.swift in Sources */,
+				7CFC442B3085217F00623C1F /* DiningNotiBottomSheetContentView.swift in Sources */,
 				D223D6192D9C0EFC00C29BE6 /* BannerDto.swift in Sources */,
 				833D9C222C6B4F6E00982145 /* NoticeListDto.swift in Sources */,
 				7C372F1E2F1CD8FB00149729 /* LostItemDataHeaderView.swift in Sources */,
