@@ -39,3 +39,18 @@ enum DiningType: CaseIterable, Equatable {
         index
     }
 }
+
+extension DiningType {
+    init?(rawValue: String) {
+        switch rawValue {
+        case "breakfast":
+            self = .breakfast
+        case "lunch":
+            self = .lunch
+        case "dinner":
+            self = .dinner
+        default:
+            return nil
+        }
+    }
+}
