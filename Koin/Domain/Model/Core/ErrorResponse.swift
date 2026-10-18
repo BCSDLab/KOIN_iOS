@@ -81,4 +81,8 @@ extension ErrorResponse {
         code: "IMAGE_UPLOAD_ERROR",
         message: "이미지 전송 실패"
     )
+    static let unknownUserAssignType = ErrorResponse(
+        code: "UNKNOWN_USER_ASSIGN_TYPE",
+        message: "알 수 없는 실험군입니다."
+    )
 }
