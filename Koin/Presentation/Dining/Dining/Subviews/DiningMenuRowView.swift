@@ -15,15 +15,23 @@ struct DiningMenuRowView: View {
     let onImageTapped: (String)->Void
     let onShareButtonTapped: (DiningItem)->Void
     
+    // MARK: - ABTest
+    let shouldShowReportButton: Bool
+    let onReportButtonTapped: (DiningItem)->Void
+    
     // MARK: - Initializer
     init(
         item: DiningItem,
         onImageTapped: @escaping (String)->Void,
-        onShareButtonTapped: @escaping (DiningItem)->Void
+        onShareButtonTapped: @escaping (DiningItem)->Void,
+        shouldShowReportButton: Bool,
+        onReportButtonTapped: @escaping (DiningItem)->Void
     ) {
         self.item = item
         self.onImageTapped = onImageTapped
         self.onShareButtonTapped = onShareButtonTapped
+        self.shouldShowReportButton = shouldShowReportButton
+        self.onReportButtonTapped = onReportButtonTapped
     }
     
     // MARK: - Body
@@ -71,6 +79,15 @@ extension DiningMenuRowView {
             } else if item.isChanged {
                 changedChip
             }
+            if !item.isSoldOut && shouldShowReportButton {
+                reportButton
+                    .anchorPreference(
+                        key: ReportButtonPreferenceKey.self,
+                        value: .bounds
+                    ) { anchor in
+                        item.place == .cornerA ? anchor : nil
+                    }
+            }
             
             Spacer()
             
@@ -98,6 +115,15 @@ extension DiningMenuRowView {
             .frame(height: 30)
             .background(Color.appColor(.neutral300))
             .clipShape(RoundedRectangle(cornerRadius: 4))
+    }
+    
+    @ViewBuilder private var reportButton: some View {
+        Button {
+            onReportButtonTapped(item)
+        } label: {
+            Image.appImage(asset: .diningReport)
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -200,5 +226,19 @@ extension DiningMenuRowView {
         }
         .buttonStyle(.plain)
         .border(Color.appColor(.neutral100), width: 1, edges: .init(arrayLiteral: .top))
+    }
+}
+
+// MARK: - PreferenceKey
+struct ReportButtonPreferenceKey: PreferenceKey {
+    typealias Value = Anchor<CGRect>?
+
+    static let defaultValue: Self.Value? = nil
+
+    static func reduce(
+        value: inout Self.Value,
+        nextValue: () -> Self.Value
+    ) {
+        value = value ?? nextValue()
     }
 }

@@ -36,4 +36,8 @@ final class DefaultDiningRepository: DiningRepository {
         shareService.shareMenuList(shareModel: shareModel)
     }
   
+    func reportSoldout(diningId: Int, imageUrl: String) async throws -> Void {
+        let request = ReportSoldoutRequestDto(imageUrl: imageUrl)
+        try await diningService.reportSoldout(diningId: diningId, request: request)
+    }
 }

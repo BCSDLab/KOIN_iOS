@@ -6,16 +6,34 @@
 //
 
 import SwiftUI
+import PhotosUI
+import SnapKit
+import Then
 
 final class DiningHostingController: UIHostingController<DiningView>, HostingControllerProtocol {
     
+    // MARK: - Modal
+    private var modalView: DiningReportModalView?
+    
     // MARK: - UI Components
+    private lazy var reportButton = UIButton().then {
+        $0.addTarget(self, action: #selector(didTapReportButton), for: .touchUpInside)
+    }
+    private lazy var reportBarButton = UIBarButtonItem(customView: reportButton)
     private lazy var coopInfoBarButton = UIBarButtonItem(
         image: .appImage(asset: .coopInfo),
         style: .plain,
         target: self,
         action: #selector(didTapCoopInfoButton)
     )
+    private lazy var reportTooltipImageView = CancelableImageView().then {
+        if let image = UIImage.appImage(asset: DiningReportAbTest.nav.imageAsset) {
+            $0.setUpImage(image: image)
+        }
+        $0.isHidden = true
+        $0.onXButtonTapped = didTapCloseReportTooltip
+        $0.onImageTapped = didTapReportButton
+    }
     
     // MARK: - Initializer
     override init(rootView: DiningView) {
@@ -31,6 +49,12 @@ final class DiningHostingController: UIHostingController<DiningView>, HostingCon
         super.viewDidLoad()
         title = "식단"
         configureNavigationBar()
+        configureView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        updateReportTooltipPosition()
     }
     
     // MARK: - Execute
@@ -38,6 +62,14 @@ final class DiningHostingController: UIHostingController<DiningView>, HostingCon
         switch action {
         case .showToastMessage(let message):
             showToastMessage(message: message)
+        case .showReportBarButton:
+            showReportBarButton()
+        case .showReportBarButtonTooltip:
+            showReportBarButtonTooltip()
+        case .showReportModal(let selectedItem):
+            showReportModal(selectedItem: selectedItem)
+        case .didFinishReporting:
+            dismiss(animated: true)
         case .showZoomedImage(let imageUrl):
             showZoomedImage(imageUrl: imageUrl)
         case .presentNotiBottomSheet(let initialValue):
@@ -52,8 +84,69 @@ extension DiningHostingController {
         navigationItem.setRightBarButtonItems([coopInfoBarButton], animated: true)
     }
     
+    private func showReportBarButton() {
+        let rightBarButtonItems = [coopInfoBarButton, reportBarButton]
+        navigationItem.setRightBarButtonItems(rightBarButtonItems, animated: true)
+    }
+    
+    private func showReportBarButtonTooltip() {
+        reportTooltipImageView.isHidden = false
+    }
+    
+    private func updateReportTooltipPosition() {
+        guard navigationItem.rightBarButtonItems?.contains(reportBarButton) == true else {
+            return
+        }
+        let reportButtonRect = reportButton.convert(
+            reportButton.bounds,
+            to: view
+        )
+        
+        reportTooltipImageView.frame.origin = CGPoint(
+            x: reportButtonRect.minX - 135,
+            y: reportButtonRect.maxY + 10
+        )
+    }
+    
+    @objc private func didTapReportButton() {
+        showReportModal(selectedItem: nil)
+    }
+    
     @objc private func didTapCoopInfoButton() {
         navigateToCoopInfo()
+    }
+
+    private func didTapCloseReportTooltip() {
+        reportTooltipImageView.removeFromSuperview()
+        rootView.didTapCloseReportTooltip()
+    }
+}
+
+extension DiningHostingController {
+    private func onCompleteButtonTapped(
+        selectedItem: DiningItem,
+        evidenceImage: UIImage
+    ) {
+        guard let imageData = evidenceImage.jpegData(compressionQuality: 0.5) else {
+            return
+        }
+        rootView.didTapReport(
+            selectedItem: selectedItem,
+            evidenceImage: imageData
+        )
+    }
+}
+
+extension DiningHostingController {
+    private func configureView() {
+        view.addSubview(reportTooltipImageView)
+        
+        reportButton.setImage(.appImage(asset: .diningReport), for: .normal)
+        
+        reportTooltipImageView.snp.makeConstraints {
+            $0.width.equalTo(171)
+            $0.height.equalTo(62)
+        }
     }
 }
 
@@ -67,6 +160,45 @@ extension DiningHostingController {
         let viewModel = DiningNoticeViewModel(fetchCoopShopListUseCase: fetchCoopShopListUseCase)
         let viewController = DiningNoticeViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    private func showReportModal(selectedItem: DiningItem?) {
+        guard !rootView.currentDiningItems.isEmpty else {
+            showToastMessage(message: "학생식당 운영시간이 아닙니다.")
+            return
+        }
+        self.modalView = makeModalView(selectedItem: selectedItem)
+        presentReportModalViewController()
+    }
+    
+    private func makeModalView(selectedItem: DiningItem?) -> DiningReportModalView {
+        return DiningReportModalView(
+            diningItems: rootView.currentDiningItems,
+            onDismissButtonTapped: { [weak self] in
+                self?.dismiss(animated: true)
+            },
+            onSelectImageButtonTapped: presentPickerViewController,
+            onCompleteButtonTapped: onCompleteButtonTapped,
+            selectedItem: selectedItem
+        )
+    }
+    
+    private func presentReportModalViewController() {
+        guard let modalView else {
+            return
+        }
+        let modalViewController = KoinModalViewController(configuration: .init(
+            appearance: .new,
+            content: .custom(customView: modalView),
+            button: .none,
+            layout: .init(
+                width: 340,
+                contentTopPadding: 16,
+                contentHorizontalPadding: 20,
+                contentBottomPadding: 16
+            )
+        ))
+        present(modalViewController, animated: true)
     }
 }
 
@@ -102,5 +234,35 @@ extension DiningHostingController {
         let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
         let viewController = NotiViewController(viewModel: NotiViewModel(changeNotiUseCase: changeNotiUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase, fetchNotiListUseCase: fetchNotiListUseCase, logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))))
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension DiningHostingController: PHPickerViewControllerDelegate {
+    private func presentPickerViewController() {
+        var configuration = PHPickerConfiguration()
+        configuration.filter = .images
+        configuration.selectionLimit = 1
+        
+        let picker = PHPickerViewController(configuration: configuration)
+        picker.delegate = self
+        presentedViewController?.present(picker, animated: true, completion: nil)
+    }
+    
+    func picker(
+        _ picker: PHPickerViewController,
+        didFinishPicking results: [PHPickerResult]
+    ) {
+        picker.dismiss(animated: true, completion: nil)
+        
+        guard let provider = results.first?.itemProvider else { return }
+        
+        if provider.canLoadObject(ofClass: UIImage.self) {
+            provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
+                guard let image = image as? UIImage else { return }
+                DispatchQueue.main.async { [weak self] in
+                    self?.modalView?.configure(evidenceImage: image)
+                }
+            }
+        }
     }
 }

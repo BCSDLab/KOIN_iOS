@@ -769,7 +769,12 @@
 		7CF77B873005F642003642C1 /* FetchMainFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF77B863005F642003642C1 /* FetchMainFrameUseCase.swift */; };
 		7CF7D0DF30853D8D009AFDCB /* DiningNoti.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0DE30853D8D009AFDCB /* DiningNoti.swift */; };
 		7CF7D0E330853DD4009AFDCB /* FetchDiningNotiUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */; };
+		7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */; };
 		7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441C30837E4900623C1F /* CancelableImage.swift */; };
+		7CFC44233083DDA000623C1F /* DiningReportModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44223083DDA000623C1F /* DiningReportModalView.swift */; };
+		7CFC4425308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */; };
+		7CFC44273084111100623C1F /* ReportSoldoutDiningUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */; };
+		7CFC44293084131A00623C1F /* ReportSoldoutRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */; };
 		7CFC442B3085217F00623C1F /* DiningNotiBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
@@ -2001,7 +2006,12 @@
 		7CF77B863005F642003642C1 /* FetchMainFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMainFrameUseCase.swift; sourceTree = "<group>"; };
 		7CF7D0DE30853D8D009AFDCB /* DiningNoti.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNoti.swift; sourceTree = "<group>"; };
 		7CF7D0E230853DD4009AFDCB /* FetchDiningNotiUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningNotiUseCase.swift; sourceTree = "<group>"; };
+		7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportAbTest.swift; sourceTree = "<group>"; };
 		7CFC441C30837E4900623C1F /* CancelableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImage.swift; sourceTree = "<group>"; };
+		7CFC44223083DDA000623C1F /* DiningReportModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportModalView.swift; sourceTree = "<group>"; };
+		7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCurrentDiningItemsUseCase.swift; sourceTree = "<group>"; };
+		7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutDiningUseCase.swift; sourceTree = "<group>"; };
+		7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutRequestDto.swift; sourceTree = "<group>"; };
 		7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiBottomSheetContentView.swift; sourceTree = "<group>"; };
 		7D447F2D75951DD4C3E08D4E /* PostRecruitUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostRecruitUseCase.swift; sourceTree = "<group>"; };
 		7DADCC36CEEA42EC86AB75B6 /* RecruitDataMetadataView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataMetadataView.swift; sourceTree = "<group>"; };
@@ -3463,6 +3473,7 @@
 				7C7ECDC73074150600C7E768 /* DiningMenuListView.swift */,
 				7C41239C307E8AB300E27FCB /* DiningMenuRowView.swift */,
 				7C7ECDCB30771FAE00C7E768 /* DiningFooterView.swift */,
+				7CFC44223083DDA000623C1F /* DiningReportModalView.swift */,
 				7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */,
 			);
 			path = Subviews;
@@ -5965,6 +5976,7 @@
 				DA2100000000000000000004 /* MealType.swift */,
 				DA2100000000000000000005 /* CoopOpen.swift */,
 				D2A513402C59FE860064941A /* ShareDiningMenu.swift */,
+				7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6175,6 +6187,7 @@
 			isa = PBXGroup;
 			children = (
 				D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */,
+				7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6601,8 +6614,10 @@
 			isa = PBXGroup;
 			children = (
 				D249CD3C2C159350000813F9 /* DateProvider.swift */,
+				7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */,
 				D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */,
 				D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */,
+				7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6860,6 +6875,7 @@
 				FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */,
 				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
 				7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */,
+				7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */,
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
 				7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */,
@@ -6944,6 +6960,7 @@
 				7CED922B2EF2D25900457128 /* DIContainer+Notice.swift in Sources */,
 				7CF1D58B30695E7900295ED9 /* RecruitMyPostViewModel.swift in Sources */,
 				7CED922C2EF2D25900457128 /* DIContainer+Dining.swift in Sources */,
+				7CFC44293084131A00623C1F /* ReportSoldoutRequestDto.swift in Sources */,
 				7CED922D2EF2D25900457128 /* DIContainer+Land.swift in Sources */,
 				7CED922F2EF2D25900457128 /* DIContainer+TimeTable.swift in Sources */,
 				7CED92302EF2D25900457128 /* DIContainer+Home.swift in Sources */,
@@ -7346,6 +7363,7 @@
 				7C61D3432F220E8C005FAC3A /* EditLostItemHeaderView.swift in Sources */,
 				7CED913B2EF2D1F900457128 /* AddLostItemFooterView.swift in Sources */,
 				7C016569300AB67B0013DD7B /* DepartmentManyTasksView.swift in Sources */,
+				7CFC44273084111100623C1F /* ReportSoldoutDiningUseCase.swift in Sources */,
 				7CED913F2EF2D1F900457128 /* EventShopCollectionViewCell.swift in Sources */,
 				7CF77B4F30028737003642C1 /* TimeTableLectureContainerView.swift in Sources */,
 				7CBFAF112FBC44CA001D64E3 /* ShopBenefitPageControl.swift in Sources */,
@@ -7453,6 +7471,7 @@
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,
 				7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */,
 				7CF77B7430058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift in Sources */,
+				7CFC44233083DDA000623C1F /* DiningReportModalView.swift in Sources */,
 				7CED91922EF2D1F900457128 /* ShopSummaryViewController.swift in Sources */,
 				7CED91932EF2D1F900457128 /* ReviewListCollectionView.swift in Sources */,
 				7C05D07F2FBC2A0E00F4D825 /* ShopBenefitTableViewCell.swift in Sources */,
@@ -7733,6 +7752,7 @@
 				7C50A1D33041F8CA00897A6F /* RecruitCategory.swift in Sources */,
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
+				7CFC4425308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift in Sources */,
 				B68D2CE52EA505AA00F3B479 /* ToastIntent.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,

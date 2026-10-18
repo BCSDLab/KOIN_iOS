@@ -12,6 +12,10 @@ import UIKit
 struct DiningView: ActionBindableView {
     enum Action {
         case showToastMessage(String)
+        case showReportBarButton
+        case showReportBarButtonTooltip
+        case showReportModal(selectedItem: DiningItem?)
+        case didFinishReporting
         case showZoomedImage(imageUrl: String)
         case presentNotiBottomSheet(initialValue: DiningNoti)
     }
@@ -19,6 +23,9 @@ struct DiningView: ActionBindableView {
     
     // MARK: - Properties
     @State private var viewModel: DiningViewModel
+    var currentDiningItems: [DiningItem] {
+        viewModel.currentDiningItems
+    }
     
     // MARK: - Initializer
     init(viewModel: DiningViewModel) {
@@ -48,6 +55,17 @@ struct DiningView: ActionBindableView {
                 viewModel.execute(.didShowToast)
             }
         }
+        .onChange(of: viewModel.reportAbTest) {
+            if viewModel.reportAbTest == .nav {
+                sendAction(.showReportBarButton)
+            }
+            if viewModel.reportAbTest == .nav && viewModel.shouldShowReportTooltip {
+                sendAction(.showReportBarButtonTooltip)
+            }
+        }
+        .onChange(of: viewModel.didFinishReporting) {
+            sendAction(.didFinishReporting)
+        }
         .onChange(of: viewModel.diningNoti) {
             if let diningNoti = viewModel.diningNoti,
                viewModel.shouldPresentNotiBottomSheet {
@@ -57,6 +75,18 @@ struct DiningView: ActionBindableView {
     }
     
     // MARK: - Public
+    func didTapCloseReportTooltip() {
+        viewModel.execute(.didTapCloseReportTooltip)
+    }
+    
+    func didTapReport(
+        selectedItem: DiningItem,
+        evidenceImage imageData: Data
+    ) {
+        IndicatorView.show()
+        viewModel.execute(.didTapReport(selectedItem: selectedItem, imageData: imageData))
+    }
+    
     func didTapSoldOutSwitch(isOn: Bool) {
         viewModel.execute(.didTapSoldOutSwitch(isOn))
     }
@@ -137,6 +167,7 @@ extension DiningView {
     private func listView(list: DiningList) -> some View {
         DiningMenuListView(
             list: list,
+            currentItems: viewModel.currentDiningItems,
             onImageTapped: { imageUrl in
                 sendAction(.showZoomedImage(imageUrl: imageUrl))
             },
@@ -146,6 +177,14 @@ extension DiningView {
             },
             onCloseShareTooltipTapped: {
                 viewModel.execute(.didTapCloseShareTooltip)
+            },
+            shouldShowReportButton: viewModel.reportAbTest == .card,
+            shouldShowReportTooltip: viewModel.reportAbTest == .card && viewModel.shouldShowReportTooltip,
+            onReportTapped: { item in
+                sendAction(.showReportModal(selectedItem: item))
+            },
+            onCloseReportTooltipTapped: {
+                viewModel.execute(.didTapCloseReportTooltip)
             }
         )
     }

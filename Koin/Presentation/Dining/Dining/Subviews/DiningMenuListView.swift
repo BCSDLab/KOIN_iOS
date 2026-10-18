@@ -11,25 +11,41 @@ struct DiningMenuListView: View {
     
     // MARK: - Property
     let list: DiningList
+    let currentItems: [DiningItem]
     let onImageTapped: (String)->Void
     
     let shouldShowShareTooltip: Bool
     let onShareTapped: (DiningItem) -> Void
     let onCloseShareTooltipTapped: () -> Void
     
+    let shouldShowReportButton: Bool
+    let shouldShowReportTooltip: Bool
+    let onReportTapped: (DiningItem?) -> Void
+    let onCloseReportTooltipTapped: ()->Void
+    
     // MARK: - Initializer
     init(
         list: DiningList,
+        currentItems: [DiningItem],
         onImageTapped: @escaping (String)->Void,
         shouldShowShareTooltip: Bool,
         onShareTapped: @escaping (DiningItem) -> Void,
         onCloseShareTooltipTapped: @escaping () -> Void,
+        shouldShowReportButton: Bool,
+        shouldShowReportTooltip: Bool,
+        onReportTapped: @escaping (DiningItem?) -> Void,
+        onCloseReportTooltipTapped: @escaping ()->Void,
     ) {
         self.list = list
+        self.currentItems = currentItems
         self.onImageTapped = onImageTapped
         self.shouldShowShareTooltip = shouldShowShareTooltip
         self.onShareTapped = onShareTapped
         self.onCloseShareTooltipTapped = onCloseShareTooltipTapped
+        self.shouldShowReportButton = shouldShowReportButton
+        self.shouldShowReportTooltip = shouldShowReportTooltip
+        self.onReportTapped = onReportTapped
+        self.onCloseReportTooltipTapped = onCloseReportTooltipTapped
     }
     
     // MARK: - Body
@@ -40,7 +56,9 @@ struct DiningMenuListView: View {
                     DiningMenuRowView(
                         item: item,
                         onImageTapped: onImageTapped,
-                        onShareButtonTapped: onShareTapped
+                        onShareButtonTapped: onShareTapped,
+                        shouldShowReportButton: (shouldShowReportButton && currentItems.contains(item)),
+                        onReportButtonTapped: onReportTapped
                     )
                     .anchorPreference(
                         key: FirstRowViewPreferenceKey.self,
@@ -61,6 +79,12 @@ struct DiningMenuListView: View {
             shouldShowShareTooltip: shouldShowShareTooltip,
             onShareTooltipImageTapped: onShareTapped,
             onShareTooltipXButtonTapped: onCloseShareTooltipTapped,
+            item: list.items.first
+        )
+        .overlayReportTooltip(
+            shouldShowReportTooltip: shouldShowReportTooltip,
+            onReportTooltipImageTapped: onReportTapped,
+            onReportTooltipXButtonTapped: onCloseReportTooltipTapped,
             item: list.items.first
         )
     }
@@ -98,6 +122,36 @@ private extension View {
                     .animateTooltip(
                         offsetY: 10,
                         duration: 0.7
+                    )
+                }
+            }
+        }
+    }
+    
+    func overlayReportTooltip(
+        shouldShowReportTooltip: Bool,
+        onReportTooltipImageTapped: @escaping (DiningItem?)->Void,
+        onReportTooltipXButtonTapped: @escaping ()->Void,
+        item: DiningItem?
+    ) -> some View {
+        overlayPreferenceValue(ReportButtonPreferenceKey.self) { anchor in
+            GeometryReader { proxy in
+                if shouldShowReportTooltip, let anchor {
+                    let rowFrame = proxy[anchor]
+                    CancelableImage(
+                        imageAsset: DiningReportAbTest.card.imageAsset,
+                        xButtonLayout: .init(
+                            topInset: 16,
+                            bottomInset: 26
+                        ),
+                        onXButtonTapped: onReportTooltipXButtonTapped,
+                        onImageTapped: {
+                            onReportTooltipImageTapped(item)
+                        }
+                    )
+                    .position(
+                        x: rowFrame.midX + 66,
+                        y: rowFrame.maxY + 35
                     )
                 }
             }

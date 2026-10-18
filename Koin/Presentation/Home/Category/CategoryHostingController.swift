@@ -108,12 +108,18 @@ extension CategoryHostingController {
             diningService: diningService,
             shareService: shareService
         )
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let abTestRepository = DefaultAbTestRepository(service: DefaultAbTestService())
         let notiReposotiry = DefaultNotiRepository(service: DefaultNotiService())
         let dateProvider = DefaultDateProvider()
         let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
         let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
         let fetchDiningNotiUseCase = DefaultFetchDiningNotiUseCase(notiRepository: notiReposotiry)
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiReposotiry)
+        let fetchCurrentDiningItemsUseCase = DefaultFetchCurrentDiningItemsUseCase(repository: diningRepository)
+        let reportSoldoutDiningUseCase = DefaultReportSoldoutDiningUseCase(repository: diningRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let assignAbTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: abTestRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = DiningViewModel(
             dateProvider: dateProvider,
@@ -121,6 +127,10 @@ extension CategoryHostingController {
             shareMenuListUseCase: shareMenuListUseCase,
             fetchDiningNotiUseCase: fetchDiningNotiUseCase,
             changeNotiUseCase: changeNotiUseCase,
+            fetchCurrentDiningItemsUseCase: fetchCurrentDiningItemsUseCase,
+            reportSoldoutDiningUseCase: reportSoldoutDiningUseCase,
+            uploadFileUseCase: uploadFileUseCase,
+            assignAbTestUseCase: assignAbTestUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let rootView = DiningView(viewModel: viewModel)
