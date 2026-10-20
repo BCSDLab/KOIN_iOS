@@ -325,7 +325,6 @@ enum EventParameter {
         }
         
         enum User: String, EventLabelType {
-            // Login
             case login = "login"
             case hamburger = "hamburger"
             case startSignUp = "start_sign_up"
@@ -338,12 +337,6 @@ enum EventParameter {
                 return "USER"
             }
         }
-        
-        // ??
-        case hamburgerRegister
-        case registerRegister
-        case loginFindIdPassword
-        case hamburgerClick
     }
     
     enum EventCategory: String {
