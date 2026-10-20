@@ -326,15 +326,9 @@ enum EventParameter {
         
         enum User: String, EventLabelType {
             // Login
-            case completeSignUp = "complete_sign_up"
             case login = "login"
-            case autoLogin = "auto_login"
-            case loginFindIdId = "login_findId_id"
             case hamburger = "hamburger"
-            case hamburgerMyInfoWithLogin = "hamburger_my_info_with_login"
-            case hamburgerMyInfoWithoutLogin = "hamburger_my_info_without_login"
             case startSignUp = "start_sign_up"
-            case userOnlyOk = "user_only_ok"
             case userInfo = "user_info"
             case termsAgreement = "terms_agreement"
             case identityVerification = "identity_verification"
