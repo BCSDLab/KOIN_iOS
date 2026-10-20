@@ -15,7 +15,6 @@ protocol EventLabelType {
 enum EventParameter {
     enum EventLabel {
         enum ForceUpdate: String, EventLabelType {
-            case forcedUpdatePageView = "forced_update_page_view"
             case forceUpdateExit = "forced_update_exit"
             case forceUpdateConfirm = "forced_update_confirm"
             case forceUpdateAlreadyDone = "forced_update_already_done"
@@ -32,7 +31,6 @@ enum EventParameter {
 //        }
         
         enum Business: String, EventLabelType {
-            // Shop
             case shop = "shop"
             case popularShop = "popular_shop"
             case shopCategories = "shop_categories"
@@ -355,16 +353,11 @@ enum EventParameter {
     enum EventLabelNeededDuration: String {
         case shopCategories
         case shopClick
-        case mainShopCategories
         case shopCall
         case shopDetailViewBack
         case shopDetailViewReviewBackByTab = "shopDetailViewReviewBackByTab"
         case shopDetailViewReviewBackByCall = "shopDetailViewReviewBackByCall"
         case shopDetailViewReviewBackByCategory = "shopDetailViewReviewBackByCategory"
-        case mainShopBenefit
-        case benefitShopCategories
-        case benefitShopClick
-        case benefitShopCall
         case shopCategoriesBack
         case shopDetailViewReviewBack = "shop_detail_view_review_back"
     }
