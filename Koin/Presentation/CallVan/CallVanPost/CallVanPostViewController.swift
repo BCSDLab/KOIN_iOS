@@ -130,7 +130,7 @@ final class CallVanPostViewController: UIViewController {
                 formatter.dateFormat = "a hh:mm"
                 return formatter.string(from: time)
             }()
-            self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteTime, category: .click, value: value))
+            self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteTime, category: .click, value: value))
             self?.inputSubject.send(.updateDepartureTime(time))
         }.store(in: &subscriptions)
         
@@ -142,7 +142,7 @@ final class CallVanPostViewController: UIViewController {
 
 extension CallVanPostViewController: PopLoggable {
     func sendPopLog(category: EventParameter.EventCategory) {
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteBack, category: category, value: ""))
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteBack, category: category, value: ""))
     }
 }
 
@@ -155,7 +155,7 @@ extension CallVanPostViewController {
         guard !dropdownHost.isPresenting else { return }
 
         postButton.isUserInteractionEnabled = false
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteDone, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteDone, category: .click, value: ""))
         inputSubject.send(.postData)
     }
 }
@@ -197,7 +197,7 @@ extension CallVanPostViewController {
             inputSubject.send(.updateDeparture(place, customPlace))
             
             let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
-            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteDeparture, category: .click, value: value))
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteDeparture, category: .click, value: value))
         }
         bottomSheetContentView.configure(
             title: .departure,
@@ -215,7 +215,7 @@ extension CallVanPostViewController {
             inputSubject.send(.updateArrival(place, customPlace))
             
             let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
-            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanWriteArrival, category: .click, value: value))
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteArrival, category: .click, value: value))
         }
         bottomSheetContentView.configure(
             title: .arrival,

@@ -240,7 +240,7 @@ extension ReportLostItemViewController {
     
         let requestModel = ReportLostItemRequest(reports: reports)
         inputSubject.send(.reportLostItemArticle(requestModel))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostReportConfirm, .click, "신고하기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.itemPostReportConfirm, .click, "신고하기"))
     }
     
 }

@@ -10,25 +10,10 @@ import FirebaseAnalytics
 protocol LogAnalyticsService {
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?)
-    func logEvent(name: String, label: String, value: String, category: String)
     func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String)
 }
 
 final class GA4AnalyticsService: LogAnalyticsService {
-    
-    func logEvent(name: String, label: String, value: String, category: String) {
-        let parameters = [
-            "event_label": label,
-            "event_category": category,
-            "value": value,
-            "gender": UserDataManager.shared.gender,
-            "major": UserDataManager.shared.major
-        ]
-//        var text: String = "CAMPUS"
-//        if label == "CAMPUS_modal_1" { text = "AB_TEST" }
-//        // TODO: 이거 우선 임시로 이렇게.. 나중에 고치기
-        Analytics.logEvent(name, parameters: parameters)
-    }
     
     func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
         let parameters = [

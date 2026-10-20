@@ -70,7 +70,7 @@ private extension NotificationViewController {
                 guard let self else { return }
                 self.inputSubject.send(.deleteNotification(id: id))
                 self.showToastMessage(message: "알림이 삭제되었습니다.")
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListDelete, .click, "알림 삭제"))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListDelete, .click, "알림 삭제"))
             }
             .store(in: &subscriptions)
         
@@ -317,13 +317,13 @@ private extension NotificationViewController {
             markAllAsRead: { [weak self] in
                 self?.inputSubject.send(.markAllAsRead)
                 self?.notificationListView.markAllAsRead()
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListReadAll, .click, "모두 읽음으로 표시"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListReadAll, .click, "모두 읽음으로 표시"))
             },
             deleteAll: { [weak self] in
                 self?.inputSubject.send(.deleteAllNotifications)
                 self?.notificationListView.deleteAll()
                 self?.showToastMessage(message: "알림이 삭제되었습니다.")
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListDeleteAll, .click, "알림 전체 삭제"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListDeleteAll, .click, "알림 전체 삭제"))
             }
         )
         popUpViewController.modalPresentationStyle = .overFullScreen

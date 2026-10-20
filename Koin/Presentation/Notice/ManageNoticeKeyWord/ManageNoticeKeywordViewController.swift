@@ -214,11 +214,11 @@ extension ManageNoticeKeywordViewController {
     
     private func presentLoginModal() {
         let onLeftButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPopupKeyword, .click, "닫기"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.loginPopupKeyword, .click, "닫기"))
         }
         let onRightButtonTapped = { [weak self] in
             self?.navigateToLogin()
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.loginPrompt, .click, "키워드 알림 팝업"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.loginPrompt, .click, "키워드 알림 팝업"))
         }
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .primary,

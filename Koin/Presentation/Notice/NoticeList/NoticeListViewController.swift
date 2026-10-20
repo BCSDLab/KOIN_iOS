@@ -81,11 +81,11 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
         
         tabBarCollectionView.selectTabPublisher.sink { [weak self] boardType in
             self?.inputSubject.send(.changeBoard(boardType))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeTab, .click, "\(boardType.displayName)"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeTab, .click, "\(boardType.displayName)"))
         }.store(in: &subscriptions)
         
         noticeTableView.isScrolledPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticePage, .scroll, "공지사항"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticePage, .scroll, "공지사항"))
         }.store(in: &subscriptions)
         
         noticeTableView.pageBtnPublisher.sink { [weak self] page in
@@ -102,13 +102,13 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             }.store(in: &subscriptions)
         noticeTableView.keywordAddBtnTapPublisher
             .sink { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.addKeyword, .click, "키워드추가"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.addKeyword, .click, "키워드추가"))
                 self?.navigateToManageKeywordVC()
             }.store(in: &subscriptions)
         
         noticeTableView.keywordAllButtonTappedPublisher
             .sink { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeFilterAll, .click, "모두보기"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeFilterAll, .click, "모두보기"))
                 self?.inputSubject.send(.getUserKeywordList(nil))
             }
             .store(in: &subscriptions)
@@ -118,7 +118,7 @@ final class NoticeListViewController: UIViewController, UIGestureRecognizerDeleg
             }.store(in: &subscriptions)
         
         noticeTableView.manageKeyWordBtnTapPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.manageKeyword, .click, "키워드관리"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.manageKeyword, .click, "키워드관리"))
             self?.navigateToManageKeywordVC()
         }.store(in: &subscriptions)
         
@@ -179,7 +179,7 @@ extension NoticeListViewController {
     }
 
     @objc private func searchButtonTapped() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.noticeSearch, .click, "검색"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeSearch, .click, "검색"))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let fetchHotKeywordUseCase = DefaultFetchHotSearchingKeywordUseCase(noticeListRepository: repository)
         let searchNoticeArticlesUseCase = DefaultSearchNoticeArticlesUseCase(noticeRepository: repository)

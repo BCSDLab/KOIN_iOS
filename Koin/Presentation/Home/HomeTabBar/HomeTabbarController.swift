@@ -195,7 +195,7 @@ extension HomeTabBarController {
     
     @objc private func rightBarButtonTapped() {
         inputSubject.send(.logEvent(
-            EventParameter.EventLabel.Campus.notification,
+            EventParameter.EventLabel.Campus.Notification.notification,
             .click,
             "알림 아이콘"
         ))

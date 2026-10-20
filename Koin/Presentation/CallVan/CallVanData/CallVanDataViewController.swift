@@ -114,7 +114,7 @@ extension CallVanDataViewController {
         )
         let viewController = CallVanChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.callvanChatEntry, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanChatEntry, category: .click, value: ""))
     }
     
     @objc private func didTapAround() {
