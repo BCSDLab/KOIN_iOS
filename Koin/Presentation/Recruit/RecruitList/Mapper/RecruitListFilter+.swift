@@ -86,16 +86,16 @@ extension RecruitListFilter {
             guard let state = RecruitState(rawValue: title) else {
                 return nil
             }
-            return (.teamRecruitmentFilterStatus, state.logValue)
+            return (.recruitFilterStatus, state.logValue)
         case 1:
             guard let sort = RecruitListSort(rawValue: title) else {
                 return nil
             }
-            return (.teamRecruitmentFilterSort, sort.logValue)
+            return (.recruitFilterSort, sort.logValue)
         case 2:
-            return (.teamRecruitmentFilterCategory, RecruitCategory(rawValue: title)?.rawValue ?? "전체")
+            return (.recruitFilterCategory, RecruitCategory(rawValue: title)?.rawValue ?? "전체")
         case 3:
-            return (.teamRecruitmentFilterMethod, RecruitMeetingType(rawValue: title)?.logValue ?? "전체")
+            return (.recruitFilterMethod, RecruitMeetingType(rawValue: title)?.logValue ?? "전체")
         default:
             return nil
         }

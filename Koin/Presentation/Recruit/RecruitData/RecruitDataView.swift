@@ -92,12 +92,12 @@ extension RecruitDataView {
         }
         
         if data.isAuthor {
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.teamRecruitmentPostApplicantCheck, .click, data.title))
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitPostApplicantCheck, .click, data.title))
             sendAction(.showApplicant)
             return
         }
         if data.canApply {
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.teamRecruitmentPostApply, .click, data.title))
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitPostApply, .click, data.title))
             sendAction(.showApply)
             return
         }

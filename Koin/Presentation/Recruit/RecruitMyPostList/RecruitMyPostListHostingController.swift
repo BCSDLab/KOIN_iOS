@@ -98,14 +98,14 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     private func showCloseModal(recruitId: Int) {
         let onCancelButtonTapped: ()->Void = { [weak self] in
             self?.rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostCloseCancel,
+                label: EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostCloseCancel,
                 category: .click,
                 value: "취소하기"
             )
         }
         let onCloseButtonTapped: ()->Void = { [weak self] in
             self?.rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostCloseConfirm,
+                label: EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostCloseConfirm,
                 category: .click,
                 value: "마감하기"
             )

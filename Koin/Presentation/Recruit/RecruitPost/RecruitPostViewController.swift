@@ -106,7 +106,7 @@ final class RecruitPostViewController: UIViewController {
     private lazy var categoryDropdown = dropdownHost.makeDropdown(
         anchor: categoryView.dropdownAnchor,
         contentView: RecruitPostCategoryDropdownView { [weak self] category in
-            self?.logEvent(post: .teamRecruitmentRecruitCategory, modify: .teamRecruitmentPostEditCategory, value: category.rawValue)
+            self?.logEvent(post: .recruitRecruitCategory, modify: .recruitPostEditCategory, value: category.rawValue)
             self?.request.category = category
             self?.categoryView.configure(category: category)
         },
@@ -205,7 +205,7 @@ extension RecruitPostViewController {
             guard let self else {
                 return
             }
-            logEvent(post: .teamRecruitmentRecruitMethod, modify: .teamRecruitmentPostEditMethod, value: meetingType.logValue)
+            logEvent(post: .recruitRecruitMethod, modify: .recruitPostEditMethod, value: meetingType.logValue)
             request.meetingType = meetingType
             
             let rect = meetingTypeView.convert(
@@ -261,12 +261,12 @@ extension RecruitPostViewController {
         }.store(in: &subscriptions)
         
         roleView.roleTypeChangedPublisher.sink { [weak self] roleType in
-            self?.logEvent(post: .teamRecruitmentRecruitRole, modify: .teamRecruitmentPostEditRole, value: "역할 구분 없이 모집하기")
+            self?.logEvent(post: .recruitRecruitRole, modify: .recruitPostEditRole, value: "역할 구분 없이 모집하기")
             self?.request.type = roleType
         }.store(in: &subscriptions)
         
         roleView.addRoleButtonTappedPublisher.sink { [weak self] in
-            self?.logEvent(post: .teamRecruitmentRecruitRole, modify: .teamRecruitmentPostEditRole, value: "역할 추가")
+            self?.logEvent(post: .recruitRecruitRole, modify: .recruitPostEditRole, value: "역할 추가")
         }.store(in: &subscriptions)
         
         roleView.rolesChangedPublisher.sink { [weak self] roles in
@@ -435,7 +435,7 @@ extension RecruitPostViewController {
     @objc private func postButtonTapped() {
         guard !dropdownHost.isPresenting else { return }
         view.endEditing(true)
-        logEvent(post: .teamRecruitmentRecruitSubmit, modify: .teamRecruitmentPostEditSubmit, value: submitLogValue)
+        logEvent(post: .recruitRecruitSubmit, modify: .recruitPostEditSubmit, value: submitLogValue)
         showSubmitModal()
     }
     
@@ -459,11 +459,11 @@ extension RecruitPostViewController {
     
     private func showSubmitModal() {
         let onCancelButtonTapped: ()->Void = { [weak self] in
-            self?.logEvent(post: .teamRecruitmentRecruitSubmitCancel, modify: .teamRecruitmentPostEditSubmitCancel, value: "취소하기")
+            self?.logEvent(post: .recruitRecruitSubmitCancel, modify: .recruitPostEditSubmitCancel, value: "취소하기")
         }
         let onSubmitButtonTapped: ()->Void = { [weak self] in
             guard let self else { return }
-            logEvent(post: .teamRecruitmentRecruitSubmitConfirm, modify: .teamRecruitmentPostEditSubmitConfirm, value: submitButtonTitle)
+            logEvent(post: .recruitRecruitSubmitConfirm, modify: .recruitPostEditSubmitConfirm, value: submitButtonTitle)
             submit()
         }
         let modalViewController = KoinModalViewController(

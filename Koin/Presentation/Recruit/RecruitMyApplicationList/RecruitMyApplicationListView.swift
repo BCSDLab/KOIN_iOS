@@ -38,7 +38,7 @@ struct RecruitMyApplicationListView: ActionBindableView {
                 totalCount: viewModel.recruitList?.totalCount ?? 0,
                 onFilterButtonTapped: {
                     viewModel.execute(.logEvent(
-                        EventParameter.EventLabel.Campus.Recruit.teamRecruitmentAppliedPostFilter,
+                        EventParameter.EventLabel.Campus.Recruit.recruitAppliedPostFilter,
                         .click,
                         "필터"
                     ))
@@ -52,14 +52,14 @@ struct RecruitMyApplicationListView: ActionBindableView {
                         },
                         onResetTapped: {
                             viewModel.execute(.logEvent(
-                                EventParameter.EventLabel.Campus.Recruit.teamRecruitmentAppliedPostFilterReset,
+                                EventParameter.EventLabel.Campus.Recruit.recruitAppliedPostFilterReset,
                                 .click,
                                 "초기화"
                             ))
                         },
                         onApplyTapped: { groupModels in
                             viewModel.execute(.logEvent(
-                                EventParameter.EventLabel.Campus.Recruit.teamRecruitmentAppliedPostFilterApply,
+                                EventParameter.EventLabel.Campus.Recruit.recruitAppliedPostFilterApply,
                                 .click,
                                 "적용하기"
                             ))
@@ -84,7 +84,7 @@ struct RecruitMyApplicationListView: ActionBindableView {
                             },
                             onShowChat: { chatRoomId in
                                 viewModel.execute(.logEvent(
-                                    EventParameter.EventLabel.Campus.Recruit.teamRecruitmentAppliedPostChat,
+                                    EventParameter.EventLabel.Campus.Recruit.recruitAppliedPostChat,
                                     .click,
                                     recruit.title
                                 ))

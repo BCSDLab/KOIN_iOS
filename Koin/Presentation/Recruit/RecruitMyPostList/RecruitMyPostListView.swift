@@ -39,7 +39,7 @@ struct RecruitMyPostListView: ActionBindableView {
                 totalCount: viewModel.recruitList?.totalCount ?? 0,
                 onFilterButtonTapped: {
                     viewModel.execute(.logEvent(
-                        EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostFilter,
+                        EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostFilter,
                         .click,
                         "필터"
                     ))
@@ -53,14 +53,14 @@ struct RecruitMyPostListView: ActionBindableView {
                         },
                         onResetTapped: {
                             viewModel.execute(.logEvent(
-                                EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostFilterReset,
+                                EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostFilterReset,
                                 .click,
                                 "초기화"
                             ))
                         },
                         onApplyTapped: { groupModels in
                             viewModel.execute(.logEvent(
-                                EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostFilterApply,
+                                EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostFilterApply,
                                 .click,
                                 "적용하기"
                             ))
@@ -85,7 +85,7 @@ struct RecruitMyPostListView: ActionBindableView {
                             },
                             onShowChat: { chatRoomId in
                                 viewModel.execute(.logEvent(
-                                    EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostChat,
+                                    EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostChat,
                                     .click,
                                     recruit.title
                                 ))
@@ -93,7 +93,7 @@ struct RecruitMyPostListView: ActionBindableView {
                             },
                             onShowApplicants: {
                                 viewModel.execute(.logEvent(
-                                    EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostApplicant,
+                                    EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostApplicant,
                                     .click,
                                     recruit.title
                                 ))
@@ -101,7 +101,7 @@ struct RecruitMyPostListView: ActionBindableView {
                             },
                             onCloseRecruit: {
                                 viewModel.execute(.logEvent(
-                                    EventParameter.EventLabel.Campus.Recruit.teamRecruitmentCreatedPostClose,
+                                    EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostClose,
                                     .click,
                                     recruit.title
                                 ))

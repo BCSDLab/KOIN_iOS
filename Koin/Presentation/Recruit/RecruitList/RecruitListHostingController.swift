@@ -218,7 +218,7 @@ extension RecruitListHostingController {
             return
         }
         rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Recruit.teamRecruitmentNotification,
+            label: EventParameter.EventLabel.Campus.Recruit.recruitNotification,
             category: .click,
             value: "알림"
         )
@@ -231,7 +231,7 @@ extension RecruitListHostingController {
             return
         }
         rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Recruit.teamRecruitmentProfile,
+            label: EventParameter.EventLabel.Campus.Recruit.recruitProfile,
             category: .click,
             value: "프로필"
         )
