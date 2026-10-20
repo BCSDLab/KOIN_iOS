@@ -35,16 +35,10 @@ enum EventParameter {
             // Shop
             case shop = "shop"
             case popularShop = "popular_shop"
-            case mainShopCategories = "main_shop_categories"
             case shopCategories = "shop_categories"
             case shopClick = "shop_click"
             case shopCall = "shop_call"
             case shopCan = "shop_can"
-            case shopPicture = "shop_picture"
-            case hamburger = "hamburger"
-            case shopCategoriesBenefit = "shop_categories_benefit"
-            case shopCategoriesEvent = "shop_categories_event"
-            case shopDetailViewEvent = "shop_detail_view_event"
             case shopCategoriesSearch = "shop_categories_search"
             case shopCategoriesSearchClick = "shop_categories_search_click"
             case shopDetailView = "shop_detail_view"
@@ -60,24 +54,14 @@ enum EventParameter {
             
             case shopDetailViewReviewDelete = "shop_detail_view_review_delete"
             case shopDetailViewReviewDeleteDone = "shop_detail_view_review_delete_done"
-            case shopDetailViewReviewDeleteCancel = "shop_detail_view_review_delete_cancel"
             case shopDetailViewReviewWriteCancel = "shop_detail_view_review_write_cancel"
-            case shopDetailViewReviewReportCancel = "shop_detail_view_review_report_cancel"
             case shopDetailViewReviewCan = "shop_detail_view_review_can"
-            case mainShopBenefit = "main_shop_benefit"
-            case benefitShopCategories = "benefit_shop_categories"
-            case benefitShopCategoriesEvent = "benefit_shop_categories_event"
-            case benefitShopClick = "benefit_shop_click"
-            case benefitShopCall = "benefit_shop_call"
             case shopBenefitEntry = "shop_benefit_entry"
             case shopBenefitBack = "shop_benefit_back"
             case shopBenefitDetail = "shop_benefit_detail"
             case shopPictureSwipe = "shop_picture_swipe"
             
             case loginPrompt = "login_prompt"
-            
-            //order
-            case orderHistoryTabClick = "orderHistory_tabClick"
             
             var team: String {
                 return "BUSINESS"
