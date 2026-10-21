@@ -76,6 +76,14 @@ struct DiningView: ActionBindableView {
     }
     
     // MARK: - Public
+    func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        viewModel.execute(.logEvent(label, category, value))
+    }
+    
     func didTapCloseReportTooltip() {
         viewModel.execute(.didTapCloseReportTooltip)
     }

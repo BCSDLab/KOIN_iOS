@@ -114,6 +114,11 @@ extension DiningHostingController {
     }
     
     @objc private func didTapCoopInfoButton() {
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.Dining.cafeteriaInfo,
+            category: .click,
+            value: "학생식당정보"
+        )
         navigateToCoopInfo()
     }
 
