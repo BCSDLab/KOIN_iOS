@@ -157,7 +157,7 @@ extension DiningView {
         .tabViewStyle(.page(indexDisplayMode: .never))
         .introspect(
             .scrollView,
-            on: .iOS(.v17, .v18, .v26, .v27)
+            on: .iOS(.v18, .v26, .v27)
         ) { scrollView in
             scrollView.contentInsetAdjustmentBehavior = .never
         }
