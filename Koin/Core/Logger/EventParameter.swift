@@ -77,7 +77,7 @@ enum EventParameter {
                 case notificationLunchSoldOut = "notification_lunch_sold_out"
                 case notificationDinnerSoldOut = "notification_dinner_sold_out"
                 var team: String {
-                    return "CAMPUS"
+                    return "DA1"
                 }
             }
             
