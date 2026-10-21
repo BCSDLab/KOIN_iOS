@@ -15,6 +15,7 @@ final class NoticeViewModel: SwiftUIViewModelProtocol {
 
     // MARK: - Input
     enum Input {
+        case onFirstAppear
         case onAppear
         case didTapTab(NoticeListType)
         case didSwipe(NoticeListType)
@@ -62,6 +63,8 @@ final class NoticeViewModel: SwiftUIViewModelProtocol {
     // MARK: - Public
     func execute(_ input: Input) {
         switch input {
+        case .onFirstAppear:
+            loadAllPages()
         case .onAppear:
             fetchKeywordList()
         case let .didTapTab(type):
@@ -91,6 +94,12 @@ final class NoticeViewModel: SwiftUIViewModelProtocol {
 }
 
 extension NoticeViewModel {
+    private func loadAllPages() {
+        NoticeListType.allCases.forEach { type in
+            pageViewModel(for: type).execute(.load)
+        }
+    }
+    
     private func fetchKeywordList() {
         fetchMyKeywordUseCase.execute()
             .receive(on: DispatchQueue.main)

@@ -34,6 +34,9 @@ struct NoticeListView: ActionBindableView {
         }
         .background(Color.appColor(.neutral0))
         .ignoresSafeArea(edges: .bottom)
+        .onFirstAppear {
+            viewModel.execute(.onFirstAppear)
+        }
         .onChange(of: viewModel.toastMessage) {
             if let toastMessage = viewModel.toastMessage {
                 sendAction(.showToastMessage(toastMessage))
@@ -79,9 +82,6 @@ extension NoticeListView {
         TabView(selection: selectedNoticeType) {
             ForEach(NoticeListType.allCases, id: \.self) { type in
                 pageView(type: type)
-                    .onFirstAppear {
-                        viewModel.pageViewModel(for: type).execute(.load)
-                    }
                     .tag(type)
             }
         }
