@@ -178,21 +178,14 @@ extension NoticeDataViewController {
     @objc private func tapInventoryButton() {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.inventory, .click, "목록"))
         guard let navigationController = navigationController else { return }
-        if let noticeListViewController = navigationController.viewControllers.last(where: { $0 is NoticeListViewController }) {
+        if let noticeListViewController = navigationController.viewControllers.last(where: { $0 is NoticeListHostingController }) {
             navigationController.popToViewController(noticeListViewController, animated: true)
         } else {
             guard let noticeDataIndex = navigationController.viewControllers.firstIndex(where: { $0 is NoticeDataViewController }) else {
                 return
             }
             let viewControllersToKeep = Array(navigationController.viewControllers.prefix(upTo: noticeDataIndex))
-            let noticeRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
-            let noticeListViewController = NoticeListViewController(
-                viewModel: NoticeListViewModel(
-                    fetchNoticeArticlesUseCase: DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeRepository),
-                    fetchMyKeywordUseCase: DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeRepository),
-                    logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-                )
-            )
+            let noticeListViewController = NoticeListHostingController.make()
             navigationController.setViewControllers(
                 viewControllersToKeep + [noticeListViewController, self],
                 animated: false
