@@ -48,6 +48,7 @@ struct DiningView: ActionBindableView {
         }
         .refreshable {
             viewModel.execute(.refresh)
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .click, viewModel.selectedDiningType.name))
         }
         .onChange(of: viewModel.toastMessage) {
             if let toastMessage = viewModel.toastMessage {

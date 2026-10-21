@@ -25,6 +25,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case didTapShare(DiningItem)
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Proeprteis
@@ -119,6 +120,8 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
             changeNoti(isOn: isOn, type: .diningSoldOut)
         case let .didTapImageUploadSwitch(isOn):
             changeNoti(isOn: isOn, type: .diningImageUpload)
+        case let .logEvent(label, category, value):
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
 }
@@ -178,6 +181,7 @@ extension DiningViewModel {
     private func changeSelectedDiningType(_ type: DiningType) {
         if selectedDiningType != type {
             selectedDiningType = type
+            makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.menuTime, category: .click, value: type.name)
         }
     }
 }

@@ -69,6 +69,7 @@ enum EventParameter {
         enum Campus {
             enum Dining: String, EventLabelType {
                 case todayMeal = "today_meal"
+                case menuTime = "menu_time"
                 case menuCorner = "menu_corner"
                 case menuShare = "menu_share"
                 case notificationMenuImageUpload = "notification_menu_image_upload"
