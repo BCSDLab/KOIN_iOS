@@ -193,6 +193,9 @@ extension DiningViewModel {
                 let request = AssignAbTestRequest(title: "icon_location")
                 let result = try await assignAbTestUseCase.execute(requestModel: request).firstValue()
                 reportAbTest = DiningReportAbTest(from: result.variableName.rawValue)
+                if let reportAbTest {
+                    makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningAbtestExposure, category: .exposure, value: reportAbTest.logValue)
+                }
             } catch {
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }

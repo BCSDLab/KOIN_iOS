@@ -34,3 +34,14 @@ extension DiningReportAbTest {
     }
 }
 
+extension DiningReportAbTest {
+    var logValue: String {
+        switch self {
+        case .nav:
+            "A안"
+        case .card:
+            "B안"
+        }
+    }
+}
+
