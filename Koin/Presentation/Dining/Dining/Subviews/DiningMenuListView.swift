@@ -11,7 +11,6 @@ struct DiningMenuListView: View {
     
     // MARK: - Property
     let list: DiningList
-    let currentItems: [DiningItem]
     let onImageTapped: (String)->Void
     
     let shouldShowShareTooltip: Bool
@@ -20,24 +19,22 @@ struct DiningMenuListView: View {
     
     let shouldShowReportButton: Bool
     let shouldShowReportTooltip: Bool
-    let onReportTapped: (DiningItem?) -> Void
+    let onReportTapped: () -> Void
     let onCloseReportTooltipTapped: ()->Void
     
     // MARK: - Initializer
     init(
         list: DiningList,
-        currentItems: [DiningItem],
         onImageTapped: @escaping (String)->Void,
         shouldShowShareTooltip: Bool,
         onShareTapped: @escaping (DiningItem) -> Void,
         onCloseShareTooltipTapped: @escaping () -> Void,
         shouldShowReportButton: Bool,
         shouldShowReportTooltip: Bool,
-        onReportTapped: @escaping (DiningItem?) -> Void,
+        onReportTapped: @escaping () -> Void,
         onCloseReportTooltipTapped: @escaping ()->Void,
     ) {
         self.list = list
-        self.currentItems = currentItems
         self.onImageTapped = onImageTapped
         self.shouldShowShareTooltip = shouldShowShareTooltip
         self.onShareTapped = onShareTapped
@@ -57,7 +54,7 @@ struct DiningMenuListView: View {
                         item: item,
                         onImageTapped: onImageTapped,
                         onShareButtonTapped: onShareTapped,
-                        shouldShowReportButton: (shouldShowReportButton && currentItems.contains(item)),
+                        shouldShowReportButton: shouldShowReportButton,
                         onReportButtonTapped: onReportTapped
                     )
                     .anchorPreference(
@@ -70,11 +67,18 @@ struct DiningMenuListView: View {
                 
                 DiningFooterView()
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .isHidden(list.items.isEmpty)
             }
+            .frame(maxWidth: .infinity)
             .padding(.horizontal, 24)
             .padding(.vertical, 20)
         }
         .scrollIndicators(.hidden)
+        .background{
+            if list.items.isEmpty {
+                DiningEmptyView()
+            }
+        }
         .overlayShareTooltip(
             shouldShowShareTooltip: shouldShowShareTooltip,
             onShareTooltipImageTapped: onShareTapped,
@@ -84,8 +88,7 @@ struct DiningMenuListView: View {
         .overlayReportTooltip(
             shouldShowReportTooltip: shouldShowReportTooltip,
             onReportTooltipImageTapped: onReportTapped,
-            onReportTooltipXButtonTapped: onCloseReportTooltipTapped,
-            item: list.items.first
+            onReportTooltipXButtonTapped: onCloseReportTooltipTapped
         )
     }
 }
@@ -130,9 +133,8 @@ private extension View {
     
     func overlayReportTooltip(
         shouldShowReportTooltip: Bool,
-        onReportTooltipImageTapped: @escaping (DiningItem?)->Void,
-        onReportTooltipXButtonTapped: @escaping ()->Void,
-        item: DiningItem?
+        onReportTooltipImageTapped: @escaping ()->Void,
+        onReportTooltipXButtonTapped: @escaping ()->Void
     ) -> some View {
         overlayPreferenceValue(ReportButtonPreferenceKey.self) { anchor in
             GeometryReader { proxy in
@@ -145,9 +147,7 @@ private extension View {
                             bottomInset: 26
                         ),
                         onXButtonTapped: onReportTooltipXButtonTapped,
-                        onImageTapped: {
-                            onReportTooltipImageTapped(item)
-                        }
+                        onImageTapped: onReportTooltipImageTapped
                     )
                     .position(
                         x: rowFrame.midX + 66,

@@ -58,6 +58,7 @@ public enum ImageAsset: String {
     
     // MARK: - Dining
     case coopInfo
+    case diningDelete
     case diningShare
     case diningTooltip
     case nonMenuImage

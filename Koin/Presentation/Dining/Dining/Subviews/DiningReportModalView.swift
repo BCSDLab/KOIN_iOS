@@ -79,14 +79,12 @@ final class DiningReportModalView: UIView {
         onCompleteButtonTapped: @escaping (
             _ selectedItem: DiningItem,
             _ evidenceImage: UIImage
-        ) -> Void,
-        selectedItem: DiningItem? = nil
+        ) -> Void
     ) {
         self.diningItems = diningItems
         self.onDismissButtonTapped = onDismissButtonTapped
         self.onSelectImageButtonTapped = onSelectImageButtonTapped
         self.onCompleteButtonTapped = onCompleteButtonTapped
-        self.selectedItem = selectedItem
         super.init(frame: .zero)
         configureView()
         setAddTargets()
@@ -260,8 +258,7 @@ extension DiningReportModalView {
             $0.layer.cornerRadius = 8
         }
         removeImageButton.do {
-            $0.setImage(.appImage(asset: .cancelBlue)?.withRenderingMode(.alwaysTemplate), for: .normal)
-            $0.tintColor = .appColor(.new500)
+            $0.setImage(.appImage(asset: .diningDelete), for: .normal)
         }
         descriptionView.do {
             $0.layer.borderWidth = 1
@@ -374,7 +371,8 @@ extension DiningReportModalView {
             $0.edges.equalTo(selectImageButton)
         }
         removeImageButton.snp.makeConstraints {
-            $0.center.equalTo(uploadedImageView)
+            $0.centerX.equalTo(uploadedImageView.snp.trailing).offset(-3)
+            $0.centerY.equalTo(uploadedImageView.snp.top).offset(3)
         }
 
         completeButton.snp.makeConstraints {
