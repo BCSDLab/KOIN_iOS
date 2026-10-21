@@ -12,6 +12,7 @@ struct DiningMenuListView: View {
     // MARK: - Property
     let list: DiningList
     let onImageTapped: (String)->Void
+    let onScrolledDown: () -> Void
     
     let shouldShowShareTooltip: Bool
     let onShareTapped: (DiningItem) -> Void
@@ -26,6 +27,7 @@ struct DiningMenuListView: View {
     init(
         list: DiningList,
         onImageTapped: @escaping (String)->Void,
+        onScrolledDown: @escaping () -> Void,
         shouldShowShareTooltip: Bool,
         onShareTapped: @escaping (DiningItem) -> Void,
         onCloseShareTooltipTapped: @escaping () -> Void,
@@ -36,6 +38,7 @@ struct DiningMenuListView: View {
     ) {
         self.list = list
         self.onImageTapped = onImageTapped
+        self.onScrolledDown = onScrolledDown
         self.shouldShowShareTooltip = shouldShowShareTooltip
         self.onShareTapped = onShareTapped
         self.onCloseShareTooltipTapped = onCloseShareTooltipTapped
@@ -44,6 +47,9 @@ struct DiningMenuListView: View {
         self.onReportTapped = onReportTapped
         self.onCloseReportTooltipTapped = onCloseReportTooltipTapped
     }
+    
+    @State private var scrollLogDirection: ScrollLogDirection = .down
+    @State private var dragStartOffsetY: CGFloat = 0
     
     // MARK: - Body
     var body: some View {
@@ -79,6 +85,9 @@ struct DiningMenuListView: View {
                 DiningEmptyView()
             }
         }
+        .onScrollPhaseChange { oldPhase, newPhase, context in
+            makeLogEventIfNeeded(oldPhase, newPhase, context)
+        }
         .overlayShareTooltip(
             shouldShowShareTooltip: shouldShowShareTooltip,
             onShareTooltipImageTapped: onShareTapped,
@@ -90,6 +99,38 @@ struct DiningMenuListView: View {
             onReportTooltipImageTapped: onReportTapped,
             onReportTooltipXButtonTapped: onCloseReportTooltipTapped
         )
+    }
+}
+
+extension DiningMenuListView {
+    private enum ScrollLogDirection {
+        case down
+        case up
+        case checked
+    }
+    
+    private func makeLogEventIfNeeded(
+        _ oldPhase: ScrollPhase,
+        _ newPhase: ScrollPhase,
+        _ context: ScrollPhaseChangeContext
+    ) {
+        let offsetY = context.geometry.contentOffset.y
+        if oldPhase != .interacting && newPhase == .interacting {
+            dragStartOffsetY = offsetY
+        }
+        if oldPhase == .interacting && newPhase != .interacting {
+            if offsetY < dragStartOffsetY {
+                scrollLogDirection = .up
+            } else if scrollLogDirection != .checked {
+                scrollLogDirection = .down
+            }
+        }
+        if oldPhase == .decelerating && newPhase == .idle,
+           scrollLogDirection == .down,
+           offsetY > context.geometry.containerSize.height * 0.7 {
+            onScrolledDown()
+            scrollLogDirection = .checked
+        }
     }
 }
 

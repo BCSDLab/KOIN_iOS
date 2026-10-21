@@ -171,6 +171,9 @@ extension DiningView {
             onImageTapped: { imageUrl in
                 sendAction(.showZoomedImage(imageUrl: imageUrl))
             },
+            onScrolledDown: {
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .scroll, list.diningType.name))
+            },
             shouldShowShareTooltip: viewModel.shouldShowShareTooltip,
             onShareTapped: { item in
                 viewModel.execute(.didTapShare(item))
