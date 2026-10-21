@@ -185,6 +185,7 @@ extension DiningView {
             shouldShowShareTooltip: viewModel.shouldShowShareTooltip,
             onShareTapped: { item in
                 viewModel.execute(.didTapShare(item))
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuShare, .click, "공유하기"))
             },
             onCloseShareTooltipTapped: {
                 viewModel.execute(.didTapCloseShareTooltip)
