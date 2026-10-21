@@ -186,7 +186,18 @@ extension DiningHostingController {
         return DiningReportModalView(
             diningItems: rootView.currentDiningItems,
             onDismissButtonTapped: { [weak self] in
-                self?.dismiss(animated: true)
+                guard let self else {
+                    return
+                }
+                if let reportAbTestName {
+                    let place = modalView?.selectedItem.map { "_\($0.place.name)" } ?? ""
+                    rootView.makeLogAnalyticsEvent(
+                        label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutExit,
+                        category: .click,
+                        value: "\(reportAbTestName)\(place)_이탈"
+                    )
+                }
+                dismiss(animated: true)
             },
             onPlaceSelected: { [weak self] item in
                 guard let self, let reportAbTest = rootView.reportAbTest else {

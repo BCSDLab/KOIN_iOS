@@ -74,6 +74,7 @@ enum EventParameter {
                 case cafeteriaDiningSoldoutSelect = "cafeteria__dining__soldout__select"
                 case cafeteriaDiningSoldoutPhoto = "cafeteria__dining__soldout__photo"
                 case cafeteriaDiningSoldoutSubmit = "cafeteria__dining__soldout__submit"
+                case cafeteriaDiningSoldoutExit = "cafeteria__dining__soldout__exit"
                 case menuTime = "menu_time"
                 case cafeteriaInfo = "cafeteria_info"
                 case menuImage = "menu_image"
