@@ -6,7 +6,8 @@
 //
 
 import SwiftUI
-import PhotosUI
+import AVFoundation
+import UniformTypeIdentifiers
 import SnapKit
 import Then
 
@@ -236,32 +237,78 @@ extension DiningHostingController {
     }
 }
 
-extension DiningHostingController: PHPickerViewControllerDelegate {
-    private func presentPickerViewController() {
-        var configuration = PHPickerConfiguration()
-        configuration.filter = .images
-        configuration.selectionLimit = 1
-        
-        let picker = PHPickerViewController(configuration: configuration)
-        picker.delegate = self
-        presentedViewController?.present(picker, animated: true, completion: nil)
+extension DiningHostingController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    private func checkAndPresentPicker() {
+        do {
+            guard UIImagePickerController.isSourceTypeAvailable(.camera),
+                  UIImagePickerController.isCameraDeviceAvailable(.rear) else {
+                throw ErrorResponse.cameraUnavailable
+            }
+            
+            let status = AVCaptureDevice.authorizationStatus(for: AVMediaType.video)
+            switch status {
+            case .authorized:
+                presentPickerController()
+            case .notDetermined:
+                requestCameraPermission { [weak self] isPermitted in
+                    guard let self else { return }
+                    if isPermitted {
+                        presentPickerController()
+                    } else {
+                        showSettingToast()
+                    }
+                }
+            case .restricted:
+                throw ErrorResponse.cameraUnavailable
+            default:
+                showSettingToast()
+            }
+        } catch {
+            showToastMessage(message: (error as? ErrorResponse)?.message ?? error.localizedDescription)
+        }
     }
     
-    func picker(
-        _ picker: PHPickerViewController,
-        didFinishPicking results: [PHPickerResult]
-    ) {
-        picker.dismiss(animated: true, completion: nil)
-        
-        guard let provider = results.first?.itemProvider else { return }
-        
-        if provider.canLoadObject(ofClass: UIImage.self) {
-            provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
-                guard let image = image as? UIImage else { return }
-                DispatchQueue.main.async { [weak self] in
-                    self?.modalView?.configure(evidenceImage: image)
-                }
+    private func presentPickerController() {
+        DispatchQueue.main.async { [weak self] in
+            let picker = UIImagePickerController()
+            picker.sourceType = .camera
+            picker.cameraDevice = .rear
+            picker.mediaTypes = [UTType.image.identifier]
+            
+            picker.delegate = self
+            
+            self?.presentedViewController?.present(picker, animated: true)
+        }
+    }
+    
+    private func requestCameraPermission(completion: @escaping (Bool)->Void) {
+        AVCaptureDevice.requestAccess(for: .video, completionHandler: completion)
+    }
+    
+    private func showSettingToast() {
+        let action: ()->Void = {
+            if let appSetting = URL(string: UIApplication.openSettingsURLString),
+               UIApplication.shared.canOpenURL(appSetting) {
+                UIApplication.shared.open(appSetting)
             }
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.showToastMessageWithButton(
+                message: "카메라 권한을 허용해주세요.",
+                buttonTitle: "설정으로 이동",
+                buttonAction: action
+            )
+        }
+    }
+    
+    func imagePickerController(
+        _ picker: UIImagePickerController,
+        didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]
+    ) {
+        picker.dismiss(animated: true)
+        
+        if let image = info[.originalImage] as? UIImage {
+            modalView?.configure(evidenceImage: image)
         }
     }
 }

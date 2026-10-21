@@ -85,4 +85,9 @@ extension ErrorResponse {
         code: "UNKNOWN_USER_ASSIGN_TYPE",
         message: "오류가 발생했습니다."
     )
+    
+    static let cameraUnavailable = ErrorResponse(
+        code: "CAMERA_UNAVAILABLE",
+        message: "카메라를 사용할 수 없습니다."
+    )
 }
