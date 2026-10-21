@@ -12,7 +12,7 @@ struct DiningMenuRowView: View {
     
     // MARK: - Property
     let item: DiningItem
-    let onImageTapped: (String)->Void
+    let onImageTapped: (DiningItem)->Void
     let onShareButtonTapped: (DiningItem)->Void
     
     // MARK: - ABTest
@@ -22,7 +22,7 @@ struct DiningMenuRowView: View {
     // MARK: - Initializer
     init(
         item: DiningItem,
-        onImageTapped: @escaping (String)->Void,
+        onImageTapped: @escaping (DiningItem)->Void,
         onShareButtonTapped: @escaping (DiningItem)->Void,
         shouldShowReportButton: Bool,
         onReportButtonTapped: @escaping ()->Void
@@ -138,7 +138,7 @@ extension DiningMenuRowView {
                 kfImageView(imageUrl: imageUrl)
             } else {
                 Button {
-                    onImageTapped(imageUrl)
+                    onImageTapped(item)
                 } label: {
                     kfImageView(imageUrl: imageUrl)
                 }

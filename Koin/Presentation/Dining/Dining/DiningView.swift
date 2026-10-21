@@ -176,8 +176,11 @@ extension DiningView {
     private func listView(list: DiningList) -> some View {
         DiningMenuListView(
             list: list,
-            onImageTapped: { imageUrl in
-                sendAction(.showZoomedImage(imageUrl: imageUrl))
+            onImageTapped: { item in
+                if let imageUrl = item.image.imageUrl {
+                    sendAction(.showZoomedImage(imageUrl: imageUrl))
+                }
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuImage, .click, "\(viewModel.selectedDiningType.name)_\(item.place.name)"))
             },
             onScrolledDown: {
                 viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .scroll, list.diningType.name))

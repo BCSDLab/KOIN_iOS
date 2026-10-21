@@ -11,7 +11,7 @@ struct DiningMenuListView: View {
     
     // MARK: - Property
     let list: DiningList
-    let onImageTapped: (String)->Void
+    let onImageTapped: (DiningItem)->Void
     let onScrolledDown: () -> Void
     
     let shouldShowShareTooltip: Bool
@@ -26,7 +26,7 @@ struct DiningMenuListView: View {
     // MARK: - Initializer
     init(
         list: DiningList,
-        onImageTapped: @escaping (String)->Void,
+        onImageTapped: @escaping (DiningItem)->Void,
         onScrolledDown: @escaping () -> Void,
         shouldShowShareTooltip: Bool,
         onShareTapped: @escaping (DiningItem) -> Void,
