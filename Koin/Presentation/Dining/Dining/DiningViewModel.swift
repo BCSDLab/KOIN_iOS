@@ -236,8 +236,10 @@ extension DiningViewModel {
                     imageUrl: imageUrl
                 )
                 toastMessage = "\(selectedItem.place.name) 품절을 제보했습니다."
+                makeReportLogEvent(category: .submit, selectedItem: selectedItem)
             } catch {
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                makeReportLogEvent(category: .fail, selectedItem: selectedItem)
             }
         }
     }
@@ -257,6 +259,20 @@ extension DiningViewModel {
 }
 
 extension DiningViewModel {
+    private func makeReportLogEvent(
+        category: EventParameter.EventCategory,
+        selectedItem: DiningItem?
+    ) {
+        guard let reportAbTestName = reportAbTest?.logValue else {
+            return
+        }
+        makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSubmit,
+            category: category,
+            value: "\(reportAbTestName)_\(selectedItem?.place.name ?? "None")"
+        )
+    }
+    
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
         category: EventParameter.EventCategory,

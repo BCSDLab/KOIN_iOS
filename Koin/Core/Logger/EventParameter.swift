@@ -73,6 +73,7 @@ enum EventParameter {
                 case cafeteriaDiningSoldoutStart = "cafeteria__dining__soldout__start"
                 case cafeteriaDiningSoldoutSelect = "cafeteria__dining__soldout__select"
                 case cafeteriaDiningSoldoutPhoto = "cafeteria__dining__soldout__photo"
+                case cafeteriaDiningSoldoutSubmit = "cafeteria__dining__soldout__submit"
                 case menuTime = "menu_time"
                 case cafeteriaInfo = "cafeteria_info"
                 case menuImage = "menu_image"
@@ -357,6 +358,8 @@ enum EventParameter {
         case result
         case exposure
         case select
+        case submit
+        case fail
     }
     
     enum EventLabelNeededDuration: String {
