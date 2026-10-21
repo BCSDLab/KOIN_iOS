@@ -188,6 +188,16 @@ extension DiningHostingController {
             onDismissButtonTapped: { [weak self] in
                 self?.dismiss(animated: true)
             },
+            onPlaceSelected: { [weak self] item in
+                guard let self, let reportAbTest = rootView.reportAbTest else {
+                    return
+                }
+                rootView.makeLogAnalyticsEvent(
+                    label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSelect,
+                    category: .select,
+                    value: "\(reportAbTest.logValue)_\(item.place.name)"
+                )
+            },
             onSelectImageButtonTapped: checkAndPresentPicker,
             onCompleteButtonTapped: onCompleteButtonTapped
         )

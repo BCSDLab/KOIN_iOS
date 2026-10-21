@@ -26,6 +26,9 @@ struct DiningView: ActionBindableView {
     var currentDiningItems: [DiningItem] {
         viewModel.currentDiningItems
     }
+    var reportAbTest: DiningReportAbTest? {
+        viewModel.reportAbTest
+    }
     
     // MARK: - Initializer
     init(viewModel: DiningViewModel) {
