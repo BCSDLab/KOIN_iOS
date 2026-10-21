@@ -20,7 +20,7 @@ struct DiningMenuListView: View {
     
     let shouldShowReportButton: Bool
     let shouldShowReportTooltip: Bool
-    let onReportTapped: () -> Void
+    let onReportTapped: (DiningItem?) -> Void
     let onCloseReportTooltipTapped: ()->Void
     
     // MARK: - Initializer
@@ -33,7 +33,7 @@ struct DiningMenuListView: View {
         onCloseShareTooltipTapped: @escaping () -> Void,
         shouldShowReportButton: Bool,
         shouldShowReportTooltip: Bool,
-        onReportTapped: @escaping () -> Void,
+        onReportTapped: @escaping (DiningItem?) -> Void,
         onCloseReportTooltipTapped: @escaping ()->Void,
     ) {
         self.list = list
@@ -96,7 +96,7 @@ struct DiningMenuListView: View {
         )
         .overlayReportTooltip(
             shouldShowReportTooltip: shouldShowReportTooltip,
-            onReportTooltipImageTapped: onReportTapped,
+            onReportTooltipImageTapped: { onReportTapped(nil) },
             onReportTooltipXButtonTapped: onCloseReportTooltipTapped
         )
     }

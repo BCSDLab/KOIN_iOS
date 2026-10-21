@@ -110,6 +110,11 @@ extension DiningHostingController {
     }
     
     @objc private func didTapReportButton() {
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
+            category: .click,
+            value: DiningReportAbTest.nav.logValue
+        )
         showReportModal()
     }
     

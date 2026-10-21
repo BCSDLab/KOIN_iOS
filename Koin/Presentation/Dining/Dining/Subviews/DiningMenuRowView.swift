@@ -17,7 +17,7 @@ struct DiningMenuRowView: View {
     
     // MARK: - ABTest
     let shouldShowReportButton: Bool
-    let onReportButtonTapped: ()->Void
+    let onReportButtonTapped: (DiningItem)->Void
     
     // MARK: - Initializer
     init(
@@ -25,7 +25,7 @@ struct DiningMenuRowView: View {
         onImageTapped: @escaping (DiningItem)->Void,
         onShareButtonTapped: @escaping (DiningItem)->Void,
         shouldShowReportButton: Bool,
-        onReportButtonTapped: @escaping ()->Void
+        onReportButtonTapped: @escaping (DiningItem)->Void
     ) {
         self.item = item
         self.onImageTapped = onImageTapped
@@ -118,7 +118,9 @@ extension DiningMenuRowView {
     }
     
     @ViewBuilder private var reportButton: some View {
-        Button(action: onReportButtonTapped) {
+        Button {
+            onReportButtonTapped(item)
+        } label: {
             Image.appImage(asset: .diningReport)
         }
         .buttonStyle(.plain)

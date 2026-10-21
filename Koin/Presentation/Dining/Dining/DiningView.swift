@@ -195,7 +195,9 @@ extension DiningView {
             },
             shouldShowReportButton: viewModel.reportAbTest == .card,
             shouldShowReportTooltip: viewModel.reportAbTest == .card && viewModel.shouldShowReportTooltip,
-            onReportTapped: { 
+            onReportTapped: { item in
+                let value = item.map { "\(DiningReportAbTest.card.logValue)_\($0.place.name)" } ?? DiningReportAbTest.card.logValue
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart, .click, value))
                 sendAction(.showReportModal)
             },
             onCloseReportTooltipTapped: {

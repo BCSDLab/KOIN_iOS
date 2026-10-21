@@ -70,6 +70,7 @@ enum EventParameter {
             enum Dining: String, EventLabelType {
                 case todayMeal = "today_meal"
                 case cafeteriaDiningAbtestExposure = "cafeteria__dining__abtest__exposure"
+                case cafeteriaDiningSoldoutStart = "cafeteria__dining__soldout__start"
                 case menuTime = "menu_time"
                 case cafeteriaInfo = "cafeteria_info"
                 case menuImage = "menu_image"
