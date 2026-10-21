@@ -363,6 +363,7 @@
 		7C8BFCED2FD04BA000963679 /* FetchNotificationListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */; };
 		7C8BFCEF2FD04BA000963679 /* FetchHomeCountsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCE82FD04BA000963679 /* FetchHomeCountsUseCase.swift */; };
 		7C8BFCF12FD04B800963679 /* HomeCounts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C8BFCF02FD04B800963679 /* HomeCounts.swift */; };
+		7C96B9783088F2680023A4ED /* DiningEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C96B9773088F2680023A4ED /* DiningEmptyView.swift */; };
 		7CA0D61F2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */; };
 		7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */; };
 		7CA0D6232EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */; };
@@ -1618,6 +1619,7 @@
 		7C8BFCE82FD04BA000963679 /* FetchHomeCountsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchHomeCountsUseCase.swift; sourceTree = "<group>"; };
 		7C8BFCE92FD04BA000963679 /* FetchNotificationListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchNotificationListUseCase.swift; sourceTree = "<group>"; };
 		7C8BFCF02FD04B800963679 /* HomeCounts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCounts.swift; sourceTree = "<group>"; };
+		7C96B9773088F2680023A4ED /* DiningEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningEmptyView.swift; sourceTree = "<group>"; };
 		7CA0D61E2EC74ACE00E9A282 /* ZoomedImageRootViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageRootViewController.swift; sourceTree = "<group>"; };
 		7CA0D6202EC74AD500E9A282 /* ZoomedImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionView.swift; sourceTree = "<group>"; };
 		7CA0D6222EC74ADE00E9A282 /* ZoomedImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageCollectionViewCell.swift; sourceTree = "<group>"; };
@@ -3475,6 +3477,7 @@
 				7C7ECDCB30771FAE00C7E768 /* DiningFooterView.swift */,
 				7CFC44223083DDA000623C1F /* DiningReportModalView.swift */,
 				7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */,
+				7C96B9773088F2680023A4ED /* DiningEmptyView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -7683,6 +7686,7 @@
 				7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */,
 				7C0C18952F68A913001781B3 /* FetchCallVanChatUseCase.swift in Sources */,
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
+				7C96B9783088F2680023A4ED /* DiningEmptyView.swift in Sources */,
 				7C372EE62F1C0CC400149729 /* LostItemListData.swift in Sources */,
 				7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */,
 				7CE13432306C01BC0011B052 /* RecruitChatMessage.swift in Sources */,

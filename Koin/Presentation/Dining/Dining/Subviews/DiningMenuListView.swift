@@ -67,11 +67,18 @@ struct DiningMenuListView: View {
                 
                 DiningFooterView()
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .isHidden(list.items.isEmpty)
             }
+            .frame(maxWidth: .infinity)
             .padding(.horizontal, 24)
             .padding(.vertical, 20)
         }
         .scrollIndicators(.hidden)
+        .background{
+            if list.items.isEmpty {
+                DiningEmptyView()
+            }
+        }
         .overlayShareTooltip(
             shouldShowShareTooltip: shouldShowShareTooltip,
             onShareTooltipImageTapped: onShareTapped,
