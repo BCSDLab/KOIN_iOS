@@ -66,8 +66,8 @@ final class DiningHostingController: UIHostingController<DiningView>, HostingCon
             showReportBarButton()
         case .showReportBarButtonTooltip:
             showReportBarButtonTooltip()
-        case .showReportModal(let selectedItem):
-            showReportModal(selectedItem: selectedItem)
+        case .showReportModal:
+            showReportModal()
         case .didFinishReporting:
             dismiss(animated: true)
         case .showZoomedImage(let imageUrl):
@@ -109,7 +109,7 @@ extension DiningHostingController {
     }
     
     @objc private func didTapReportButton() {
-        showReportModal(selectedItem: nil)
+        showReportModal()
     }
     
     @objc private func didTapCoopInfoButton() {
@@ -162,24 +162,23 @@ extension DiningHostingController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func showReportModal(selectedItem: DiningItem?) {
+    private func showReportModal() {
         guard !rootView.currentDiningItems.isEmpty else {
             showToastMessage(message: "학생식당 운영시간이 아닙니다.")
             return
         }
-        self.modalView = makeModalView(selectedItem: selectedItem)
+        self.modalView = makeModalView()
         presentReportModalViewController()
     }
     
-    private func makeModalView(selectedItem: DiningItem?) -> DiningReportModalView {
+    private func makeModalView() -> DiningReportModalView {
         return DiningReportModalView(
             diningItems: rootView.currentDiningItems,
             onDismissButtonTapped: { [weak self] in
                 self?.dismiss(animated: true)
             },
-            onSelectImageButtonTapped: presentPickerViewController,
-            onCompleteButtonTapped: onCompleteButtonTapped,
-            selectedItem: selectedItem
+            onSelectImageButtonTapped: checkAndPresentPicker,
+            onCompleteButtonTapped: onCompleteButtonTapped
         )
     }
     

@@ -79,14 +79,12 @@ final class DiningReportModalView: UIView {
         onCompleteButtonTapped: @escaping (
             _ selectedItem: DiningItem,
             _ evidenceImage: UIImage
-        ) -> Void,
-        selectedItem: DiningItem? = nil
+        ) -> Void
     ) {
         self.diningItems = diningItems
         self.onDismissButtonTapped = onDismissButtonTapped
         self.onSelectImageButtonTapped = onSelectImageButtonTapped
         self.onCompleteButtonTapped = onCompleteButtonTapped
-        self.selectedItem = selectedItem
         super.init(frame: .zero)
         configureView()
         setAddTargets()

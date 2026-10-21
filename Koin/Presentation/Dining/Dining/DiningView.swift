@@ -14,7 +14,7 @@ struct DiningView: ActionBindableView {
         case showToastMessage(String)
         case showReportBarButton
         case showReportBarButtonTooltip
-        case showReportModal(selectedItem: DiningItem?)
+        case showReportModal
         case didFinishReporting
         case showZoomedImage(imageUrl: String)
         case presentNotiBottomSheet(initialValue: DiningNoti)
@@ -167,7 +167,6 @@ extension DiningView {
     private func listView(list: DiningList) -> some View {
         DiningMenuListView(
             list: list,
-            currentItems: viewModel.currentDiningItems,
             onImageTapped: { imageUrl in
                 sendAction(.showZoomedImage(imageUrl: imageUrl))
             },
@@ -180,8 +179,8 @@ extension DiningView {
             },
             shouldShowReportButton: viewModel.reportAbTest == .card,
             shouldShowReportTooltip: viewModel.reportAbTest == .card && viewModel.shouldShowReportTooltip,
-            onReportTapped: { item in
-                sendAction(.showReportModal(selectedItem: item))
+            onReportTapped: { 
+                sendAction(.showReportModal)
             },
             onCloseReportTooltipTapped: {
                 viewModel.execute(.didTapCloseReportTooltip)
