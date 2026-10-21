@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct NoticeAISummaryDto: Decodable {
+struct NoticeAISummaryDto: Decodable, Equatable {
     let status: NoticeAISummaryStatusDto
     let items: [NoticeAISummaryItemDto]
 }
 
-struct NoticeAISummaryItemDto: Decodable {
+struct NoticeAISummaryItemDto: Decodable, Equatable {
     let icon: String
     let text: String
 }

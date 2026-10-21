@@ -249,8 +249,8 @@ extension NoticeListViewController {
         pageInfos: NoticeListPages,
         noticeListType: NoticeListType
     ) {
-        tabBarCollectionView.updateBoard(noticeList: noticeList, noticeListType: noticeListType)
-        noticeTableView.updateNoticeList(noticeArticleList: noticeList, pageInfos: pageInfos)
+        tabBarCollectionView.update(selectedType: noticeListType)
+        noticeTableView.configure(noticeArticleList: noticeList, pageInfos: pageInfos, animated: true)
         if noticeListType.rawValue < 9 {
             tabBarCollectionView.tag = noticeListType.rawValue - 4
         }
@@ -263,7 +263,7 @@ extension NoticeListViewController {
     }
     
     private func updateUserKeywordList(keywords: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
-        noticeTableView.updateKeywordList(keywordList: keywords, selectedKeyword: selectedKeyword)
+        noticeTableView.configure(keywordList: keywords, selectedKeyword: selectedKeyword)
     }
     
     private func configureSwipeGestures() {

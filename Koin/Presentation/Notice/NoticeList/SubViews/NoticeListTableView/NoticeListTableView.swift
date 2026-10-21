@@ -62,12 +62,12 @@ final class NoticeListTableView: UITableView {
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     }
 
-    func updateNoticeList(noticeArticleList: [NoticeArticleDto], pageInfos: NoticeListPages) {
+    func configure(noticeArticleList: [NoticeArticleDto], pageInfos: NoticeListPages, animated: Bool) {
         self.noticeArticleList = noticeArticleList
         self.pageInfos = pageInfos
         isForSearch = false
         let indexSet = IndexSet(integer: 0)
-        reloadSections(indexSet, with: .automatic)
+        reloadSections(indexSet, with: animated ? .automatic : .none)
     }
     
     func updateSearchedResult(noticeArticleList: [NoticeArticleDto], isLastPage: Bool, isNewKeyword: Bool) {
@@ -83,7 +83,7 @@ final class NoticeListTableView: UITableView {
         scrollToRow(at: IndexPath, at: .bottom, animated: true)
     }
     
-    func updateKeywordList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
+    func configure(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
         headerView.updateKeyWordsList(keywordList: keywordList, selectedKeyword: selectedKeyword)
         reloadData()
     }

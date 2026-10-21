@@ -36,8 +36,8 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
 }
 
 extension TabBarCollectionView {
-    func updateBoard(noticeList: [NoticeArticleDto], noticeListType: NoticeListType) {
-        let indexPath = IndexPath(item: noticeListType.index, section: 0)
+    func update(selectedType: NoticeListType) {
+        let indexPath = IndexPath(item: selectedType.index, section: 0)
  
         scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
         pendingScrollIndex = indexPath
@@ -67,7 +67,6 @@ extension TabBarCollectionView {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         selectTabPublisher.send(noticeTabList[indexPath.row])
-        print(noticeTabList[indexPath.row])
     }
 }
 

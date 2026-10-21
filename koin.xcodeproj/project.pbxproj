@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7CA0F158D0643B6FF60A028B /* NoticeTabBarRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0F14802200337473C1826 /* NoticeTabBarRepresentable.swift */; };
+		7CA0F1799B625094AACF1729 /* NoticeListTableRepresentable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0F19FCFA334186E3FA30C /* NoticeListTableRepresentable.swift */; };
 		7CA0F1678A6F9A5DD8825854 /* NoticeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA0F1C0B396CD3E0E854385 /* NoticeViewModel.swift */; };
 		004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */; };
 		0D3DC4E723268AE45A326D07 /* RecruitChatDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */; };
@@ -1266,6 +1268,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		7CA0F14802200337473C1826 /* NoticeTabBarRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeTabBarRepresentable.swift; sourceTree = "<group>"; };
+		7CA0F19FCFA334186E3FA30C /* NoticeListTableRepresentable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableRepresentable.swift; sourceTree = "<group>"; };
 		7CA0F1C0B396CD3E0E854385 /* NoticeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeViewModel.swift; sourceTree = "<group>"; };
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatPostRequestDto.swift; sourceTree = "<group>"; };
@@ -2523,6 +2527,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7CA0F14DC75864F7CA878BA7 /* Representable */ = {
+			isa = PBXGroup;
+			children = (
+				7CA0F14802200337473C1826 /* NoticeTabBarRepresentable.swift */,
+				7CA0F19FCFA334186E3FA30C /* NoticeListTableRepresentable.swift */,
+			);
+			path = Representable;
+			sourceTree = "<group>";
+		};
 		35728BBC0BEFE046C56D7CDF /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
@@ -4561,6 +4574,7 @@
 		7CED8F4C2EF2D1F900457128 /* SubViews */ = {
 			isa = PBXGroup;
 			children = (
+				7CA0F14DC75864F7CA878BA7 /* Representable */,
 				7CED8F402EF2D1F900457128 /* TabBar */,
 				7CED8F472EF2D1F900457128 /* NoticeListTableView */,
 				7CF77B5930056D87003642C1 /* NoticeKeywordScrollView */,
@@ -7566,6 +7580,8 @@
 				7C82619C30407FF300C20F64 /* FilterGroupView.swift in Sources */,
 				7CED91AB2EF2D1F900457128 /* NoticeListViewModel.swift in Sources */,
 				7CA0F1E32F00000100000001 /* NoticePageViewModel.swift in Sources */,
+				7CA0F158D0643B6FF60A028B /* NoticeTabBarRepresentable.swift in Sources */,
+				7CA0F1799B625094AACF1729 /* NoticeListTableRepresentable.swift in Sources */,
 				7CA0F1678A6F9A5DD8825854 /* NoticeViewModel.swift in Sources */,
 				7CB11C152FB1BDA6004E0C80 /* FetchLostItemKeywordSuggestionUseCase.swift in Sources */,
 				7C7F43282F65F31500CC5860 /* CallVanReportRequest.swift in Sources */,
