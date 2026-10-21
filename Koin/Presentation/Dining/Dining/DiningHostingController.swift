@@ -198,9 +198,25 @@ extension DiningHostingController {
                     value: "\(reportAbTest.logValue)_\(item.place.name)"
                 )
             },
-            onSelectImageButtonTapped: checkAndPresentPicker,
+            onSelectImageButtonTapped: { [weak self] in
+                guard let self else {
+                    return
+                }
+                if let reportAbTestName {
+                    rootView.makeLogAnalyticsEvent(
+                        label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutPhoto,
+                        category: .click,
+                        value: "\(reportAbTestName)_\(modalView?.selectedItem?.place.name ?? "None")"
+                    )
+                }
+                checkAndPresentPicker()
+            },
             onCompleteButtonTapped: onCompleteButtonTapped
         )
+    }
+    
+    private var reportAbTestName: String? {
+        rootView.reportAbTest?.logValue
     }
     
     private func presentReportModalViewController() {
