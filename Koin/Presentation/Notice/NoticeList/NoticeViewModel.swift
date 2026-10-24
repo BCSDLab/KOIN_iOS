@@ -17,13 +17,10 @@ final class NoticeViewModel: SwiftUIViewModelProtocol {
     enum Input {
         case onFirstAppear
         case onAppear
-        case didTapTab(NoticeListType)
-        case didSwipe(NoticeListType)
-        case didTapSearch
-        case didTapAddKeyword
-        case didTapManageKeyword
+        case changeSelectedNoticeType(NoticeListType)
         case didShowToast
         case didTapCloseTooltip
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -36,7 +33,6 @@ final class NoticeViewModel: SwiftUIViewModelProtocol {
     // MARK: - Properties
     private let fetchMyKeywordUseCase: FetchNotificationKeywordUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private var subscriptions: Set<AnyCancellable> = []
 
     // MARK: - Initializer
     init(
@@ -67,65 +63,66 @@ final class NoticeViewModel: SwiftUIViewModelProtocol {
             loadAllPages()
         case .onAppear:
             fetchKeywordList()
-        case let .didTapTab(type):
-            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.Notice.noticeTab, category: .click, value: type.displayName)
+        case let .changeSelectedNoticeType(type):
             selectedNoticeType = type
-        case let .didSwipe(type):
-            selectedNoticeType = type
-        case .didTapSearch:
-            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.Notice.noticeSearch, category: .click, value: "검색")
-        case .didTapAddKeyword:
-            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.Notice.addKeyword, category: .click, value: "키워드추가")
-        case .didTapManageKeyword:
-            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.Notice.manageKeyword, category: .click, value: "키워드관리")
         case .didShowToast:
             toastMessage = nil
         case .didTapCloseTooltip:
             shouldShowTooltip = false
+        case let .logEvent(label, category, value):
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
+}
 
-    func pageViewModel(for type: NoticeListType) -> NoticePageViewModel {
-        guard let pageViewModel = pageViewModels[type] else {
-            preconditionFailure("NoticePageViewModel for \(type) is not initialized")
+extension NoticeViewModel {
+    private func updateKeywordList(_ keywords: [NoticeKeywordDto]) {
+        keywordList = keywords
+        deselectKeywordIfNeeded(keywords)
+        handleTooltipVisibility()
+    }
+    
+    private func deselectKeywordIfNeeded(_ keywords: [NoticeKeywordDto]) {
+        let keywords = Set(keywords.map(\.keyword))
+        pageViewModels.values.forEach { pageViewModel in
+            if let keyword = pageViewModel.keyword,
+               !keywords.contains(keyword) {
+                pageViewModel.execute(.selectKeyword(nil))
+            }
         }
-        return pageViewModel
+    }
+    
+    private func handleTooltipVisibility() {
+        if keywordList.isEmpty && !UserDefaults.standard.bool(forKey: "hasShownNoticeTooltip") {
+            shouldShowTooltip = true
+            UserDefaults.standard.set(true, forKey: "hasShownNoticeTooltip")
+        }
     }
 }
 
 extension NoticeViewModel {
     private func loadAllPages() {
         NoticeListType.allCases.forEach { type in
-            pageViewModel(for: type).execute(.load)
+            pageViewModels[type]?.execute(.load)
         }
     }
     
     private func fetchKeywordList() {
-        fetchMyKeywordUseCase.execute()
-            .receive(on: DispatchQueue.main)
-            .sink(
-                receiveCompletion: { _ in },
-                receiveValue: { [weak self] keywords, _ in
-                    self?.updateKeywordList(keywords)
-                }
-            )
-            .store(in: &subscriptions)
-    }
-
-    private func updateKeywordList(_ keywords: [NoticeKeywordDto]) {
-        keywordList = keywords
-
-        let registeredKeywords = Set(keywords.map(\.keyword))
-        pageViewModels.values.forEach { pageViewModel in
-            if let keyword = pageViewModel.keyword,
-               !registeredKeywords.contains(keyword) {
-                pageViewModel.execute(.selectKeyword(nil))
+        Task {
+            do {
+                let (keywords, _) = try await fetchMyKeywordUseCase.execute().firstValue()
+                updateKeywordList(keywords)
+            } catch {
+                
             }
         }
+    }
 
-        if keywords.isEmpty && !UserDefaults.standard.bool(forKey: "hasShownNoticeTooltip") {
-            shouldShowTooltip = true
-            UserDefaults.standard.set(true, forKey: "hasShownNoticeTooltip")
-        }
+    private func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

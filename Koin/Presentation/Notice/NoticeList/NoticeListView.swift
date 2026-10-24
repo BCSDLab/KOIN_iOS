@@ -33,7 +33,6 @@ struct NoticeListView: ActionBindableView {
             tabView
         }
         .background(Color.appColor(.neutral0))
-        .ignoresSafeArea(edges: .bottom)
         .onFirstAppear {
             viewModel.execute(.onFirstAppear)
         }
@@ -46,7 +45,7 @@ struct NoticeListView: ActionBindableView {
         .onAppear {
             viewModel.execute(.onAppear)
         }
-        
+        .scrollIndicators(.hidden)
     }
 }
 
@@ -56,7 +55,8 @@ extension NoticeListView {
         NoticeTabBarRepresentable(
             selectedNoticeType: viewModel.selectedNoticeType,
             onTap: { type in
-                viewModel.execute(.didTapTab(type))
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeTab, .click, type.displayName))
+                viewModel.execute(.changeSelectedNoticeType(type))
             }
         )
         .frame(height: 50)
@@ -72,7 +72,7 @@ extension NoticeListView {
         Binding {
             viewModel.selectedNoticeType
         } set: { type in
-            viewModel.execute(.didSwipe(type))
+            viewModel.execute(.changeSelectedNoticeType(type))
         }
     }
 
@@ -95,29 +95,31 @@ extension NoticeListView {
 
     @ViewBuilder
     private func pageView(type: NoticeListType) -> some View {
-        NoticePageView(
-            viewModel: viewModel.pageViewModel(for: type),
-            keywordList: viewModel.keywordList,
-            isSelected: viewModel.selectedNoticeType == type,
-            shouldShowTooltip: viewModel.shouldShowTooltip,
-            onSearchTapped: {
-                viewModel.execute(.didTapSearch)
-                sendAction(.navigateToSearch)
-            },
-            onAddKeywordTapped: {
-                viewModel.execute(.didTapAddKeyword)
-                sendAction(.navigateToManageKeyword)
-            },
-            onManageKeywordTapped: {
-                viewModel.execute(.didTapManageKeyword)
-                sendAction(.navigateToManageKeyword)
-            },
-            onArticleTapped: { noticeId, boardId in
-                sendAction(.navigateToNoticeData(noticeId: noticeId, boardId: boardId))
-            },
-            onCloseTooltipTapped: {
-                viewModel.execute(.didTapCloseTooltip)
-            }
-        )
+        if let pageViewModel = viewModel.pageViewModels[type] {
+            NoticePageView(
+                viewModel: pageViewModel,
+                keywordList: viewModel.keywordList,
+                isSelected: viewModel.selectedNoticeType == type,
+                shouldShowTooltip: viewModel.shouldShowTooltip,
+                onSearchTapped: {
+                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeSearch, .click, "검색"))
+                    sendAction(.navigateToSearch)
+                },
+                onAddKeywordTapped: {
+                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Notice.addKeyword, .click, "키워드추가"))
+                    sendAction(.navigateToManageKeyword)
+                },
+                onManageKeywordTapped: {
+                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Notice.manageKeyword, .click, "키워드관리"))
+                    sendAction(.navigateToManageKeyword)
+                },
+                onArticleTapped: { noticeId, boardId in
+                    sendAction(.navigateToNoticeData(noticeId: noticeId, boardId: boardId))
+                },
+                onCloseTooltipTapped: {
+                    viewModel.execute(.didTapCloseTooltip)
+                }
+            )
+        }
     }
 }
