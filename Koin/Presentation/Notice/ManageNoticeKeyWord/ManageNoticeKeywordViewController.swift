@@ -188,6 +188,9 @@ extension ManageNoticeKeywordViewController {
                2 <= text.count, text.count <= 10 {
                 addKeywordButton.backgroundColor = .appColor(.new600)
                 addKeywordButton.setTitleColor(.appColor(.neutral0), for: .normal)
+            } else {
+                addKeywordButton.backgroundColor = .appColor(.neutral300)
+                addKeywordButton.setTitleColor(.appColor(.neutral0), for: .normal)
             }
         }
         else {
@@ -198,7 +201,7 @@ extension ManageNoticeKeywordViewController {
     }
     
     @objc private func tapAddKeywordButton() {
-        if let text = textField.text {
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             inputSubject.send(.addKeyword(keyword: text, isRecommended: false))
             textField.text = ""
             textField.resignFirstResponder()
@@ -250,7 +253,7 @@ extension ManageNoticeKeywordViewController {
     }
     
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let text = textField.text {
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             textField.text = ""
             inputSubject.send(.addKeyword(keyword: text, isRecommended: false))
         }
