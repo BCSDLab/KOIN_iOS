@@ -90,17 +90,40 @@ final class NoticeListTableView: UITableView {
         reloadSections(indexSet, with: animated ? .automatic : .none)
     }
     
-    func updateSearchedResult(noticeArticleList: [NoticeArticleDto], isLastPage: Bool, isNewKeyword: Bool) {
-        if isNewKeyword {
-            self.noticeArticleList = []
-        }
-        self.noticeArticleList.append(contentsOf: noticeArticleList)
+    func updateSearchedResult(
+        noticeArticleList: [NoticeArticleDto],
+        isLastPage: Bool,
+        isNewKeyword: Bool
+    ) {
         isForSearch = true
         isLastSearchedPage = isLastPage
-        let indexSet = IndexSet(integer: 0)
-        reloadSections(indexSet, with: .automatic)
-        let IndexPath = IndexPath(row: self.noticeArticleList.count - 1, section: 0)
-        scrollToRow(at: IndexPath, at: .bottom, animated: true)
+        
+        performBatchUpdates { [weak self] in
+            guard let self else { return }
+            
+            if isNewKeyword {
+                self.noticeArticleList = noticeArticleList
+                reloadSections(IndexSet(integer: 0), with: .automatic)
+            } else {
+                let firstRow = self.noticeArticleList.count
+                self.noticeArticleList.append(contentsOf: noticeArticleList)
+                let lastRow = self.noticeArticleList.count - 1
+                
+                guard !noticeArticleList.isEmpty else { return }
+                
+                let insertedIndexpaths: [IndexPath] = (firstRow...lastRow).map {
+                    IndexPath(row: $0, section: 0)
+                }
+                insertRows(at: insertedIndexpaths, with: .automatic)
+            }
+        } completion: { [weak self] _ in
+            guard let self,
+                  !self.noticeArticleList.isEmpty else {
+                return
+            }
+            let lastIndexPath = IndexPath(row: self.noticeArticleList.count - 1, section: 0)
+            scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
+        }
     }
     
     func configure(
