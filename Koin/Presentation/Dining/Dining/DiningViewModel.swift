@@ -25,6 +25,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case didTapShare(DiningItem)
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
+        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Proeprteis
@@ -119,6 +120,8 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
             changeNoti(isOn: isOn, type: .diningSoldOut)
         case let .didTapImageUploadSwitch(isOn):
             changeNoti(isOn: isOn, type: .diningImageUpload)
+        case let .logEvent(label, category, value):
+            makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
     }
 }
@@ -189,6 +192,9 @@ extension DiningViewModel {
                 let request = AssignAbTestRequest(title: "icon_location")
                 let result = try await assignAbTestUseCase.execute(requestModel: request).firstValue()
                 reportAbTest = DiningReportAbTest(from: result.variableName.rawValue)
+                if let reportAbTest {
+                    makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningAbtestExposure, category: .exposure, value: reportAbTest.logValue)
+                }
             } catch {
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
@@ -229,8 +235,10 @@ extension DiningViewModel {
                     imageUrl: imageUrl
                 )
                 toastMessage = "\(selectedItem.place.name) 품절을 제보했습니다."
+                makeReportLogEvent(category: .submit, selectedItem: selectedItem)
             } catch {
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                makeReportLogEvent(category: .fail, selectedItem: selectedItem)
             }
         }
     }
@@ -250,6 +258,20 @@ extension DiningViewModel {
 }
 
 extension DiningViewModel {
+    private func makeReportLogEvent(
+        category: EventParameter.EventCategory,
+        selectedItem: DiningItem?
+    ) {
+        guard let reportAbTestName = reportAbTest?.logValue else {
+            return
+        }
+        makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSubmit,
+            category: category,
+            value: "\(reportAbTestName)_\(selectedItem?.place.name ?? "None")"
+        )
+    }
+    
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
         category: EventParameter.EventCategory,

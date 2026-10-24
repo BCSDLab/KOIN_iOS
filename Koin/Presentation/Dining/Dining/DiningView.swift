@@ -26,6 +26,9 @@ struct DiningView: ActionBindableView {
     var currentDiningItems: [DiningItem] {
         viewModel.currentDiningItems
     }
+    var reportAbTest: DiningReportAbTest? {
+        viewModel.reportAbTest
+    }
     
     // MARK: - Initializer
     init(viewModel: DiningViewModel) {
@@ -48,6 +51,7 @@ struct DiningView: ActionBindableView {
         }
         .refreshable {
             viewModel.execute(.refresh)
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .click, viewModel.selectedDiningType.name))
         }
         .onChange(of: viewModel.toastMessage) {
             if let toastMessage = viewModel.toastMessage {
@@ -75,6 +79,14 @@ struct DiningView: ActionBindableView {
     }
     
     // MARK: - Public
+    func makeLogAnalyticsEvent(
+        label: EventLabelType,
+        category: EventParameter.EventCategory,
+        value: Any
+    ) {
+        viewModel.execute(.logEvent(label, category, value))
+    }
+    
     func didTapCloseReportTooltip() {
         viewModel.execute(.didTapCloseReportTooltip)
     }
@@ -116,6 +128,7 @@ extension DiningView {
             types: DiningType.allCases,
             selectedType: viewModel.selectedDiningType
         ) { type in
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .click, type.name))
             viewModel.execute(.changeSelectedDiningType(type))
         }
         .applySketchShadow(
@@ -157,7 +170,7 @@ extension DiningView {
         .tabViewStyle(.page(indexDisplayMode: .never))
         .introspect(
             .scrollView,
-            on: .iOS(.v17, .v18, .v26, .v27)
+            on: .iOS(.v18, .v26, .v27)
         ) { scrollView in
             scrollView.contentInsetAdjustmentBehavior = .never
         }
@@ -167,19 +180,28 @@ extension DiningView {
     private func listView(list: DiningList) -> some View {
         DiningMenuListView(
             list: list,
-            onImageTapped: { imageUrl in
-                sendAction(.showZoomedImage(imageUrl: imageUrl))
+            onImageTapped: { item in
+                if let imageUrl = item.image.imageUrl {
+                    sendAction(.showZoomedImage(imageUrl: imageUrl))
+                }
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuImage, .click, "\(viewModel.selectedDiningType.name)_\(item.place.name)"))
+            },
+            onScrolledDown: {
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .scroll, list.diningType.name))
             },
             shouldShowShareTooltip: viewModel.shouldShowShareTooltip,
             onShareTapped: { item in
                 viewModel.execute(.didTapShare(item))
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuShare, .click, "공유하기"))
             },
             onCloseShareTooltipTapped: {
                 viewModel.execute(.didTapCloseShareTooltip)
             },
             shouldShowReportButton: viewModel.reportAbTest == .card,
             shouldShowReportTooltip: viewModel.reportAbTest == .card && viewModel.shouldShowReportTooltip,
-            onReportTapped: { 
+            onReportTapped: { item in
+                let value = item.map { "\(DiningReportAbTest.card.logValue)_\($0.place.name)" } ?? DiningReportAbTest.card.logValue
+                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart, .click, value))
                 sendAction(.showReportModal)
             },
             onCloseReportTooltipTapped: {

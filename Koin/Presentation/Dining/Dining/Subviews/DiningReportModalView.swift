@@ -13,6 +13,7 @@ final class DiningReportModalView: UIView {
 
     // MARK: - Closures
     private let onDismissButtonTapped: ()->Void
+    private let onPlaceSelected: (DiningItem)->Void
     private let onSelectImageButtonTapped: ()->Void
     private let onCompleteButtonTapped: (
         _ selectedItem: DiningItem,
@@ -75,6 +76,7 @@ final class DiningReportModalView: UIView {
     init(
         diningItems: [DiningItem],
         onDismissButtonTapped: @escaping ()->Void,
+        onPlaceSelected: @escaping (DiningItem)->Void,
         onSelectImageButtonTapped: @escaping ()->Void,
         onCompleteButtonTapped: @escaping (
             _ selectedItem: DiningItem,
@@ -83,6 +85,7 @@ final class DiningReportModalView: UIView {
     ) {
         self.diningItems = diningItems
         self.onDismissButtonTapped = onDismissButtonTapped
+        self.onPlaceSelected = onPlaceSelected
         self.onSelectImageButtonTapped = onSelectImageButtonTapped
         self.onCompleteButtonTapped = onCompleteButtonTapped
         super.init(frame: .zero)
@@ -148,6 +151,7 @@ extension DiningReportModalView {
             return
         }
         selectedItem = diningItems[index]
+        onPlaceSelected(diningItems[index])
     }
 
     @objc private func didTapSelectImageButton() {

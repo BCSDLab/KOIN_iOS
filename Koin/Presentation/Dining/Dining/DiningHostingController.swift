@@ -110,10 +110,20 @@ extension DiningHostingController {
     }
     
     @objc private func didTapReportButton() {
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
+            category: .click,
+            value: DiningReportAbTest.nav.logValue
+        )
         showReportModal()
     }
     
     @objc private func didTapCoopInfoButton() {
+        rootView.makeLogAnalyticsEvent(
+            label: EventParameter.EventLabel.Campus.Dining.cafeteriaInfo,
+            category: .click,
+            value: "학생식당정보"
+        )
         navigateToCoopInfo()
     }
 
@@ -176,11 +186,48 @@ extension DiningHostingController {
         return DiningReportModalView(
             diningItems: rootView.currentDiningItems,
             onDismissButtonTapped: { [weak self] in
-                self?.dismiss(animated: true)
+                guard let self else {
+                    return
+                }
+                if let reportAbTestName {
+                    let place = modalView?.selectedItem.map { "_\($0.place.name)" } ?? ""
+                    rootView.makeLogAnalyticsEvent(
+                        label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutExit,
+                        category: .click,
+                        value: "\(reportAbTestName)\(place)_이탈"
+                    )
+                }
+                dismiss(animated: true)
             },
-            onSelectImageButtonTapped: checkAndPresentPicker,
+            onPlaceSelected: { [weak self] item in
+                guard let self, let reportAbTest = rootView.reportAbTest else {
+                    return
+                }
+                rootView.makeLogAnalyticsEvent(
+                    label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSelect,
+                    category: .select,
+                    value: "\(reportAbTest.logValue)_\(item.place.name)"
+                )
+            },
+            onSelectImageButtonTapped: { [weak self] in
+                guard let self else {
+                    return
+                }
+                if let reportAbTestName {
+                    rootView.makeLogAnalyticsEvent(
+                        label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutPhoto,
+                        category: .click,
+                        value: "\(reportAbTestName)_\(modalView?.selectedItem?.place.name ?? "None")"
+                    )
+                }
+                checkAndPresentPicker()
+            },
             onCompleteButtonTapped: onCompleteButtonTapped
         )
+    }
+    
+    private var reportAbTestName: String? {
+        rootView.reportAbTest?.logValue
     }
     
     private func presentReportModalViewController() {
