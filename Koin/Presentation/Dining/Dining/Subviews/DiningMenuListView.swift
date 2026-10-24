@@ -125,7 +125,7 @@ extension DiningMenuListView {
                 scrollLogDirection = .down
             }
         }
-        if oldPhase == .decelerating && newPhase == .idle,
+        if (oldPhase == .interacting || oldPhase == .decelerating) && newPhase == .idle,
            scrollLogDirection == .down,
            offsetY > context.geometry.containerSize.height * 0.7 {
             onScrolledDown()
