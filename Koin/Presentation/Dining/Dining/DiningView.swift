@@ -14,7 +14,7 @@ struct DiningView: ActionBindableView {
         case showToastMessage(String)
         case showReportBarButton
         case showReportBarButtonTooltip
-        case showReportModal
+        case showReportModal(selectedPlace: DiningPlace?)
         case didFinishReporting
         case showZoomedImage(imageUrl: String)
         case presentNotiBottomSheet(initialValue: DiningNoti)
@@ -202,7 +202,7 @@ extension DiningView {
             onReportTapped: { item in
                 let value = item.map { "\(DiningReportAbTest.card.logValue)_\($0.place.name)" } ?? DiningReportAbTest.card.logValue
                 viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart, .click, value))
-                sendAction(.showReportModal)
+                sendAction(.showReportModal(selectedPlace: item?.place))
             },
             onCloseReportTooltipTapped: {
                 viewModel.execute(.didTapCloseReportTooltip)

@@ -67,8 +67,8 @@ final class DiningHostingController: UIHostingController<DiningView>, HostingCon
             showReportBarButton()
         case .showReportBarButtonTooltip:
             showReportBarButtonTooltip()
-        case .showReportModal:
-            showReportModal()
+        case .showReportModal(let selectedPlace):
+            showReportModal(selectedPlace: selectedPlace)
         case .didFinishReporting:
             dismiss(animated: true)
         case .showZoomedImage(let imageUrl):
@@ -115,7 +115,7 @@ extension DiningHostingController {
             category: .click,
             value: DiningReportAbTest.nav.logValue
         )
-        showReportModal()
+        showReportModal(selectedPlace: nil)
     }
     
     @objc private func didTapCoopInfoButton() {
@@ -173,28 +173,28 @@ extension DiningHostingController {
         navigationController?.pushViewController(viewController, animated: true)
     }
     
-    private func showReportModal() {
-        guard !rootView.currentDiningItems.isEmpty else {
+    private func showReportModal(selectedPlace: DiningPlace?) {
+        let diningItems = rootView.currentDiningItems
+        guard let selectedItem = diningItems.first(where: { $0.place == selectedPlace }) ?? diningItems.first else {
             showToastMessage(message: "학생식당 운영시간이 아닙니다.")
             return
         }
-        self.modalView = makeModalView()
+        self.modalView = makeModalView(selectedItem: selectedItem)
         presentReportModalViewController()
     }
     
-    private func makeModalView() -> DiningReportModalView {
+    private func makeModalView(selectedItem: DiningItem) -> DiningReportModalView {
         return DiningReportModalView(
             diningItems: rootView.currentDiningItems,
             onDismissButtonTapped: { [weak self] in
                 guard let self else {
                     return
                 }
-                if let reportAbTestName {
-                    let place = modalView?.selectedItem.map { "_\($0.place.name)" } ?? ""
+                if let reportAbTestName, let selectedItem = modalView?.selectedItem {
                     rootView.makeLogAnalyticsEvent(
                         label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutExit,
                         category: .click,
-                        value: "\(reportAbTestName)\(place)_이탈"
+                        value: "\(reportAbTestName)_\(selectedItem.place.name)_이탈"
                     )
                 }
                 dismiss(animated: true)
@@ -213,16 +213,17 @@ extension DiningHostingController {
                 guard let self else {
                     return
                 }
-                if let reportAbTestName {
+                if let reportAbTestName, let selectedItem = modalView?.selectedItem {
                     rootView.makeLogAnalyticsEvent(
                         label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutPhoto,
                         category: .click,
-                        value: "\(reportAbTestName)_\(modalView?.selectedItem?.place.name ?? "None")"
+                        value: "\(reportAbTestName)_\(selectedItem.place.name)"
                     )
                 }
                 checkAndPresentPicker()
             },
-            onCompleteButtonTapped: onCompleteButtonTapped
+            onCompleteButtonTapped: onCompleteButtonTapped,
+            selectedItem: selectedItem
         )
     }
     
