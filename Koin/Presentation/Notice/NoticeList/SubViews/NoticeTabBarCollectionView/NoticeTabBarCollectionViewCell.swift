@@ -1,5 +1,5 @@
 //
-//  TabBarCollectionViewCell.swift
+//  NoticeTabBarCollectionViewCell.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/13/24.
@@ -10,7 +10,7 @@ import SnapKit
 import UIKit
 import Then
 
-final class TabBarCollectionViewCell: UICollectionViewCell {
+final class NoticeTabBarCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     private let tabTitleLabel = UILabel().then {
         $0.textAlignment = .center
@@ -41,7 +41,7 @@ final class TabBarCollectionViewCell: UICollectionViewCell {
     }
 }
 
-extension TabBarCollectionViewCell {
+extension NoticeTabBarCollectionViewCell {
     private func setUpLayouts() {
         [tabTitleLabel, indicatorView].forEach {
             contentView.addSubview($0)

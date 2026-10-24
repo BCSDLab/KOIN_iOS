@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct NoticeListPages {
+struct NoticeListPages: Equatable {
     let isPreviousPage: PageReloadDirection?
     let pages: [Int]
     let selectedIndex: Int

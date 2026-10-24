@@ -18,7 +18,12 @@ final class ManageNoticeKeywordViewController: UIViewController {
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - UI Components
-
+    private let scrollView = UIScrollView().then {
+        $0.contentInsetAdjustmentBehavior = .never
+        $0.showsVerticalScrollIndicator = false
+    }
+    private let contentView = UIView()
+    
     private let myKeywordGuideLabel = UILabel().then {
         $0.text = "내 키워드"
         $0.font = UIFont.appFont(.pretendardBold, size: 18)
@@ -45,6 +50,8 @@ final class ManageNoticeKeywordViewController: UIViewController {
         $0.layer.cornerRadius = 19
         $0.layer.borderColor = UIColor.appColor(.neutral400).cgColor
         $0.layer.borderWidth = 1
+        $0.font = .appFont(.pretendardRegular, size: 14)
+        $0.textColor = .appColor(.neutral800)
     }
     
     private let addKeywordButton = UIButton().then {
@@ -176,8 +183,15 @@ extension ManageNoticeKeywordViewController {
     @objc private func textFieldValueChanged(sender: UITextField) {
         if sender.isEditing {
             textField.layer.borderColor = UIColor.appColor(.new300).cgColor
-            addKeywordButton.backgroundColor = .appColor(.new600)
-            addKeywordButton.setTitleColor(.appColor(.neutral0), for: .normal)
+            
+            if let text = sender.text?.trimmingCharacters(in: .whitespacesAndNewlines),
+               2 <= text.count, text.count <= 10 {
+                addKeywordButton.backgroundColor = .appColor(.new600)
+                addKeywordButton.setTitleColor(.appColor(.neutral0), for: .normal)
+            } else {
+                addKeywordButton.backgroundColor = .appColor(.neutral300)
+                addKeywordButton.setTitleColor(.appColor(.neutral0), for: .normal)
+            }
         }
         else {
             textField.layer.borderColor = UIColor.appColor(.neutral400).cgColor
@@ -187,7 +201,7 @@ extension ManageNoticeKeywordViewController {
     }
     
     @objc private func tapAddKeywordButton() {
-        if let text = textField.text {
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             inputSubject.send(.addKeyword(keyword: text, isRecommended: false))
             textField.text = ""
             textField.resignFirstResponder()
@@ -202,6 +216,7 @@ extension ManageNoticeKeywordViewController {
     private func updateMyKeywords(keywords: [NoticeKeywordDto]) {
         myKeywordCollectionView.updateMyKeywords(keywords: keywords)
         numberOfKeywordLabel.text = "\(keywords.count)/10"
+        
     }
     
     private func updateRecommendedKeywords(keywords: [String]) {
@@ -238,7 +253,7 @@ extension ManageNoticeKeywordViewController {
     }
     
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if let text = textField.text {
+        if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines) {
             textField.text = ""
             inputSubject.send(.addKeyword(keyword: text, isRecommended: false))
         }
@@ -249,14 +264,30 @@ extension ManageNoticeKeywordViewController {
 extension ManageNoticeKeywordViewController {
     private func setUpLayouts() {
         [myKeywordGuideLabel, numberOfKeywordLabel, addKeywordDescriptionLabel, addKeywordButton, textField, myKeywordCollectionView ,separatorView, recommendedKeywordCollectionView, keywordNotificationGuideLabel, keywordNotificationLabel, keywordNotificationDescriptionLabel, keywordNotificationSwtich, recommendedKeywordGuideLabel].forEach {
+            contentView.addSubview($0)
+        }
+        [contentView].forEach {
+            scrollView.addSubview($0)
+        }
+        
+        [scrollView].forEach {
             view.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+        }
+        contentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.snp.width)
+        }
         
         myKeywordGuideLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(8)
+            $0.top.equalToSuperview().offset(8)
             $0.leading.equalToSuperview().offset(24)
             $0.height.equalTo(29)
         }
@@ -313,6 +344,7 @@ extension ManageNoticeKeywordViewController {
             $0.top.equalTo(keywordNotificationLabel.snp.bottom)
             $0.leading.equalTo(keywordNotificationLabel)
             $0.height.equalTo(19)
+            $0.bottom.equalToSuperview().offset(-24)
         }
         
         keywordNotificationSwtich.snp.makeConstraints {

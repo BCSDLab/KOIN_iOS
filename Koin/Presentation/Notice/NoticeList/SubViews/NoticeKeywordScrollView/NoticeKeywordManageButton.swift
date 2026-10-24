@@ -9,14 +9,14 @@ import SwiftUI
 
 struct NoticeKeywordManageButton: View {
     
-    let manageButtonTapped: ()->Void
+    let onManageButtonTapped: ()->Void
     
-    init(action manageButtonTapped: @escaping () -> Void) {
-        self.manageButtonTapped = manageButtonTapped
+    init(action onManageButtonTapped: @escaping () -> Void) {
+        self.onManageButtonTapped = onManageButtonTapped
     }
     
     var body: some View {
-        Button(action: manageButtonTapped) {
+        Button(action: onManageButtonTapped) {
             Image.appImage(asset: .noticeManageKeyword)
         }
         .buttonStyle(.plain)
