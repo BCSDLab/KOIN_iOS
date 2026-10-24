@@ -31,7 +31,7 @@ final class DiningReportModalView: UIView {
     ]
 
     // MARK: - State
-    private(set) var selectedItem: DiningItem? {
+    private(set) var selectedItem: DiningItem {
         didSet {
             updatePlaceButtons()
             updateCompleteButton()
@@ -44,7 +44,7 @@ final class DiningReportModalView: UIView {
         }
     }
     private var isButtonEnabled: Bool {
-        selectedItem != nil && evidenceImage != nil
+        evidenceImage != nil
     }
 
     // MARK: - UI Components
@@ -81,13 +81,15 @@ final class DiningReportModalView: UIView {
         onCompleteButtonTapped: @escaping (
             _ selectedItem: DiningItem,
             _ evidenceImage: UIImage
-        ) -> Void
+        ) -> Void,
+        selectedItem: DiningItem
     ) {
         self.diningItems = diningItems
         self.onDismissButtonTapped = onDismissButtonTapped
         self.onPlaceSelected = onPlaceSelected
         self.onSelectImageButtonTapped = onSelectImageButtonTapped
         self.onCompleteButtonTapped = onCompleteButtonTapped
+        self.selectedItem = selectedItem
         super.init(frame: .zero)
         configureView()
         setAddTargets()
@@ -163,7 +165,7 @@ extension DiningReportModalView {
     }
 
     @objc private func didTapCompleteButton() {
-        guard let selectedItem, let evidenceImage else {
+        guard let evidenceImage else {
             return
         }
         onCompleteButtonTapped(

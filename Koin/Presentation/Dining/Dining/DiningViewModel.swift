@@ -260,7 +260,7 @@ extension DiningViewModel {
 extension DiningViewModel {
     private func makeReportLogEvent(
         category: EventParameter.EventCategory,
-        selectedItem: DiningItem?
+        selectedItem: DiningItem
     ) {
         guard let reportAbTestName = reportAbTest?.logValue else {
             return
@@ -268,7 +268,7 @@ extension DiningViewModel {
         makeLogAnalyticsEvent(
             label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSubmit,
             category: category,
-            value: "\(reportAbTestName)_\(selectedItem?.place.name ?? "None")"
+            value: "\(reportAbTestName)_\(selectedItem.place.name)"
         )
     }
     
