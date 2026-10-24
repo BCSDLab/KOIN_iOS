@@ -1,5 +1,5 @@
 //
-//  TabBarCollectionView.swift
+//  NoticeTabBarCollectionView.swift
 //  koin
 //
 //  Created by JOOMINKYUNG on 8/13/24.
@@ -9,7 +9,7 @@ import Combine
 import SnapKit
 import UIKit
 
-final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
+final class NoticeTabBarCollectionView: UICollectionView, UICollectionViewDataSource {
     //MARK: - Properties
     private let noticeTabList = NoticeListType.allCases
     let selectTabPublisher = PassthroughSubject<NoticeListType, Never>()
@@ -26,7 +26,7 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
     }
     
     private func commonInit() {
-        register(TabBarCollectionViewCell.self, forCellWithReuseIdentifier: TabBarCollectionViewCell.identifier)
+        register(NoticeTabBarCollectionViewCell.self, forCellWithReuseIdentifier: NoticeTabBarCollectionViewCell.identifier)
         decelerationRate = .normal
         showsHorizontalScrollIndicator = false
         contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
@@ -35,7 +35,7 @@ final class TabBarCollectionView: UICollectionView, UICollectionViewDataSource {
     }
 }
 
-extension TabBarCollectionView {
+extension NoticeTabBarCollectionView {
     func update(selectedType: NoticeListType) {
         let indexPath = IndexPath(item: selectedType.index, section: 0)
  
@@ -45,16 +45,18 @@ extension TabBarCollectionView {
     }
 }
 
-extension TabBarCollectionView {
+extension NoticeTabBarCollectionView {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return noticeTabList.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TabBarCollectionViewCell.identifier, for: indexPath) as? TabBarCollectionViewCell else {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: NoticeTabBarCollectionViewCell.identifier,
+            for: indexPath
+        ) as? NoticeTabBarCollectionViewCell else {
             return UICollectionViewCell()
         }
-       
         cell.configure(title: noticeTabList[indexPath.row].displayName)
         if indexPath == pendingScrollIndex {
             cell.selectTab(isSelected: true)
@@ -70,7 +72,7 @@ extension TabBarCollectionView {
     }
 }
 
-extension TabBarCollectionView: UICollectionViewDelegateFlowLayout {
+extension NoticeTabBarCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
         label.text = noticeTabList[indexPath.row].displayName

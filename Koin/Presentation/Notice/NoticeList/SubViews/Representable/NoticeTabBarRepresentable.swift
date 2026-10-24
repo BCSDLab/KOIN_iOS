@@ -20,27 +20,33 @@ struct NoticeTabBarRepresentable: UIViewRepresentable {
         Coordinator(onTap: onTap)
     }
 
-    func makeUIView(context: Context) -> TabBarCollectionView {
+    func makeUIView(context: Context) -> NoticeTabBarCollectionView {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
-        let tabBarCollectionView = TabBarCollectionView(frame: .zero, collectionViewLayout: flowLayout).then {
+        let noticeTabBarCollectionView = NoticeTabBarCollectionView(frame: .zero, collectionViewLayout: flowLayout).then {
             $0.backgroundColor = .clear
         }
-        context.coordinator.bind(tabBarCollectionView: tabBarCollectionView)
-        return tabBarCollectionView
+        context.coordinator.bind(noticeTabBarCollectionView: noticeTabBarCollectionView)
+        return noticeTabBarCollectionView
     }
 
-    func updateUIView(_ tabBarCollectionView: TabBarCollectionView, context: Context) {
+    func updateUIView(
+        _ noticeTabBarCollectionView: NoticeTabBarCollectionView,
+        context: Context
+    ) {
         let coordinator = context.coordinator
         coordinator.onTap = onTap
 
         if coordinator.lastSelectedType != selectedNoticeType {
-            tabBarCollectionView.update(selectedType: selectedNoticeType)
+            noticeTabBarCollectionView.update(selectedType: selectedNoticeType)
             coordinator.lastSelectedType = selectedNoticeType
         }
     }
 
-    static func dismantleUIView(_ tabBarCollectionView: TabBarCollectionView, coordinator: Coordinator) {
+    static func dismantleUIView(
+        _ noticeTabBarCollectionView: NoticeTabBarCollectionView,
+        coordinator: Coordinator
+    ) {
         coordinator.subscriptions.removeAll()
     }
 }
@@ -55,8 +61,8 @@ extension NoticeTabBarRepresentable {
             self.onTap = onTap
         }
 
-        func bind(tabBarCollectionView: TabBarCollectionView) {
-            tabBarCollectionView.selectTabPublisher.sink { [weak self] type in
+        func bind(noticeTabBarCollectionView: NoticeTabBarCollectionView) {
+            noticeTabBarCollectionView.selectTabPublisher.sink { [weak self] type in
                 self?.onTap(type)
             }.store(in: &subscriptions)
         }

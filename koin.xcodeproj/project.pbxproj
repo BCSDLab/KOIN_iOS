@@ -573,7 +573,7 @@
 		7CED90F62EF2D1F900457128 /* LostItemChatDateHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EFF2EF2D1F900457128 /* LostItemChatDateHeaderView.swift */; };
 		7CED90F72EF2D1F900457128 /* ReviewImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90032EF2D1F900457128 /* ReviewImageCollectionViewCell.swift */; };
 		7CED90FA2EF2D1F900457128 /* LandDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B82EF2D1F900457128 /* LandDetailViewController.swift */; };
-		7CED90FB2EF2D1F900457128 /* TabBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3E2EF2D1F900457128 /* TabBarCollectionViewCell.swift */; };
+		7CED90FB2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3E2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift */; };
 		7CED90FD2EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90182EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift */; };
 		7CED90FE2EF2D1F900457128 /* SelectTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908B2EF2D1F900457128 /* SelectTimeView.swift */; };
 		7CED90FF2EF2D1F900457128 /* PolicyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F1E2EF2D1F900457128 /* PolicyViewController.swift */; };
@@ -663,7 +663,7 @@
 		7CED918B2EF2D1F900457128 /* LostArticleImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE82EF2D1F900457128 /* LostArticleImageCollectionView.swift */; };
 		7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90002EF2D1F900457128 /* ScoreChartCollectionViewCell.swift */; };
 		7CED91902EF2D1F900457128 /* StateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F342EF2D1F900457128 /* StateView.swift */; };
-		7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3D2EF2D1F900457128 /* TabBarCollectionView.swift */; };
+		7CED91912EF2D1F900457128 /* NoticeTabBarCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3D2EF2D1F900457128 /* NoticeTabBarCollectionView.swift */; };
 		7CED91922EF2D1F900457128 /* ShopSummaryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FDA2EF2D1F900457128 /* ShopSummaryViewController.swift */; };
 		7CED91932EF2D1F900457128 /* ReviewListCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90052EF2D1F900457128 /* ReviewListCollectionView.swift */; };
 		7CED91942EF2D1F900457128 /* DiningNoticeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED907C2EF2D1F900457128 /* DiningNoticeViewController.swift */; };
@@ -1838,8 +1838,8 @@
 		7CED8F372EF2D1F900457128 /* FindPasswordCertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordCertViewController.swift; sourceTree = "<group>"; };
 		7CED8F382EF2D1F900457128 /* FindPasswordChangeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindPasswordChangeViewController.swift; sourceTree = "<group>"; };
 		7CED8F392EF2D1F900457128 /* ChangePasswordSuccessViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangePasswordSuccessViewController.swift; sourceTree = "<group>"; };
-		7CED8F3D2EF2D1F900457128 /* TabBarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionView.swift; sourceTree = "<group>"; };
-		7CED8F3E2EF2D1F900457128 /* TabBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarCollectionViewCell.swift; sourceTree = "<group>"; };
+		7CED8F3D2EF2D1F900457128 /* NoticeTabBarCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeTabBarCollectionView.swift; sourceTree = "<group>"; };
+		7CED8F3E2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeTabBarCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8F412EF2D1F900457128 /* NoticeListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableView.swift; sourceTree = "<group>"; };
 		7CED8F422EF2D1F900457128 /* NoticeListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewCell.swift; sourceTree = "<group>"; };
 		7CED8F432EF2D1F900457128 /* NoticeListTableViewFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListTableViewFooter.swift; sourceTree = "<group>"; };
@@ -4547,8 +4547,8 @@
 		7CED8F3F2EF2D1F900457128 /* TabBarCollectionView */ = {
 			isa = PBXGroup;
 			children = (
-				7CED8F3D2EF2D1F900457128 /* TabBarCollectionView.swift */,
-				7CED8F3E2EF2D1F900457128 /* TabBarCollectionViewCell.swift */,
+				7CED8F3D2EF2D1F900457128 /* NoticeTabBarCollectionView.swift */,
+				7CED8F3E2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift */,
 			);
 			path = TabBarCollectionView;
 			sourceTree = "<group>";
@@ -7324,7 +7324,7 @@
 				7CED90F62EF2D1F900457128 /* LostItemChatDateHeaderView.swift in Sources */,
 				7CED90F72EF2D1F900457128 /* ReviewImageCollectionViewCell.swift in Sources */,
 				7CED90FA2EF2D1F900457128 /* LandDetailViewController.swift in Sources */,
-				7CED90FB2EF2D1F900457128 /* TabBarCollectionViewCell.swift in Sources */,
+				7CED90FB2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift in Sources */,
 				7CF77B6930056EC9003642C1 /* NoticeKeywordButton.swift in Sources */,
 				7CED90FD2EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift in Sources */,
 				7CED90FE2EF2D1F900457128 /* SelectTimeView.swift in Sources */,
@@ -7499,7 +7499,7 @@
 				7C58FE862F5F9CDD00A2737B /* CallVanDataViewController.swift in Sources */,
 				7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */,
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,
-				7CED91912EF2D1F900457128 /* TabBarCollectionView.swift in Sources */,
+				7CED91912EF2D1F900457128 /* NoticeTabBarCollectionView.swift in Sources */,
 				7CF77B7430058AF3003642C1 /* NoticeKeywordScrollViewHostingController.swift in Sources */,
 				7CFC44233083DDA000623C1F /* DiningReportModalView.swift in Sources */,
 				7CED91922EF2D1F900457128 /* ShopSummaryViewController.swift in Sources */,
