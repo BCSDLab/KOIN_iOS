@@ -135,30 +135,45 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
         
         recentSearchTableView.tapDeleteButtonPublisher
             .sink { [weak self] name, date in
-            print(name)
-            self?.inputSubject.send(.searchWord(name, date, 1))
-        }.store(in: &subscriptions)
+                print(name)
+                self?.inputSubject.send(.searchWord(name, date, 1))
+            }.store(in: &subscriptions)
         
         recommendedSearchCollectionView.tapRecommendedWord.sink { [weak self] word in
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.popularSearchingWord, .click, "\(word)"))
             self?.textField.text = word
         }.store(in: &subscriptions)
         
-        noticeListTableView.tapListLoadButtnPublisher.sink { [weak self] page in
-            self?.inputSubject.send(.fetchSearchedResult(page, nil, false))
+        noticeListTableView.eventPublisher.sink { [weak self] event in
+            guard let self else { return }
+            switch event {
+            case .noticeRowTapped(let noticeId, let boardId):
+                navigateToNoticeData(noticeId: noticeId, boardId: boardId)
+            case let .nextPageButtonTapped(page):
+                inputSubject.send(.fetchSearchedResult(page, nil, false))
+            default:
+                break
+            }
         }.store(in: &subscriptions)
-       
-        noticeListTableView.tapNoticePublisher.sink { [weak self] item in
-            let noticeListService = DefaultNoticeService()
-            let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
-            let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
-            let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
-            let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
-            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: fetchNoticeDataUseCase, fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase, downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, noticeId: item.0, boardId: item.1)
-            let noticeDataVc = NoticeDataViewController(viewModel: viewModel)
-            self?.navigationController?.pushViewController(noticeDataVc, animated: true)
-        }.store(in: &subscriptions)
+    }
+    
+    private func navigateToNoticeData(noticeId: Int, boardId: Int) {
+        let noticeListService = DefaultNoticeService()
+        let noticeListRepository = DefaultNoticeListRepository(service: noticeListService)
+        let fetchNoticeDataUseCase = DefaultFetchNoticeDataUseCase(noticeListRepository: noticeListRepository)
+        let downloadNoticeAttachmentUseCase = DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: noticeListRepository)
+        let fetchHotNoticeArticlesUseCase = DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeDataViewModel(
+            fetchNoticeDataUseCase: fetchNoticeDataUseCase,
+            fetchHotNoticeArticlesUseCase: fetchHotNoticeArticlesUseCase,
+            downloadNoticeAttachmentUseCase: downloadNoticeAttachmentUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
+            noticeId: noticeId,
+            boardId: boardId
+        )
+        let viewController = NoticeDataViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 

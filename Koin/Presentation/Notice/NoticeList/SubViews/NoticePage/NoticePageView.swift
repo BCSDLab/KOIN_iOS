@@ -44,25 +44,25 @@ struct NoticePageView: View {
 extension NoticePageView {
     private func handle(_ event: NoticeListTableRepresentable.Event) {
         switch event {
-        case let .didTapKeyword(keyword):
+        case let .keywordTapped(keyword):
             viewModel.execute(.selectKeyword(keyword.keyword))
-        case .didTapAllKeyword:
+        case .keywordAllTapped:
             viewModel.execute(.didTapAllKeyword)
-        case let .didTapPage(page):
+        case let .pageButtonTapped(page):
             viewModel.execute(.changePage(page))
         case .didScroll:
             viewModel.execute(.logScroll)
-        case .didTapSearch:
+        case .searchButtonTapped:
             onSearchTapped()
-        case .didTapAddKeyword:
+        case .keywordAddTapped:
             onAddKeywordTapped()
-        case .didTapManageKeyword:
+        case .keywordManageTapped:
             onManageKeywordTapped()
-        case let .didTapArticle(noticeId, boardId):
+        case let .noticeRowTapped(noticeId, boardId):
             onArticleTapped(noticeId, boardId)
-        case let .didChangeAddButtonMinX(addButtonMinX):
+        case let .keywordAddButtonDidMove(addButtonMinX):
             self.addButtonMinX = addButtonMinX
-        case let .didChangeContentOffsetY(contentOffsetY):
+        case let .contentOffsetDidChange(contentOffsetY):
             self.contentOffsetY = contentOffsetY
         }
     }

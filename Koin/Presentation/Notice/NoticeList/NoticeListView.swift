@@ -45,7 +45,6 @@ struct NoticeListView: ActionBindableView {
         .onAppear {
             viewModel.execute(.onAppear)
         }
-        .scrollIndicators(.hidden)
     }
 }
 

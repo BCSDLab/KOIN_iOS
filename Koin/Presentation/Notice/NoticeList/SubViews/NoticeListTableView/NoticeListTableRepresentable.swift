@@ -12,16 +12,16 @@ import UIKit
 struct NoticeListTableRepresentable: UIViewRepresentable {
 
     enum Event {
-        case didTapKeyword(NoticeKeywordDto)
-        case didTapAllKeyword
-        case didTapPage(Int)
+        case pageButtonTapped(Int)
+        case noticeRowTapped(noticeId: Int, boardId: Int)
+        case searchButtonTapped
+        case keywordAddTapped
+        case keywordAllTapped
+        case keywordTapped(keyword: NoticeKeywordDto)
+        case keywordManageTapped
         case didScroll
-        case didTapSearch
-        case didTapAddKeyword
-        case didTapManageKeyword
-        case didTapArticle(noticeId: Int, boardId: Int)
-        case didChangeAddButtonMinX(CGFloat)
-        case didChangeContentOffsetY(CGFloat)
+        case keywordAddButtonDidMove(minX: CGFloat)
+        case contentOffsetDidChange(offsetY: CGFloat)
     }
 
     // MARK: - Properties
@@ -91,44 +91,32 @@ extension NoticeListTableRepresentable {
         }
 
         func bind(tableView: NoticeListTableView) {
-            tableView.keywordTapPublisher.sink { [weak self] keyword in
-                self?.onEvent(.didTapKeyword(keyword))
-            }.store(in: &subscriptions)
-
-            tableView.keywordAllButtonTappedPublisher.sink { [weak self] in
-                self?.onEvent(.didTapAllKeyword)
-            }.store(in: &subscriptions)
-
-            tableView.pageBtnPublisher.sink { [weak self] page in
-                self?.onEvent(.didTapPage(page))
-            }.store(in: &subscriptions)
-
-            tableView.isScrolledPublisher.sink { [weak self] in
-                self?.onEvent(.didScroll)
-            }.store(in: &subscriptions)
-
-            tableView.searchButtonTappedPublisher.sink { [weak self] in
-                self?.onEvent(.didTapSearch)
-            }.store(in: &subscriptions)
-
-            tableView.keywordAddBtnTapPublisher.sink { [weak self] in
-                self?.onEvent(.didTapAddKeyword)
-            }.store(in: &subscriptions)
-
-            tableView.manageKeyWordBtnTapPublisher.sink { [weak self] in
-                self?.onEvent(.didTapManageKeyword)
-            }.store(in: &subscriptions)
-
-            tableView.tapNoticePublisher.sink { [weak self] noticeId, boardId in
-                self?.onEvent(.didTapArticle(noticeId: noticeId, boardId: boardId))
-            }.store(in: &subscriptions)
-
-            tableView.addButtonMinXPublisher.sink { [weak self] addButtonMinX in
-                self?.onEvent(.didChangeAddButtonMinX(addButtonMinX))
-            }.store(in: &subscriptions)
-
-            tableView.contentOffsetYPublisher.sink { [weak self] contentOffsetY in
-                self?.onEvent(.didChangeContentOffsetY(contentOffsetY))
+            tableView.eventPublisher.sink { [weak self] event in
+                guard let self else { return }
+                switch event {
+                case let .noticeRowTapped(noticeId, boardId):
+                    onEvent(.noticeRowTapped(noticeId: noticeId, boardId: boardId))
+                case .searchButtonTapped:
+                    onEvent(.searchButtonTapped)
+                case .keywordAddTapped:
+                    onEvent(.keywordAddTapped)
+                case .keywordAllTapped:
+                    onEvent(.keywordAllTapped)
+                case let .keywordTapped(keyword):
+                    onEvent(.keywordTapped(keyword: keyword))
+                case .keywordManageTapped:
+                    onEvent(.keywordManageTapped)
+                case .didScroll:
+                    onEvent(.didScroll)
+                case let .keywordAddButtonDidMove(minX):
+                    onEvent(.keywordAddButtonDidMove(minX: minX))
+                case let .contentOffsetDidChange(offsetY):
+                    onEvent(.contentOffsetDidChange(offsetY: offsetY))
+                case let .pageButtonTapped(page):
+                    onEvent(.pageButtonTapped(page))
+                case .nextPageButtonTapped:
+                    break
+                }
             }.store(in: &subscriptions)
         }
     }
