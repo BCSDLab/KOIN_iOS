@@ -43,11 +43,10 @@ struct NoticeListView: ActionBindableView {
                 viewModel.execute(.didShowToast)
             }
         }
-    }
-
-    // MARK: - Public
-    func onAppear() {
-        viewModel.execute(.onAppear)
+        .onAppear {
+            viewModel.execute(.onAppear)
+        }
+        
     }
 }
 

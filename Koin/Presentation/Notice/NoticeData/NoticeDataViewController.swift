@@ -185,7 +185,18 @@ extension NoticeDataViewController {
                 return
             }
             let viewControllersToKeep = Array(navigationController.viewControllers.prefix(upTo: noticeDataIndex))
-            let noticeListViewController = NoticeListHostingController.make()
+            let noticeService = DefaultNoticeService()
+            let noticeListRepository = DefaultNoticeListRepository(service: noticeService)
+            let fetchNoticeArticlesUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+            let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+            let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+            let viewModel = NoticeViewModel(
+                fetchNoticeArticlesUseCase: fetchNoticeArticlesUseCase,
+                fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+                logAnalyticsEventUseCase: logAnalyticsEventUseCase
+            )
+            let noticeListView = NoticeListView(viewModel: viewModel)
+            let noticeListViewController = NoticeListHostingController(rootView: noticeListView)
             navigationController.setViewControllers(
                 viewControllersToKeep + [noticeListViewController, self],
                 animated: false

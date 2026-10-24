@@ -24,11 +24,6 @@ final class NoticeListHostingController: UIHostingController<NoticeListView>, Ho
         view.backgroundColor = .appColor(.neutral0)
     }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        rootView.onAppear()
-    }
-
     // MARK: - Execute
     func execute(action: RootView.Action) {
         switch action {
@@ -41,24 +36,6 @@ final class NoticeListHostingController: UIHostingController<NoticeListView>, Ho
         case .navigateToManageKeyword:
             navigateToManageKeyword()
         }
-    }
-}
-
-extension NoticeListHostingController {
-    static func make(noticeListType: NoticeListType = .all) -> NoticeListHostingController {
-        let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
-        let fetchNoticeArticlesUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: repository)
-        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: repository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
-            repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
-        )
-        let viewModel = NoticeViewModel(
-            fetchNoticeArticlesUseCase: fetchNoticeArticlesUseCase,
-            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            noticeListType: noticeListType
-        )
-        return NoticeListHostingController(rootView: NoticeListView(viewModel: viewModel))
     }
 }
 

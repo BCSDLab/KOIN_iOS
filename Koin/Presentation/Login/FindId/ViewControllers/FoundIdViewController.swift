@@ -119,7 +119,7 @@ extension FoundIdViewController {
     private func makeHomeTabBarController() -> HomeTabBarController {
         let homeViewController = makeHomeHostingController()
         let categoryViewController = makeCategoryHostingController()
-        let noticeViewController = NoticeListHostingController.make()
+        let noticeViewController = makeNoticeListHostingController()
         let profileViewController = makeProfileHostingController()
         
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
@@ -190,6 +190,21 @@ extension FoundIdViewController {
                 checkLoginUseCase: checkLoginUseCase,
                 logAnalyticsEventUseCase: logAnalyticsEventUseCase))
         return CategoryHostingController(rootView: categoryRootView)
+    }
+
+    private func makeNoticeListHostingController() -> UIViewController {
+        let noticeService = DefaultNoticeService()
+        let noticeListRepository = DefaultNoticeListRepository(service: noticeService)
+        let fetchNoticeArticlesUseCase = DefaultFetchNoticeArticlesUseCase(noticeListRepository: noticeListRepository)
+        let fetchMyKeywordUseCase = DefaultFetchNotificationKeywordUseCase(noticeListRepository: noticeListRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = NoticeViewModel(
+            fetchNoticeArticlesUseCase: fetchNoticeArticlesUseCase,
+            fetchMyKeywordUseCase: fetchMyKeywordUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let noticeListView = NoticeListView(viewModel: viewModel)
+        return NoticeListHostingController(rootView: noticeListView)
     }
     
     private func makeProfileHostingController() -> UIViewController {
