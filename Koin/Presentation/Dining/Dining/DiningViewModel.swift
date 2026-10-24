@@ -181,7 +181,6 @@ extension DiningViewModel {
     private func changeSelectedDiningType(_ type: DiningType) {
         if selectedDiningType != type {
             selectedDiningType = type
-            makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.menuTime, category: .click, value: type.name)
         }
     }
 }

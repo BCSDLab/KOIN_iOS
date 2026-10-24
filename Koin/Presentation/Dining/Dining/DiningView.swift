@@ -128,6 +128,7 @@ extension DiningView {
             types: DiningType.allCases,
             selectedType: viewModel.selectedDiningType
         ) { type in
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .click, type.name))
             viewModel.execute(.changeSelectedDiningType(type))
         }
         .applySketchShadow(
