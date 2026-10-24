@@ -9,14 +9,14 @@ import SwiftUI
 
 struct NoticeKeywordSearchButton: View {
     
-    let searchButtonTapped: ()->Void
+    let onSearchButtonTapped: ()->Void
     
-    init(action searchButtonTapped: @escaping () -> Void) {
-        self.searchButtonTapped = searchButtonTapped
+    init(action onSearchButtonTapped: @escaping () -> Void) {
+        self.onSearchButtonTapped = onSearchButtonTapped
     }
     
     var body: some View {
-        Button(action: searchButtonTapped) {
+        Button(action: onSearchButtonTapped) {
             Image.appImage(asset: .noticeSearch)
                 .renderingMode(.template)
                 .foregroundStyle(Color.appColor(.neutral500))

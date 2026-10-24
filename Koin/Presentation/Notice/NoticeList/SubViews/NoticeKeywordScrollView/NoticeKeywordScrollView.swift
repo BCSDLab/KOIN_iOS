@@ -64,25 +64,21 @@ struct NoticeKeywordScrollView: View {
                 
                 NoticeKeywordManageButton(action: manageButtonTapped)
                 
-                NoticeKeywordAllButton(
-                    action: {
-                        keywordAllButtonTapped()
-                        store.selectedKeyword = nil
-                    },
-                    isSelected: store.selectedKeyword == nil
-                )
+                NoticeKeywordAllButton(isSelected: store.selectedKeyword == nil) {
+                    keywordAllButtonTapped()
+                    store.selectedKeyword = nil
+                }
                 
                 switch store.noticeKeywordList.isEmpty {
                 case false:
                     ForEach(store.noticeKeywordList) { keyword in
                         NoticeKeywordButton(
-                            action: {
-                                keywordButtonTapped(keyword)
-                                store.selectedKeyword = keyword
-                            },
                             isSelected: store.selectedKeyword == keyword,
                             keyword: keyword.keyword
-                        )
+                        ) {
+                            keywordButtonTapped(keyword)
+                            store.selectedKeyword = keyword
+                        }
                     }
                 case true:
                     NoticeKeywordAddButton(action: addButtonTapped)
