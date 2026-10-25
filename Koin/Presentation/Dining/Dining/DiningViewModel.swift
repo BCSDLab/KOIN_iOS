@@ -180,7 +180,9 @@ extension DiningViewModel {
                         fetchCurrnetDiningItemsTask = nil
                     }
                 }
-                currentDiningItems = try await fetchCurrentDiningItemsUseCase.execute()
+                let result = try await fetchCurrentDiningItemsUseCase.execute()
+                guard !Task.isCancelled else { return }
+                currentDiningItems = result
             } catch {
                 guard !Task.isCancelled else { return }
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
