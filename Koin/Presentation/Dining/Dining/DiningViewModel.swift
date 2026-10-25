@@ -25,6 +25,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case didTapShare(DiningItem)
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
+        case didPresentNotiBottomSheet
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
@@ -85,11 +86,6 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         initializeDates()
         fetchDiningDate(selectedDate: selectedDate, selectedDiningType: selectedDiningType)
-        
-        #if DEBUG
-        shouldShowShareTooltip = true
-        shouldShowReportTooltip = true
-        #endif
     }
     
     func execute(_ input: Input) {
@@ -120,6 +116,8 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
             changeNoti(isOn: isOn, type: .diningSoldOut)
         case let .didTapImageUploadSwitch(isOn):
             changeNoti(isOn: isOn, type: .diningImageUpload)
+        case .didPresentNotiBottomSheet:
+            didPresentNotiBottomSheet()
         case let .logEvent(label, category, value):
             makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
@@ -208,6 +206,11 @@ extension DiningViewModel {
     private func hideReportTooltip() {
         UserDefaults.standard.set(true, forKey: "shouldHideReportTooltip")
         shouldShowReportTooltip = false
+    }
+    
+    private func didPresentNotiBottomSheet() {
+        UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
+        shouldPresentNotiBottomSheet = false
     }
 }
 

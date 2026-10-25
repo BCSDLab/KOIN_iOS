@@ -74,6 +74,7 @@ struct DiningView: ActionBindableView {
             if let diningNoti = viewModel.diningNoti,
                viewModel.shouldPresentNotiBottomSheet {
                 sendAction(.presentNotiBottomSheet(initialValue: diningNoti))
+                viewModel.execute(.didPresentNotiBottomSheet)
             }
         }
     }
