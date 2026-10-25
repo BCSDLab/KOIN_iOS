@@ -77,6 +77,7 @@ struct DiningView: ActionBindableView {
                 viewModel.execute(.didPresentNotiBottomSheet)
             }
         }
+        .loadingOverlay(viewModel.isLoading)
     }
     
     // MARK: - Public
