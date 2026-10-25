@@ -25,6 +25,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case didTapShare(DiningItem)
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
+        case didPresentNotiBottomSheet
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
     
@@ -41,6 +42,8 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private var fetchDiningListTask: Task<Void, Never>?
+    private var fetchCurrnetDiningItemsTask: Task<Void, Never>?
+    private var assignReportABTestTask: Task<Void, Never>?
     
     // MARK: - State
     private(set) var dates: [Date] = []
@@ -54,6 +57,11 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     private(set) var shouldShowReportTooltip = !UserDefaults.standard.bool(forKey: "shouldHideReportTooltip")
     private(set) var shouldPresentNotiBottomSheet = !UserDefaults.standard.bool(forKey: "hasShownBottomSheet") && UserDataManager.shared.isLoggedIn
     private(set) var diningNoti: DiningNoti?
+    var isLoading: Bool {
+        fetchDiningListTask != nil
+        || fetchCurrnetDiningItemsTask != nil
+        || assignReportABTestTask != nil
+    }
     
     // MARK: - AbTest
     private(set) var reportAbTest: DiningReportAbTest?
@@ -85,11 +93,6 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         initializeDates()
         fetchDiningDate(selectedDate: selectedDate, selectedDiningType: selectedDiningType)
-        
-        #if DEBUG
-        shouldShowShareTooltip = true
-        shouldShowReportTooltip = true
-        #endif
     }
     
     func execute(_ input: Input) {
@@ -120,6 +123,8 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
             changeNoti(isOn: isOn, type: .diningSoldOut)
         case let .didTapImageUploadSwitch(isOn):
             changeNoti(isOn: isOn, type: .diningImageUpload)
+        case .didPresentNotiBottomSheet:
+            didPresentNotiBottomSheet()
         case let .logEvent(label, category, value):
             makeLogAnalyticsEvent(label: label, category: category, value: value)
         }
@@ -151,19 +156,35 @@ extension DiningViewModel {
         
         fetchDiningListTask = Task {
             do {
+                defer {
+                    if !Task.isCancelled {
+                        fetchDiningListTask = nil
+                    }
+                }
                 let result = try await fetchDiningListUseCase.execute(date: selectedDate).firstValue()
                 guard !Task.isCancelled else { return }
                 diningLists = result
             } catch {
+                guard !Task.isCancelled else { return }
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
     }
     private func fetchCurrnetDiningItems() {
-        Task {
+        fetchCurrnetDiningItemsTask?.cancel()
+        
+        fetchCurrnetDiningItemsTask = Task {
             do {
-                currentDiningItems = try await fetchCurrentDiningItemsUseCase.execute()
+                defer {
+                    if !Task.isCancelled {
+                        fetchCurrnetDiningItemsTask = nil
+                    }
+                }
+                let result = try await fetchCurrentDiningItemsUseCase.execute()
+                guard !Task.isCancelled else { return }
+                currentDiningItems = result
             } catch {
+                guard !Task.isCancelled else { return }
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
@@ -187,8 +208,15 @@ extension DiningViewModel {
 
 extension DiningViewModel {
     private func assignReportABTest() {
-        Task {
+        assignReportABTestTask?.cancel()
+        
+        assignReportABTestTask = Task {
             do {
+                defer {
+                    if !Task.isCancelled {
+                        assignReportABTestTask = nil
+                    }
+                }
                 let request = AssignAbTestRequest(title: "icon_location")
                 let result = try await assignAbTestUseCase.execute(requestModel: request).firstValue()
                 reportAbTest = DiningReportAbTest(from: result.variableName.rawValue)
@@ -196,7 +224,9 @@ extension DiningViewModel {
                     makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningAbtestExposure, category: .exposure, value: reportAbTest.logValue)
                 }
             } catch {
-                toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                guard !Task.isCancelled else { return }
+                let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
+                print(errorMessage)
             }
         }
     }
@@ -208,6 +238,11 @@ extension DiningViewModel {
     private func hideReportTooltip() {
         UserDefaults.standard.set(true, forKey: "shouldHideReportTooltip")
         shouldShowReportTooltip = false
+    }
+    
+    private func didPresentNotiBottomSheet() {
+        UserDefaults.standard.set(true, forKey: "hasShownBottomSheet")
+        shouldPresentNotiBottomSheet = false
     }
 }
 
@@ -237,6 +272,7 @@ extension DiningViewModel {
                 toastMessage = "\(selectedItem.place.name) 품절을 제보했습니다."
                 makeReportLogEvent(category: .submit, selectedItem: selectedItem)
             } catch {
+                guard !Task.isCancelled else { return }
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
                 makeReportLogEvent(category: .fail, selectedItem: selectedItem)
             }
@@ -294,6 +330,7 @@ extension DiningViewModel {
             } catch let error as ErrorResponse where error.statusCode == 401 {
                 return
             } catch {
+                guard !Task.isCancelled else { return }
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
@@ -309,6 +346,7 @@ extension DiningViewModel {
                     type: type
                 ).firstValue()
             } catch {
+                guard !Task.isCancelled else { return }
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
             }
         }
