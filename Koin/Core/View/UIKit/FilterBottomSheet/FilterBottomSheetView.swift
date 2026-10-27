@@ -143,8 +143,6 @@ extension FilterBottomSheetView {
     private func setUpStyles() {
         self.do {
             $0.backgroundColor = .appColor(.neutral0)
-            $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            $0.layer.cornerRadius = 32
         }
         
         titleLabel.do {
