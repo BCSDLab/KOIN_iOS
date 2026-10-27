@@ -492,7 +492,6 @@
 		7CC42B702F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B6F2F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift */; };
 		7CC42B762F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */; };
 		7CC42B7B2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */; };
-		7CC42B832F5D307C00940CE1 /* BottomSheetViewControllerB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */; };
 		7CC42B892F5D85F700940CE1 /* CallVanChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B882F5D85F700940CE1 /* CallVanChat.swift */; };
 		7CC42B8F2F5DCE7400940CE1 /* CallVanChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */; };
 		7CC42B912F5DCE7D00940CE1 /* CallVanChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B902F5DCE7D00940CE1 /* CallVanChatViewModel.swift */; };
@@ -1749,7 +1748,6 @@
 		7CC42B6F2F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownViewTimeDelegate.swift; sourceTree = "<group>"; };
 		7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownViewDateDelegate.swift; sourceTree = "<group>"; };
 		7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostPlaceBottomSheetView.swift; sourceTree = "<group>"; };
-		7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewControllerB.swift; sourceTree = "<group>"; };
 		7CC42B882F5D85F700940CE1 /* CallVanChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChat.swift; sourceTree = "<group>"; };
 		7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatViewController.swift; sourceTree = "<group>"; };
 		7CC42B902F5DCE7D00940CE1 /* CallVanChatViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatViewModel.swift; sourceTree = "<group>"; };
@@ -3195,7 +3193,6 @@
 				7C333E7A302E280C009D2B89 /* KoinModalViewController */,
 				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
 				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
-				7CC42B822F5D307C00940CE1 /* BottomSheetViewControllerB.swift */,
 				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
 				7CC42B042F56A78600940CE1 /* PaddingLabel.swift */,
 				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
@@ -7046,7 +7043,6 @@
 				7C61D3132F212DFA005FAC3A /* FetchLostItemDataUseCase.swift in Sources */,
 				7CED92332EF2D25900457128 /* DIContainer.swift in Sources */,
 				7CED92342EF2D25900457128 /* DIContainer+LostItem.swift in Sources */,
-				7CC42B832F5D307C00940CE1 /* BottomSheetViewControllerB.swift in Sources */,
 				7CED92352EF2D25900457128 /* DIConatiner+Login.swift in Sources */,
 				7CC42B052F56A78600940CE1 /* PaddingLabel.swift in Sources */,
 				7C016571300B4AB70013DD7B /* DepartmentViewModel.swift in Sources */,
