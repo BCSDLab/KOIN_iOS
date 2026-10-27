@@ -48,18 +48,18 @@ extension RecruitMyPostFilter {
 }
 
 extension RecruitMyPostFilter {
-    static func logEvent(groupIndex: Int, title: String) -> (label: EventParameter.EventLabel.Campus, value: String)? {
+    static func logEvent(groupIndex: Int, title: String) -> (label: EventParameter.EventLabel.Campus.Recruit, value: String)? {
         switch groupIndex {
         case 0:
             guard let state = RecruitState(rawValue: title) else {
                 return nil
             }
-            return (.teamRecruitmentCreatedPostFilterStatus, state == .closed ? "모집 마감" : state.logValue)
+            return (.recruitCreatedPostFilterStatus, state == .closed ? "모집 마감" : state.logValue)
         case 1:
             guard let sort = RecruitListSort(rawValue: title) else {
                 return nil
             }
-            return (.teamRecruitmentCreatedPostFilterSort, sort.logValue)
+            return (.recruitCreatedPostFilterSort, sort.logValue)
         default:
             return nil
         }

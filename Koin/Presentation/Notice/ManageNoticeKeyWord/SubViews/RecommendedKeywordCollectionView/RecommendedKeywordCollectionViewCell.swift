@@ -15,7 +15,6 @@ final class RecommendedKeywordCollectionViewCell: UICollectionViewCell {
     let recommendedKeywordPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - UI Components
- 
     private let keywordLabel = UILabel().then {
         $0.textColor = .appColor(.neutral500)
         $0.font = .appFont(.pretendardMedium, size: 14)

@@ -17,6 +17,7 @@ final class RecruitChatViewController: UIViewController {
     private let viewModel: RecruitChatViewModel
     private let inputSubject = PassthroughSubject<RecruitChatViewModel.Input, Never>()
     private var subscriptions = Set<AnyCancellable>()
+    var roomSource: RecruitChatViewModel.RoomSource { viewModel.roomSource }
 
     // MARK: - UI Components
     private let chatListView = ChatListView()
@@ -120,6 +121,8 @@ extension RecruitChatViewController {
            let currentMemberCount = data.currentMemberCount,
            let maximumMemberCount = data.maximumMemberCount {
             participantsLabel.text = "\(currentMemberCount)/\(maximumMemberCount)"
+            peopleImageView.isHidden = false
+            participantsLabel.isHidden = false
         } else {
             peopleImageView.isHidden = true
             participantsLabel.isHidden = true

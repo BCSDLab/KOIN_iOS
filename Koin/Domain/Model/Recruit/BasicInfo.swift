@@ -20,6 +20,9 @@ extension BasicInfo {
               let studentNumber, !studentNumber.isEmpty else {
             return false
         }
+        guard StudentNumberInput.isValid(studentNumber) else {
+            return false
+        }
         return true
     }
 }

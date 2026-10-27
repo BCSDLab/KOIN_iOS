@@ -157,7 +157,7 @@ private extension CategoryView {
         }
     }
 
-    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus, value: String)? {
+    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus.Home, value: String)? {
         switch action {
         case .showRecruit:
             return nil // TODO: 로깅 추가

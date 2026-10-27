@@ -15,6 +15,7 @@ struct ChatMessageRowModel {
     let showsProfile: Bool
     let isLeftUser: Bool
     let profileImage: UIImage?
+    let unreadCount: String?
 }
 
 enum ChatMessageAlignment {

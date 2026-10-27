@@ -39,7 +39,7 @@ final class RecruitChatViewModel: ViewModelProtocol {
     
     private var pollingTask: Task<Void, Never>?
     
-    private let roomSource: RoomSource
+    let roomSource: RoomSource
     private var chatRoomId: Int?
     private var recruitmentId: Int {
         switch roomSource {

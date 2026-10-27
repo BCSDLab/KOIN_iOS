@@ -9,13 +9,9 @@ import SwiftUI
 
 struct NoticeKeywordAllButton: View {
     
-    let allButtonTapped: ()->Void
+    // MARK: - Properties
+    let onAllButtonTapped: ()->Void
     let isSelected: Bool
-    
-    init(action allButtonTapped: @escaping () -> Void, isSelected: Bool) {
-        self.allButtonTapped = allButtonTapped
-        self.isSelected = isSelected
-    }
     
     var font: Font {
         isSelected ? Font.appFont(.pretendardBold, size: 14) : Font.appFont(.pretendardMedium, size: 14)
@@ -26,9 +22,16 @@ struct NoticeKeywordAllButton: View {
     var backgroundStyle: Color {
         isSelected ? Color.appColor(.new600) : Color.appColor(.neutral100)
     }
-
+    
+    // MARK: - Initializer
+    init(isSelected: Bool, action onAllButtonTapped: @escaping () -> Void) {
+        self.isSelected = isSelected
+        self.onAllButtonTapped = onAllButtonTapped
+    }
+    
+    // MARK: - Body
     var body: some View {
-        Button(action: allButtonTapped) {
+        Button(action: onAllButtonTapped) {
             Text("모두보기")
                 .font(font)
                 .foregroundStyle(foregroundStyle)

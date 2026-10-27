@@ -7,23 +7,29 @@
 
 import Combine
 import UIKit
+import Foundation
 
 final class NoticeListTableView: UITableView {
+    
+    enum Event {
+        case noticeRowTapped(noticeId: Int, boardId: Int)
+        case searchButtonTapped
+        case keywordAddTapped
+        case keywordAllTapped
+        case keywordTapped(keyword: NoticeKeywordDto)
+        case keywordManageTapped
+        case didScroll
+        case keywordAddButtonDidMove(minX: CGFloat)
+        case contentOffsetDidChange(offsetY: CGFloat)
+        case pageButtonTapped(Int)
+        case nextPageButtonTapped(Int)
+    }
+    
     // MARK: - Properties
     private var noticeArticleList: [NoticeArticleDto] = [] 
     private var pageInfos: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
-    let pageBtnPublisher = PassthroughSubject<Int, Never>()
-    let tapNoticePublisher = PassthroughSubject<(Int, Int), Never>()
-    let searchButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let keywordAddBtnTapPublisher = PassthroughSubject<(), Never>()
-    let keywordAllButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    let keywordTapPublisher = PassthroughSubject<NoticeKeywordDto, Never>()
-    let tapListLoadButtnPublisher = PassthroughSubject<Int, Never>()
-    let manageKeyWordBtnTapPublisher = PassthroughSubject<(), Never>()
-    let isScrolledPublisher = PassthroughSubject<Void, Never>()
     
-    let addButtonMinXPublisher = PassthroughSubject<CGFloat, Never>()
-    let contentOffsetYPublisher = PassthroughSubject<CGFloat, Never>()
+    let eventPublisher = PassthroughSubject<Event, Never>()
     
     private var scrollDirection: ScrollLog = .scrollToDown
     private var subscriptions = Set<AnyCancellable>()
@@ -32,12 +38,9 @@ final class NoticeListTableView: UITableView {
     private var headerCancellables = Set<AnyCancellable>()
     
     // MARK: - UI Components
-    private lazy var headerView = NoticeListHeaderView().then { _ in
-    }
-    private lazy var footerView = NoticeListTableViewFooter().then { _ in
-    }
-    private lazy var searchFooterView = NoticeSearchTableViewFooter().then { _ in
-    }
+    private lazy var headerView = NoticeListHeaderView()
+    private lazy var footerView = NoticeListTableViewFooter()
+    private lazy var searchFooterView = NoticeSearchTableViewFooter()
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -50,40 +53,81 @@ final class NoticeListTableView: UITableView {
     }
     
     private func commonInit() {
-        register(NoticeListTableViewCell.self, forCellReuseIdentifier: NoticeListTableViewCell.identifier)
-        register(NoticeListTableViewFooter.self, forHeaderFooterViewReuseIdentifier: NoticeListTableViewFooter.identifier)
-        register(NoticeSearchTableViewFooter.self, forHeaderFooterViewReuseIdentifier: NoticeSearchTableViewFooter.identifier)
-        register(NoticeListHeaderView.self, forHeaderFooterViewReuseIdentifier: NoticeListHeaderView.identifier)
+        register(
+            NoticeListTableViewCell.self,
+            forCellReuseIdentifier: NoticeListTableViewCell.identifier
+        )
+        register(
+            NoticeListTableViewFooter.self,
+            forHeaderFooterViewReuseIdentifier: NoticeListTableViewFooter.identifier
+        )
+        register(
+            NoticeSearchTableViewFooter.self,
+            forHeaderFooterViewReuseIdentifier: NoticeSearchTableViewFooter.identifier
+        )
+        register(
+            NoticeListHeaderView.self,
+            forHeaderFooterViewReuseIdentifier: NoticeListHeaderView.identifier
+        )
         dataSource = self
         delegate = self
         estimatedRowHeight = 110
         sectionHeaderHeight = 0
         sectionHeaderTopPadding = 0
         separatorInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        showsVerticalScrollIndicator = false
     }
 
-    func updateNoticeList(noticeArticleList: [NoticeArticleDto], pageInfos: NoticeListPages) {
+    func configure(
+        noticeArticleList: [NoticeArticleDto],
+        pageInfos: NoticeListPages,
+        animated: Bool
+    ) {
         self.noticeArticleList = noticeArticleList
         self.pageInfos = pageInfos
         isForSearch = false
         let indexSet = IndexSet(integer: 0)
-        reloadSections(indexSet, with: .automatic)
+        reloadSections(indexSet, with: animated ? .automatic : .none)
     }
     
-    func updateSearchedResult(noticeArticleList: [NoticeArticleDto], isLastPage: Bool, isNewKeyword: Bool) {
-        if isNewKeyword {
-            self.noticeArticleList = []
-        }
-        self.noticeArticleList.append(contentsOf: noticeArticleList)
+    func updateSearchedResult(
+        noticeArticleList: [NoticeArticleDto],
+        isLastPage: Bool,
+        isNewKeyword: Bool
+    ) {
         isForSearch = true
         isLastSearchedPage = isLastPage
-        let indexSet = IndexSet(integer: 0)
-        reloadSections(indexSet, with: .automatic)
-        let IndexPath = IndexPath(row: self.noticeArticleList.count - 1, section: 0)
-        scrollToRow(at: IndexPath, at: .bottom, animated: true)
+        
+        performBatchUpdates { [weak self] in
+            guard let self else { return }
+            
+            if isNewKeyword {
+                self.noticeArticleList = noticeArticleList
+                reloadSections(IndexSet(integer: 0), with: .automatic)
+            } else {
+                let firstRow = self.noticeArticleList.count
+                self.noticeArticleList.append(contentsOf: noticeArticleList)
+                let lastRow = self.noticeArticleList.count - 1
+                
+                guard !noticeArticleList.isEmpty else { return }
+                
+                let insertedIndexpaths: [IndexPath] = (firstRow...lastRow).map {
+                    IndexPath(row: $0, section: 0)
+                }
+                insertRows(at: insertedIndexpaths, with: .automatic)
+            }
+        } completion: { [weak self] _ in
+            guard let self,
+                  !self.noticeArticleList.isEmpty else {
+                return
+            }
+            let lastIndexPath = IndexPath(row: self.noticeArticleList.count - 1, section: 0)
+            scrollToRow(at: lastIndexPath, at: .bottom, animated: true)
+        }
     }
     
-    func updateKeywordList(keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
+    func configure(
+        keywordList: [NoticeKeywordDto], selectedKeyword: NoticeKeywordDto?) {
         headerView.updateKeyWordsList(keywordList: keywordList, selectedKeyword: selectedKeyword)
         reloadData()
     }
@@ -95,7 +139,7 @@ extension NoticeListTableView: UIScrollViewDelegate {
         let screenHeight = self.frame.height
         if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.7 && scrollDirection != .scrollChecked {
             scrollDirection = .scrollChecked
-            isScrolledPublisher.send()
+            eventPublisher.send(.didScroll)
         }
     }
     
@@ -112,7 +156,7 @@ extension NoticeListTableView: UIScrollViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        contentOffsetYPublisher.send(scrollView.contentOffset.y)
+        eventPublisher.send(.contentOffsetDidChange(offsetY: scrollView.contentOffset.y))
     }
 }
 
@@ -128,22 +172,22 @@ extension NoticeListTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         headerCancellables.removeAll()
         headerView.searchButtonTappedPublisher.sink { [weak self] in
-            self?.searchButtonTappedPublisher.send()
+            self?.eventPublisher.send(.searchButtonTapped)
         }.store(in: &headerCancellables)
         headerView.keywordAddBtnTapPublisher.sink { [weak self] in
-            self?.keywordAddBtnTapPublisher.send()
+            self?.eventPublisher.send(.keywordAddTapped)
         }.store(in: &headerCancellables)
         headerView.keywordAllButtonTappedPublisher.sink { [weak self] in
-            self?.keywordAllButtonTappedPublisher.send()
+            self?.eventPublisher.send(.keywordAllTapped)
         }.store(in: &headerCancellables)
         headerView.keywordTapPublisher.sink { [weak self] keyword in
-            self?.keywordTapPublisher.send(keyword)
+            self?.eventPublisher.send(.keywordTapped(keyword: keyword))
         }.store(in: &headerCancellables)
         headerView.manageKeyWordBtnTapPublisher.sink { [weak self] in
-            self?.manageKeyWordBtnTapPublisher.send()
+            self?.eventPublisher.send(.keywordManageTapped)
         }.store(in: &headerCancellables)
-        headerView.noticeKeywordScrollView.addButtonMinXPublisher.sink { [weak self] addButtonMinX in
-            self?.addButtonMinXPublisher.send(addButtonMinX)
+        headerView.noticeKeywordScrollView.addButtonMinXPublisher.sink { [weak self] minX in
+            self?.eventPublisher.send(.keywordAddButtonDidMove(minX: minX))
         }.store(in: &headerCancellables)
         return headerView
     }
@@ -159,7 +203,10 @@ extension NoticeListTableView: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tapNoticePublisher.send((noticeArticleList[indexPath.row].id, noticeArticleList[indexPath.row].boardId))
+        eventPublisher.send(.noticeRowTapped(
+            noticeId: noticeArticleList[indexPath.row].id,
+            boardId: noticeArticleList[indexPath.row].boardId
+        ))
     }
 }
 
@@ -169,7 +216,7 @@ extension NoticeListTableView: UITableViewDelegate {
             footerView.subscriptions.removeAll()
             footerView.configure(pageInfo: pageInfos)
             footerView.tapBtnPublisher.sink { [weak self] page in
-                self?.pageBtnPublisher.send(page)
+                self?.eventPublisher.send(.pageButtonTapped(page))
             }.store(in: &footerView.subscriptions)
             return footerView
         }
@@ -179,7 +226,7 @@ extension NoticeListTableView: UITableViewDelegate {
                 .sink { [weak self] in
                     guard let self = self else { return }
                     let page = (self.noticeArticleList.count) / 5
-                    self.tapListLoadButtnPublisher.send(page + 1)
+                    self.eventPublisher.send(.nextPageButtonTapped(page + 1))
                 }.store(in: &searchFooterView.subscriptions)
             
             return searchFooterView

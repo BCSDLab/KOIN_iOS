@@ -27,7 +27,7 @@ final class NewBannerViewController: UIViewController {
             self?.setCountLabel(index: index, totalCount: totalCount)
         },
         onBannerSwiped: { [weak self] banner in
-            self?.onLogEvent(EventParameter.EventLabel.Campus.mainNextModal, .swipe, banner.title)
+            self?.onLogEvent(EventParameter.EventLabel.Campus.Home.mainNextModal, .swipe, banner.title)
         }
     )
     private let countLabel = UILabel()
@@ -71,7 +71,7 @@ extension NewBannerViewController {
         UserDefaults.standard.set(Date(), forKey: "noShowBanner")
         
         if let title = collectionView.currentTitle {
-            onLogEvent(EventParameter.EventLabel.Campus.mainModalHide7d, .click, title)
+            onLogEvent(EventParameter.EventLabel.Campus.Home.mainModalHide7d, .click, title)
         }
     }
 
@@ -79,7 +79,7 @@ extension NewBannerViewController {
         dismiss(animated: true)
         
         if let title = collectionView.currentTitle {
-            onLogEvent(EventParameter.EventLabel.Campus.mainModalClose, .click, title)
+            onLogEvent(EventParameter.EventLabel.Campus.Home.mainModalClose, .click, title)
         }
     }
 }

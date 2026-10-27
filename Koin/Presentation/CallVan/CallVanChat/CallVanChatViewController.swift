@@ -17,6 +17,7 @@ final class CallVanChatViewController: UIViewController {
     private let inputSubject = PassthroughSubject<CallVanChatViewModel.Input, Never>()
     private let viewModel: CallVanChatViewModel
     private var subscriptions: Set<AnyCancellable> = []
+    var postId: Int { viewModel.postId }
     
     // MARK: - TitleView
     private lazy var titleLabel = UILabel()
@@ -74,7 +75,7 @@ final class CallVanChatViewController: UIViewController {
                 self?.inputSubject.send(.sendMessage(message))
                 self?.inputSubject.send(
                     .logEvent(
-                        label: EventParameter.EventLabel.Campus.callvanChatSend,
+                        label: EventParameter.EventLabel.Campus.CallVan.callvanChatSend,
                         category: .click,
                         value: ""
                     )

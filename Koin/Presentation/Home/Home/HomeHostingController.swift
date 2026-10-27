@@ -53,17 +53,37 @@ extension HomeHostingController {
     private func makeDiningViewController() -> UIViewController {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
-        let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let diningRepository = DefaultDiningRepository(
+            diningService: diningService,
+            shareService: shareService
+        )
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let abTestRepository = DefaultAbTestRepository(service: DefaultAbTestService())
+        let notiReposotiry = DefaultNotiRepository(service: DefaultNotiService())
         let dateProvider = DefaultDateProvider()
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
         let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
-        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
-        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
-        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(fetchDiningListUseCase: fetchDiningListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase, dateProvder: dateProvider, shareMenuListUseCase: shareMenuListUseCase, changeNotiUseCase: changeNotiUseCase, fetchNotiListUsecase: fetchNotiListUseCase, changeNotiDetailUseCase: changeNotiDetailUseCase)
-        return DiningViewController(viewModel: viewModel)
+        let fetchDiningNotiUseCase = DefaultFetchDiningNotiUseCase(notiRepository: notiReposotiry)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiReposotiry)
+        let fetchCurrentDiningItemsUseCase = DefaultFetchCurrentDiningItemsUseCase(repository: diningRepository)
+        let reportSoldoutDiningUseCase = DefaultReportSoldoutDiningUseCase(repository: diningRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let assignAbTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: abTestRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = DiningViewModel(
+            dateProvider: dateProvider,
+            fetchDiningListUseCase: fetchDiningListUseCase,
+            shareMenuListUseCase: shareMenuListUseCase,
+            fetchDiningNotiUseCase: fetchDiningNotiUseCase,
+            changeNotiUseCase: changeNotiUseCase,
+            fetchCurrentDiningItemsUseCase: fetchCurrentDiningItemsUseCase,
+            reportSoldoutDiningUseCase: reportSoldoutDiningUseCase,
+            uploadFileUseCase: uploadFileUseCase,
+            assignAbTestUseCase: assignAbTestUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let rootView = DiningView(viewModel: viewModel)
+        return DiningHostingController(rootView: rootView)
     }
 
     private func makeShopViewController() -> UIViewController {
@@ -188,11 +208,10 @@ extension HomeHostingController {
         )
         bottomSheetViewController.modalPresentationStyle = .overFullScreen
         bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        logAnalyticsEventUseCase.logEvent(
-            name: "CAMPUS",
-            label: "main_modal_entry",
-            value: banner.banners.first?.title ?? "",
-            category: "entry"
+        logAnalyticsEventUseCase.execute(
+            label: EventParameter.EventLabel.Campus.Home.mainModalEntry,
+            category: .entry,
+            value: banner.banners.first?.title ?? ""
         )
         present(bottomSheetViewController, animated: true)
     }
@@ -202,11 +221,10 @@ extension HomeHostingController {
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
             repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
         )
-        logAnalyticsEventUseCase.logEvent(
-            name: "CAMPUS",
-            label: "main_modal",
-            value: banner.title,
-            category: "click"
+        logAnalyticsEventUseCase.execute(
+            label: EventParameter.EventLabel.Campus.Home.mainModal,
+            category: .click,
+            value: banner.title
         )
 
         if let version = banner.version,

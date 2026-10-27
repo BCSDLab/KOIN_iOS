@@ -142,26 +142,26 @@ extension RecruitMyPostApplicantView {
 
 extension RecruitMyPostApplicantView {
     private func makeLogAnalyticsEvent(_ decision: RecruitApplicantDecision) {
-        let label: EventParameter.EventLabel.Campus
+        let label: EventParameter.EventLabel.Campus.Recruit
         switch decision {
         case .accepted:
-            label = .teamRecruitmentCreatedPostApplicantApprove
+            label = .recruitCreatedPostApplicantApprove
         case .denied:
-            label = .teamRecruitmentCreatedPostApplicantReject
+            label = .recruitCreatedPostApplicantReject
         }
         viewModel.execute(.logEvent(label, .click, "\(decision.rawValue)하기"))
     }
 
     private func showDecisionModal(_ decision: RecruitApplicantDecision) {
-        let cancelLabel: EventParameter.EventLabel.Campus
-        let decideLabel: EventParameter.EventLabel.Campus
+        let cancelLabel: EventParameter.EventLabel.Campus.Recruit
+        let decideLabel: EventParameter.EventLabel.Campus.Recruit
         switch decision {
         case .accepted:
-            cancelLabel = .teamRecruitmentCreatedPostApplicantApproveCancel
-            decideLabel = .teamRecruitmentCreatedPostApplicantApproveConfirm
+            cancelLabel = .recruitCreatedPostApplicantApproveCancel
+            decideLabel = .recruitCreatedPostApplicantApproveConfirm
         case .denied:
-            cancelLabel = .teamRecruitmentCreatedPostApplicantRejectCancel
-            decideLabel = .teamRecruitmentCreatedPostApplicantRejectConfirm
+            cancelLabel = .recruitCreatedPostApplicantRejectCancel
+            decideLabel = .recruitCreatedPostApplicantRejectConfirm
         }
         sendAction(.showDecisionModal(
             decision: decision,

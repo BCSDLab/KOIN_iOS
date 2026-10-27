@@ -76,10 +76,10 @@ extension NotiViewModel {
              
             if type == .diningSoldOut {
                 self?.outputSubject.send(.changeButtonEnableStatus(isOn))
-                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.notificationSoldOut, category: .click, value: logValue)
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.notificationSoldOut, category: .click, value: logValue)
             }
             else if type == .diningImageUpload {
-                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.notificationMenuImageUpload, category: .click, value: logValue)
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.notificationMenuImageUpload, category: .click, value: logValue)
             }
             
         }.store(in: &subscriptions)
@@ -114,7 +114,7 @@ extension NotiViewModel {
     }
     
     private func makeLogByDetailSubsciption(type: DetailSubscribeType, value: String) {
-        let eventLabel: EventParameter.EventLabel.Campus
+        let eventLabel: EventParameter.EventLabel.Campus.Dining
         switch type {
         case .breakfast:
             eventLabel = .notificationBreakfastSoldOut

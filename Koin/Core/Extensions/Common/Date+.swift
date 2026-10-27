@@ -21,7 +21,15 @@ extension Date {
         return Calendar.current.component(.day, from: self)
     }
     
-    func isWeekend() -> Bool {
+    var weekday: String {
+        self.formatted(
+            .dateTime
+                .locale(Locale(identifier: "ko_KR"))
+                .weekday(.abbreviated)
+        )
+    }
+    
+    var isWeekend: Bool {
         let calendar = Calendar.current
         let components = calendar.dateComponents([.weekday], from: self)
         if let weekday = components.weekday {
@@ -88,13 +96,6 @@ extension Date {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale(identifier: "ko_KR")
         dateFormatter.dateFormat = "yyyy\(separator)MM\(separator)dd"
-        return dateFormatter.string(from: self)
-    }
-    
-    func dayOfWeek() -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR")
-        dateFormatter.dateFormat = "EEE"
         return dateFormatter.string(from: self)
     }
     

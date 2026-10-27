@@ -41,10 +41,4 @@ final class DefaultDateProvider: DateProvider {
         
         return CurrentDiningTime(date: adjustedDate, diningType: diningType)
     }
-    
-    private func formatDate(date: Date) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyMMdd"
-        return dateFormatter.string(from: date)
-    }
 }

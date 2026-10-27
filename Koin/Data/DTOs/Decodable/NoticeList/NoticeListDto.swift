@@ -21,7 +21,7 @@ struct NoticeListDto: Decodable {
     }
 }
 
-struct NoticeArticleDto: Decodable {
+struct NoticeArticleDto: Decodable, Equatable {
     let id: Int
     let boardId: Int
     let title: String?
@@ -48,7 +48,7 @@ struct NoticeArticleDto: Decodable {
     }
 }
 
-struct NoticeAttachmentDto: Decodable {
+struct NoticeAttachmentDto: Decodable, Equatable {
     let id: Int
     let name, url, createdAt, updatedAt: String
     
