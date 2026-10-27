@@ -34,8 +34,6 @@ final class CallVanPostViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private let postButton = UIButton()
     
-    private let bottomSheetContentView = CallVanPostPlaceBottomSheetView()
-    
     // MARK: - Dropdown
     private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
     private lazy var dateDropdown = dropdownHost.makeDropdown(
@@ -199,13 +197,14 @@ extension CallVanPostViewController {
             let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
             inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteDeparture, category: .click, value: value))
         }
-        bottomSheetContentView.configure(
+        let contentView = CallVanPostPlaceBottomSheetView()
+        contentView.configure(
             title: .departure,
             selectedPlace: viewModel.request.departureType,
             customPlace: viewModel.request.departureCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
-        presentPlaceBottomSheet()
+        presentBottomSheet(contentView)
     }
 
     private func presentArrivalPlaceBottomSheet() {
@@ -217,19 +216,14 @@ extension CallVanPostViewController {
             let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
             inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteArrival, category: .click, value: value))
         }
-        bottomSheetContentView.configure(
+        let contentView = CallVanPostPlaceBottomSheetView()
+        contentView.configure(
             title: .arrival,
             selectedPlace: viewModel.request.arrivalType,
             customPlace: viewModel.request.arrivalCustomName,
             onApplyButtonTapped: onApplyButtonTapped
         )
-        presentPlaceBottomSheet()
-    }
-
-    private func presentPlaceBottomSheet() {
-        let bottomSheetViewController = BottomSheetViewControllerB(contentView: bottomSheetContentView)
-        bottomSheetContentView.delegate = bottomSheetViewController
-        present(bottomSheetViewController, animated: false)
+        presentBottomSheet(contentView)
     }
 }
 

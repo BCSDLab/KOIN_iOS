@@ -10,7 +10,7 @@ import Combine
 import SnapKit
 import Then
 
-final class CallVanPostPlaceBottomSheetView: UIView {
+final class CallVanPostPlaceBottomSheetView: UIView, KoinBottomSheetContent {
     
     enum Title: String {
         case departure = "출발지가 어디인가요?"
@@ -84,8 +84,9 @@ final class CallVanPostPlaceBottomSheetView: UIView {
         customPlace: String?,
         onApplyButtonTapped: @escaping (CallVanPlace, String?)->Void
     ) {
-        self.selectedPlace = selectedPlace
+        customPlaceTextField.text = customPlace
         self.customPlace = customPlace
+        self.selectedPlace = selectedPlace
         self.onApplyButtonTapped = onApplyButtonTapped
         titleLabel.text = title.rawValue
     }
@@ -173,9 +174,8 @@ extension CallVanPostPlaceBottomSheetView: UITextFieldDelegate {
             customPlaceTextField.isHidden = false
         }
         
+        delegate?.invalidateHeight(animated: true)
         UIView.animate(springDuration: 0.2) { [weak self] in
-            self?.superview?.layoutIfNeeded()
-            self?.layoutIfNeeded()
             self?.customPlaceTextField.alpha = isVisible ? 1 : 0
         } completion: { [weak self] _ in
             self?.customPlaceTextField.isHidden = !isVisible
@@ -254,8 +254,6 @@ extension CallVanPostPlaceBottomSheetView {
     
     private func setUpStyles() {
         self.do {
-            $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            $0.layer.cornerRadius = 32
             $0.backgroundColor = UIColor.appColor(.neutral0)
         }
         
