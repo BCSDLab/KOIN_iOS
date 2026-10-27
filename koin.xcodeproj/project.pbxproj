@@ -159,7 +159,7 @@
 		7C4D5A572F01638800B40128 /* ShuttleTimetableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A262F01638800B40128 /* ShuttleTimetableTableView.swift */; };
 		7C4D5A582F01638800B40128 /* BusSearchResultTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A172F01638800B40128 /* BusSearchResultTableViewFooter.swift */; };
 		7C4D5A592F01638800B40128 /* BusTimetableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A2A2F01638800B40128 /* BusTimetableViewController.swift */; };
-		7C4D5A5A2F01638800B40128 /* BusAreaSelectdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */; };
+		7C4D5A5A2F01638800B40128 /* BusAreaSelectedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A0D2F01638800B40128 /* BusAreaSelectedView.swift */; };
 		7C4D5A5B2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A2E2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift */; };
 		7C4D5A5D2F0163BA00B40128 /* DIContainer+Bus.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A5C2F0163BA00B40128 /* DIContainer+Bus.swift */; };
 		7C50A1BF3041A44E00897A6F /* RecruitListHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C50A1BE3041A44E00897A6F /* RecruitListHostingController.swift */; };
@@ -1405,7 +1405,7 @@
 		7C457B202FCE1BA80011D338 /* HomeTabbarViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTabbarViewModel.swift; sourceTree = "<group>"; };
 		7C457B412FCE1BA80011D338 /* CategoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryViewModel.swift; sourceTree = "<group>"; };
 		7C4C714D2FBECB3D009D9875 /* SendDeviceTokenIfNeededUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendDeviceTokenIfNeededUseCase.swift; sourceTree = "<group>"; };
-		7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectdViewController.swift; sourceTree = "<group>"; };
+		7C4D5A0D2F01638800B40128 /* BusAreaSelectedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedView.swift; sourceTree = "<group>"; };
 		7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionView.swift; sourceTree = "<group>"; };
 		7C4D5A0F2F01638800B40128 /* BusAreaSelectedCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusAreaSelectedCollectionViewCell.swift; sourceTree = "<group>"; };
 		7C4D5A122F01638800B40128 /* BusSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchViewController.swift; sourceTree = "<group>"; };
@@ -2948,7 +2948,7 @@
 		7C4D5A102F01638800B40128 /* BusAreaSelected */ = {
 			isa = PBXGroup;
 			children = (
-				7C4D5A0D2F01638800B40128 /* BusAreaSelectdViewController.swift */,
+				7C4D5A0D2F01638800B40128 /* BusAreaSelectedView.swift */,
 				7C4D5A0E2F01638800B40128 /* BusAreaSelectedCollectionView.swift */,
 				7C4D5A0F2F01638800B40128 /* BusAreaSelectedCollectionViewCell.swift */,
 			);
@@ -7619,7 +7619,7 @@
 				7C4D5A572F01638800B40128 /* ShuttleTimetableTableView.swift in Sources */,
 				7C4D5A582F01638800B40128 /* BusSearchResultTableViewFooter.swift in Sources */,
 				7C4D5A592F01638800B40128 /* BusTimetableViewController.swift in Sources */,
-				7C4D5A5A2F01638800B40128 /* BusAreaSelectdViewController.swift in Sources */,
+				7C4D5A5A2F01638800B40128 /* BusAreaSelectedView.swift in Sources */,
 				7C4D5A5B2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift in Sources */,
 				7CED91AA2EF2D1F900457128 /* DeleteLectureView.swift in Sources */,
 				7C82619C30407FF300C20F64 /* FilterGroupView.swift in Sources */,

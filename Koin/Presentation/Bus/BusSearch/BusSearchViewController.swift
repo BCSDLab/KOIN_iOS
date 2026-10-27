@@ -172,7 +172,7 @@ extension BusSearchViewController {
 
         let departure = selectedBusPlace(from: departAreaSelectedButton)
         let arrival = selectedBusPlace(from: arrivedAreaSelectedButton)
-        let busAreaViewController = BusAreaSelectedViewController(
+        let contentView = BusAreaSelectedView(
             onDepartureBusAreaSelected: { [weak self] departureArea in
                 self?.selectDepartureBusArea(departureArea)
             },
@@ -180,16 +180,13 @@ extension BusSearchViewController {
                 self?.selectArrivalBusArea(arrivalArea)
             }
         )
-        busAreaViewController.configure(
+        contentView.configure(
             busAreaLists: busAreaList,
             buttonState: buttonState,
             departure: departure,
             arrival: arrival
         )
-        let bottomSheet = BottomSheetViewController(contentViewController: busAreaViewController, defaultHeight: 312.5 + UIApplication.bottomSafeAreaHeight(), cornerRadius: 32, isPannedable: false)
-        bottomSheet.modalPresentationStyle = .overFullScreen
-        bottomSheet.modalTransitionStyle = .crossDissolve
-        present(bottomSheet, animated: true)
+        presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 32))
     }
 
     private func selectedBusPlace(from button: UIButton) -> BusPlace? {
