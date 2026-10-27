@@ -10,6 +10,7 @@ import Foundation
 
 enum DiningFixture {
 
+#if false // TODO: 식단 리팩토링 후 테스트 재작성
     static func dto(
         id: Int = 1,
         date: String = "2026-08-03",
@@ -21,8 +22,8 @@ enum DiningFixture {
         DiningDto(
             id: id,
             date: date,
-            type: type,
-            place: place,
+            type: DiningTypeDto(from: type).rawValue,
+            place: DiningPlaceDto(from: place).rawValue,
             priceCard: nil,
             priceCash: nil,
             kcal: nil,
@@ -61,6 +62,7 @@ enum DiningFixture {
             date: date
         )
     }
+#endif
 
     static func date(
         year: Int = 2026,

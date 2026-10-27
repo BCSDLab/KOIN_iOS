@@ -70,7 +70,7 @@ extension LostItemChatListTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat = viewModel.chatList[indexPath.row]
         let viewController = LostItemChatViewController(viewModel: LostItemChatViewModel(articleId: chat.articleId, chatRoomId: chat.chatRoomId, articleTitle: chat.articleTitle))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.messageListSelect, .click, "쪽지"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.messageListSelect, .click, "쪽지"))
         navigationController?.pushViewController(viewController, animated: true)
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

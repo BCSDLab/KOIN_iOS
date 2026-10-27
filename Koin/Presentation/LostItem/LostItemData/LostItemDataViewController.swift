@@ -138,7 +138,7 @@ final class LostItemDataViewController: UIViewController {
         
         buttonsView.deleteButtonTappedPublisher.sink { [weak self] in
             guard let self, let type = viewModel.type else { return }
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDelete, EventParameter.EventCategory.click, "\(type.description)물"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.findUserDelete, EventParameter.EventCategory.click, "\(type.description)물"))
             showDeleteModal()
         }.store(in: &subscription)
         
@@ -148,18 +148,18 @@ final class LostItemDataViewController: UIViewController {
         
         buttonsView.changeStateButtonTappedPublisher.sink { [weak self] in
             guard let self, let type = viewModel.type else { return }
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemStateChange, .click, "\(type.description)물"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemStateChange, .click, "\(type.description)물"))
             self.showChangeStateModal()
         }.store(in: &subscription)
         
         buttonsView.chatButtonTappedPublisher.sink { [weak self] in
             guard let self, let type = viewModel.type else { return }
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemMessageSend, .click, "\(type.description)물 쪽지 보내기"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.itemMessageSend, .click, "\(type.description)물 쪽지 보내기"))
             inputSubject.send(.checkLogIn(.chat))
         }.store(in: &subscription)
         
         buttonsView.reportButtonTappedPublisher.sink { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.itemPostReport, .click, "신고하기"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.itemPostReport, .click, "신고하기"))
             self?.inputSubject.send(.checkLogIn(.report))
         }.store(in: &subscription)
         
@@ -244,7 +244,7 @@ extension LostItemDataViewController {
     private func showDeleteModal() {
         let onRightButtonTapped: ()->Void = { [weak self] in
             self?.inputSubject.send(.deleteData)
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.findUserDeleteConfirm, EventParameter.EventCategory.click, "확인"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.findUserDeleteConfirm, EventParameter.EventCategory.click, "확인"))
         }
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .primary,
@@ -275,7 +275,7 @@ extension LostItemDataViewController {
         let onRightButtonTapped: ()->Void = { [weak self] in
             guard let self, let type = viewModel.type else { return }
             inputSubject.send(.changeState(viewModel.id))
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemFound, .click, "\(type.description)물"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFound, .click, "\(type.description)물"))
         }
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .primary,
@@ -301,10 +301,10 @@ extension LostItemDataViewController {
     
     private func showLoginToChatModal() {
         let onLeftButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemMessageLoginRequest, .click, "닫기"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemMessageLoginRequest, .click, "닫기"))
         }
         let onRightButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.lostItemMessageLoginRequest, .click, "로그인하기"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemMessageLoginRequest, .click, "로그인하기"))
             
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())

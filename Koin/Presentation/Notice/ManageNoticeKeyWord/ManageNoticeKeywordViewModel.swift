@@ -91,7 +91,7 @@ extension ManageNoticeKeywordViewModel {
                         case .sameKeyword:
                             self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
                         case .success:
-                            if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.recommendedKeyword, category: .click, value: keyword) }
+                            if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Notice.recommendedKeyword, category: .click, value: keyword) }
                             self?.fetchMyKeyword()
                         }
                     }
@@ -160,7 +160,7 @@ extension ManageNoticeKeywordViewModel {
             receiveValue: { [weak self] response in
                 self?.outputSubject.send(.updateSwitch(isOn: isOn))
                 let value = isOn ? "on" : "off"
-                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.keywordNotification, category: .click, value: value)
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Notice.keywordNotification, category: .click, value: value)
             }
         ).store(in: &subscriptions)
     }

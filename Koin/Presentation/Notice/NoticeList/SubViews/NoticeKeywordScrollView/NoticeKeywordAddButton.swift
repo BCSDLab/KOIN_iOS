@@ -9,12 +9,15 @@ import SwiftUI
 
 struct NoticeKeywordAddButton: View {
     
+    // MARK: - Properties
     let addButtonTapped: ()->Void
     
+    // MARK: - Initializer
     init(action addButtonTapped: @escaping () -> Void) {
         self.addButtonTapped = addButtonTapped
     }
     
+    // MARK: - Body
     var body: some View {
         Button(action: addButtonTapped) {
             Text("새 키워드 추가")

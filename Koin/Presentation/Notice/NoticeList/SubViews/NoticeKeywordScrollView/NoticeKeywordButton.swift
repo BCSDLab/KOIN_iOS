@@ -9,15 +9,10 @@ import SwiftUI
 
 struct NoticeKeywordButton: View {
     
-    let keywordButtonTapped: ()->Void
+    // MARK: - Properties
+    let onKeywordButtonTapped: ()->Void
     let isSelected: Bool
     let keyword: String
-    
-    init(action keywordButtonTapped: @escaping () -> Void, isSelected: Bool, keyword: String) {
-        self.keywordButtonTapped = keywordButtonTapped
-        self.isSelected = isSelected
-        self.keyword = keyword
-    }
     
     var font: Font {
         isSelected ? Font.appFont(.pretendardBold, size: 14) : Font.appFont(.pretendardMedium, size: 14)
@@ -28,9 +23,17 @@ struct NoticeKeywordButton: View {
     var backgroundStyle: Color {
         isSelected ? Color.appColor(.new600) : Color.appColor(.neutral100)
     }
-
+    
+    // MARK: - Initializer
+    init(isSelected: Bool, keyword: String, action onKeywordButtonTapped: @escaping () -> Void) {
+        self.onKeywordButtonTapped = onKeywordButtonTapped
+        self.isSelected = isSelected
+        self.keyword = keyword
+    }
+    
+    // MARK: - Body
     var body: some View {
-        Button(action: keywordButtonTapped) {
+        Button(action: onKeywordButtonTapped) {
             Text("#\(keyword)")
                 .font(font)
                 .foregroundStyle(foregroundStyle)

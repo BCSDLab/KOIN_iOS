@@ -102,7 +102,7 @@ private extension NotificationViewModel {
         outputSubject.send(.selectedNotification(notification))
         
         makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.notificationList,
+            label: EventParameter.EventLabel.Campus.Notification.notificationList,
             category: .click,
             value: logValue
         )

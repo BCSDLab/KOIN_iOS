@@ -23,11 +23,13 @@ final class KakaoShareService: ShareService {
             return
         }
         
+        let typeValue = DiningTypeDto(from: shareModel.type).rawValue
+        let placeValue = DiningPlaceDto(from: shareModel.place).rawValue
         let link = Link(
             webUrl: webUrl,
             mobileWebUrl: mobileWebUrl,
-            androidExecutionParams: ["date": shareModel.date, "type": shareModel.type.rawValue, "place": shareModel.place.rawValue],
-            iosExecutionParams: ["date": shareModel.date, "type": shareModel.type.rawValue, "place": shareModel.place.rawValue]
+            androidExecutionParams: ["date": shareModel.date, "type": typeValue, "place": placeValue],
+            iosExecutionParams: ["date": shareModel.date, "type": typeValue, "place": placeValue]
         )
         
         let monthString = String(shareModel.date.dropFirst(2).prefix(2))
@@ -45,7 +47,7 @@ final class KakaoShareService: ShareService {
         let itemContent = ItemContent(
             profileText: "\(formattedDate) \(shareModel.type.name) 식단",
             items: [
-                ItemInfo(item: shareModel.place.rawValue, itemOp: contentText)
+                ItemInfo(item: shareModel.place.name, itemOp: contentText)
             ]
         )
         let content: Content

@@ -10,31 +10,35 @@ import Foundation
 struct DiningDto: Decodable {
     let id: Int
     let date: String
-    let type: DiningType
-    let place: DiningPlace
+    let type: String
+    let place: String
     let priceCard, priceCash: Int?
     let kcal: Int?
     let menu: [String]?
-    let createdAt, updatedAt: String
     let soldoutAt, changedAt: String?
     let imageURL: String?
-    let likes: Int
-    let isLiked: Bool
     
     enum CodingKeys: String, CodingKey {
-        case id, date, type, place, likes
+        case id, date, type, place
         case priceCard = "price_card"
         case priceCash = "price_cash"
         case kcal, menu
         case imageURL = "image_url"
-        case createdAt = "created_at"
-        case updatedAt = "updated_at"
         case soldoutAt = "soldout_at"
         case changedAt = "changed_at"
-        case isLiked = "is_liked"
     }
     
-    func toDomain() -> DiningItem {
+    func toDomain() -> DiningItem? {
+        let inputFormatter = DateFormatter()
+        inputFormatter.locale = Locale(identifier: "ko_KR")
+        inputFormatter.calendar = Calendar(identifier: .gregorian)
+        inputFormatter.dateFormat = "yyyy-MM-dd"
+
+        guard let type = DiningTypeDto(rawValue: type)?.toDomain(),
+              let place = DiningPlaceDto(rawValue: place)?.toDomain(),
+              let date = inputFormatter.date(from: date) else {
+            return nil
+        }
         return .init(
             id: id,
             type: type,
@@ -43,55 +47,15 @@ struct DiningDto: Decodable {
             priceCash: priceCash,
             kcal: kcal ?? 0,
             menu: menu ?? [],
-            soldoutAt: soldoutAt,
-            changedAt: changedAt,
-            imageUrl: imageURL,
-            likes: likes,
-            isLiked: isLiked,
+            isSoldOut: soldoutAt != nil,
+            isChanged: changedAt != nil,
+            image: DiningImage(
+                imageURL,
+                place: place,
+                type: type,
+                isWeekend: date.isWeekend
+            ),
             date: date
         )
-    }
-}
-
-enum DiningType: String, Decodable {
-    case breakfast = "BREAKFAST"
-    case lunch = "LUNCH"
-    case dinner = "DINNER"
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        self = DiningType(rawValue: rawValue) ?? .breakfast
-    }
-
-    init?(segmentIndex: Int) {
-        switch segmentIndex {
-        case 0: self = .breakfast
-        case 1: self = .lunch
-        case 2: self = .dinner
-        default: return nil
-        }
-    }
-
-    var name: String {
-        switch self {
-        case .breakfast : "아침"
-        case .lunch : "점심"
-        case .dinner : "저녁"
-        }
-    }
-}
-
-enum DiningPlace: String, Decodable {
-    case cornerA = "A코너"
-    case cornerB = "B코너"
-    case cornerC = "C코너"
-    case special = "능수관"
-    case secondCampus = "2캠퍼스"
-    
-    init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        self = DiningPlace(rawValue: rawValue) ?? .cornerA
     }
 }

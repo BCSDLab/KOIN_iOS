@@ -70,7 +70,7 @@ private extension NotificationViewController {
                 guard let self else { return }
                 self.inputSubject.send(.deleteNotification(id: id))
                 self.showToastMessage(message: "알림이 삭제되었습니다.")
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListDelete, .click, "알림 삭제"))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListDelete, .click, "알림 삭제"))
             }
             .store(in: &subscriptions)
         
@@ -247,30 +247,40 @@ extension NotificationViewController {
         return NoticeDataViewController(viewModel: viewModel)
     }
     
-    private func makeDiningViewController() -> DiningViewController {
+    private func makeDiningViewController() -> UIViewController {
         let diningService = DefaultDiningService()
         let shareService = KakaoShareService()
-        let diningRepository = DefaultDiningRepository(diningService: diningService, shareService: shareService)
-        let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
-        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
-        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let dateProvider = DefaultDateProvider()
-        let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
-        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
-        let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
-        let fetchNotiListUseCase = DefaultFetchNotiListUseCase(notiRepository: notiRepository)
-        let viewModel = DiningViewModel(
-            fetchDiningListUseCase: fetchDiningListUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            dateProvder: dateProvider,
-            shareMenuListUseCase: shareMenuListUseCase,
-            changeNotiUseCase: changeNotiUseCase,
-            fetchNotiListUsecase: fetchNotiListUseCase,
-            changeNotiDetailUseCase: changeNotiDetailUseCase
+        let diningRepository = DefaultDiningRepository(
+            diningService: diningService,
+            shareService: shareService
         )
-        let viewController = DiningViewController(viewModel: viewModel)
-        viewController.title = "식단"
-        return viewController
+        let coreRepository = DefaultCoreRepository(service: DefaultCoreService())
+        let abTestRepository = DefaultAbTestRepository(service: DefaultAbTestService())
+        let notiReposotiry = DefaultNotiRepository(service: DefaultNotiService())
+        let dateProvider = DefaultDateProvider()
+        let fetchDiningListUseCase = DefaultFetchDiningListUseCase(diningRepository: diningRepository)
+        let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
+        let fetchDiningNotiUseCase = DefaultFetchDiningNotiUseCase(notiRepository: notiReposotiry)
+        let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiReposotiry)
+        let fetchCurrentDiningItemsUseCase = DefaultFetchCurrentDiningItemsUseCase(repository: diningRepository)
+        let reportSoldoutDiningUseCase = DefaultReportSoldoutDiningUseCase(repository: diningRepository)
+        let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
+        let assignAbTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: abTestRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = DiningViewModel(
+            dateProvider: dateProvider,
+            fetchDiningListUseCase: fetchDiningListUseCase,
+            shareMenuListUseCase: shareMenuListUseCase,
+            fetchDiningNotiUseCase: fetchDiningNotiUseCase,
+            changeNotiUseCase: changeNotiUseCase,
+            fetchCurrentDiningItemsUseCase: fetchCurrentDiningItemsUseCase,
+            reportSoldoutDiningUseCase: reportSoldoutDiningUseCase,
+            uploadFileUseCase: uploadFileUseCase,
+            assignAbTestUseCase: assignAbTestUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        let rootView = DiningView(viewModel: viewModel)
+        return DiningHostingController(rootView: rootView)
     }
     
     private func makeShopSummaryViewController(shopId: Int) -> UIViewController {
@@ -307,13 +317,13 @@ private extension NotificationViewController {
             markAllAsRead: { [weak self] in
                 self?.inputSubject.send(.markAllAsRead)
                 self?.notificationListView.markAllAsRead()
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListReadAll, .click, "모두 읽음으로 표시"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListReadAll, .click, "모두 읽음으로 표시"))
             },
             deleteAll: { [weak self] in
                 self?.inputSubject.send(.deleteAllNotifications)
                 self?.notificationListView.deleteAll()
                 self?.showToastMessage(message: "알림이 삭제되었습니다.")
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.notificationListDeleteAll, .click, "알림 전체 삭제"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListDeleteAll, .click, "알림 전체 삭제"))
             }
         )
         popUpViewController.modalPresentationStyle = .overFullScreen

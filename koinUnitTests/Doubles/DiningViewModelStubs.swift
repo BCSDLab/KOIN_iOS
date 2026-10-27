@@ -14,6 +14,10 @@ final class StubFetchDiningListUseCase: FetchDiningListUseCase {
     func execute(diningInfo: CurrentDiningTime) -> AnyPublisher<[DiningItem], ErrorResponse> {
         Empty<[DiningItem], ErrorResponse>().eraseToAnyPublisher()
     }
+
+    func execute(date: Date) -> AnyPublisher<[DiningList], ErrorResponse> {
+        Empty<[DiningList], ErrorResponse>().eraseToAnyPublisher()
+    }
 }
 
 final class StubDateProvider: DateProvider {
@@ -48,8 +52,6 @@ final class StubLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
     func execute(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {}
 
     func executeWithDuration(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?) {}
-
-    func logEvent(name: String, label: String, value: String, category: String) {}
 
     func executeWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {}
 }

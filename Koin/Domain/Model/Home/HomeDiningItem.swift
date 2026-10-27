@@ -20,7 +20,7 @@ extension HomeDiningItem {
     init(_ diningItem: DiningItem, timeText: String?) {
         self.init(
             id: diningItem.id,
-            placeName: diningItem.place.rawValue,
+            placeName: diningItem.place.name,
             timeText: timeText,
             priceText: diningItem.diningPriceText,
             kcalText: "\(diningItem.kcal)kcal",

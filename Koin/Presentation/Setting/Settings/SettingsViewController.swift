@@ -208,6 +208,7 @@ extension SettingsViewController {
     }
     
     private func navigateToNoti() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notification, .click, "알림설정"))
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)

@@ -162,7 +162,7 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
         
         oneBusTimetableDataTableView.tapIncorrectButtonPublisher.sink { [weak self] in
             let routeValue = "\(self?.shuttleRouteTypeLabel.text ?? "")_\(self?.busTimetablePlaceLabel.text ?? "")"
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.errorFeedbackButton, .click, routeValue))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.errorFeedbackButton, .click, routeValue))
             if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
                UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -186,7 +186,7 @@ extension BusTimetableDataViewController {
     
     @objc private func tapIncorrentInfoButton() {
         let routeValue = "\(shuttleRouteTypeLabel.text ?? "")_\(busTimetablePlaceLabel.text ?? "")"
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.errorFeedbackButton, .click, routeValue))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.errorFeedbackButton, .click, routeValue))
         if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)

@@ -36,13 +36,13 @@ final class DefaultFetchHomeDiningListUseCase: FetchHomeDiningListUseCase {
                 let weekdayOperatingTimes = self.weekdayOperatingTimes(from: coopShopData)
 
                 return diningItems
+                    .filter { $0.place != .secondCampus }
                     .map {
                         HomeDiningItem(
                             $0,
                             timeText: weekdayOperatingTimes[$0.type]
                         )
                     }
-                    .filter { $0.placeName != "2캠퍼스" }
             }
             .eraseToAnyPublisher()
     }
