@@ -1248,6 +1248,7 @@
 		BF263002000000000000000C /* KoinBottomSheetController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF263001000000000000000C /* KoinBottomSheetController+Animation.swift */; };
 		BF263002000000000000000D /* KoinBottomSheetController+Dismissal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF263001000000000000000D /* KoinBottomSheetController+Dismissal.swift */; };
 		BF2630020000000000000009 /* KoinBottomSheetController+Pan.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2630010000000000000009 /* KoinBottomSheetController+Pan.swift */; };
+		BF2600040000000000000002 /* CallVanBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600040000000000000001 /* CallVanBottomSheetView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2511,6 +2512,7 @@
 		BF263001000000000000000C /* KoinBottomSheetController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Animation.swift"; sourceTree = "<group>"; };
 		BF263001000000000000000D /* KoinBottomSheetController+Dismissal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Dismissal.swift"; sourceTree = "<group>"; };
 		BF2630010000000000000009 /* KoinBottomSheetController+Pan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Pan.swift"; sourceTree = "<group>"; };
+		BF2600040000000000000001 /* CallVanBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanBottomSheetView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -4027,6 +4029,7 @@
 			children = (
 				7CC42B262F575E6900940CE1 /* CallVanListCollectionView */,
 				7CC42B2E2F58105B00940CE1 /* CallVanBottomSheetViewController.swift */,
+				BF2600040000000000000001 /* CallVanBottomSheetView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -7027,6 +7030,7 @@
 				7CF77B853005F105003642C1 /* NoticeSearchEmptyView.swift in Sources */,
 				83DD0DB72C53777800278ABD /* SearchBusInfoUseCase.swift in Sources */,
 				7CC42B2F2F58105B00940CE1 /* CallVanBottomSheetViewController.swift in Sources */,
+				BF2600040000000000000002 /* CallVanBottomSheetView.swift in Sources */,
 				D2B7EBDA2D382C8800EE46B0 /* UserTypeResponse.swift in Sources */,
 				7C61D3392F21FADF005FAC3A /* EditLostItemViewModel.swift in Sources */,
 				7CB11C7A2FB32716004E0C80 /* LostItemKeywordDto.swift in Sources */,
