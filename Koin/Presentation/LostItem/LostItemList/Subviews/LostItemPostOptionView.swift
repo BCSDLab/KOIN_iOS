@@ -1,18 +1,21 @@
 //
-//  LostItemPostOptionController.swift
+//  LostItemPostOptionView.swift
 //  koin
 //
 //  Created by 홍기정 on 1/18/26.
 //
 
 import UIKit
+import SnapKit
+import Then
 
-final class LostItemPostOptionController: UIViewController {
-    
+final class LostItemPostOptionView: UIView, KoinBottomSheetContent {
+    weak var delegate: KoinBottomSheetDelegate?
+
     // MARK: - Properties
     private let onFoundButtonTapped: ()->Void
     private let onLostButtonTapped: ()->Void
-    
+
     // MARK: - UI Components
     private let filterTitleLabel = UILabel().then {
         $0.text = "유형을 선택해주세요"
@@ -57,35 +60,32 @@ final class LostItemPostOptionController: UIViewController {
     private let bottomSeparatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
-    
+
     // MARK: - Initializer
     init(onFoundButtonTapped: @escaping () -> Void,
          onLostButtonTapped: @escaping () -> Void) {
         self.onFoundButtonTapped = onFoundButtonTapped
         self.onLostButtonTapped = onLostButtonTapped
-        super.init(nibName: nil, bundle: nil)
+        super.init(frame: .zero)
+        backgroundColor = .white
+        configureView()
+        setAddTargets()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Life Cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureView()
-        setAddTargets()
-    }
+
 }
 
-extension LostItemPostOptionController {
-    
+extension LostItemPostOptionView {
+
     private func setAddTargets() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         foundButton.addTarget(self, action: #selector(foundButtonTapped), for: .touchUpInside)
         lostButton.addTarget(self, action: #selector(lostButtonTapped), for: .touchUpInside)
     }
     @objc private func closeButtonTapped() {
-        dismissView()
+        delegate?.dismiss()
     }
     @objc private func foundButtonTapped() {
         onFoundButtonTapped()
@@ -95,14 +95,14 @@ extension LostItemPostOptionController {
     }
 }
 
-extension LostItemPostOptionController {
-    
+extension LostItemPostOptionView {
+
     private func setUpLayouts() {
         [filterTitleLabel, closeButton, topSeparatorView, foundButton, lostButton, bottomSeparatorView].forEach {
-            view.addSubview($0)
+            addSubview($0)
         }
     }
-    
+
     private func setUpConstaints() {
         filterTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
@@ -132,10 +132,11 @@ extension LostItemPostOptionController {
         bottomSeparatorView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
-            $0.top.equalTo(lostButton.snp.bottom).offset(12)
+            $0.top.equalTo(lostButton.snp.bottom).offset(10)
+            $0.bottom.equalToSuperview()
         }
     }
-    
+
     private func configureView() {
         setUpLayouts()
         setUpConstaints()
