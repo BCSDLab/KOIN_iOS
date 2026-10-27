@@ -1012,7 +1012,6 @@
 		D20AB9582C553621006BC684 /* NotiService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9572C553621006BC684 /* NotiService.swift */; };
 		D20AB95A2C55369F006BC684 /* NotiAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9592C55369F006BC684 /* NotiAPI.swift */; };
 		D20AB9612C5543AA006BC684 /* DefaultNotiRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB9602C5543AA006BC684 /* DefaultNotiRepository.swift */; };
-		D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */; };
 		D20AD6EB2E028F950067760A /* FindIdSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */; };
 		D20AD6ED2E028FA20067760A /* FindIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */; };
 		D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */; };
@@ -2270,7 +2269,6 @@
 		D20AB9572C553621006BC684 /* NotiService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiService.swift; sourceTree = "<group>"; };
 		D20AB9592C55369F006BC684 /* NotiAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotiAPI.swift; sourceTree = "<group>"; };
 		D20AB9602C5543AA006BC684 /* DefaultNotiRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNotiRepository.swift; sourceTree = "<group>"; };
-		D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomSheetViewController.swift; sourceTree = "<group>"; };
 		D20AD6EA2E028F950067760A /* FindIdSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsRequest.swift; sourceTree = "<group>"; };
 		D20AD6EC2E028FA20067760A /* FindIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailRequest.swift; sourceTree = "<group>"; };
 		D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckVerificationEmailRequest.swift; sourceTree = "<group>"; };
@@ -3192,7 +3190,6 @@
 				7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */,
 				7C333E7A302E280C009D2B89 /* KoinModalViewController */,
 				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
-				D20AB96E2C574291006BC684 /* BottomSheetViewController.swift */,
 				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
 				7CC42B042F56A78600940CE1 /* PaddingLabel.swift */,
 				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
@@ -7840,7 +7837,6 @@
 				D20AD6EF2E029B250067760A /* CheckVerificationEmailRequest.swift in Sources */,
 				D261BB982D79418600A67F06 /* UserDataManager.swift in Sources */,
 				7CDCD0D23055E9E4004204DA /* RecruitProfileCardView.swift in Sources */,
-				D20AB96F2C574291006BC684 /* BottomSheetViewController.swift in Sources */,
 				D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */,
 				D2D380FD2BA7415C009AD5A9 /* ErrorResponseDto.swift in Sources */,
 				D208A7C92CABB486007040E7 /* CheckVersionUseCase.swift in Sources */,
