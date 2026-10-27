@@ -1236,6 +1236,19 @@
 		FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000013 /* KoinDropdownAnimator.swift */; };
 		FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000016 /* KoinDropdownConfiguration.swift */; };
 		FE0B6B2358364622BC242C74 /* RecruitDataButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AB6864692D44B9849E0447 /* RecruitDataButton.swift */; };
+		BF2600020000000000000001 /* KoinBottomSheetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000001 /* KoinBottomSheetConfiguration.swift */; };
+		BF2600020000000000000002 /* KoinBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000002 /* KoinBottomSheetController.swift */; };
+		BF2600020000000000000003 /* KoinBottomSheetDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000003 /* KoinBottomSheetDelegate.swift */; };
+		C01000000000000000000002 /* KoinBottomSheetContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01000000000000000000001 /* KoinBottomSheetContent.swift */; };
+		BF2600020000000000000004 /* KoinBottomSheetContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000004 /* KoinBottomSheetContentViewController.swift */; };
+		BF2600020000000000000005 /* PassThroughView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000005 /* PassThroughView.swift */; };
+		BF2600020000000000000006 /* UIViewController+KoinBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000006 /* UIViewController+KoinBottomSheet.swift */; };
+		BF2600020000000000000007 /* KoinBottomSheetController+Keyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000007 /* KoinBottomSheetController+Keyboard.swift */; };
+		BF263002000000000000000A /* KoinBottomSheetController+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF263001000000000000000A /* KoinBottomSheetController+Layout.swift */; };
+		BF263002000000000000000B /* KoinBottomSheetController+Height.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF263001000000000000000B /* KoinBottomSheetController+Height.swift */; };
+		BF263002000000000000000C /* KoinBottomSheetController+Animation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF263001000000000000000C /* KoinBottomSheetController+Animation.swift */; };
+		BF263002000000000000000D /* KoinBottomSheetController+Dismissal.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF263001000000000000000D /* KoinBottomSheetController+Dismissal.swift */; };
+		BF2630020000000000000009 /* KoinBottomSheetController+Pan.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2630010000000000000009 /* KoinBottomSheetController+Pan.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -2487,6 +2500,19 @@
 		FE01000000000000000011 /* KoinDropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdown.swift; sourceTree = "<group>"; };
 		FE01000000000000000013 /* KoinDropdownAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownAnimator.swift; sourceTree = "<group>"; };
 		FE01000000000000000016 /* KoinDropdownConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownConfiguration.swift; sourceTree = "<group>"; };
+		BF2600010000000000000001 /* KoinBottomSheetConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetConfiguration.swift"; sourceTree = "<group>"; };
+		BF2600010000000000000002 /* KoinBottomSheetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController.swift"; sourceTree = "<group>"; };
+		BF2600010000000000000003 /* KoinBottomSheetDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetDelegate.swift"; sourceTree = "<group>"; };
+		C01000000000000000000001 /* KoinBottomSheetContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinBottomSheetContent.swift; sourceTree = "<group>"; };
+		BF2600010000000000000004 /* KoinBottomSheetContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetContentViewController.swift"; sourceTree = "<group>"; };
+		BF2600010000000000000005 /* PassThroughView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "PassThroughView.swift"; sourceTree = "<group>"; };
+		BF2600010000000000000006 /* UIViewController+KoinBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+KoinBottomSheet.swift"; sourceTree = "<group>"; };
+		BF2600010000000000000007 /* KoinBottomSheetController+Keyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Keyboard.swift"; sourceTree = "<group>"; };
+		BF263001000000000000000A /* KoinBottomSheetController+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Layout.swift"; sourceTree = "<group>"; };
+		BF263001000000000000000B /* KoinBottomSheetController+Height.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Height.swift"; sourceTree = "<group>"; };
+		BF263001000000000000000C /* KoinBottomSheetController+Animation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Animation.swift"; sourceTree = "<group>"; };
+		BF263001000000000000000D /* KoinBottomSheetController+Dismissal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Dismissal.swift"; sourceTree = "<group>"; };
+		BF2630010000000000000009 /* KoinBottomSheetController+Pan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Pan.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3159,6 +3185,7 @@
 		7C50A1DA3042013B00897A6F /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				BF2600030000000000000001 /* KoinBottomSheet */,
 				7C8B37A73040286C00A7EB5A /* FilterBottomSheet */,
 				D19A1001300000000000000C /* Chat */,
 				D19A00013000000000000008 /* Notification */,
@@ -3409,6 +3436,7 @@
 		7C6790832FCC48A60045E163 /* UIKit */ = {
 			isa = PBXGroup;
 			children = (
+				BF2600010000000000000006 /* UIViewController+KoinBottomSheet.swift */,
 				7C67906E2FCC48A60045E163 /* CALayer+.swift */,
 				7C67906F2FCC48A60045E163 /* UIApplication+.swift */,
 				7C6790702FCC48A60045E163 /* UIButton+.swift */,
@@ -6675,6 +6703,25 @@
 			path = KoinDropdown;
 			sourceTree = "<group>";
 		};
+		BF2600030000000000000001 /* KoinBottomSheet */ = {
+			isa = PBXGroup;
+			children = (
+				BF2600010000000000000001 /* KoinBottomSheetConfiguration.swift */,
+				BF2600010000000000000002 /* KoinBottomSheetController.swift */,
+				BF2600010000000000000007 /* KoinBottomSheetController+Keyboard.swift */,
+				BF263001000000000000000A /* KoinBottomSheetController+Layout.swift */,
+				BF263001000000000000000B /* KoinBottomSheetController+Height.swift */,
+				BF263001000000000000000C /* KoinBottomSheetController+Animation.swift */,
+				BF263001000000000000000D /* KoinBottomSheetController+Dismissal.swift */,
+				BF2630010000000000000009 /* KoinBottomSheetController+Pan.swift */,
+				BF2600010000000000000003 /* KoinBottomSheetDelegate.swift */,
+				C01000000000000000000001 /* KoinBottomSheetContent.swift */,
+				BF2600010000000000000004 /* KoinBottomSheetContentViewController.swift */,
+				BF2600010000000000000005 /* PassThroughView.swift */,
+			);
+			path = KoinBottomSheet;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -6866,6 +6913,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BF2600020000000000000001 /* KoinBottomSheetConfiguration.swift in Sources */,
+				BF2600020000000000000002 /* KoinBottomSheetController.swift in Sources */,
+				BF2600020000000000000007 /* KoinBottomSheetController+Keyboard.swift in Sources */,
+				BF263002000000000000000A /* KoinBottomSheetController+Layout.swift in Sources */,
+				BF263002000000000000000B /* KoinBottomSheetController+Height.swift in Sources */,
+				BF263002000000000000000C /* KoinBottomSheetController+Animation.swift in Sources */,
+				BF263002000000000000000D /* KoinBottomSheetController+Dismissal.swift in Sources */,
+				BF2630020000000000000009 /* KoinBottomSheetController+Pan.swift in Sources */,
+				BF2600020000000000000003 /* KoinBottomSheetDelegate.swift in Sources */,
+				C01000000000000000000002 /* KoinBottomSheetContent.swift in Sources */,
+				BF2600020000000000000004 /* KoinBottomSheetContentViewController.swift in Sources */,
+				BF2600020000000000000005 /* PassThroughView.swift in Sources */,
+				BF2600020000000000000006 /* UIViewController+KoinBottomSheet.swift in Sources */,
 				A2C140000000000000000001 /* RecruitChatViewController.swift in Sources */,
 				A2C140000000000000000003 /* RecruitChatViewModel.swift in Sources */,
 				A2C140000000000000000005 /* ChatListModel+RecruitChat.swift in Sources */,
