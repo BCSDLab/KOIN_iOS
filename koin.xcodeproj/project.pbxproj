@@ -401,7 +401,7 @@
 		7CA63A2A2F1AF80B00226F86 /* LostItemListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A292F1AF80B00226F86 /* LostItemListTableView.swift */; };
 		7CA63A2C2F1AF80F00226F86 /* LostItemListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A2B2F1AF80F00226F86 /* LostItemListTableViewCell.swift */; };
 		7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */; };
-		7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */; };
+		7CA63A332F1B1B0C00226F86 /* LostItemListFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA63A322F1B1B0C00226F86 /* LostItemListFilterView.swift */; };
 		7CA686692FFC3242007937E9 /* NotificationHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA686682FFC3242007937E9 /* NotificationHistoryRepository.swift */; };
 		7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA686792FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift */; };
 		7CA6868B2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CA6868A2FFCE750007937E9 /* DeleteNotificationHistoryUseCase.swift */; };
@@ -1674,7 +1674,7 @@
 		7CA63A292F1AF80B00226F86 /* LostItemListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListTableView.swift; sourceTree = "<group>"; };
 		7CA63A2B2F1AF80F00226F86 /* LostItemListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListTableViewCell.swift; sourceTree = "<group>"; };
 		7CA63A2F2F1B13F100226F86 /* LostItemStats.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemStats.swift; sourceTree = "<group>"; };
-		7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListFilterViewController.swift; sourceTree = "<group>"; };
+		7CA63A322F1B1B0C00226F86 /* LostItemListFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListFilterView.swift; sourceTree = "<group>"; };
 		7CA686672FFC1FAF007937E9 /* NotificationService.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = NotificationService.entitlements; sourceTree = "<group>"; };
 		7CA686682FFC3242007937E9 /* NotificationHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationHistoryRepository.swift; sourceTree = "<group>"; };
 		7CA686792FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultNotificationHistoryRepository.swift; sourceTree = "<group>"; };
@@ -3766,7 +3766,7 @@
 			children = (
 				7CB11C082FB19895004E0C80 /* LostItemKeywordCollectionView */,
 				7CA63A312F1B1AFA00226F86 /* LostItemListTableView */,
-				7CA63A322F1B1B0C00226F86 /* LostItemListFilterViewController.swift */,
+				7CA63A322F1B1B0C00226F86 /* LostItemListFilterView.swift */,
 				7C372EDC2F1B8DC900149729 /* LostItemListFilterButton.swift */,
 				7C372F132F1CC79C00149729 /* LostItemPostOptionView.swift */,
 			);
@@ -7283,7 +7283,7 @@
 				AA20000000000000000031 /* VerificationSession.swift in Sources */,
 				AA20000000000000000037 /* RegisterInfoInput.swift in Sources */,
 				AA20000000000000000041 /* EnterFormState.swift in Sources */,
-				7CA63A332F1B1B0C00226F86 /* LostItemListFilterViewController.swift in Sources */,
+				7CA63A332F1B1B0C00226F86 /* LostItemListFilterView.swift in Sources */,
 				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
 				7C8A942F2FD2C15400DEA6F5 /* ShopEventCountDto.swift in Sources */,
 				7CF1D58F3069772700295ED9 /* RecruitApplicantRow.swift in Sources */,
