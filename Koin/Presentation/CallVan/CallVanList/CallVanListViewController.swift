@@ -221,11 +221,8 @@ extension CallVanListViewController {
             onFilterItemTapped: onFilterItemTapped,
             onApplyTapped: onApplyTapped
         )
-        let bottomSheetVC = BottomSheetViewControllerB(contentView: contentView)
-        contentView.delegate = bottomSheetVC
-        
-        present(bottomSheetVC, animated: false)
-        
+        presentBottomSheet(contentView)
+
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanFilter, category: .click, value: ""))
     }
     

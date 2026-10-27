@@ -10,7 +10,7 @@ import Combine
 import SnapKit
 import Then
 
-class FilterBottomSheetView: UIView {
+class FilterBottomSheetView: UIView, KoinBottomSheetContent {
     
     // MARK: - Properties
     weak var delegate: KoinBottomSheetDelegate?
@@ -57,6 +57,14 @@ class FilterBottomSheetView: UIView {
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // 스크롤/스택 내부 칩의 실제 너비를 확정한 뒤 intrinsic 높이를 사용한다.
+        filterGroupScrollView.layoutIfNeeded()
+        filterGroupStackView.layoutIfNeeded()
+        filterGroupViews.forEach { $0.layoutIfNeeded() }
     }
 
     // MARK: - Bind
@@ -229,7 +237,7 @@ extension FilterBottomSheetView {
         filterGroupScrollView.snp.makeConstraints {
             $0.top.equalTo(topSeparatorView.snp.bottom)
             $0.leading.trailing.equalToSuperview().inset(32)
-            $0.height.equalTo(filterGroupScrollView.contentLayoutGuide.snp.height).priority(.medium)
+            $0.height.equalTo(filterGroupScrollView.contentLayoutGuide).priority(500)
         }
         filterGroupStackView.snp.makeConstraints {
 //            $0.edges.equalTo(filterGroupScrollView.contentLayoutGuide)
