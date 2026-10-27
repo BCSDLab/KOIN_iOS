@@ -32,7 +32,7 @@ final class CallVanPostPlaceBottomSheetView: UIView {
     }
     
     // MARK: - Properties
-    weak var delegate: BottomSheetViewControllerBDelegate?
+    weak var delegate: KoinBottomSheetDelegate?
     private var onApplyButtonTapped: ((CallVanPlace, String?)->Void)?
     private var filterGroup = FilterGroupModel(
         title: "",

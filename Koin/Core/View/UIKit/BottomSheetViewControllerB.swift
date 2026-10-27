@@ -9,11 +9,6 @@ import UIKit
 import SnapKit
 import Then
 
-protocol BottomSheetViewControllerBDelegate: AnyObject {
-    func present()
-    func dismiss()
-}
-
 final class BottomSheetViewControllerB: UIViewController {
     
     // MARK: - Properties
@@ -66,7 +61,7 @@ final class BottomSheetViewControllerB: UIViewController {
     }
 }
 
-extension BottomSheetViewControllerB: BottomSheetViewControllerBDelegate {
+extension BottomSheetViewControllerB: KoinBottomSheetDelegate {
     
     func present() {
         view.layoutIfNeeded()
@@ -81,7 +76,7 @@ extension BottomSheetViewControllerB: BottomSheetViewControllerBDelegate {
         }
     }
     
-    func dismiss() {
+    func dismiss(completion: (() -> Void)?) {
         dismissContentViewConstraint?.activate()
         presentContentViewConstraint?.deactivate()
         
@@ -93,10 +88,25 @@ extension BottomSheetViewControllerB: BottomSheetViewControllerBDelegate {
                 view.layoutIfNeeded()
             },
             completion: { [weak self] _ in
-                self?.dismiss(animated: true)
+                self?.dismiss(animated: true, completion: completion)
             }
         )
     }
+
+    func invalidateHeight(animated: Bool) {
+        if animated {
+            UIView.animate(withDuration: 0.25) { [weak self] in
+                self?.view.layoutIfNeeded()
+            }
+        } else {
+            view.layoutIfNeeded()
+        }
+    }
+
+    func setFullScreen(_ fullScreen: Bool, animated: Bool) {
+        // 호환 컨테이너는 기본 높이만 지원한다.
+    }
+
 }
 
 extension BottomSheetViewControllerB {

@@ -13,7 +13,7 @@ import Then
 class FilterBottomSheetView: UIView {
     
     // MARK: - Properties
-    weak var delegate: BottomSheetViewControllerBDelegate?
+    weak var delegate: KoinBottomSheetDelegate?
     private var groupModels: [FilterGroupModel]
     private let onFilterItemTapped: ((Int, FilterItemModel)->Bool)?
     private let onResetTapped: (()->Void)?

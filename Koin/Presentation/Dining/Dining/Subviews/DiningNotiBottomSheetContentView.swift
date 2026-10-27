@@ -12,7 +12,7 @@ import Then
 final class DiningNotiBottomSheetContentView: UIView {
     
     // MARK: - Properties
-    weak var delegate: BottomSheetViewControllerBDelegate?
+    weak var delegate: KoinBottomSheetDelegate?
     private let onSoldOutSwitchToggled: (Bool)->Void
     private let onImageUploadSwitchToggled: (Bool)->Void
     private let onNotiButtonTapped: ()->Void
