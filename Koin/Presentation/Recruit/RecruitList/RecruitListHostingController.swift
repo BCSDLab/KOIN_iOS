@@ -200,9 +200,7 @@ extension RecruitListHostingController {
             onResetTapped: onResetTapped,
             onApplyTapped: onApplyTapped
         )
-        let bottomSheetViewController = BottomSheetViewControllerB(contentView: filterBottomSheetView)
-        filterBottomSheetView.delegate = bottomSheetViewController
-        present(bottomSheetViewController, animated: true)
+        presentBottomSheet(filterBottomSheetView)
     }    
 }
 
