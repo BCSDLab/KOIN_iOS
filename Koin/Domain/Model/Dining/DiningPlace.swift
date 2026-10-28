@@ -5,7 +5,7 @@
 //  Created by 김나훈 on 3/9/24.
 //  Nullable 2024.04.26
 
-enum DiningPlace: Equatable {
+enum DiningPlace: Equatable, CaseIterable {
     case cornerA
     case cornerB
     case cornerC

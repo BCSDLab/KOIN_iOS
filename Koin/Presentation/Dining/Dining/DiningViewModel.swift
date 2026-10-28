@@ -18,10 +18,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case didShowToast
         case didTapCloseShareTooltip
         case didTapCloseReportTooltip
-        case didTapReport(
-            selectedItem: DiningItem,
-            imageData: Data
-        )
+        case didTapReport(DiningReportRequest)
         case didTapShare(DiningItem)
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
@@ -35,14 +32,14 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     private let shareMenuListUseCase: ShareMenuListUseCase
     private let fetchDiningNotiUseCase: FetchDiningNotiUseCase
     private let changeNotiUseCase: ChangeNotiUseCase
-    private let fetchCurrentDiningItemsUseCase: FetchCurrentDiningItemsUseCase
+    private let fetchOperatingDiningPlacesUseCase: FetchOperatingDiningPlacesUseCase
     private let reportSoldoutDiningUseCase: ReportSoldoutDiningUseCase
     private let uploadFileUseCase: UploadFileUseCase
     private let assignAbTestUseCase: AssignAbTestUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     private var fetchDiningListTask: Task<Void, Never>?
-    private var fetchCurrnetDiningItemsTask: Task<Void, Never>?
+    private var fetchOperatingDiningPlacesTask: Task<Void, Never>?
     private var assignReportABTestTask: Task<Void, Never>?
     
     // MARK: - State
@@ -50,7 +47,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     private(set) var selectedDate: Date = Date()
     private(set) var selectedDiningType: DiningType = .breakfast
     private(set) var diningLists: [DiningList] = []
-    private(set) var currentDiningItems: [DiningItem] = []
+    private(set) var operatingPlaces: [(place: DiningPlace, id: Int?)] = []
     private(set) var toastMessage: String?
     private(set) var didFinishReporting: Int = 0
     private(set) var shouldShowShareTooltip = !UserDefaults.standard.bool(forKey: "hasShownDiningShareTooltip")
@@ -59,7 +56,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     private(set) var diningNoti: DiningNoti?
     var isLoading: Bool {
         fetchDiningListTask != nil
-        || fetchCurrnetDiningItemsTask != nil
+        || fetchOperatingDiningPlacesTask != nil
         || assignReportABTestTask != nil
     }
     
@@ -73,7 +70,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         shareMenuListUseCase: ShareMenuListUseCase,
         fetchDiningNotiUseCase: FetchDiningNotiUseCase,
         changeNotiUseCase: ChangeNotiUseCase,
-        fetchCurrentDiningItemsUseCase: FetchCurrentDiningItemsUseCase,
+        fetchOperatingDiningPlacesUseCase: FetchOperatingDiningPlacesUseCase,
         reportSoldoutDiningUseCase: ReportSoldoutDiningUseCase,
         uploadFileUseCase: UploadFileUseCase,
         assignAbTestUseCase: AssignAbTestUseCase,
@@ -86,7 +83,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         self.shareMenuListUseCase = shareMenuListUseCase
         self.fetchDiningNotiUseCase = fetchDiningNotiUseCase
         self.changeNotiUseCase = changeNotiUseCase
-        self.fetchCurrentDiningItemsUseCase = fetchCurrentDiningItemsUseCase
+        self.fetchOperatingDiningPlacesUseCase = fetchOperatingDiningPlacesUseCase
         self.reportSoldoutDiningUseCase = reportSoldoutDiningUseCase
         self.uploadFileUseCase = uploadFileUseCase
         self.assignAbTestUseCase = assignAbTestUseCase
@@ -99,12 +96,12 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         switch input {
         case .onFirstAppear:
             fetchDiningList()
-            fetchCurrnetDiningItems()
+            fetchOperatingDiningPlaces()
             assignReportABTest()
             fetchNotiListIfNeeded()
         case .refresh:
             fetchDiningList()
-            fetchCurrnetDiningItems()
+            fetchOperatingDiningPlaces()
         case let .changeSelectedDate(date):
             changeSelectedDate(date)
         case let .changeSelectedDiningType(type):
@@ -115,8 +112,8 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
             hideShareTooltip()
         case .didTapCloseReportTooltip:
             hideReportTooltip()
-        case let .didTapReport(selectedItem, imageData):
-            postReport(selectedItem, imageData)
+        case let .didTapReport(request):
+            postReport(request)
         case let .didTapShare(selecteItem):
             shareMenuList(selectedItem: selecteItem)
         case let .didTapSoldOutSwitch(isOn):
@@ -170,19 +167,19 @@ extension DiningViewModel {
             }
         }
     }
-    private func fetchCurrnetDiningItems() {
-        fetchCurrnetDiningItemsTask?.cancel()
+    private func fetchOperatingDiningPlaces() {
+        fetchOperatingDiningPlacesTask?.cancel()
         
-        fetchCurrnetDiningItemsTask = Task {
+        fetchOperatingDiningPlacesTask = Task {
             do {
                 defer {
                     if !Task.isCancelled {
-                        fetchCurrnetDiningItemsTask = nil
+                        fetchOperatingDiningPlacesTask = nil
                     }
                 }
-                let result = try await fetchCurrentDiningItemsUseCase.execute()
+                let operatingPlaces = try await fetchOperatingDiningPlacesUseCase.execute()
                 guard !Task.isCancelled else { return }
-                currentDiningItems = result
+                self.operatingPlaces = operatingPlaces
             } catch {
                 guard !Task.isCancelled else { return }
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
@@ -247,17 +244,14 @@ extension DiningViewModel {
 }
 
 extension DiningViewModel {
-    private func postReport(
-        _ selectedItem: DiningItem,
-        _ imageData: Data
-    ) {
+    private func postReport(_ request: DiningReportRequest) {
         Task {
             do {
                 defer {
                     didFinishReporting += 1
                 }
                 guard let imageUrl = try await uploadFileUseCase.execute(
-                    files: [imageData],
+                    files: [request.evidenceImageData],
                     domain: .coop
                 )
                 .firstValue()
@@ -266,15 +260,15 @@ extension DiningViewModel {
                     throw ErrorResponse.imageUploadError
                 }
                 try await reportSoldoutDiningUseCase.execute(
-                    diningId: selectedItem.id,
+                    diningId: request.id,
                     imageUrl: imageUrl
                 )
-                toastMessage = "\(selectedItem.place.name) 품절을 제보했습니다."
-                makeReportLogEvent(category: .submit, selectedItem: selectedItem)
+                toastMessage = "\(request.place.name) 품절을 제보했습니다."
+                makeReportLogEvent(category: .submit, selectedPlace: request.place)
             } catch {
                 guard !Task.isCancelled else { return }
                 toastMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
-                makeReportLogEvent(category: .fail, selectedItem: selectedItem)
+                makeReportLogEvent(category: .fail, selectedPlace: request.place)
             }
         }
     }
@@ -296,7 +290,7 @@ extension DiningViewModel {
 extension DiningViewModel {
     private func makeReportLogEvent(
         category: EventParameter.EventCategory,
-        selectedItem: DiningItem
+        selectedPlace: DiningPlace
     ) {
         guard let reportAbTestName = reportAbTest?.logValue else {
             return
@@ -304,7 +298,7 @@ extension DiningViewModel {
         makeLogAnalyticsEvent(
             label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSubmit,
             category: category,
-            value: "\(reportAbTestName)_\(selectedItem.place.name)"
+            value: "\(reportAbTestName)_\(selectedPlace.name)"
         )
     }
     

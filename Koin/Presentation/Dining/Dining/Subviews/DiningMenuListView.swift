@@ -96,7 +96,7 @@ struct DiningMenuListView: View {
         )
         .overlayReportTooltip(
             shouldShowReportTooltip: shouldShowReportTooltip,
-            onReportTooltipImageTapped: { onReportTapped(nil) },
+            onReportTooltipImageTapped: { onReportTapped(list.items.first) },
             onReportTooltipXButtonTapped: onCloseReportTooltipTapped
         )
     }

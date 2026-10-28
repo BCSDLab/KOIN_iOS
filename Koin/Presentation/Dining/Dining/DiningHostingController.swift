@@ -134,17 +134,8 @@ extension DiningHostingController {
 }
 
 extension DiningHostingController {
-    private func onCompleteButtonTapped(
-        selectedItem: DiningItem,
-        evidenceImage: UIImage
-    ) {
-        guard let imageData = evidenceImage.jpegData(compressionQuality: 0.5) else {
-            return
-        }
-        rootView.didTapReport(
-            selectedItem: selectedItem,
-            evidenceImage: imageData
-        )
+    private func onCompleteButtonTapped(_ request: DiningReportRequest) {
+        rootView.didTapReport(request)
     }
 }
 
@@ -174,56 +165,65 @@ extension DiningHostingController {
     }
     
     private func showReportModal(selectedPlace: DiningPlace?) {
-        let diningItems = rootView.currentDiningItems
-        guard let selectedItem = diningItems.first(where: { $0.place == selectedPlace }) ?? diningItems.first else {
+        let operatingPlaces = rootView.operatingPlaces
+        guard operatingPlaces.contains(where: { $0.id != nil }) else {
             showToastMessage(message: "학생식당 운영시간이 아닙니다.")
             return
         }
-        self.modalView = makeModalView(selectedItem: selectedItem)
+        self.modalView = makeModalView(
+            operatingPlaces: operatingPlaces,
+            selectedPlace: selectedPlace
+        )
         presentReportModalViewController()
     }
     
-    private func makeModalView(selectedItem: DiningItem) -> DiningReportModalView {
+    private func makeModalView(
+        operatingPlaces: [(place: DiningPlace, id: Int?)],
+        selectedPlace: DiningPlace?
+    ) -> DiningReportModalView {
         return DiningReportModalView(
-            diningItems: rootView.currentDiningItems,
+            operatingPlaces: operatingPlaces,
             onDismissButtonTapped: { [weak self] in
                 guard let self else {
                     return
                 }
-                if let reportAbTestName, let selectedItem = modalView?.selectedItem {
+                if let reportAbTestName, let selectedPlace = modalView?.selectedPlace {
                     rootView.makeLogAnalyticsEvent(
                         label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutExit,
                         category: .click,
-                        value: "\(reportAbTestName)_\(selectedItem.place.name)_이탈"
+                        value: "\(reportAbTestName)_\(selectedPlace.name)_이탈"
                     )
                 }
                 dismiss(animated: true)
             },
-            onPlaceSelected: { [weak self] item in
+            onPlaceSelected: { [weak self] place in
                 guard let self, let reportAbTest = rootView.reportAbTest else {
                     return
                 }
                 rootView.makeLogAnalyticsEvent(
                     label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSelect,
                     category: .select,
-                    value: "\(reportAbTest.logValue)_\(item.place.name)"
+                    value: "\(reportAbTest.logValue)_\(place.name)"
                 )
             },
             onSelectImageButtonTapped: { [weak self] in
                 guard let self else {
                     return
                 }
-                if let reportAbTestName, let selectedItem = modalView?.selectedItem {
+                if let reportAbTestName, let selectedPlace = modalView?.selectedPlace {
                     rootView.makeLogAnalyticsEvent(
                         label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutPhoto,
                         category: .click,
-                        value: "\(reportAbTestName)_\(selectedItem.place.name)"
+                        value: "\(reportAbTestName)_\(selectedPlace.name)"
                     )
                 }
                 checkAndPresentPicker()
             },
             onCompleteButtonTapped: onCompleteButtonTapped,
-            selectedItem: selectedItem
+            showToastMessage: { [weak self] message in
+                self?.showToastMessage(message: message)
+            },
+            selectedPlace: selectedPlace
         )
     }
     
