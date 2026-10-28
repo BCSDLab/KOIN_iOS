@@ -594,7 +594,7 @@
 		7CED91122EF2D1F900457128 /* LectureView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90882EF2D1F900457128 /* LectureView.swift */; };
 		7CED91142EF2D1F900457128 /* LostItemChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F032EF2D1F900457128 /* LostItemChatViewController.swift */; };
 		7CED91152EF2D1F900457128 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F232EF2D1F900457128 /* LoginViewModel.swift */; };
-		7CED91162EF2D1F900457128 /* ShopSortOptionSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FB52EF2D1F900457128 /* ShopSortOptionSheetViewController.swift */; };
+		7CED91162EF2D1F900457128 /* ShopSortOptionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FB52EF2D1F900457128 /* ShopSortOptionSheetView.swift */; };
 		7CED91172EF2D1F900457128 /* TimetableText+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A02EF2D1F900457128 /* TimetableText+.swift */; };
 		7CED91182EF2D1F900457128 /* LandViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AB2EF2D1F900457128 /* LandViewModel.swift */; };
 		7CED911C2EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90772EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift */; };
@@ -1883,7 +1883,7 @@
 		7CED8FB12EF2D1F900457128 /* EventShopCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventShopCollectionView.swift; sourceTree = "<group>"; };
 		7CED8FB22EF2D1F900457128 /* EventShopCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventShopCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8FB42EF2D1F900457128 /* CenterFlowLayout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CenterFlowLayout.swift; sourceTree = "<group>"; };
-		7CED8FB52EF2D1F900457128 /* ShopSortOptionSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSortOptionSheetViewController.swift; sourceTree = "<group>"; };
+		7CED8FB52EF2D1F900457128 /* ShopSortOptionSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSortOptionSheetView.swift; sourceTree = "<group>"; };
 		7CED8FB72EF2D1F900457128 /* ShopViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewModel.swift; sourceTree = "<group>"; };
 		7CED8FB82EF2D1F900457128 /* ShopViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopViewController.swift; sourceTree = "<group>"; };
 		7CED8FBA2EF2D1F900457128 /* ShopSearchTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchTableView.swift; sourceTree = "<group>"; };
@@ -4776,7 +4776,7 @@
 				7CED8FB02EF2D1F900457128 /* ShopInfoCollectionView */,
 				7CED8FB32EF2D1F900457128 /* EventShopCollectionView */,
 				7CED92452EF3DC2800457128 /* OrderCategoryCollectionView */,
-				7CED8FB52EF2D1F900457128 /* ShopSortOptionSheetViewController.swift */,
+				7CED8FB52EF2D1F900457128 /* ShopSortOptionSheetView.swift */,
 				7CED8FB42EF2D1F900457128 /* CenterFlowLayout.swift */,
 			);
 			path = SubViews;
@@ -7394,7 +7394,7 @@
 				7CED91142EF2D1F900457128 /* LostItemChatViewController.swift in Sources */,
 				7CED91152EF2D1F900457128 /* LoginViewModel.swift in Sources */,
 				7C7F56B42FFB6A6400847151 /* NotificationPopUpViewController.swift in Sources */,
-				7CED91162EF2D1F900457128 /* ShopSortOptionSheetViewController.swift in Sources */,
+				7CED91162EF2D1F900457128 /* ShopSortOptionSheetView.swift in Sources */,
 				7CB8EB4530584FC500300E99 /* RecruitProfilePostSecondStepView.swift in Sources */,
 				7CED91172EF2D1F900457128 /* TimetableText+.swift in Sources */,
 				7CED91182EF2D1F900457128 /* LandViewModel.swift in Sources */,
