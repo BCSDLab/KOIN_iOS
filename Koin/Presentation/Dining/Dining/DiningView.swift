@@ -68,6 +68,7 @@ struct DiningView: ActionBindableView {
             }
         }
         .onChange(of: viewModel.didFinishReporting) {
+            IndicatorView.dismiss()
             sendAction(.didFinishReporting)
         }
         .onChange(of: viewModel.diningNoti) {
