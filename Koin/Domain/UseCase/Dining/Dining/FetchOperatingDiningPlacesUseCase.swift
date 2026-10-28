@@ -62,6 +62,7 @@ final class DefaultFetchOperatingDiningPlacesUseCase: FetchOperatingDiningPlaces
                 let operatingDiningItem: DiningItem? = operatingDiningItems.first {
                     $0.place == place
                     && $0.isSoldOut == false
+                    && $0.menu.first != "미운영"
                 }
                 return (place, operatingDiningItem?.id)
             }
