@@ -116,7 +116,7 @@ extension CategoryHostingController {
         let shareMenuListUseCase = DefaultShareMenuListUseCase(diningRepository: diningRepository)
         let fetchDiningNotiUseCase = DefaultFetchDiningNotiUseCase(notiRepository: notiReposotiry)
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiReposotiry)
-        let fetchCurrentDiningItemsUseCase = DefaultFetchCurrentDiningItemsUseCase(repository: diningRepository)
+        let fetchOperatingDiningPlacesUseCase = DefaultFetchOperatingDiningPlacesUseCase(repository: diningRepository)
         let reportSoldoutDiningUseCase = DefaultReportSoldoutDiningUseCase(repository: diningRepository)
         let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: coreRepository)
         let assignAbTestUseCase = DefaultAssignAbTestUseCase(abTestRepository: abTestRepository)
@@ -127,7 +127,7 @@ extension CategoryHostingController {
             shareMenuListUseCase: shareMenuListUseCase,
             fetchDiningNotiUseCase: fetchDiningNotiUseCase,
             changeNotiUseCase: changeNotiUseCase,
-            fetchCurrentDiningItemsUseCase: fetchCurrentDiningItemsUseCase,
+            fetchOperatingDiningPlacesUseCase: fetchOperatingDiningPlacesUseCase,
             reportSoldoutDiningUseCase: reportSoldoutDiningUseCase,
             uploadFileUseCase: uploadFileUseCase,
             assignAbTestUseCase: assignAbTestUseCase,
