@@ -21,15 +21,23 @@ final class DefaultFetchCurrentDiningItemsUseCase: FetchCurrentDiningItemsUseCas
     
     func execute() async throws -> [DiningItem] {
         let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: Date())
-        let minute = calendar.component(.minute, from: Date())
-        let weekday = calendar.component(.weekday, from: Date())
-        let targetTime = [hour, minute].map { String($0) }.joined(separator: ":")
-        let dayOfWeek: DayOfWeek = switch weekday {
-        case 1: .sunday
-        case 7: .saturday
-        default: .weekday
-        }
+        let now = Date()
+        let dayOfWeek: DayOfWeek = {
+            let weekday = calendar.component(.weekday, from: now)
+            switch weekday {
+            case 1:
+                return .sunday
+            case 7:
+                return .saturday
+            default:
+                return.weekday
+            }
+        }()
+        let targetTime = {
+            let hour = calendar.component(.hour, from: now)
+            let minute = calendar.component(.minute, from: now)
+            return String(format: "%02d:%02d", hour, minute)
+        }()
         
         let mealType = try? await repository.fetchCoopShopList()
             .firstValue()
@@ -43,7 +51,6 @@ final class DefaultFetchCurrentDiningItemsUseCase: FetchCurrentDiningItemsUseCas
             .map {
                 $0.type.toDiningType()
             }
-        
         return try await repository.fetchDiningList(date: Date()).firstValue()
             .filter { $0.type == mealType }
     }
