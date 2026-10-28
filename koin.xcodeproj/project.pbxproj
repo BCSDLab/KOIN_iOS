@@ -196,6 +196,7 @@
 		7C520869306902C10009BDD3 /* RecruitApplyRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C520868306902C10009BDD3 /* RecruitApplyRequest.swift */; };
 		7C5583602F11778B00D3A980 /* ShopInfoHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */; };
 		7C5583622F11779400D3A980 /* ShopInfoFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */; };
+		7C58FB2E30920D43006B4655 /* DiningReportRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FB2D30920D43006B4655 /* DiningReportRequest.swift */; };
 		7C58FE862F5F9CDD00A2737B /* CallVanDataViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE852F5F9CDD00A2737B /* CallVanDataViewController.swift */; };
 		7C58FE892F5F9E7600A2737B /* CallVanData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE882F5F9E7600A2737B /* CallVanData.swift */; };
 		7C58FE8E2F5FA4D200A2737B /* CallVanDataTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C58FE8D2F5FA4D200A2737B /* CallVanDataTableView.swift */; };
@@ -778,7 +779,7 @@
 		7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */; };
 		7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC441C30837E4900623C1F /* CancelableImage.swift */; };
 		7CFC44233083DDA000623C1F /* DiningReportModalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44223083DDA000623C1F /* DiningReportModalView.swift */; };
-		7CFC4425308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */; };
+		7CFC4425308404E300623C1F /* FetchOperatingDiningPlacesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC4424308404E300623C1F /* FetchOperatingDiningPlacesUseCase.swift */; };
 		7CFC44273084111100623C1F /* ReportSoldoutDiningUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */; };
 		7CFC44293084131A00623C1F /* ReportSoldoutRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */; };
 		7CFC442B3085217F00623C1F /* DiningNotiBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */; };
@@ -1460,6 +1461,7 @@
 		7C520868306902C10009BDD3 /* RecruitApplyRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplyRequest.swift; sourceTree = "<group>"; };
 		7C55835F2F11778B00D3A980 /* ShopInfoHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoHeaderView.swift; sourceTree = "<group>"; };
 		7C5583612F11779400D3A980 /* ShopInfoFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopInfoFooterView.swift; sourceTree = "<group>"; };
+		7C58FB2D30920D43006B4655 /* DiningReportRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportRequest.swift; sourceTree = "<group>"; };
 		7C58FE852F5F9CDD00A2737B /* CallVanDataViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanDataViewController.swift; sourceTree = "<group>"; };
 		7C58FE882F5F9E7600A2737B /* CallVanData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanData.swift; sourceTree = "<group>"; };
 		7C58FE8D2F5FA4D200A2737B /* CallVanDataTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanDataTableView.swift; sourceTree = "<group>"; };
@@ -2021,7 +2023,7 @@
 		7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportAbTest.swift; sourceTree = "<group>"; };
 		7CFC441C30837E4900623C1F /* CancelableImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CancelableImage.swift; sourceTree = "<group>"; };
 		7CFC44223083DDA000623C1F /* DiningReportModalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningReportModalView.swift; sourceTree = "<group>"; };
-		7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchCurrentDiningItemsUseCase.swift; sourceTree = "<group>"; };
+		7CFC4424308404E300623C1F /* FetchOperatingDiningPlacesUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOperatingDiningPlacesUseCase.swift; sourceTree = "<group>"; };
 		7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutDiningUseCase.swift; sourceTree = "<group>"; };
 		7CFC44283084131A00623C1F /* ReportSoldoutRequestDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportSoldoutRequestDto.swift; sourceTree = "<group>"; };
 		7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningNotiBottomSheetContentView.swift; sourceTree = "<group>"; };
@@ -5995,6 +5997,7 @@
 				DA2100000000000000000005 /* CoopOpen.swift */,
 				D2A513402C59FE860064941A /* ShareDiningMenu.swift */,
 				7CFC441A30822E3400623C1F /* DiningReportAbTest.swift */,
+				7C58FB2D30920D43006B4655 /* DiningReportRequest.swift */,
 			);
 			path = Dining;
 			sourceTree = "<group>";
@@ -6632,7 +6635,7 @@
 			isa = PBXGroup;
 			children = (
 				D249CD3C2C159350000813F9 /* DateProvider.swift */,
-				7CFC4424308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift */,
+				7CFC4424308404E300623C1F /* FetchOperatingDiningPlacesUseCase.swift */,
 				D249CD252C12DC2C000813F9 /* FetchDiningListUseCase.swift */,
 				D2A8F8BF2C4BCD470090C7A4 /* ShareMenuListUseCase.swift */,
 				7CFC44263084111100623C1F /* ReportSoldoutDiningUseCase.swift */,
@@ -6893,6 +6896,7 @@
 				FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */,
 				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
 				7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */,
+				7C58FB2E30920D43006B4655 /* DiningReportRequest.swift in Sources */,
 				7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */,
 				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
@@ -7776,7 +7780,7 @@
 				7C50A1D33041F8CA00897A6F /* RecruitCategory.swift in Sources */,
 				D208A7B92CA1661F007040E7 /* FetchShopBenefitUseCase.swift in Sources */,
 				D20AD6FB2E02A1280067760A /* FindIdEmailResponse.swift in Sources */,
-				7CFC4425308404E300623C1F /* FetchCurrentDiningItemsUseCase.swift in Sources */,
+				7CFC4425308404E300623C1F /* FetchOperatingDiningPlacesUseCase.swift in Sources */,
 				B68D2CE52EA505AA00F3B479 /* ToastIntent.swift in Sources */,
 				D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */,
 				D22C54752C6A2A80000826DA /* PostReviewUseCase.swift in Sources */,

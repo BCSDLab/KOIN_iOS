@@ -23,8 +23,8 @@ struct DiningView: ActionBindableView {
     
     // MARK: - Properties
     @State private var viewModel: DiningViewModel
-    var currentDiningItems: [DiningItem] {
-        viewModel.currentDiningItems
+    var operatingPlaces: [(place: DiningPlace, id: Int?)] {
+        viewModel.operatingPlaces
     }
     var reportAbTest: DiningReportAbTest? {
         viewModel.reportAbTest
@@ -94,12 +94,9 @@ struct DiningView: ActionBindableView {
         viewModel.execute(.didTapCloseReportTooltip)
     }
     
-    func didTapReport(
-        selectedItem: DiningItem,
-        evidenceImage imageData: Data
-    ) {
+    func didTapReport(_ request: DiningReportRequest) {
         IndicatorView.show()
-        viewModel.execute(.didTapReport(selectedItem: selectedItem, imageData: imageData))
+        viewModel.execute(.didTapReport(request))
     }
     
     func didTapSoldOutSwitch(isOn: Bool) {
@@ -213,4 +210,3 @@ extension DiningView {
         )
     }
 }
-

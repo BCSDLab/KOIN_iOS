@@ -13,15 +13,13 @@ final class DiningReportModalView: UIView {
 
     // MARK: - Closures
     private let onDismissButtonTapped: ()->Void
-    private let onPlaceSelected: (DiningItem)->Void
+    private let onPlaceSelected: (DiningPlace)->Void
     private let onSelectImageButtonTapped: ()->Void
-    private let onCompleteButtonTapped: (
-        _ selectedItem: DiningItem,
-        _ evidenceImage: UIImage
-    ) -> Void
+    private let onCompleteButtonTapped: (DiningReportRequest) -> Void
+    private let showToastMessage: (String) -> Void
 
     // MARK: - Properties
-    private let diningItems: [DiningItem]
+    private let operatingPlaces: [(place: DiningPlace, id: Int?)]
     private let evidenceImageDescriptions: [String] = [
         "• 배식대의 품절 안내판 촬영",
         "• 학식당 앞 품절 식판 안내",
@@ -31,7 +29,7 @@ final class DiningReportModalView: UIView {
     ]
 
     // MARK: - State
-    private(set) var selectedItem: DiningItem {
+    private(set) var selectedPlace: DiningPlace {
         didSet {
             updatePlaceButtons()
             updateCompleteButton()
@@ -74,22 +72,27 @@ final class DiningReportModalView: UIView {
 
     // MARK: - Initializer
     init(
-        diningItems: [DiningItem],
+        operatingPlaces: [(place: DiningPlace, id: Int?)],
         onDismissButtonTapped: @escaping ()->Void,
-        onPlaceSelected: @escaping (DiningItem)->Void,
+        onPlaceSelected: @escaping (DiningPlace)->Void,
         onSelectImageButtonTapped: @escaping ()->Void,
-        onCompleteButtonTapped: @escaping (
-            _ selectedItem: DiningItem,
-            _ evidenceImage: UIImage
-        ) -> Void,
-        selectedItem: DiningItem
+        onCompleteButtonTapped: @escaping (DiningReportRequest) -> Void,
+        showToastMessage: @escaping (String) -> Void,
+        selectedPlace: DiningPlace?
     ) {
-        self.diningItems = diningItems
+        // 호출부에서 제보 가능한 장소가 하나 이상임을 보장한다.
+        let initialPlace = operatingPlaces.first { $0.place == selectedPlace && $0.id != nil }
+            ?? operatingPlaces.first { $0.id != nil }
+        guard let initialPlace else {
+            preconditionFailure("품절 제보 가능한 식단이 없음")
+        }
+        self.operatingPlaces = operatingPlaces
         self.onDismissButtonTapped = onDismissButtonTapped
         self.onPlaceSelected = onPlaceSelected
         self.onSelectImageButtonTapped = onSelectImageButtonTapped
         self.onCompleteButtonTapped = onCompleteButtonTapped
-        self.selectedItem = selectedItem
+        self.showToastMessage = showToastMessage
+        self.selectedPlace = initialPlace.place
         super.init(frame: .zero)
         configureView()
         setAddTargets()
@@ -110,9 +113,9 @@ final class DiningReportModalView: UIView {
 extension DiningReportModalView {
     // MARK: - Update
     private func updatePlaceButtons() {
-        zip(diningItems, placeButtons).forEach { diningItem, button in
-            let isSelected = diningItem == selectedItem
-            let textColor: ColorAsset = isSelected ? .new500 : .neutral500
+        zip(operatingPlaces, placeButtons).forEach { diningPlace, button in
+            let isSelected = diningPlace.place == selectedPlace
+            let textColor: ColorAsset = diningPlace.id == nil ? .neutral300 : (isSelected ? .new500 : .neutral500)
             let borderColor: ColorAsset = isSelected ? .new500 : .neutral300
             button.configuration?.attributedTitle?.foregroundColor = UIColor.appColor(textColor)
             button.configuration?.background.strokeColor = .appColor(borderColor)
@@ -152,8 +155,10 @@ extension DiningReportModalView {
         guard let index = placeButtons.firstIndex(of: sender) else {
             return
         }
-        selectedItem = diningItems[index]
-        onPlaceSelected(diningItems[index])
+        let option = operatingPlaces[index]
+        guard option.id != nil else { return }
+        selectedPlace = option.place
+        onPlaceSelected(option.place)
     }
 
     @objc private func didTapSelectImageButton() {
@@ -168,10 +173,18 @@ extension DiningReportModalView {
         guard let evidenceImage else {
             return
         }
-        onCompleteButtonTapped(
-            selectedItem,
-            evidenceImage
+        guard let id = operatingPlaces.first(where: { $0.place == selectedPlace })?.id,
+              let imageData = evidenceImage.jpegData(compressionQuality: 0.5) else {
+            let error = ErrorResponse.unexpectedInternalError
+            showToastMessage(error.message)
+            return
+        }
+        let request = DiningReportRequest(
+            place: selectedPlace,
+            id: id,
+            evidenceImageData: imageData
         )
+        onCompleteButtonTapped(request)
     }
 }
 
@@ -179,8 +192,28 @@ extension DiningReportModalView {
     // MARK: - Configure
     private func configureView() {
         setUpStyles()
+        setUpButtons()
         setUpLayouts()
         setUpConstraints()
+    }
+
+    private func setUpButtons() {
+        placeButtons = operatingPlaces.map { option in
+            UIButton().then {
+                var configuration = UIButton.Configuration.plain()
+                configuration.attributedTitle = AttributedString(
+                    option.place.name,
+                    attributes: AttributeContainer([
+                        .font: UIFont.appFont(.pretendardSemiBold, size: 14)
+                    ])
+                )
+                configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
+                configuration.cornerStyle = .capsule
+                configuration.background.strokeWidth = 1
+                $0.configuration = configuration
+                $0.isEnabled = option.id != nil
+            }
+        }
     }
 
     private func setUpStyles() {
@@ -214,21 +247,6 @@ extension DiningReportModalView {
         placeButtonStackView.do {
             $0.axis = .horizontal
             $0.spacing = 12
-        }
-        placeButtons = diningItems.map { diningItem in
-            UIButton().then {
-                var configuration = UIButton.Configuration.plain()
-                configuration.attributedTitle = AttributedString(
-                    diningItem.place.name,
-                    attributes: AttributeContainer([
-                        .font: UIFont.appFont(.pretendardSemiBold, size: 14)
-                    ])
-                )
-                configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 12)
-                configuration.cornerStyle = .capsule
-                configuration.background.strokeWidth = 1
-                $0.configuration = configuration
-            }
         }
 
         evidenceView.do {
