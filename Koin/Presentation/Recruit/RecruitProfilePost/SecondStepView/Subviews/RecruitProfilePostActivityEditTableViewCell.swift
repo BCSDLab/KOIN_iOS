@@ -20,6 +20,10 @@ final class RecruitProfilePostActivityEditTableViewCell: UITableViewCell {
     
     private var activity = RecruitProfileActivityRequest()
     private var subscriptions = Set<AnyCancellable>()
+    /// activity의 시작·종료일과 진행 중 여부
+    private var period: RecruitActivityPeriod {
+        RecruitActivityPeriod(start: activity.startedAt, end: activity.endedAt, isOngoing: activity.isOngoing)
+    }
     
     // MARK: - Dropdown
     private weak var dropdown: KoinDropdownViewController?
@@ -60,12 +64,8 @@ final class RecruitProfilePostActivityEditTableViewCell: UITableViewCell {
         disabledTextColor: .appColor(.neutral0),
         cornerRadius: 16
     )
-    private let startPickerView = KoinPickerDropDownView(
-        delegate: KoinPickerDropDownViewDateDelegate(range: -18_250..<1)
-    )
-    private let endPickerView = KoinPickerDropDownView(
-        delegate: KoinPickerDropDownViewDateDelegate(range: -18_250..<1)
-    )
+    private let startPickerView = NewKoinPickerDropDownView(configuration: .recruitDate)
+    private let endPickerView = NewKoinPickerDropDownView(configuration: .recruitDate)
     
     // MARK: - Initializer
     override init(
@@ -104,22 +104,14 @@ final class RecruitProfilePostActivityEditTableViewCell: UITableViewCell {
 
 extension RecruitProfilePostActivityEditTableViewCell {
     private func bind() {
-        startPickerView.selectedItemPublisher
-            .sink { [weak self] item in
-                guard let self, let date = date(from: item) else { return }
-                activity.startedAt = date
-                refreshDates()
-                publishActivity()
-            }
-            .store(in: &subscriptions)
-        endPickerView.selectedItemPublisher
-            .sink { [weak self] item in
-                guard let self, let date = date(from: item) else { return }
-                activity.endedAt = date
-                refreshDates()
-                publishActivity()
-            }
-            .store(in: &subscriptions)
+        [RecruitActivityPeriod.Field.start, .end].forEach { field in
+            pickerView(for: field).datePublisher
+                .sink { [weak self] date in
+                    guard let self else { return }
+                    apply(period.updating(field, to: date))
+                }
+                .store(in: &subscriptions)
+        }
     }
 }
 
@@ -151,7 +143,7 @@ extension RecruitProfilePostActivityEditTableViewCell {
     }
     
     @objc private func startDateButtonTapped() {
-        startPickerView.reset(initialDate: activity.startedAt ?? Date())
+        preparePicker(for: .start)
         dropdown = presentDropdown(
             anchor: activityPeriodDropdownAnchor,
             content: startPickerView,
@@ -161,7 +153,7 @@ extension RecruitProfilePostActivityEditTableViewCell {
     
     @objc private func endDateButtonTapped() {
         guard !activity.isOngoing else { return }
-        endPickerView.reset(initialDate: activity.endedAt ?? activity.startedAt ?? Date())
+        preparePicker(for: .end)
         dropdown = presentDropdown(
             anchor: activityPeriodDropdownAnchor,
             content: endPickerView,
@@ -190,6 +182,33 @@ extension RecruitProfilePostActivityEditTableViewCell {
         activityChangedPublisher.send(activity)
     }
     
+    /// 드롭다운형: 범위 적용 후 값 표시. 값이 없으면 보정된 picker.date를 즉시 반영(setDate는 이벤트 없음)
+    private func preparePicker(for field: RecruitActivityPeriod.Field) {
+        let picker = pickerView(for: field)
+        let range = period.range(for: field, today: Date())
+        picker.setRange(minimum: range.lowerBound, maximum: range.upperBound)
+        if let date = period.date(for: field) {
+            picker.setDate(date)
+        } else {
+            picker.setDate(Date())
+            apply(period.updating(field, to: picker.date))
+        }
+    }
+    
+    private func apply(_ period: RecruitActivityPeriod) {
+        activity.startedAt = period.start
+        activity.endedAt = period.end
+        refreshDates()
+        publishActivity()
+    }
+    
+    private func pickerView(for field: RecruitActivityPeriod.Field) -> NewKoinPickerDropDownView {
+        switch field {
+        case .start: return startPickerView
+        case .end: return endPickerView
+        }
+    }
+    
     private func refreshDates() {
         configureDateButton(
             startDateButton,
@@ -212,14 +231,7 @@ extension RecruitProfilePostActivityEditTableViewCell {
         date: Date?,
         placeholder: String
     ) {
-        let dateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "ko_KR")
-            formatter.dateFormat = "yyyy.MM.dd"
-            return formatter
-        }()
-        
-        let text = date.map(dateFormatter.string(from:)) ?? placeholder
+        let text = date?.string(with: .yearMonthDayDot) ?? placeholder
         button.setAttributedTitle(NSAttributedString(
             string: text,
             attributes: [
@@ -236,14 +248,6 @@ extension RecruitProfilePostActivityEditTableViewCell {
     
     private func updateCompleteButton() {
         completeButton.updateState(isEnabled: activity.isValid)
-    }
-    
-    private func date(from item: [String]) -> Date? {
-        guard item.count == 3,
-              let year = Int(item[0].filter(\.isNumber)),
-              let month = Int(item[1].filter(\.isNumber)),
-              let day = Int(item[2].filter(\.isNumber)) else { return nil }
-        return Calendar.current.date(from: DateComponents(year: year, month: month, day: day))
     }
 }
 

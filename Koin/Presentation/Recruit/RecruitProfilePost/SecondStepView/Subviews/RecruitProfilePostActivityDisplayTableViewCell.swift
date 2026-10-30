@@ -58,17 +58,11 @@ final class RecruitProfilePostActivityDisplayTableViewCell: UITableViewCell {
             periodLabel.text = nil
             return
         }
-        let dateFormatter: DateFormatter = {
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "ko_KR")
-            formatter.dateFormat = "yyyy.MM.dd"
-            return formatter
-        }()
-        let start = dateFormatter.string(from: startedAt)
+        let start = startedAt.string(with: .yearMonthDayDot)
         if activity.isOngoing {
             periodLabel.text = "\(start) - 진행 중"
         } else if let endedAt = activity.endedAt {
-            periodLabel.text = "\(start) - \(dateFormatter.string(from: endedAt))"
+            periodLabel.text = "\(start) - \(endedAt.string(with: .yearMonthDayDot))"
         } else {
             periodLabel.text = start
         }

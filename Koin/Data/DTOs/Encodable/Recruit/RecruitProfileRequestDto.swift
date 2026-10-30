@@ -69,8 +69,8 @@ extension RecruitProfileActivityRequestDto {
             return nil
         }
         self.title = title
-        self.startedAt = startedAt.formatDateToYYYYMMDD(separator: "-")
-        self.endedAt = request.isOngoing ? nil : request.endedAt?.formatDateToYYYYMMDD(separator: "-")
+        self.startedAt = startedAt.string(with: .yearMonthDayHyphen)
+        self.endedAt = request.isOngoing ? nil : request.endedAt?.string(with: .yearMonthDayHyphen)
         self.isOngoing = request.isOngoing
         self.description = description
     }

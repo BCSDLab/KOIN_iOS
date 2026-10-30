@@ -32,6 +32,7 @@
 		57B70985D5DEFF4D774733F6 /* StudentAcademicInfoRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9D3B08333D4FA77CC935917B /* StudentAcademicInfoRequestDto.swift */; };
 		5AE5AB8D26086C14A37D8929 /* RecruitApplicantListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 827BD7E96347F476DB1BD966 /* RecruitApplicantListRequestDto.swift */; };
 		5F6F2CE2D04FA793C2A5FD33 /* RecruitMyPostDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A5115E53734B28CC6EBED6 /* RecruitMyPostDataDto.swift */; };
+		5FABD176180615A12BEFDC82 /* RecruitActivityPeriod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13EEDE9C4E0CA4F9CF7AB1F8 /* RecruitActivityPeriod.swift */; };
 		678D20761DEF461CA6D4728A /* RecruitDataTextSectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2FBEEB767094CE8B219095B /* RecruitDataTextSectionView.swift */; };
 		682DA9853EC4F396EFEEF876 /* RecruitListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 21AA98431B25CB5914BC2598 /* RecruitListDto.swift */; };
 		7231A38A9BEC1DFBB8C2D978 /* RecruitProfileRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C8CD337DB4DF4456561F92 /* RecruitProfileRequestDto.swift */; };
@@ -1299,6 +1300,7 @@
 /* Begin PBXFileReference section */
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatPostRequestDto.swift; sourceTree = "<group>"; };
+		13EEDE9C4E0CA4F9CF7AB1F8 /* RecruitActivityPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitActivityPeriod.swift; sourceTree = "<group>"; };
 		142D55777812FCA0FA0C2D10 /* Date+KoinFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+KoinFormat.swift"; sourceTree = "<group>"; };
 		1A900DEA87E917C84BCD7E04 /* RecruitProfileDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitProfileDto.swift; sourceTree = "<group>"; };
 		1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostTextFieldView.swift; sourceTree = "<group>"; };
@@ -3219,6 +3221,7 @@
 				645CEE62E516B130B4E2D784 /* RecruitMyApplication.swift */,
 				87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */,
 				1D65EF9E2B65CAE83F8017DD /* RecruitPostSchedule.swift */,
+				13EEDE9C4E0CA4F9CF7AB1F8 /* RecruitActivityPeriod.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -8160,6 +8163,7 @@
 				97ED15F703E2138911A28C10 /* DateAndTimeColumns.swift in Sources */,
 				763EC1A47E67771FDAB08537 /* NewKoinPickerDropDownView.swift in Sources */,
 				FBCFB1EF499995884A6F2E83 /* RecruitPostSchedule.swift in Sources */,
+				5FABD176180615A12BEFDC82 /* RecruitActivityPeriod.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
