@@ -1237,6 +1237,7 @@
 		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 		F7F814BB370C922B6D8AA6EF /* RecruitStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */; };
+		FBCFB1EF499995884A6F2E83 /* RecruitPostSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D65EF9E2B65CAE83F8017DD /* RecruitPostSchedule.swift */; };
 		FC40DDB1CAB3573658F94721 /* StudentAcademicInfoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */; };
 		FDBBD28AC999C8351545499E /* PickerAppearanceDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04DE3DD779FBB7BEB86A567 /* PickerAppearanceDelegate.swift */; };
 		FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000013 /* KoinDropdownAnimator.swift */; };
@@ -1301,6 +1302,7 @@
 		142D55777812FCA0FA0C2D10 /* Date+KoinFormat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+KoinFormat.swift"; sourceTree = "<group>"; };
 		1A900DEA87E917C84BCD7E04 /* RecruitProfileDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitProfileDto.swift; sourceTree = "<group>"; };
 		1C70F17EDEED094B2D134CFD /* RecruitPostTextFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostTextFieldView.swift; sourceTree = "<group>"; };
+		1D65EF9E2B65CAE83F8017DD /* RecruitPostSchedule.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostSchedule.swift; sourceTree = "<group>"; };
 		1FC1A22BED5A1C53E5ED9903 /* RecruitApplicantDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplicantDataDto.swift; sourceTree = "<group>"; };
 		21AA98431B25CB5914BC2598 /* RecruitListDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitListDto.swift; sourceTree = "<group>"; };
 		258BAC6CDD37437FBCCE7CC7 /* DiningList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningList.swift; sourceTree = "<group>"; };
@@ -2592,7 +2594,6 @@
 				F04DE3DD779FBB7BEB86A567 /* PickerAppearanceDelegate.swift */,
 				C6F79CF3354555A65E99DC41 /* NewKoinPickerDropDownView.swift */,
 			);
-			name = NewKoinPickerView;
 			path = NewKoinPickerView;
 			sourceTree = "<group>";
 		};
@@ -3217,6 +3218,7 @@
 				A2C110000000000000000006 /* RecruitChatPostRequest.swift */,
 				645CEE62E516B130B4E2D784 /* RecruitMyApplication.swift */,
 				87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */,
+				1D65EF9E2B65CAE83F8017DD /* RecruitPostSchedule.swift */,
 			);
 			path = Recruit;
 			sourceTree = "<group>";
@@ -5418,7 +5420,6 @@
 				8BC033C97C892742AC115EA1 /* Time24Columns.swift */,
 				675B2652128682A102A19CB8 /* DateAndTimeColumns.swift */,
 			);
-			name = DataSources;
 			path = DataSources;
 			sourceTree = "<group>";
 		};
@@ -8158,6 +8159,7 @@
 				572984100D9B039CAB83A106 /* Time24Columns.swift in Sources */,
 				97ED15F703E2138911A28C10 /* DateAndTimeColumns.swift in Sources */,
 				763EC1A47E67771FDAB08537 /* NewKoinPickerDropDownView.swift in Sources */,
+				FBCFB1EF499995884A6F2E83 /* RecruitPostSchedule.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

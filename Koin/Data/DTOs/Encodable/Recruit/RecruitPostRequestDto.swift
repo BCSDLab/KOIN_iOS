@@ -61,9 +61,9 @@ extension RecruitPostRequestDto {
         self.category = RecruitCategoryDto(from: category)
         self.title = title
         self.meetingType = RecruitMeetingTypeDto(from: meetingType)
-        self.activityStartDate = startDate.formatDateToYYYYMMDD(separator: "-")
-        self.activityEndDate = endDate.formatDateToYYYYMMDD(separator: "-")
-        self.deadlineDate = deadline.formatDateToYYYYMMDD(separator: "-")
+        self.activityStartDate = startDate.string(with: .yearMonthDayHyphen)
+        self.activityEndDate = endDate.string(with: .yearMonthDayHyphen)
+        self.deadlineDate = deadline.string(with: .yearMonthDayHyphen)
         self.recruitmentType = RecruitRoleTypeDto(from: request.type)
         switch request.type {
         case .roleBased:
