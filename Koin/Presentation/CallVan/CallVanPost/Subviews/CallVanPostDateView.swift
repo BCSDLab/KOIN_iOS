@@ -14,11 +14,12 @@ final class CallVanPostDateView: UIView {
     
     // MARK: - Properties
     let dateButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    /// 사용자 조작(휠·초기화)일 때만 발행
     let dateChangedPublisher = PassthroughSubject<Date, Never>()
-    let selectedItemPublisher = PassthroughSubject<[String], Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let formatter = DateFormatter().then {
-        $0.dateFormat = "yyyy년 M월 d일"
+    
+    var date: Date {
+        return dateDropDownView.date
     }
     
     // MARK: - Dropdown
@@ -31,10 +32,11 @@ final class CallVanPostDateView: UIView {
     private let dateButton = UIButton()
     private let dateLabel = UILabel()
     private let downArrowImageView = UIImageView()
-    private let dateDropDownView = KoinPickerDropDownView(delegate: KoinPickerDropDownViewDateDelegate(range: 0..<365))
+    private let dateDropDownView: NewKoinPickerDropDownView
     
     // MARK: - Initializer
-    init() {
+    init(now: Date) {
+        self.dateDropDownView = NewKoinPickerDropDownView(configuration: .callVanDate(now: now))
         super.init(frame: .zero)
         configureView()
         setAddTargets()
@@ -45,23 +47,24 @@ final class CallVanPostDateView: UIView {
     }
     
     // MARK: - Public
-    func update(_ date: Date) {
-        dateDropDownView.reset(initialDate: date)
+    /// 이벤트 없음. 범위로 보정된 값(date)으로 라벨 갱신
+    func setDate(_ date: Date) {
+        dateDropDownView.setDate(date)
+        updateDateLabel(dateDropDownView.date)
     }
 }
 
 extension CallVanPostDateView {
     
     private func bind() {
-        dateDropDownView.selectedItemPublisher.sink { [weak self] selectedItems in
-            guard let self else { return }
-            dateLabel.text = "\(selectedItems[0]) \(selectedItems[1]) \(selectedItems[2])"
-            if let date = formatter.date(from: dateLabel.text ?? "") {
-                dateChangedPublisher.send(date)
-            }
-            
+        dateDropDownView.datePublisher.sink { [weak self] date in
+            self?.updateDateLabel(date)
+            self?.dateChangedPublisher.send(date)
         }.store(in: &subscriptions)
-        
+    }
+    
+    private func updateDateLabel(_ date: Date) {
+        dateLabel.text = date.string(with: .yearMonthDay)
     }
 }
 

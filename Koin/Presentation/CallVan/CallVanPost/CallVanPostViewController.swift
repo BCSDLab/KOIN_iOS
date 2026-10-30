@@ -21,12 +21,14 @@ final class CallVanPostViewController: UIViewController {
     private let inputSubject = PassthroughSubject<CallVanPostViewModel.Input, Never>()
     private let viewModel: CallVanPostViewModel
     private var subscriptions: Set<AnyCancellable> = []
+    /// 화면 진입 시 1회 고정. 출발일 범위·초기값 기준
+    private let now = Date()
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
     private let scrollContentView = UIView()
     private let placeView = CallVanPostPlaceView()
-    private let dateView = CallVanPostDateView()
+    private lazy var dateView = CallVanPostDateView(now: now)
     private let timeView = CallVanPostTimeView()
     private let participantsView = CallVanPostParticipantsView()
     
@@ -51,7 +53,7 @@ final class CallVanPostViewController: UIViewController {
         configureView()
         setAddTargets()
         bind()
-        dateView.update(Date())
+        configureInitialDate()
         timeView.update(Date())
     }
     
@@ -132,6 +134,15 @@ final class CallVanPostViewController: UIViewController {
         participantsView.participantsChangedPublisher.sink { [weak self] participants in
             self?.inputSubject.send(.updateMaxParticipants(participants))
         }.store(in: &subscriptions)
+    }
+}
+
+extension CallVanPostViewController {
+    
+    /// setDate는 이벤트가 없으므로 보정된 값으로 VM을 직접 1회 갱신
+    private func configureInitialDate() {
+        dateView.setDate(now)
+        inputSubject.send(.updateDepartureDate(dateView.date))
     }
 }
 
