@@ -38,8 +38,7 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         super.viewDidLoad()
         configureView()
         bind()
-        inputSubject.send(.getDatePickerData)
-        getTodayData()
+        inputSubject.send(.getSearchedResult(viewModel.departDate, nil))
         let backButton = UIBarButtonItem(image: .appImage(asset: .arrowBack), style: .done, target: self, action: #selector(tapLeftBarButton))
        navigationItem.leftBarButtonItem = backButton
         
@@ -68,8 +67,8 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .udpatesSearchedResult(departTime, busSearchedResult):
-                self?.updateSearchedResult(departTime: departTime, departInfo: busSearchedResult)
+            case let .udpatesSearchedResult(departDate, busSearchedResult):
+                self?.updateSearchedResult(departDate: departDate, departInfo: busSearchedResult)
             case let .updateSemesterInfo(semesterInfo):
                 self?.updateSemesterInfo(semesterInfo: semesterInfo)
             }
@@ -100,24 +99,9 @@ extension BusSearchResultViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    private func getTodayData() {
-        let currentDate = Date()
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: currentDate)
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "h:mm"
-    
-        let amPm = hour < 12 ? "오전" : "오후"
-        let formattedTime = formatter.string(from: currentDate)
-       
-        let today = "오늘 \(amPm) \(formattedTime)"
-        inputSubject.send(.getSearchedResult(today, .noValue))
-    }
-    
-    private func updateSearchedResult(departTime: String?, departInfo: SearchBusInfoResult) {
-        if let time = departTime {
-            tableView.setBusSearchTime(departTime: "\(time)")
+    private func updateSearchedResult(departDate: Date?, departInfo: SearchBusInfoResult) {
+        if let departDate {
+            tableView.setBusSearchTime(departTime: departDate.relativeDayTimeString(today: viewModel.now))
         }
         tableView.setBusSearchResult(busSearchResult: departInfo)
     }
@@ -126,26 +110,21 @@ extension BusSearchResultViewController {
         datePickerSubTitle = "현재는 \(semesterInfo.name)(\(semesterInfo.to)까지)의 시간표를 제공하고 있어요."
     }
 
+    /// 모달형: 열 때 현재 departDate 표시, 완료 시에만 적용, 닫기는 미적용
     private func presentBusSearchDatePickerViewController() {
-        guard let datePickerData = viewModel.datePickerData else { return }
-
         let busSearchDatePickerViewController = BusSearchDatePickerViewController(
             subTitle: datePickerSubTitle,
-            onPickerDateChanged: { [weak self] isChanged in
-                let logValue = isChanged != nil ? "Y" : "N"
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.departureTimeSettingDone, .click, logValue))
-            },
-            onPickerItemsSelected: { [weak self] selectedItems in
-                guard selectedItems.count > 3 else { return }
-                self?.inputSubject.send(.updateDatePickerSelectedItems(selectedItems))
-                let time = "\(selectedItems[0]) \(selectedItems[1]) \(selectedItems[2]):\(selectedItems[3])"
-                self?.inputSubject.send(.getSearchedResult(time, nil))
+            now: viewModel.now,
+            departDate: viewModel.departDate,
+            onCompleted: { [weak self] departDate, isDateChanged in
+                self?.inputSubject.send(.getSearchedResult(departDate, nil))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.departureTimeSettingDone, .click, isDateChanged ? "Y" : "N"))
             },
             onDepartureNowTapped: { [weak self] in
+                self?.inputSubject.send(.departNow)
                 self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.departureNow, .click, "지금 출발"))
             }
         )
-        busSearchDatePickerViewController.setPickerItems(items: datePickerData.0, selectedItems: datePickerData.1)
         present(busSearchDatePickerViewController, animated: true)
     }
 }
