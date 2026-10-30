@@ -15,6 +15,9 @@ final class BusSearchResultTableView: UITableView {
     private var subscriptions = Set<AnyCancellable>()
     private var busSearchResult: SearchBusInfoResult = .init(depart: .koreatech, arrival: .terminal, departDate: Date(), departTime: Date(), schedule: [])
     private var busSearchSchedule: [ScheduleInformation] = []
+    /// 헤더 재생성·재사용 시 다시 넣을 표시 상태
+    private var departTimeText: String?
+    private var departBusType: BusType = .noValue
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -39,6 +42,7 @@ final class BusSearchResultTableView: UITableView {
     }
     
     func setBusSearchTime(departTime: String) {
+        departTimeText = departTime
         guard let view = self.headerView(forSection: 0) as? BusSearchResultTableViewHeader else { return }
         view.configureDepartTime(departTime: departTime)
     }
@@ -52,12 +56,18 @@ final class BusSearchResultTableView: UITableView {
         }
     }
     
+    func clearBusSearchResult() {
+        busSearchSchedule = []
+        reloadData()
+    }
+    
     private func showDropDown() {
         let dropDown = DropDown()
         guard let view = self.headerView(forSection: 0) as? BusSearchResultTableViewHeader else { return }
         dropDown.dataSource = ["전체 차종", "셔틀버스", "대성고속", "시내버스"]
         dropDown.selectionAction = { [weak self] (index, item) in
             let busType: BusType = index == 0 ? .noValue : BusType.allCases[index - 1]
+            self?.departBusType = busType
             view.configureDepartBusType(busType: busType)
             self?.tapDepartBusTypeButtonPublisher.send(busType)
         }
@@ -83,6 +93,12 @@ extension BusSearchResultTableView: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         guard let view = tableView.dequeueReusableHeaderFooterView(withIdentifier: BusSearchResultTableViewHeader.identifier) as? BusSearchResultTableViewHeader else { return UIView() }
+        if let departTimeText {
+            view.configureDepartTime(departTime: departTimeText)
+        }
+        view.configureDepartBusType(busType: departBusType)
+        // 같은 헤더가 다시 반환돼도 구독이 쌓이지 않도록 초기화
+        view.subscriptions.removeAll()
         view.tapDepartTimeButtonPublisher.sink { [weak self] in
             self?.tapDepartTimeButtonPublisher.send()
         }.store(in: &view.subscriptions)

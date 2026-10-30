@@ -17,14 +17,22 @@ final class BusSearchResultViewModel: ViewModelProtocol {
     }
     enum Output {
         case updateSemesterInfo(SemesterInfo)
-        case udpatesSearchedResult(Date?, SearchBusInfoResult)
+        /// 출발 시각(trigger) 갱신. 검색 결과와 무관하게 departDate·now가 바뀌는 즉시 발행
+        case updateDepartDate(Date, now: Date)
+        case udpatesSearchedResult(SearchBusInfoResult)
+        /// 검색 실패: 이전 결과와 새 조건이 섞이지 않도록 목록 비움
+        case clearSearchedResult
+        /// 최신 검색 완료(성공·실패)
+        case searchCompleted
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    /// 진행 중인 검색. 새 검색 시 취소
+    private var searchCancellable: AnyCancellable?
     let busPlaces: (BusPlace, BusPlace)  // navigationItem을 설정하기 위해 private 임시 없앰
     private var departBusType: BusType = .noValue
-    /// 오늘/내일·날짜 목록 기준. 화면 진입 시 1회 고정, 지금 출발 시 갱신
+    /// 오늘/내일·날짜 목록 기준. 화면 진입 시 1회 고정, 지금 출발·새로고침 시 갱신
     private(set) var now: Date
     private(set) var departDate: Date
     private let fetchSearchedResultUseCase: SearchBusInfoUseCase
@@ -63,20 +71,31 @@ extension BusSearchResultViewModel {
     private func getSearchedResult(departDate: Date?, busType: BusType?) {
         if let departDate = departDate {
             self.departDate = departDate
+            outputSubject.send(.updateDepartDate(departDate, now: now))
         }
         else if let busType = busType {
             self.departBusType = busType
         }
-        fetchSearchedResultUseCase.execute(date: self.departDate, busType: departBusType, departure: busPlaces.0, arrival: busPlaces.1).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] searchedResult in
-                let output = departDate != nil ? (departDate, searchedResult) : (nil, searchedResult)
-                self?.outputSubject.send(.udpatesSearchedResult(output.0, output.1))
-            }
-        ).store(in: &subscriptions)
+        
+        searchCancellable?.cancel()
+        searchCancellable = fetchSearchedResultUseCase.execute(date: self.departDate, busType: departBusType, departure: busPlaces.0, arrival: busPlaces.1)
+            .receive(on: DispatchQueue.main)
+            .sink(
+                receiveCompletion: { [weak self] completion in
+                    guard let self else { return }
+                    if case .failure = completion {
+                        outputSubject.send(.clearSearchedResult)
+                    }
+                    outputSubject.send(.searchCompleted)
+                },
+                receiveValue: { [weak self] searchedResult in
+                    guard let self else { return }
+                    outputSubject.send(.udpatesSearchedResult(searchedResult))
+                }
+            )
     }
     
-    /// 지금 출발: now 갱신 후 now로 재검색
+    /// 지금 출발·새로고침: now 갱신 후 now로 재검색
     private func departNow() {
         now = Date()
         getSearchedResult(departDate: now, busType: nil)

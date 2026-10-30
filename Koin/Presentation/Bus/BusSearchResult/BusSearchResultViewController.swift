@@ -19,6 +19,7 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
     // MARK: - UI Components
     
     private let tableView = BusSearchResultTableView(frame: .zero, style: .plain)
+    private let refreshControl = UIRefreshControl()
     
     // MARK: - Initialization
     
@@ -67,8 +68,14 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .udpatesSearchedResult(departDate, busSearchedResult):
-                self?.updateSearchedResult(departDate: departDate, departInfo: busSearchedResult)
+            case let .updateDepartDate(departDate, now):
+                self?.tableView.setBusSearchTime(departTime: departDate.relativeDayTimeString(today: now))
+            case let .udpatesSearchedResult(busSearchedResult):
+                self?.tableView.setBusSearchResult(busSearchResult: busSearchedResult)
+            case .clearSearchedResult:
+                self?.tableView.clearBusSearchResult()
+            case .searchCompleted:
+                self?.refreshControl.endRefreshing()
             case let .updateSemesterInfo(semesterInfo):
                 self?.updateSemesterInfo(semesterInfo: semesterInfo)
             }
@@ -99,11 +106,9 @@ extension BusSearchResultViewController {
         navigationController?.popViewController(animated: true)
     }
     
-    private func updateSearchedResult(departDate: Date?, departInfo: SearchBusInfoResult) {
-        if let departDate {
-            tableView.setBusSearchTime(departTime: departDate.relativeDayTimeString(today: viewModel.now))
-        }
-        tableView.setBusSearchResult(busSearchResult: departInfo)
+    /// 당겨서 새로고침 = 지금 출발
+    @objc private func didPullToRefresh() {
+        inputSubject.send(.departNow)
     }
     
     private func updateSemesterInfo(semesterInfo: SemesterInfo) {
@@ -147,5 +152,7 @@ extension BusSearchResultViewController {
         setUpLayOuts()
         setUpConstraints()
         self.view.backgroundColor = .systemBackground
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
     }
 }
