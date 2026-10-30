@@ -26,6 +26,8 @@ enum KoinDateFormat: String, CaseIterable {
     case yearMonthDayDot = "yyyy.MM.dd"
     /// 2026-03-05
     case yearMonthDayHyphen = "yyyy-MM-dd"
+    /// 2026-03-05 09:05
+    case yearMonthDayHyphenHourMinute = "yyyy-MM-dd HH:mm"
     /// 3월 5일(목)
     case monthDayWeekday = "M월 d일(EEE)"
     /// 오전 09:05
@@ -34,6 +36,8 @@ enum KoinDateFormat: String, CaseIterable {
     case meridiemHourMinute = "a h:mm"
     /// 09:05
     case hourMinute = "HH:mm"
+    /// 09:05 (12시간제)
+    case paddedHour12Minute = "hh:mm"
     /// 2026년
     case yearUnit = "yyyy년"
     /// 3월

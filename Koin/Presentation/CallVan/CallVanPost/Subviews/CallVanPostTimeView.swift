@@ -14,11 +14,13 @@ final class CallVanPostTimeView: UIView {
     
     // MARK: - Properteis
     let timeButtonTappedPublisher = PassthroughSubject<Void, Never>()
+    /// 사용자 조작(휠·초기화)일 때만 발행
     let timeChangedPublisher = PassthroughSubject<Date, Never>()
     
     private var subscriptions: Set<AnyCancellable> = []
-    private let formatter = DateFormatter().then {
-        $0.locale = Locale(identifier: "ko_KR")
+    
+    var date: Date {
+        return timeDropDownView.date
     }
     
     // MARK: - Dropdown
@@ -32,7 +34,7 @@ final class CallVanPostTimeView: UIView {
     private let amPmLabel = UILabel()
     private let separatorView = UIView()
     private let timeLabel = UILabel()
-    private let timeDropDownView = KoinPickerDropDownView(delegate: KoinPickerDropDownViewTimeDelegate())
+    private let timeDropDownView = NewKoinPickerDropDownView(configuration: .callVanTime)
     
     // MARK: - Initializer
     init() {
@@ -47,31 +49,25 @@ final class CallVanPostTimeView: UIView {
     
     
     // MARK: - Public
-    func update(_ date: Date) {
-        timeDropDownView.reset(initialDate: date)
+    /// 이벤트 없음. 보정된 값(date)으로 라벨 갱신
+    func setDate(_ date: Date) {
+        timeDropDownView.setDate(date)
+        updateTimeLabels(timeDropDownView.date)
     }
 }
 
 extension CallVanPostTimeView {
     
     private func bind() {
-        timeDropDownView.selectedItemPublisher.sink { [weak self] selectedItems in
-            let amPm = selectedItems[0] == "AM" ? "오전" : "오후"
-            var hour = selectedItems[1]
-            if hour.count == 1 {
-                hour = "0" + hour
-            }
-            let minute = selectedItems[2]
-            
-            self?.amPmLabel.text = amPm
-            self?.timeLabel.text =  "\(hour):\(minute)"
-            
-            self?.formatter.dateFormat = "a hh:mm"
-            if let date = self?.formatter.date(from: "\(amPm) \(hour):\(minute)") {
-                self?.timeChangedPublisher.send(date)
-            }
+        timeDropDownView.datePublisher.sink { [weak self] date in
+            self?.updateTimeLabels(date)
+            self?.timeChangedPublisher.send(date)
         }.store(in: &subscriptions)
-        
+    }
+    
+    private func updateTimeLabels(_ date: Date) {
+        amPmLabel.text = date.string(with: .meridiem)
+        timeLabel.text = date.string(with: .paddedHour12Minute)
     }
 }
 

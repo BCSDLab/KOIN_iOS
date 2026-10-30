@@ -54,7 +54,6 @@ final class CallVanPostViewController: UIViewController {
         setAddTargets()
         bind()
         configureInitialDate()
-        timeView.update(Date())
     }
     
     private func bind() {
@@ -121,12 +120,7 @@ final class CallVanPostViewController: UIViewController {
             }.store(in: &subscriptions)
         
         timeView.timeChangedPublisher.sink { [weak self] time in
-            let value = {
-                let formatter = DateFormatter()
-                formatter.locale = Locale(identifier: "ko_KR")
-                formatter.dateFormat = "a hh:mm"
-                return formatter.string(from: time)
-            }()
+            let value = time.string(with: .meridiemPaddedHourMinute)
             self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteTime, category: .click, value: value))
             self?.inputSubject.send(.updateDepartureTime(time))
         }.store(in: &subscriptions)
@@ -139,10 +133,12 @@ final class CallVanPostViewController: UIViewController {
 
 extension CallVanPostViewController {
     
-    /// setDate는 이벤트가 없으므로 보정된 값으로 VM을 직접 1회 갱신
+    /// setDate는 이벤트가 없으므로 보정된 값으로 VM을 직접 1회 갱신(callvanWriteTime 로그는 사용자 조작 시에만)
     private func configureInitialDate() {
         dateView.setDate(now)
         inputSubject.send(.updateDepartureDate(dateView.date))
+        timeView.setDate(now)
+        inputSubject.send(.updateDepartureTime(timeView.date))
     }
 }
 
