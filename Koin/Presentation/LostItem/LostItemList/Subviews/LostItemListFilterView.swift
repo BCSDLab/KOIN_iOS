@@ -35,6 +35,11 @@ final class LostItemListFilterView: UIView, KoinBottomSheetContent {
         $0.backgroundColor = .appColor(.neutral200)
     }
 
+    private let filterScrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    private let filterContentView = UIView()
+
     private let authorFilterTitleLabel = UILabel().then {
         $0.text = "목록"
         $0.font = .appFont(.pretendardBold, size: 16)
@@ -280,11 +285,15 @@ extension LostItemListFilterView {
         [stateAllButton, stateNotFoundButton, stateFoundButton].forEach {
             stateButtonsStackView.addArrangedSubview($0)
         }
-        [filterTitleLabel, closeButton, topSeparatorView,
-         authorFilterTitleLabel, authorButtonsStackView, separatorView1,
+        [authorFilterTitleLabel, authorButtonsStackView, separatorView1,
          typeFilterTitleLabel, typeButtonsStackView, separatorView2,
          categoryFilterTitleLabel, categoryButtonsStackView1, categoryButtonsStackView2, separatorView3,
-         stateTitleLabel, stateButtonsStackView,
+         stateTitleLabel, stateButtonsStackView].forEach {
+            filterContentView.addSubview($0)
+        }
+        filterScrollView.addSubview(filterContentView)
+        [filterTitleLabel, closeButton, topSeparatorView,
+         filterScrollView,
          resetFilterButton, applyFilterButton,
          bottomSeparatorView].forEach {
             addSubview($0)
@@ -319,8 +328,18 @@ extension LostItemListFilterView {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
+        filterScrollView.snp.makeConstraints {
+            $0.top.equalTo(topSeparatorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(resetFilterButton.snp.top)
+            $0.height.equalTo(filterScrollView.contentLayoutGuide).priority(500)
+        }
+        filterContentView.snp.makeConstraints {
+            $0.edges.equalTo(filterScrollView.contentLayoutGuide)
+            $0.width.equalTo(filterScrollView.frameLayoutGuide)
+        }
         authorFilterTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(topSeparatorView.snp.bottom).offset(16)
+            $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(32)
         }
         authorButtonsStackView.snp.makeConstraints {
@@ -372,11 +391,11 @@ extension LostItemListFilterView {
         stateButtonsStackView.snp.makeConstraints {
             $0.top.equalTo(stateTitleLabel.snp.bottom).offset(12)
             $0.leading.equalToSuperview().offset(32)
+            $0.bottom.equalToSuperview().offset(-24)
         }
         resetFilterButton.snp.makeConstraints {
             $0.width.equalTo(98)
             $0.height.equalTo(48)
-            $0.top.equalTo(stateButtonsStackView.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(32)
         }
         applyFilterButton.snp.makeConstraints {
