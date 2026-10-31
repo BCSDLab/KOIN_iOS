@@ -32,11 +32,11 @@ final class CallVanPostDateView: UIView {
     private let dateButton = UIButton()
     private let dateLabel = UILabel()
     private let downArrowImageView = UIImageView()
-    private let dateDropDownView: NewKoinPickerDropDownView
+    private let dateDropDownView: KoinPickerDropDownView
     
     // MARK: - Initializer
     init(now: Date) {
-        self.dateDropDownView = NewKoinPickerDropDownView(configuration: .callVanDate(now: now))
+        self.dateDropDownView = KoinPickerDropDownView(configuration: .callVanDate(now: now))
         super.init(frame: .zero)
         configureView()
         setAddTargets()

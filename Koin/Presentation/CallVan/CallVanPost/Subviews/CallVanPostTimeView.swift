@@ -34,7 +34,7 @@ final class CallVanPostTimeView: UIView {
     private let amPmLabel = UILabel()
     private let separatorView = UIView()
     private let timeLabel = UILabel()
-    private let timeDropDownView = NewKoinPickerDropDownView(configuration: .callVanTime)
+    private let timeDropDownView = KoinPickerDropDownView(configuration: .callVanTime)
     
     // MARK: - Initializer
     init() {

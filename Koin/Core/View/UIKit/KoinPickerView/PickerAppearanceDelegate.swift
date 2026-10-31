@@ -11,8 +11,8 @@ import UIKit
 final class PickerAppearanceDelegate: NSObject {
 
     // MARK: - Properties
-    private let style: NewKoinPickerView.Style
-    private let columnSpacing: NewKoinPickerView.ColumnSpacing
+    private let style: KoinPickerView.Style
+    private let columnSpacing: KoinPickerView.ColumnSpacing
     /// 컴포넌트별 정렬. 없으면 가운데
     private let columnAlignments: [Int: NSTextAlignment]
     private let columnsDataSource: PickerColumnsDataSource
@@ -33,8 +33,8 @@ final class PickerAppearanceDelegate: NSObject {
 
     // MARK: - Initializer
     init(
-        style: NewKoinPickerView.Style,
-        columnSpacing: NewKoinPickerView.ColumnSpacing,
+        style: KoinPickerView.Style,
+        columnSpacing: KoinPickerView.ColumnSpacing,
         columnAlignments: [Int: NSTextAlignment],
         columnsDataSource: PickerColumnsDataSource
     ) {
@@ -80,7 +80,7 @@ extension PickerAppearanceDelegate: UIPickerViewDelegate {
         _ pickerView: UIPickerView,
         rowHeightForComponent component: Int
     ) -> CGFloat {
-        return NewKoinPickerView.rowHeight
+        return KoinPickerView.rowHeight
     }
 
     /// 왼쪽 여백 + 글자 폭 + 오른쪽 여백

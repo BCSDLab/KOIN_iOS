@@ -186,7 +186,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Dropdown
-    private var dropdownView: NewKoinPickerDropDownView?
+    private var dropdownView: KoinPickerDropDownView?
     private weak var dropdown: KoinDropdownViewController?
     
     // MARK: - Initializer
@@ -228,7 +228,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     /// now: CollectionView 가 넘겨주는 화면 진입 시각(습득일 범위 기준). picker 는 셀당 한 번만 만든다.
     func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType, now: Date) {
         if dropdownView == nil {
-            let dropdownView = NewKoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.primary600)).then {
+            let dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.primary600)).then {
                 $0.backgroundColor = UIColor.appColor(.neutral100)
                 $0.layer.cornerRadius = 12
             }

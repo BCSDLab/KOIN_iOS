@@ -1,5 +1,5 @@
 //
-//  NewKoinPickerView+Configuration.swift
+//  KoinPickerView+Configuration.swift
 //  koin
 //
 //  Created by 홍기정 on 10/30/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-extension NewKoinPickerView {
+extension KoinPickerView {
 
     // MARK: - Configuration
     struct Configuration {
@@ -122,7 +122,7 @@ extension NewKoinPickerView {
 }
 
 // MARK: - Presets
-extension NewKoinPickerView.Configuration {
+extension KoinPickerView.Configuration {
 
     /// BUS: 오늘 00:00 ~ +89일 23:59, 1분
     static func busDeparture(now: Date) -> Self {

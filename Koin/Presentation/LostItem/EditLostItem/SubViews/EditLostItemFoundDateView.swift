@@ -70,7 +70,7 @@ final class EditLostItemFoundDateView: UIView {
         $0.image = UIImage.appImage(asset: .chevronDown)
         $0.isUserInteractionEnabled = false
     }
-    private let dropdownView: NewKoinPickerDropDownView
+    private let dropdownView: KoinPickerDropDownView
 
     // MARK: - Initializer
     /// now: 화면 진입 시 고정한 시각(습득일 범위 기준)
@@ -79,7 +79,7 @@ final class EditLostItemFoundDateView: UIView {
         self.originalFoundDate = foundDate
         // 서버 값은 보정하지 않고 그대로 표시
         self.foundDateValue = Date(string: foundDate, format: .yearMonthDayHyphen)
-        self.dropdownView = NewKoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.primary600)).then {
+        self.dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.primary600)).then {
             $0.backgroundColor = UIColor.appColor(.neutral100)
             $0.layer.cornerRadius = 12
         }

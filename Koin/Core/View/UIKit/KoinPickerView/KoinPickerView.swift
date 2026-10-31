@@ -1,5 +1,5 @@
 //
-//  NewKoinPickerView.swift
+//  KoinPickerView.swift
 //  koin
 //
 //  Created by 홍기정 on 10/30/26.
@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 
-final class NewKoinPickerView: UIView {
+final class KoinPickerView: UIView {
 
     // MARK: - Publisher
     /// 사용자가 휠을 조작했을 때만 발행
@@ -38,7 +38,7 @@ final class NewKoinPickerView: UIView {
         let count = CGFloat(visibleRowCount.rawValue)
         return CGSize(
             width: UIView.noIntrinsicMetric,
-            height: NewKoinPickerView.rowContentHeight * count + NewKoinPickerView.rowSpacing * (count - 1)
+            height: KoinPickerView.rowContentHeight * count + KoinPickerView.rowSpacing * (count - 1)
         )
     }
 
@@ -47,12 +47,12 @@ final class NewKoinPickerView: UIView {
 
     // MARK: - Initializer
     init(configuration: Configuration) {
-        let columnsDataSource = NewKoinPickerView.makeColumnsDataSource(configuration: configuration, initialDate: Date())
+        let columnsDataSource = KoinPickerView.makeColumnsDataSource(configuration: configuration, initialDate: Date())
         self.columnsDataSource = columnsDataSource
         self.appearanceDelegate = PickerAppearanceDelegate(
             style: configuration.style,
             columnSpacing: configuration.columnSpacing,
-            columnAlignments: NewKoinPickerView.makeColumnAlignments(configuration: configuration),
+            columnAlignments: KoinPickerView.makeColumnAlignments(configuration: configuration),
             columnsDataSource: columnsDataSource
         )
         self.visibleRowCount = configuration.visibleRowCount
@@ -106,7 +106,7 @@ final class NewKoinPickerView: UIView {
     }
 }
 
-extension NewKoinPickerView {
+extension KoinPickerView {
 
     private func userDidSelectRow(_ row: Int, inComponent component: Int) {
         let changedComponents = columnsDataSource.selectRow(row, inComponent: component)

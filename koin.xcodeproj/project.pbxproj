@@ -12,7 +12,7 @@
 		0E2253358E42231BE436FA27 /* RecruitPostScheduleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE127F2AE4B18899F6E5E0D /* RecruitPostScheduleView.swift */; };
 		0EB58161489280CCE5DFB98C /* PickerColumnsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = A644536454EB046B5895D793 /* PickerColumnsDataSource.swift */; };
 		0FCD163D2BA80EAA00C23A2F /* KeychainWorker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */; };
-		10A2EF4791EC61956B3B7A11 /* NewKoinPickerView+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ACE69F8F05148E6637B729 /* NewKoinPickerView+Configuration.swift */; };
+		10A2EF4791EC61956B3B7A11 /* KoinPickerView+Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6ACE69F8F05148E6637B729 /* KoinPickerView+Configuration.swift */; };
 		1537B6CFD3D7AF52A2E9E944 /* RecruitPostMeetingTypeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 73F70BC5F3AA1A34663C32CA /* RecruitPostMeetingTypeView.swift */; };
 		1AD09EAFA1CF9EE0B81E886D /* RecruitMyPostListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = DC82D6E2A559FEFE43E63F24 /* RecruitMyPostListRequestDto.swift */; };
 		239837C1CD4A0D7A5D1D36C7 /* RecruitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AC394F2327076B2F9AEE2A4 /* RecruitService.swift */; };
@@ -38,7 +38,7 @@
 		7231A38A9BEC1DFBB8C2D978 /* RecruitProfileRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 99C8CD337DB4DF4456561F92 /* RecruitProfileRequestDto.swift */; };
 		74B27E3E1D4CD1DA57C65077 /* DateColumns.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC1F6A16FAFCF525CD431C6 /* DateColumns.swift */; };
 		75EBF253F4468B2060B79212 /* RecruitPostSectionHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C3694E3ACBE05B8C7F15357 /* RecruitPostSectionHeaderView.swift */; };
-		763EC1A47E67771FDAB08537 /* NewKoinPickerDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F79CF3354555A65E99DC41 /* NewKoinPickerDropDownView.swift */; };
+		763EC1A47E67771FDAB08537 /* KoinPickerDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C6F79CF3354555A65E99DC41 /* KoinPickerDropDownView.swift */; };
 		79759F6CDB325A7914C75CBE /* RecruitListRequestDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4067CAF18D134F99A04BBA0D /* RecruitListRequestDto.swift */; };
 		7C016540300A88940013DD7B /* ShuttleTicketViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C01653F300A88940013DD7B /* ShuttleTicketViewController.swift */; };
 		7C016544300AA1450013DD7B /* DepartmentCategoryHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C016543300AA1450013DD7B /* DepartmentCategoryHostingController.swift */; };
@@ -494,10 +494,6 @@
 		7CC42B5E2F59D01000940CE1 /* CallVanPostDateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B5D2F59D01000940CE1 /* CallVanPostDateView.swift */; };
 		7CC42B602F59D06C00940CE1 /* CallVanPostParticipantsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B5F2F59D06C00940CE1 /* CallVanPostParticipantsView.swift */; };
 		7CC42B622F59D0EF00940CE1 /* CallVanPostPlaceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B612F59D0EF00940CE1 /* CallVanPostPlaceView.swift */; };
-		7CC42B682F5A9C0C00940CE1 /* KoinPickerDropDownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B672F5A9C0C00940CE1 /* KoinPickerDropDownView.swift */; };
-		7CC42B6E2F5AB00500940CE1 /* KoinPickerViewB.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B6D2F5AB00500940CE1 /* KoinPickerViewB.swift */; };
-		7CC42B702F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B6F2F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift */; };
-		7CC42B762F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */; };
 		7CC42B7B2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */; };
 		7CC42B892F5D85F700940CE1 /* CallVanChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B882F5D85F700940CE1 /* CallVanChat.swift */; };
 		7CC42B8F2F5DCE7400940CE1 /* CallVanChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */; };
@@ -548,7 +544,6 @@
 		7CEB3B4B2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CEB3B4A2FBFF4B700AF2B81 /* DeleteDeviceTokenUseCase.swift */; };
 		7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD02EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift */; };
 		7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F612EF2D1F900457128 /* ManageNoticeKeywordViewController.swift */; };
-		7CED90C02EF2D1F900457128 /* DatePickerDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EEF2EF2D1F900457128 /* DatePickerDropdownView.swift */; };
 		7CED90C12EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD32EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift */; };
 		7CED90C32EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCC2EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift */; };
 		7CED90C62EF2D1F900457128 /* TimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED909A2EF2D1F900457128 /* TimetableCollectionViewCell.swift */; };
@@ -861,8 +856,6 @@
 		83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770FD2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift */; };
 		83E771002D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E770FF2D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift */; };
 		83E96DB82BBC6FBF00164914 /* BusSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83E96DB72BBC6FBF00164914 /* BusSearchDto.swift */; };
-		83EBB87A2D0FDFD700346018 /* KoinPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB8792D0FDFD700346018 /* KoinPickerView.swift */; };
-		83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */; };
 		8A7B1679CC9945559E674584 /* RecruitDataRolesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945FF00E918646E5AB601057 /* RecruitDataRolesView.swift */; };
 		8CBCEFF4A1B4841D6B422B46 /* RecruitProfileDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A900DEA87E917C84BCD7E04 /* RecruitProfileDto.swift */; };
 		8F73C145755D31960169BE61 /* RecruitMyPostListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = A064C42647B4EBB3454B2CA3 /* RecruitMyPostListDto.swift */; };
@@ -1197,7 +1190,7 @@
 		D2FCBEA62D0877CC0097A388 /* FetchFramesUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA52D0877CC0097A388 /* FetchFramesUseCase.swift */; };
 		D2FFA9702D5F4DC500EF8E56 /* CheckLoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA96F2D5F4DB600EF8E56 /* CheckLoginUseCase.swift */; };
 		D2FFA9852D6333BB00EF8E56 /* ReportLostItemRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FFA9842D6333BB00EF8E56 /* ReportLostItemRequest.swift */; };
-		D4B67FBE409FFDD94C9CBEE0 /* NewKoinPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F483F8DD8FCE3104599410C0 /* NewKoinPickerView.swift */; };
+		D4B67FBE409FFDD94C9CBEE0 /* KoinPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F483F8DD8FCE3104599410C0 /* KoinPickerView.swift */; };
 		D6728313D8B09F12DCB47D44 /* RecruitChatMessageDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = B7C07F15438785121E093249 /* RecruitChatMessageDto.swift */; };
 		D80AD4E42E6C6BC30061334B /* waveLogo.json in Resources */ = {isa = PBXBuildFile; fileRef = D80AD4E32E6C6BC30061334B /* waveLogo.json */; };
 		D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */; };
@@ -1763,10 +1756,6 @@
 		7CC42B5D2F59D01000940CE1 /* CallVanPostDateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostDateView.swift; sourceTree = "<group>"; };
 		7CC42B5F2F59D06C00940CE1 /* CallVanPostParticipantsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostParticipantsView.swift; sourceTree = "<group>"; };
 		7CC42B612F59D0EF00940CE1 /* CallVanPostPlaceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostPlaceView.swift; sourceTree = "<group>"; };
-		7CC42B672F5A9C0C00940CE1 /* KoinPickerDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownView.swift; sourceTree = "<group>"; };
-		7CC42B6D2F5AB00500940CE1 /* KoinPickerViewB.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerViewB.swift; sourceTree = "<group>"; };
-		7CC42B6F2F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownViewTimeDelegate.swift; sourceTree = "<group>"; };
-		7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownViewDateDelegate.swift; sourceTree = "<group>"; };
 		7CC42B7A2F5CBD3B00940CE1 /* CallVanPostPlaceBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanPostPlaceBottomSheetView.swift; sourceTree = "<group>"; };
 		7CC42B882F5D85F700940CE1 /* CallVanChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChat.swift; sourceTree = "<group>"; };
 		7CC42B8E2F5DCE7400940CE1 /* CallVanChatViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanChatViewController.swift; sourceTree = "<group>"; };
@@ -1827,7 +1816,6 @@
 		7CED8EEB2EF2D1F900457128 /* AddLostItemCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemCollectionView.swift; sourceTree = "<group>"; };
 		7CED8EEC2EF2D1F900457128 /* AddLostItemCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemCollectionViewCell.swift; sourceTree = "<group>"; };
 		7CED8EED2EF2D1F900457128 /* AddLostItemFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddLostItemFooterView.swift; sourceTree = "<group>"; };
-		7CED8EEF2EF2D1F900457128 /* DatePickerDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DatePickerDropdownView.swift; sourceTree = "<group>"; };
 		7CED8EF12EF2D1F900457128 /* PostLostItemViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemViewModel.swift; sourceTree = "<group>"; };
 		7CED8EF22EF2D1F900457128 /* PostLostItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostLostItemViewController.swift; sourceTree = "<group>"; };
 		7CED8EF92EF2D1F900457128 /* LostItemChatListTableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemChatListTableViewModel.swift; sourceTree = "<group>"; };
@@ -2134,8 +2122,6 @@
 		83E770FD2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShuttleBusTimetableDto.swift; sourceTree = "<group>"; };
 		83E770FF2D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShuttleBusTimetableUseCase.swift; sourceTree = "<group>"; };
 		83E96DB72BBC6FBF00164914 /* BusSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusSearchDto.swift; sourceTree = "<group>"; };
-		83EBB8792D0FDFD700346018 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
-		83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKoinPickerDateUseCase.swift; sourceTree = "<group>"; };
 		87039C64B7CB2AEB632113C6 /* RecruitMyPostData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitMyPostData.swift; sourceTree = "<group>"; };
 		8AC394F2327076B2F9AEE2A4 /* RecruitService.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitService.swift; sourceTree = "<group>"; };
 		8BC033C97C892742AC115EA1 /* Time24Columns.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Time24Columns.swift; sourceTree = "<group>"; };
@@ -2224,7 +2210,7 @@
 		B68D2CEA2EA50C1E00F3B479 /* UIViewController+Toast.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Toast.swift"; sourceTree = "<group>"; };
 		B6A0D6292EEB01E600A19521 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
 		B6A0D62B2EEB01F100A19521 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
-		B6ACE69F8F05148E6637B729 /* NewKoinPickerView+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NewKoinPickerView+Configuration.swift"; sourceTree = "<group>"; };
+		B6ACE69F8F05148E6637B729 /* KoinPickerView+Configuration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinPickerView+Configuration.swift"; sourceTree = "<group>"; };
 		B7C07F15438785121E093249 /* RecruitChatMessageDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatMessageDto.swift; sourceTree = "<group>"; };
 		BEEF10000000000000000001 /* RecruitMyPostList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostList.swift; sourceTree = "<group>"; };
 		BEEF10000000000000000002 /* RecruitMyPostRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostRow.swift; sourceTree = "<group>"; };
@@ -2242,7 +2228,7 @@
 		C0DE00000000000000000002 /* RecruitProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfile.swift; sourceTree = "<group>"; };
 		C0DE00000000000000000004 /* FetchMyRecruitProfileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchMyRecruitProfileUseCase.swift; sourceTree = "<group>"; };
 		C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatDataDto.swift; sourceTree = "<group>"; };
-		C6F79CF3354555A65E99DC41 /* NewKoinPickerDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKoinPickerDropDownView.swift; sourceTree = "<group>"; };
+		C6F79CF3354555A65E99DC41 /* KoinPickerDropDownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerDropDownView.swift; sourceTree = "<group>"; };
 		C8FC035A1EC83BD077A6AFCA /* RecruitApplyRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplyRequestDto.swift; sourceTree = "<group>"; };
 		CAFE10000000000000000001 /* RecruitMyApplicationList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationList.swift; sourceTree = "<group>"; };
 		CAFE10000000000000000002 /* RecruitMyApplicationRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationRow.swift; sourceTree = "<group>"; };
@@ -2517,7 +2503,7 @@
 		F04DE3DD779FBB7BEB86A567 /* PickerAppearanceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerAppearanceDelegate.swift; sourceTree = "<group>"; };
 		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
 		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
-		F483F8DD8FCE3104599410C0 /* NewKoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewKoinPickerView.swift; sourceTree = "<group>"; };
+		F483F8DD8FCE3104599410C0 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
 		FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StudentAcademicInfoDto.swift; sourceTree = "<group>"; };
 		FB6A15BFD7B896A787835F8E /* RecruitApplyBlockReason.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplyBlockReason.swift; sourceTree = "<group>"; };
@@ -2587,16 +2573,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		14EF3C4025607E9FFB87797B /* NewKoinPickerView */ = {
+		14EF3C4025607E9FFB87797B /* KoinPickerView */ = {
 			isa = PBXGroup;
 			children = (
 				81B4E524C9B86904E3CF0176 /* DataSources */,
-				F483F8DD8FCE3104599410C0 /* NewKoinPickerView.swift */,
-				B6ACE69F8F05148E6637B729 /* NewKoinPickerView+Configuration.swift */,
+				F483F8DD8FCE3104599410C0 /* KoinPickerView.swift */,
+				B6ACE69F8F05148E6637B729 /* KoinPickerView+Configuration.swift */,
 				F04DE3DD779FBB7BEB86A567 /* PickerAppearanceDelegate.swift */,
-				C6F79CF3354555A65E99DC41 /* NewKoinPickerDropDownView.swift */,
+				C6F79CF3354555A65E99DC41 /* KoinPickerDropDownView.swift */,
 			);
-			path = NewKoinPickerView;
+			path = KoinPickerView;
 			sourceTree = "<group>";
 		};
 		35728BBC0BEFE046C56D7CDF /* Subviews */ = {
@@ -3241,15 +3227,13 @@
 				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
 				7CC42B042F56A78600940CE1 /* PaddingLabel.swift */,
 				83B7457C2C9B2EBB005868BD /* IndicatorView.swift */,
-				83EBB8792D0FDFD700346018 /* KoinPickerView.swift */,
-				7CC42B732F5AD39C00940CE1 /* KoinPickerDropDownView */,
 				FE01000000000000000031 /* KoinDropdown */,
 				D289873D2D21B30D00AA7285 /* DebouncedButton.swift */,
 				D89F8FD82DF0A8A4000265DC /* DefaultTextField.swift */,
 				D89F8FDA2DF12847000265DC /* StatefulButton.swift */,
 				7C61D3502F22B344005FAC3A /* ExtendedTouchAreaView.swift */,
 				7C65FDCA2FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView */,
-				14EF3C4025607E9FFB87797B /* NewKoinPickerView */,
+				14EF3C4025607E9FFB87797B /* KoinPickerView */,
 			);
 			path = UIKit;
 			sourceTree = "<group>";
@@ -4178,33 +4162,6 @@
 			path = Subviews;
 			sourceTree = "<group>";
 		};
-		7CC42B732F5AD39C00940CE1 /* KoinPickerDropDownView */ = {
-			isa = PBXGroup;
-			children = (
-				7CC42B792F5C946200940CE1 /* Delegates */,
-				7CC42B742F5AD3B600940CE1 /* Subviews */,
-				7CC42B672F5A9C0C00940CE1 /* KoinPickerDropDownView.swift */,
-			);
-			path = KoinPickerDropDownView;
-			sourceTree = "<group>";
-		};
-		7CC42B742F5AD3B600940CE1 /* Subviews */ = {
-			isa = PBXGroup;
-			children = (
-				7CC42B6D2F5AB00500940CE1 /* KoinPickerViewB.swift */,
-			);
-			path = Subviews;
-			sourceTree = "<group>";
-		};
-		7CC42B792F5C946200940CE1 /* Delegates */ = {
-			isa = PBXGroup;
-			children = (
-				7CC42B6F2F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift */,
-				7CC42B752F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift */,
-			);
-			path = Delegates;
-			sourceTree = "<group>";
-		};
 		7CC42B8A2F5DCE4800940CE1 /* CallVanChat */ = {
 			isa = PBXGroup;
 			children = (
@@ -4384,7 +4341,6 @@
 			children = (
 				7CED8EEA2EF2D1F900457128 /* LostItemImageCollectionView */,
 				7CED8EEE2EF2D1F900457128 /* AddLostItemCollectionView */,
-				7CED8EEF2EF2D1F900457128 /* DatePickerDropdownView.swift */,
 			);
 			path = SubViews;
 			sourceTree = "<group>";
@@ -5540,7 +5496,6 @@
 				83DD0DEB2C57497D00278ABD /* FetchCityBusTimetableUseCase.swift */,
 				83E770FF2D05D8BE00EB3F84 /* FetchShuttleBusTimetableUseCase.swift */,
 				83E770FB2D05B6DD00EB3F84 /* FetchEmergencyNoticeUseCase.swift */,
-				83EBB87D2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift */,
 			);
 			path = Bus;
 			sourceTree = "<group>";
@@ -7078,7 +7033,6 @@
 				835C99172C7DF89A002E02D3 /* DeleteNotificationKeywordUseCase.swift in Sources */,
 				7CC42B892F5D85F700940CE1 /* CallVanChat.swift in Sources */,
 				D874DB4B2DBE31FC0098EED0 /* CheckDuplicatedPhoneNumberRequest.swift in Sources */,
-				7CC42B682F5A9C0C00940CE1 /* KoinPickerDropDownView.swift in Sources */,
 				D2A8F8BE2C4A78F20090C7A4 /* CoopShopData.swift in Sources */,
 				DA2200000000000000000001 /* DiningType.swift in Sources */,
 				DA2200000000000000000002 /* DiningPlace.swift in Sources */,
@@ -7174,7 +7128,6 @@
 				7CF77B6330056E85003642C1 /* NoticeKeywordScrollView.swift in Sources */,
 				D208A7A82CA11221007040E7 /* AbTestService.swift in Sources */,
 				7C0C189B2F68AAFA001781B3 /* CallVanChatRequestDto.swift in Sources */,
-				83EBB87A2D0FDFD700346018 /* KoinPickerView.swift in Sources */,
 				7C6790B72FCC66D40045E163 /* TypographyModifier.swift in Sources */,
 				D2009F7F2C1784DA00211D1B /* MockAnalyticsService.swift in Sources */,
 				7CA0D6212EC74AD500E9A282 /* ZoomedImageCollectionView.swift in Sources */,
@@ -7351,7 +7304,6 @@
 				7CF1D5913069772700295ED9 /* FetchRecruitMyPostDataUseCase.swift in Sources */,
 				D27DD0CF2BA608310081FD36 /* CollectionViewDelegate.swift in Sources */,
 				D22C545A2C68B033000826DA /* FetchShopReviewRequest.swift in Sources */,
-				83EBB87E2D0FE1BE00346018 /* FetchKoinPickerDateUseCase.swift in Sources */,
 				7CB11C0E2FB198BC004E0C80 /* LostItemKeywordCollectionViewSettingCell.swift in Sources */,
 				D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */,
 				7CC42B4D2F59960100940CE1 /* FetchCallVanNotificationListUseCase.swift in Sources */,
@@ -7375,7 +7327,6 @@
 				D29F21CA2C4E151000994554 /* TimetableRepository.swift in Sources */,
 				7CED90BC2EF2D1F900457128 /* ShopSummaryTableViewHeaderView.swift in Sources */,
 				7CED90BD2EF2D1F900457128 /* ManageNoticeKeywordViewController.swift in Sources */,
-				7CED90C02EF2D1F900457128 /* DatePickerDropdownView.swift in Sources */,
 				7C7CCE762F86872F00E3A54B /* CallVanRestrictionDto.swift in Sources */,
 				7CED90C12EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift in Sources */,
 				7CED90C32EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift in Sources */,
@@ -7505,7 +7456,6 @@
 				7CED91412EF2D1F900457128 /* ShopSummaryPopUpView.swift in Sources */,
 				7CED91452EF2D1F900457128 /* ChangePasswordViewModel.swift in Sources */,
 				7CED91462EF2D1F900457128 /* AddLostItemCollectionView.swift in Sources */,
-				7CC42B6E2F5AB00500940CE1 /* KoinPickerViewB.swift in Sources */,
 				7CED91482EF2D1F900457128 /* FindPasswordViewModel.swift in Sources */,
 				7CED91492EF2D1F900457128 /* ReviewListViewModel.swift in Sources */,
 				7CED914C2EF2D1F900457128 /* ShopSummaryImagesCollectionView.swift in Sources */,
@@ -7587,7 +7537,6 @@
 				7C58FE892F5F9E7600A2737B /* CallVanData.swift in Sources */,
 				7CED91832EF2D1F900457128 /* NoticeDataViewModel.swift in Sources */,
 				7CED91852EF2D1F900457128 /* DiningOperatingTimeCollectionView.swift in Sources */,
-				7CC42B762F5AD51300940CE1 /* KoinPickerDropDownViewDateDelegate.swift in Sources */,
 				7C64040D300F40E300A9589F /* SearchDepartmentUseCase.swift in Sources */,
 				7CED91862EF2D1F900457128 /* ShopReviewViewController.swift in Sources */,
 				7CED91872EF2D1F900457128 /* ReviewListViewController.swift in Sources */,
@@ -7676,7 +7625,6 @@
 				7CBFAF152FBC48C6001D64E3 /* ShopBenefitEmptyView.swift in Sources */,
 				7C640402300F39BB00A9589F /* DefaultDepartmentRepository.swift in Sources */,
 				7C4D5A562F01638800B40128 /* BusTimetableRouteView.swift in Sources */,
-				7CC42B702F5AC88500940CE1 /* KoinPickerDropDownViewTimeDelegate.swift in Sources */,
 				7C4D5A572F01638800B40128 /* ShuttleTimetableTableView.swift in Sources */,
 				7C4D5A582F01638800B40128 /* BusSearchResultTableViewFooter.swift in Sources */,
 				7C4D5A592F01638800B40128 /* BusTimetableViewController.swift in Sources */,
@@ -8153,15 +8101,15 @@
 				96488857FC811975AC91DC0C /* RecruitNotificationListRequestDto.swift in Sources */,
 				E7EB12C06B3F32702DE1BDDB /* RecruitNotificationListDto.swift in Sources */,
 				56030F8A9793926BBB430F6C /* Date+KoinFormat.swift in Sources */,
-				D4B67FBE409FFDD94C9CBEE0 /* NewKoinPickerView.swift in Sources */,
-				10A2EF4791EC61956B3B7A11 /* NewKoinPickerView+Configuration.swift in Sources */,
+				D4B67FBE409FFDD94C9CBEE0 /* KoinPickerView.swift in Sources */,
+				10A2EF4791EC61956B3B7A11 /* KoinPickerView+Configuration.swift in Sources */,
 				FDBBD28AC999C8351545499E /* PickerAppearanceDelegate.swift in Sources */,
 				0EB58161489280CCE5DFB98C /* PickerColumnsDataSource.swift in Sources */,
 				74B27E3E1D4CD1DA57C65077 /* DateColumns.swift in Sources */,
 				96953E7550F795CB78DD7632 /* Time12Columns.swift in Sources */,
 				572984100D9B039CAB83A106 /* Time24Columns.swift in Sources */,
 				97ED15F703E2138911A28C10 /* DateAndTimeColumns.swift in Sources */,
-				763EC1A47E67771FDAB08537 /* NewKoinPickerDropDownView.swift in Sources */,
+				763EC1A47E67771FDAB08537 /* KoinPickerDropDownView.swift in Sources */,
 				FBCFB1EF499995884A6F2E83 /* RecruitPostSchedule.swift in Sources */,
 				5FABD176180615A12BEFDC82 /* RecruitActivityPeriod.swift in Sources */,
 			);

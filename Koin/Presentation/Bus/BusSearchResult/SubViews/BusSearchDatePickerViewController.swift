@@ -23,7 +23,7 @@ final class BusSearchDatePickerViewController: KoinModalViewController {
     private let mainTitleLabel = UILabel()
     private let subTitleLabel = UILabel()
     private let pickerBackgroundView = UIView()
-    private let pickerView: NewKoinPickerView
+    private let pickerView: KoinPickerView
     /// busDeparture 컬럼 순서: 날짜 · 오전/오후 · 시 · 분
     private let timeSeparatorLabel = UILabel()
     /// ':' 가로 중심 = picker leading + 시·분 경계 가운데(picker 좌표)
@@ -45,7 +45,7 @@ final class BusSearchDatePickerViewController: KoinModalViewController {
     ) {
         self.onCompleted = onCompleted
         self.onDepartureNowTapped = onDepartureNowTapped
-        self.pickerView = NewKoinPickerView(configuration: .busDeparture(now: now))
+        self.pickerView = KoinPickerView(configuration: .busDeparture(now: now))
         
         super.init(configuration: .init(
             appearance: .primary,

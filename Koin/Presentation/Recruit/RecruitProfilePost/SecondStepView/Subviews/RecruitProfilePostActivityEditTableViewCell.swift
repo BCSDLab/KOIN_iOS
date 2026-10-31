@@ -64,8 +64,8 @@ final class RecruitProfilePostActivityEditTableViewCell: UITableViewCell {
         disabledTextColor: .appColor(.neutral0),
         cornerRadius: 16
     )
-    private let startPickerView = NewKoinPickerDropDownView(configuration: .recruitDate)
-    private let endPickerView = NewKoinPickerDropDownView(configuration: .recruitDate)
+    private let startPickerView = KoinPickerDropDownView(configuration: .recruitDate)
+    private let endPickerView = KoinPickerDropDownView(configuration: .recruitDate)
     
     // MARK: - Initializer
     override init(
@@ -202,7 +202,7 @@ extension RecruitProfilePostActivityEditTableViewCell {
         publishActivity()
     }
     
-    private func pickerView(for field: RecruitActivityPeriod.Field) -> NewKoinPickerDropDownView {
+    private func pickerView(for field: RecruitActivityPeriod.Field) -> KoinPickerDropDownView {
         switch field {
         case .start: return startPickerView
         case .end: return endPickerView

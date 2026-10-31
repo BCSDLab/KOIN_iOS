@@ -1,5 +1,5 @@
 //
-//  NewKoinPickerDropDownView.swift
+//  KoinPickerDropDownView.swift
 //  koin
 //
 //  Created by 홍기정 on 10/30/26.
@@ -9,7 +9,7 @@ import UIKit
 import Combine
 import SnapKit
 
-final class NewKoinPickerDropDownView: UIView {
+final class KoinPickerDropDownView: UIView {
 
     private enum Metric {
         static let pickerTop: CGFloat = 12
@@ -34,7 +34,7 @@ final class NewKoinPickerDropDownView: UIView {
     private var subscriptions: Set<AnyCancellable> = []
 
     // MARK: - UI Components
-    private let pickerView: NewKoinPickerView
+    private let pickerView: KoinPickerView
     private let separatorView = UIView()
     private let resetButton = UIButton()
     private let applyButton = UIButton()
@@ -42,8 +42,8 @@ final class NewKoinPickerDropDownView: UIView {
     private let buttonColor: UIColor
 
     // MARK: - Initializer
-    init(configuration: NewKoinPickerView.Configuration, buttonColor: UIColor = .appColor(.new500)) {
-        self.pickerView = NewKoinPickerView(configuration: configuration)
+    init(configuration: KoinPickerView.Configuration, buttonColor: UIColor = .appColor(.new500)) {
+        self.pickerView = KoinPickerView(configuration: configuration)
         self.buttonColor = buttonColor
         super.init(frame: .zero)
         configureView()
@@ -67,7 +67,7 @@ final class NewKoinPickerDropDownView: UIView {
 }
 
 // MARK: - KoinDropdownContentView
-extension NewKoinPickerDropDownView: KoinDropdownContentView {
+extension KoinPickerDropDownView: KoinDropdownContentView {
     var dismissTappedPublisher: AnyPublisher<Void, Never> {
         applyButtonTappedSubject.eraseToAnyPublisher()
     }
@@ -82,7 +82,7 @@ extension NewKoinPickerDropDownView: KoinDropdownContentView {
     }
 }
 
-extension NewKoinPickerDropDownView {
+extension KoinPickerDropDownView {
 
     private func bind() {
         pickerView.datePublisher.sink { [weak self] date in
@@ -107,7 +107,7 @@ extension NewKoinPickerDropDownView {
     }
 }
 
-extension NewKoinPickerDropDownView {
+extension KoinPickerDropDownView {
 
     private func configureView() {
         setUpStyles()

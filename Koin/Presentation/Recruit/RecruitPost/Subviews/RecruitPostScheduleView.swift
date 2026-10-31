@@ -34,13 +34,13 @@ final class RecruitPostScheduleView: UIView {
     let activityPeriodDropdownAnchor = UIView()
     let deadlineDateDropdownAnchor = UIView()
     
-    let startDateDropdownContentView = NewKoinPickerDropDownView(configuration: .recruitDate).then {
+    let startDateDropdownContentView = KoinPickerDropDownView(configuration: .recruitDate).then {
         $0.backgroundColor = .appColor(.neutral0)
     }
-    let endDateDropdownContentView = NewKoinPickerDropDownView(configuration: .recruitDate).then {
+    let endDateDropdownContentView = KoinPickerDropDownView(configuration: .recruitDate).then {
         $0.backgroundColor = .appColor(.neutral0)
     }
-    let deadlineDateDropdownContentView = NewKoinPickerDropDownView(configuration: .recruitDate).then {
+    let deadlineDateDropdownContentView = KoinPickerDropDownView(configuration: .recruitDate).then {
         $0.backgroundColor = .appColor(.neutral0)
     }
     
@@ -62,7 +62,7 @@ final class RecruitPostScheduleView: UIView {
         deadlineDateLabel.text = schedule.deadline?.string(with: .yearMonthDayDot) ?? Placeholder.deadlineDate
     }
     
-    func dropdownContentView(for field: RecruitPostSchedule.Field) -> NewKoinPickerDropDownView {
+    func dropdownContentView(for field: RecruitPostSchedule.Field) -> KoinPickerDropDownView {
         switch field {
         case .start: return startDateDropdownContentView
         case .end: return endDateDropdownContentView
