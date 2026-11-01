@@ -94,7 +94,6 @@ final class RecruitApplyViewController: UIViewController {
         super.viewDidLoad()
         title = "팀원 모집 지원"
         configureView()
-        firstStepView.prepareDropdown(host: dropdownHost)
         setAddTargets()
         bind()
         observeKeyboard()

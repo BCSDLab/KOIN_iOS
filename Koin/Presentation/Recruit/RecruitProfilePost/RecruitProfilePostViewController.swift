@@ -137,7 +137,6 @@ final class RecruitProfilePostViewController: UIViewController {
         super.viewDidLoad()
         title = titleText
         configureView()
-        secondStepView.prepareDropdown(host: secondStepDropdownHost)
         secondStepView.configure(request)
         completeButton.updateState(isEnabled: request.isValid)
         setAddTargets()

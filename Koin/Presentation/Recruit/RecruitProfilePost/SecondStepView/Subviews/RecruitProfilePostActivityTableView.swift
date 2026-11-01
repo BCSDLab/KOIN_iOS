@@ -38,7 +38,6 @@ final class RecruitProfilePostActivityTableView: UITableView {
     private var rows: [Row] = []
     private var footerSubscriptions = Set<AnyCancellable>()
     
-    private weak var dropdownHost: KoinDropdownHost?
     private var lastContentHeight: CGFloat = 0
     private var pendingSizeChange: PendingSizeChange?
     
@@ -79,10 +78,6 @@ final class RecruitProfilePostActivityTableView: UITableView {
         reloadData()
     }
     
-    func prepareDropdown(host: KoinDropdownHost) {
-        dropdownHost = host
-    }
-    
     func applyPendingSizeChange() {
         guard let pendingSizeChange else { return }
         self.pendingSizeChange = nil
@@ -103,7 +98,6 @@ final class RecruitProfilePostActivityTableView: UITableView {
 extension RecruitProfilePostActivityTableView {
     private func addActivity() {
         addButtonTappedPublisher.send()
-        dropdownHost?.dismissPresented()
         let indexPath = IndexPath(row: rows.count, section: 0)
         rows.append(Row(
             draft: RecruitProfileActivityRequest(),
@@ -119,7 +113,6 @@ extension RecruitProfilePostActivityTableView {
               let committed = rows[indexPath.row].committed else { return }
         let previousHeight = rectForRow(at: indexPath).height
         editButtonTappedPublisher.send()
-        dropdownHost?.dismissPresented()
         rows[indexPath.row].draft = committed
         rows[indexPath.row].mode = .editing
         pendingSizeChange = .reload(indexPath)
@@ -135,7 +128,6 @@ extension RecruitProfilePostActivityTableView {
         } else {
             editCompleteButtonTappedPublisher.send()
         }
-        dropdownHost?.dismissPresented()
         rows[indexPath.row].committed = rows[indexPath.row].draft
         rows[indexPath.row].mode = .display
         pendingSizeChange = .reload(indexPath)
@@ -147,7 +139,6 @@ extension RecruitProfilePostActivityTableView {
     private func deleteActivity(at indexPath: IndexPath) {
         guard rows.indices.contains(indexPath.row) else { return }
         let previousHeight = rectForRow(at: indexPath).height
-        dropdownHost?.dismissPresented()
         rows.remove(at: indexPath.row)
         pendingSizeChange = .delete(indexPath)
         didChangeHeightPublisher.send((indexPath, -Int(previousHeight)))
@@ -254,9 +245,6 @@ extension RecruitProfilePostActivityTableView: UITableViewDataSource {
             return UITableViewCell()
         }
 
-        if let dropdownHost {
-            cell.prepareDropdown(host: dropdownHost)
-        }
         cell.configure(activity: rows[indexPath.row].draft)
         cell.cellSubscriptions.removeAll()
         cell.activityChangedPublisher

@@ -164,10 +164,6 @@ final class RecruitApplyFirstStepView: UIScrollView {
         departmentButton.configure(text: department)
     }
 
-    func prepareDropdown(host: KoinDropdownHost) {
-        activityTableView.prepareDropdown(host: host)
-    }
-
     func applyPendingSizeChange() {
         skillTableView.applyPendingSizeChange()
         activityTableView.applyPendingSizeChange()
