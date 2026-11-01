@@ -1233,6 +1233,12 @@
 		FE01000000000000000021 /* KoinDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000011 /* KoinDropdown.swift */; };
 		FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000013 /* KoinDropdownAnimator.swift */; };
 		FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000016 /* KoinDropdownConfiguration.swift */; };
+		FE01000000000000000027 /* KoinDropdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000017 /* KoinDropdownViewController.swift */; };
+		FE01000000000000000028 /* UIViewController+Dropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000018 /* UIViewController+Dropdown.swift */; };
+		FE01000000000000000029 /* KoinDropdownContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000019 /* KoinDropdownContentView.swift */; };
+		FE0100000000000000002A /* KoinDropdownViewController+Present.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0100000000000000001A /* KoinDropdownViewController+Present.swift */; };
+		FE0100000000000000002B /* KoinDropdownViewController+Scroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0100000000000000001B /* KoinDropdownViewController+Scroll.swift */; };
+		FE0100000000000000002C /* KoinDropdownViewController+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0100000000000000001C /* KoinDropdownViewController+Layout.swift */; };
 		FE0B6B2358364622BC242C74 /* RecruitDataButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AB6864692D44B9849E0447 /* RecruitDataButton.swift */; };
 		BF2600020000000000000001 /* KoinBottomSheetConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000001 /* KoinBottomSheetConfiguration.swift */; };
 		BF2600020000000000000002 /* KoinBottomSheetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF2600010000000000000002 /* KoinBottomSheetController.swift */; };
@@ -2511,6 +2517,12 @@
 		BF263001000000000000000D /* KoinBottomSheetController+Dismissal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Dismissal.swift"; sourceTree = "<group>"; };
 		BF2630010000000000000009 /* KoinBottomSheetController+Pan.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetController+Pan.swift"; sourceTree = "<group>"; };
 		BF2600040000000000000001 /* CallVanBottomSheetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallVanBottomSheetView.swift; sourceTree = "<group>"; };
+		FE01000000000000000017 /* KoinDropdownViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownViewController.swift; sourceTree = "<group>"; };
+		FE01000000000000000018 /* UIViewController+Dropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Dropdown.swift"; sourceTree = "<group>"; };
+		FE01000000000000000019 /* KoinDropdownContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownContentView.swift; sourceTree = "<group>"; };
+		FE0100000000000000001A /* KoinDropdownViewController+Present.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Present.swift"; sourceTree = "<group>"; };
+		FE0100000000000000001B /* KoinDropdownViewController+Scroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Scroll.swift"; sourceTree = "<group>"; };
+		FE0100000000000000001C /* KoinDropdownViewController+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Layout.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -3450,6 +3462,7 @@
 				7C67907C2FCC48A60045E163 /* UITextField+.swift */,
 				7C67907D2FCC48A60045E163 /* UITextFiled+Publisher.swift */,
 				7C67907E2FCC48A60045E163 /* UIViewController+.swift */,
+				FE01000000000000000018 /* UIViewController+Dropdown.swift */,
 				7C67907F2FCC48A60045E163 /* UIViewcontroller+Alert.swift */,
 				7C6790802FCC48A60045E163 /* UIViewController+Navigate.swift */,
 				7C6790812FCC48A60045E163 /* UIViewController+NavigationBarStyle.swift */,
@@ -3643,14 +3656,6 @@
 				7CCB1E4A2F29D87C00472669 /* LostItemPostChatDetailUseCase.swift */,
 			);
 			path = LostItem;
-			sourceTree = "<group>";
-		};
-		7C8B2FF0303D928300A7EB5A /* Helper */ = {
-			isa = PBXGroup;
-			children = (
-				FE01000000000000000013 /* KoinDropdownAnimator.swift */,
-			);
-			path = Helper;
 			sourceTree = "<group>";
 		};
 		7C8B37A73040286C00A7EB5A /* FilterBottomSheet */ = {
@@ -6692,10 +6697,15 @@
 		FE01000000000000000031 /* KoinDropdown */ = {
 			isa = PBXGroup;
 			children = (
-				7C8B2FF0303D928300A7EB5A /* Helper */,
+				FE01000000000000000013 /* KoinDropdownAnimator.swift */,
 				FE01000000000000000016 /* KoinDropdownConfiguration.swift */,
 				D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */,
 				FE01000000000000000011 /* KoinDropdown.swift */,
+				FE01000000000000000017 /* KoinDropdownViewController.swift */,
+				FE01000000000000000019 /* KoinDropdownContentView.swift */,
+				FE0100000000000000001A /* KoinDropdownViewController+Present.swift */,
+				FE0100000000000000001B /* KoinDropdownViewController+Scroll.swift */,
+				FE0100000000000000001C /* KoinDropdownViewController+Layout.swift */,
 			);
 			path = KoinDropdown;
 			sourceTree = "<group>";
@@ -6948,6 +6958,12 @@
 				D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */,
 				FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */,
 				FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */,
+				FE01000000000000000027 /* KoinDropdownViewController.swift in Sources */,
+				FE01000000000000000028 /* UIViewController+Dropdown.swift in Sources */,
+				FE01000000000000000029 /* KoinDropdownContentView.swift in Sources */,
+				FE0100000000000000002A /* KoinDropdownViewController+Present.swift in Sources */,
+				FE0100000000000000002B /* KoinDropdownViewController+Scroll.swift in Sources */,
+				FE0100000000000000002C /* KoinDropdownViewController+Layout.swift in Sources */,
 				D208A7CD2CABB7A3007040E7 /* CoreAPI.swift in Sources */,
 				7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */,
 				7C58FB2E30920D43006B4655 /* DiningReportRequest.swift in Sources */,

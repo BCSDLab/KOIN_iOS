@@ -9,12 +9,6 @@ import UIKit
 import Combine
 
 @MainActor
-protocol KoinDropdownContentView: AnyObject {
-    var dismissTappedPublisher: AnyPublisher<Void, Never> { get }
-    var height: CGFloat { get }
-}
-
-@MainActor
 final class KoinDropdown: UIView {
     
     // MARK: - Properties
