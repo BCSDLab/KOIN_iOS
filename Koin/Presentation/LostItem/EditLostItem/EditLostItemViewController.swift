@@ -58,9 +58,6 @@ final class EditLostItemViewController: UIViewController {
         $0.layer.masksToBounds = true
     }
     
-    // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
-    
     // MARK: - Initializer
     init(viewModel: EditLostItemViewModel) {
         self.viewModel = viewModel
@@ -109,7 +106,6 @@ final class EditLostItemViewController: UIViewController {
             self?.addImageButtonTapped()
         }.store(in: &subscriptions)
         
-        foundDateView.prepareDropdown(host: dropdownHost)
     }
 }
 
@@ -120,9 +116,6 @@ extension EditLostItemViewController {
     }
     
     @objc private func editButtonTapped() {
-        guard !dropdownHost.isPresenting else {
-            return
-        }
         dismissKeyboard()
         
         if foundDateView.isValid && foundPlaceView.isValid {
@@ -174,7 +167,7 @@ extension EditLostItemViewController {
             return
         }
         
-        guard !dropdownHost.isPresenting else { return }
+        guard !isPresentingDropdown else { return }
 
         let contentInset = UIEdgeInsets(
             top: 0,
@@ -200,7 +193,7 @@ extension EditLostItemViewController {
     }
     
     @objc private func keyBoardWillHide(_ notification: NSNotification) {
-        guard !dropdownHost.isPresenting else { return }
+        guard !isPresentingDropdown else { return }
 
         let contentInset = UIEdgeInsets.zero
         scrollView.contentInset = contentInset
