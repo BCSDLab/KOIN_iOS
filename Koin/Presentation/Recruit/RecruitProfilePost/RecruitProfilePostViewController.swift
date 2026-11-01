@@ -93,8 +93,6 @@ final class RecruitProfilePostViewController: UIViewController {
     )
 
     // MARK: - Dropdown
-    private lazy var firstStepDropdownHost = KoinDropdownHost(scrollView: firstStepView)
-    private lazy var secondStepDropdownHost = KoinDropdownHost(scrollView: secondStepView)
     private lazy var departmentDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
         guard let self else { return }
         makeLogAnalyticsEvent(
@@ -106,11 +104,6 @@ final class RecruitProfilePostViewController: UIViewController {
         firstStepView.configure(department: department)
         nextButton.updateState(isEnabled: basicInfo.isValid)
     }
-    private lazy var departmentDropdown = firstStepDropdownHost.makeDropdown(
-        anchor: firstStepView.departmentDropdownAnchor,
-        contentView: departmentDropdownContentView,
-        configuration: .init(topPadding: 12, shadow: .shadow2)
-    )
 
     // MARK: - Initializer
     init(
@@ -225,8 +218,6 @@ extension RecruitProfilePostViewController {
     
     private func showStep(isFirstStep: Bool) {
         view.endEditing(true)
-        firstStepDropdownHost.dismissPresented()
-        secondStepDropdownHost.dismissPresented()
         self.isFirstStep = isFirstStep
         
         view.layoutIfNeeded()
@@ -283,7 +274,12 @@ extension RecruitProfilePostViewController {
                 guard let self else { return }
                 view.endEditing(true)
                 restoreFirstStepContentInsetBottom { [weak self] in
-                    self?.departmentDropdown.toggle()
+                    guard let self else { return }
+                    presentDropdown(
+                        anchor: firstStepView.departmentDropdownAnchor,
+                        content: departmentDropdownContentView,
+                        configuration: .init(topPadding: 12, shadow: .shadow2)
+                    )
                 }
             }
             .store(in: &subscriptions)
