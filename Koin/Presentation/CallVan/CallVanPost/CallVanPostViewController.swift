@@ -34,19 +34,6 @@ final class CallVanPostViewController: UIViewController {
     private let descriptionLabel = UILabel()
     private let postButton = UIButton()
     
-    // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
-    private lazy var dateDropdown = dropdownHost.makeDropdown(
-        anchor: dateView.dropdownTrigger,
-        contentView: dateView.dropdownContentView,
-        configuration: .init(topPadding: 12, shadow: .shadow2)
-    )
-    private lazy var timeDropdown = dropdownHost.makeDropdown(
-        anchor: timeView.dropdownTrigger,
-        contentView: timeView.dropdownContentView,
-        configuration: .init(topPadding: 12, shadow: .shadow2)
-    )
-    
     // MARK: - Initializer
     init(viewModel: CallVanPostViewModel) {
         self.viewModel = viewModel
@@ -110,7 +97,12 @@ final class CallVanPostViewController: UIViewController {
         }.store(in: &subscriptions)
         
         dateView.dateButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
-                self?.dateDropdown.toggle()
+                guard let self else { return }
+                presentDropdown(
+                    anchor: dateView.dropdownTrigger,
+                    content: dateView.dropdownContentView,
+                    configuration: .init(topPadding: 12, shadow: .shadow2)
+                )
             }.store(in: &subscriptions)
         
         dateView.dateChangedPublisher.sink { [weak self] date in
@@ -118,7 +110,12 @@ final class CallVanPostViewController: UIViewController {
         }.store(in: &subscriptions)
         
         timeView.timeButtonTappedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
-                self?.timeDropdown.toggle()
+                guard let self else { return }
+                presentDropdown(
+                    anchor: timeView.dropdownTrigger,
+                    content: timeView.dropdownContentView,
+                    configuration: .init(topPadding: 12, shadow: .shadow2)
+                )
             }.store(in: &subscriptions)
         
         timeView.timeChangedPublisher.sink { [weak self] time in
@@ -150,8 +147,6 @@ extension CallVanPostViewController {
     }
     
     @objc private func postButtonTapped() {
-        guard !dropdownHost.isPresenting else { return }
-
         postButton.isUserInteractionEnabled = false
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanWriteDone, category: .click, value: ""))
         inputSubject.send(.postData)
