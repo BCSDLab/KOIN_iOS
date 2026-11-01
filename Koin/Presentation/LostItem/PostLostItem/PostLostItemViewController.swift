@@ -134,7 +134,7 @@ extension PostLostItemViewController {
             return
         }
         
-        guard !addLostItemCollectionView.isDropdownPresenting else { return }
+        guard !isPresentingDropdown else { return }
 
         let contentInset = UIEdgeInsets(
             top: 0,
@@ -158,7 +158,7 @@ extension PostLostItemViewController {
     }
     
     @objc private func keyBoardWillHide(_ notification: NSNotification) {
-        guard !addLostItemCollectionView.isDropdownPresenting else { return }
+        guard !isPresentingDropdown else { return }
 
         let contentInset = UIEdgeInsets.zero
         addLostItemCollectionView.contentInset = contentInset
