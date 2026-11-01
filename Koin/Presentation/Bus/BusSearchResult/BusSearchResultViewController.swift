@@ -117,6 +117,8 @@ extension BusSearchResultViewController {
 
     /// 모달형: 열 때 현재 departDate 표시, 완료 시에만 적용, 닫기는 미적용
     private func presentBusSearchDatePickerViewController() {
+        // Input은 동기 처리라 아래에서 갱신된 now를 읽음
+        inputSubject.send(.refreshNowIfDayChanged)
         let busSearchDatePickerViewController = BusSearchDatePickerViewController(
             subTitle: datePickerSubTitle,
             now: viewModel.now,

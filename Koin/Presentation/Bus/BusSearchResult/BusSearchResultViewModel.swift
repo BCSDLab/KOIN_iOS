@@ -12,6 +12,8 @@ final class BusSearchResultViewModel: ViewModelProtocol {
     enum Input {
         case getSearchedResult(Date?, BusType?)
         case departNow
+        /// 모달 열기 직전. 날짜가 바뀐 경우에만 now 갱신
+        case refreshNowIfDayChanged
         case getSemesterInfo
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
@@ -32,7 +34,7 @@ final class BusSearchResultViewModel: ViewModelProtocol {
     private var searchCancellable: AnyCancellable?
     let busPlaces: (BusPlace, BusPlace)  // navigationItem을 설정하기 위해 private 임시 없앰
     private var departBusType: BusType = .noValue
-    /// 오늘/내일·날짜 목록 기준. 화면 진입 시 1회 고정, 지금 출발·새로고침 시 갱신
+    /// 오늘/내일·날짜 목록 기준. 화면 진입 시 1회 고정, 지금 출발·새로고침·날짜 변경 시 갱신
     private(set) var now: Date
     private(set) var departDate: Date
     private let fetchSearchedResultUseCase: SearchBusInfoUseCase
@@ -56,6 +58,8 @@ final class BusSearchResultViewModel: ViewModelProtocol {
                 self?.getSearchedResult(departDate: departDate, busType: busType)
             case .departNow:
                 self?.departNow()
+            case .refreshNowIfDayChanged:
+                self?.refreshNowIfDayChanged()
             case let .logEvent(label, category, value):
                 self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
             case .getSemesterInfo:
@@ -69,6 +73,7 @@ final class BusSearchResultViewModel: ViewModelProtocol {
 extension BusSearchResultViewModel {
     /// departDate가 있으면 출발 시각 변경(버스 타입 유지), 없으면 버스 타입 변경(같은 departDate 재사용)
     private func getSearchedResult(departDate: Date?, busType: BusType?) {
+        refreshNowIfDayChanged()
         if let departDate = departDate {
             self.departDate = departDate
             outputSubject.send(.updateDepartDate(departDate, now: now))
@@ -99,6 +104,14 @@ extension BusSearchResultViewModel {
     private func departNow() {
         now = Date()
         getSearchedResult(departDate: now, busType: nil)
+    }
+    
+    /// 자정이 지나 now가 어제면 갱신 후 출발 시각 문구 재표시(자체 재검색 없음). 같은 날은 유지, departDate는 모달 picker가 범위로 보정
+    private func refreshNowIfDayChanged() {
+        if !Calendar.koin.isDate(now, inSameDayAs: Date()) {
+            now = Date()
+            outputSubject.send(.updateDepartDate(departDate, now: now))
+        }
     }
     
     private func getSemesterInfo() {
