@@ -59,7 +59,6 @@ final class RecruitApplyViewController: UIViewController {
     private let previousButton = UIButton()
 
     // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: firstStepView)
     private lazy var departmentDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
         guard let self else { return }
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitApplyMajorSelect, .click, department))
@@ -67,11 +66,6 @@ final class RecruitApplyViewController: UIViewController {
         firstStepView.configure(department: department)
         updateNextButtonState()
     }
-    private lazy var departmentDropdown = dropdownHost.makeDropdown(
-        anchor: firstStepView.departmentDropdownAnchor,
-        contentView: departmentDropdownContentView,
-        configuration: .init(topPadding: 12, shadow: .shadow2)
-    )
 
     // MARK: - Initializer
     init(
@@ -167,7 +161,12 @@ extension RecruitApplyViewController {
                 guard let self else { return }
                 view.endEditing(true)
                 restoreFirstStepContentInsetBottom { [weak self] in
-                    self?.departmentDropdown.toggle()
+                    guard let self else { return }
+                    presentDropdown(
+                        anchor: firstStepView.departmentDropdownAnchor,
+                        content: departmentDropdownContentView,
+                        configuration: .init(topPadding: 12, shadow: .shadow2)
+                    )
                 }
             }
             .store(in: &subscriptions)
@@ -244,7 +243,6 @@ extension RecruitApplyViewController {
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitApplyNext, .click, "다음"))
         isFirstStep = false
         view.endEditing(true)
-        dropdownHost.dismissPresented()
         view.layoutIfNeeded()
         scrollView.setContentOffset(CGPoint(x: scrollView.bounds.width, y: 0), animated: true)
     }
@@ -252,7 +250,6 @@ extension RecruitApplyViewController {
     @objc private func previousButtonTapped() {
         isFirstStep = true
         view.endEditing(true)
-        dropdownHost.dismissPresented()
         view.layoutIfNeeded()
         scrollView.setContentOffset(.zero, animated: true)
     }
