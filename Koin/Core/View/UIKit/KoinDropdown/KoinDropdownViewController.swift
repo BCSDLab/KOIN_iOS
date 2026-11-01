@@ -79,7 +79,9 @@ final class KoinDropdownViewController: UIViewController {
         if view.bounds.size != lastLayoutSize {
             // inset 조정이 layout을 다시 일으킬 수 있으므로, 조정 전에 크기를 먼저 기록한다.
             lastLayoutSize = view.bounds.size
-            adjustScrollIfNeeded(animated: false)
+            if let target = prepareScroll() {
+                scrollView?.contentOffset = target
+            }
         }
         layoutPanel()
     }

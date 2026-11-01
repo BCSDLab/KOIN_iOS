@@ -16,9 +16,15 @@ extension KoinDropdownViewController {
         scrollView = nearestScrollView(to: anchor)
 
         contentView.transform = .identity
-        adjustScrollIfNeeded(animated: true)
         guard layoutPanel() else { return false }
         applyShadow()
+        let target = prepareScroll()
+        UIView.animate(withDuration: KoinDropdownAnimator.Metric.presentDuration) {
+            if let target {
+                self.scrollView?.contentOffset = target
+            }
+            self.layoutPanel()
+        }
         animator.present(
             view: contentView,
             travel: travel
@@ -39,6 +45,7 @@ extension KoinDropdownViewController {
         if animated {
             UIView.animate(withDuration: KoinDropdownAnimator.Metric.dismissDuration) {
                 self.restoreScrollView()
+                self.layoutPanel()
             }
             animator.dismiss(
                 view: contentView,
