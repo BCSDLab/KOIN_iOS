@@ -975,7 +975,6 @@
 		CC6BE28EE54649DEEBF56B9B /* NotificationFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C097425ADD10086931A8789D /* NotificationFooterView.swift */; };
 		CD3000000000000000000001 /* RecruitPostCategoryDropdownView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */; };
 		CE3D147031BC1F6BDD25184B /* DefaultRecruitRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = ED038AB5420C8C565688CF6B /* DefaultRecruitRepository.swift */; };
-		D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */; };
 		D19A00013000000000000002 /* NotificationRowModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000001 /* NotificationRowModel.swift */; };
 		D19A00013000000000000004 /* NotificationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000003 /* NotificationListView.swift */; };
 		D19A00013000000000000006 /* NotificationHistoryItem+.swift in Sources */ = {isa = PBXBuildFile; fileRef = D19A00013000000000000005 /* NotificationHistoryItem+.swift */; };
@@ -1230,7 +1229,6 @@
 		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 		F7F814BB370C922B6D8AA6EF /* RecruitStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */; };
 		FC40DDB1CAB3573658F94721 /* StudentAcademicInfoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */; };
-		FE01000000000000000021 /* KoinDropdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000011 /* KoinDropdown.swift */; };
 		FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000013 /* KoinDropdownAnimator.swift */; };
 		FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000016 /* KoinDropdownConfiguration.swift */; };
 		FE01000000000000000027 /* KoinDropdownViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE01000000000000000017 /* KoinDropdownViewController.swift */; };
@@ -2239,7 +2237,6 @@
 		CAFE1000000000000000000B /* RecruitMyApplicationListRowView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListRowView.swift; sourceTree = "<group>"; };
 		CAFE1000000000000000000C /* RecruitMyApplicationListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyApplicationListEmptyView.swift; sourceTree = "<group>"; };
 		CD3000000000000000000002 /* RecruitPostCategoryDropdownView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostCategoryDropdownView.swift; sourceTree = "<group>"; };
-		D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownHost.swift; sourceTree = "<group>"; };
 		D19A00013000000000000001 /* NotificationRowModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRowModel.swift; sourceTree = "<group>"; };
 		D19A00013000000000000003 /* NotificationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationListView.swift; sourceTree = "<group>"; };
 		D19A00013000000000000005 /* NotificationHistoryItem+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationHistoryItem+.swift"; sourceTree = "<group>"; };
@@ -2500,7 +2497,6 @@
 		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
 		FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StudentAcademicInfoDto.swift; sourceTree = "<group>"; };
 		FB6A15BFD7B896A787835F8E /* RecruitApplyBlockReason.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitApplyBlockReason.swift; sourceTree = "<group>"; };
-		FE01000000000000000011 /* KoinDropdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdown.swift; sourceTree = "<group>"; };
 		FE01000000000000000013 /* KoinDropdownAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownAnimator.swift; sourceTree = "<group>"; };
 		FE01000000000000000016 /* KoinDropdownConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinDropdownConfiguration.swift; sourceTree = "<group>"; };
 		BF2600010000000000000001 /* KoinBottomSheetConfiguration.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinBottomSheetConfiguration.swift"; sourceTree = "<group>"; };
@@ -6699,8 +6695,6 @@
 			children = (
 				FE01000000000000000013 /* KoinDropdownAnimator.swift */,
 				FE01000000000000000016 /* KoinDropdownConfiguration.swift */,
-				D0A71C4E2F1B8340009E2D71 /* KoinDropdownHost.swift */,
-				FE01000000000000000011 /* KoinDropdown.swift */,
 				FE01000000000000000017 /* KoinDropdownViewController.swift */,
 				FE01000000000000000019 /* KoinDropdownContentView.swift */,
 				FE0100000000000000001A /* KoinDropdownViewController+Present.swift */,
@@ -6954,8 +6948,6 @@
 				75EBF253F4468B2060B79212 /* RecruitPostSectionHeaderView.swift in Sources */,
 				A0B343754988C9398C4FE726 /* ModifyRecruitUseCase.swift in Sources */,
 				515B96092C6730C797C1F837 /* PostRecruitUseCase.swift in Sources */,
-				FE01000000000000000021 /* KoinDropdown.swift in Sources */,
-				D0A71C4F2F1B8340009E2D71 /* KoinDropdownHost.swift in Sources */,
 				FE01000000000000000023 /* KoinDropdownAnimator.swift in Sources */,
 				FE01000000000000000026 /* KoinDropdownConfiguration.swift in Sources */,
 				FE01000000000000000027 /* KoinDropdownViewController.swift in Sources */,
