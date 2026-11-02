@@ -19,7 +19,7 @@ final class BannerView: UIView, KoinBottomSheetContent {
     // MARK: - UI Components
     private let noShowButton = UIButton()
     private let closeButton = UIButton()
-    private lazy var collectionView = NewBannerCollectionView(
+    private lazy var collectionView = BannerCollectionView(
         onBannerTap: { [weak self] banner in
             self?.onBannerTap(banner)
         },
