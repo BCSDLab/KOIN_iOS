@@ -16,11 +16,7 @@ struct RecruitProfileActivity: Identifiable, Equatable {
     let description: String
 
     var periodText: String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "yyyy.MM.dd"
-
-        let start = formatter.string(from: startedAt)
+        let start = startedAt.string(with: .yearMonthDayDot)
         if isOngoing {
             return "\(start) - 진행 중"
         }
@@ -28,7 +24,7 @@ struct RecruitProfileActivity: Identifiable, Equatable {
             return start
         }
 
-        return "\(start) - \(formatter.string(from: endedAt))"
+        return "\(start) - \(endedAt.string(with: .yearMonthDayDot))"
     }
 }
 

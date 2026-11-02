@@ -6,6 +6,7 @@
 //
 
 import Combine
+import Foundation
 
 final class DefaultBusRepository: BusRepository {
     
@@ -15,7 +16,14 @@ final class DefaultBusRepository: BusRepository {
         self.service = service
     }
 
-    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, ErrorResponse> {
+    func searchBusInformation(date: Date, busType: BusType, departure: BusPlace, arrival: BusPlace) -> AnyPublisher<BusSearchDto, ErrorResponse> {
+        let requestModel = SearchBusInfoRequest(
+            date: date.string(with: .yearMonthDayHyphen),
+            time: date.string(with: .hourMinute),
+            busType: busType.rawValue,
+            depart: departure.rawValue,
+            arrival: arrival.rawValue
+        )
         return service.searchBusInformation(requestModel: requestModel)
     }
     

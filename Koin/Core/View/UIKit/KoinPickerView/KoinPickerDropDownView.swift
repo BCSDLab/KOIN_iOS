@@ -2,41 +2,49 @@
 //  KoinPickerDropDownView.swift
 //  koin
 //
-//  Created by 홍기정 on 3/6/26.
+//  Created by 홍기정 on 10/30/26.
 //
 
 import UIKit
 import Combine
-
-protocol KoinPickerDropDownViewDelegate: AnyObject {
-    func reset(koinPicker: KoinPickerDropDownView, initialDate: Date)
-    func selectedItemUpdated(koinPicker: KoinPickerDropDownView, selectedItem: [String])
-}
+import SnapKit
 
 final class KoinPickerDropDownView: UIView {
-    
-    // MARK: - Publisher
-    let selectedItemPublisher = PassthroughSubject<[String], Never>()
-    let applyButtonTappedPublisher = PassthroughSubject<Void, Never>()
-    
-    // MARK: - Properties
-    private var selectedItem: [String] = [] {
-        didSet {
-            selectedItemPublisher.send(selectedItem)
-        }
+
+    private enum Metric {
+        static let pickerTop: CGFloat = 12
+        static let separatorSpacing: CGFloat = 8
+        static let separatorHeight: CGFloat = 1
+        static let buttonHeight: CGFloat = 22
+        static let bottom: CGFloat = 12
     }
-    private let delegate: KoinPickerDropDownViewDelegate
+
+    // MARK: - Publisher
+    /// 휠 조작 + 초기화 버튼
+    var datePublisher: AnyPublisher<Date, Never> {
+        return dateSubject.eraseToAnyPublisher()
+    }
+    private let dateSubject = PassthroughSubject<Date, Never>()
+    private let applyButtonTappedSubject = PassthroughSubject<Void, Never>()
+
+    // MARK: - Properties
+    var date: Date {
+        return pickerView.date
+    }
     private var subscriptions: Set<AnyCancellable> = []
-    
+
     // MARK: - UI Components
-    private let pickerView = KoinPickerViewB(columnSpacing: 40)
+    private let pickerView: KoinPickerView
     private let separatorView = UIView()
     private let resetButton = UIButton()
     private let applyButton = UIButton()
-    
+    /// 초기화·확인 버튼 글자색
+    private let buttonColor: UIColor
+
     // MARK: - Initializer
-    init(delegate: KoinPickerDropDownViewDelegate) {
-        self.delegate = delegate
+    init(configuration: KoinPickerView.Configuration, buttonColor: UIColor = .appColor(.new500)) {
+        self.pickerView = KoinPickerView(configuration: configuration)
+        self.buttonColor = buttonColor
         super.init(frame: .zero)
         configureView()
         bind()
@@ -45,128 +53,121 @@ final class KoinPickerDropDownView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Called by ViewController
-    func reset(initialDate: Date) {
-        delegate.reset(koinPicker: self, initialDate: initialDate)
+
+    // MARK: - Public
+    /// 이벤트 없음
+    func setDate(_ date: Date) {
+        pickerView.setDate(date, animated: false)
     }
-    
-    // MARK: - Called By Delegate
-    func reset(items: [[String]], selectedItem: [String], columnWidths: [CGFloat]) {
-        self.selectedItem = selectedItem
-        pickerView.reset(items: items, selectedItem: selectedItem, columnWidths: columnWidths)
-    }
-    
-    func update(selectedItem: [String]) {
-        self.selectedItem = selectedItem
-        pickerView.update(selectedItem: selectedItem)
-    }
-    
-    func configure(
-        from startDate: Date,
-        to endDate: Date,
-        selectedDate: Date
-    ) {
-        (delegate as? KoinPickerDropDownViewDateDelegate)?.resetDates(from: startDate, to: endDate)
-        delegate.reset(koinPicker: self, initialDate: selectedDate)
+
+    /// 이벤트 없음. 현재 값 재정규화
+    func setRange(minimum: Date?, maximum: Date?) {
+        pickerView.setRange(minimum: minimum, maximum: maximum)
     }
 }
 
 // MARK: - KoinDropdownContentView
 extension KoinPickerDropDownView: KoinDropdownContentView {
     var dismissTappedPublisher: AnyPublisher<Void, Never> {
-        applyButtonTappedPublisher.eraseToAnyPublisher()
+        applyButtonTappedSubject.eraseToAnyPublisher()
     }
+    /// 3행 picker(90) + 고정 여백 63 = 153
     var height: CGFloat {
-        return 153
+        return Metric.pickerTop
+            + pickerView.intrinsicContentSize.height
+            + Metric.separatorSpacing * 2
+            + Metric.separatorHeight
+            + Metric.buttonHeight
+            + Metric.bottom
     }
 }
 
 extension KoinPickerDropDownView {
-    
+
     private func bind() {
-        pickerView.selectedItemPublisher.sink { [weak self] selectedItem in
-            guard let self else { return }
-            delegate.selectedItemUpdated(koinPicker: self, selectedItem: selectedItem)
+        pickerView.datePublisher.sink { [weak self] date in
+            self?.dateSubject.send(date)
         }.store(in: &subscriptions)
     }
-    
+
     private func setAddTargets() {
         applyButton.addTarget(self, action: #selector(applyButtonTapped), for: .touchUpInside)
         resetButton.addTarget(self, action: #selector(resetButtonTapped), for: .touchUpInside)
     }
-    
+
+    /// 닫기만. 드롭다운형은 휠 변경이 즉시 반영된다
     @objc private func applyButtonTapped() {
-        applyButtonTappedPublisher.send()
+        applyButtonTappedSubject.send()
     }
-    
+
+    /// 현재 시각으로 clamp 후 1회 발행
     @objc private func resetButtonTapped() {
-        delegate.reset(koinPicker: self, initialDate: Date())
+        pickerView.setDate(Date(), animated: false)
+        dateSubject.send(pickerView.date)
     }
 }
 
 extension KoinPickerDropDownView {
-    
+
     private func configureView() {
         setUpStyles()
         setUpLayouts()
         setUpConstraints()
     }
-    
+
     private func setUpStyles() {
         backgroundColor = UIColor.appColor(.neutral100)
-        
+
         pickerView.do {
             $0.backgroundColor = .clear
         }
-        
+
         separatorView.do {
             $0.backgroundColor = UIColor.appColor(.neutral200)
         }
-        
+
         applyButton.do {
             $0.setAttributedTitle(NSAttributedString(
                 string: "확인",
                 attributes: [
                     .font : UIFont.appFont(.pretendardMedium, size: 14),
-                    .foregroundColor : UIColor.appColor(.new500)
+                    .foregroundColor : buttonColor
                 ]
             ), for: .normal)
         }
-        
+
         resetButton.do {
             $0.setAttributedTitle(NSAttributedString(
                 string: "초기화",
                 attributes: [
                     .font : UIFont.appFont(.pretendardMedium, size: 14),
-                    .foregroundColor : UIColor.appColor(.new500)
+                    .foregroundColor : buttonColor
                 ]
             ), for: .normal)
         }
     }
-    
+
     private func setUpLayouts() {
         [pickerView, separatorView, resetButton, applyButton].forEach {
             addSubview($0)
         }
     }
-    
+
     private func setUpConstraints() {
         pickerView.snp.makeConstraints {
-            $0.height.equalTo(90)
-            $0.top.equalToSuperview().offset(12)
+            $0.top.equalToSuperview().offset(Metric.pickerTop)
             $0.centerX.equalToSuperview()
         }
         separatorView.snp.makeConstraints {
-            $0.height.equalTo(1)
-            $0.top.equalTo(pickerView.snp.bottom).offset(8)
+            $0.height.equalTo(Metric.separatorHeight)
+            $0.top.equalTo(pickerView.snp.bottom).offset(Metric.separatorSpacing)
             $0.leading.trailing.equalToSuperview().inset(10)
         }
         applyButton.snp.makeConstraints {
-            $0.height.equalTo(22)
-            $0.top.equalTo(separatorView.snp.bottom).offset(8)
+            $0.height.equalTo(Metric.buttonHeight)
+            $0.top.equalTo(separatorView.snp.bottom).offset(Metric.separatorSpacing)
             $0.trailing.equalToSuperview().offset(-24)
-            $0.bottom.equalToSuperview().offset(-12)
+            $0.bottom.equalToSuperview().offset(-Metric.bottom)
         }
         resetButton.snp.makeConstraints {
             $0.top.bottom.equalTo(applyButton)

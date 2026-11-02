@@ -15,13 +15,15 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     private var cancellable = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
-    let datePublisher = PassthroughSubject<String, Never>()
+    /// 습득일 변경(휠·초기화, 값 없이 열었을 때 보정값)
+    let datePublisher = PassthroughSubject<Date, Never>()
     let categoryPublisher = PassthroughSubject<String, Never>()
     let locationPublisher = PassthroughSubject<String, Never>()
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
     
     private var type: LostItemType = .lost
+    private var foundDate: Date?
     private var textViewPlaceHolder = ""
     private var textFieldPlaceHolder = ""
     
@@ -184,11 +186,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Dropdown
-    private lazy var dropdownView = DatePickerDropdownView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.layer.cornerRadius = 12
-    }
-
+    private var dropdownView: KoinPickerDropDownView?
     private weak var dropdown: KoinDropdownViewController?
     
     // MARK: - Initializer
@@ -212,9 +210,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             self?.pictureCountLabel.text = "\(urls.count)/10"
             self?.imageUrlsPublisher.send(urls)
             }.store(in: &cancellable)
-        dropdownView.valueChangedPublisher.sink { [weak self] in
-            self?.dropdownValueChanged()
-            }.store(in: &cancellable)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -230,7 +225,18 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Configure
-    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
+    /// now: CollectionView 가 넘겨주는 화면 진입 시각(습득일 범위 기준). picker 는 셀당 한 번만 만든다.
+    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType, now: Date) {
+        if dropdownView == nil {
+            let dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.primary600)).then {
+                $0.backgroundColor = UIColor.appColor(.neutral100)
+                $0.layer.cornerRadius = 12
+            }
+            dropdownView.datePublisher.sink { [weak self] date in
+                self?.updateFoundDate(date)
+            }.store(in: &cancellable)
+            self.dropdownView = dropdownView
+        }
         self.type = type
         textFieldPlaceHolder = "\(type.description) 장소를 입력해주세요."
         textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
@@ -249,13 +255,8 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             locationTextField.textColor = UIColor.appColor(.neutral800)
         }
         
-        if model.foundDate.isEmpty {
-            dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
-            dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        } else {
-            dateButton.setTitle(model.foundDate, for: .normal)
-            dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        }
+        foundDate = Date(string: model.foundDate, format: .yearMonthDayHyphen)
+        updateDateButton()
         if let content = model.content, content.isEmpty {
             contentTextView.textColor = UIColor.appColor(.neutral500)
             contentTextView.text = textViewPlaceHolder
@@ -289,13 +290,6 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
                 button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
                 button.layer.borderColor = UIColor.appColor(.primary500).cgColor
             }
-        }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
-        dateFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
-        if let dateValue = dateFormatter.date(from: model.foundDate) {
-            dropdownView.dateValue = dateValue
         }
         
         locationEssentialLabel.isHidden = self.type == .lost
@@ -388,9 +382,6 @@ extension AddLostItemCollectionViewCell {
             }
         }
         
-        let foundDate = dateButton.titleLabel?.text ?? ""
-        let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
-        
         let content: String?
         if contentTextView.textColor != .appColor(.neutral500),
            let rawContent = contentTextView.text,
@@ -403,28 +394,12 @@ extension AddLostItemCollectionViewCell {
         return PostLostItemRequest(
             category: category,
             location: location,
-            foundDate: formattedFoundDate,
+            foundDate: foundDate?.string(with: .yearMonthDayHyphen) ?? "",
             content: content,
             images: imageUploadCollectionView.imageUrls,
             registeredAt: "2025-01-10",
             updatedAt: "2025-01-10"
         )
-    }
-    
-    func convertToISODate(from koreanDate: String) -> String? {
-        let inputFormatter = DateFormatter()
-        inputFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
-        inputFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
-        
-        let outputFormatter = DateFormatter()
-        outputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 형식
-        outputFormatter.dateFormat = "yyyy-MM-dd" // 원하는 출력 형식
-        
-        if let date = inputFormatter.date(from: koreanDate) {
-            return outputFormatter.string(from: date) // 변환된 ISO 형식 날짜
-        } else {
-            return nil
-        }
     }
     
     func validateInputs() -> Bool {
@@ -436,7 +411,7 @@ extension AddLostItemCollectionViewCell {
             isValid = false
         }
         
-        if let title = dateButton.title(for: .normal), title.contains("일자") {
+        if foundDate == nil {
             dateWarningLabel.isHidden = false
             isValid = false
         }
@@ -456,7 +431,15 @@ extension AddLostItemCollectionViewCell {
 extension AddLostItemCollectionViewCell {
     
     // MARK: - dropdown 열기/닫기
+    /// 드롭다운형: 값 있으면 setDate, 없으면 보정된 picker.date 즉시 반영(setDate는 이벤트 없음)
     @objc private func dateButtonTapped(button: UIButton) {
+        guard let dropdownView else { return }
+        if let foundDate {
+            dropdownView.setDate(foundDate)
+        } else {
+            dropdownView.setDate(Date())
+            updateFoundDate(dropdownView.date)
+        }
         dropdown = presentDropdown(
             anchor: dateButton,
             content: dropdownView,
@@ -464,16 +447,21 @@ extension AddLostItemCollectionViewCell {
         )
     }
     
-    private func dropdownValueChanged() {
-        let formattedDate = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy년 M월 d일"
-            return formatter.string(from: dropdownView.dateValue)
-        }()
-        dateButton.setTitle(formattedDate, for: .normal)
-        dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        datePublisher.send(formattedDate)
+    private func updateFoundDate(_ date: Date) {
+        foundDate = date
+        updateDateButton()
+        datePublisher.send(date)
         dateWarningLabel.isHidden = true
+    }
+    
+    private func updateDateButton() {
+        if let foundDate {
+            dateButton.setTitle(foundDate.string(with: .yearMonthDay), for: .normal)
+            dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        } else {
+            dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
+            dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+        }
     }
 }
 

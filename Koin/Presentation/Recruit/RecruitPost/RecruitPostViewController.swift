@@ -63,6 +63,22 @@ final class RecruitPostViewController: UIViewController {
             validate()
         }
     }
+    /// 화면 진입 시 1회 고정. 모집 일정 최대 범위 기준
+    private let today = Date()
+    /// request의 시작·종료·마감일. 반영 시 라벨도 함께 갱신
+    private var schedule: RecruitPostSchedule {
+        get {
+            RecruitPostSchedule(start: request.startDate, end: request.endDate, deadline: request.deadline)
+        }
+        set {
+            var request = request
+            request.startDate = newValue.start
+            request.endDate = newValue.end
+            request.deadline = newValue.deadline
+            self.request = request
+            scheduleView.configure(schedule: newValue)
+        }
+    }
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
@@ -202,58 +218,23 @@ extension RecruitPostViewController {
         }.store(in: &subscriptions)
         
         scheduleView.startDateButtonTappedPublisher.sink { [weak self] in
-            guard let self else { return }
-            scheduleView.startDateDropdownContentView.reset(initialDate: request.startDate ?? Date())
-            presentDropdown(
-                anchor: scheduleView.activityPeriodDropdownAnchor,
-                content: scheduleView.startDateDropdownContentView,
-                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
-            )
+            self?.openScheduleDropdown(.start)
         }.store(in: &subscriptions)
         
         scheduleView.endDateButtonTappedPublisher.sink { [weak self] in
-            guard let self else { return }
-            scheduleView.endDateDropdownContentView.reset(initialDate: request.endDate ?? Date())
-            presentDropdown(
-                anchor: scheduleView.activityPeriodDropdownAnchor,
-                content: scheduleView.endDateDropdownContentView,
-                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
-            )
+            self?.openScheduleDropdown(.end)
         }.store(in: &subscriptions)
         
         scheduleView.deadlineDateButtonTappedPublisher.sink { [weak self] in
-            guard let self else { return }
-            scheduleView.deadlineDateDropdownContentView.reset(initialDate: request.deadline ?? Date())
-            presentDropdown(
-                anchor: scheduleView.deadlineDateDropdownAnchor,
-                content: scheduleView.deadlineDateDropdownContentView,
-                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
-            )
+            self?.openScheduleDropdown(.deadline)
         }.store(in: &subscriptions)
         
-        scheduleView.startDateDropdownContentView.selectedItemPublisher.sink { [weak self] selectedItems in
-            let startDate = self?.date(from: selectedItems)
-            if self?.request.startDate != startDate {
-                self?.request.startDate = startDate
-                self?.scheduleView.configure(startDate: startDate)
-            }
-        }.store(in: &subscriptions)
-        
-        scheduleView.endDateDropdownContentView.selectedItemPublisher.sink { [weak self] selectedItems in
-            let endDate = self?.date(from: selectedItems)
-            if self?.request.endDate != endDate {
-                self?.request.endDate = endDate
-                self?.scheduleView.configure(endDate: endDate)
-            }
-        }.store(in: &subscriptions)
-        
-        scheduleView.deadlineDateDropdownContentView.selectedItemPublisher.sink { [weak self] selectedItems in
-            let deadline = self?.date(from: selectedItems)
-            if self?.request.deadline != deadline {
-                self?.request.deadline = deadline
-                self?.scheduleView.configure(deadlineDate: deadline)
-            }
-        }.store(in: &subscriptions)
+        [RecruitPostSchedule.Field.start, .end, .deadline].forEach { field in
+            scheduleView.dropdownContentView(for: field).datePublisher.sink { [weak self] date in
+                guard let self else { return }
+                schedule = schedule.updating(field, to: date)
+            }.store(in: &subscriptions)
+        }
         
         roleView.roleTypeChangedPublisher.sink { [weak self] roleType in
             self?.logEvent(post: .recruitRecruitRole, modify: .recruitPostEditRole, value: "역할 구분 없이 모집하기")
@@ -318,20 +299,22 @@ extension RecruitPostViewController {
         }.store(in: &subscriptions)
     }
 
-    private func date(from selectedItems: [String]) -> Date? {
-        guard selectedItems.count == 3,
-              let year = Int(selectedItems[0].filter { $0.isNumber }),
-              let month = Int(selectedItems[1].filter { $0.isNumber }),
-              let day = Int(selectedItems[2].filter { $0.isNumber }) else {
-            return nil
+    /// 드롭다운형: 범위 적용 후 값 표시. 값이 없으면 보정된 picker.date를 즉시 반영(setDate는 이벤트 없음)
+    private func openScheduleDropdown(_ field: RecruitPostSchedule.Field) {
+        let picker = scheduleView.dropdownContentView(for: field)
+        let range = schedule.range(for: field, today: today)
+        picker.setRange(minimum: range.lowerBound, maximum: range.upperBound)
+        if let date = schedule.date(for: field) {
+            picker.setDate(date)
+        } else {
+            picker.setDate(Date())
+            schedule = schedule.updating(field, to: picker.date)
         }
-        var components = DateComponents()
-        components.calendar = Calendar(identifier: .gregorian)
-        components.timeZone = TimeZone.current
-        components.year = year
-        components.month = month
-        components.day = day
-        return components.date
+        presentDropdown(
+            anchor: field == .deadline ? scheduleView.deadlineDateDropdownAnchor : scheduleView.activityPeriodDropdownAnchor,
+            content: picker,
+            configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+        )
     }
 }
 
@@ -405,11 +388,12 @@ extension RecruitPostViewController {
         categoryView.configure(category: data.category)
         titleView.configure(text: data.title)
         meetingTypeView.configure(meetingType: data.meetingType)
-        scheduleView.configure(
-            startDate: data.startDate,
-            endDate: data.endDate,
-            deadlineDate: data.deadlineDate
-        )
+        // 서버 값은 보정하지 않고 그대로 표시
+        scheduleView.configure(schedule: RecruitPostSchedule(
+            start: data.startDate,
+            end: data.endDate,
+            deadline: data.deadlineDate
+        ))
         roleView.configure(
             roleType: data.type,
             roles: data.roles.map { RecruitRoleRequest(from: $0) },

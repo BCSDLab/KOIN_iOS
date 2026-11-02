@@ -17,6 +17,8 @@ final class EditLostItemViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: EditLostItemViewModel
+    /// 화면 진입 시 1회 고정. 습득일 범위 기준
+    private let now = Date()
     private let inputSubject = PassthroughSubject<EditLostItemViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     weak var delegate: EditLostItemViewControllerDelegate?
@@ -36,7 +38,7 @@ final class EditLostItemViewController: UIViewController {
     
     private lazy var categoryView = EditLostItemCategoryView(selectedCategory: viewModel.lostItemData.category)
     
-    private lazy var foundDateView = EditLostItemFoundDateView(type: viewModel.lostItemData.type, foundDate: viewModel.lostItemData.foundDate)
+    private lazy var foundDateView = EditLostItemFoundDateView(type: viewModel.lostItemData.type, foundDate: viewModel.lostItemData.foundDate, now: now)
     
     private lazy var foundPlaceView = EditLostItemFoundPlaceView(type: viewModel.lostItemData.type, foundPlace: viewModel.lostItemData.foundPlace)
     
@@ -118,7 +120,8 @@ extension EditLostItemViewController {
     @objc private func editButtonTapped() {
         dismissKeyboard()
         
-        if foundDateView.isValid && foundPlaceView.isValid {
+        let isFoundDateValid = foundDateView.validateInput()
+        if isFoundDateValid && foundPlaceView.isValid {
             let imageUrls = imagesView.imageUploadCollectionView.imageUrls
             let category = categoryView.selectedCategory
             let foundDate = foundDateView.foundDate

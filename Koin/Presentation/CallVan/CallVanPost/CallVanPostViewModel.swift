@@ -35,10 +35,6 @@ final class CallVanPostViewModel: ViewModelProtocol {
     private let fetchCallVanRestrictionUseCase: FetchCallVanRestrictionUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    private let dateFormatter = DateFormatter().then {
-        $0.locale = Locale(identifier: "ko_KR")
-        $0.calendar = Calendar(identifier: .gregorian)
-    }
     private(set) var request = CallVanPostRequest() {
         didSet {
             validate()
@@ -90,13 +86,11 @@ final class CallVanPostViewModel: ViewModelProtocol {
 extension CallVanPostViewModel {
     
     private func updateDepartureDate(_ departureDate: Date) {
-        dateFormatter.dateFormat = "yyyy-MM-dd"
-        request.departureDate = dateFormatter.string(from: departureDate)
+        request.departureDate = departureDate.string(with: .yearMonthDayHyphen)
     }
     
     private func updateDepartureTime(_ departureTime: Date) {
-        dateFormatter.dateFormat = "HH:mm"
-        request.departureTime = dateFormatter.string(from: departureTime)
+        request.departureTime = departureTime.string(with: .hourMinute)
     }
     
     private func swapPlace() {
@@ -114,8 +108,6 @@ extension CallVanPostViewModel {
     private func validate() {
         var isValid = true
         
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd HH:mm"
         let tenMinutes: TimeInterval = 1 * 60 * 10
         
         /// 빈 값이 있는지 확인
@@ -141,7 +133,7 @@ extension CallVanPostViewModel {
         /// 현재 시각으로부터 최소 10분 이후 일정인지 확인
         let date = request.departureDate ?? ""
         let time = request.departureTime ?? ""
-        if let requestDate = formatter.date(from: "\(date) \(time)"),
+        if let requestDate = Date(string: "\(date) \(time)", format: .yearMonthDayHyphenHourMinute),
            requestDate.timeIntervalSince(Date()) < tenMinutes {
             isValid = false
         }
