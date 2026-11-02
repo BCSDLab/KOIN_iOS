@@ -10,24 +10,30 @@ import UIKit
 @MainActor
 final class KoinDropdownAnimator {
 
+    // MARK: - Metric
     enum Metric {
         static let presentDuration: TimeInterval = 0.3
         static let presentBounce: CGFloat = 0.15
         static let dismissDuration: TimeInterval = 0.2
     }
 
-    private func hiddenTransform(travel: CGFloat) -> CGAffineTransform {
-        CGAffineTransform(translationX: 0, y: -travel)
+    // MARK: - Transform
+    private func hiddenTransform(hiddenOffsetY: CGFloat) -> CGAffineTransform {
+        CGAffineTransform(
+            translationX: 0,
+            y: hiddenOffsetY
+        )
     }
 
+    // MARK: - Present
     func present(
         view: UIView,
-        travel: CGFloat,
+        hiddenOffsetY: CGFloat,
         completion: (() -> Void)? = nil
     ) {
         view.isHidden = false
         view.alpha = 0
-        view.transform = hiddenTransform(travel: travel)
+        view.transform = hiddenTransform(hiddenOffsetY: hiddenOffsetY)
 
         UIView.animate(
             springDuration: Metric.presentDuration,
@@ -40,14 +46,15 @@ final class KoinDropdownAnimator {
         }
     }
 
+    // MARK: - Dismiss
     func dismiss(
         view: UIView,
-        travel: CGFloat,
+        hiddenOffsetY: CGFloat,
         completion: (() -> Void)? = nil
     ) {
         UIView.animate(springDuration: Metric.dismissDuration) {
             view.alpha = 0
-            view.transform = self.hiddenTransform(travel: travel)
+            view.transform = self.hiddenTransform(hiddenOffsetY: hiddenOffsetY)
         } completion: { _ in
             view.isHidden = true
             completion?()

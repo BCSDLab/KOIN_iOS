@@ -189,7 +189,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         $0.layer.cornerRadius = 12
     }
 
-    private var dropdown: KoinDropdown?
+    private weak var dropdown: KoinDropdownViewController?
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -221,18 +221,10 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - PrepareForReuse
-    /// ScrollView 를 아는 CollectionView 가 Host 를 넘겨준다. 셀당 한 번만 만든다.
-    func prepareDropdown(host: KoinDropdownHost) {
-        guard dropdown == nil else { return }
-        dropdown = host.makeDropdown(
-            anchor: dateButton,
-            contentView: dropdownView,
-            configuration: .init(topPadding: 4, shadow: .shadow2)
-        )
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
+        dropdown?.dismissDropdown(animated: false)
+        dropdown = nil
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
     }
@@ -465,8 +457,11 @@ extension AddLostItemCollectionViewCell {
     
     // MARK: - dropdown 열기/닫기
     @objc private func dateButtonTapped(button: UIButton) {
-        // KoinDropdown 은 표시 중 키보드가 없다고 전제한다. 먼저 내린다.
-        dropdown?.toggle()
+        dropdown = presentDropdown(
+            anchor: dateButton,
+            content: dropdownView,
+            configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+        )
     }
     
     private func dropdownValueChanged() {

@@ -100,10 +100,6 @@ final class RecruitProfilePostSecondStepView: UIScrollView {
         introductionView.configure(text: request.introduction)
     }
 
-    func prepareDropdown(host: KoinDropdownHost) {
-        activityTableView.prepareDropdown(host: host)
-    }
-
     func applyPendingSizeChange() {
         skillTableView.applyPendingSizeChange()
         activityTableView.applyPendingSizeChange()

@@ -10,9 +10,6 @@ import UIKit
 
 final class AddLostItemCollectionView: UICollectionView {
 
-    // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: self)
-    
     // MARK: - Properties
     private var footerCancellables = Set<AnyCancellable>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
@@ -20,10 +17,6 @@ final class AddLostItemCollectionView: UICollectionView {
     
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
-    
-    var isDropdownPresenting: Bool {
-        dropdownHost.isPresenting
-    }
     
     // MARK: - Initializer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -58,10 +51,6 @@ final class AddLostItemCollectionView: UICollectionView {
 
 extension AddLostItemCollectionView {
     
-    func dismissDropdown() {
-        dropdownHost.dismissPresented()
-    }
-
     func setType(type: LostItemType) {
         self.type = type
         reloadData()
@@ -127,7 +116,6 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         cell.imageUrlsPublisher.sink { [weak self] urls in
             self?.articles[indexPath.row].images = urls
         }.store(in: &cell.cancellables)
-        cell.prepareDropdown(host: dropdownHost)
         return cell
     }
     
@@ -151,7 +139,6 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
                     formatter.dateFormat = "yyyy년 M월 d일"
                     return formatter.string(from: Date())
                 }()
-                self?.dismissDropdown()
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
                     self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
                     self?.reloadData()

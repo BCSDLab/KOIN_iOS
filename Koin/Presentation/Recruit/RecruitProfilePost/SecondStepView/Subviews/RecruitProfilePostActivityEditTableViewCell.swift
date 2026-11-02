@@ -22,8 +22,7 @@ final class RecruitProfilePostActivityEditTableViewCell: UITableViewCell {
     private var subscriptions = Set<AnyCancellable>()
     
     // MARK: - Dropdown
-    private var startDropdown: KoinDropdown?
-    private var endDropdown: KoinDropdown?
+    private weak var dropdown: KoinDropdownViewController?
     
     // MARK: - UI Components
     private let cardView = UIView()
@@ -86,25 +85,11 @@ final class RecruitProfilePostActivityEditTableViewCell: UITableViewCell {
     override func prepareForReuse() {
         super.prepareForReuse()
         cellSubscriptions.removeAll()
-        startDropdown?.dismiss()
-        endDropdown?.dismiss()
+        dropdown?.dismissDropdown(animated: false)
+        dropdown = nil
     }
     
     // MARK: - Public
-    func prepareDropdown(host: KoinDropdownHost) {
-        guard startDropdown == nil, endDropdown == nil else { return }
-        startDropdown = host.makeDropdown(
-            anchor: activityPeriodDropdownAnchor,
-            contentView: startPickerView,
-            configuration: .init(topPadding: 8, shadow: .shadow2)
-        )
-        endDropdown = host.makeDropdown(
-            anchor: activityPeriodDropdownAnchor,
-            contentView: endPickerView,
-            configuration: .init(topPadding: 8, shadow: .shadow2)
-        )
-    }
-    
     func configure(activity: RecruitProfileActivityRequest) {
         self.activity = activity
         titleTextField.text = activity.title
@@ -166,25 +151,28 @@ extension RecruitProfilePostActivityEditTableViewCell {
     }
     
     @objc private func startDateButtonTapped() {
-        endDropdown?.dismiss()
-        endEditing(true)
         startPickerView.reset(initialDate: activity.startedAt ?? Date())
-        startDropdown?.toggle()
+        dropdown = presentDropdown(
+            anchor: activityPeriodDropdownAnchor,
+            content: startPickerView,
+            configuration: .init(direction: .down(spacing: 8), shadow: .shadow2)
+        )
     }
     
     @objc private func endDateButtonTapped() {
         guard !activity.isOngoing else { return }
-        startDropdown?.dismiss()
-        endEditing(true)
         endPickerView.reset(initialDate: activity.endedAt ?? activity.startedAt ?? Date())
-        endDropdown?.toggle()
+        dropdown = presentDropdown(
+            anchor: activityPeriodDropdownAnchor,
+            content: endPickerView,
+            configuration: .init(direction: .down(spacing: 8), shadow: .shadow2)
+        )
     }
     
     @objc private func ongoingButtonTapped() {
         activity.isOngoing.toggle()
         if activity.isOngoing {
             activity.endedAt = nil
-            endDropdown?.dismiss()
         }
         updateOngoingButton()
         refreshDates()

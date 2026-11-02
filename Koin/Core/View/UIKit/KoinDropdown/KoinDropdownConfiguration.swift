@@ -8,10 +8,46 @@
 import UIKit
 
 struct KoinDropdownConfiguration {
-    let topPadding: CGFloat
+    // MARK: - Properties
+    let direction: Direction
     let shadow: Shadow
 }
 
+// MARK: - Direction
+extension KoinDropdownConfiguration {
+    /// 각 연관값의 spacing은 anchor와 dropdown 사이 간격이다.
+    enum Direction {
+        case down(spacing: CGFloat)
+        case auto(
+            downSpacing: CGFloat,
+            upSpacing: CGFloat
+        )
+    }
+
+    enum ResolvedDirection {
+        case down
+        case up
+    }
+
+    var isAutoDirection: Bool {
+        if case .auto = direction {
+            return true
+        }
+        return false
+    }
+
+    /// 실제로 연 방향에서 anchor와 dropdown 사이 간격을 반환한다.
+    func spacing(for resolvedDirection: ResolvedDirection) -> CGFloat {
+        switch direction {
+        case let .down(spacing):
+            return spacing
+        case let .auto(downSpacing, upSpacing):
+            return resolvedDirection == .down ? downSpacing : upSpacing
+        }
+    }
+}
+
+// MARK: - Shadow
 extension KoinDropdownConfiguration {
     enum Shadow {
         case shadow2
@@ -53,12 +89,12 @@ extension KoinDropdownConfiguration {
         }
     }
 
-    var shadowPadding: UIEdgeInsets {
+    func shadowPadding(for direction: ResolvedDirection) -> UIEdgeInsets {
         let base = max(0, shadow.blur + shadow.spread)
         return UIEdgeInsets(
-            top: 0,
+            top: direction == .up ? base + max(0, -shadow.offset.y) : 0,
             left: base + max(0, -shadow.offset.x),
-            bottom: base + max(0, shadow.offset.y),
+            bottom: direction == .down ? base + max(0, shadow.offset.y) : 0,
             right: base + max(0, shadow.offset.x)
         )
     }

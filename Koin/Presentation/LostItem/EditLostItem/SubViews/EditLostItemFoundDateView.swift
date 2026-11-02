@@ -69,11 +69,6 @@ final class EditLostItemFoundDateView: UIView {
         $0.layer.cornerRadius = 12
     }
 
-    // MARK: - Dropdown
-    var dropdownTrigger: UIView { dateButton }
-    var dropdownContentView: UIView & KoinDropdownContentView { dropdownView }
-    private var dropdown: KoinDropdown?
-    
     // MARK: - Initializer
     init(type: LostItemType, foundDate: String) {
         self.type = type
@@ -113,17 +108,10 @@ final class EditLostItemFoundDateView: UIView {
     }
     
     @objc private func dateButtonTapped(button: UIButton) {
-        endEditing(true)
-        dropdown?.toggle()
-    }
-
-    /// ScrollView 를 아는 호출부가 Host 를 넘겨준다.
-    func prepareDropdown(host: KoinDropdownHost) {
-        guard dropdown == nil else { return }
-        dropdown = host.makeDropdown(
+        presentDropdown(
             anchor: dateButton,
-            contentView: dropdownView,
-            configuration: .init(topPadding: 4, shadow: .shadow2)
+            content: dropdownView,
+            configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
         )
     }
     

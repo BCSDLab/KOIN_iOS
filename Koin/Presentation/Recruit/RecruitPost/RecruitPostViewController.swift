@@ -101,32 +101,15 @@ final class RecruitPostViewController: UIViewController {
     private let postButton = UIButton()
     
     // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
-    
-    private lazy var categoryDropdown = dropdownHost.makeDropdown(
-        anchor: categoryView.dropdownAnchor,
-        contentView: RecruitPostCategoryDropdownView { [weak self] category in
-            self?.logEvent(post: .recruitRecruitCategory, modify: .recruitPostEditCategory, value: category.rawValue)
-            self?.request.category = category
-            self?.categoryView.configure(category: category)
-        },
-        configuration: .init(topPadding: 4, shadow: .shadow2)
-    )
-    private lazy var startDateDropdown = dropdownHost.makeDropdown(
-        anchor: scheduleView.activityPeriodDropdownAnchor,
-        contentView: scheduleView.startDateDropdownContentView,
-        configuration: .init(topPadding: 4, shadow: .shadow2)
-    )
-    private lazy var endDateDropdown = dropdownHost.makeDropdown(
-        anchor: scheduleView.activityPeriodDropdownAnchor,
-        contentView: scheduleView.endDateDropdownContentView,
-        configuration: .init(topPadding: 4, shadow: .shadow2)
-    )
-    private lazy var deadlineDateDropdown = dropdownHost.makeDropdown(
-        anchor: scheduleView.deadlineDateDropdownAnchor,
-        contentView: scheduleView.deadlineDateDropdownContentView,
-        configuration: .init(topPadding: 4, shadow: .shadow2)
-    )
+    private lazy var categoryDropdownContentView = RecruitPostCategoryDropdownView { [weak self] category in
+        self?.logEvent(
+            post: .recruitRecruitCategory,
+            modify: .recruitPostEditCategory,
+            value: category.rawValue
+        )
+        self?.request.category = category
+        self?.categoryView.configure(category: category)
+    }
     
     // MARK: - Initializer
     init(
@@ -193,8 +176,11 @@ extension RecruitPostViewController {
     private func bindSections() {
         categoryView.categoryButtonTappedPublisher.sink { [weak self] in
             guard let self else { return }
-            view.endEditing(true)
-            categoryDropdown.toggle()
+            presentDropdown(
+                anchor: categoryView.dropdownAnchor,
+                content: categoryDropdownContentView,
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+            )
         }.store(in: &subscriptions)
         
         titleView.textChangedPublisher.sink { [weak self] text in
@@ -217,23 +203,32 @@ extension RecruitPostViewController {
         
         scheduleView.startDateButtonTappedPublisher.sink { [weak self] in
             guard let self else { return }
-            view.endEditing(true)
             scheduleView.startDateDropdownContentView.reset(initialDate: request.startDate ?? Date())
-            startDateDropdown.toggle()
+            presentDropdown(
+                anchor: scheduleView.activityPeriodDropdownAnchor,
+                content: scheduleView.startDateDropdownContentView,
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+            )
         }.store(in: &subscriptions)
         
         scheduleView.endDateButtonTappedPublisher.sink { [weak self] in
             guard let self else { return }
-            view.endEditing(true)
             scheduleView.endDateDropdownContentView.reset(initialDate: request.endDate ?? Date())
-            endDateDropdown.toggle()
+            presentDropdown(
+                anchor: scheduleView.activityPeriodDropdownAnchor,
+                content: scheduleView.endDateDropdownContentView,
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+            )
         }.store(in: &subscriptions)
         
         scheduleView.deadlineDateButtonTappedPublisher.sink { [weak self] in
             guard let self else { return }
-            view.endEditing(true)
             scheduleView.deadlineDateDropdownContentView.reset(initialDate: request.deadline ?? Date())
-            deadlineDateDropdown.toggle()
+            presentDropdown(
+                anchor: scheduleView.deadlineDateDropdownAnchor,
+                content: scheduleView.deadlineDateDropdownContentView,
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+            )
         }.store(in: &subscriptions)
         
         scheduleView.startDateDropdownContentView.selectedItemPublisher.sink { [weak self] selectedItems in
@@ -433,7 +428,6 @@ extension RecruitPostViewController {
     }
     
     @objc private func postButtonTapped() {
-        guard !dropdownHost.isPresenting else { return }
         view.endEditing(true)
         logEvent(post: .recruitRecruitSubmit, modify: .recruitPostEditSubmit, value: submitLogValue)
         showSubmitModal()
