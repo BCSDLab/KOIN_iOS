@@ -262,16 +262,15 @@ extension DiningHostingController {
 
 extension DiningHostingController {
     private func presentNotiBottomSheet(_ initialValue: DiningNoti) {
-        let contentView = DiningNotiBottomSheetContentView(
-            onSoldOutSwitchToggled: rootView.didTapSoldOutSwitch,
-            onImageUploadSwitchToggled: rootView.didTapImageUploadSwitch,
-            onNotiButtonTapped: navigateToNoti,
-            initialValue: initialValue
-        )
-        let bottomSheetViewController = BottomSheetViewControllerB(contentView: contentView)
-        contentView.delegate = bottomSheetViewController
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) { [weak self] in
-            self?.present(bottomSheetViewController, animated: false)
+            guard let self, viewIfLoaded?.window != nil else { return }
+            let contentView = DiningNotiBottomSheetContentView(
+                onSoldOutSwitchToggled: rootView.didTapSoldOutSwitch,
+                onImageUploadSwitchToggled: rootView.didTapImageUploadSwitch,
+                onNotiButtonTapped: navigateToNoti,
+                initialValue: initialValue
+            )
+            presentBottomSheet(contentView, configuration: .init(cornerRadius: 16))
         }
     }
     

@@ -1,5 +1,5 @@
 //
-//  NewBannerViewController.swift
+//  BannerView.swift
 //  koin
 //
 //  Created by 홍기정 on 6/20/26.
@@ -9,17 +9,17 @@ import SnapKit
 import Then
 import UIKit
 
-final class NewBannerViewController: UIViewController {
-    
+final class BannerView: UIView, KoinBottomSheetContent {
+    weak var delegate: KoinBottomSheetDelegate?
+
     // MARK: - Properties
     private let onBannerTap: (Banner) -> Void
     private let onLogEvent: (EventLabelType, EventParameter.EventCategory, Any) -> Void
-    
+
     // MARK: - UI Components
-    private let contentView = UIView()
     private let noShowButton = UIButton()
     private let closeButton = UIButton()
-    private lazy var collectionView = NewBannerCollectionView(
+    private lazy var collectionView = BannerCollectionView(
         onBannerTap: { [weak self] banner in
             self?.onBannerTap(banner)
         },
@@ -39,18 +39,13 @@ final class NewBannerViewController: UIViewController {
     ) {
         self.onBannerTap = onBannerTap
         self.onLogEvent = onLogEvent
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-
-    // MARK: - Life Cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        super.init(frame: .zero)
         configureView()
         setAddTargets()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // MARK: - Public
@@ -59,33 +54,33 @@ final class NewBannerViewController: UIViewController {
     }
 }
 
-extension NewBannerViewController {
-    
+extension BannerView {
+
     private func setAddTargets() {
         noShowButton.addTarget(self, action: #selector(noShowButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }
-    
+
     @objc private func noShowButtonTapped() {
-        dismiss(animated: true)
+        delegate?.dismiss()
         UserDefaults.standard.set(Date(), forKey: "noShowBanner")
-        
+
         if let title = collectionView.currentTitle {
             onLogEvent(EventParameter.EventLabel.Campus.Home.mainModalHide7d, .click, title)
         }
     }
 
     @objc private func closeButtonTapped() {
-        dismiss(animated: true)
-        
+        delegate?.dismiss()
+
         if let title = collectionView.currentTitle {
             onLogEvent(EventParameter.EventLabel.Campus.Home.mainModalClose, .click, title)
         }
     }
 }
 
-extension NewBannerViewController {
-    
+extension BannerView {
+
     private func setCountLabel(index: Int, totalCount: Int) {
         let text = "\(index + 1)/\(totalCount)"
         let attributedString = NSMutableAttributedString(string: text)
@@ -110,46 +105,39 @@ extension NewBannerViewController {
 }
 
 
-extension NewBannerViewController {
-    
+extension BannerView {
+
     private func configureView() {
         setUpStyles()
         setUpLayouts()
         setUpConstraints()
     }
-    
+
     private func setUpStyles() {
-        view.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.7)
-        contentView.backgroundColor = .white
-        contentView.layer.cornerRadius = 8
-        contentView.layer.masksToBounds = true
-        
+        backgroundColor = .white
+
         noShowButton.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
         noShowButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
         noShowButton.setTitle("일주일 동안 그만 보기", for: .normal)
-        
+
         closeButton.titleLabel?.font = UIFont.appFont(.pretendardRegular, size: 14)
         closeButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
         closeButton.setTitle("닫기", for: .normal)
-        
+
         countLabel.backgroundColor = .black.withAlphaComponent(0.5)
         countLabel.font = UIFont.appFont(.pretendardRegular, size: 14)
         countLabel.textAlignment = .center
         countLabel.layer.cornerRadius = 8
         countLabel.layer.masksToBounds = true
     }
-    
+
     private func setUpLayouts() {
-        view.addSubview(contentView)
         [noShowButton, closeButton, collectionView, countLabel].forEach {
-            contentView.addSubview($0)
+            addSubview($0)
         }
     }
-    
+
     private func setUpConstraints() {
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
         noShowButton.snp.makeConstraints {
             $0.top.equalToSuperview().offset(13)
             $0.leading.equalToSuperview().offset(22.5)
@@ -165,7 +153,8 @@ extension NewBannerViewController {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(closeButton.snp.bottom).offset(13)
             $0.horizontalEdges.equalToSuperview()
-            $0.height.equalTo(293)
+            $0.height.equalTo(293).priority(500)
+            $0.bottom.equalToSuperview()
         }
         countLabel.snp.makeConstraints {
             $0.top.equalTo(collectionView.snp.top).offset(8)

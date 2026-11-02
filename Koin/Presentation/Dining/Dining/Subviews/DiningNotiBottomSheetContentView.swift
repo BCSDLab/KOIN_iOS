@@ -9,10 +9,10 @@ import UIKit
 import SnapKit
 import Then
 
-final class DiningNotiBottomSheetContentView: UIView {
+final class DiningNotiBottomSheetContentView: UIView, KoinBottomSheetContent {
     
     // MARK: - Properties
-    weak var delegate: BottomSheetViewControllerBDelegate?
+    weak var delegate: KoinBottomSheetDelegate?
     private let onSoldOutSwitchToggled: (Bool)->Void
     private let onImageUploadSwitchToggled: (Bool)->Void
     private let onNotiButtonTapped: ()->Void
@@ -87,8 +87,7 @@ extension DiningNotiBottomSheetContentView {
     }
     
     @objc private func didTapNotiButton() {
-        onNotiButtonTapped()
-        delegate?.dismiss()
+        delegate?.dismiss(completion: onNotiButtonTapped)
     }
     
     @objc private func didTapCloseButton() {
@@ -106,8 +105,6 @@ extension DiningNotiBottomSheetContentView {
 
     private func setUpStyles() {
         backgroundColor = .appColor(.neutral0)
-        layer.cornerRadius = 16
-        layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
 
         titleLabel.do {
             $0.setLineHeight(lineHeight: 1.6, text: "알림 설정을 허용하고\n식단 품절 알림을 받아보세요!")

@@ -10,7 +10,7 @@ import Combine
 import SnapKit
 import Then
 
-final class CallVanPostPlaceBottomSheetView: UIView {
+final class CallVanPostPlaceBottomSheetView: UIView, KoinBottomSheetContent {
     
     enum Title: String {
         case departure = "출발지가 어디인가요?"
@@ -32,7 +32,7 @@ final class CallVanPostPlaceBottomSheetView: UIView {
     }
     
     // MARK: - Properties
-    weak var delegate: BottomSheetViewControllerBDelegate?
+    weak var delegate: KoinBottomSheetDelegate?
     private var onApplyButtonTapped: ((CallVanPlace, String?)->Void)?
     private var filterGroup = FilterGroupModel(
         title: "",
@@ -56,7 +56,10 @@ final class CallVanPostPlaceBottomSheetView: UIView {
     private let titleLabel = UILabel()
     private let closeButton = UIButton()
     private let topSeparatorView = UIView()
-    
+
+    private let placeScrollView = UIScrollView()
+    private let placeContentView = UIView()
+    private var placeScrollViewHeight: CGFloat = 0
     private lazy var filterGroupCollectionView = FilterGroupCollectionView(filterGroup: filterGroup)
     
     private let separatorView = UIView()
@@ -84,15 +87,31 @@ final class CallVanPostPlaceBottomSheetView: UIView {
         customPlace: String?,
         onApplyButtonTapped: @escaping (CallVanPlace, String?)->Void
     ) {
-        self.selectedPlace = selectedPlace
+        customPlaceTextField.text = customPlace
         self.customPlace = customPlace
+        self.selectedPlace = selectedPlace
         self.onApplyButtonTapped = onApplyButtonTapped
         titleLabel.text = title.rawValue
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        // 스크롤 내부 칩의 실제 너비를 확정한 뒤 intrinsic 높이를 사용한다.
+        placeScrollView.layoutIfNeeded()
+        placeContentView.layoutIfNeeded()
+        // 키보드·창 크기로 보이는 영역이 바뀌면 입력란을 다시 보이게 한다.
+        let height = placeScrollView.bounds.height
+        if abs(height - placeScrollViewHeight) > 0.5 {
+            placeScrollViewHeight = height
+            DispatchQueue.main.async { [weak self] in
+                self?.revealCustomPlaceTextField()
+            }
+        }
+    }
+
     // MARK: - Bind
     private func bind() {
         filterGroupCollectionView.itemTappedPublisher
@@ -102,6 +121,12 @@ final class CallVanPostPlaceBottomSheetView: UIView {
                     return
                 }
                 self.selectedPlace = selectedPlace
+            }
+            .store(in: &subscriptions)
+
+        NotificationCenter.default.publisher(for: UIResponder.keyboardDidShowNotification)
+            .sink { [weak self] _ in
+                self?.revealCustomPlaceTextField()
             }
             .store(in: &subscriptions)
     }
@@ -167,15 +192,15 @@ extension CallVanPostPlaceBottomSheetView: UITextFieldDelegate {
             $0.height.equalTo(isVisible ? 47 : 0)
             $0.top.equalTo(separatorView.snp.bottom).offset(isVisible ? 24 : 0)
             $0.leading.trailing.equalToSuperview().inset(32)
+            $0.bottom.equalToSuperview().offset(-24)
         }
         
         if isVisible {
             customPlaceTextField.isHidden = false
         }
         
+        delegate?.invalidateHeight(animated: true)
         UIView.animate(springDuration: 0.2) { [weak self] in
-            self?.superview?.layoutIfNeeded()
-            self?.layoutIfNeeded()
             self?.customPlaceTextField.alpha = isVisible ? 1 : 0
         } completion: { [weak self] _ in
             self?.customPlaceTextField.isHidden = !isVisible
@@ -188,6 +213,14 @@ extension CallVanPostPlaceBottomSheetView: UITextFieldDelegate {
         }
     }
     
+    /// 포커스가 풀렸거나 시트가 사라진 뒤의 지연 호출은 무시한다.
+    private func revealCustomPlaceTextField() {
+        guard window != nil, customPlaceTextField.isFirstResponder else { return }
+        layoutIfNeeded()
+        let rect = customPlaceTextField.convert(customPlaceTextField.bounds, to: placeScrollView)
+        placeScrollView.scrollRectToVisible(rect, animated: true)
+    }
+
     private func updateApplyButton(isCustomSelected: Bool) {
         let title = isCustomSelected ? "입력완료" : "선택하기"
         applyButton.setAttributedTitle(NSAttributedString(
@@ -254,8 +287,6 @@ extension CallVanPostPlaceBottomSheetView {
     
     private func setUpStyles() {
         self.do {
-            $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
-            $0.layer.cornerRadius = 32
             $0.backgroundColor = UIColor.appColor(.neutral0)
         }
         
@@ -269,6 +300,9 @@ extension CallVanPostPlaceBottomSheetView {
         }
         [topSeparatorView, separatorView, bottomSeparatorView].forEach {
             $0.backgroundColor = UIColor.appColor(.neutral300)
+        }
+        placeScrollView.do {
+            $0.showsVerticalScrollIndicator = false
         }
         customPlaceTextField.do {
             $0.layer.cornerRadius = 12
@@ -294,9 +328,12 @@ extension CallVanPostPlaceBottomSheetView {
     }
     
     private func setUpLayouts() {
+        [filterGroupCollectionView, separatorView, customPlaceTextField].forEach {
+            placeContentView.addSubview($0)
+        }
+        placeScrollView.addSubview(placeContentView)
         [titleLabel, closeButton, topSeparatorView,
-         filterGroupCollectionView,
-         separatorView, customPlaceTextField,
+         placeScrollView,
          applyButton, bottomSeparatorView].forEach {
             addSubview($0)
         }
@@ -317,8 +354,18 @@ extension CallVanPostPlaceBottomSheetView {
             $0.leading.trailing.equalToSuperview()
             $0.top.equalTo(titleLabel.snp.bottom).offset(12)
         }
+        placeScrollView.snp.makeConstraints {
+            $0.top.equalTo(topSeparatorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(applyButton.snp.top)
+            $0.height.equalTo(placeScrollView.contentLayoutGuide).priority(500)
+        }
+        placeContentView.snp.makeConstraints {
+            $0.edges.equalTo(placeScrollView.contentLayoutGuide)
+            $0.width.equalTo(placeScrollView.frameLayoutGuide)
+        }
         filterGroupCollectionView.snp.makeConstraints {
-            $0.top.equalTo(topSeparatorView.snp.bottom).offset(12)
+            $0.top.equalToSuperview().offset(12)
             $0.leading.trailing.equalToSuperview().inset(32)
         }
         separatorView.snp.makeConstraints {
@@ -330,10 +377,10 @@ extension CallVanPostPlaceBottomSheetView {
             $0.height.equalTo(0)
             $0.top.equalTo(separatorView.snp.bottom).offset(0)
             $0.leading.trailing.equalToSuperview().inset(32)
+            $0.bottom.equalToSuperview().offset(-24)
         }
         applyButton.snp.makeConstraints {
             $0.height.equalTo(48)
-            $0.top.equalTo(customPlaceTextField.snp.bottom).offset(24)
             $0.leading.trailing.equalToSuperview().inset(32)
         }
         bottomSeparatorView.snp.makeConstraints {

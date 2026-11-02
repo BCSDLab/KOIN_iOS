@@ -174,13 +174,11 @@ extension ShopViewController {
     }
 
     @objc private func sortButtonTapped() {
-        guard presentedViewController == nil else { return }
-        
-        let bottomSheetViewController = ShopSortOptionSheetViewController(current: viewModel.currentSortType)
-        
+        let contentView = ShopSortOptionSheetView(current: viewModel.currentSortType)
+
         let categoryName = viewModel.selectedCategoryName
 
-        bottomSheetViewController.onOptionSelected = { [weak self] sort in
+        contentView.onOptionSelected = { [weak self] sort in
             self?.inputSubject.send(.sortOptionDidChange(sort))
             let value: String
             switch sort {
@@ -190,20 +188,8 @@ extension ShopViewController {
             }
             self?.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
         }
-        
-        bottomSheetViewController.modalPresentationStyle = .pageSheet
-        if let sheet = bottomSheetViewController.sheetPresentationController {
-            if #available(iOS 16.0, *) {
-                let detent = UISheetPresentationController.Detent.custom(identifier: .init("fixed233")) { _ in 233 }
-                sheet.detents = [detent]
-                sheet.selectedDetentIdentifier = detent.identifier
-            } else {
-                sheet.detents = [.medium()]
-            }
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 32
-        }
-        present(bottomSheetViewController, animated: true)
+
+        presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.2), cornerRadius: 32))
     }
 }
 

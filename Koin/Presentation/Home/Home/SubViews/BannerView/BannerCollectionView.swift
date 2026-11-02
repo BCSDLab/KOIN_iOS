@@ -1,5 +1,5 @@
 //
-//  NewBannerCollectionView.swift
+//  BannerCollectionView.swift
 //  koin
 //
 //  Created by 홍기정 on 6/20/26.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class NewBannerCollectionView: AutoScrollableInfiniteCarouselCollectionView {
+final class BannerCollectionView: AutoScrollableInfiniteCarouselCollectionView {
 
     // MARK: - Properties
     private var banners: [Banner] = []
@@ -53,7 +53,7 @@ final class NewBannerCollectionView: AutoScrollableInfiniteCarouselCollectionVie
 
 // MARK: - AutoScrollableInfiniteCarouselCollectionViewProtocol
 
-extension NewBannerCollectionView: AutoScrollableInfiniteCarouselCollectionViewProtocol {
+extension BannerCollectionView: AutoScrollableInfiniteCarouselCollectionViewProtocol {
     
     func numberOfItems(in collectionView: AutoScrollableInfiniteCarouselCollectionView) -> Int {
         banners.count

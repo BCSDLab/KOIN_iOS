@@ -1,21 +1,25 @@
 //
-//  LostItemListFilterViewController.swift
+//  LostItemListFilterView.swift
 //  koin
 //
 //  Created by 홍기정 on 1/17/26.
 //
 
 import UIKit
+import SnapKit
+import Then
 import Combine
 
-final class LostItemListFilterViewController: UIViewController {
-    
+final class LostItemListFilterView: UIView, KoinBottomSheetContent {
+    weak var delegate: KoinBottomSheetDelegate?
+
     // MARK: - Properties
     private let onApplyFilterButtonTapped: (FetchLostItemListRequest)->Void
     @Published private var filterState: FetchLostItemListRequest
     private var subscriptions: Set<AnyCancellable> = []
     private let isLoggedIn: Bool
-    
+    private let onLoginRequired: () -> Void
+
     // MARK: - UI Components
     private let filterTitleLabel = UILabel().then {
         $0.attributedText = NSAttributedString(string: "필터", attributes: [
@@ -30,7 +34,12 @@ final class LostItemListFilterViewController: UIViewController {
     private let topSeparatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
-    
+
+    private let filterScrollView = UIScrollView().then {
+        $0.showsVerticalScrollIndicator = false
+    }
+    private let filterContentView = UIView()
+
     private let authorFilterTitleLabel = UILabel().then {
         $0.text = "목록"
         $0.font = .appFont(.pretendardBold, size: 16)
@@ -43,11 +52,11 @@ final class LostItemListFilterViewController: UIViewController {
     }
     private let authorAllButton = LostItemListFilterButton(text: "전체", isSelected: true)
     private let authorMineButton = LostItemListFilterButton(text: "내 게시물", isSelected: false)
-    
+
     private let separatorView1 = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
-    
+
     private let typeFilterTitleLabel = UILabel().then {
         $0.text = "물품 카테고리"
         $0.font = .appFont(.pretendardBold, size: 16)
@@ -61,11 +70,11 @@ final class LostItemListFilterViewController: UIViewController {
     private let typeAllButton = LostItemListFilterButton(text: "전체", isSelected: true)
     private let typeFoundButton = LostItemListFilterButton(text: "습득물", isSelected: false)
     private let typeLostButton = LostItemListFilterButton(text: "분실물", isSelected: true)
-    
+
     private let separatorView2 = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
-    
+
     private let categoryFilterTitleLabel = UILabel().then {
         $0.text = "물품 종류"
         $0.font = .appFont(.pretendardBold, size: 16)
@@ -87,11 +96,11 @@ final class LostItemListFilterViewController: UIViewController {
     private let categoryIdCardButton = LostItemListFilterButton(text: LostItemCategory.id.description, isSelected: false)
     private let categoryElectronicDeviceButton = LostItemListFilterButton(text: LostItemCategory.electronics.description, isSelected: false)
     private let categoryOtherButton = LostItemListFilterButton(text: LostItemCategory.etc.description, isSelected: false)
-    
+
     private let separatorView3 = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
-    
+
     private let stateTitleLabel = UILabel().then {
         $0.text = "물품 상태"
         $0.font = .appFont(.pretendardBold, size: 16)
@@ -105,7 +114,7 @@ final class LostItemListFilterViewController: UIViewController {
     private let stateAllButton = LostItemListFilterButton(text: "전체", isSelected: true)
     private let stateNotFoundButton = LostItemListFilterButton(text: "찾는중", isSelected: false)
     private let stateFoundButton = LostItemListFilterButton(text: "찾음", isSelected: false)
-    
+
     private let resetFilterButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString("초기화", attributes: AttributeContainer([
@@ -130,32 +139,31 @@ final class LostItemListFilterViewController: UIViewController {
         $0.layer.cornerRadius = 12
         $0.clipsToBounds = true
     }
-    
+
     private let bottomSeparatorView = UIView().then {
         $0.backgroundColor = .appColor(.neutral200)
     }
-    
+
     // MARK: - Initiailizer
     init(isLoggedIn: Bool,
          filterState: FetchLostItemListRequest,
-         onApplyFilterButtonTapped: @escaping (FetchLostItemListRequest) -> Void) {
+         onApplyFilterButtonTapped: @escaping (FetchLostItemListRequest) -> Void,
+         onLoginRequired: @escaping () -> Void) {
         self.isLoggedIn = isLoggedIn
+        self.onLoginRequired = onLoginRequired
         self.filterState = filterState
         self.onApplyFilterButtonTapped = onApplyFilterButtonTapped
-        super.init(nibName: nil, bundle: nil)
-    }
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    // MARK: - Life Cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
+        super.init(frame: .zero)
+        backgroundColor = .white
         configureView()
         setAddTargets()
         bind()
     }
-    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+
     private func bind() {
         $filterState.sink { [weak self] state in
             guard let self else { return }
@@ -164,14 +172,14 @@ final class LostItemListFilterViewController: UIViewController {
             typeAllButton.isSelected = (state.type == nil)
             typeFoundButton.isSelected = (state.type == .found)
             typeLostButton.isSelected = (state.type == .lost)
-            
+
             categoryAllButton.isSelected = state.category.contains(.all)
             categoryCardButton.isSelected = state.category.contains(.card)
             categoryWalletButton.isSelected = state.category.contains(.wallet)
             categoryIdCardButton.isSelected = state.category.contains(.id)
             categoryElectronicDeviceButton.isSelected = state.category.contains(.electronics)
             categoryOtherButton.isSelected = state.category.contains(.etc)
-            
+
             stateAllButton.isSelected = (state.foundStatus == .all)
             stateNotFoundButton.isSelected = (state.foundStatus == .notFound)
             stateFoundButton.isSelected = (state.foundStatus == .found)
@@ -179,8 +187,8 @@ final class LostItemListFilterViewController: UIViewController {
     }
 }
 
-extension LostItemListFilterViewController {
-    
+extension LostItemListFilterView {
+
     private func setAddTargets() {
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         authorAllButton.addTarget(self, action: #selector(authorAllButtonTapped), for: .touchUpInside)
@@ -200,9 +208,9 @@ extension LostItemListFilterViewController {
         resetFilterButton.addTarget(self, action: #selector(resetFilterButtonTapped), for: .touchUpInside)
         applyFilterButton.addTarget(self, action: #selector(applyFilterButtonTapped), for: .touchUpInside)
     }
-    
+
     @objc private func closeButtonTapped() {
-        dismissView()
+        delegate?.dismiss()
     }
     @objc private func authorAllButtonTapped() {
         filterState.author = .all
@@ -211,7 +219,7 @@ extension LostItemListFilterViewController {
         if isLoggedIn {
             filterState.author = .my
         } else {
-            showToast(message: "로그인이 필요한 기능입니다.")
+            onLoginRequired()
         }
     }
     @objc private func typeAllButtonTapped() {
@@ -223,7 +231,7 @@ extension LostItemListFilterViewController {
     @objc private func typeLostButtonTapped() {
         filterState.type = .lost
     }
-    
+
     @objc private func categoryButtonTapped(_ sender: LostItemListFilterButton) {
         if sender.text == LostItemCategory.all.description {
             filterState.category.removeAll()
@@ -231,9 +239,9 @@ extension LostItemListFilterViewController {
             return
         }
         filterState.category.remove(.all)
-        
+
         if let category = LostItemCategory(description: sender.text) {
-            
+
             if filterState.category.contains(category) {
                 filterState.category.remove(category)
             } else {
@@ -241,7 +249,7 @@ extension LostItemListFilterViewController {
             }
         }
     }
-    
+
     @objc private func stateAllButtonTapped() {
         filterState.foundStatus = .all
     }
@@ -259,8 +267,8 @@ extension LostItemListFilterViewController {
     }
 }
 
-extension LostItemListFilterViewController {
-    
+extension LostItemListFilterView {
+
     private func setUpLayouts() {
         [authorAllButton, authorMineButton].forEach {
             authorButtonsStackView.addArrangedSubview($0)
@@ -277,14 +285,18 @@ extension LostItemListFilterViewController {
         [stateAllButton, stateNotFoundButton, stateFoundButton].forEach {
             stateButtonsStackView.addArrangedSubview($0)
         }
-        [filterTitleLabel, closeButton, topSeparatorView,
-         authorFilterTitleLabel, authorButtonsStackView, separatorView1,
+        [authorFilterTitleLabel, authorButtonsStackView, separatorView1,
          typeFilterTitleLabel, typeButtonsStackView, separatorView2,
          categoryFilterTitleLabel, categoryButtonsStackView1, categoryButtonsStackView2, separatorView3,
-         stateTitleLabel, stateButtonsStackView,
+         stateTitleLabel, stateButtonsStackView].forEach {
+            filterContentView.addSubview($0)
+        }
+        filterScrollView.addSubview(filterContentView)
+        [filterTitleLabel, closeButton, topSeparatorView,
+         filterScrollView,
          resetFilterButton, applyFilterButton,
          bottomSeparatorView].forEach {
-            view.addSubview($0)
+            addSubview($0)
         }
     }
     private func setUpConstraints() {
@@ -299,7 +311,7 @@ extension LostItemListFilterViewController {
                 $0.height.equalTo(34)
             }
         }
-        
+
         filterTitleLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
             $0.leading.equalToSuperview().offset(32)
@@ -310,14 +322,24 @@ extension LostItemListFilterViewController {
             $0.centerY.equalTo(filterTitleLabel)
             $0.trailing.equalToSuperview().offset(-24)
         }
-        
+
         topSeparatorView.snp.makeConstraints {
             $0.top.equalTo(filterTitleLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
+        filterScrollView.snp.makeConstraints {
+            $0.top.equalTo(topSeparatorView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(resetFilterButton.snp.top)
+            $0.height.equalTo(filterScrollView.contentLayoutGuide).priority(500)
+        }
+        filterContentView.snp.makeConstraints {
+            $0.edges.equalTo(filterScrollView.contentLayoutGuide)
+            $0.width.equalTo(filterScrollView.frameLayoutGuide)
+        }
         authorFilterTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(topSeparatorView.snp.bottom).offset(16)
+            $0.top.equalToSuperview().offset(16)
             $0.leading.equalToSuperview().offset(32)
         }
         authorButtonsStackView.snp.makeConstraints {
@@ -369,11 +391,11 @@ extension LostItemListFilterViewController {
         stateButtonsStackView.snp.makeConstraints {
             $0.top.equalTo(stateTitleLabel.snp.bottom).offset(12)
             $0.leading.equalToSuperview().offset(32)
+            $0.bottom.equalToSuperview().offset(-24)
         }
         resetFilterButton.snp.makeConstraints {
             $0.width.equalTo(98)
             $0.height.equalTo(48)
-            $0.top.equalTo(stateButtonsStackView.snp.bottom).offset(24)
             $0.leading.equalToSuperview().offset(32)
         }
         applyFilterButton.snp.makeConstraints {
@@ -383,12 +405,13 @@ extension LostItemListFilterViewController {
             $0.trailing.equalToSuperview().offset(-32)
         }
         bottomSeparatorView.snp.makeConstraints {
-            $0.top.equalTo(resetFilterButton.snp.bottom).offset(12)
+            $0.top.equalTo(resetFilterButton.snp.bottom).offset(7)
+            $0.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
         }
     }
-    
+
     private func configureView() {
         setUpLayouts()
         setUpConstraints()

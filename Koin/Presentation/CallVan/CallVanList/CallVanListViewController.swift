@@ -221,11 +221,8 @@ extension CallVanListViewController {
             onFilterItemTapped: onFilterItemTapped,
             onApplyTapped: onApplyTapped
         )
-        let bottomSheetVC = BottomSheetViewControllerB(contentView: contentView)
-        contentView.delegate = bottomSheetVC
-        
-        present(bottomSheetVC, animated: false)
-        
+        presentBottomSheet(contentView)
+
         inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanFilter, category: .click, value: ""))
     }
     
@@ -279,7 +276,6 @@ extension CallVanListViewController {
     private func showBottomSheet(state: CallVanState, postId: Int) {
         let onMainButtonTapped: ()->Void
         var onCloseButtonTapped: (()->Void)? = nil
-        var defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
         switch state {
         case .참여하기:
             onMainButtonTapped = { [weak self] in
@@ -309,39 +305,27 @@ extension CallVanListViewController {
             onMainButtonTapped = { [weak self] in
                 self?.inputSubject.send(.complete(postId))
             }
-            defaultHeight = 255 + view.safeAreaInsets.bottom
         default:
             return
         }
-        let contentViewController = CallVanBottomSheetViewController(state: state, onMainButtonTapped: onMainButtonTapped, onCloseButtonTapped: onCloseButtonTapped)
-        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        present(bottomSheetViewController, animated: false)
+        let contentView = CallVanBottomSheetView(state: state, onMainButtonTapped: onMainButtonTapped, onCloseButtonTapped: onCloseButtonTapped)
+        presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 16))
     }
     
     private func showLoginToPostBottomSheet() {
         let onMainButtonTapped: ()->Void = { [weak self] in
             self?.navigateToLogin()
         }
-        let defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
-        let contentViewController = CallVanBottomSheetViewController(titleText: "콜밴팟을 모집하려면 로그인이 필요해요.", subTitleLabel: nil, mainButtonText: "로그인하기", closeButtonText: "닫기", onMainButtonTapped: onMainButtonTapped)
-        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        present(bottomSheetViewController, animated: false)
+        let contentView = CallVanBottomSheetView(titleText: "콜밴팟을 모집하려면 로그인이 필요해요.", subTitleLabel: nil, mainButtonText: "로그인하기", closeButtonText: "닫기", onMainButtonTapped: onMainButtonTapped)
+        presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 16))
     }
     
     private func showLoginToParticipateBottomSheet() {
         let onMainButtonTapped: ()->Void = { [weak self] in
             self?.navigateToLogin()
         }
-        let defaultHeight: CGFloat = 195 + view.safeAreaInsets.bottom
-        let contentViewController = CallVanBottomSheetViewController(titleText: "콜밴팟에 참여하려면 로그인이 필요해요.", subTitleLabel: nil, mainButtonText: "로그인하기", closeButtonText: "닫기", onMainButtonTapped: onMainButtonTapped)
-        let bottomSheetViewController = BottomSheetViewController(contentViewController: contentViewController, defaultHeight: defaultHeight)
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        present(bottomSheetViewController, animated: false)
+        let contentView = CallVanBottomSheetView(titleText: "콜밴팟에 참여하려면 로그인이 필요해요.", subTitleLabel: nil, mainButtonText: "로그인하기", closeButtonText: "닫기", onMainButtonTapped: onMainButtonTapped)
+        presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 16))
     }
     
     private func cellButtonTapped(postId: Int, state: CallVanState) {
@@ -457,7 +441,7 @@ extension CallVanListViewController {
         let onCloseButtonTapped: ()->Void = {
             UserDefaults.standard.set(true, forKey: "callvanNotificationLater")
         }
-        let contentViewController = CallVanBottomSheetViewController(
+        let contentView = CallVanBottomSheetView(
             titleText: "알림을 켜볼까요?",
             subTitleLabel: subTitleLabel,
             mainButtonText: "알림 켜기",
@@ -465,13 +449,7 @@ extension CallVanListViewController {
             onMainButtonTapped: onMainButtonTapped,
             onCloseButtonTapped: onCloseButtonTapped
         )
-        let bottomSheetViewController = BottomSheetViewController(
-            contentViewController: contentViewController,
-            defaultHeight: 180 + 53 + view.safeAreaInsets.bottom
-        )
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        present(bottomSheetViewController, animated: false)
+        presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 16))
     }
     
     private func navigateToNoti() {

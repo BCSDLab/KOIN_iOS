@@ -244,33 +244,30 @@ extension LostItemListViewController {
     }
     
     private func presentPostTypeModal() {
-        let onFoundButtonTapped = { [weak self] in
-            guard let self else { return }
-            dismissView()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.findUserWrite, .click, "주인을 찾아요"))
-            let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-            viewController.delegate = self
-            navigationController?.pushViewController(viewController, animated: true)
+        weak var sheet: KoinBottomSheetController?
+        let onFoundButtonTapped: () -> Void = { [weak self] in
+            sheet?.dismiss { [weak self] in
+                guard let self else { return }
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.findUserWrite, .click, "주인을 찾아요"))
+                let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
+                viewController.delegate = self
+                navigationController?.pushViewController(viewController, animated: true)
+            }
         }
-        let onLostButtonTapped = { [weak self] in
-            guard let self else { return }
-            dismissView()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemWrite, .click, "잃어버렸어요"))
-            let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
-            viewController.delegate = self
-            navigationController?.pushViewController(viewController, animated: true)
+        let onLostButtonTapped: () -> Void = { [weak self] in
+            sheet?.dismiss { [weak self] in
+                guard let self else { return }
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemWrite, .click, "잃어버렸어요"))
+                let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
+                viewController.delegate = self
+                navigationController?.pushViewController(viewController, animated: true)
+            }
         }
-        let postOptionViewController = LostItemPostOptionController(
+        let contentView = LostItemPostOptionView(
             onFoundButtonTapped: onFoundButtonTapped,
             onLostButtonTapped: onLostButtonTapped
         )
-        let bottomSheetViewController = BottomSheetViewController(
-            contentViewController: postOptionViewController,
-            defaultHeight: 191 + UIApplication.bottomSafeAreaHeight(),
-            cornerRadius: 32
-        )
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        navigationController?.present(bottomSheetViewController, animated: true)
+        sheet = presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 32))
     }
 }
 
@@ -313,21 +310,21 @@ extension LostItemListViewController {
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFilter, .click, "분실물"))
         
-        let filterViewController = LostItemListFilterViewController(
-            isLoggedIn: self.viewModel.isLoggedIn,
-            filterState: self.viewModel.filterState,
+        weak var sheet: KoinBottomSheetController?
+        let contentView = LostItemListFilterView(
+            isLoggedIn: viewModel.isLoggedIn,
+            filterState: viewModel.filterState,
             onApplyFilterButtonTapped: { [weak self] filter in
-                self?.dismissView()
-                self?.inputSubject.send(.updateFilter(filter))
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFilterApply, .click, "분실물"))
+                sheet?.dismiss { [weak self] in
+                    self?.inputSubject.send(.updateFilter(filter))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFilterApply, .click, "분실물"))
+                }
+            },
+            onLoginRequired: { [weak self] in
+                self?.showToast(message: "로그인이 필요한 기능입니다.")
             }
         )
-        let bottomSheetViewController = BottomSheetViewController(
-            contentViewController: filterViewController,
-            defaultHeight: 627 + UIApplication.bottomSafeAreaHeight(),
-            cornerRadius: 32)
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        navigationController?.present(bottomSheetViewController, animated: true)
+        sheet = presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 32))
     }
     
     @objc private func writeButtonTapped() {

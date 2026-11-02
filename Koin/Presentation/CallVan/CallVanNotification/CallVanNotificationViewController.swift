@@ -150,19 +150,13 @@ extension CallVanNotificationViewController {
                 self?.showEmptyView()
                 self?.inputSubject.send(.deleteAllNotifications)
             }
-            let contentViewController = CallVanBottomSheetViewController(
+            let contentView = CallVanBottomSheetView(
                 titleText: "알림을 모두 삭제할까요?",
                 subTitleLabel: subTitleLabel,
                 mainButtonText: "예",
                 closeButtonText: "아니요",
                 onMainButtonTapped: onMainButtonTapped)
-            let bottomSheetViewController = BottomSheetViewController(
-                contentViewController: contentViewController,
-                defaultHeight: 233 + view.safeAreaInsets.bottom
-            )
-            bottomSheetViewController.modalTransitionStyle = .crossDissolve
-            bottomSheetViewController.modalPresentationStyle = .overFullScreen
-            present(bottomSheetViewController, animated: false)
+            presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 16))
         }
         let dropdownViewController = CallVanNotificationDropdownViewController(
             onReadButtonTapped: onReadButtonTapped,

@@ -1,5 +1,5 @@
 //
-//  CallVanBottomSheetViewController.swift
+//  CallVanBottomSheetView.swift
 //  koin
 //
 //  Created by 홍기정 on 3/4/26.
@@ -9,8 +9,8 @@ import UIKit
 import Then
 import SnapKit
 
-extension CallVanBottomSheetViewController {
-    
+extension CallVanBottomSheetView {
+
     convenience init(state: CallVanState, onMainButtonTapped: @escaping () -> Void, onCloseButtonTapped: (()->Void)? = nil) {
         let titleText: String
         var subTitleLabel: UILabel? = nil
@@ -46,6 +46,7 @@ extension CallVanBottomSheetViewController {
                         .paragraphStyle : paragraphStyle
                     ])
                 $0.numberOfLines = 2
+                $0.snp.makeConstraints { $0.height.equalTo(44) }
             }
             mainButtonText = "예"
             closeButtonText = "아니요"
@@ -54,20 +55,21 @@ extension CallVanBottomSheetViewController {
             mainButtonText = ""
             closeButtonText = ""
         }
-        
+
         self.init(titleText: titleText, subTitleLabel: subTitleLabel, mainButtonText: mainButtonText, closeButtonText: closeButtonText, onMainButtonTapped: onMainButtonTapped, onCloseButtonTapped: onCloseButtonTapped)
     }
 }
 
-final class CallVanBottomSheetViewController: UIViewController {
-    
+final class CallVanBottomSheetView: UIView, KoinBottomSheetContent {
+    weak var delegate: KoinBottomSheetDelegate?
+
     // MARK: - Properties
     private let titleText: String
     private let mainButtonText: String
     private let closeButtonText: String
     private let onMainButtonTapped: ()->Void
     private let onCloseButtonTapped: (()->Void)?
-    
+
     // MARK: - UI Components
     private let titleLabel = UILabel()
     private let subTitleLabel: UILabel?
@@ -75,7 +77,7 @@ final class CallVanBottomSheetViewController: UIViewController {
     private let mainButton = UIButton()
     private let closeButton = UIButton()
     private let bottomSeparatorView = UIView()
-    
+
     // MARK: - Initializer
     init(
         titleText: String,
@@ -91,26 +93,22 @@ final class CallVanBottomSheetViewController: UIViewController {
         self.closeButtonText = closeButtonText
         self.onMainButtonTapped = onMainButtonTapped
         self.onCloseButtonTapped = onCloseButtonTapped
-        super.init(nibName: nil, bundle: nil)
+        super.init(frame: .zero)
+        configureView()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Life Cycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureView()
-    }
-    
+
     private func configureView() {
         setUpStyles()
         setUpLayouts()
         setUpConstraints()
         setAddTargets()
     }
-    
+
     private func setUpStyles() {
+        backgroundColor = .white
         titleLabel.do {
             $0.text = titleText
             $0.font = UIFont.appFont(.pretendardSemiBold, size: 18)
@@ -142,14 +140,14 @@ final class CallVanBottomSheetViewController: UIViewController {
             $0.backgroundColor = UIColor.appColor(.neutral300)
         }
     }
-    
+
     private func setUpLayouts() {
         [titleLabel, topSeparatorView, mainButton, closeButton, bottomSeparatorView].forEach {
-            view.addSubview($0)
+            addSubview($0)
         }
-        
+
         if let subTitleLabel {
-            view.addSubview(subTitleLabel)
+            addSubview(subTitleLabel)
         }
     }
     private func setUpConstraints() {
@@ -163,14 +161,14 @@ final class CallVanBottomSheetViewController: UIViewController {
             $0.top.equalTo(titleLabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
         }
-        
+
         if let subTitleLabel {
             subTitleLabel.snp.makeConstraints {
                 $0.top.equalTo(topSeparatorView.snp.bottom).offset(16)
                 $0.leading.equalTo(titleLabel)
             }
         }
-        
+
         mainButton.snp.makeConstraints {
             $0.height.equalTo(49)
             if let subTitleLabel {
@@ -187,25 +185,24 @@ final class CallVanBottomSheetViewController: UIViewController {
         }
         bottomSeparatorView.snp.makeConstraints {
             $0.height.equalTo(1)
-            $0.top.equalTo(closeButton.snp.bottom).offset(12)
+            $0.top.equalTo(closeButton.snp.bottom).offset(10)
+            $0.bottom.equalToSuperview()
             $0.leading.trailing.equalToSuperview()
         }
     }
 }
 
-extension CallVanBottomSheetViewController {
-    
+extension CallVanBottomSheetView {
+
     private func setAddTargets() {
         mainButton.addTarget(self, action: #selector(mainButtonTapped), for: .touchUpInside)
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
     }
-    
+
     @objc private func mainButtonTapped() {
-        onMainButtonTapped()
-        dismissView()
+        delegate?.dismiss(completion: onMainButtonTapped)
     }
     @objc private func closeButtonTapped() {
-        onCloseButtonTapped?()
-        dismissView()
+        delegate?.dismiss(completion: onCloseButtonTapped)
     }
 }
