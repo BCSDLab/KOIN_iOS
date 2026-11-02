@@ -155,7 +155,7 @@ extension RecruitProfilePostActivityEditTableViewCell {
         dropdown = presentDropdown(
             anchor: activityPeriodDropdownAnchor,
             content: startPickerView,
-            configuration: .init(topPadding: 8, shadow: .shadow2)
+            configuration: .init(direction: .down(spacing: 8), shadow: .shadow2)
         )
     }
     
@@ -165,7 +165,7 @@ extension RecruitProfilePostActivityEditTableViewCell {
         dropdown = presentDropdown(
             anchor: activityPeriodDropdownAnchor,
             content: endPickerView,
-            configuration: .init(topPadding: 8, shadow: .shadow2)
+            configuration: .init(direction: .down(spacing: 8), shadow: .shadow2)
         )
     }
     

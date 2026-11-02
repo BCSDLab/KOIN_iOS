@@ -101,7 +101,7 @@ final class CallVanPostViewController: UIViewController {
                 presentDropdown(
                     anchor: dateView.dropdownTrigger,
                     content: dateView.dropdownContentView,
-                    configuration: .init(topPadding: 12, shadow: .shadow2)
+                    configuration: .init(direction: .down(spacing: 12), shadow: .shadow2)
                 )
             }.store(in: &subscriptions)
         
@@ -114,7 +114,7 @@ final class CallVanPostViewController: UIViewController {
                 presentDropdown(
                     anchor: timeView.dropdownTrigger,
                     content: timeView.dropdownContentView,
-                    configuration: .init(topPadding: 12, shadow: .shadow2)
+                    configuration: .init(direction: .down(spacing: 12), shadow: .shadow2)
                 )
             }.store(in: &subscriptions)
         

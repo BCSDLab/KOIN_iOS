@@ -11,7 +11,7 @@ import UIKit
 extension KoinDropdownViewController {
     /// 화면의 안전 영역에서 그림자까지 들어가는 방향을 정한다. 양쪽 모두 부족하면 더 넓은 쪽을 고른다.
     func resolveDirection() {
-        guard configuration.direction == .auto else {
+        guard configuration.isAutoDirection else {
             resolvedDirection = .down
             fitsInResolvedDirection = false
             return
@@ -22,9 +22,14 @@ extension KoinDropdownViewController {
         let visible = view.bounds.inset(by: view.safeAreaInsets)
         let spaceBelow = visible.maxY - anchorFrame.maxY
         let spaceAbove = anchorFrame.minY - visible.minY
-        let requiredHeight = contentView.height + configuration.topPadding
-        let fitsBelow = requiredHeight + configuration.shadowPadding(for: .down).bottom <= spaceBelow
-        let fitsAbove = requiredHeight + configuration.shadowPadding(for: .up).top <= spaceAbove
+        let requiredHeightBelow = contentView.height
+            + configuration.spacing(for: .down)
+            + configuration.shadowPadding(for: .down).bottom
+        let requiredHeightAbove = contentView.height
+            + configuration.spacing(for: .up)
+            + configuration.shadowPadding(for: .up).top
+        let fitsBelow = requiredHeightBelow <= spaceBelow
+        let fitsAbove = requiredHeightAbove <= spaceAbove
 
         if fitsBelow {
             resolvedDirection = .down
@@ -52,7 +57,8 @@ extension KoinDropdownViewController {
             return false
         }
 
-        travel = panelHeight + configuration.topPadding
+        let spacing = configuration.spacing(for: resolvedDirection)
+        travel = panelHeight + spacing
         let anchorFrame = anchor.convert(anchor.bounds, to: view)
         let padding = configuration.shadowPadding(for: resolvedDirection)
         switch resolvedDirection {
@@ -77,7 +83,7 @@ extension KoinDropdownViewController {
         )
         contentView.center = CGPoint(
             x: padding.left + anchorFrame.width / 2,
-            y: (resolvedDirection == .down ? configuration.topPadding : padding.top) + panelHeight / 2
+            y: (resolvedDirection == .down ? spacing : padding.top) + panelHeight / 2
         )
         return true
     }

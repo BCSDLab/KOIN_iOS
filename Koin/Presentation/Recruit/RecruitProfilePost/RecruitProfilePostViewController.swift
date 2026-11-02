@@ -278,7 +278,7 @@ extension RecruitProfilePostViewController {
                     presentDropdown(
                         anchor: firstStepView.departmentDropdownAnchor,
                         content: departmentDropdownContentView,
-                        configuration: .init(topPadding: 12, shadow: .shadow2)
+                        configuration: .init(direction: .down(spacing: 12), shadow: .shadow2)
                     )
                 }
             }

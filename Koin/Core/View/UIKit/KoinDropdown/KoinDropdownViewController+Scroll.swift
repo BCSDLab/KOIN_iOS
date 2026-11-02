@@ -39,7 +39,7 @@ extension KoinDropdownViewController {
     /// 스크롤을 잠그고 필요한 하단 inset을 추가한 뒤, anchor와 dropdown이 보이는 목표 offset을 반환한다.
     func prepareScroll() -> CGPoint? {
         guard let anchor else { return nil }
-        travel = contentView.height + configuration.topPadding
+        travel = contentView.height + configuration.spacing(for: .down)
 
         guard let scrollView else { return nil }
         isScrollPrepared = true

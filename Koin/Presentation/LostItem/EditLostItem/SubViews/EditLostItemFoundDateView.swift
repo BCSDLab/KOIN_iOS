@@ -111,7 +111,7 @@ final class EditLostItemFoundDateView: UIView {
         presentDropdown(
             anchor: dateButton,
             content: dropdownView,
-            configuration: .init(topPadding: 4, shadow: .shadow2)
+            configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
         )
     }
     

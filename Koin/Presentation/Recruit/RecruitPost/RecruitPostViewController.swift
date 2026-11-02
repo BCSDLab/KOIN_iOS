@@ -179,7 +179,7 @@ extension RecruitPostViewController {
             presentDropdown(
                 anchor: categoryView.dropdownAnchor,
                 content: categoryDropdownContentView,
-                configuration: .init(topPadding: 4, shadow: .shadow2)
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
             )
         }.store(in: &subscriptions)
         
@@ -207,7 +207,7 @@ extension RecruitPostViewController {
             presentDropdown(
                 anchor: scheduleView.activityPeriodDropdownAnchor,
                 content: scheduleView.startDateDropdownContentView,
-                configuration: .init(topPadding: 4, shadow: .shadow2)
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
             )
         }.store(in: &subscriptions)
         
@@ -217,7 +217,7 @@ extension RecruitPostViewController {
             presentDropdown(
                 anchor: scheduleView.activityPeriodDropdownAnchor,
                 content: scheduleView.endDateDropdownContentView,
-                configuration: .init(topPadding: 4, shadow: .shadow2)
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
             )
         }.store(in: &subscriptions)
         
@@ -227,7 +227,7 @@ extension RecruitPostViewController {
             presentDropdown(
                 anchor: scheduleView.deadlineDateDropdownAnchor,
                 content: scheduleView.deadlineDateDropdownContentView,
-                configuration: .init(topPadding: 4, shadow: .shadow2)
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
             )
         }.store(in: &subscriptions)
         
