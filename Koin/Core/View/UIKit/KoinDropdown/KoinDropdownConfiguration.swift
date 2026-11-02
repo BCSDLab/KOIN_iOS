@@ -8,10 +8,26 @@
 import UIKit
 
 struct KoinDropdownConfiguration {
+    // MARK: - Properties
     let topPadding: CGFloat
     let shadow: Shadow
+    var direction: Direction = .down
 }
 
+// MARK: - Direction
+extension KoinDropdownConfiguration {
+    enum Direction {
+        case down
+        case auto
+    }
+
+    enum ResolvedDirection {
+        case down
+        case up
+    }
+}
+
+// MARK: - Shadow
 extension KoinDropdownConfiguration {
     enum Shadow {
         case shadow2
@@ -53,12 +69,12 @@ extension KoinDropdownConfiguration {
         }
     }
 
-    var shadowPadding: UIEdgeInsets {
+    func shadowPadding(for direction: ResolvedDirection) -> UIEdgeInsets {
         let base = max(0, shadow.blur + shadow.spread)
         return UIEdgeInsets(
-            top: 0,
+            top: direction == .up ? base + max(0, -shadow.offset.y) : 0,
             left: base + max(0, -shadow.offset.x),
-            bottom: base + max(0, shadow.offset.y),
+            bottom: direction == .down ? base + max(0, shadow.offset.y) : 0,
             right: base + max(0, shadow.offset.x)
         )
     }

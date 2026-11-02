@@ -26,10 +26,16 @@ final class KoinDropdownViewController: UIViewController {
     // MARK: - Scroll State
     weak var scrollView: UIScrollView?
     var addedBottomInset: CGFloat = 0
+    var isScrollPrepared = false
 
     // MARK: - Layout State
     var travel: CGFloat = 0
     var lastLayoutSize: CGSize = .zero
+    var resolvedDirection: KoinDropdownConfiguration.ResolvedDirection = .down
+    var fitsInResolvedDirection = false
+    var hiddenOffsetY: CGFloat {
+        resolvedDirection == .down ? -travel : travel
+    }
 
     // MARK: - UI Components
     private let backgroundTapView = UIView()
@@ -79,7 +85,8 @@ final class KoinDropdownViewController: UIViewController {
         if view.bounds.size != lastLayoutSize {
             // inset 조정이 layout을 다시 일으킬 수 있으므로, 조정 전에 크기를 먼저 기록한다.
             lastLayoutSize = view.bounds.size
-            if let target = prepareScroll() {
+            resolveDirection()
+            if let target = prepareScrollIfNeeded() {
                 scrollView?.contentOffset = target
             }
         }

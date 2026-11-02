@@ -9,6 +9,22 @@ import UIKit
 
 // MARK: - Scroll
 extension KoinDropdownViewController {
+    /// 아래 고정은 기존대로 조정하고, 자동 방향은 아래 공간이 부족할 때만 조정한다.
+    func prepareScrollIfNeeded() -> CGPoint? {
+        switch configuration.direction {
+        case .down:
+            return prepareScroll()
+        case .auto:
+            if resolvedDirection == .down, !fitsInResolvedDirection {
+                return prepareScroll()
+            }
+            if isScrollPrepared {
+                restoreScrollView()
+            }
+            return nil
+        }
+    }
+
     func nearestScrollView(to anchor: UIView) -> UIScrollView? {
         var ancestor = anchor.superview
         while let current = ancestor {
@@ -26,6 +42,7 @@ extension KoinDropdownViewController {
         travel = contentView.height + configuration.topPadding
 
         guard let scrollView else { return nil }
+        isScrollPrepared = true
         scrollView.isScrollEnabled = false
         scrollView.contentInset.bottom -= addedBottomInset
         addedBottomInset = 0
@@ -36,7 +53,7 @@ extension KoinDropdownViewController {
         )
 
         let anchorFrame = anchor.convert(anchor.bounds, to: scrollView)
-        let dropdownBottomY = anchorFrame.maxY + travel + configuration.shadowPadding.bottom
+        let dropdownBottomY = anchorFrame.maxY + travel + configuration.shadowPadding(for: .down).bottom
         let minOffsetY = -scrollView.adjustedContentInset.top
         let maximumOffsetY = maxOffsetY(of: scrollView)
         let bottomVisibleOffsetY = dropdownBottomY - scrollView.bounds.height
@@ -50,6 +67,8 @@ extension KoinDropdownViewController {
     }
 
     func restoreScrollView() {
+        // 조정한 스크롤만 원복한다.
+        guard isScrollPrepared else { return }
         if let scrollView {
             scrollView.contentInset.bottom -= addedBottomInset
             scrollView.contentOffset = CGPoint(
@@ -59,13 +78,14 @@ extension KoinDropdownViewController {
         }
         addedBottomInset = 0
         scrollView?.isScrollEnabled = true
+        isScrollPrepared = false
     }
 
     private func addBottomInset(
         anchor: UIView,
         in scrollView: UIScrollView
     ) -> CGFloat {
-        let dropdownMaxY = anchor.convert(anchor.bounds, to: scrollView).maxY + travel + configuration.shadowPadding.bottom
+        let dropdownMaxY = anchor.convert(anchor.bounds, to: scrollView).maxY + travel + configuration.shadowPadding(for: .down).bottom
         let viewport = scrollView.bounds.height
         let overflow = dropdownMaxY - (maxOffsetY(of: scrollView) + viewport)
         guard overflow > 0 else { return 0 }
