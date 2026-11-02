@@ -68,6 +68,8 @@ extension KoinBottomSheetController {
         animator = nil
         stopObservingKeyboard()
         navigationObservation = nil
+        ownerWindowObserver?.removeFromSuperview()
+        ownerWindowObserver = nil
         contentViewController.willMove(toParent: nil)
         contentViewController.view.removeFromSuperview()
         contentViewController.removeFromParent()

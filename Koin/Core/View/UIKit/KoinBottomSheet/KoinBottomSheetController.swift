@@ -28,6 +28,7 @@ final class KoinBottomSheetController: UIViewController {
         }
         return false
     }
+    var ownerWindowObserver: UIView?
 
     // MARK: - State
     var state: State = .presenting
@@ -107,13 +108,6 @@ final class KoinBottomSheetController: UIViewController {
         updateHeightIfNeeded()
     }
 
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
-        if state != .dismissed, owner?.viewIfLoaded?.window == nil {
-            teardown()
-        }
-    }
-
     // MARK: - Presentation
     func presentSheet() {
         installHostGuideConstraintsIfNeeded()
@@ -123,6 +117,7 @@ final class KoinBottomSheetController: UIViewController {
             teardown()
             return
         }
+        observeOwnerWindow()
         updateHeightIfNeeded()
         updateNavigationGesture()
         containerView.transform = CGAffineTransform(
@@ -135,5 +130,32 @@ final class KoinBottomSheetController: UIViewController {
     func dismissForReplacement() {
         pendingAction = nil
         beginDismissal(isReplacement: true)
+    }
+
+    private func observeOwnerWindow() {
+        guard let ownerView = owner?.viewIfLoaded else { return }
+        let observer = OwnerWindowObserverView().then {
+            $0.isHidden = true
+        }
+        observer.onWindowChange = { [weak self] in
+            guard let self, self.owner?.viewIfLoaded?.window == nil else { return }
+            // 전환 중 잠깐 떼었다 붙는 경우를 거르려고 다음 runloop에서 다시 확인한다.
+            DispatchQueue.main.async { [weak self] in
+                guard let self, self.state != .dismissed,
+                      self.owner?.viewIfLoaded?.window == nil else { return }
+                self.teardown()
+            }
+        }
+        ownerView.addSubview(observer)
+        ownerWindowObserver = observer
+    }
+}
+
+private final class OwnerWindowObserverView: UIView {
+    var onWindowChange: (() -> Void)?
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        onWindowChange?()
     }
 }
