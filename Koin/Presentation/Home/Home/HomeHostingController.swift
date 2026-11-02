@@ -189,7 +189,7 @@ extension HomeHostingController {
             repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
         )
         weak var sheet: KoinBottomSheetController?
-        let contentView = NewBannerView(
+        let contentView = BannerView(
             onBannerTap: { [weak self] banner in
                 sheet?.dismiss { [weak self] in
                     self?.handleBannerTap(banner, isLoggedIn: isLoggedIn)

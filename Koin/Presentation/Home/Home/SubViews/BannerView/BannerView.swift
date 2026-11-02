@@ -1,5 +1,5 @@
 //
-//  NewBannerView.swift
+//  BannerView.swift
 //  koin
 //
 //  Created by 홍기정 on 6/20/26.
@@ -9,7 +9,7 @@ import SnapKit
 import Then
 import UIKit
 
-final class NewBannerView: UIView, KoinBottomSheetContent {
+final class BannerView: UIView, KoinBottomSheetContent {
     weak var delegate: KoinBottomSheetDelegate?
 
     // MARK: - Properties
@@ -54,7 +54,7 @@ final class NewBannerView: UIView, KoinBottomSheetContent {
     }
 }
 
-extension NewBannerView {
+extension BannerView {
 
     private func setAddTargets() {
         noShowButton.addTarget(self, action: #selector(noShowButtonTapped), for: .touchUpInside)
@@ -79,7 +79,7 @@ extension NewBannerView {
     }
 }
 
-extension NewBannerView {
+extension BannerView {
 
     private func setCountLabel(index: Int, totalCount: Int) {
         let text = "\(index + 1)/\(totalCount)"
@@ -105,7 +105,7 @@ extension NewBannerView {
 }
 
 
-extension NewBannerView {
+extension BannerView {
 
     private func configureView() {
         setUpStyles()
