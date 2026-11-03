@@ -29,11 +29,11 @@ final class BusTimetableRouteCollectionView: UICollectionView, UICollectionViewD
     private func commonInit() {
         register(BusTimetableRouteCollectionViewCell.self, forCellWithReuseIdentifier: BusTimetableRouteCollectionViewCell.identifier)
         showsHorizontalScrollIndicator = false
-        contentInset = .zero
+        contentInset = UIEdgeInsets(top: 0, left: 24, bottom: 0, right: 24)
         delegate = self
         dataSource = self
         isScrollEnabled = false
-        backgroundColor = .appColor(.neutral100)
+        backgroundColor = .appColor(.neutral0)
     }
     
     func configure(routeList: [String]) {

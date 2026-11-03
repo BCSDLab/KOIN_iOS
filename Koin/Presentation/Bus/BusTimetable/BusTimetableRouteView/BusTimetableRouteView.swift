@@ -11,7 +11,6 @@ import UIKit
 
 final class BusTimetableRouteView: UIView {
     // MARK: - properties
-    let busRouteContentHeightPublisher = PassthroughSubject<CGFloat, Never>()
     let busFilterIdxPublisher = CurrentValueSubject<(Int, Int?), Never>((0, nil))
     let firstFilterPublisher = PassthroughSubject<String, Never>()
     let secondFilterPublisher = PassthroughSubject<String, Never>()
@@ -25,14 +24,6 @@ final class BusTimetableRouteView: UIView {
     private let secondBusTimetableRouteCollectionView = BusTimetableRouteCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
         let flowLayout = $0.collectionViewLayout as? UICollectionViewFlowLayout
         flowLayout?.scrollDirection = .horizontal
-    }
-    private let firstBusRouteGuideLabel = UILabel().then {
-        $0.textColor = .appColor(.neutral600)
-        $0.font = .appFont(.pretendardRegular, size: 16)
-    }
-    private let secondBusRouteGuideLabel = UILabel().then {
-        $0.textColor = .appColor(.neutral600)
-        $0.font = .appFont(.pretendardRegular, size: 16)
     }
     
     init() {
@@ -66,76 +57,59 @@ final class BusTimetableRouteView: UIView {
         }.store(in: &subscriptions)
     }
     
+    /// 칩 행 높이(칩 34 + 상하 padding). 시내버스는 노선 행 + 방면 행 2줄.
+    static func height(for busType: BusType) -> CGFloat {
+        switch busType {
+        case .shuttleBus: return 34 + 8 * 2
+        case .cityBus: return (34 + 12 * 2) * 2
+        default: return 34 + 12 * 2
+        }
+    }
+    
     func setBusType(busType: BusType, firstRouteList: [String], secondRouteList: [String]?) {
         let isCityBus = (busType == .cityBus)
-        let isExpressBus = (busType == .expressBus)
-        let shouldShowFirstLabel = isCityBus || isExpressBus
-       
-        firstBusRouteGuideLabel.isHidden = !shouldShowFirstLabel
-        secondBusRouteGuideLabel.isHidden = !isCityBus
+        let verticalPadding: CGFloat = busType == .shuttleBus ? 8 : 12
         secondBusTimetableRouteCollectionView.isHidden = !isCityBus
-      
-        firstBusRouteGuideLabel.text = "운행"
-        secondBusRouteGuideLabel.text = isCityBus ? "노선" : ""
-      
-        DispatchQueue.main.async { [weak self] in
-            guard let self = self else { return }
-            self.firstBusTimetableRouteCollectionView.snp.updateConstraints {
-                $0.leading.equalToSuperview().offset(shouldShowFirstLabel ? 68 : 24)
-            }
+        
+        firstBusTimetableRouteCollectionView.snp.updateConstraints {
+            $0.bottom.equalToSuperview().inset(verticalPadding)
         }
-      
-        busRouteContentHeightPublisher.send(isCityBus ? 104 : 62)
+        
+        firstBusTimetableRouteCollectionView.configure(routeList: firstRouteList)
+        secondBusTimetableRouteCollectionView.configure(routeList: secondRouteList ?? [])
+        
         if isCityBus {
             busFilterIdxPublisher.send((0, 0))
         }
         else {
             busFilterIdxPublisher.send((0, nil))
         }
-        
-        firstBusTimetableRouteCollectionView.configure(routeList: firstRouteList)
-        secondBusTimetableRouteCollectionView.configure(routeList: secondRouteList ?? [])
     }
 }
 
 extension BusTimetableRouteView {
     private func setUpLayouts() {
-        [firstBusRouteGuideLabel, secondBusRouteGuideLabel, firstBusTimetableRouteCollectionView, secondBusTimetableRouteCollectionView].forEach {
+        [firstBusTimetableRouteCollectionView, secondBusTimetableRouteCollectionView].forEach {
             self.addSubview($0)
         }
     }
     
     private func setUpConstraints() {
-        firstBusRouteGuideLabel.snp.makeConstraints {
-            $0.bottom.equalToSuperview().inset(18)
-            $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(28)
-            $0.height.equalTo(26)
-        }
-        secondBusRouteGuideLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(18)
-            $0.leading.equalTo(firstBusRouteGuideLabel)
-            $0.width.equalTo(28)
-            $0.height.equalTo(26)
-        }
         firstBusTimetableRouteCollectionView.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(68)
-            $0.centerY.equalTo(firstBusRouteGuideLabel)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalToSuperview().inset(12)
             $0.height.equalTo(34)
-            $0.trailing.equalToSuperview().inset(24)
         }
         secondBusTimetableRouteCollectionView.snp.makeConstraints {
-            $0.leading.equalTo(secondBusRouteGuideLabel.snp.trailing).offset(16)
-            $0.centerY.equalTo(secondBusRouteGuideLabel)
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview().offset(12)
             $0.height.equalTo(34)
-            $0.trailing.equalToSuperview().inset(24)
         }
     }
     
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        backgroundColor = .appColor(.neutral100)
+        backgroundColor = .appColor(.neutral0)
     }
 }
-

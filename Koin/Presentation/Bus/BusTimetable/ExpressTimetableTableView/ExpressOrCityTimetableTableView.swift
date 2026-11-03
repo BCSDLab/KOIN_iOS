@@ -14,7 +14,6 @@ final class ExpressOrCityTimetableTableView: UITableView {
     private var busInfo: [BusArrivalInfo] = []
     private var updatedAt: String = ""
     let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
-    let heightPublisher = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -33,7 +32,8 @@ final class ExpressOrCityTimetableTableView: UITableView {
         dataSource = self
         separatorStyle = .none
         showsVerticalScrollIndicator = false
-        isScrollEnabled = false
+        isScrollEnabled = true
+        contentInsetAdjustmentBehavior = .never
         backgroundColor = .systemBackground
         register(BusTimetableTableViewFooterView.self, forHeaderFooterViewReuseIdentifier: BusTimetableTableViewFooterView.identifier)
     }
@@ -43,12 +43,7 @@ final class ExpressOrCityTimetableTableView: UITableView {
         self.updatedAt = busInfo.updatedAt
         reloadData()
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        heightPublisher.send(self.contentSize.height)
     }
-}
 
 extension ExpressOrCityTimetableTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

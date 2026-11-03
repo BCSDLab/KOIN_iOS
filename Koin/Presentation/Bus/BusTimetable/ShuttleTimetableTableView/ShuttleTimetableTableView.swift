@@ -13,7 +13,6 @@ final class ShuttleTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     let moveDetailTimetablePublisher = PassthroughSubject<(String, String, String), Never>()
-    let heightPublisher = PassthroughSubject<CGFloat, Never>()
     let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
     private var busInfo: [RouteRegion] = []
     private var semesterInfo: SemesterInfo = SemesterInfo(name: "", from: "", to: "")
@@ -36,7 +35,8 @@ final class ShuttleTimetableTableView: UITableView {
         dataSource = self
         separatorStyle = .none
         showsVerticalScrollIndicator = false
-        isScrollEnabled = false
+        isScrollEnabled = true
+        contentInsetAdjustmentBehavior = .never
         contentInset = .zero
         self.backgroundColor = .systemBackground
     }
@@ -46,12 +46,7 @@ final class ShuttleTimetableTableView: UITableView {
         self.semesterInfo = busInfo.semesterInfo
         reloadData()
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        heightPublisher.send(self.contentSize.height)
     }
-}
 
 extension ShuttleTimetableTableView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {

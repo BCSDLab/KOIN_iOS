@@ -20,7 +20,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
         case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo)
         case updateShuttleBusRoutes(busRoutes: ShuttleRouteDto)
         case updateEmergencyNotice(notice: BusNoticeDto)
-        case updateStopLabel(busStop: String)
+        case updateStopLabel(busType: BusType, busStop: String)
     }
     
     // MARK: - properties
@@ -92,7 +92,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 receiveValue: { [weak self] timetable, busDirection in
                     self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
                     let busStop = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
-                    self?.outputSubject.send(.updateStopLabel(busStop: busStop))
+                    self?.outputSubject.send(.updateStopLabel(busType: busType, busStop: busStop))
                 }
             ).store(in: &subscriptions)
         default:
@@ -100,7 +100,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 receiveCompletion: { _ in },
                 receiveValue: { [weak self] timetable, busDirection in
                     self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
-                    self?.outputSubject.send(.updateStopLabel(busStop: "\(busDirection) 승차"))
+                    self?.outputSubject.send(.updateStopLabel(busType: busType, busStop: "\(busDirection) 승차"))
                 }
             ).store(in: &subscriptions)
         }
