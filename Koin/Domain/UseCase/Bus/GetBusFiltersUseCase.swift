@@ -21,7 +21,7 @@ protocol GetCityFiltersUseCase {
 
 final class DefaultGetShuttleBusFilterUseCase: GetShuttleBusFilterUseCase {
     func execute() -> [String] {
-        return ["전체", "순환노선", "주말노선", "주중노선"]
+        return ["전체", "주중노선", "주말노선", "순환노선"]
     }
 }
 

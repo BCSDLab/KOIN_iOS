@@ -57,23 +57,16 @@ final class BusTimetableRouteView: UIView {
         }.store(in: &subscriptions)
     }
     
-    /// 칩 행 높이(칩 34 + 상하 padding). 시내버스는 노선 행 + 방면 행 2줄.
+    /// 칩 행 높이 58(칩 34 + 상하 12). 시내버스는 노선 행 + 방면 행 2줄.
+    static let rowHeight: CGFloat = 58
+    
     static func height(for busType: BusType) -> CGFloat {
-        switch busType {
-        case .shuttleBus: return 34 + 8 * 2
-        case .cityBus: return (34 + 12 * 2) * 2
-        default: return 34 + 12 * 2
-        }
+        busType == .cityBus ? rowHeight * 2 : rowHeight
     }
     
     func setBusType(busType: BusType, firstRouteList: [String], secondRouteList: [String]?) {
         let isCityBus = (busType == .cityBus)
-        let verticalPadding: CGFloat = busType == .shuttleBus ? 8 : 12
         secondBusTimetableRouteCollectionView.isHidden = !isCityBus
-        
-        firstBusTimetableRouteCollectionView.snp.updateConstraints {
-            $0.bottom.equalToSuperview().inset(verticalPadding)
-        }
         
         firstBusTimetableRouteCollectionView.configure(routeList: firstRouteList)
         secondBusTimetableRouteCollectionView.configure(routeList: secondRouteList ?? [])
@@ -96,14 +89,12 @@ extension BusTimetableRouteView {
     
     private func setUpConstraints() {
         firstBusTimetableRouteCollectionView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(12)
-            $0.height.equalTo(34)
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(Self.rowHeight)
         }
         secondBusTimetableRouteCollectionView.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalToSuperview().offset(12)
-            $0.height.equalTo(34)
+            $0.leading.trailing.top.equalToSuperview()
+            $0.height.equalTo(Self.rowHeight)
         }
     }
     
