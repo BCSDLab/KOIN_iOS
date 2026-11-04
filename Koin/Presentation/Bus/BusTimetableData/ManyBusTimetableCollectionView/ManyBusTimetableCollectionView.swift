@@ -12,7 +12,6 @@ final class ManyBusTimetableCollectionView: UICollectionView {
 
     // MARK: Properties
     private var busTimeData: [RouteInfo] = []
-    let contentWidthPublisher = PassthroughSubject<CGFloat, Never>()
 
     // MARK: Init
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -44,11 +43,6 @@ final class ManyBusTimetableCollectionView: UICollectionView {
     func configure(busInfo: [RouteInfo]) {
         self.busTimeData = busInfo
         reloadData()
-    }
-
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentWidthPublisher.send(contentSize.width)
     }
 }
 
@@ -105,12 +99,12 @@ extension ManyBusTimetableCollectionView: UICollectionViewDelegateFlowLayout {
             let sample = firstValidTime(in: busTimeData[indexPath.section].arrivalTime) ?? "—"
             let width = textWidth(sample,
                                   font: .appFont(.pretendardRegular, size: 14)) + 50
-            return CGSize(width: width, height: 52)
+            return CGSize(width: width, height: BusTimetableGridPageView.headerRowHeight)
         } else {
             let time = busTimeData[indexPath.section].arrivalTime[indexPath.item - 1] ?? "—"
             let width = textWidth(time,
                                   font: .appFont(.pretendardBold, size: 16)) + 20
-            return CGSize(width: width, height: 50)
+            return CGSize(width: width, height: BusTimetableGridPageView.rowHeight)
         }
     }
 

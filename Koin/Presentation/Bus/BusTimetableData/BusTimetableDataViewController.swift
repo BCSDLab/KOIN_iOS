@@ -10,181 +10,115 @@ import UIKit
 import SnapKit
 
 final class BusTimetableDataViewController: UIViewController, UIScrollViewDelegate {
-    
+
+    // MARK: - Page
+    private enum Page {
+        /// 단일열(시간 | 승하차장명)
+        case single(nodeInfo: [NodeInfo], arrivalTime: [String?], timeHeaderText: String)
+        /// 회차 그리드(승하차장명 고정 + 회차 가로 스크롤)
+        case grid(nodeInfo: [NodeInfo], routeInfo: [RouteInfo])
+    }
+
     // MARK: - Properties
     private var subscriptions: Set<AnyCancellable> = []
+    private var pageSubscriptions: Set<AnyCancellable> = []
     private var inputSubject: PassthroughSubject<BusTimetableDataViewModel.Input, Never> = .init()
     private let viewModel: BusTimetableDataViewModel
-    
+    private var selectedIndex = 0
+    private var lastPageWidth: CGFloat = 0
+    private var tabBarHeightConstraint: Constraint?
+
     // MARK: - UI Components
-    private var shuttleRouteTypeLabel = UILabel().then {
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-        $0.font = .appFont(.pretendardRegular, size: 11)
-        $0.textAlignment = .center
-        $0.textColor = .appColor(.neutral0)
-    }
-    
+    private let shuttleRouteTypeLabel = BusRouteTagLabel()
+
     private let busTimetablePlaceLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 20)
         $0.textColor = .appColor(.neutral800)
         $0.textAlignment = .left
     }
-    
+
     private let subBusTimetablePlaceLabel = UILabel().then {
         $0.font = .appFont(.pretendardRegular, size: 12)
         $0.textColor = .appColor(.neutral500)
         $0.textAlignment = .left
+        $0.isHidden = true
     }
-    
-    private let incorrectBusInfoButton = UIButton().then {
-        var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .incorrectInfo)
-        let title = AttributedString("정보가 정확하지 않나요?", attributes: AttributeContainer([
-            .font: UIFont.appFont(.pretendardRegular, size: 12),
-            .foregroundColor: UIColor.appColor(.neutral500)
-        ]))
-        configuration.attributedTitle = title
-        configuration.imagePadding = 4
-        configuration.contentInsets = .init(top: 5, leading: 0, bottom: 5, trailing: 0)
-        $0.configuration = configuration
+
+    private lazy var titleStackView = UIStackView(arrangedSubviews: [shuttleRouteTypeLabel, busTimetablePlaceLabel, subBusTimetablePlaceLabel]).then {
+        $0.axis = .vertical
+        $0.alignment = .leading
+        $0.spacing = 4
     }
-    
-    private let busTimetableBorderView = UIView().then {
+
+    private let titleBorderView = UIView().then {
         $0.backgroundColor = .appColor(.neutral400)
+        $0.isHidden = true
     }
-    
-    private let busTimetableSeparateView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
+
+    private let tabBarContainerView = UIView()
+
+    private var tabBarView: BusTimetableTabBarView?
+
+    private let pagingScrollView = UIScrollView().then {
+        $0.isPagingEnabled = true
+        $0.showsHorizontalScrollIndicator = false
+        $0.showsVerticalScrollIndicator = false
+        $0.bounces = false
+        $0.contentInsetAdjustmentBehavior = .never
     }
-    
-    private let oneBusTimetableDataTableView = OneBusTimetableTableView(frame: .zero, style: .grouped)
-    
-    private let manyBusTimetableDataTableView = ManyBusTimetableTableView(frame: .zero, style: .grouped)
-    
-    private let manyBusTimetableDataCollectionView = ManyBusTimetableCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout()).then {
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        $0.collectionViewLayout = layout
+
+    private let pageStackView = UIStackView().then {
+        $0.axis = .horizontal
+        $0.distribution = .fillEqually
     }
-    
-    private let scrollView = UIScrollView()
-    
-    private let contentView = UIView()
-    
-    private let segmentControl = UISegmentedControl().then {
-        $0.setBackgroundImage(UIImage(), for: .normal, barMetrics: .default)
-        $0.insertSegment(withTitle: "등교", at: 0, animated: true)
-        $0.insertSegment(withTitle: "하교", at: 1, animated: true)
-        $0.setDividerImage(UIImage(), forLeftSegmentState: .normal, rightSegmentState: .normal, barMetrics: .default)
-        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.neutral500), NSAttributedString.Key.font: UIFont.appFont(.pretendardRegular, size: 16)], for: .normal)
-        $0.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.appColor(.primary500), NSAttributedString.Key.font: UIFont.appFont(.pretendardBold, size: 16)], for: .selected)
-        $0.layer.masksToBounds = false
-        $0.selectedSegmentIndex = 0
-    }
-    
-    private let shadowView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral400)
-        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.02, x: 0, y: 1, blur: 1, spread: 0)
-    }
-    
-    private let selectedUnderlineView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
-    }
-    
-    private let headerColorView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-    }
-    
+
     // MARK: - Initialization
     init(viewModel: BusTimetableDataViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
+
+
     // MARK: - Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
-        segmentControl.addTarget(self, action: #selector(changeSegmentControl), for: .valueChanged)
-        incorrectBusInfoButton.addTarget(self, action: #selector(tapIncorrentInfoButton), for: .touchUpInside)
         bind()
-        inputSubject.send(.getBusTimetable(.manyRoute))
+        inputSubject.send(.getBusTimetable)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
-    
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // 페이지 폭이 바뀐 경우에만 보정한다. 탭 전환 애니메이션 중에 덮어쓰면 목표 페이지를 지나친다.
+        let pageWidth = pagingScrollView.bounds.width
+        guard pageWidth > 0, pageWidth != lastPageWidth else { return }
+        lastPageWidth = pageWidth
+        pagingScrollView.contentOffset.x = pageWidth * CGFloat(selectedIndex)
+        tabBarView?.updateIndicator(progress: CGFloat(selectedIndex))
+    }
+
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .updateBusRoute(timetable, shuttleTimetableType):
-                self?.updateShuttleBusTimetable(timetable: timetable, shuttleTimetableType: shuttleTimetableType)
-            }
-        }.store(in: &subscriptions)
-        
-        manyBusTimetableDataTableView.contentHeightPublisher.sink { [weak self] height in
-            DispatchQueue.main.async {
-                self?.contentView.snp.updateConstraints {
-                    $0.height.equalTo(height + 30)
-                }
-                self?.busTimetableSeparateView.snp.updateConstraints {
-                    $0.height.equalTo(height - 20)
-                }
-            }
-        }.store(in: &subscriptions)
-        
-        manyBusTimetableDataCollectionView.contentWidthPublisher
-            .sink { [weak self] width in
-                DispatchQueue.main.async {
-                    guard let self = self else { return }
-                    let headerWidth = UIScreen.main.bounds.width - width - self.manyBusTimetableDataTableView.bounds.width
-                    if headerWidth > 0 {
-                        self.headerColorView.snp.updateConstraints {
-                            $0.width.equalTo(headerWidth)
-                        }
-                    }
-                    else {
-                        self.headerColorView.snp.updateConstraints {
-                            $0.width.equalTo(0)
-                        }
-                    }
-                }
-            }.store(in: &subscriptions)
-        
-        oneBusTimetableDataTableView.tapIncorrectButtonPublisher.sink { [weak self] in
-            let routeValue = "\(self?.shuttleRouteTypeLabel.text ?? "")_\(self?.busTimetablePlaceLabel.text ?? "")"
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.errorFeedbackButton, .click, routeValue))
-            if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
-               UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            case let .updateBusRoute(timetable):
+                self?.updateShuttleBusTimetable(timetable: timetable)
             }
         }.store(in: &subscriptions)
     }
 }
 
 extension BusTimetableDataViewController {
-    @objc private func changeSegmentControl(sender: UISegmentedControl) {
-        moveUnderLineView()
-        let shuttleTimetableType: ShuttleTimetableType
-        switch sender.selectedSegmentIndex {
-        case 0:
-            shuttleTimetableType = .goSchool
-        default:
-            shuttleTimetableType = .dropOffSchool
-        }
-        inputSubject.send(.getBusTimetable(shuttleTimetableType))
-    }
-    
-    @objc private func tapIncorrentInfoButton() {
+    private func tapIncorrectInfoButton() {
         let routeValue = "\(shuttleRouteTypeLabel.text ?? "")_\(busTimetablePlaceLabel.text ?? "")"
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.errorFeedbackButton, .click, routeValue))
         if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
@@ -192,177 +126,184 @@ extension BusTimetableDataViewController {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
-    
-    private func configureSwipeGestures() {
-        let swipeLeftGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        swipeLeftGesture.direction = .left
-        oneBusTimetableDataTableView.addGestureRecognizer(swipeLeftGesture)
-        let swipeRightGesture = UISwipeGestureRecognizer(target: self, action: #selector(handleSwipe(_:)))
-        swipeRightGesture.direction = .right
-        oneBusTimetableDataTableView.addGestureRecognizer(swipeRightGesture)
-    }
-    
-    @objc private func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
-        let currentSegmentIndex = segmentControl.selectedSegmentIndex
-        if gesture.direction == .left {
-            if currentSegmentIndex < segmentControl.numberOfSegments - 1 {
-                segmentControl.selectedSegmentIndex = currentSegmentIndex + 1
-            }
-        } else if gesture.direction == .right {
-            if currentSegmentIndex > 0 {
-                segmentControl.selectedSegmentIndex = currentSegmentIndex - 1
-            }
-        }
-        changeSegmentControl(sender: segmentControl)
-    }
-    
-    private func moveUnderLineView() {
-        let newXPosition = (segmentControl.frame.width / CGFloat(segmentControl.numberOfSegments)) * CGFloat(segmentControl.selectedSegmentIndex)
-        selectedUnderlineView.snp.updateConstraints {
-            $0.leading.equalTo(segmentControl).offset(newXPosition)
-        }
-        UIView.animate (
-            withDuration: 0.4,
-            animations: { [weak self] in
-                guard let self = self
-                else { return }
-                self.view.layoutIfNeeded()
-            }
-        )
-    }
-    
-    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetable, shuttleTimetableType: ShuttleTimetableType) {
-        shuttleRouteTypeLabel.text = timetable.routeType.rawValue
-        shuttleRouteTypeLabel.backgroundColor = UIColor.setColor(timetable.routeType.returnRouteColor())
+
+    private func updateShuttleBusTimetable(timetable: ShuttleBusTimetable) {
+        shuttleRouteTypeLabel.configure(shuttleRouteType: timetable.routeType)
         busTimetablePlaceLabel.text = timetable.routeName
         subBusTimetablePlaceLabel.text = timetable.subName
-        if timetable.routeType == .weekday && timetable.routeInfo.count > 1 {
-            manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
-            [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
-                $0.isHidden = false
+        subBusTimetablePlaceLabel.isHidden = timetable.subName?.isEmpty ?? true
+        let (titles, pages) = makePages(timetable: timetable)
+        configureTabBar(titles: titles)
+        configurePages(pages)
+    }
+
+    /// 응답 데이터로 탭 라벨과 페이지를 만든다.
+    /// - 주중 + routeInfo 2개 이상: 단일열 페이지, 탭 = routeInfo 이름(등교/하교)
+    /// - 주중 + routeInfo 1개: 단일열 1페이지, 탭 없음, 시간 컬럼 라벨 = routeInfo 이름
+    /// - 그 외: 모든 routeInfo의 detail이 있고 종류가 2개 이상이면 detail별 그리드 페이지(탭 = detail), 아니면 그리드 1페이지
+    private func makePages(timetable: ShuttleBusTimetable) -> (titles: [String], pages: [Page]) {
+        let routeInfo = timetable.routeInfo
+        if timetable.routeType == .weekday, !routeInfo.isEmpty {
+            if routeInfo.count == 1, let route = routeInfo.first {
+                return ([], [.single(nodeInfo: timetable.nodeInfo, arrivalTime: route.arrivalTime, timeHeaderText: route.name)])
             }
-            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView, scrollView].forEach {
-                $0.isHidden = true
+            let pages: [Page] = routeInfo.enumerated().map { index, route in
+                // 하교 arrivalTime은 DTO 변환 시 이미 역순(ShuttleBusTimetableDto) → 정류장만 뒤집는다(기존 동작).
+                let nodeInfo = index == 0 ? timetable.nodeInfo : timetable.nodeInfo.reversed()
+                return .single(nodeInfo: nodeInfo, arrivalTime: route.arrivalTime, timeHeaderText: "시간")
             }
-            if shuttleTimetableType == .dropOffSchool {
-                oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo.reversed(), routeInfo: timetable.routeInfo[1].arrivalTime)
-            }
-            else {
-                oneBusTimetableDataTableView.configure(nodeInfo: timetable.nodeInfo, routeInfo: timetable.routeInfo.first?.arrivalTime ?? [])
-            }
+            return (routeInfo.map { $0.name }, pages)
         }
-        else {
-            [segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView].forEach {
-                $0.isHidden = true
+
+        let details = routeInfo.compactMap { $0.detail }.filter { !$0.isEmpty }
+        var groupTitles: [String] = []
+        details.forEach { if !groupTitles.contains($0) { groupTitles.append($0) } }
+        if details.count == routeInfo.count, groupTitles.count >= 2 {
+            let pages: [Page] = groupTitles.map { title in
+                let routes = routeInfo
+                    .filter { $0.detail == title }
+                    .map { RouteInfo(name: $0.name, detail: nil, arrivalTime: $0.arrivalTime) }
+                return .grid(nodeInfo: timetable.nodeInfo, routeInfo: routes)
             }
-            [manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView, scrollView].forEach {
-                $0.isHidden = false
-            }
-            manyBusTimetableDataTableView.configure(timetable: timetable.nodeInfo)
-            manyBusTimetableDataCollectionView.configure(busInfo: timetable.routeInfo)
+            return (groupTitles, pages)
         }
+        return ([], [.grid(nodeInfo: timetable.nodeInfo, routeInfo: routeInfo)])
+    }
+
+    private func configureTabBar(titles: [String]) {
+        tabBarView?.removeFromSuperview()
+        tabBarView = nil
+        let hasTabs = titles.count > 1
+        titleBorderView.isHidden = hasTabs
+        tabBarHeightConstraint?.update(offset: hasTabs ? 50 : 0)
+        guard hasTabs else { return }
+        let tabBarView = BusTimetableTabBarView(titles: titles)
+        tabBarContainerView.addSubview(tabBarView)
+        tabBarView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        self.tabBarView = tabBarView
+    }
+
+    private func configurePages(_ pages: [Page]) {
+        pageSubscriptions.removeAll()
+        if let tabBarView {
+            tabBarView.selectTabPublisher.sink { [weak self] index in
+                self?.tapTab(index: index)
+            }.store(in: &pageSubscriptions)
+        }
+        pageStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        pages.forEach { page in
+            let pageView: UIView
+            switch page {
+            case let .single(nodeInfo, arrivalTime, timeHeaderText):
+                let tableView = OneBusTimetableTableView(frame: .zero, style: .grouped)
+                tableView.configure(nodeInfo: nodeInfo, routeInfo: arrivalTime, timeHeaderText: timeHeaderText)
+                tableView.tapIncorrectButtonPublisher.sink { [weak self] in
+                    self?.tapIncorrectInfoButton()
+                }.store(in: &pageSubscriptions)
+                pageView = tableView
+            case let .grid(nodeInfo, routeInfo):
+                let gridView = BusTimetableGridPageView()
+                gridView.configure(nodeInfo: nodeInfo, routeInfo: routeInfo)
+                gridView.tapIncorrectButtonPublisher.sink { [weak self] in
+                    self?.tapIncorrectInfoButton()
+                }.store(in: &pageSubscriptions)
+                pageView = gridView
+            }
+            pageStackView.addArrangedSubview(pageView)
+        }
+        pageStackView.snp.remakeConstraints {
+            $0.edges.equalTo(pagingScrollView.contentLayoutGuide)
+            $0.height.equalTo(pagingScrollView.frameLayoutGuide)
+            $0.width.equalTo(pagingScrollView.frameLayoutGuide).multipliedBy(max(pages.count, 1))
+        }
+        pagingScrollView.isScrollEnabled = pages.count > 1
+        selectedIndex = 0
+        tabBarView?.update(selectedIndex: 0)
+        tabBarView?.updateIndicator(progress: 0)
+        pagingScrollView.contentOffset.x = 0
+    }
+}
+
+// MARK: - Paging
+extension BusTimetableDataViewController {
+    private func tapTab(index: Int) {
+        guard index != selectedIndex else { return }
+        selectPage(index: index)
+        pagingScrollView.setContentOffset(CGPoint(x: pagingScrollView.bounds.width * CGFloat(index), y: 0), animated: true)
+    }
+
+    /// 탭 탭·페이지 스와이프 모두 이 경로로 선택 상태를 갱신한다.
+    private func selectPage(index: Int) {
+        guard index != selectedIndex, pageStackView.arrangedSubviews.indices.contains(index) else { return }
+        selectedIndex = index
+        tabBarView?.update(selectedIndex: index)
+    }
+
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        guard scrollView === pagingScrollView, scrollView.bounds.width > 0 else { return }
+        tabBarView?.updateIndicator(progress: scrollView.contentOffset.x / scrollView.bounds.width)
+    }
+
+    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
+        guard !decelerate, scrollView === pagingScrollView, scrollView.bounds.width > 0 else { return }
+        selectPage(index: Int(round(scrollView.contentOffset.x / scrollView.bounds.width)))
+    }
+
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        guard scrollView === pagingScrollView, scrollView.bounds.width > 0 else { return }
+        selectPage(index: Int(round(scrollView.contentOffset.x / scrollView.bounds.width)))
     }
 }
 
 extension BusTimetableDataViewController {
     private func setUpLayouts() {
-        [shuttleRouteTypeLabel, busTimetablePlaceLabel, scrollView, segmentControl, shadowView, selectedUnderlineView, oneBusTimetableDataTableView, subBusTimetablePlaceLabel].forEach {
+        [titleStackView, tabBarContainerView, pagingScrollView, titleBorderView].forEach {
             view.addSubview($0)
         }
-        scrollView.addSubview(contentView)
-        [busTimetableBorderView, manyBusTimetableDataTableView, manyBusTimetableDataCollectionView, busTimetableSeparateView, headerColorView, incorrectBusInfoButton].forEach {
-            contentView.addSubview($0)
-        }
+        pagingScrollView.addSubview(pageStackView)
     }
-    
+
     private func setUpConstraints() {
-        scrollView.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
-            $0.top.equalTo(subBusTimetablePlaceLabel.snp.bottom).offset(16)
-        }
-        contentView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.height.equalTo(1500)
+        titleStackView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
+            $0.leading.trailing.equalToSuperview().inset(24)
         }
         shuttleRouteTypeLabel.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
-            $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(28)
             $0.height.equalTo(18)
         }
         busTimetablePlaceLabel.snp.makeConstraints {
-            $0.leading.equalTo(shuttleRouteTypeLabel)
-            $0.top.equalTo(shuttleRouteTypeLabel.snp.bottom).offset(4)
             $0.height.equalTo(32)
         }
         subBusTimetablePlaceLabel.snp.makeConstraints {
-            $0.leading.equalTo(shuttleRouteTypeLabel)
-            $0.top.equalTo(busTimetablePlaceLabel.snp.bottom).offset(4)
             $0.height.equalTo(19)
         }
-        oneBusTimetableDataTableView.snp.makeConstraints {
+        tabBarContainerView.snp.makeConstraints {
+            $0.top.equalTo(titleStackView.snp.bottom).offset(16)
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(selectedUnderlineView.snp.bottom)
-            $0.bottom.equalToSuperview()
+            tabBarHeightConstraint = $0.height.equalTo(0).constraint
         }
-        busTimetableBorderView.snp.makeConstraints {
+        titleBorderView.snp.makeConstraints {
+            $0.top.equalTo(tabBarContainerView)
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalToSuperview()
             $0.height.equalTo(1)
         }
-        manyBusTimetableDataTableView.snp.makeConstraints {
-            $0.leading.bottom.equalToSuperview()
-            $0.width.equalTo(152)
-            $0.top.equalTo(busTimetableBorderView.snp.bottom)
+        pagingScrollView.snp.makeConstraints {
+            $0.top.equalTo(tabBarContainerView.snp.bottom)
+            $0.leading.trailing.bottom.equalToSuperview()
         }
-        manyBusTimetableDataCollectionView.snp.makeConstraints {
-            $0.leading.equalTo(manyBusTimetableDataTableView.snp.trailing)
-            $0.trailing.equalToSuperview()
-            $0.top.equalTo(busTimetableBorderView.snp.bottom)
-            $0.bottom.equalToSuperview()
-        }
-        busTimetableSeparateView.snp.makeConstraints {
-            $0.leading.equalTo(manyBusTimetableDataTableView.snp.trailing)
-            $0.width.equalTo(0.5)
-            $0.top.equalTo(manyBusTimetableDataTableView)
-            $0.height.equalTo(300)
-        }
-        segmentControl.snp.makeConstraints {
-            $0.top.equalTo(subBusTimetablePlaceLabel.snp.bottom).offset(16)
-            $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(50)
-        }
-        shadowView.snp.makeConstraints {
-            $0.leading.equalToSuperview()
-            $0.width.equalToSuperview()
-            $0.top.equalTo(segmentControl.snp.bottom)
-            $0.height.equalTo(1)
-        }
-        selectedUnderlineView.snp.makeConstraints {
-            $0.leading.equalTo(segmentControl.snp.leading)
-            $0.height.equalTo(2)
-            $0.top.equalTo(segmentControl.snp.bottom)
-            $0.width.equalTo(segmentControl.snp.width).dividedBy(segmentControl.numberOfSegments)
-        }
-        headerColorView.snp.makeConstraints {
-            $0.trailing.equalToSuperview()
-            $0.width.equalTo(0)
-            $0.top.equalTo(self.manyBusTimetableDataCollectionView)
-            $0.height.equalTo(52)
-        }
-        incorrectBusInfoButton.snp.makeConstraints {
-            $0.bottom.equalToSuperview()
-            $0.leading.equalToSuperview().offset(24)
-            $0.height.equalTo(20)
+        pageStackView.snp.makeConstraints {
+            $0.edges.equalTo(pagingScrollView.contentLayoutGuide)
+            $0.height.equalTo(pagingScrollView.frameLayoutGuide)
+            $0.width.equalTo(pagingScrollView.frameLayoutGuide)
         }
     }
-    
+
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
         view.backgroundColor = .systemBackground
-        configureSwipeGestures()
+        pagingScrollView.delegate = self
     }
 }
-

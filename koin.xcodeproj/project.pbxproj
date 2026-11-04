@@ -147,6 +147,7 @@
 		7C4D5A442F01638800B40128 /* OneBusTimetableTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A342F01638800B40128 /* OneBusTimetableTableView.swift */; };
 		7C4D5A452F01638800B40128 /* BusSearchResultTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A152F01638800B40128 /* BusSearchResultTableView.swift */; };
 		7C4D5A462F01638800B40128 /* ManyBusTimetableCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A2D2F01638800B40128 /* ManyBusTimetableCollectionView.swift */; };
+		58B6889BEB4C9527682E8A18 /* BusTimetableGridPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6A19E97610F10119947E3ED /* BusTimetableGridPageView.swift */; };
 		7C4D5A472F01638800B40128 /* BusSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A132F01638800B40128 /* BusSearchViewModel.swift */; };
 		7C4D5A482F01638800B40128 /* BusTimetableDataViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A392F01638800B40128 /* BusTimetableDataViewModel.swift */; };
 		7C4D5A492F01638800B40128 /* BusSearchDatePickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C4D5A1A2F01638800B40128 /* BusSearchDatePickerViewController.swift */; };
@@ -1446,6 +1447,7 @@
 		7C4D5A2A2F01638800B40128 /* BusTimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableViewController.swift; sourceTree = "<group>"; };
 		7C4D5A2B2F01638800B40128 /* BusTimetableViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableViewModel.swift; sourceTree = "<group>"; };
 		7C4D5A2D2F01638800B40128 /* ManyBusTimetableCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManyBusTimetableCollectionView.swift; sourceTree = "<group>"; };
+		D6A19E97610F10119947E3ED /* BusTimetableGridPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusTimetableGridPageView.swift; sourceTree = "<group>"; };
 		7C4D5A2E2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManyBusTimetableCollectionViewCell.swift; sourceTree = "<group>"; };
 		7C4D5A2F2F01638800B40128 /* ManyBusTimetableCollectionViewHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManyBusTimetableCollectionViewHeaderCell.swift; sourceTree = "<group>"; };
 		7C4D5A312F01638800B40128 /* ManyBusTimetableTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ManyBusTimetableTableView.swift; sourceTree = "<group>"; };
@@ -3086,6 +3088,7 @@
 			isa = PBXGroup;
 			children = (
 				7C4D5A2D2F01638800B40128 /* ManyBusTimetableCollectionView.swift */,
+				D6A19E97610F10119947E3ED /* BusTimetableGridPageView.swift */,
 				7C4D5A2E2F01638800B40128 /* ManyBusTimetableCollectionViewCell.swift */,
 				7C4D5A2F2F01638800B40128 /* ManyBusTimetableCollectionViewHeaderCell.swift */,
 			);
@@ -7606,6 +7609,7 @@
 				7C4D5A442F01638800B40128 /* OneBusTimetableTableView.swift in Sources */,
 				7C4D5A452F01638800B40128 /* BusSearchResultTableView.swift in Sources */,
 				7C4D5A462F01638800B40128 /* ManyBusTimetableCollectionView.swift in Sources */,
+				58B6889BEB4C9527682E8A18 /* BusTimetableGridPageView.swift in Sources */,
 				7C4D5A472F01638800B40128 /* BusSearchViewModel.swift in Sources */,
 				7C4D5A482F01638800B40128 /* BusTimetableDataViewModel.swift in Sources */,
 				7C4D5A492F01638800B40128 /* BusSearchDatePickerViewController.swift in Sources */,

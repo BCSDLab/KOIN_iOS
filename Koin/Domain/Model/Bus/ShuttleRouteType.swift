@@ -18,15 +18,4 @@ enum ShuttleRouteType: String, Decodable, CaseIterable {
         let rawValue = try? container.decode(String.self)
         self = ShuttleRouteType(rawValue: rawValue ?? "") ?? .circular
     }
-    
-    func returnRouteColor() -> String {
-        switch self {
-        case .circular:
-            return "4ED927"
-        case .weekday:
-            return "FFB443"
-        default:
-            return "34ADFF"
-        }
-    }
 }
