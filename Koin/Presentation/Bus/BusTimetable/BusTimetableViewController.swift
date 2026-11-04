@@ -296,7 +296,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         busNoticeLabel.text = notice.title
         busNoticeWrappedView.tag = notice.id
         let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int
-        updateLayoutsByNotice(isDeleted: noticeId == notice.id || noticeId != nil)
+        updateLayoutsByNotice(isDeleted: noticeId == notice.id)
     }
 }
 

@@ -245,7 +245,7 @@ extension BusSearchViewController {
         busNoticeLabel.text = notice.title
         busNoticeWrappedView.tag = notice.id
         let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int
-        if noticeId == notice.id || noticeId != nil {
+        if noticeId == notice.id {
             updateLayoutsByNotice(isDeleted: true)
         }
     }
