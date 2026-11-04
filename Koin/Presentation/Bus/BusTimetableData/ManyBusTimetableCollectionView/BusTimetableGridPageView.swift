@@ -13,10 +13,13 @@ import UIKit
 /// 회차 그리드 페이지: 승하차장명 고정 컬럼 + 회차 컬럼 가로 스크롤, 페이지 전체는 세로 스크롤.
 final class BusTimetableGridPageView: UIScrollView {
     // MARK: - Properties
-    static let headerRowHeight: CGFloat = 52
+    /// 헤더 행 높이: 기본 38, 탭이 있거나 회차 헤더가 2줄(name+detail)이면 52
+    static let compactHeaderRowHeight: CGFloat = 38
+    static let expandedHeaderRowHeight: CGFloat = 52
     static let rowHeight: CGFloat = 50
     let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
     private var gridHeightConstraint: Constraint?
+    private var headerBandHeightConstraint: Constraint?
 
     // MARK: - UI Components
     private let contentView = UIView()
@@ -60,11 +63,14 @@ final class BusTimetableGridPageView: UIScrollView {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func configure(nodeInfo: [NodeInfo], routeInfo: [RouteInfo]) {
+    func configure(nodeInfo: [NodeInfo], routeInfo: [RouteInfo], headerRowHeight: CGFloat) {
+        stationTableView.headerRowHeight = headerRowHeight
+        timeCollectionView.headerRowHeight = headerRowHeight
         stationTableView.configure(timetable: nodeInfo)
         timeCollectionView.configure(busInfo: routeInfo)
+        headerBandHeightConstraint?.update(offset: headerRowHeight)
         // 가로 flow layout은 높이가 한 컬럼보다 작으면 섹션을 다음 열로 접는다 → 데이터로 정확히 계산.
-        gridHeightConstraint?.update(offset: Self.headerRowHeight + Self.rowHeight * CGFloat(nodeInfo.count))
+        gridHeightConstraint?.update(offset: headerRowHeight + Self.rowHeight * CGFloat(nodeInfo.count))
     }
 
     @objc private func tapIncorrectButton() {
@@ -87,12 +93,12 @@ extension BusTimetableGridPageView {
         }
         headerBandView.snp.makeConstraints {
             $0.top.leading.trailing.equalToSuperview()
-            $0.height.equalTo(Self.headerRowHeight)
+            headerBandHeightConstraint = $0.height.equalTo(Self.compactHeaderRowHeight).constraint
         }
         stationTableView.snp.makeConstraints {
             $0.top.leading.equalToSuperview()
             $0.width.equalTo(156)
-            gridHeightConstraint = $0.height.equalTo(Self.headerRowHeight).constraint
+            gridHeightConstraint = $0.height.equalTo(Self.compactHeaderRowHeight).constraint
         }
         separatorView.snp.makeConstraints {
             $0.leading.equalTo(stationTableView.snp.trailing)
@@ -115,7 +121,6 @@ extension BusTimetableGridPageView {
     private func configureView() {
         backgroundColor = .appColor(.neutral0)
         showsVerticalScrollIndicator = false
-        contentInsetAdjustmentBehavior = .never
         stationTableView.sectionHeaderTopPadding = 0
         setUpLayouts()
         setUpConstraints()

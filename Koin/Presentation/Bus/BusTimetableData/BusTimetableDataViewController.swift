@@ -205,7 +205,12 @@ extension BusTimetableDataViewController {
                 pageView = tableView
             case let .grid(nodeInfo, routeInfo):
                 let gridView = BusTimetableGridPageView()
-                gridView.configure(nodeInfo: nodeInfo, routeInfo: routeInfo)
+                let isExpandedHeader = pages.count > 1 || routeInfo.contains { !($0.detail ?? "").isEmpty }
+                gridView.configure(
+                    nodeInfo: nodeInfo,
+                    routeInfo: routeInfo,
+                    headerRowHeight: isExpandedHeader ? BusTimetableGridPageView.expandedHeaderRowHeight : BusTimetableGridPageView.compactHeaderRowHeight
+                )
                 gridView.tapIncorrectButtonPublisher.sink { [weak self] in
                     self?.tapIncorrectInfoButton()
                 }.store(in: &pageSubscriptions)

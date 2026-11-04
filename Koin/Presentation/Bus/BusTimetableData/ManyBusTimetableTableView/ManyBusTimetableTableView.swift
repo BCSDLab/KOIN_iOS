@@ -12,6 +12,7 @@ final class ManyBusTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     private var busPlaces: [NodeInfo] = []
+    var headerRowHeight: CGFloat = BusTimetableGridPageView.compactHeaderRowHeight
     
     
     // MARK: - Initialization
@@ -80,6 +81,6 @@ extension ManyBusTimetableTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return BusTimetableGridPageView.headerRowHeight
+        return headerRowHeight
     }
 }
