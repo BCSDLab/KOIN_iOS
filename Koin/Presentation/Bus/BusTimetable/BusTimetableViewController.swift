@@ -55,14 +55,18 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private let busNoticeWrappedView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.info100)
+        $0.backgroundColor = UIColor.appColor(.neutral0)
         $0.layer.cornerRadius = 8
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.08
+        $0.layer.shadowOffset = CGSize(width: 0, height: 2)
+        $0.layer.shadowRadius = 2.5
         $0.isUserInteractionEnabled = true
         $0.isHidden = true
     }
     
     private let busNoticeLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textAlignment = .left
         $0.lineBreakMode = .byTruncatingTail
@@ -93,7 +97,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     
     private let busStopLabel = UILabel().then {
         $0.font = .appFont(.pretendardRegular, size: 13)
-        $0.textColor = .appColor(.primary500)
+        $0.textColor = .appColor(.new500)
         $0.textAlignment = .right
         $0.isHidden = true
     }
@@ -135,6 +139,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         super.viewDidLayoutSubviews()
         let pageWidth = pagingScrollView.bounds.width
         pageTableViews.forEach { updateBottomInset(of: $0) }
+        busNoticeWrappedView.layer.shadowPath = UIBezierPath(roundedRect: busNoticeWrappedView.bounds, cornerRadius: 8).cgPath
         // 페이지 폭이 바뀐 경우(최초 레이아웃·회전)에만 보정한다. 탭 전환 애니메이션 중에 덮어쓰면 목표 페이지를 지나친다.
         guard pageWidth > 0, pageWidth != lastPageWidth else { return }
         lastPageWidth = pageWidth
@@ -486,8 +491,7 @@ extension BusTimetableViewController {
         busStopImageView.snp.makeConstraints {
             $0.trailing.equalToSuperview().inset(24)
             $0.centerY.equalTo(typeOftimetableLabel)
-            $0.height.equalTo(18)
-            $0.width.equalTo(15)
+            $0.width.height.equalTo(18)
         }
     }
     
