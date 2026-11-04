@@ -34,15 +34,4 @@ enum BusType: String, Decodable, CaseIterable {
             return "전체 차종"
         }
     }
-    
-    func returnBusTypeColor() -> String {
-        switch self {
-        case .shuttleBus:
-            return "D7FBEB"
-        case .expressBus:
-            return "D7E6FB"
-        default:
-            return "FBEBD7"
-        }
-    }
 }

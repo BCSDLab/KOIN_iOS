@@ -11,11 +11,7 @@ import UIKit
 
 final class BusSearchResultTableViewCell: UITableViewCell {
     //MARK: - UI Components
-    private let busTypeLabel = UILabel().then {
-        $0.font = .appFont(.pretendardRegular, size: 11)
-        $0.textColor = .appColor(.neutral600)
-        $0.textAlignment = .center
-    }
+    private let busTypeLabel = BusRouteTagLabel()
     
     private let busTimeLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 20)
@@ -25,7 +21,7 @@ final class BusSearchResultTableViewCell: UITableViewCell {
     
     private let remainTimeLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 16)
-        $0.textColor = .appColor(.info700)
+        $0.textColor = .appColor(.neutral500)
         $0.textAlignment = .right
     }
     
@@ -47,8 +43,15 @@ final class BusSearchResultTableViewCell: UITableViewCell {
     }
 
     func configure(searchModel: ScheduleInformation) {
-        busTypeLabel.text = String(searchModel.busType.koreanDescription.prefix(2))
-        busTypeLabel.backgroundColor = UIColor.setColor(searchModel.busType.returnBusTypeColor())
+        let busTypeText = String(searchModel.busType.koreanDescription.prefix(2))
+        switch searchModel.busType {
+        case .expressBus:
+            busTypeLabel.configure(text: busTypeText, background: .info200, foreground: .info700)
+        case .cityBus:
+            busTypeLabel.configure(text: busTypeText, background: .success200, foreground: .success700)
+        default:
+            busTypeLabel.configure(text: busTypeText, background: .warning100, foreground: .warning600)
+        }
         busTimeLabel.text = searchModel.departTime.formatDateToHHMM(isHH: false)
         if let remainTime = searchModel.remainTime {
             let remainTimeValue = remainTime.timeDifference()
@@ -84,9 +87,8 @@ extension BusSearchResultTableViewCell {
     
     private func setUpConstraints() {
         busTypeLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(33)
+            $0.leading.equalToSuperview().offset(32)
             $0.top.equalToSuperview().offset(8)
-            $0.width.equalTo(28)
             $0.height.equalTo(18)
         }
         busTimeLabel.snp.makeConstraints {
@@ -95,11 +97,11 @@ extension BusSearchResultTableViewCell {
             $0.height.equalTo(32)
         }
         remainTimeLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview().inset(31)
+            $0.trailing.equalToSuperview().inset(32)
             $0.centerY.equalToSuperview()
         }
         busNumberLabel.snp.makeConstraints {
-            $0.leading.equalTo(busTypeLabel.snp.trailing).offset(10)
+            $0.leading.equalTo(busTypeLabel.snp.trailing).offset(6)
             $0.centerY.equalTo(busTypeLabel)
         }
     }

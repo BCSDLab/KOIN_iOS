@@ -24,7 +24,7 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
     
     private let departTimeLabel = UILabel().then {
         $0.font = .appFont(.pretendardBold, size: 16)
-        $0.textColor = .appColor(.info700)
+        $0.textColor = .appColor(.new500)
         $0.textAlignment = .left
         $0.minimumScaleFactor = 0.3
         $0.adjustsFontSizeToFitWidth = true
@@ -34,8 +34,8 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
         $0.text = "출발"
         $0.minimumScaleFactor = 0.3
         $0.adjustsFontSizeToFitWidth = true
-        $0.font = .appFont(.pretendardBold, size: 16)
-        $0.textColor = .black
+        $0.font = .appFont(.pretendardMedium, size: 16)
+        $0.textColor = .appColor(.neutral800)
     }
     
     private let busTypeFilterButton = UIButton().then {
@@ -110,7 +110,7 @@ extension BusSearchResultTableViewHeader {
         configuration.attributedTitle = AttributedString(busType, attributes: AttributeContainer([.font: UIFont.appFont(.pretendardMedium, size: 14), .foregroundColor: UIColor.appColor(.neutral800)]))
         configuration.image = .appImage(asset: .arrowDown)?.withTintColor(.appColor(.neutral800), renderingMode: .alwaysOriginal)
         configuration.imagePadding = 4
-        configuration.contentInsets = .init(top: 9, leading: 16, bottom: 9, trailing: 16)
+        configuration.contentInsets = .init(top: 8, leading: 16, bottom: 8, trailing: 8)
         configuration.imagePlacement = .trailing
         busTypeFilterButton.configuration = configuration
     }

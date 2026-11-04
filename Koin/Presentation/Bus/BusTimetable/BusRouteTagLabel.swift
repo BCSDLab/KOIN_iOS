@@ -34,18 +34,20 @@ final class BusRouteTagLabel: UILabel {
     }
 
     func configure(shuttleRouteType: ShuttleRouteType) {
-        text = shuttleRouteType.rawValue
         switch shuttleRouteType {
         case .circular:
-            backgroundColor = .appColor(.success200)
-            textColor = .appColor(.success700)
+            configure(text: shuttleRouteType.rawValue, background: .success200, foreground: .success700)
         case .weekday:
-            backgroundColor = .appColor(.warning100)
-            textColor = .appColor(.warning600)
+            configure(text: shuttleRouteType.rawValue, background: .warning100, foreground: .warning600)
         default:
-            backgroundColor = .appColor(.info200)
-            textColor = .appColor(.info700)
+            configure(text: shuttleRouteType.rawValue, background: .info200, foreground: .info700)
         }
+    }
+
+    func configure(text: String, background: ColorAsset, foreground: ColorAsset) {
+        self.text = text
+        backgroundColor = .appColor(background)
+        textColor = .appColor(foreground)
         invalidateIntrinsicContentSize()
     }
 }
