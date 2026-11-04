@@ -23,16 +23,22 @@ final class BusSearchViewController: UIViewController {
     }
     
     private let busNoticeWrappedView = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.info100)
+        $0.backgroundColor = UIColor.appColor(.neutral0)
         $0.layer.cornerRadius = 8
+        $0.layer.shadowColor = UIColor.black.cgColor
+        $0.layer.shadowOpacity = 0.08
+        $0.layer.shadowOffset = CGSize(width: 0, height: 4)
+        $0.layer.shadowRadius = 2.5
         $0.isUserInteractionEnabled = true
+        $0.isHidden = true
     }
     
     private let busNoticeLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.primary500)
+        $0.textColor = UIColor.appColor(.new500)
         $0.font = .appFont(.pretendardMedium, size: 14)
         $0.textAlignment = .left
-        $0.numberOfLines = 0
+        $0.numberOfLines = 2
+        $0.lineBreakMode = .byTruncatingTail
     }
     
     private let deleteNoticeButton = UIButton().then {
@@ -53,6 +59,7 @@ final class BusSearchViewController: UIViewController {
     
     private let swapAreaButton = UIButton().then {
         $0.setImage(.appImage(asset: .swap), for: .normal)
+        $0.backgroundColor = .appColor(.neutral50)
         $0.layer.cornerRadius = 16
         $0.layer.borderWidth = 1
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
@@ -186,7 +193,7 @@ extension BusSearchViewController {
             departure: departure,
             arrival: arrival
         )
-        presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 32))
+        presentBottomSheet(contentView)
     }
 
     private func selectedBusPlace(from button: UIButton) -> BusPlace? {
@@ -214,10 +221,9 @@ extension BusSearchViewController {
     
     private func changeBusAreaButton(sender: UIButton, title: BusPlace) {
         var configuration = UIButton.Configuration.plain()
-        configuration.attributedTitle = AttributedString(title.koreanDescription, attributes: AttributeContainer([.font: UIFont.appFont(.pretendardBold, size: 18), .foregroundColor: UIColor.appColor(.neutral800)]))
-        configuration.contentInsets = .init(top: 12, leading: 30, bottom: 12, trailing: 30)
+        configuration.attributedTitle = AttributedString(title.koreanDescription, attributes: AttributeContainer([.font: UIFont.appFont(.pretendardSemiBold, size: 14), .foregroundColor: UIColor.appColor(.neutral800)]))
+        configuration.contentInsets = .init(top: 12, leading: 16, bottom: 12, trailing: 16)
         sender.configuration = configuration
-        sender.backgroundColor = .clear
         sender.tag = (BusPlace.allCases.firstIndex(of: title) ?? 0) + 1
     }
     
@@ -229,7 +235,7 @@ extension BusSearchViewController {
         }
         else {
             busInfoSearchButton.isEnabled = true
-            busInfoSearchButton.backgroundColor = .appColor(.primary500)
+            busInfoSearchButton.backgroundColor = .appColor(.new500)
             busInfoSearchButton.setTitleColor(.appColor(.neutral0), for: .normal)
         }
     }
@@ -251,7 +257,7 @@ extension BusSearchViewController {
     private func setUpLabels() {
         [departGuideLabel, arriveGuideLabel].forEach {
             $0.font = .appFont(.pretendardMedium, size: 16)
-            $0.textColor = .appColor(.primary500)
+            $0.textColor = .appColor(.new500)
             $0.textAlignment = .center
         }
     }
@@ -261,12 +267,14 @@ extension BusSearchViewController {
         let buttons = [departAreaSelectedButton, arrivedAreaSelectedButton]
         for (index, value) in buttons.enumerated() {
             var configuration = UIButton.Configuration.plain()
-            configuration.attributedTitle = AttributedString(buttonNames[index], attributes: AttributeContainer([.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.gray)]))
-            configuration.contentInsets = .init(top: 12, leading: 30, bottom: 12, trailing: 30)
+            configuration.attributedTitle = AttributedString(buttonNames[index], attributes: AttributeContainer([.font: UIFont.appFont(.pretendardRegular, size: 14), .foregroundColor: UIColor.appColor(.neutral500)]))
+            configuration.contentInsets = .init(top: 12, leading: 16, bottom: 12, trailing: 16)
             value.configuration = configuration
-            value.backgroundColor = .appColor(.neutral100)
+            value.backgroundColor = .appColor(.neutral0)
             value.addTarget(self, action: #selector(tapBusAreaSelectedButtons), for: .touchUpInside)
-            value.layer.cornerRadius = 4
+            value.layer.cornerRadius = 16
+            value.layer.borderWidth = 1
+            value.layer.borderColor = UIColor.appColor(.neutral300).cgColor
         }
     }
     
@@ -283,47 +291,35 @@ extension BusSearchViewController {
     private func updateLayoutsByNotice(isDeleted: Bool) {
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            if isDeleted {
-                self.busNoticeWrappedView.isHidden = true
-                self.searchMainDescriptionLabel.snp.remakeConstraints {
-                    $0.leading.equalToSuperview().offset(24)
-                    $0.top.equalTo(self.view.safeAreaLayoutGuide.snp.top).offset(24)
-                }
-            }
-            else {
-                self.busNoticeWrappedView.isHidden = false
-                self.searchMainDescriptionLabel.snp.updateConstraints {
-                    $0.top.equalTo(self.busNoticeWrappedView.snp.bottom).offset(18)
-                }
-            }
+            // 공지 카드는 출발/도착 행 아래에 있어 다른 요소 위치에 영향이 없다.
+            self.busNoticeWrappedView.isHidden = isDeleted
         }
     }
     
     private func setUpConstraints() {
         searchMainDescriptionLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
-            $0.top.equalTo(busNoticeWrappedView.snp.bottom).offset(18)
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
         }
         departGuideLabel.snp.makeConstraints {
-            $0.leading.equalToSuperview().offset(24)
-            $0.width.equalTo(127)
-            $0.top.equalTo(searchMainDescriptionLabel.snp.bottom).offset(65)
+            $0.centerX.equalTo(departAreaSelectedButton)
+            $0.top.equalTo(searchMainDescriptionLabel.snp.bottom).offset(49)
         }
         arriveGuideLabel.snp.makeConstraints {
-            $0.trailing.equalToSuperview().inset(24)
-            $0.width.equalTo(127)
+            $0.centerX.equalTo(arrivedAreaSelectedButton)
             $0.top.equalTo(departGuideLabel)
         }
+        // 출발 박스 | 스왑 영역 58 | 도착 박스, 좌우 24
         departAreaSelectedButton.snp.makeConstraints {
-            $0.centerX.equalTo(departGuideLabel)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalTo(swapAreaButton.snp.leading).offset(-13)
             $0.top.equalTo(departGuideLabel.snp.bottom).offset(8)
-            $0.width.equalTo(143)
             $0.height.equalTo(46)
         }
         arrivedAreaSelectedButton.snp.makeConstraints {
-            $0.centerX.equalTo(arriveGuideLabel)
+            $0.leading.equalTo(swapAreaButton.snp.trailing).offset(13)
+            $0.trailing.equalToSuperview().inset(24)
             $0.top.equalTo(departAreaSelectedButton)
-            $0.width.equalTo(143)
             $0.height.equalTo(46)
         }
         swapAreaButton.snp.makeConstraints {
@@ -339,7 +335,7 @@ extension BusSearchViewController {
         busNoticeWrappedView.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalToSuperview().inset(24)
-            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
+            $0.top.equalTo(departAreaSelectedButton.snp.bottom).offset(38)
         }
         busNoticeLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
