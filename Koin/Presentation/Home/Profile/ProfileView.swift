@@ -12,7 +12,7 @@ struct ProfileView: ActionBindableView {
         case showLogin
         case showLogout
         case showSetting
-        case showTimeTable
+        case showTimeTable(MainTimetableFrame?)
     }
     
     // MARK: - Properties
@@ -63,7 +63,7 @@ struct ProfileView: ActionBindableView {
                 TimeTableView(
                     lectures: viewModel.lectures,
                     timeTableTapped: {
-                        sendAction(.showTimeTable)
+                        sendAction(.showTimeTable(viewModel.mainFrame))
                         viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Home.homeTimetable, .click, "내 시간표"))
                     }
                 )

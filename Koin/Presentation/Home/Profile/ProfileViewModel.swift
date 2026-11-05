@@ -20,7 +20,8 @@ final class ProfileViewModel: SwiftUIViewModelProtocol {
     
     // MARK: - Properties
     private(set) var userInfo: UserDto? = nil
-    private(set) var lectures: [LectureData] = []
+    private(set) var mainFrame: MainTimetableFrame?
+    var lectures: [LectureData] { mainFrame?.lectures ?? [] }
     
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase
@@ -64,7 +65,7 @@ extension ProfileViewModel {
                 receiveCompletion: { [weak self] completion in
                     if case .failure = completion {
                         self?.userInfo = nil
-                        self?.lectures.removeAll()
+                        self?.mainFrame = nil
                     }
                 },
                 receiveValue: { [weak self] response in
@@ -82,9 +83,8 @@ extension ProfileViewModel {
                         print(error.message)
                     }
                 },
-                receiveValue: { [weak self] lectures in
-                    print(lectures)
-                    self?.lectures = lectures
+                receiveValue: { [weak self] mainFrame in
+                    self?.mainFrame = mainFrame
                 }
             )
             .store(in: &subscriptions)
@@ -99,7 +99,7 @@ extension ProfileViewModel {
                 KeychainWorker.shared.delete(key: .refresh)
                 UserDataManager.shared.resetUserData()
                 userInfo = nil
-                lectures.removeAll()
+                mainFrame = nil
             }.store(in: &subscriptions)
     }
 }
