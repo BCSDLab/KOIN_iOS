@@ -36,14 +36,13 @@ extension KoinDropdownViewController {
         return nil
     }
 
-    /// 스크롤을 잠그고 필요한 하단 inset을 추가한 뒤, anchor와 dropdown이 보이는 목표 offset을 반환한다.
+    /// 필요한 하단 inset을 추가한 뒤, anchor와 dropdown이 보이는 목표 offset을 반환한다. 바깥 스크롤은 드롭다운을 닫으므로 스크롤을 잠그지 않는다.
     func prepareScroll() -> CGPoint? {
         guard let anchor else { return nil }
         travel = contentView.height + configuration.spacing(for: .down)
 
         guard let scrollView else { return nil }
         isScrollPrepared = true
-        scrollView.isScrollEnabled = false
         scrollView.contentInset.bottom -= addedBottomInset
         addedBottomInset = 0
         scrollView.layoutIfNeeded()
@@ -71,13 +70,15 @@ extension KoinDropdownViewController {
         guard isScrollPrepared else { return }
         if let scrollView {
             scrollView.contentInset.bottom -= addedBottomInset
-            scrollView.contentOffset = CGPoint(
-                x: scrollView.contentOffset.x,
-                y: min(scrollView.contentOffset.y, maxOffsetY(of: scrollView))
-            )
+            // 바깥 스크롤로 닫히는 중이면 손가락 드래그와 다투지 않게 위치는 스크롤뷰에 맡긴다.
+            if !scrollView.isTracking {
+                scrollView.contentOffset = CGPoint(
+                    x: scrollView.contentOffset.x,
+                    y: min(scrollView.contentOffset.y, maxOffsetY(of: scrollView))
+                )
+            }
         }
         addedBottomInset = 0
-        scrollView?.isScrollEnabled = true
         isScrollPrepared = false
     }
 

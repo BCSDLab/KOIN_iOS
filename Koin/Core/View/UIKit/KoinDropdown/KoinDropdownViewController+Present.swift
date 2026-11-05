@@ -32,6 +32,7 @@ extension KoinDropdownViewController {
         )
         lastLayoutSize = view.bounds.size
         isPresented = true
+        parent?.view.addGestureRecognizer(outsideTouchRecognizer)
         return true
     }
 }
@@ -67,13 +68,15 @@ extension KoinDropdownViewController {
         }
     }
 
-    @objc func handleOutsideTap() {
+    @objc func handleOutsideTouch(_ recognizer: UIGestureRecognizer) {
+        guard recognizer.state == .began else { return }
         dismissDropdown()
     }
 
     private func finishDismiss() {
         guard !isDismissed else { return }
         isDismissed = true
+        outsideTouchRecognizer.view?.removeGestureRecognizer(outsideTouchRecognizer)
         willMove(toParent: nil)
         view.removeFromSuperview()
         removeFromParent()

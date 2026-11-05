@@ -7,6 +7,7 @@
 
 import UIKit
 import Combine
+import Then
 
 @MainActor
 final class KoinDropdownViewController: UIViewController {
@@ -38,8 +39,15 @@ final class KoinDropdownViewController: UIViewController {
     }
 
     // MARK: - UI Components
-    private let backgroundTapView = UIView()
     let panel = UIView()
+    /// 부모 화면에 붙여 바깥 터치를 받는다. 탭은 뒤 화면에 전달하지 않고, 스크롤(pan)은 통과시킨다.
+    lazy var outsideTouchRecognizer = OutsideTouchGestureRecognizer(
+        target: self,
+        action: #selector(handleOutsideTouch)
+    ).then {
+        $0.delaysTouchesBegan = true
+        $0.delegate = self
+    }
 
     // MARK: - Initializer
     init(
@@ -59,6 +67,11 @@ final class KoinDropdownViewController: UIViewController {
     }
 
     // MARK: - Life Cycle
+    override func loadView() {
+        // 패널 밖 터치는 아래로 넘기고, 바깥 처리는 outsideTouchRecognizer가 맡는다.
+        view = PassThroughView()
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
@@ -112,19 +125,43 @@ extension KoinDropdownViewController {
         view.backgroundColor = .clear
         view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
 
-        backgroundTapView.backgroundColor = .clear
-        backgroundTapView.frame = view.bounds
-        backgroundTapView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
-        backgroundTapView.addGestureRecognizer(
-            UITapGestureRecognizer(
-                target: self,
-                action: #selector(handleOutsideTap)
-            )
-        )
         panel.backgroundColor = .clear
         panel.clipsToBounds = true
-        view.addSubview(backgroundTapView)
         view.addSubview(panel)
         panel.addSubview(contentView)
+    }
+}
+
+// MARK: - Outside Touch
+extension KoinDropdownViewController: UIGestureRecognizerDelegate {
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldReceive touch: UITouch
+    ) -> Bool {
+        // 닫히기 시작한 뒤의 터치는 평소처럼 뒤 화면이 받는다.
+        !isDismissing && !panel.bounds.contains(touch.location(in: panel))
+    }
+
+    func gestureRecognizer(
+        _ gestureRecognizer: UIGestureRecognizer,
+        shouldRecognizeSimultaneouslyWith otherGestureRecognizer: UIGestureRecognizer
+    ) -> Bool {
+        // 스크롤·시트 드래그는 그대로 진행되고 드롭다운만 닫힌다.
+        otherGestureRecognizer is UIPanGestureRecognizer
+    }
+}
+
+/// 터치가 닿는 즉시 인식한다. 인식되면 뒤 화면의 버튼·셀·탭 제스처는 그 터치를 받지 못한다.
+final class OutsideTouchGestureRecognizer: UIGestureRecognizer {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        if state == .possible { state = .began }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent) {
+        state = .ended
+    }
+
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent) {
+        state = .cancelled
     }
 }
