@@ -17,7 +17,7 @@ extension Array where Element == Int {
         var start = -1
         var end = -1
 
-        for time in self.sorted() {
+        for time in Set(self).sorted() {
             let day = time / 100
             let slot = time % 100
 
@@ -36,7 +36,8 @@ extension Array where Element == Int {
         }
 
         var result = ""
-        for (i, entry) in timetable.enumerated() {
+        for entry in timetable {
+            guard days.indices.contains(entry.day) else { continue }
             let dayText = days[entry.day]
 
             // 두 자리 형식으로 시간 계산
@@ -46,10 +47,10 @@ extension Array where Element == Int {
             let endHour = String(format: "%02d", entry.end / 2 + 1)
             let endText = "\(endHour)\(entry.end % 2 == 0 ? "A" : "B")"
 
-            if i > 0 {
+            if !result.isEmpty {
                 result += ", "
             }
-            result += "\(dayText) \(startText) ~ \(endText)"
+            result += "\(dayText)\(startText)~\(endText)"
         }
 
         return result
