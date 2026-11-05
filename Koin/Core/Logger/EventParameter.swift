@@ -110,7 +110,6 @@ enum EventParameter {
                 case swapDestination = "swap_destination"
                 case searchBus = "search_bus"
                 case searchResultBack = "search_result_back"
-                case searchResultClose = "search_result_close"
                 case searchResultDepartureTime = "search_result_departure_time"
                 case departureNow = "departure_now"
                 case departureTimeSettingDone = "departure_time_setting_done"
