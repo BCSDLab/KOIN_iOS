@@ -1042,6 +1042,7 @@
 		D215726A2CEDDE500061E725 /* FetchSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */; };
 		D215726C2CEDE59B0061E725 /* DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */; };
 		D215726F2CEE28D70061E725 /* LectureData.swift in Sources */ = {isa = PBXBuildFile; fileRef = D215726E2CEE28D70061E725 /* LectureData.swift */; };
+		AB2000000000000000000061 /* MainTimetableFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1000000000000000000061 /* MainTimetableFrame.swift */; };
 		D21572812CEF062A0061E725 /* DeleteSemesterUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */; };
 		D21572832CEF220D0061E725 /* _DeleteLectureUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */; };
 		D223D6192D9C0EFC00C29BE6 /* BannerDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D223D6182D9C0EFC00C29BE6 /* BannerDto.swift */; };
@@ -2307,6 +2308,7 @@
 		D21572692CEDDE500061E725 /* FetchSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSemesterUseCase.swift; sourceTree = "<group>"; };
 		D215726B2CEDE59B0061E725 /* DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteLectureUseCase.swift; sourceTree = "<group>"; };
 		D215726E2CEE28D70061E725 /* LectureData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LectureData.swift; sourceTree = "<group>"; };
+		AB1000000000000000000061 /* MainTimetableFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTimetableFrame.swift; sourceTree = "<group>"; };
 		D21572802CEF062A0061E725 /* DeleteSemesterUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteSemesterUseCase.swift; sourceTree = "<group>"; };
 		D21572822CEF220D0061E725 /* _DeleteLectureUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = _DeleteLectureUseCase.swift; sourceTree = "<group>"; };
 		D223D6182D9C0EFC00C29BE6 /* BannerDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BannerDto.swift; sourceTree = "<group>"; };
@@ -5917,6 +5919,7 @@
 			isa = PBXGroup;
 			children = (
 				D215726E2CEE28D70061E725 /* LectureData.swift */,
+				AB1000000000000000000061 /* MainTimetableFrame.swift */,
 			);
 			path = Timetable;
 			sourceTree = "<group>";
@@ -7902,6 +7905,7 @@
 				D29F21C52C4DE2DF00994554 /* UserAPI.swift in Sources */,
 				D29F21CE2C4E162600994554 /* TimetableService.swift in Sources */,
 				D215726F2CEE28D70061E725 /* LectureData.swift in Sources */,
+				AB2000000000000000000061 /* MainTimetableFrame.swift in Sources */,
 				D2D7C0D02C28285600C85A85 /* LandRepository.swift in Sources */,
 				7CA60D7B2F664C0C007C08C1 /* DeleteAllNotificationsUseCase.swift in Sources */,
 				7CA60D972F667AE9007C08C1 /* CompleteCallVanUseCase.swift in Sources */,
