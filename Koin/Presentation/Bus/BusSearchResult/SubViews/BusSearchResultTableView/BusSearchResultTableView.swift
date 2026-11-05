@@ -7,6 +7,7 @@
 
 import Combine
 import SnapKit
+import Then
 import UIKit
 
 final class BusSearchResultTableView: UITableView {
@@ -40,6 +41,12 @@ final class BusSearchResultTableView: UITableView {
         separatorStyle = .none
         backgroundColor = .systemBackground
         sectionHeaderTopPadding = 0
+        let emptyContainer = UIView()
+        let emptyView = BusSearchResultEmptyView()
+        emptyContainer.addSubview(emptyView)
+        emptyView.snp.makeConstraints { $0.center.equalToSuperview() }
+        emptyContainer.isHidden = true
+        backgroundView = emptyContainer
     }
     
     func setBusSearchTime(departTime: String) {
@@ -52,6 +59,7 @@ final class BusSearchResultTableView: UITableView {
         self.busSearchResult = busSearchResult
         self.busSearchSchedule = busSearchResult.schedule
         reloadData()
+        backgroundView?.isHidden = !busSearchSchedule.isEmpty
         if busSearchResult.schedule.count > 0 {
             scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         }
@@ -60,6 +68,7 @@ final class BusSearchResultTableView: UITableView {
     func clearBusSearchResult() {
         busSearchSchedule = []
         reloadData()
+        backgroundView?.isHidden = true
     }
     
     private func showDropDown() {
@@ -171,5 +180,46 @@ private final class BusTypeDropdownView: UIView, KoinDropdownContentView {
     @objc private func tapButton(_ sender: UIButton) {
         onSelect(Self.busTypes[sender.tag])
         dismissTappedSubject.send()
+    }
+}
+
+/// 검색 결과가 없을 때 표시 (CallVanNotificationEmptyView 형식)
+private final class BusSearchResultEmptyView: UIView {
+    init() {
+        super.init(frame: .zero)
+        let symbolImageView = UIImageView(image: .appImage(asset: .sleepBcsdSymbol))
+        let titleLabel = UILabel().then {
+            $0.text = "조건에 맞는 교통편이 없어요"
+            $0.font = .appFont(.pretendardSemiBold, size: 18)
+            $0.textColor = .appColor(.new500)
+        }
+        let subTitleLabel = UILabel().then {
+            $0.text = "조건을 바꿔서 다시 확인해보세요"
+            $0.font = .appFont(.pretendardMedium, size: 14)
+            $0.textColor = .appColor(.neutral600)
+        }
+        [symbolImageView, titleLabel, subTitleLabel].forEach { addSubview($0) }
+        symbolImageView.snp.makeConstraints {
+            $0.width.equalTo(95)
+            $0.height.equalTo(75)
+            $0.top.centerX.equalToSuperview()
+        }
+        // 피그마 텍스트 높이 명시 (UIKit 라벨 기본 높이와 다름)
+        titleLabel.snp.makeConstraints {
+            $0.height.equalTo(29)
+            $0.top.equalTo(symbolImageView.snp.bottom).offset(12)
+            $0.centerX.equalToSuperview()
+        }
+        subTitleLabel.snp.makeConstraints {
+            $0.height.equalTo(22)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(2)
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
