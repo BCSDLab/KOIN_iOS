@@ -38,7 +38,7 @@ final class BusSearchResultTableViewHeader: UITableViewHeaderFooterView {
         $0.textColor = .appColor(.neutral800)
     }
     
-    private let busTypeFilterButton = UIButton().then {
+    let busTypeFilterButton = UIButton().then {
         $0.layer.cornerRadius = 12
         $0.backgroundColor = .appColor(.neutral50)
     }
