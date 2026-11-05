@@ -18,13 +18,8 @@ extension UIViewController {
         assert(contentView.superview == nil, "Create new content for every KoinBottomSheet presentation")
         window.endEditing(true)
 
-        let host: UIViewController
-        switch configuration.style {
-        case .modal:
-            host = tabBarController ?? navigationController ?? self
-        case .nonModal:
-            host = self
-        }
+        // nonModal도 tab·nav에 붙여 fullscreen dim이 내비게이션 바까지 덮게 한다.
+        let host = tabBarController ?? navigationController ?? self
         // 닫히는 중인 시트는 애니메이션 동안 붙어 있지만, 활성 시트 조회에서는 빠진다.
         activeBottomSheets.forEach { $0.dismissForReplacement() }
 

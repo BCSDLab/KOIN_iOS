@@ -79,8 +79,8 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
         }
         if let scroll = panTracking.touchedScrollView {
             if panTracking.touchedScrollWasDecelerating { return false }
-            // 위로는 펼칠 수 있을 때만 시트가, 아래로는 스크롤이 맨 위일 때만 시트가 갖는다.
-            if velocity.y < 0 { return canExpandByPan }
+            // 스크롤 영역에서 위로 끌면 항상 스크롤한다. 아래로는 스크롤이 맨 위일 때만 시트가 갖는다.
+            if velocity.y < 0 { return false }
             if scroll.contentOffset.y > -scroll.adjustedContentInset.top + 0.5 {
                 return false
             }
@@ -162,9 +162,14 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
         let movement = state.offset + translation - state.translation
         holdHeight(state.height)
         if movement >= 0 {
+            // fullscreen에서 시작하면 detent 높이까지는 시트 높이를 줄인다. 하단 고정 뷰는 그대로 두고 스크롤 영역만 줄어든다.
+            // detent 아래부터는 시트 전체를 내린다.
             let free = state.startedFullScreen ? max(0, state.height - min(state.baseHeight, availableHeight)) : 0
-            let distance = configuration.behavior.dismissOnDrag || movement <= free
-                ? movement : free + rubberBand(movement - free, dimension: state.height)
+            // 움직이던 시트를 다시 잡은 경우, 잡기 전의 이동(offset)은 줄이기에 쓰지 않아 하단이 튀지 않게 한다.
+            let shrink = min(max(0, movement - state.offset), free)
+            holdHeight(state.height - shrink)
+            let rest = movement - shrink
+            let distance = configuration.behavior.dismissOnDrag ? rest : rubberBand(rest, dimension: state.height)
             containerView.transform = CGAffineTransform(translationX: 0, y: distance)
         } else if state.canExpand && !state.startedFullScreen && state.height < availableHeight - 0.5 {
             let desiredHeight = state.height - movement
@@ -177,6 +182,10 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
             containerView.transform = CGAffineTransform(translationX: 0,
                 y: -rubberBand(-movement, dimension: state.height))
         }
+        applyNonModalDim(
+            forHeight: heightConstraint?.constant ?? state.height,
+            baseHeight: min(state.baseHeight, availableHeight)
+        )
         view.layoutIfNeeded()
     }
 

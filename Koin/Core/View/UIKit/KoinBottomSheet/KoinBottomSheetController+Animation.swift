@@ -72,7 +72,7 @@ extension KoinBottomSheetController {
             guard let self else { return }
             self.holdHeight(targetHeight)
             self.containerView.transform = .identity
-            self.applyModalDimTarget()
+            self.applyDimTarget()
             self.view.layoutIfNeeded()
         } completion: { [weak self] in
             guard let self else { return }
@@ -104,10 +104,21 @@ extension KoinBottomSheetController {
         state = .presented
     }
 
-    func applyModalDimTarget() {
+    func applyDimTarget() {
         guard isActive else { return }
-        if case let .modal(alpha) = configuration.style {
+        switch configuration.style {
+        case let .modal(alpha):
             dimView.alpha = alpha
+        case .nonModal:
+            dimView.alpha = isFullScreen ? Self.nonModalFullScreenDimAlpha : 0
         }
+    }
+
+    /// nonModal을 끌 때 기본 높이에서 fullscreen으로 갈수록 dim을 진하게 한다.
+    func applyNonModalDim(forHeight height: CGFloat, baseHeight: CGFloat) {
+        guard !isModal else { return }
+        let range = availableHeight - baseHeight
+        let progress = range > 0.5 ? (height - baseHeight) / range : (isFullScreen ? 1 : 0)
+        dimView.alpha = Self.nonModalFullScreenDimAlpha * min(1, max(0, progress))
     }
 }

@@ -42,6 +42,9 @@ extension KoinBottomSheetController {
         capturePresentationLayout()
         holdHeight(sheetView.bounds.height)
         state = .dismissing
+        let onWillDismiss = configuration.onWillDismiss
+        configuration.onWillDismiss = nil
+        onWillDismiss?()
         prepareKeyboardDismissal(for: contentViewController.view)
         let distance = view.bounds.maxY - containerView.frame.minY
         let targetY = containerView.transform.ty + distance
@@ -86,15 +89,20 @@ extension KoinBottomSheetController {
     }
 
     func updateNavigationGesture(host: UIViewController? = nil) {
-        guard isModal, let host = host ?? parent else { return }
+        guard let host = host ?? parent else { return }
         let navigation = (host as? UINavigationController)
             ?? host.navigationController
             ?? ((host as? UITabBarController)?.selectedViewController as? UINavigationController)
-        let hasModal = host.children
+        // 시트가 떠 있는 동안은 style·높이와 관계없이 스와이프 pop을 막는다.
+        let isBlocked = host.children
             .compactMap { $0 as? KoinBottomSheetController }
-            .contains { $0.isModal && $0.state != .dismissed }
-        navigation?.interactivePopGestureRecognizer?.isEnabled = !hasModal
+            .contains { $0.state != .dismissed }
+        navigation?.interactivePopGestureRecognizer?.isEnabled = !isBlocked
             && (navigation?.viewControllers.count ?? 0) > 1
+        // iOS 26의 화면 전체 스와이프 pop은 가장자리 pop과 별도 제스처다.
+        if #available(iOS 26.0, *) {
+            navigation?.interactiveContentPopGestureRecognizer?.isEnabled = !isBlocked
+        }
         if state != .dismissed, navigationObservation == nil {
             navigationObservation = navigation?.interactivePopGestureRecognizer?.observe(
                 \.isEnabled, options: [.new]) { [weak self] gesture, _ in

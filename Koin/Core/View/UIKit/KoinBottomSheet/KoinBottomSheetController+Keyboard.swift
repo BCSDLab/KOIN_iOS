@@ -137,7 +137,7 @@ private extension KoinBottomSheetController {
             if let self, self.isActive, self.panState == nil {
                 self.containerView.transform = .identity
             }
-            self?.applyModalDimTarget()
+            self?.applyDimTarget()
             self?.view.layoutIfNeeded()
         } completion: { [weak self] _ in
             self?.finishPresentationIfNeeded()

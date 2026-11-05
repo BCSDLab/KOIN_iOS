@@ -39,6 +39,18 @@ final class KoinBottomSheetController: UIViewController {
         state == .dismissing
     }
     var isFullScreen = false
+    /// 바깥 전체 터치를 막는지. modal은 항상, nonModal은 fullscreen일 때만.
+    var blocksOutside: Bool {
+        isModal || isFullScreen
+    }
+    /// dim이 받아 시트를 닫을 터치. 바깥 전체를 막지 않을 때도 nav 영역(상단 한계 위)은 받는다.
+    func dimReceivesTouch(at point: CGPoint) -> Bool {
+        guard !blocksOutside else { return true }
+        guard let host = view.superview, let topLimitY else { return false }
+        return dimView.convert(point, to: host).y < topLimitY
+    }
+    /// nonModal fullscreen의 dim 농도.
+    static let nonModalFullScreenDimAlpha: CGFloat = 0.7
     var didExpandForKeyboard = false
 
     // MARK: - Closure
@@ -61,7 +73,7 @@ final class KoinBottomSheetController: UIViewController {
     var keyboardState = KeyboardState()
 
     // MARK: - UI Components
-    let dimView = UIView().then {
+    let dimView = DimView().then {
         $0.backgroundColor = .appColor(.neutral800)
         $0.alpha = 0
     }
@@ -105,6 +117,14 @@ final class KoinBottomSheetController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard state != .dismissed else { return }
+        if configuration.showsShadow {
+            // path를 지정해 애니메이션 중 매 프레임 그림자 모양을 다시 계산하지 않게 한다.
+            containerView.layer.shadowPath = UIBezierPath(
+                roundedRect: containerView.bounds,
+                byRoundingCorners: [.topLeft, .topRight],
+                cornerRadii: CGSize(width: configuration.cornerRadius, height: configuration.cornerRadius)
+            ).cgPath
+        }
         updateHeightIfNeeded()
     }
 
@@ -148,6 +168,16 @@ final class KoinBottomSheetController: UIViewController {
         }
         ownerView.addSubview(observer)
         ownerWindowObserver = observer
+    }
+}
+
+/// dim이 투명(alpha 0)해도 시트 바깥 탭을 받아 닫는다. UIKit 기본 hitTest는 alpha 0.01 미만을 건너뛴다.
+final class DimView: UIView {
+    var receivesTouch: ((CGPoint) -> Bool)?
+
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        guard isUserInteractionEnabled, !isHidden, self.point(inside: point, with: event) else { return nil }
+        return receivesTouch?(point) ?? true ? self : nil
     }
 }
 
