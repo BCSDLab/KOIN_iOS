@@ -9,67 +9,49 @@ import Combine
 import UIKit
 
 final class AddDirectFooterView: UICollectionReusableView {
-    
+    // MARK: - Properties
     static let identifier = "AddDirectFooterView"
     let footerTapPublisher = PassthroughSubject<Void, Never>()
-    
-    private let footerView = UIView().then {
-        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        $0.layer.borderWidth = 1.0
-        $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 5
-        $0.isUserInteractionEnabled = true
-    }
-    
-    private let addOptionLabel = UILabel().then {
-        $0.text = "시간 및 장소 추가"
-        $0.font = UIFont.appFont(.pretendardBold, size: 12)
-        $0.textColor = UIColor.appColor(.primary500)
-    }
-    
-    private let addImageView = UIImageView().then {
-        $0.image = UIImage.appImage(asset: .add)
-    }
+
+    // MARK: - UI Components
+    private let addButton = UIButton(type: .system)
+
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
-        addGesture()
+        configureView()
+        addButton.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
 
-extension AddDirectFooterView {
-    private func addGesture() {
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(footerTapped))
-        footerView.addGestureRecognizer(tapGesture)
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    @objc private func addTapped() { footerTapPublisher.send() }
+
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
     }
-    @objc private func footerTapped() {
-        footerTapPublisher.send()
+
+    private func setUpStyles() {
+        backgroundColor = .appColor(.neutral0)
+        addButton.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        addButton.layer.borderWidth = 0.5
+        addButton.layer.cornerRadius = 16
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .add)?.withRenderingMode(.alwaysTemplate)
+        configuration.imagePlacement = .trailing
+        configuration.baseForegroundColor = .appColor(.new500)
+        configuration.contentInsets = .init(top: 0, leading: 18, bottom: 0, trailing: 10)
+        addButton.configuration = configuration
+        TimetableButtonTitle.set("시간 및 장소 추가", on: addButton, font: .pretendardSemiBold, size: 12, color: .new500)
+        addButton.contentHorizontalAlignment = .fill
     }
-}
-extension AddDirectFooterView {
-    private func setupViews() {
-        self.backgroundColor = .systemBackground
-        
-        [footerView, addOptionLabel, addImageView].forEach {
-            self.addSubview($0)
-        }
-        footerView.snp.makeConstraints { make in
-            make.top.bottom.equalToSuperview()
-            make.leading.equalTo(self.snp.leading).offset(24)
-            make.trailing.equalTo(self.snp.trailing).offset(-24)
-        }
-        addOptionLabel.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.leading.equalTo(footerView.snp.leading).offset(13)
-        }
-        addImageView.snp.makeConstraints { make in
-            make.centerY.equalToSuperview()
-            make.trailing.equalTo(footerView.snp.trailing).offset(-5.5)
-            make.width.height.equalTo(24)
+
+    private func setUpLayouts() { addSubview(addButton) }
+
+    private func setUpConstraints() {
+        addButton.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(32)
         }
     }
 }
