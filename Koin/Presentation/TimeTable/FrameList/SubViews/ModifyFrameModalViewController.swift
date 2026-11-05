@@ -13,17 +13,30 @@ final class ModifyFrameModalViewController: KoinModalViewController {
     private let onDeleteButtonTapped: (FrameDto) -> Void
     private let onSaveButtonTapped: (FrameDto) -> Void
     private var frame: FrameDto = FrameDto(id: 0, timetableName: "", isMain: false)
+
+    private var trimmedName: String {
+        (textField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var isValid: Bool { !trimmedName.isEmpty }
     
     // MARK: - UI Components
-    let containerView = UIView()
+    private let containerView = UIView()
     
-    let messageLabel = UILabel()
-    let deleteButton = UIButton()
-    let textField = UITextField()
+    private let messageLabel = UILabel()
+    private let buttonStackView = UIStackView()
+    private let deleteButton = UIButton(type: .system)
+    private let saveButton = StatefulButton(
+        title: "저장",
+        font: .appFont(.pretendardMedium, size: 15),
+        enabledColor: .appColor(.new500),
+        cornerRadius: 4
+    )
+    private let textField = UITextField()
     
-    let checkButtonWrapperView = UIView()
-    let checkButton = UIButton()
-    let buttonTextLabel = UILabel()
+    private let checkButtonWrapperView = UIControl()
+    private let checkButton = UIImageView()
+    private let buttonTextLabel = UILabel()
     
     // MARK: - Initializer
     init(
@@ -36,18 +49,12 @@ final class ModifyFrameModalViewController: KoinModalViewController {
         super.init(configuration: .init(
             appearance: .primary,
             content: .custom(customView: containerView),
-            button: .buttons(
-                leftButtonTitle: "취소",
-                rightButtonTitle: "저장",
-                rightButtonAction: {} //rightButtonAction
-            ),
+            button: .none,
             layout: .init(
-                width: 327,
-                contentTopPadding: 12,
-                contentHorizontalPadding: 24,
-                paddingBetweenContentAndButton: 10,
-                buttonHorizontalPadding: 24,
-                buttonBottomPadding: 16
+                width: 340,
+                contentTopPadding: 26,
+                contentHorizontalPadding: 30.5,
+                contentBottomPadding: 26
             )
         ))
     }
@@ -61,27 +68,16 @@ final class ModifyFrameModalViewController: KoinModalViewController {
         configureView()
         setUpDelegate()
         setUpAddTargets()
+        saveButton.updateState(isEnabled: isValid)
     }
     
     // MARK: - Public
     func configure(frame: FrameDto) {
         self.frame = frame
-        self.textField.attributedPlaceholder = NSAttributedString(
-            string: frame.timetableName,
-            attributes: [
-                .font: UIFont.appFont(.pretendardRegular, size: 14),
-                .foregroundColor: UIColor.appColor(.neutral500)
-            ])
-        self.frame = frame
-        self.checkButton.setImage(UIImage.appImage(asset: frame.isMain ? .checkFill : .checkEmpty), for: .normal)
-    }
-    
-    // MARK: - Override
-    override func rightButtonTapped() {
-        dismiss(animated: true) { [weak self] in
-            guard let self else { return }
-            onSaveButtonTapped(frame)
-        }
+        textField.text = frame.timetableName
+        checkButtonWrapperView.isSelected = frame.isMain
+        updateCheckButton()
+        saveButton.updateState(isEnabled: isValid)
     }
 }
 
@@ -95,23 +91,42 @@ extension ModifyFrameModalViewController {
     private func setUpAddTargets() {
         textField.addTarget(self, action: #selector(textFieldDidChange(_:)), for: .editingChanged)
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
-        checkButton.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
+        saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        checkButtonWrapperView.addTarget(self, action: #selector(checkButtonTapped), for: .touchUpInside)
     }
     
     @objc private func textFieldDidChange(_ textField: UITextField) {
-        guard let text = textField.text else { return }
-        frame.timetableName = text
+        saveButton.updateState(isEnabled: isValid)
     }
     
     @objc private func checkButtonTapped() {
-        frame.isMain.toggle()
-        checkButton.setImage(UIImage.appImage(asset: frame.isMain ? .checkFill : .checkEmpty), for: .normal)
+        checkButtonWrapperView.isSelected.toggle()
+        updateCheckButton()
+    }
+
+    private func updateCheckButton() {
+        let isSelected = checkButtonWrapperView.isSelected
+        checkButton.image = UIImage.appImage(asset: isSelected ? .checkFill : .checkEmpty)?
+            .withRenderingMode(isSelected ? .alwaysTemplate : .alwaysOriginal)
+        checkButtonWrapperView.accessibilityTraits = checkButtonWrapperView.isSelected ? [.button, .selected] : .button
+    }
+
+    @objc private func saveButtonTapped() {
+        guard isValid else { return }
+        var updatedFrame = frame
+        updatedFrame.timetableName = trimmedName
+        updatedFrame.isMain = checkButtonWrapperView.isSelected
+        let onSave = onSaveButtonTapped
+        dismiss(animated: true) {
+            onSave(updatedFrame)
+        }
     }
     
     @objc private func deleteButtonTapped() {
-        dismiss(animated: true) { [weak self] in
-            guard let self else { return }
-            onDeleteButtonTapped(frame)
+        let onDelete = onDeleteButtonTapped
+        let frame = frame
+        dismiss(animated: true) {
+            onDelete(frame)
         }
     }
 }
@@ -127,56 +142,70 @@ extension ModifyFrameModalViewController {
         messageLabel.do {
             $0.text = "시간표 설정"
             $0.font = UIFont.appFont(.pretendardSemiBold, size: 16)
+            $0.textColor = .appColor(.neutral800)
+            $0.textAlignment = .center
         }
         
         deleteButton.do {
-            $0.backgroundColor = UIColor.appColor(.danger700)
-            $0.setTitle("삭제", for: .normal)
-            $0.setTitleColor(UIColor.appColor(.neutral0), for: .normal)
-            $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 14)
+            $0.setAttributedTitle(NSAttributedString(string: "삭제", attributes: [
+                .font: UIFont.appFont(.pretendardMedium, size: 15),
+                .foregroundColor: UIColor.appColor(.neutral600)
+            ]), for: .normal)
+            $0.setTitleColor(.appColor(.neutral600), for: .normal)
+            $0.titleLabel?.font = .appFont(.pretendardMedium, size: 15)
+            $0.layer.borderColor = UIColor.appColor(.gray).cgColor
+            $0.layer.borderWidth = 1
             $0.layer.cornerRadius = 4
-            $0.layer.masksToBounds = true
         }
+
+        saveButton.setAttributedTitle(NSAttributedString(string: "저장", attributes: [
+            .font: UIFont.appFont(.pretendardMedium, size: 15)
+        ]), for: .normal)
+        [deleteButton, saveButton].forEach { $0.titleLabel?.numberOfLines = 1 }
+        checkButton.tintColor = .appColor(.new500)
+        buttonStackView.axis = .horizontal
+        buttonStackView.spacing = 8
+        buttonStackView.distribution = .fillEqually
         
         textField.do {
             $0.backgroundColor = UIColor.appColor(.neutral100)
             $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
             $0.layer.borderWidth = 1
-            $0.layer.cornerRadius = 4
+            $0.layer.cornerRadius = 20
             $0.leftView = UIView(frame: .init(x: 0, y: 0, width: 16, height: 22))
             $0.leftViewMode = .always
             $0.rightView = UIView(frame: .init(x: 0, y: 0, width: 16, height: 22))
             $0.rightViewMode = .always
             $0.font = UIFont.appFont(.pretendardRegular, size: 14)
-            $0.textColor = UIColor.appColor(.neutral800)
+            $0.textColor = UIColor.appColor(.neutral500)
+            $0.accessibilityLabel = "시간표 이름"
         }
         
         buttonTextLabel.do {
             $0.text = "기본 시간표로 설정하기"
             $0.font = UIFont.appFont(.pretendardMedium, size: 14)
+            $0.textColor = .appColor(.neutral800)
         }
+        checkButtonWrapperView.isAccessibilityElement = true
+        checkButtonWrapperView.accessibilityLabel = "기본 시간표로 설정하기"
     }
     private func setUpLayouts() {
         [checkButton, buttonTextLabel].forEach {
             checkButtonWrapperView.addSubview($0)
         }
-        [deleteButton, messageLabel, textField, checkButtonWrapperView].forEach {
+        [deleteButton, saveButton].forEach { buttonStackView.addArrangedSubview($0) }
+        [messageLabel, textField, checkButtonWrapperView, buttonStackView].forEach {
             containerView.addSubview($0)
         }
     }
     private func setUpConstraints() {
-        deleteButton.snp.makeConstraints { make in
-            make.top.leading.equalToSuperview()
-            make.width.equalTo(60)
-            make.height.equalTo(24)
-        }
         messageLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(14)
+            make.top.equalToSuperview()
             make.centerX.equalToSuperview()
             make.height.equalTo(26)
         }
         textField.snp.makeConstraints { make in
-            make.top.equalTo(messageLabel.snp.bottom).offset(14)
+            make.top.equalTo(messageLabel.snp.bottom).offset(10)
             make.leading.equalTo(containerView.snp.leading)
             make.trailing.equalTo(containerView.snp.trailing)
             make.height.equalTo(46)
@@ -185,17 +214,21 @@ extension ModifyFrameModalViewController {
             $0.height.equalTo(24)
             $0.centerX.equalToSuperview()
             $0.top.equalTo(textField.snp.bottom).offset(10)
-            $0.bottom.equalToSuperview()
         }
         
         checkButton.snp.makeConstraints {
-            $0.top.leading.bottom.equalToSuperview()
+            $0.leading.centerY.equalToSuperview()
             $0.size.equalTo(24)
         }
         buttonTextLabel.snp.makeConstraints {
             $0.centerY.equalTo(checkButton)
-            $0.leading.equalTo(checkButton.snp.trailing).offset(5)
+            $0.leading.equalTo(checkButton.snp.trailing).offset(8)
             $0.trailing.equalToSuperview()
+        }
+        buttonStackView.snp.makeConstraints {
+            $0.top.equalTo(checkButtonWrapperView.snp.bottom).offset(10)
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(48)
         }
     }
 }

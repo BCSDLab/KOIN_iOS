@@ -21,26 +21,21 @@ final class DeleteSemesterModalViewController: KoinModalViewController {
         self.semesters = semesters
         self.onDeleteButtonTapped = onDeleteButtonTapped
 
-        let attributedString = {
-            let text = "시간표가 작성되어 있는 학기가\n있어요. 해당 학기를 제외할 경우\n학기 내 시간표도 함께 삭제돼요."
-            let attributedString = NSMutableAttributedString(
-                string: text,
-                attributes: [
-                    .font: UIFont.appFont(.pretendardMedium, size: 16),
-                    .foregroundColor: UIColor.appColor(.neutral800)
-                ]
-            )
-            let range = (text as NSString).range(of: "학기 내 시간표도 함께 삭제")
-            attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.danger700), range: range)
-            return attributedString
-        }()
+        let message = "시간표가 작성되어 있는 학기가\n있어요. 해당 학기를 제외할 경우\n학기 내 시간표도 함께 삭제돼요."
+        let attributedTitle = NSMutableAttributedString(string: message, attributes: [
+            .font: UIFont.appFont(.pretendardMedium, size: 16),
+            .foregroundColor: UIColor.appColor(.neutral800)
+        ])
+        attributedTitle.addAttribute(.font, value: UIFont.appFont(.pretendardSemiBold, size: 16), range: (message as NSString).range(of: "학기 내 시간표도 함께 삭제"))
         super.init(configuration: .init(
             appearance: .destructive,
-            content: .attributedSingleTitle(title: attributedString),
+            content: .attributedSingleTitle(title: attributedTitle),
             button: .buttons(
                 leftButtonTitle: "취소",
+                leftButtonStyle: .init(textColor: .neutral600, font: .pretendardMedium, fontSize: 15, borderColor: .gray, borderWidth: 1, cornerRadius: 4),
                 rightButtonTitle: "삭제하기",
-                rightButtonAction: {}
+                rightButtonAction: {},
+                rightButtonStyle: .init(textColor: .neutral0, font: .pretendardMedium, fontSize: 15, backgroundColor: .danger700, cornerRadius: 4)
             )
         ))
     }
@@ -50,9 +45,10 @@ final class DeleteSemesterModalViewController: KoinModalViewController {
 
     // MARK: - Override
     override func rightButtonTapped() {
-        dismiss(animated: true) { [weak self] in
-            guard let self else { return }
-            onDeleteButtonTapped(semesters)
+        let onDelete = onDeleteButtonTapped
+        let semesters = semesters
+        dismiss(animated: true) {
+            onDelete(semesters)
         }
     }
 }
