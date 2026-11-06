@@ -143,26 +143,16 @@ final class EnterFormViewController: UIViewController {
         $0.isHidden = true
     }
     
-    private let departmentDropdownButton = UIButton().then {
-        $0.applyDropdownStyle(
-            title: "학부를 선택해주세요.",
-            font: UIFont.appFont(.pretendardRegular, size: 14),
-            titleColor: .appColor(.neutral400),
-            borderColor: .white,
-            backgroundColor: .appColor(.neutral0),
-            icon: UIImage.appImage(symbol: .chevronDown)
-        )
-        $0.layer.shadowColor = UIColor.black.cgColor
-        $0.layer.shadowOpacity = 0.06
-        $0.layer.shadowOffset = CGSize(width: 0, height: 1)
-        $0.layer.shadowRadius = 4
-        $0.layer.cornerRadius = 12
+    private let departmentDropdownButton = RecruitDropdownTriggerButton(placeholder: "학부를 선택해주세요.").then {
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.06, x: 0, y: 1, blur: 9, spread: 0)
         $0.isHidden = true
     }
-    
-    private let deptDropDown = DropDown().then {
-        $0.backgroundColor = .white
-        $0.isHidden = true
+
+    private var selectedDepartment: String?
+
+    private lazy var deptDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
+        self?.selectedDepartment = department
+        self?.departmentDropdownButton.configure(text: department)
     }
     
     private let studentIdTextField = DefaultTextField(
@@ -295,7 +285,7 @@ final class EnterFormViewController: UIViewController {
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
                 self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "아이디 생성", customSessionId))
             case let .showDeptDropDownList(deptList):
-                self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
+                strongSelf.deptDropdownContentView.configure(departments: deptList)
             case let .showNicknameHttpResult(message, color):
                 self?.nicknameResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
@@ -424,8 +414,11 @@ extension EnterFormViewController {
     }
     
     @objc func departmentButtonTapped(_ sender: UIButton) {
-        self.view.layoutIfNeeded()
-        deptDropDown.show()
+        presentDropdown(
+            anchor: departmentDropdownButton,
+            content: deptDropdownContentView,
+            configuration: .init(direction: .down(spacing: 12), shadow: .shadow2)
+        )
     }
     
     @objc private func clearStudentIdTextField() {
@@ -494,7 +487,7 @@ extension EnterFormViewController {
 
         switch userType {
         case .student:
-            let department = departmentDropdownButton.titleLabel?.text ?? ""
+            let department = selectedDepartment ?? ""
             let studentNumber = studentIdTextField.text ?? ""
 
             let emailInput = studentEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -564,7 +557,6 @@ extension EnterFormViewController {
             correctPasswordLabel,
             studentInfoGuideLabel,
             departmentDropdownButton,
-            deptDropDown,
             studentIdTextField,
             studentIdWarningLabel,
             nicknameTextField,
@@ -787,7 +779,7 @@ extension EnterFormViewController {
         
         switch userType {
         case .student:
-            fields = [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
+            fields = [studentInfoGuideLabel, departmentDropdownButton,
                       studentIdTextField, nicknameTextField, nicknameDuplicateButton,
                       studentEmailTextField, koreatechEmailLabel]
         case .general:
@@ -807,31 +799,6 @@ extension EnterFormViewController {
     private func setUpTextFieldUnderline() {
         [idTextField, passwordTextField1, passwordTextField2, studentIdTextField, nicknameTextField, studentEmailTextField, generalEmailTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
-        }
-    }
-    
-    private func setUpDropDown(dropDown: DropDown, button: UIButton, dataSource: [String]) {
-        dropDown.anchorView = button
-        dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
-        dropDown.dataSource = dataSource
-        dropDown.direction = .bottom
-        dropDown.selectionAction = { (index: Int, item: String) in
-            var buttonConfiguration = UIButton.Configuration.plain()
-            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
-            
-            var attributedTitle = AttributedString(item)
-            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
-            attributedTitle.foregroundColor = UIColor.appColor(.neutral500)
-            buttonConfiguration.attributedTitle = attributedTitle
-            button.configuration = buttonConfiguration
-
-            if let imageView = button.subviews.compactMap({ $0 as? UIImageView }).first {
-                imageView.image = UIImage.appImage(symbol: .chevronDown)
-                NSLayoutConstraint.activate([
-                    imageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
-                    imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
-                ])
-            }
         }
     }
     
