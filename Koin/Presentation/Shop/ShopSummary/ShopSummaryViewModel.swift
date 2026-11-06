@@ -20,9 +20,9 @@ final class ShopSummaryViewModel {
     
     // MARK: - Output
     enum Output {
-        case update1(images: [OrderImage], name: String, rating: Double, reviewCount: Int)
+        case update1(images: [ShopImage], name: String, rating: Double, reviewCount: Int)
         case update2(delivery: Bool, payBank: Bool, payCard: Bool, maxDeliveryTip: Int = 0, phone: String)
-        case update3(menusGroups: OrderShopMenusGroups, menus: [OrderShopMenus])
+        case update3(menusGroups: OrderShopMenusGroups, menus: [ShopMenuGroup])
         case updateShopEvent(event: String?)
         case updateTitle(String)
     }
@@ -32,7 +32,7 @@ final class ShopSummaryViewModel {
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var shopId: Int
     private(set) var phonenumber: String = ""
-    var cachedImages: [OrderImage] = []
+    var cachedImages: [ShopImage] = []
     private(set) var shopName: String
     let backCategoryName: String?
 

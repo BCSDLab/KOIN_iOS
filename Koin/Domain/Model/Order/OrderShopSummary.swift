@@ -10,7 +10,7 @@ import Foundation
 struct OrderShopSummary {
     let shopId: Int
     let orderableShopId: Int
-    let images: [OrderImage]
+    let images: [ShopImage]
     let name: String
     let ratingAverage: Double
     let reviewCount: Int
@@ -36,7 +36,7 @@ extension OrderShopSummary {
         self.minimumDeliveryTip = 0
         self.maximumDeliveryTip = 0
         self.images = dto.images.map {
-            OrderImage(imageUrl: $0.imageUrl, isThumbnail: $0.isThumbnail)
+            ShopImage(imageUrl: $0.imageUrl, isThumbnail: $0.isThumbnail)
         }
     }
 }

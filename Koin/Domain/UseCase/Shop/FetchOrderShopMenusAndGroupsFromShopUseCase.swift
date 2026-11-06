@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchOrderShopMenusAndGroupsFromShopUseCase {
-    func execute(shopId: Int) -> AnyPublisher<(OrderShopMenusGroups, [OrderShopMenus]), ErrorResponse>
+    func execute(shopId: Int) -> AnyPublisher<(OrderShopMenusGroups, [ShopMenuGroup]), ErrorResponse>
 }
 
 final class DefaultFetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMenusAndGroupsFromShopUseCase {
@@ -19,10 +19,10 @@ final class DefaultFetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMe
         self.shopRepository = shopRepository
     }
     
-    func execute(shopId: Int) -> AnyPublisher<(OrderShopMenusGroups, [OrderShopMenus]), ErrorResponse> {
+    func execute(shopId: Int) -> AnyPublisher<(OrderShopMenusGroups, [ShopMenuGroup]), ErrorResponse> {
         return shopRepository.fetchShopMenuList(requestModel: FetchShopDataRequest(shopId: shopId)).map { menuDto in
-            let orderShopMenus: [OrderShopMenus] = (menuDto.menuCategories ?? []).map {
-                OrderShopMenus(from: $0)
+            let orderShopMenus: [ShopMenuGroup] = (menuDto.menuCategories ?? []).map {
+                ShopMenuGroup(from: $0)
             }
             let menuGroup: [MenuGroup] = (menuDto.menuCategories ?? []).map {
                 return MenuGroup(name: $0.name)

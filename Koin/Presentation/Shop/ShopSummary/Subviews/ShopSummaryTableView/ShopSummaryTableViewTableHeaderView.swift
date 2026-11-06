@@ -130,12 +130,12 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
 extension ShopSummaryTableViewTableHeaderView {
     
     func configure1(
-        images: [OrderImage],
+        images: [ShopImage],
         name: String,
         rating: Double,
         reviewCount: Int
     ) {
-        imagesCollectionView.configure(orderImage: images)
+        imagesCollectionView.configure(shopImages: images)
         imagesPageControl.numberOfPages = images.count
         if images.count <= 1 {
             imagesPageControl.isHidden = true

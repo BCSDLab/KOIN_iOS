@@ -110,7 +110,7 @@ final class LostItemDataContentView: UIView {
     private func bind() {
         imageCollectionView.didTapThumbnailPublisher.sink { [weak self] indexPath in
             guard let self else { return }
-            imageTapPublisher.send((imageCollectionView.orderImages.map { $0.imageUrl }, indexPath))
+            imageTapPublisher.send((imageCollectionView.shopImages.map { $0.imageUrl }, indexPath))
         }.store(in: &subscriptions)
         
         imageCollectionView.didScrollOutputSubject.sink { [weak self] page in
