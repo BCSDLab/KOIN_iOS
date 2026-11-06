@@ -27,9 +27,10 @@ final class BusTimetableRouteCollectionViewCell: UICollectionViewCell {
     
     func configure(isSelected: Bool, route: String) {
         routeLabel.text = route
-        routeLabel.font = isSelected ? .appFont(.pretendardBold, size: 14) : .appFont(.pretendardMedium, size: 14)
+        routeLabel.font = isSelected ? .appFont(.pretendardSemiBold, size: 14) : .appFont(.pretendardMedium, size: 14)
         routeLabel.textColor = isSelected ? .appColor(.neutral0) : .appColor(.neutral500)
-        contentView.backgroundColor = isSelected ? .appColor(.primary500) : .clear
+        contentView.backgroundColor = isSelected ? .appColor(.new500) : .clear
+        contentView.layer.borderWidth = isSelected ? 0 : 1
     }
 }
 
@@ -51,6 +52,7 @@ extension BusTimetableRouteCollectionViewCell {
         setUpLayouts()
         setUpConstraints()
         contentView.layer.cornerRadius = 17
+        contentView.layer.borderColor = UIColor.appColor(.neutral300).cgColor
     }
 }
 

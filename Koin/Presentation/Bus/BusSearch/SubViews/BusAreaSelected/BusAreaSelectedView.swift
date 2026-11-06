@@ -20,24 +20,26 @@ final class BusAreaSelectedView: UIView, KoinBottomSheetContent {
 
     //MARK: - UI Components
     private let busRouteDescriptionlabel = UILabel().then {
-        $0.font = .appFont(.pretendardBold, size: 18)
-        $0.textColor = .appColor(.neutral800)
+        $0.font = .appFont(.pretendardSemiBold, size: 18)
+        $0.textColor = .appColor(.new500)
+    }
+    
+    private let closeButton = UIButton().then {
+        $0.setImage(.appImage(asset: .cancel)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        $0.tintColor = .appColor(.neutral800)
+        $0.accessibilityLabel = "닫기"
     }
 
     private let busAreaCollectionView = BusAreaSelectedCollectionView(frame: .zero, collectionViewLayout: UICollectionViewLayout()).then {
         let layout = UICollectionViewFlowLayout()
-        layout.minimumInteritemSpacing = 14
+        layout.minimumInteritemSpacing = 12
         $0.collectionViewLayout = layout
-        $0.contentInset = .init(top: 16, left: 32, bottom: 16, right: 32)
-    }
-
-    private let separateView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral300)
+        $0.contentInset = .init(top: 12, left: 32, bottom: 12, right: 32)
     }
 
     private let confirmButton = UIButton().then {
-        $0.backgroundColor = .appColor(.primary500)
-        $0.layer.cornerRadius = 4
+        $0.backgroundColor = .appColor(.new500)
+        $0.layer.cornerRadius = 20
     }
 
     //MARK: - Initialization
@@ -50,6 +52,7 @@ final class BusAreaSelectedView: UIView, KoinBottomSheetContent {
         super.init(frame: .zero)
         configureView()
         confirmButton.addTarget(self, action: #selector(tapConfirmButton), for: .touchUpInside)
+        closeButton.addTarget(self, action: #selector(tapCloseButton), for: .touchUpInside)
     }
 
     required init?(coder: NSCoder) {
@@ -84,17 +87,20 @@ extension BusAreaSelectedView {
     }
 
     private func setUpView(buttonState: BusAreaButtonState) {
-        let attributeContainer: [NSAttributedString.Key: Any] = [.font: UIFont.appFont(.pretendardMedium, size: 15), .foregroundColor: UIColor.appColor(.neutral0)]
+        let attributeContainer: [NSAttributedString.Key: Any] = [.font: UIFont.appFont(.pretendardSemiBold, size: 16), .foregroundColor: UIColor.appColor(.neutral0)]
         let confirmButtonTitle: String
         if buttonState == .allSelected {
-
-            confirmButtonTitle = "조회하기"
+            confirmButtonTitle = "완료"
         }
         else {
             confirmButtonTitle = busRouteType == .arrival ? "출발지 선택하기" : "도착지 선택하기"
         }
-        busRouteDescriptionlabel.text = busRouteType == .arrival ? "목적지가 어디인가요?" : "어디서 출발하시나요?"
+        busRouteDescriptionlabel.text = busRouteType == .arrival ? "도착지 선택" : "출발지 선택"
         confirmButton.setAttributedTitle(NSAttributedString(string: confirmButtonTitle, attributes: attributeContainer), for: .normal)
+    }
+
+    @objc private func tapCloseButton() {
+        delegate?.dismiss(completion: nil)
     }
 
     @objc private func tapConfirmButton() {
@@ -126,32 +132,34 @@ extension BusAreaSelectedView {
 extension BusAreaSelectedView {
 
     private func setUpLayOuts() {
-        [busRouteDescriptionlabel, busAreaCollectionView, confirmButton, separateView].forEach {
+        [busRouteDescriptionlabel, closeButton, busAreaCollectionView, confirmButton].forEach {
             addSubview($0)
         }
     }
 
     private func setUpConstraints() {
+        // 타이틀 행 66(padding 12 v) → 칩 영역(padding 12 v + 칩 34) → gap 80 → 버튼 48
         busRouteDescriptionlabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(23)
+            $0.top.equalToSuperview().offset(12)
             $0.leading.equalToSuperview().offset(32)
-            $0.height.equalTo(29)
+            $0.height.equalTo(42)
+        }
+        closeButton.snp.makeConstraints {
+            $0.centerY.equalTo(busRouteDescriptionlabel)
+            // 아이콘 24는 trailing 32 위치 유지, 터치 영역 44
+            $0.trailing.equalToSuperview().inset(22)
+            $0.width.height.equalTo(44)
         }
         busAreaCollectionView.snp.makeConstraints {
-            $0.top.equalTo(separateView.snp.bottom)
+            $0.top.equalTo(busRouteDescriptionlabel.snp.bottom).offset(12)
             $0.leading.trailing.equalToSuperview()
-            $0.height.equalTo(160).priority(500)
+            $0.height.equalTo(58)
         }
         confirmButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(32)
-            $0.top.equalTo(busAreaCollectionView.snp.bottom)
+            $0.top.equalTo(busAreaCollectionView.snp.bottom).offset(80)
             $0.height.equalTo(48)
             $0.bottom.equalToSuperview().inset(40)
-        }
-        separateView.snp.makeConstraints {
-            $0.height.equalTo(0.5)
-            $0.leading.trailing.equalToSuperview()
-            $0.top.equalTo(busRouteDescriptionlabel.snp.bottom).offset(12)
         }
     }
 

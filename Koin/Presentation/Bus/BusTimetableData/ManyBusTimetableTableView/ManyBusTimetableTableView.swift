@@ -12,7 +12,7 @@ final class ManyBusTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     private var busPlaces: [NodeInfo] = []
-    let contentHeightPublisher = PassthroughSubject<CGFloat, Never>()
+    var headerRowHeight: CGFloat = BusTimetableGridPageView.compactHeaderRowHeight
     
     
     // MARK: - Initialization
@@ -34,11 +34,6 @@ final class ManyBusTimetableTableView: UITableView {
         showsVerticalScrollIndicator = false
         isScrollEnabled = false
         backgroundColor = .systemBackground
-    }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentHeightPublisher.send(self.contentSize.height)
     }
     
     func configure(timetable: [NodeInfo]) {
@@ -82,10 +77,10 @@ extension ManyBusTimetableTableView: UITableViewDataSource {
 
 extension ManyBusTimetableTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 50
+        return BusTimetableGridPageView.rowHeight
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 52
+        return headerRowHeight
     }
 }

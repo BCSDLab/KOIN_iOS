@@ -45,7 +45,9 @@ final class BusSearchDatePickerViewController: KoinModalViewController {
     ) {
         self.onCompleted = onCompleted
         self.onDepartureNowTapped = onDepartureNowTapped
-        self.pickerView = KoinPickerView(configuration: .busDeparture(now: now))
+        var pickerConfiguration = KoinPickerView.Configuration.busDeparture(now: now)
+        pickerConfiguration.style = .new
+        self.pickerView = KoinPickerView(configuration: pickerConfiguration)
         
         super.init(configuration: .init(
             appearance: .primary,
@@ -58,7 +60,14 @@ final class BusSearchDatePickerViewController: KoinModalViewController {
                     fontSize: 15
                 ),
                 rightButtonTitle: "완료",
-                rightButtonAction: {}
+                rightButtonAction: {},
+                rightButtonStyle: .init(
+                    textColor: .neutral0,
+                    font: .pretendardMedium,
+                    fontSize: 15,
+                    backgroundColor: .new500,
+                    cornerRadius: 4
+                )
             ),
             layout: .init(
                 contentTopPadding: 24,
@@ -161,7 +170,7 @@ extension BusSearchDatePickerViewController {
         }
         timeSeparatorLabel.do {
             $0.text = ":"
-            $0.textColor = .appColor(.primary500)
+            $0.textColor = .appColor(.new500)
             $0.font = .appFont(.pretendardMedium, size: 16)
             $0.isUserInteractionEnabled = false
         }

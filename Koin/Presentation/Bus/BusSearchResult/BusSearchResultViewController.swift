@@ -9,7 +9,7 @@ import Combine
 import SnapKit
 import UIKit
 
-final class BusSearchResultViewController: UIViewController, UIGestureRecognizerDelegate {
+final class BusSearchResultViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: BusSearchResultViewModel
     private let inputSubject: PassthroughSubject<BusSearchResultViewModel.Input, Never> = .init()
@@ -40,20 +40,17 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         configureView()
         bind()
         inputSubject.send(.getSearchedResult(viewModel.departDate, nil))
-        let backButton = UIBarButtonItem(image: .appImage(asset: .arrowBack), style: .done, target: self, action: #selector(tapLeftBarButton))
-       navigationItem.leftBarButtonItem = backButton
-        
-        
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(tapRightBarButton))
-        navigationItem.rightBarButtonItem = deleteButton
-        
         inputSubject.send(.getSemesterInfo)
+        // 기존과 동일하게 뒤로가기 버튼 탭만 로깅 (스와이프 제외)
+        navigationItem.backAction = UIAction { [weak self] _ in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultBack, .click, "뒤로가기"))
+            self?.navigationController?.popViewController(animated: true)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -96,16 +93,6 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
 }
 
 extension BusSearchResultViewController {
-    @objc private func tapLeftBarButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultBack, .click, "뒤로가기"))
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc private func tapRightBarButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultClose, .click, "뒤로가기"))
-        navigationController?.popViewController(animated: true)
-    }
-    
     /// 당겨서 새로고침 = 지금 출발
     @objc private func didPullToRefresh() {
         inputSubject.send(.departNow)

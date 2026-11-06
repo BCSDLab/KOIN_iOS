@@ -6,6 +6,8 @@
 //
 
 import Combine
+import SnapKit
+import Then
 import UIKit
 
 final class BusSearchResultTableView: UITableView {
@@ -39,6 +41,12 @@ final class BusSearchResultTableView: UITableView {
         separatorStyle = .none
         backgroundColor = .systemBackground
         sectionHeaderTopPadding = 0
+        let emptyContainer = UIView()
+        let emptyView = BusSearchResultEmptyView()
+        emptyContainer.addSubview(emptyView)
+        emptyView.snp.makeConstraints { $0.center.equalToSuperview() }
+        emptyContainer.isHidden = true
+        backgroundView = emptyContainer
     }
     
     func setBusSearchTime(departTime: String) {
@@ -51,6 +59,7 @@ final class BusSearchResultTableView: UITableView {
         self.busSearchResult = busSearchResult
         self.busSearchSchedule = busSearchResult.schedule
         reloadData()
+        backgroundView?.isHidden = !busSearchSchedule.isEmpty
         if busSearchResult.schedule.count > 0 {
             scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
         }
@@ -59,22 +68,21 @@ final class BusSearchResultTableView: UITableView {
     func clearBusSearchResult() {
         busSearchSchedule = []
         reloadData()
+        backgroundView?.isHidden = true
     }
     
     private func showDropDown() {
-        let dropDown = DropDown()
-        guard let view = self.headerView(forSection: 0) as? BusSearchResultTableViewHeader else { return }
-        dropDown.dataSource = ["전체 차종", "셔틀버스", "대성고속", "시내버스"]
-        dropDown.selectionAction = { [weak self] (index, item) in
-            let busType: BusType = index == 0 ? .noValue : BusType.allCases[index - 1]
+        guard let header = headerView(forSection: 0) as? BusSearchResultTableViewHeader else { return }
+        let content = BusTypeDropdownView { [weak self, weak header] busType in
             self?.departBusType = busType
-            view.configureDepartBusType(busType: busType)
+            header?.configureDepartBusType(busType: busType)
             self?.tapDepartBusTypeButtonPublisher.send(busType)
         }
-        dropDown.anchorView = view
-        dropDown.bottomOffset = .init(x: (dropDown.anchorView?.plainView.bounds.width ?? 0) - 128, y: (dropDown.anchorView?.plainView.bounds.height ?? 0) - 16)
-        dropDown.width = 104
-        dropDown.show()
+        presentDropdown(
+            anchor: header.busTypeFilterButton,
+            content: content,
+            configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+        )
     }
 }
 
@@ -121,3 +129,97 @@ extension BusSearchResultTableView: UITableViewDelegate {
 
 
 
+
+/// 차종 필터 드롭다운 목록(전체 차종/셔틀버스/대성고속/시내버스)
+private final class BusTypeDropdownView: UIView, KoinDropdownContentView {
+    private static let busTypes: [BusType] = [.noValue, .shuttleBus, .expressBus, .cityBus]
+    private static let rowHeight: CGFloat = 34
+    private let dismissTappedSubject = PassthroughSubject<Void, Never>()
+    var dismissTappedPublisher: AnyPublisher<Void, Never> { dismissTappedSubject.eraseToAnyPublisher() }
+    let height: CGFloat = BusTypeDropdownView.rowHeight * CGFloat(BusTypeDropdownView.busTypes.count) + 12
+    private let onSelect: (BusType) -> Void
+
+    init(onSelect: @escaping (BusType) -> Void) {
+        self.onSelect = onSelect
+        super.init(frame: .zero)
+        backgroundColor = .appColor(.neutral0)
+        layer.cornerRadius = 16
+        let stackView = UIStackView(arrangedSubviews: Self.busTypes.enumerated().map { makeButton(index: $0, busType: $1) })
+        stackView.axis = .vertical
+        addSubview(stackView)
+        stackView.snp.makeConstraints {
+            $0.top.bottom.equalToSuperview().inset(6)
+            $0.leading.trailing.equalToSuperview()
+        }
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    private func makeButton(index: Int, busType: BusType) -> UIButton {
+        var configuration = UIButton.Configuration.plain()
+        configuration.attributedTitle = AttributedString(busType.koreanDescription, attributes: AttributeContainer([
+            .font: UIFont.appFont(.pretendardRegular, size: 14),
+            .foregroundColor: UIColor.appColor(.neutral800)
+        ]))
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 12, bottom: 0, trailing: 0)
+        let button = UIButton(configuration: configuration)
+        button.contentHorizontalAlignment = .leading
+        button.configurationUpdateHandler = { button in
+            button.configuration?.background.backgroundColor = .appColor(button.isHighlighted ? .neutral100 : .neutral0)
+        }
+        button.tag = index
+        button.addTarget(self, action: #selector(tapButton(_:)), for: .touchUpInside)
+        button.snp.makeConstraints {
+            $0.height.equalTo(Self.rowHeight)
+        }
+        return button
+    }
+
+    @objc private func tapButton(_ sender: UIButton) {
+        onSelect(Self.busTypes[sender.tag])
+        dismissTappedSubject.send()
+    }
+}
+
+/// 검색 결과가 없을 때 표시 (CallVanNotificationEmptyView 형식)
+private final class BusSearchResultEmptyView: UIView {
+    init() {
+        super.init(frame: .zero)
+        let symbolImageView = UIImageView(image: .appImage(asset: .sleepBcsdSymbol))
+        let titleLabel = UILabel().then {
+            $0.text = "조건에 맞는 교통편이 없어요"
+            $0.font = .appFont(.pretendardSemiBold, size: 18)
+            $0.textColor = .appColor(.new500)
+        }
+        let subTitleLabel = UILabel().then {
+            $0.text = "조건을 바꿔서 다시 확인해보세요"
+            $0.font = .appFont(.pretendardMedium, size: 14)
+            $0.textColor = .appColor(.neutral600)
+        }
+        [symbolImageView, titleLabel, subTitleLabel].forEach { addSubview($0) }
+        symbolImageView.snp.makeConstraints {
+            $0.width.equalTo(95)
+            $0.height.equalTo(75)
+            $0.top.centerX.equalToSuperview()
+        }
+        // 피그마 텍스트 높이 명시 (UIKit 라벨 기본 높이와 다름)
+        titleLabel.snp.makeConstraints {
+            $0.height.equalTo(29)
+            $0.top.equalTo(symbolImageView.snp.bottom).offset(12)
+            $0.centerX.equalToSuperview()
+        }
+        subTitleLabel.snp.makeConstraints {
+            $0.height.equalTo(22)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(2)
+            $0.centerX.equalToSuperview()
+            $0.leading.trailing.bottom.equalToSuperview()
+        }
+    }
+
+    @available(*, unavailable)
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
