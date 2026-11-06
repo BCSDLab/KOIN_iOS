@@ -31,11 +31,9 @@ final class ChangeMyProfileViewController: UIViewController {
         $0.isHidden = userType == .general ? true : false
     }
     
-    private let deptDropDown: DropDown = {
-        let dropDown = DropDown()
-        dropDown.backgroundColor = .systemBackground
-        return dropDown
-    }()
+    private lazy var deptDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
+        self?.selectDept(department)
+    }
     
     private let primaryInfoLabel = InsetLabel(top: 0, left: 24, bottom: 0, right: 0).then {
         $0.text = "기본정보"
@@ -361,7 +359,7 @@ final class ChangeMyProfileViewController: UIViewController {
             case let .showProfile(profile):
                 self?.showProfile(profile)
             case let .showDeptDropDownList(deptList):
-                self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.deptButton, dataSource: deptList)
+                strongSelf.deptDropdownContentView.configure(departments: deptList)
             }
         }.store(in: &subscriptions)
         
@@ -481,7 +479,11 @@ extension ChangeMyProfileViewController {
     }
     
     @objc private func deptButtonTapped() {
-        deptDropDown.show()
+        presentDropdown(
+            anchor: deptButton,
+            content: deptDropdownContentView,
+            configuration: .init(direction: .down(spacing: 12), shadow: .shadow2)
+        )
     }
     
     @objc private func saveButtonTapped() {
@@ -513,22 +515,15 @@ extension ChangeMyProfileViewController {
         }
     }
     
-    private func setUpDropDown(dropDown: DropDown, button: UIButton, dataSource: [String]) {
-        dropDown.anchorView = button
-        dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
-        dropDown.dataSource = dataSource
-        dropDown.direction = .bottom
-        dropDown.selectionBackgroundColor = .clear
-        dropDown.selectionAction = { [weak self] (index: Int, item: String) in
-            var buttonConfiguration = UIButton.Configuration.plain()
-            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
-            var attributedTitle = AttributedString(item)
-            self?.viewModel.modifyUserData?.major = item
-            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 16)
-            attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
-            buttonConfiguration.attributedTitle = attributedTitle
-            button.configuration = buttonConfiguration
-        }
+    private func selectDept(_ dept: String) {
+        viewModel.modifyUserData?.major = dept
+        var buttonConfiguration = UIButton.Configuration.plain()
+        buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
+        var attributedTitle = AttributedString(dept)
+        attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 16)
+        attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
+        buttonConfiguration.attributedTitle = attributedTitle
+        deptButton.configuration = buttonConfiguration
     }
     
 }
