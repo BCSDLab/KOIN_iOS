@@ -220,17 +220,11 @@ final class CertificationFormViewController: UIViewController {
         setUpButtonTargets()
         bind()
         hideKeyboardWhenTappedAround()
-        addKeyboardNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        removeKeyboardNotifications()
     }
     
     override func viewDidLayoutSubviews() {
@@ -307,29 +301,6 @@ final class CertificationFormViewController: UIViewController {
 }
 
 extension CertificationFormViewController {
-    private func addKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
-    private func removeKeyboardNotifications() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        
-        scrollView.contentInset.bottom = keyboardFrame.height
-        scrollView.verticalScrollIndicatorInsets.bottom = keyboardFrame.height
-    }
-
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        scrollView.contentInset.bottom = 0
-        scrollView.verticalScrollIndicatorInsets.bottom = 0
-    }
-    
     @objc private func clearNameTextField() {
         nameTextField.text = ""
     }
@@ -613,7 +584,9 @@ extension CertificationFormViewController {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(progressView.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(24)
-            $0.bottom.equalTo(nextButton.snp.top).offset(-32)
+            $0.bottom.lessThanOrEqualTo(nextButton.snp.top).offset(-32)
+            $0.bottom.lessThanOrEqualTo(view.keyboardLayoutGuide.snp.top)
+            $0.bottom.equalTo(nextButton.snp.top).offset(-32).priority(.high)
         }
 
         contentView.snp.makeConstraints {
