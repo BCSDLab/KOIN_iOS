@@ -69,7 +69,7 @@ final class CertificationFormViewController: UIViewController {
     }
     
     private let nameTextField = DefaultTextField(
-        placeholder: "2~5 자리로 입력해 주세요.",
+        placeholder: "성함을 입력해 주세요.",
         placeholderColor: UIColor.appColor(.neutral400),
         font: UIFont.appFont(.pretendardRegular, size: 14)
     )
@@ -428,12 +428,12 @@ extension CertificationFormViewController {
         let certificationError = CertificationError(message: message)
 
         if certificationError.showsLoginEntry {
-            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningRed), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger600))
+            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningRed), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger700))
             [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
                 $0.isHidden = false
             }
         } else if certificationError.blocksResend {
-            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningRed), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger600))
+            phoneNumberReponseLabel.setImageText(image: .appImage(asset: .warningRed), text: message, font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.danger700))
             [goToLoginButton, phoneNotFoundLabel, contactButton].forEach {
                 $0.isHidden = true
             }
@@ -644,7 +644,7 @@ extension CertificationFormViewController {
         }
         
         femaleButton.snp.makeConstraints {
-            $0.top.equalTo(nameHelpLabel.snp.bottom).offset(10)
+            $0.top.equalTo(nameHelpLabel.snp.bottom).offset(12)
             $0.leading.equalTo(nameTextField.snp.leading).offset(-5)
             $0.height.equalTo(26)
             $0.width.greaterThanOrEqualTo(52)
@@ -741,6 +741,10 @@ extension CertificationFormViewController {
     
     private func configureView() {
         view.backgroundColor = .white
+        [nameTextField, phoneNumberTextField, verificationTextField].forEach {
+            $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 4, height: 0))
+            $0.leftViewMode = .always
+        }
         setUpLayouts()
         setUpConstraints()
     }
