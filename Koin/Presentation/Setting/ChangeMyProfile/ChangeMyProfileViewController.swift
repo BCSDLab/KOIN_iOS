@@ -547,7 +547,9 @@ extension ChangeMyProfileViewController {
     private func setUpConstraints() {
         scrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom).offset(-80)
+            make.bottom.lessThanOrEqualTo(saveButton.snp.top)
+            make.bottom.lessThanOrEqualTo(view.keyboardLayoutGuide.snp.top)
+            make.bottom.equalTo(saveButton.snp.top).priority(.high)
         }
         primaryInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.top)
@@ -701,7 +703,7 @@ extension ChangeMyProfileViewController {
             make.leading.equalTo(nameTitleLabel.snp.leading)
             make.trailing.equalTo(studentNumberTextField)
             make.height.equalTo(46)
-            make.bottom.equalTo(scrollView.snp.bottom).offset(-400)
+            make.bottom.equalTo(scrollView.snp.bottom).offset(-32)
         }
         saveButton.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(24)
