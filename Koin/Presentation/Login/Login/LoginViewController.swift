@@ -49,6 +49,8 @@ final class LoginViewController: UIViewController {
         $0.textContentType = .username
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardRegular, size: 16)
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 4, height: 0))
+        $0.leftViewMode = .always
     }
     
     private let separateView1 = UIView().then {
@@ -72,6 +74,8 @@ final class LoginViewController: UIViewController {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardRegular, size: 16)
         $0.isSecureTextEntry = true
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 4, height: 0))
+        $0.leftViewMode = .always
     }
     
     private let changeSecureButton = UIButton().then { button in
@@ -371,13 +375,13 @@ extension LoginViewController {
             $0.height.equalTo(66)
         }
         logoTextImageView.snp.makeConstraints {
-            $0.top.equalTo(logoImageView.snp.bottom).offset(9)
+            $0.top.equalTo(logoImageView.snp.bottom).offset(4)
             $0.centerX.equalTo(contentLayoutGuide)
             $0.width.equalTo(102)
-            $0.height.equalTo(41)
+            $0.height.equalTo(34)
         }
         idTextField.snp.makeConstraints {
-            $0.top.equalTo(logoTextImageView.snp.bottom).offset(52)
+            $0.top.equalTo(logoTextImageView.snp.bottom).offset(55.5)
             $0.leading.trailing.equalTo(contentLayoutGuide).inset(48)
             $0.height.equalTo(40)
         }
@@ -452,7 +456,7 @@ extension LoginViewController {
         }
         ownerButton.snp.makeConstraints {
             $0.top.centerX.equalTo(footerLayoutGuide)
-            $0.bottom.equalTo(copyrightLabel.snp.top).offset(-21)
+            $0.bottom.equalTo(copyrightLabel.snp.top).offset(-24)
             $0.height.equalTo(29)
         }
         
