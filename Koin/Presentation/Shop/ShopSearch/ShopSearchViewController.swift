@@ -159,17 +159,11 @@ extension ShopSearchViewController {
     private func navigateTo(shopId: Int, shopName: String) {
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
-        let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: shopRepository)
-        let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: shopRepository)
-        let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: shopRepository)
-        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: shopRepository)
+        let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopSummaryViewModel(
-            fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-            fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-            fetchShopDataUseCase: fetchShopDataUseCase,
-            fetchShopEventListUseCase: fetchShopEventListUseCase,
+            fetchShopSummaryUseCase: fetchShopSummaryUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             shopId: shopId,

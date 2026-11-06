@@ -494,17 +494,11 @@ extension SceneDelegate {
     
     private func makeShopSummaryViewController(shopId: Int) -> UIViewController {
         let repository = DefaultShopRepository(service: DefaultShopService())
-        let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
-        let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
-        let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
-        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: repository)
+        let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(shopRepository: repository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopSummaryViewModel(
-            fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-            fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-            fetchShopDataUseCase: fetchShopDataUseCase,
-            fetchShopEventListUseCase: fetchShopEventListUseCase,
+            fetchShopSummaryUseCase: fetchShopSummaryUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
             getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             shopId: shopId,
