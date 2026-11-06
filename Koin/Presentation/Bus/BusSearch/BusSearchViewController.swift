@@ -242,7 +242,8 @@ extension BusSearchViewController {
     
     private func updateEmergencyNotice(notice: BusNoticeDto) {
         updateLayoutsByNotice(isDeleted: false)
-        busNoticeLabel.text = notice.title
+        busNoticeLabel.setLineHeight(lineHeight: 1.6, text: notice.title)
+        busNoticeLabel.lineBreakMode = .byTruncatingTail
         busNoticeWrappedView.tag = notice.id
         let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int
         if noticeId == notice.id {

@@ -293,7 +293,8 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     }
     
     private func updateEmergencyNotice(notice: BusNoticeDto) {
-        busNoticeLabel.text = notice.title
+        busNoticeLabel.setLineHeight(lineHeight: 1.6, text: notice.title)
+        busNoticeLabel.lineBreakMode = .byTruncatingTail
         busNoticeWrappedView.tag = notice.id
         let noticeId = UserDefaults.standard.object(forKey: "busNoticeId") as? Int
         updateLayoutsByNotice(isDeleted: noticeId == notice.id)
