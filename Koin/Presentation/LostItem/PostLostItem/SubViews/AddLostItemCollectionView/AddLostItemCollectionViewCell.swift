@@ -33,16 +33,18 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     private let itemCountLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.primary600)
-        $0.backgroundColor = UIColor.appColor(.info200)
+        $0.textColor = UIColor.appColor(.new500)
+        $0.backgroundColor = UIColor.appColor(.neutral0)
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.appColor(.new500).cgColor
         $0.textAlignment = .center
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 12
+        $0.layer.cornerRadius = 15
     }
     
     private let deleteCellButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .trashcanBlue), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .trashcanBlue)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), for: .normal)
     }
     
     private let pictureLabel = UILabel().then {
@@ -71,13 +73,13 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     
     private let addPictureButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .picture)
+        configuration.image = UIImage.appImage(asset: .picture)?.withTintColor(.appColor(.neutral0), renderingMode: .alwaysOriginal)
         var text = AttributedString("사진 등록하기")
         text.font = UIFont.appFont(.pretendardMedium, size: 14)
         configuration.attributedTitle = text
-        configuration.imagePadding = 4
-        configuration.baseForegroundColor = UIColor.appColor(.primary600)
-        $0.backgroundColor = UIColor.appColor(.info200)
+        configuration.imagePadding = 8
+        configuration.baseForegroundColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.new500)
         $0.configuration = configuration
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 8
@@ -208,6 +210,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] urls in
             self?.addPictureButton.isEnabled = urls.count < 10
             self?.pictureCountLabel.text = "\(urls.count)/10"
+            self?.updateImageLayout(hasImages: !urls.isEmpty)
             self?.imageUrlsPublisher.send(urls)
             }.store(in: &cancellable)
     }
@@ -228,7 +231,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     /// now: CollectionView 가 넘겨주는 화면 진입 시각(습득일 범위 기준). picker 는 셀당 한 번만 만든다.
     func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType, now: Date) {
         if dropdownView == nil {
-            let dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.primary600)).then {
+            let dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.new500)).then {
                 $0.backgroundColor = UIColor.appColor(.neutral100)
                 $0.layer.cornerRadius = 12
             }
@@ -238,6 +241,7 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             self.dropdownView = dropdownView
         }
         self.type = type
+        updateImageLayout(hasImages: !(model.images ?? []).isEmpty)
         textFieldPlaceHolder = "\(type.description) 장소를 입력해주세요."
         textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
         
@@ -253,15 +257,18 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         case false:
             locationTextField.text = model.location
             locationTextField.textColor = UIColor.appColor(.neutral800)
+            locationTextField.font = .appFont(.pretendardRegular, size: 14)
         }
         
         foundDate = Date(string: model.foundDate, format: .yearMonthDayHyphen)
         updateDateButton()
         if let content = model.content, content.isEmpty {
             contentTextView.textColor = UIColor.appColor(.neutral500)
+            contentTextView.font = .appFont(.pretendardRegular, size: 12)
             contentTextView.text = textViewPlaceHolder
         } else {
             contentTextView.textColor = UIColor.appColor(.neutral800)
+            contentTextView.font = .appFont(.pretendardRegular, size: 14)
             contentTextView.text = model.content
         }
         deleteCellButton.isHidden = isSingle
@@ -272,14 +279,14 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         for view in categoryStackView.arrangedSubviews {
             guard let button = view as? UIButton else { continue }
             if button.configuration?.title == category {
-                button.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+                button.configuration?.baseBackgroundColor = UIColor.appColor(.new500)
                 button.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
-                button.layer.borderColor = UIColor.appColor(.primary600).cgColor
+                button.layer.borderColor = UIColor.appColor(.new500).cgColor
                 isCategorySelected = true
             } else {
                 button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-                button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+                button.configuration?.baseForegroundColor = UIColor.appColor(.new500)
+                button.layer.borderColor = UIColor.appColor(.new500).cgColor
             }
         }
         
@@ -287,8 +294,8 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
             categoryStackView.arrangedSubviews.forEach { view in
                 guard let button = view as? UIButton else { return }
                 button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-                button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+                button.configuration?.baseForegroundColor = UIColor.appColor(.new500)
+                button.layer.borderColor = UIColor.appColor(.new500).cgColor
             }
         }
         
@@ -347,19 +354,33 @@ extension AddLostItemCollectionViewCell{
                guard let button = view as? UIButton else { return }
                button.isSelected = false
                button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-               button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-               button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+               button.configuration?.baseForegroundColor = UIColor.appColor(.new500)
+               button.layer.borderColor = UIColor.appColor(.new500).cgColor
            }
 
            sender.isSelected = true
-           sender.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+           sender.configuration?.baseBackgroundColor = UIColor.appColor(.new500)
            sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
-           sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
+           sender.layer.borderColor = UIColor.appColor(.new500).cgColor
     }
 }
 
 extension AddLostItemCollectionViewCell {
     
+    private func updateImageLayout(hasImages: Bool) {
+        let visibilityChanged = imageUploadCollectionView.isHidden == hasImages
+        imageUploadCollectionView.isHidden = !hasImages
+        imageUploadCollectionView.snp.updateConstraints {
+            $0.height.equalTo(hasImages ? 123 : 0)
+        }
+        addPictureButton.snp.updateConstraints {
+            $0.top.equalTo(imageUploadCollectionView.snp.bottom).offset(hasImages ? 16 : 0)
+        }
+        if visibilityChanged {
+            (superview as? UICollectionView)?.collectionViewLayout.invalidateLayout()
+        }
+    }
+
     func setImage(url: [String]) {
         imageUploadCollectionView.updateImageUrls(url)
     }
@@ -405,7 +426,7 @@ extension AddLostItemCollectionViewCell {
     func validateInputs() -> Bool {
         var isValid = true
         
-        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.primary600) }
+        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.new500) }
         if selectedCategory == nil {
             categoryWarningLabel.isHidden = false
             isValid = false
@@ -458,9 +479,11 @@ extension AddLostItemCollectionViewCell {
         if let foundDate {
             dateButton.setTitle(foundDate.string(with: .yearMonthDay), for: .normal)
             dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            dateButton.titleLabel?.font = .appFont(.pretendardRegular, size: 14)
         } else {
             dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
             dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+            dateButton.titleLabel?.font = .appFont(.pretendardRegular, size: 12)
         }
     }
 }
@@ -473,6 +496,7 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
             textView.textColor = UIColor.appColor(.neutral800)
+            textView.font = .appFont(.pretendardRegular, size: 14)
         }
     }
     
@@ -494,6 +518,7 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.textColor = UIColor.appColor(.neutral500)
+            textView.font = .appFont(.pretendardRegular, size: 12)
         }
     }
     
@@ -513,6 +538,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         if textField.textColor == UIColor.appColor(.neutral500) {
             textField.text = ""
             textField.textColor = UIColor.appColor(.neutral800)
+            textField.font = .appFont(.pretendardRegular, size: 14)
         }
     }
     
@@ -529,6 +555,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         //  placeholder 만들기
         if (textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
             textField.textColor = UIColor.appColor(.neutral500)
+            textField.font = .appFont(.pretendardRegular, size: 12)
             textField.text = "\(type.description) 장소를 입력해주세요."
         }
     }
@@ -611,8 +638,10 @@ extension AddLostItemCollectionViewCell {
         }
         categoryStackView.snp.makeConstraints { make in
             make.top.equalTo(categoryMessageLabel.snp.bottom).offset(12)
-            make.leading.equalTo(contentView.snp.leading).offset(29.5)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-29.5)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(316).priority(999)
+            make.leading.greaterThanOrEqualToSuperview().offset(24)
+            make.trailing.lessThanOrEqualToSuperview().offset(-24)
             make.height.equalTo(38)
         }
         dateLabel.snp.makeConstraints { make in
@@ -652,7 +681,7 @@ extension AddLostItemCollectionViewCell {
             make.top.equalTo(locationLabel.snp.bottom).offset(8)
             make.leading.equalTo(itemCountLabel.snp.leading)
             make.trailing.equalTo(dateButton.snp.trailing)
-            make.height.equalTo(35)
+            make.height.equalTo(38)
         }
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(locationTextField.snp.bottom).offset(16)
@@ -690,12 +719,12 @@ extension AddLostItemCollectionViewCell {
     
     private func setUpAttributes() {
         [pictureMessageLabel, pictureCountLabel, categoryMessageLabel, contentTextCountLabel].forEach {
-            $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
             $0.textColor = UIColor.appColor(.neutral500)
         }
         [pictureLabel, categoryLabel, dateLabel, locationLabel, contentLabel].forEach {
             $0.textColor = UIColor.appColor(.neutral800)
-            $0.font = UIFont.appFont(.pretendardMedium, size: 15)
+            $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         }
     }
     private func setUpTexts(_ type: LostItemType) {
@@ -735,9 +764,9 @@ extension AddLostItemCollectionViewCell {
             let button = UIButton(type: .system)
             var configuration = UIButton.Configuration.filled()
             configuration.title = title
-            configuration.baseForegroundColor = UIColor.appColor(.primary500)
+            configuration.baseForegroundColor = UIColor.appColor(.new500)
             configuration.baseBackgroundColor = UIColor.appColor(.neutral0)
-            configuration.cornerStyle = .medium
+            configuration.cornerStyle = .capsule
             button.configuration = configuration
             
             let attributedTitle = AttributedString(title, attributes: AttributeContainer([
@@ -746,7 +775,7 @@ extension AddLostItemCollectionViewCell {
             button.configuration?.attributedTitle = attributedTitle
             
             button.layer.borderWidth = 1
-            button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+            button.layer.borderColor = UIColor.appColor(.new500).cgColor
             button.layer.cornerRadius = 19
             button.clipsToBounds = true
             button.titleLabel?.numberOfLines = 1

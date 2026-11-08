@@ -22,7 +22,10 @@ final class LostItemImageCollectionViewCell: UICollectionViewCell {
     }
 
     private let cancelButton =  UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .cancelBlue), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .cancelNeutral500)?.withTintColor(.appColor(.neutral0), renderingMode: .alwaysOriginal), for: .normal)
+        $0.backgroundColor = .appColor(.new500)
+        $0.layer.cornerRadius = 8
+        $0.clipsToBounds = true
     }
 
     // MARK: - Initializer

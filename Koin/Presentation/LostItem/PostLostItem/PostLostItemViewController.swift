@@ -41,8 +41,8 @@ final class PostLostItemViewController: UIViewController {
     
     private let writeButton = DebouncedButton().then {
         $0.setTitle("작성 완료", for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 14)
-        $0.backgroundColor = UIColor.appColor(.primary600)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardSemiBold, size: 15)
+        $0.backgroundColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 8
         $0.layer.masksToBounds = true
     }
@@ -280,7 +280,7 @@ extension PostLostItemViewController {
             make.bottom.equalTo(separateView.snp.top)
         }
         writeButtonBackgroundView.snp.makeConstraints {
-            $0.height.equalTo(70)
+            $0.height.equalTo(88)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
         }
@@ -291,8 +291,8 @@ extension PostLostItemViewController {
         }
         writeButton.snp.makeConstraints { make in
             make.centerX.equalTo(writeButtonBackgroundView)
-            make.width.equalTo(160)
-            make.height.equalTo(38)
+            make.leading.trailing.equalTo(writeButtonBackgroundView).inset(32)
+            make.height.equalTo(48)
             make.bottom.equalTo(writeButtonBackgroundView.snp.bottom).offset(-16)
         }
     }
@@ -300,6 +300,6 @@ extension PostLostItemViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .appColor(.neutral0)
     }
 }

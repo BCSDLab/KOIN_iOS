@@ -15,13 +15,15 @@ final class AddLostItemFooterView: UICollectionReusableView {
     
     private let addItemButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .addCircle)
+        configuration.image = UIImage.appImage(asset: .addCircle)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal)
         var text = AttributedString("물품 추가")
         text.font = UIFont.appFont(.pretendardMedium, size: 14)
         configuration.attributedTitle = text
         configuration.imagePadding = 4
-        configuration.baseForegroundColor = UIColor.appColor(.primary600)
-        $0.backgroundColor = UIColor.appColor(.info200)
+        configuration.baseForegroundColor = UIColor.appColor(.new500)
+        $0.backgroundColor = UIColor.appColor(.neutral0)
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.appColor(.new500).cgColor
         $0.configuration = configuration
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 8
@@ -48,7 +50,7 @@ extension AddLostItemFooterView {
 }
 extension AddLostItemFooterView {
     private func setupViews() {
-        self.backgroundColor = .systemBackground
+        self.backgroundColor = .appColor(.neutral0)
         
         [addItemButton].forEach {
             self.addSubview($0)

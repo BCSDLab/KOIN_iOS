@@ -152,7 +152,7 @@ extension AddLostItemCollectionView: UICollectionViewDelegateFlowLayout {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1500
         let dummyCell = AddLostItemCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(index: 0, isSingle: true, model: PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""), type: type, now: now)
+        dummyCell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type, now: now)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)
