@@ -17,7 +17,6 @@ final class LostItemListTableView: UITableView {
     let showToastPublisher = PassthroughSubject<String, Never>()
     let cellTappedPublisher = PassthroughSubject<Int, Never>()
     let loadMoreListPublisher = PassthroughSubject<Void, Never>()
-    let dismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
     init() {
@@ -110,8 +109,6 @@ extension LostItemListTableView: UITableViewDelegate {
 extension LostItemListTableView: UIScrollViewDelegate {
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        dismissKeyBoardPublisher.send()
-        
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         
@@ -129,6 +126,7 @@ extension LostItemListTableView {
     }
 
     private func commonInit() {
+        keyboardDismissMode = .interactive
         register(LostItemListTableViewCell.self, forCellReuseIdentifier: LostItemListTableViewCell.identifier)
         delegate = self
         dataSource = self

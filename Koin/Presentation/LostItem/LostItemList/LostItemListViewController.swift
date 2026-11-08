@@ -162,10 +162,6 @@ final class LostItemListViewController: UIViewController {
             self?.inputSubject.send(.loadMore)
         }.store(in: &subscriptions)
         
-        lostItemListTableView.dismissKeyBoardPublisher.sink { [weak self] in
-            self?.dismissKeyboard()
-        }.store(in: &subscriptions)
-        
         lostItemKeywordCollectionView.didTapSettingPublisher.sink { [weak self] in
             self?.navigateToLostItemKeyword()
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordSetting, .click, "키워드 설정"))
