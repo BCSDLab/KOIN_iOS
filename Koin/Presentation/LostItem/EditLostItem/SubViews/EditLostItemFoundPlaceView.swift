@@ -110,6 +110,7 @@ extension EditLostItemFoundPlaceView: UITextFieldDelegate {
         if textField.textColor == UIColor.appColor(.neutral500) {
             textField.text = ""
             textField.textColor = UIColor.appColor(.neutral800)
+            textField.font = .appFont(.pretendardRegular, size: 14)
         }
     }
     
@@ -119,6 +120,7 @@ extension EditLostItemFoundPlaceView: UITextFieldDelegate {
         
         if (textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
             textField.textColor = UIColor.appColor(.neutral500)
+            textField.font = .appFont(.pretendardRegular, size: 12)
             textField.text = "\(type.description) 장소를 입력해주세요."
             locationWarningLabel.isHidden = (type == .lost)
         }
@@ -152,7 +154,7 @@ extension EditLostItemFoundPlaceView {
         locationTextField.snp.makeConstraints {
             $0.top.equalTo(locationLabel.snp.bottom).offset(8)
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.height.equalTo(35)
+            $0.height.equalTo(38)
         }
         essentialLabel.snp.makeConstraints {
             $0.top.equalToSuperview()

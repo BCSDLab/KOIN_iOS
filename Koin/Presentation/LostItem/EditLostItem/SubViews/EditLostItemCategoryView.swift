@@ -31,7 +31,7 @@ final class EditLostItemCategoryView: UIView {
     }
     private let categoryMessageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.gray)
+        $0.textColor = UIColor.appColor(.neutral500)
         $0.text = "품목을 선택해주세요."
     }
     
@@ -114,7 +114,9 @@ extension EditLostItemCategoryView {
         }
         categoryStackView.snp.makeConstraints {
             $0.top.equalTo(categoryMessageLabel.snp.bottom).offset(12)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.centerX.bottom.equalToSuperview()
+            $0.leading.greaterThanOrEqualToSuperview()
+            $0.trailing.lessThanOrEqualToSuperview()
             $0.height.equalTo(38)
         }
     }

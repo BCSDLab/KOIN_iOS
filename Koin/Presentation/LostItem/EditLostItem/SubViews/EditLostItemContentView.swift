@@ -38,7 +38,7 @@ final class EditLostItemContentView: UIView {
         $0.layer.masksToBounds = true
         if let content, 0 < content.count {
             $0.text = content
-            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
+            $0.font = UIFont.appFont(.pretendardRegular, size: 14)
             $0.textColor = UIColor.appColor(.neutral800)
         } else {
             $0.text = textViewPlaceHolder
@@ -75,6 +75,7 @@ extension EditLostItemContentView: UITextViewDelegate {
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
             textView.textColor = UIColor.appColor(.neutral800)
+            textView.font = .appFont(.pretendardRegular, size: 14)
         }
     }
     
@@ -95,6 +96,7 @@ extension EditLostItemContentView: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.textColor = UIColor.appColor(.neutral500)
+            textView.font = .appFont(.pretendardRegular, size: 12)
         }
     }
     
@@ -106,6 +108,7 @@ extension EditLostItemContentView: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.textColor = UIColor.appColor(.neutral500)
+            textView.font = .appFont(.pretendardRegular, size: 12)
         }
         
         return true

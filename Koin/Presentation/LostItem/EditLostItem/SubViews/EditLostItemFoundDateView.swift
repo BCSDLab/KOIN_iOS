@@ -79,7 +79,7 @@ final class EditLostItemFoundDateView: UIView {
         self.originalFoundDate = foundDate
         // 서버 값은 보정하지 않고 그대로 표시
         self.foundDateValue = Date(string: foundDate, format: .yearMonthDayHyphen)
-        self.dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.primary600)).then {
+        self.dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.new500)).then {
             $0.backgroundColor = UIColor.appColor(.neutral100)
             $0.layer.cornerRadius = 12
         }
@@ -135,9 +135,11 @@ final class EditLostItemFoundDateView: UIView {
         if let foundDateValue {
             dateButton.setTitle(foundDateValue.string(with: .yearMonthDay), for: .normal)
             dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            dateButton.titleLabel?.font = .appFont(.pretendardRegular, size: 14)
         } else {
             dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
             dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+            dateButton.titleLabel?.font = .appFont(.pretendardRegular, size: 12)
         }
     }
 }

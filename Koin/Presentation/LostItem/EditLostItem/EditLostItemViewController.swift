@@ -54,8 +54,8 @@ final class EditLostItemViewController: UIViewController {
     
     private let editButton = DebouncedButton().then {
         $0.setTitle("수정 완료", for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 14)
-        $0.backgroundColor = UIColor.appColor(.primary600)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardSemiBold, size: 15)
+        $0.backgroundColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 8
         $0.layer.masksToBounds = true
     }
@@ -300,7 +300,7 @@ extension EditLostItemViewController {
         }
         
         editButtonBackgroundView.snp.makeConstraints {
-            $0.height.equalTo(70)
+            $0.height.equalTo(88)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
         }
@@ -310,8 +310,8 @@ extension EditLostItemViewController {
             $0.bottom.equalTo(editButtonBackgroundView.snp.top).offset(-8)
         }
         editButton.snp.makeConstraints {
-            $0.width.equalTo(160)
-            $0.height.equalTo(38)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(48)
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(editButtonBackgroundView.snp.bottom).offset(-16)
         }

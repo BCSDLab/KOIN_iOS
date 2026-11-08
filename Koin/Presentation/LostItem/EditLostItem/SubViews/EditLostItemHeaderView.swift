@@ -19,10 +19,10 @@ final class EditLostItemHeaderView: UIView {
         $0.text = (type == .lost ? "물건을 찾아요" : "주인을 찾아요" )
     }
     private lazy var messageImageView = UIImageView().then {
-        $0.image = (type == .lost ? .appImage(asset: .findPerson) : .appImage(asset: .lostItem))
+        $0.image = (type == .lost ? .appImage(asset: .lostItem) : .appImage(asset: .findPerson))
     }
     private lazy var subMessageLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
         $0.text = (type == .lost ? "분실한 물건을 자세히 설명해주세요!" : "습득한 물건을 자세히 설명해주세요!" )
     }

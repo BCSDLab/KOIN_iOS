@@ -13,10 +13,10 @@ final class EditLostItemButton: UIButton {
     
     override var isSelected: Bool {
         didSet {
-            backgroundColor = isSelected ? .appColor(.primary500) : .appColor(.neutral0)
+            backgroundColor = isSelected ? .appColor(.new500) : .appColor(.neutral0)
             setAttributedTitle(NSAttributedString(string: title, attributes: [
                 .font : UIFont.appFont(.pretendardMedium, size: 14),
-                .foregroundColor : (isSelected ? UIColor.appColor(.neutral0) : UIColor.appColor(.primary500)) 
+                .foregroundColor : (isSelected ? UIColor.appColor(.neutral0) : UIColor.appColor(.new500))
             ]), for: .normal)
         }
     }
@@ -39,6 +39,6 @@ final class EditLostItemButton: UIButton {
     private func configureView() {
         layer.cornerRadius = 19
         layer.borderWidth = 1
-        layer.borderColor = UIColor.appColor(.primary500).cgColor
+        layer.borderColor = UIColor.appColor(.new500).cgColor
     }
 }
