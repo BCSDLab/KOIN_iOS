@@ -22,34 +22,35 @@ final class LostItemListViewController: UIViewController {
         $0.leftViewMode = .always
         $0.rightViewMode = .always
         $0.attributedPlaceholder = NSAttributedString(string: "검색어를 입력해주세요.", attributes: [
-            .font : UIFont.appFont(.pretendardRegular, size: 14),
-            .foregroundColor : UIColor.appColor(.gray)
+            .font : UIFont.appFont(.pretendardRegular, size: 12),
+            .foregroundColor : UIColor.appColor(.neutral500)
         ])
-        $0.font = .appFont(.pretendardRegular, size: 14)
+        $0.font = .appFont(.pretendardRegular, size: 12)
         $0.textColor = .appColor(.neutral800)
-        $0.backgroundColor = .appColor(.neutral100)
-        $0.layer.cornerRadius = 4
+        $0.backgroundColor = .appColor(.neutral0)
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.layer.cornerRadius = 18
     }
     private let searchButton = UIButton().then {
-        $0.setImage(.appImage(asset: .search), for: .normal)
-        $0.tintColor = .appColor(.neutral600)
+        $0.setImage(.appImage(asset: .search)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), for: .normal)
     }
     private let filterButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString("필터", attributes: AttributeContainer([
-            .font: UIFont.appFont(.pretendardBold, size: 14),
-            .foregroundColor: UIColor.appColor(.neutral600)
+            .font: UIFont.appFont(.pretendardSemiBold, size: 14),
+            .foregroundColor: UIColor.appColor(.neutral0)
         ]))
-        configuration.image = .appImage(asset: .filter)?.withTintColor(.appColor(.primary600), renderingMode: .alwaysTemplate).resize(to: CGSize(width: 20, height: 20))
+        configuration.image = .appImage(asset: .filter)?.withTintColor(.appColor(.neutral0), renderingMode: .alwaysOriginal).resize(to: CGSize(width: 20, height: 20))
         configuration.imagePadding = 4
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12)
         configuration.imagePlacement = .trailing
         $0.configuration = configuration
         $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
-        $0.layer.cornerRadius = 17
+        $0.layer.cornerRadius = 18
         $0.clipsToBounds = true
         $0.layer.masksToBounds = false
-        $0.backgroundColor = .appColor(.info200)
+        $0.backgroundColor = .appColor(.new500)
         $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     private let lostItemKeywordCollectionView = LostItemKeywordCollectionView().then {
@@ -59,20 +60,21 @@ final class LostItemListViewController: UIViewController {
     
     private let writeButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = .appImage(asset: .pencil)?.withTintColor(.appColor(.neutral600), renderingMode: .alwaysTemplate).resize(to: CGSize(width: 24, height: 24))
+        configuration.image = .appImage(asset: .pencil)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal).resize(to: CGSize(width: 24, height: 24))
         configuration.attributedTitle = AttributedString("글쓰기", attributes: AttributeContainer([
             .font: UIFont.appFont(.pretendardMedium, size: 16),
-            .foregroundColor: UIColor.appColor(.neutral600)
+            .foregroundColor: UIColor.appColor(.new500)
         ]))
         configuration.imagePadding = 4
-        configuration.imagePlacement = .leading
+        configuration.imagePlacement = .trailing
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
         $0.configuration = configuration
         $0.backgroundColor = .appColor(.neutral50)
-        $0.layer.borderColor = UIColor.appColor(.neutral400).cgColor
+        $0.layer.borderColor = UIColor.appColor(.new500).cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 21
-        $0.clipsToBounds = true
+        $0.clipsToBounds = false
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.08, x: 0, y: 8, blur: 10, spread: 0)
     }
     
     // MARK: - Initializer
@@ -228,7 +230,7 @@ extension LostItemListViewController {
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .titles(
                 mainTitleText: "게시글을 작성하려면\n로그인이 필요해요.",
                 subTitleText: "로그인 후 글을 작성해주세요!"
@@ -267,7 +269,7 @@ extension LostItemListViewController {
             onFoundButtonTapped: onFoundButtonTapped,
             onLostButtonTapped: onLostButtonTapped
         )
-        sheet = presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 32))
+        sheet = presentBottomSheet(contentView, configuration: .init(style: .modal(), cornerRadius: 32))
     }
 }
 
@@ -310,21 +312,23 @@ extension LostItemListViewController {
         
         inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFilter, .click, "분실물"))
         
-        weak var sheet: KoinBottomSheetController?
-        let contentView = LostItemListFilterView(
-            isLoggedIn: viewModel.isLoggedIn,
-            filterState: viewModel.filterState,
-            onApplyFilterButtonTapped: { [weak self] filter in
-                sheet?.dismiss { [weak self] in
-                    self?.inputSubject.send(.updateFilter(filter))
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFilterApply, .click, "분실물"))
+        let contentView = FilterBottomSheetView(
+            groupModels: viewModel.filterState.toFilterGroupModels(),
+            onFilterItemTapped: { [weak self] groupIndex, item in
+                guard let self else { return false }
+                if groupIndex == 0, item.title == "내 게시물", !viewModel.isLoggedIn {
+                    showToast(message: "로그인이 필요한 기능입니다.")
+                    return false
                 }
+                return true
             },
-            onLoginRequired: { [weak self] in
-                self?.showToast(message: "로그인이 필요한 기능입니다.")
+            onApplyTapped: { [weak self] groups in
+                guard let filter = FetchLostItemListRequest(from: groups) else { return }
+                self?.inputSubject.send(.updateFilter(filter))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFilterApply, .click, "분실물"))
             }
         )
-        sheet = presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 32))
+        presentBottomSheet(contentView)
     }
     
     @objc private func writeButtonTapped() {
@@ -351,7 +355,7 @@ extension LostItemListViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(4)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalTo(filterButton.snp.leading).offset(-12)
-            $0.height.equalTo(40)
+            $0.height.equalTo(36)
         }
         searchButton.snp.makeConstraints {
             $0.centerY.equalTo(searchTextField)
@@ -359,7 +363,7 @@ extension LostItemListViewController {
             $0.trailing.equalTo(searchTextField.snp.trailing).offset(-16)
         }
         filterButton.snp.makeConstraints {
-            $0.height.equalTo(34)
+            $0.height.equalTo(36)
             $0.width.equalTo(73)
             $0.centerY.equalTo(searchTextField)
             $0.trailing.equalToSuperview().offset(-24)

@@ -26,11 +26,11 @@ final class LostItemListTableViewCell: UITableViewCell {
     private let titleStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 4
-        $0.alignment = .fill
+        $0.alignment = .center
     }
     private let categoryLabel = paddingLabel(padding: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)).then {
-        $0.backgroundColor = .appColor(.primary500)
-        $0.layer.cornerRadius = 11
+        $0.font = .appFont(.pretendardMedium, size: 10)
+        $0.layer.cornerRadius = 9
         $0.clipsToBounds = true
         $0.textAlignment = .center
     }
@@ -89,16 +89,19 @@ final class LostItemListTableViewCell: UITableViewCell {
         
         if lostItemListData.isFound {
             isFoundLabel.text = "찾음"
-            isFoundLabel.textColor = .appColor(.neutral400)
-            isFoundLabel.backgroundColor = .appColor(.neutral100)
+            isFoundLabel.textColor = .appColor(.neutral0)
+            isFoundLabel.backgroundColor = .appColor(.neutral400)
         } else {
             isFoundLabel.text = "찾는중"
             isFoundLabel.textColor = .appColor(.neutral0)
-            isFoundLabel.backgroundColor = UIColor(hexCode: "FFA928")
+            isFoundLabel.backgroundColor = .appColor(.new700)
         }
         
         typeLabel.text = "\(lostItemListData.type.description)물"
+        let categoryColors = LostItemColorAsset(rawValue: lostItemListData.category) ?? .unknown
         categoryLabel.text = lostItemListData.category
+        categoryLabel.backgroundColor = .appColor(categoryColors.background)
+        categoryLabel.textColor = .appColor(categoryColors.foreground)
         foundPlaceLabel.text = lostItemListData.foundPlace
         foundDateLabel.text = lostItemListData.foundDate
         
@@ -117,15 +120,14 @@ extension LostItemListTableViewCell {
     
     private func configureLabels() {
         // textColor
-        [typeLabel].forEach { $0.textColor = .appColor(.primary600) }
-        [categoryLabel].forEach { $0.textColor = .appColor(.neutral0) }
+        [typeLabel].forEach { $0.textColor = .appColor(.new500) }
         [foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel, contentLabel].forEach { $0.textColor = .appColor(.neutral800) }
         [blindedLabel, authorLabel, registeredDateLabel].forEach { $0.textColor = .appColor(.neutral500) }
         [authorSeparatorLabel].forEach { $0.textColor = .appColor(.neutral400) }
         
         // font
         [typeLabel].forEach { $0.font = .appFont(.pretendardSemiBold, size: 12) }
-        [categoryLabel, foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel, blindedLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 14) }
+        [foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel, blindedLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 14) }
         [contentLabel, authorLabel, authorSeparatorLabel, registeredDateLabel].forEach { $0.font = .appFont(.pretendardRegular, size: 12) }
         [isFoundLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 12) }
     }
@@ -163,7 +165,7 @@ extension LostItemListTableViewCell {
         labelsStackView.snp.makeConstraints {
             $0.top.equalTo(typeLabel.snp.bottom).offset(2)
             $0.leading.equalToSuperview().offset(24)
-            $0.trailing.lessThanOrEqualTo(isFoundLabel.snp.leading).offset(-8)
+            $0.trailing.equalToSuperview().offset(-24)
             $0.bottom.equalToSuperview().offset(-12).priority(999)
         }
         separatorView.snp.makeConstraints {
@@ -171,8 +173,14 @@ extension LostItemListTableViewCell {
             $0.height.equalTo(1)
         }
         
+        categoryLabel.snp.makeConstraints {
+            $0.height.equalTo(18)
+        }
         titleStackView.snp.makeConstraints {
             $0.height.equalTo(22)
+        }
+        titleStackView.snp.makeConstraints {
+            $0.trailing.lessThanOrEqualTo(isFoundLabel.snp.leading).offset(-8)
         }
         contentLabel.snp.makeConstraints {
             $0.height.equalTo(14)

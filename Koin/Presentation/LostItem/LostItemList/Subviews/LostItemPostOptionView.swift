@@ -19,21 +19,21 @@ final class LostItemPostOptionView: UIView, KoinBottomSheetContent {
     // MARK: - UI Components
     private let filterTitleLabel = UILabel().then {
         $0.text = "유형을 선택해주세요"
-        $0.font = .appFont(.pretendardBold, size: 18)
-        $0.tintColor = .appColor(.primary500)
+        $0.font = .appFont(.pretendardSemiBold, size: 18)
+        $0.textColor = .appColor(.new500)
     }
     private let closeButton = UIButton().then {
         $0.setImage(.appImage(asset: .cancelNeutral500), for: .normal)
         $0.tintColor = .appColor(.neutral800)
     }
     private let topSeparatorView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral200)
+        $0.backgroundColor = .appColor(.neutral300)
     }
     private let foundButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.image = .appImage(asset: .findPerson)
         configuration.attributedTitle = AttributedString("주인을 찾아요", attributes: AttributeContainer([
-            .font : UIFont.appFont(.pretendardBold, size: 18),
+            .font : UIFont.appFont(.pretendardSemiBold, size: 18),
             .foregroundColor : UIColor.appColor(.neutral600)
         ]))
         configuration.imagePadding = 8
@@ -47,7 +47,7 @@ final class LostItemPostOptionView: UIView, KoinBottomSheetContent {
         var configuration = UIButton.Configuration.plain()
         configuration.image = .appImage(asset: .lostItem)
         configuration.attributedTitle = AttributedString("잃어버렸어요", attributes: AttributeContainer([
-            .font : UIFont.appFont(.pretendardBold, size: 18),
+            .font : UIFont.appFont(.pretendardSemiBold, size: 18),
             .foregroundColor : UIColor.appColor(.neutral600)
         ]))
         configuration.imagePadding = 8
@@ -58,7 +58,7 @@ final class LostItemPostOptionView: UIView, KoinBottomSheetContent {
         $0.clipsToBounds = true
     }
     private let bottomSeparatorView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral200)
+        $0.backgroundColor = .appColor(.neutral300)
     }
 
     // MARK: - Initializer
@@ -67,7 +67,7 @@ final class LostItemPostOptionView: UIView, KoinBottomSheetContent {
         self.onFoundButtonTapped = onFoundButtonTapped
         self.onLostButtonTapped = onLostButtonTapped
         super.init(frame: .zero)
-        backgroundColor = .white
+        backgroundColor = .appColor(.neutral0)
         configureView()
         setAddTargets()
     }
@@ -105,19 +105,19 @@ extension LostItemPostOptionView {
 
     private func setUpConstaints() {
         filterTitleLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(12)
+            $0.top.equalToSuperview().offset(19)
             $0.leading.equalToSuperview().offset(32)
             $0.height.equalTo(29)
         }
         closeButton.snp.makeConstraints {
             $0.width.height.equalTo(24)
             $0.centerY.equalTo(filterTitleLabel)
-            $0.trailing.equalToSuperview().offset(-24)
+            $0.trailing.equalToSuperview().offset(-32)
         }
         topSeparatorView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
-            $0.top.equalTo(filterTitleLabel.snp.bottom).offset(12)
+            $0.top.equalTo(filterTitleLabel.snp.bottom).offset(18)
         }
         foundButton.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview().inset(32)
@@ -132,7 +132,7 @@ extension LostItemPostOptionView {
         bottomSeparatorView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
             $0.height.equalTo(1)
-            $0.top.equalTo(lostButton.snp.bottom).offset(10)
+            $0.top.equalTo(lostButton.snp.bottom).offset(12)
             $0.bottom.equalToSuperview()
         }
     }

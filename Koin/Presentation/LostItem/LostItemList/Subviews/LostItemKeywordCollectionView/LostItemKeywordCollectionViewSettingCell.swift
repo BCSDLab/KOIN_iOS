@@ -11,7 +11,7 @@ import SnapKit
 final class LostItemKeywordCollectionViewSettingCell: UICollectionViewCell {
     
     // MARK: - UI Components
-    private let gearImageView = UIImageView(image: UIImage.appImage(asset: .lostItemGear))
+    private let gearImageView = UIImageView(image: UIImage(named: "lostItemKeywordSettings"))
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -29,7 +29,7 @@ extension LostItemKeywordCollectionViewSettingCell {
         contentView.addSubview(gearImageView)
         gearImageView.snp.makeConstraints {
             $0.center.equalToSuperview()
-            $0.size.equalTo(32)
+            $0.size.equalTo(20)
         }
     }
 }
