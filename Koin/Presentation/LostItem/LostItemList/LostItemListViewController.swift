@@ -26,6 +26,7 @@ final class LostItemListViewController: UIViewController {
             .foregroundColor : UIColor.appColor(.neutral500)
         ])
         $0.font = .appFont(.pretendardRegular, size: 12)
+        $0.returnKeyType = .search
         $0.textColor = .appColor(.neutral800)
         $0.backgroundColor = .appColor(.neutral0)
         $0.layer.borderWidth = 1
@@ -180,6 +181,13 @@ final class LostItemListViewController: UIViewController {
     
     private func setDelegate() {
         searchTextField.delegate = self
+    }
+
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === searchTextField {
+            searchButtonTapped()
+        }
+        return super.textFieldShouldReturn(textField)
     }
 }
 
