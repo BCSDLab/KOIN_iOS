@@ -94,7 +94,6 @@ final class CallVanChatViewController: UIViewController {
             .sink { [weak self] imageUrl in
                 let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
                 zoomedImageViewController.configure(url: imageUrl)
-                zoomedImageViewController.modalTransitionStyle = .crossDissolve
                 zoomedImageViewController.modalPresentationStyle = .overFullScreen
                 self?.present(zoomedImageViewController, animated: true)
             }

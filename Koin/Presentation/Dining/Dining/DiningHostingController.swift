@@ -267,7 +267,6 @@ extension DiningHostingController {
     private func showZoomedImage(imageUrl: String) {
         let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
         zoomedImageViewController.configure(url: imageUrl)
-        zoomedImageViewController.modalTransitionStyle = .coverVertical
         zoomedImageViewController.modalPresentationStyle = .overFullScreen
         present(zoomedImageViewController, animated: true)
     }

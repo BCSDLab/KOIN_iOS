@@ -52,7 +52,7 @@ final class ZoomedImageViewController: UIViewController {
     init() {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .fullScreen
-        modalTransitionStyle = .crossDissolve
+        modalTransitionStyle = .coverVertical
     }
     
     @available(*, unavailable)
