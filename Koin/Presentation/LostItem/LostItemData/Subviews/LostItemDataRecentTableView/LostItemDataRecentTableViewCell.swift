@@ -18,8 +18,8 @@ final class LostItemDataRecentTableViewCell: UITableViewCell {
         $0.alignment = .center
     }
     private let categoryLabel = paddingLabel(padding: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)).then {
-        $0.backgroundColor = .appColor(.primary500)
-        $0.layer.cornerRadius = 19/2
+        $0.font = .appFont(.pretendardMedium, size: 10)
+        $0.layer.cornerRadius = 9
         $0.clipsToBounds = true
         $0.textAlignment = .center
         $0.setContentHuggingPriority(.defaultHigh, for: .horizontal)
@@ -56,18 +56,21 @@ final class LostItemDataRecentTableViewCell: UITableViewCell {
     
     func configure(lostItemListData: LostItemListData) {
         typeLabel.text = "\(lostItemListData.type.description)물"
+        let categoryColors = LostItemColorAsset(rawValue: lostItemListData.category) ?? .unknown
         categoryLabel.text = lostItemListData.category
+        categoryLabel.backgroundColor = .appColor(categoryColors.background)
+        categoryLabel.textColor = .appColor(categoryColors.foreground)
         foundPlaceLabel.text = lostItemListData.foundPlace
         foundDateLabel.text = lostItemListData.foundDate
         
         if lostItemListData.isFound {
             isFoundLabel.text = "찾음"
-            isFoundLabel.textColor = .appColor(.neutral400)
-            isFoundLabel.backgroundColor = .appColor(.neutral100)
+            isFoundLabel.textColor = .appColor(.neutral0)
+            isFoundLabel.backgroundColor = .appColor(.neutral400)
         } else {
             isFoundLabel.text = "찾는중"
             isFoundLabel.textColor = .appColor(.neutral0)
-            isFoundLabel.backgroundColor = UIColor(hexCode: "FFA928")
+            isFoundLabel.backgroundColor = .appColor(.new700)
         }
     }
 }
@@ -76,13 +79,12 @@ extension LostItemDataRecentTableViewCell {
     
     private func configureLabels() {
         // textColor
-        [typeLabel].forEach { $0.textColor = .appColor(.primary600) }
-        [categoryLabel].forEach { $0.textColor = .appColor(.neutral0) }
+        [typeLabel].forEach { $0.textColor = .appColor(.new500) }
         [foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel].forEach { $0.textColor = .appColor(.neutral800) }
         
         // font
         [typeLabel].forEach { $0.font = .appFont(.pretendardSemiBold, size: 12) }
-        [categoryLabel, foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 14) }
+        [foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 14) }
         [isFoundLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 12) }
     }
     
@@ -101,7 +103,7 @@ extension LostItemDataRecentTableViewCell {
             $0.leading.equalToSuperview().offset(24)
         }
         categoryLabel.snp.makeConstraints {
-            $0.height.equalTo(19)
+            $0.height.equalTo(18)
         }
         titleStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()

@@ -31,7 +31,7 @@ final class LostItemDataButtonsView: UIView {
         $0.textColor = .appColor(.neutral500)
     }
     private let changeStateButton = UIButton().then {
-        $0.backgroundColor = .appColor(.neutral400)
+        $0.backgroundColor = .appColor(.neutral300)
         $0.layer.cornerRadius = 11
         $0.clipsToBounds = true
     }
@@ -125,7 +125,7 @@ extension LostItemDataButtonsView {
         editButtonTappedPublisher.send()
     }
     @objc private func changeStateButtonTapped() {
-        if changeStateButton.backgroundColor != UIColor.appColor(.primary500) {
+        if changeStateButton.backgroundColor != UIColor.appColor(.new500) {
             changeStateButtonTappedPublisher.send()
         }
     }
@@ -141,7 +141,7 @@ extension LostItemDataButtonsView {
     
     func changeState() {
         UIView.animate(withDuration: 0.2) { [weak self] in
-            self?.changeStateButton.backgroundColor = .appColor(.primary500)
+            self?.changeStateButton.backgroundColor = .appColor(.new500)
             self?.changeStateCircleView.transform = CGAffineTransform(translationX: 24, y: 0)
             self?.changeStateCircleView.layer.shadowColor = UIColor.clear.cgColor
             
