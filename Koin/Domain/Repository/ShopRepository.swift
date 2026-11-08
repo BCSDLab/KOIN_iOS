@@ -28,8 +28,6 @@ protocol ShopRepository {
     func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
-    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, ErrorResponse>
-    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, ErrorResponse>
     func searchRelatedQuery(text: String) -> AnyPublisher<RelatedKeywordsDto, ErrorResponse>
     
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>

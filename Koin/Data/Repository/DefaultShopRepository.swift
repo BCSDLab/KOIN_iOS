@@ -23,14 +23,6 @@ final class DefaultShopRepository: ShopRepository {
         service.fetchShopSummary(id: id)
     }
     
-    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, ErrorResponse> {
-        service.fetchBeneficialShops(id: id)
-    }
-    
-    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, ErrorResponse> {
-        service.fetchShopBenefits()
-    }
-    
     func fetchShopList(requestModel: FetchShopListRequest) -> AnyPublisher<ShopsDto, ErrorResponse> {
         return service.fetchShopList(requestModel: requestModel)
     }
