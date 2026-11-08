@@ -102,7 +102,7 @@ extension LostItemKeywordViewController {
         
         myKeywordCollectionView.didLayoutSubviewsPublisher.sink { [weak self] height in
             guard let self else { return }
-            let inset: CGFloat = 12 * 2
+            let inset: CGFloat = height > 0 ? 12 * 2 : 0
             updateHeight(view: myKeywordCollectionView, height: height + inset)
         }.store(in: &subscriptions)
         
@@ -163,8 +163,8 @@ extension LostItemKeywordViewController {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        myKeywordTextField.layer.borderColor = UIColor.appColor(.primary400).cgColor
-        myKeywordAddButton.backgroundColor = .appColor(.primary500)
+        myKeywordTextField.layer.borderColor = UIColor.appColor(.new500).cgColor
+        myKeywordAddButton.backgroundColor = .appColor(.new500)
         changeButtonForegroundColor(to: .appColor(.neutral0))
     }
 
@@ -196,7 +196,7 @@ extension LostItemKeywordViewController {
             self?.navigateToLogin()
         }
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .titles(
                 mainTitleText: "키워드 알림을 받으려면\n로그인이 필요해요.",
                 subTitleText: "로그인 후 간편하게 분실물 키워드\n알림을 받아보세요!"
@@ -248,7 +248,7 @@ extension LostItemKeywordViewController {
                 string: "잃어버린 물건을 입력해 주세요.",
                 attributes: [
                     .font : UIFont.appFont(.pretendardRegular, size: 14),
-                    .foregroundColor : UIColor.appColor(.gray)
+                    .foregroundColor : UIColor.appColor(.neutral500)
                 ]
             )
             $0.textColor = .appColor(.neutral800)
@@ -290,8 +290,8 @@ extension LostItemKeywordViewController {
             $0.textColor = .appColor(.neutral800)
         }
         notificationSubTitleLabel.do {
-            $0.text = "분실물 키워드 알림 받기"
-            $0.textColor = .black
+            $0.text = "분실물 키워드 알림받기"
+            $0.textColor = .appColor(.neutral800)
             $0.font = .appFont(.pretendardMedium, size: 16)
         }
         notificationDescriptionLabel.do {
@@ -300,7 +300,7 @@ extension LostItemKeywordViewController {
             $0.textColor = .appColor(.neutral500)
         }
         notificationSwitch.do {
-            $0.onTintColor = .appColor(.primary500)
+            $0.onTintColor = .appColor(.new500)
         }
         bottomSeparatorView.do {
             $0.backgroundColor = .appColor(.neutral100)
@@ -333,7 +333,7 @@ extension LostItemKeywordViewController {
         // MARK: - 내 키워드
         myKeywordTitleLabel.snp.makeConstraints {
             $0.height.equalTo(29)
-            $0.top.equalToSuperview().offset(16)
+            $0.top.equalToSuperview().offset(8)
             $0.leading.equalToSuperview().offset(24)
         }
         myKeywordCountLabel.snp.makeConstraints {

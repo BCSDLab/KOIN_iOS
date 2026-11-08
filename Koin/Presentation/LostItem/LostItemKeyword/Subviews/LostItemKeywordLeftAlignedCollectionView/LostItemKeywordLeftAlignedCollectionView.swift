@@ -97,7 +97,7 @@ extension LostItemKeywordLeftAlignedCollectionView: UICollectionViewDelegateFlow
         let font = UIFont.appFont(.pretendardMedium, size: 14)
         let inset = 16 * 2
         let padding = 2
-        let imageWidth = 18
+        let imageWidth = action == .delete ? 16 : 18
         let keyword = keywords[indexPath.row].keyword
         var width = Int((keyword as NSString).size(withAttributes: [.font : font]).width)
         width = width + inset + padding + imageWidth
