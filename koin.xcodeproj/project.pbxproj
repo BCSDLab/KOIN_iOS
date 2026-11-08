@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A83115679000000000000008 /* LostItemListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000009 /* LostItemListEmptyView.swift */; };
 		004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */; };
 		0A6D1C1BA5922E1A28882034 /* BusRouteTagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B13E077479AB081D3DB06C /* BusRouteTagLabel.swift */; };
 		0D3DC4E723268AE45A326D07 /* RecruitChatDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */; };
@@ -1288,6 +1289,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		A83115679000000000000009 /* LostItemListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListEmptyView.swift; sourceTree = "<group>"; };
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatPostRequestDto.swift; sourceTree = "<group>"; };
 		13EEDE9C4E0CA4F9CF7AB1F8 /* RecruitActivityPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitActivityPeriod.swift; sourceTree = "<group>"; };
@@ -3787,6 +3789,7 @@
 		7CA63A282F1AF80300226F86 /* Subviews */ = {
 			isa = PBXGroup;
 			children = (
+				A83115679000000000000009 /* LostItemListEmptyView.swift */,
 				7CB11C082FB19895004E0C80 /* LostItemKeywordCollectionView */,
 				7CA63A312F1B1AFA00226F86 /* LostItemListTableView */,
 				7C372F132F1CC79C00149729 /* LostItemPostOptionView.swift */,
@@ -7936,6 +7939,7 @@
 				D2908D282BB8D1580008F908 /* LectureDto.swift in Sources */,
 				D2908D2C2BB9D4150008F908 /* TimetablesDto.swift in Sources */,
 				7CA63A2A2F1AF80B00226F86 /* LostItemListTableView.swift in Sources */,
+				A83115679000000000000008 /* LostItemListEmptyView.swift in Sources */,
 				7C50A1FF3042E9DC00897A6F /* RecruitList.swift in Sources */,
 				833D9C5E2C7375B400982145 /* FetchNoticeDataUseCase.swift in Sources */,
 				D2D4225F2BAC2AC600A8AF04 /* UserPutRequest.swift in Sources */,

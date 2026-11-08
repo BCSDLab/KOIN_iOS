@@ -57,6 +57,10 @@ final class LostItemListViewController: UIViewController {
         $0.contentInset = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
     }
     private let lostItemListTableView = LostItemListTableView()
+    private let emptyLayoutGuide = UILayoutGuide()
+    private let emptyView = LostItemListEmptyView().then {
+        $0.isHidden = true
+    }
     
     private let writeButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
@@ -118,6 +122,10 @@ final class LostItemListViewController: UIViewController {
         
         lostItemListTableView.showToastPublisher.sink { [weak self] message in
             self?.showToastMessage(message: message)
+        }.store(in: &subscriptions)
+
+        lostItemListTableView.isEmptyPublisher.sink { [weak self] isEmpty in
+            self?.emptyView.isHidden = !isEmpty
         }.store(in: &subscriptions)
         
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
@@ -345,7 +353,8 @@ extension LostItemListViewController {
 extension LostItemListViewController {
     
     private func setLayouts() {
-        [lostItemListTableView, searchTextField, searchButton, filterButton, lostItemKeywordCollectionView, writeButton].forEach {
+        view.addLayoutGuide(emptyLayoutGuide)
+        [lostItemListTableView, emptyView, searchTextField, searchButton, filterButton, lostItemKeywordCollectionView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -376,6 +385,14 @@ extension LostItemListViewController {
         lostItemListTableView.snp.makeConstraints {
             $0.top.equalTo(lostItemKeywordCollectionView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
+        }
+        emptyLayoutGuide.snp.makeConstraints {
+            $0.top.equalTo(searchTextField.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+        }
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(emptyLayoutGuide)
         }
         writeButton.snp.makeConstraints {
             $0.width.equalTo(94)
