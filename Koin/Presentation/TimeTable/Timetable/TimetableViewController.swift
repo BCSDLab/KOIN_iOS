@@ -20,6 +20,8 @@ final class TimetableViewController: UIViewController {
     private var pendingSheetContent: (view: UIView, height: CGFloat?)?
     private var isResettingTimetableInset = false
     private var previewClassTimes: [Int] = []
+    /// 상세 시트에 가려지지 않게 보여 줄, 탭한 강의 블록의 위치(scrollView 좌표).
+    private var lectureRectToReveal: CGRect?
     
     
     // MARK: - UI Components
@@ -487,6 +489,7 @@ extension TimetableViewController {
  
     @objc private func handleLectureTap(_ sender: UITapGestureRecognizer) {
         if let tappedView = sender.view as? LectureView {
+            lectureRectToReveal = tappedView.convert(tappedView.bounds, to: scrollView)
             deleteLectureView.configure(lecture: tappedView.info)
             showTimetableSheet(content: deleteLectureView)
         }
@@ -539,6 +542,10 @@ extension TimetableViewController {
 
     private func showTimetableSheet(content: UIView, height: CGFloat? = nil) {
         guard requireStudentAccess() else { return }
+        // 탭한 강의는 상세 시트에서만 보여 준다.
+        if content !== deleteLectureView {
+            lectureRectToReveal = nil
+        }
         if content !== addDirectCollectionView, !previewClassTimes.isEmpty {
             previewClassTimes = []
             setUpCollectionViewHeight(viewModel.lectureData)
@@ -577,8 +584,10 @@ extension TimetableViewController {
             let bottomInset = max(0, self.scrollView.frame.maxY - self.view.convert(frame, from: nil).minY)
             self.scrollView.contentInset.bottom = bottomInset
             self.scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
+            self.revealTappedLecture()
         }
         configuration.onWillDismiss = { [weak self] in
+            self?.lectureRectToReveal = nil
             self?.resetTimetableBottomInset(animated: true)
         }
         configuration.onDismiss = { [weak self, weak sheetContent] in
@@ -599,6 +608,30 @@ extension TimetableViewController {
         if sheetController == nil {
             sheetContent.removeContent()
             sheetContentView = nil
+        }
+    }
+
+    /// 탭한 강의 블록이 시트에 가려지면 보이도록 스크롤한다. 블록이 보이는 영역보다 길면 위쪽을 맞춘다.
+    private func revealTappedLecture() {
+        guard let rect = lectureRectToReveal else { return }
+        let adjustedInset = scrollView.adjustedContentInset
+        let currentOffsetY = scrollView.contentOffset.y
+        var offsetY = currentOffsetY
+        // 시트 위로 표 하단 여백(safe area)만큼 띄운다.
+        let visibleBottom = offsetY + scrollView.bounds.height - adjustedInset.bottom
+        if rect.maxY > visibleBottom {
+            offsetY += rect.maxY - visibleBottom
+        }
+        if rect.minY < offsetY + adjustedInset.top {
+            offsetY = rect.minY - adjustedInset.top
+        }
+        let maxOffsetY = max(-adjustedInset.top, scrollView.contentSize.height + adjustedInset.bottom - scrollView.bounds.height)
+        let targetOffsetY = min(max(offsetY, -adjustedInset.top), maxOffsetY)
+        guard abs(targetOffsetY - currentOffsetY) > 0.5 else { return }
+        // 시트 애니메이션 블록 밖에서 스크롤한다. 시트 전환이 애니메이션을 끊어도 스크롤이 튀지 않는다.
+        DispatchQueue.main.async { [weak self] in
+            guard let self else { return }
+            self.scrollView.setContentOffset(CGPoint(x: self.scrollView.contentOffset.x, y: targetOffsetY), animated: true)
         }
     }
 
