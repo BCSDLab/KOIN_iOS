@@ -70,7 +70,7 @@ final class LostItemKeywordViewController: UIViewController {
 extension LostItemKeywordViewController {
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case .showLoginModal:
@@ -87,6 +87,11 @@ extension LostItemKeywordViewController {
                 updateMyKeywordCountLabel(count)
             case let .appendMyKeyword(keyword):
                 myKeywordCollectionView.append(keyword: keyword)
+            case let .clearKeywordInput(submittedText):
+                if myKeywordTextField.text == submittedText {
+                    myKeywordTextField.text = ""
+                    updateKeywordAddButton()
+                }
             case let .removeKeywordSuggestion(keyword):
                 keywordSuggestionCollectionView.remove(keyword: keyword)
             case .showToastExceedCount:
@@ -134,12 +139,13 @@ extension LostItemKeywordViewController {
     
     private func setAddTargets() {
         myKeywordAddButton.addTarget(self, action: #selector(myKeywordAddButtonTapped), for: .touchUpInside)
+        myKeywordTextField.addTarget(self, action: #selector(keywordTextDidChange), for: .editingChanged)
         notificationSwitch.addTarget(self, action: #selector(notificationSwitchTapped), for: .valueChanged)
     }
     
     @objc private func myKeywordAddButtonTapped() {
-        if let text = myKeywordTextField.text {
-            inputSubject.send(.subscribeKeyword(text))
+        if myKeywordAddButton.isEnabled, let text = myKeywordTextField.text {
+            inputSubject.send(.submitKeyword(text))
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordAdd, .click, "키워드 추가"))
         }
     }
@@ -160,16 +166,32 @@ extension LostItemKeywordViewController {
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
         myKeywordTextField.layer.borderColor = UIColor.appColor(.new500).cgColor
-        myKeywordAddButton.backgroundColor = .appColor(.new500)
-        changeButtonForegroundColor(to: .appColor(.neutral0))
+        updateKeywordAddButton()
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         myKeywordTextField.layer.borderColor = UIColor.clear.cgColor
-        myKeywordAddButton.backgroundColor = .appColor(.neutral300)
-        changeButtonForegroundColor(to: .appColor(.neutral600))
+        updateKeywordAddButton()
     }
     
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === myKeywordTextField {
+            myKeywordAddButtonTapped()
+        }
+        return super.textFieldShouldReturn(textField)
+    }
+
+    @objc private func keywordTextDidChange() {
+        updateKeywordAddButton()
+    }
+
+    private func updateKeywordAddButton() {
+        let hasText = !(myKeywordTextField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        myKeywordAddButton.isEnabled = hasText
+        myKeywordAddButton.backgroundColor = .appColor(hasText ? .new500 : .neutral300)
+        changeButtonForegroundColor(to: .appColor(hasText ? .neutral0 : .neutral600))
+    }
+
     private func changeButtonForegroundColor(to color: UIColor) {
         if let currentAttributedTitle = myKeywordAddButton.currentAttributedTitle {
             let mutableAttributedTitle = NSMutableAttributedString(attributedString: currentAttributedTitle)
@@ -249,6 +271,7 @@ extension LostItemKeywordViewController {
             )
             $0.textColor = .appColor(.neutral800)
             $0.font = .appFont(.pretendardRegular, size: 14)
+            $0.returnKeyType = .done
             
             $0.backgroundColor = .appColor(.neutral100)
             $0.layer.cornerRadius = 4
@@ -265,6 +288,7 @@ extension LostItemKeywordViewController {
                     ]),
                 for: .normal)
             $0.backgroundColor = .appColor(.neutral300)
+            $0.isEnabled = false
             $0.layer.cornerRadius = 4
         }
         myKeywordCollectionView.do {
