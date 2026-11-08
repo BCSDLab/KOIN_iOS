@@ -191,8 +191,8 @@ private extension View {
                         onImageTapped: onReportTooltipImageTapped
                     )
                     .position(
-                        x: rowFrame.midX + 66,
-                        y: rowFrame.maxY + 35
+                        x: rowFrame.midX + 85 - 23,
+                        y: rowFrame.maxY + 31 + 5
                     )
                 }
             }

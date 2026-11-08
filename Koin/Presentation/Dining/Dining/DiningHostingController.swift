@@ -117,8 +117,8 @@ extension DiningHostingController {
         )
         
         reportTooltipImageView.frame.origin = CGPoint(
-            x: reportButtonRect.minX - 135,
-            y: reportButtonRect.maxY + 10
+            x: reportButtonRect.minX - 171 + 38 + 22,
+            y: reportButtonRect.maxY + 5
         )
     }
     
