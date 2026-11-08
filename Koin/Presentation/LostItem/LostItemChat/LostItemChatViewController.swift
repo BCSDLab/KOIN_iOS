@@ -9,96 +9,57 @@ import Combine
 import PhotosUI
 import UIKit
 
-final class LostItemChatViewController: UIViewController, UITextViewDelegate, PHPickerViewControllerDelegate {
-    
+final class LostItemChatViewController: UIViewController, PHPickerViewControllerDelegate {
+
     // MARK: - Properties
     private let viewModel: LostItemChatViewModel
     private let inputSubject: PassthroughSubject<LostItemChatViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    private var messageInputBottomConstraint: NSLayoutConstraint!
-    private var textViewHeightConstraint: NSLayoutConstraint!
     var chatRoomId: Int { viewModel.chatRoomId }
-    
+
     // MARK: - UI Components
-    private let bottomBackgroundView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral100)
-    }
-    private let messageInputView = UIView().then {
-        $0.backgroundColor = .appColor(.neutral100)
-    }
-    
-    private let leftButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .gallery), for: .normal)
-    }
-    
-    private let textView = UITextView().then {
-        $0.isScrollEnabled = false
-        $0.font = UIFont.systemFont(ofSize: 16)
-        $0.backgroundColor = .appColor(.neutral0)
-        $0.textContainerInset = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
-        $0.layer.cornerRadius = 12
-        $0.text = "메시지 보내기"
-        $0.textColor = .appColor(.neutral500)
-    }
-    
-    private let sendButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .send), for: .normal)
-    }
-    
-    private let chatHistoryTableView = LostItemChatHistoryTableView().then {
-        $0.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 16, right: 0)
-    }
-    
+    private let chatListView = ChatListView()
+
     init(viewModel: LostItemChatViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
         let rightButton = UIBarButtonItem(image: UIImage.appImage(asset: .threeCircle), style: .plain, target: self, action: #selector(rightButtonTapped))
         navigationItem.rightBarButtonItem = rightButton
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self)
-    }
-    
+
     // MARK: - Life Cycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         configureView()
         bind()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
-        view.addGestureRecognizer(tapGesture)
-        leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
-        sendButton.addTarget(self, action: #selector(sendButtonTapped), for: .touchUpInside)
-        textView.delegate = self
         inputSubject.send(.viewDidLoad)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         inputSubject.send(.fetchChatDetail)
         configureNavigationBar(style: .empty)
     }
-    
+
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(true)
         inputSubject.send(.viewWillDisappear)
     }
-    
+
     // MARK: - Bind
-    
+
     private func bind() {
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
-            case .showChatHistory(let chatHistory): chatHistoryTableView.setChatHistory(item: chatHistory)
+            case .showChatHistory(let chatHistory): chatListView.update(model: ChatListModel(from: chatHistory))
             case .showToast(let message, let success):
                 showToastMessage(message: message, intent: success ? .positive : .negative)
                 if success { navigationController?.popViewController(animated: true) }
@@ -106,10 +67,22 @@ final class LostItemChatViewController: UIViewController, UITextViewDelegate, PH
                 self.title = title
             }
         }.store(in: &subscriptions)
-        
-        chatHistoryTableView.imageTapPublisher.sink { [weak self] imageUrl in
+
+        chatListView.messageSendPublisher
+            .sink { [weak self] message in
+                self?.inputSubject.send(.sendMessage(message, false))
+            }
+            .store(in: &subscriptions)
+
+        chatListView.imageSendTappedPublisher
+            .sink { [weak self] in
+                self?.leftButtonTapped()
+            }
+            .store(in: &subscriptions)
+
+        chatListView.imageTappedPublisher.sink { [weak self] imageUrl in
             self?.dismissKeyboard()
-            
+
             let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
             zoomedImageViewController.configure(urls: [imageUrl], initialIndexPath: IndexPath(row: 0, section: 0))
             self?.present(zoomedImageViewController, animated: true, completion: nil)
@@ -117,18 +90,8 @@ final class LostItemChatViewController: UIViewController, UITextViewDelegate, PH
     }
 }
 
-extension LostItemChatViewController{
-    
-    @objc private func sendButtonTapped() {
-        if textView.text.isEmpty || textView.textColor == .appColor(.neutral500) { return }
-        inputSubject.send(.sendMessage(textView.text, false))
-        textView.text = ""
-        textViewHeightConstraint.constant = 36
-        UIView.animate(withDuration: 0.1) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
+extension LostItemChatViewController {
+
     @objc private func leftButtonTapped() {
         dismissKeyboard()
         presentImagePicker()
@@ -138,18 +101,18 @@ extension LostItemChatViewController{
         var config = PHPickerConfiguration()
         config.filter = .images
         config.selectionLimit = 1
-        
+
         let picker = PHPickerViewController(configuration: config)
         picker.delegate = self
         present(picker, animated: true, completion: nil)
     }
-    
+
     // ✅ 사용자가 사진을 선택했을 때 실행되는 함수
     func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
         picker.dismiss(animated: true, completion: nil)
-        
+
         guard let provider = results.first?.itemProvider else { return }
-        
+
         if provider.canLoadObject(ofClass: UIImage.self) {
             provider.loadObject(ofClass: UIImage.self) { [weak self] image, error in
                 DispatchQueue.main.async {
@@ -161,7 +124,7 @@ extension LostItemChatViewController{
             }
         }
     }
-    
+
     @objc private func rightButtonTapped() {
         dismissKeyboard()
 
@@ -175,7 +138,7 @@ extension LostItemChatViewController{
 
     private func presentBlockUserConfirmationModal() {
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .titles(
                 mainTitleText: "이 사용자를 차단하시겠습니까?",
                 subTitleText: "쪽지 수신 및 발신이 모두 차단됩니다."
@@ -191,114 +154,15 @@ extension LostItemChatViewController{
         present(modalViewController, animated: true)
     }
 
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
-        let keyboardHeight = keyboardFrame.height
-        
-        UIView.animate(withDuration: 0.3) { [weak self] in
-            self?.chatHistoryTableView.contentOffset.y += (keyboardHeight - UIApplication.bottomSafeAreaHeight())
-        }
-    }
-    
-    private func adjustInputViewPosition(up: Bool, height: CGFloat) {
-        messageInputBottomConstraint.constant = up ? -height : 0
-        UIView.animate(withDuration: 0.3) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    @objc internal override func dismissKeyboard() {
-        textView.resignFirstResponder()
-    }
-    
-    func textViewDidBeginEditing(_ textView: UITextView) {
-        if textView.textColor == .appColor(.neutral500) {
-            textView.text = ""
-            textView.textColor = .appColor(.neutral800)
-        }
-    }
-    
-    func textViewDidChange(_ textView: UITextView) {
-        let size = CGSize(width: textView.frame.width, height: .infinity)
-        let estimatedSize = textView.sizeThatFits(size)
-        
-        let maxHeight: CGFloat = 120
-        let minHeight: CGFloat = 36
-        if estimatedSize.height >= maxHeight {
-            textViewHeightConstraint.constant = maxHeight
-            textView.isScrollEnabled = true
-        } else if estimatedSize.height <= minHeight{
-            textViewHeightConstraint.constant = minHeight
-        } else {
-            textViewHeightConstraint.constant = estimatedSize.height
-        }
-        
-        UIView.animate(withDuration: 0.2) {
-            self.view.layoutIfNeeded()
-        }
-    }
-    
-    func textViewDidEndEditing(_ textView: UITextView) {
-        if textView.text == "" {
-            textView.text = "메시지 보내기"
-            textView.textColor = .appColor(.neutral500)
-        }
-    }
-    
-    func textViewShouldEndEditing(_ textView: UITextView) -> Bool {
-        if textView.text == "" {
-            textView.text = "메시지 보내기"
-            textView.textColor = .appColor(.neutral500)
-        }
-        return true
-    }
 }
 
-extension LostItemChatViewController {
-    
-    private func setUpLayOuts() {
-        [bottomBackgroundView, chatHistoryTableView, messageInputView].forEach {
-            view.addSubview($0)
-        }
-        [leftButton, textView, sendButton].forEach {
-            messageInputView.addSubview($0)
-        }
-    }
-    
-    private func setUpConstraints() {
-        chatHistoryTableView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(messageInputView.snp.top)
-        }
-        messageInputView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.height.greaterThanOrEqualTo(50)
-            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
-        }
-        leftButton.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(24)
-            make.bottom.equalTo(messageInputView.snp.bottom).offset(-8)
-            make.size.equalTo(32)
-        }
-        sendButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview().offset(-24)
-            make.bottom.equalTo(messageInputView.snp.bottom).offset(-8)
-            make.size.equalTo(32)
-        }
-        textView.snp.makeConstraints { make in
-            make.leading.equalTo(leftButton.snp.trailing).offset(8)
-            make.trailing.equalTo(sendButton.snp.leading).offset(-8)
-            make.top.equalTo(messageInputView).offset(8)
-            make.bottom.equalTo(messageInputView).offset(-8)
-            textViewHeightConstraint = make.height.equalTo(36).priority(.high).constraint.layoutConstraints.first
-        }
-        bottomBackgroundView.snp.makeConstraints {
+private extension LostItemChatViewController {
+    func configureView() {
+        view.backgroundColor = .appColor(.neutral0)
+        view.addSubview(chatListView)
+        chatListView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             $0.leading.trailing.bottom.equalToSuperview()
-            $0.top.equalTo(messageInputView.snp.bottom)
         }
-    }
-    private func configureView() {
-        setUpLayOuts()
-        setUpConstraints()
-        self.view.backgroundColor = .systemBackground
     }
 }
