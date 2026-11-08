@@ -132,8 +132,7 @@ extension LostItemChatViewController {
             self?.presentBlockUserConfirmationModal()
         })
         blockCheckModalViewController.modalPresentationStyle = .overFullScreen
-        blockCheckModalViewController.modalTransitionStyle = .crossDissolve
-        present(blockCheckModalViewController, animated: true)
+        present(blockCheckModalViewController, animated: false)
     }
 
     private func presentBlockUserConfirmationModal() {

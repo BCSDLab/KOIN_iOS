@@ -9,6 +9,17 @@ import UIKit
 
 final class LostItemBlockCheckModalViewController: UIViewController {
     private let onBlockButtonTapped: () -> Void
+    private var minimizedTransform: CGAffineTransform {
+        let scale = 0.4
+        return CGAffineTransform(
+            a: scale,
+            b: 0,
+            c: 0,
+            d: scale,
+            tx: blockButton.bounds.width * (1 - scale) / 2,
+            ty: -blockButton.bounds.height * (1 - scale) / 2
+        )
+    }
     
     private let blockButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
@@ -43,17 +54,53 @@ final class LostItemBlockCheckModalViewController: UIViewController {
         configureView()
         blockButton.addTarget(self, action: #selector(blockButtonTapped), for: .touchUpInside)
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOutsideOfContainerView))
+        tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        view.layoutIfNeeded()
+        blockButton.transform = minimizedTransform
+        blockButton.alpha = 0
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animate(
+            springDuration: 0.2,
+            bounce: 0.2,
+            options: [.curveEaseInOut, .beginFromCurrentState]
+        ) { [weak self] in
+            self?.blockButton.transform = .identity
+            self?.blockButton.alpha = 1
+        }
+    }
+
+    private func dismissMenu(completion: (() -> Void)? = nil) {
+        guard view.isUserInteractionEnabled else { return }
+        view.isUserInteractionEnabled = false
+        UIView.animate(
+            springDuration: 0.2,
+            bounce: 0.2,
+            options: [.curveEaseInOut, .beginFromCurrentState]
+        ) { [weak self] in
+            guard let self else { return }
+            blockButton.transform = minimizedTransform
+            blockButton.alpha = 0
+        } completion: { [weak self] _ in
+            self?.dismiss(animated: false, completion: completion)
+        }
     }
     
     @objc func blockButtonTapped() {
-        dismiss(animated: true, completion: onBlockButtonTapped)
+        dismissMenu(completion: onBlockButtonTapped)
     }
     
     @objc func tapOutsideOfContainerView(_ sender: UITapGestureRecognizer) {
         let location = sender.location(in: view)
         if !blockButton.frame.contains(location) {
-            dismiss(animated: true, completion: nil)
+            dismissMenu()
         }
     }
     
