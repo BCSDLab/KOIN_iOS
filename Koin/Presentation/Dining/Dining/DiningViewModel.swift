@@ -62,6 +62,11 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     
     // MARK: - AbTest
     private(set) var reportAbTest: DiningReportAbTest?
+    /// 서버·캐시 배정 모두 실패해 로컬에서 임의로 `.nav`를 배정한 경우. 비교군 오염 방지를 위해 ABTest 로그를 남기지 않는다.
+    private var isReportAbTestLocallyAssigned = false
+    var reportAbTestLogValue: String? {
+        isReportAbTestLocallyAssigned ? nil : reportAbTest?.logValue
+    }
     
     // MARK: - Initializer
     init(
@@ -224,6 +229,8 @@ extension DiningViewModel {
                 guard !Task.isCancelled else { return }
                 let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
                 print(errorMessage)
+                isReportAbTestLocallyAssigned = true
+                reportAbTest = .nav
             }
         }
     }
@@ -292,7 +299,7 @@ extension DiningViewModel {
         category: EventParameter.EventCategory,
         selectedPlace: DiningPlace
     ) {
-        guard let reportAbTestName = reportAbTest?.logValue else {
+        guard let reportAbTestName = reportAbTestLogValue else {
             return
         }
         makeLogAnalyticsEvent(

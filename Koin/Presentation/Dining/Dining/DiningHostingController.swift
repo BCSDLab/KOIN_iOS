@@ -123,11 +123,13 @@ extension DiningHostingController {
     }
     
     @objc private func didTapReportButton() {
-        rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
-            category: .click,
-            value: DiningReportAbTest.nav.logValue
-        )
+        if let reportAbTestName {
+            rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
+                category: .click,
+                value: reportAbTestName
+            )
+        }
         showReportModal(selectedPlace: nil)
     }
     
@@ -208,13 +210,13 @@ extension DiningHostingController {
                 dismiss(animated: true)
             },
             onPlaceSelected: { [weak self] place in
-                guard let self, let reportAbTest = rootView.reportAbTest else {
+                guard let self, let reportAbTestName else {
                     return
                 }
                 rootView.makeLogAnalyticsEvent(
                     label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSelect,
                     category: .select,
-                    value: "\(reportAbTest.logValue)_\(place.name)"
+                    value: "\(reportAbTestName)_\(place.name)"
                 )
             },
             onSelectImageButtonTapped: { [weak self] in
@@ -239,7 +241,7 @@ extension DiningHostingController {
     }
     
     private var reportAbTestName: String? {
-        rootView.reportAbTest?.logValue
+        rootView.reportAbTestLogValue
     }
     
     private func presentReportModalViewController() {
