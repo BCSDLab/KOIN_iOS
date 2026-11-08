@@ -63,7 +63,6 @@ public enum ImageAsset: String {
     case diningTooltip
     case nonMenuImage
     case nonMenuWeekendImage
-    case diningReport
     case diningReportTooltipNav
     case diningReportTooltipCard
     case diningReportImageEvidence

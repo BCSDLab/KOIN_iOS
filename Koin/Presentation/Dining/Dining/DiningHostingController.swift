@@ -17,9 +17,22 @@ final class DiningHostingController: UIHostingController<DiningView>, HostingCon
     private var modalView: DiningReportModalView?
     
     // MARK: - UI Components
-    private lazy var reportButton = UIButton().then {
-        $0.addTarget(self, action: #selector(didTapReportButton), for: .touchUpInside)
-    }
+    private lazy var reportButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.attributedTitle = AttributedString(
+            "품절 제보",
+            attributes: AttributeContainer([
+                .font: UIFont.setFont(.captionStronger),
+                .foregroundColor : UIColor.appColor(.neutral0)
+            ]))
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 14, bottom: 7, trailing: 14)
+        configuration.cornerStyle = .capsule
+        configuration.background.backgroundColor = UIColor.ColorSystem.Primary.purple700
+        
+        let button = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(didTapReportButton), for: .touchUpInside)
+        return button
+    }()
     private lazy var reportBarButton = UIBarButtonItem(customView: reportButton)
     private lazy var coopInfoBarButton = UIBarButtonItem(
         image: .appImage(asset: .coopInfo),
@@ -142,8 +155,6 @@ extension DiningHostingController {
 extension DiningHostingController {
     private func configureView() {
         view.addSubview(reportTooltipImageView)
-        
-        reportButton.setImage(.appImage(asset: .diningReport), for: .normal)
         
         reportTooltipImageView.snp.makeConstraints {
             $0.width.equalTo(171)
