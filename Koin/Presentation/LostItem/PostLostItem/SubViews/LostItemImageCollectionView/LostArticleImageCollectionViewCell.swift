@@ -23,14 +23,9 @@ final class LostItemImageCollectionViewCell: UICollectionViewCell {
 
     private let cancelButton =  UIButton().then {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .cancelNeutral500)?
-            .withTintColor(.appColor(.neutral0), renderingMode: .alwaysOriginal)
-            .resize(to: CGSize(width: 12, height: 12))
-        configuration.contentInsets = NSDirectionalEdgeInsets(top: 2, leading: 2, bottom: 2, trailing: 2)
+        configuration.image = UIImage.appImage(asset: .lostItemPhotoDelete)?.withRenderingMode(.alwaysOriginal)
+        configuration.contentInsets = .zero
         $0.configuration = configuration
-        $0.backgroundColor = .appColor(.new500)
-        $0.layer.cornerRadius = 8
-        $0.clipsToBounds = true
     }
 
     // MARK: - Initializer
