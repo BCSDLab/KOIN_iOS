@@ -52,6 +52,8 @@ extension KoinBottomSheetController {
         velocity: CGFloat = 0
     ) {
         let startHeight = sheetView.bounds.height
+        // 키보드를 닫으며 끈 뒤에는 콘텐츠가 시트 하단에서 떠 있다. 그 간격에서 시작해 0으로 맞춘다.
+        let startContentInset = startHeight - contentViewController.view.frame.maxY
         let startTransform = containerView.transform
         let startTop = containerView.frame.minY
         let startAlpha = dimView.alpha
@@ -61,6 +63,7 @@ extension KoinBottomSheetController {
         let targetHeight = sheetView.bounds.height
         let targetTop = containerView.frame.minY
         holdHeight(startHeight)
+        contentBottomConstraint?.update(inset: startContentInset)
         containerView.transform = startTransform
         view.layoutIfNeeded()
         dimView.alpha = startAlpha
@@ -71,9 +74,11 @@ extension KoinBottomSheetController {
         ) { [weak self] in
             guard let self else { return }
             self.holdHeight(targetHeight)
+            self.contentBottomConstraint?.update(inset: 0)
             self.containerView.transform = .identity
-            self.applyModalDimTarget()
+            self.applyDimTarget()
             self.view.layoutIfNeeded()
+            self.notifyTargetFrame()
         } completion: { [weak self] in
             guard let self else { return }
             self.applyTargetHeight()
@@ -86,11 +91,13 @@ extension KoinBottomSheetController {
         guard let animator else { return }
         let frame = containerView.layer.presentation()?.frame ?? containerView.frame
         let height = sheetView.layer.presentation()?.bounds.height ?? sheetView.bounds.height
+        let contentMaxY = contentViewController.view.layer.presentation()?.frame.maxY ?? contentViewController.view.frame.maxY
         let dimAlpha = dimView.layer.presentation()?.opacity ?? Float(dimView.alpha)
         animator.stopAnimation(true)
         self.animator = nil
         dimView.alpha = CGFloat(dimAlpha)
         holdHeight(height)
+        contentBottomConstraint?.update(inset: max(0, height - contentMaxY))
         containerView.transform = .identity
         view.layoutIfNeeded()
         containerView.transform = CGAffineTransform(
@@ -99,15 +106,32 @@ extension KoinBottomSheetController {
         )
     }
 
+    /// transform이 identity인 목표 레이아웃에서 불러야 최종 frame이 나간다.
+    func notifyTargetFrame() {
+        guard isActive else { return }
+        configuration.onTargetFrameChange?(sheetView.convert(sheetView.bounds, to: nil))
+    }
+
     func finishPresentationIfNeeded() {
         guard state == .presenting else { return }
         state = .presented
     }
 
-    func applyModalDimTarget() {
+    func applyDimTarget() {
         guard isActive else { return }
-        if case let .modal(alpha) = configuration.style {
+        switch configuration.style {
+        case let .modal(alpha):
             dimView.alpha = alpha
+        case .nonModal:
+            dimView.alpha = isFullScreen ? Self.nonModalFullScreenDimAlpha : 0
         }
+    }
+
+    /// nonModal을 끌 때 기본 높이에서 fullscreen으로 갈수록 dim을 진하게 한다.
+    func applyNonModalDim(forHeight height: CGFloat, baseHeight: CGFloat) {
+        guard !isModal else { return }
+        let range = availableHeight - baseHeight
+        let progress = range > 0.5 ? (height - baseHeight) / range : (isFullScreen ? 1 : 0)
+        dimView.alpha = Self.nonModalFullScreenDimAlpha * min(1, max(0, progress))
     }
 }

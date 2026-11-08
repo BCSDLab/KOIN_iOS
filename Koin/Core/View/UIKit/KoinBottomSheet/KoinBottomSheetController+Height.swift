@@ -8,10 +8,25 @@
 import UIKit
 
 extension KoinBottomSheetController {
-    var heightContext: KoinBottomSheetContext? {
+    /// 시트가 올라갈 수 있는 상단 한계. host가 nav·tab이어도 owner 화면의 safe area(내비게이션 바 아래)에서 멈춘다.
+    var topLimitGuide: UILayoutGuide? {
         guard let host = view.superview else { return nil }
+        if let ownerView = owner?.viewIfLoaded, ownerView.isDescendant(of: host) {
+            return ownerView.safeAreaLayoutGuide
+        }
+        return host.safeAreaLayoutGuide
+    }
+
+    /// host 좌표계의 상단 한계 y.
+    var topLimitY: CGFloat? {
+        guard let host = view.superview, let guide = topLimitGuide, let guideView = guide.owningView else { return nil }
+        return guideView.convert(guide.layoutFrame, to: host).minY
+    }
+
+    var heightContext: KoinBottomSheetContext? {
+        guard let host = view.superview, let topLimitY else { return nil }
         let width = view.bounds.width
-        let maximumHeight = host.safeAreaLayoutGuide.layoutFrame.height
+        let maximumHeight = host.safeAreaLayoutGuide.layoutFrame.maxY - topLimitY
         guard view.window != nil,
               width.isFinite, width > 0,
               maximumHeight.isFinite,
@@ -51,17 +66,18 @@ extension KoinBottomSheetController {
         applyTargetHeight()
         containerView.transform = .identity
         if wasAnimating {
-            applyModalDimTarget()
+            applyDimTarget()
         }
         view.layoutIfNeeded()
+        notifyTargetFrame()
         if wasAnimating {
             finishPresentationIfNeeded()
         }
     }
 
     var availableHeight: CGFloat {
-        guard let host = view.superview else { return 0 }
-        return max(0, host.keyboardLayoutGuide.layoutFrame.minY - host.safeAreaLayoutGuide.layoutFrame.minY)
+        guard let host = view.superview, let topLimitY else { return 0 }
+        return max(0, host.keyboardLayoutGuide.layoutFrame.minY - topLimitY)
     }
 
     /// 화면 크기보다 큰 유한값을 선호하고, required 상한은 Auto Layout에 맡긴다.
@@ -70,6 +86,7 @@ extension KoinBottomSheetController {
         heightConstraint.priority = UILayoutPriority(999)
         heightConstraint.constant = isFullScreen ? max(view.bounds.height * 2, 1) : resolvedHeight
         heightConstraint.isActive = true
+        contentBottomConstraint?.update(inset: 0)
     }
 
     func holdHeight(_ height: CGFloat) {
