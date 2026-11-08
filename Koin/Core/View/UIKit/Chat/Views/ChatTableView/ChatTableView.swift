@@ -42,7 +42,7 @@ extension ChatTableView {
         sectionFooterHeight = 51
         rowHeight = UITableView.automaticDimension
         tableHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: CGFloat.leastNonzeroMagnitude))
-        keyboardDismissMode = .interactiveWithAccessory
+        keyboardDismissMode = .interactive
         delegate = self
         dataSource = self
         register(ChatLeftCell.self, forCellReuseIdentifier: ChatLeftCell.identifier)
