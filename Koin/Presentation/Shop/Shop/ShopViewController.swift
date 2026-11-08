@@ -75,7 +75,6 @@ final class ShopViewController: UIViewController {
                 self.updateEventShops(eventShops)
             case let .updateSortButtonTitle(newTitle):
                 self.shopCollectionView.updateSortButtonTitle(newTitle)
-            default: break
             }
         }.store(in: &subscriptions)
 
