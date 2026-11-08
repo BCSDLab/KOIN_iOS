@@ -121,7 +121,14 @@ extension DiningMenuRowView {
         Button {
             onReportButtonTapped(item)
         } label: {
-            Image.appImage(asset: .diningReport)
+            Text("품절 제보")
+                .font(.appFont(.pretendardSemiBold, size: 13))
+                .foregroundStyle(Color.appColor(.neutral0))
+                .padding(.horizontal, 14)
+                .padding(.top, 7)
+                .padding(.bottom, 7)
+                .background(Color.ColorSystem.Primary.purple700)
+                .clipShape(.capsule)
         }
         .buttonStyle(.plain)
     }

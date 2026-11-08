@@ -50,10 +50,16 @@ struct DiningMenuCard: View {
                 }
                 .frame(height: 19.2)
                 
-                Text(item.placeName)
-                    .font(.appFont(.pretendardBold, size: 20))
-                    .foregroundStyle(Color.ColorSystem.Neutral.gray800)
-                    .frame(height: 32)
+                HStack(spacing: 4) {
+                    Text(item.placeName)
+                        .font(.appFont(.pretendardBold, size: 20))
+                        .foregroundStyle(Color.ColorSystem.Neutral.gray800)
+                        .frame(height: 32)
+                    
+                    if item.isSoldOut {
+                        soldOutChip
+                    }
+                }
                 
                 Text(item.menu.byCharWrapping)
                     .font(.appFont(.pretendardMedium, size: 14))
@@ -74,5 +80,16 @@ struct DiningMenuCard: View {
             }
         }
         .buttonStyle(.plain)
+    }
+    
+    private var soldOutChip: some View {
+        Text("품절")
+            .font(.appFont(.pretendardMedium, size: 10))
+            .foregroundStyle(Color.appColor(.new600))
+            .frame(height: 10 * 1.6)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 1)
+            .background(Color.appColor(.new100))
+            .clipShape(.capsule)
     }
 }

@@ -14,6 +14,7 @@ struct HomeDiningItem: Equatable, Identifiable {
     let priceText: String?
     let kcalText: String?
     let menu: String
+    let isSoldOut: Bool
 }
 
 extension HomeDiningItem {
@@ -24,7 +25,8 @@ extension HomeDiningItem {
             timeText: timeText,
             priceText: diningItem.diningPriceText,
             kcalText: "\(diningItem.kcal)kcal",
-            menu: diningItem.menu.joined(separator: " · ")
+            menu: diningItem.menu.joined(separator: " · "),
+            isSoldOut: diningItem.isSoldOut
         )
     }
 }

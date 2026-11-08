@@ -17,9 +17,22 @@ final class DiningHostingController: UIHostingController<DiningView>, HostingCon
     private var modalView: DiningReportModalView?
     
     // MARK: - UI Components
-    private lazy var reportButton = UIButton().then {
-        $0.addTarget(self, action: #selector(didTapReportButton), for: .touchUpInside)
-    }
+    private lazy var reportButton: UIButton = {
+        var configuration = UIButton.Configuration.filled()
+        configuration.attributedTitle = AttributedString(
+            "품절 제보",
+            attributes: AttributeContainer([
+                .font: UIFont.setFont(.captionStronger),
+                .foregroundColor : UIColor.appColor(.neutral0)
+            ]))
+        configuration.contentInsets = NSDirectionalEdgeInsets(top: 7, leading: 14, bottom: 7, trailing: 14)
+        configuration.cornerStyle = .capsule
+        configuration.background.backgroundColor = UIColor.ColorSystem.Primary.purple700
+        
+        let button = UIButton(configuration: configuration)
+        button.addTarget(self, action: #selector(didTapReportButton), for: .touchUpInside)
+        return button
+    }()
     private lazy var reportBarButton = UIBarButtonItem(customView: reportButton)
     private lazy var coopInfoBarButton = UIBarButtonItem(
         image: .appImage(asset: .coopInfo),
@@ -104,17 +117,19 @@ extension DiningHostingController {
         )
         
         reportTooltipImageView.frame.origin = CGPoint(
-            x: reportButtonRect.minX - 135,
-            y: reportButtonRect.maxY + 10
+            x: reportButtonRect.minX - 171 + 38 + 22,
+            y: reportButtonRect.maxY + 5
         )
     }
     
     @objc private func didTapReportButton() {
-        rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
-            category: .click,
-            value: DiningReportAbTest.nav.logValue
-        )
+        if let reportAbTestName {
+            rootView.makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
+                category: .click,
+                value: reportAbTestName
+            )
+        }
         showReportModal(selectedPlace: nil)
     }
     
@@ -142,8 +157,6 @@ extension DiningHostingController {
 extension DiningHostingController {
     private func configureView() {
         view.addSubview(reportTooltipImageView)
-        
-        reportButton.setImage(.appImage(asset: .diningReport), for: .normal)
         
         reportTooltipImageView.snp.makeConstraints {
             $0.width.equalTo(171)
@@ -197,13 +210,13 @@ extension DiningHostingController {
                 dismiss(animated: true)
             },
             onPlaceSelected: { [weak self] place in
-                guard let self, let reportAbTest = rootView.reportAbTest else {
+                guard let self, let reportAbTestName else {
                     return
                 }
                 rootView.makeLogAnalyticsEvent(
                     label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSelect,
                     category: .select,
-                    value: "\(reportAbTest.logValue)_\(place.name)"
+                    value: "\(reportAbTestName)_\(place.name)"
                 )
             },
             onSelectImageButtonTapped: { [weak self] in
@@ -228,7 +241,7 @@ extension DiningHostingController {
     }
     
     private var reportAbTestName: String? {
-        rootView.reportAbTest?.logValue
+        rootView.reportAbTestLogValue
     }
     
     private func presentReportModalViewController() {

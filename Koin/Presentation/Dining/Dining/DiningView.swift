@@ -26,8 +26,8 @@ struct DiningView: ActionBindableView {
     var operatingPlaces: [(place: DiningPlace, id: Int?)] {
         viewModel.operatingPlaces
     }
-    var reportAbTest: DiningReportAbTest? {
-        viewModel.reportAbTest
+    var reportAbTestLogValue: String? {
+        viewModel.reportAbTestLogValue
     }
     
     // MARK: - Initializer
