@@ -12,70 +12,137 @@ protocol TimetableCellDelegate: AnyObject {
 }
 
 final class TimetableCell: UITableViewCell {
-    
-    
+    // MARK: - Properties
     weak var delegate: TimetableCellDelegate?
-     var indexPath: IndexPath? // 셀의 indexPath를 저장
-    
+    private var indexPath: IndexPath?
+
     // MARK: - UI Components
-    private let titleLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    private let bookmarkImageView = UIImageView().then { _ in
-    }
-    private let settingButton = UIButton().then {
-        $0.setTitle("설정", for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 16)
-        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-    }
-    
-    // MARK: - Initialization
+    private let titleStackView = UIStackView()
+    private let titleLabel = UILabel()
+    private let bookmarkImageView = UIImageView()
+    private let settingButton = UIButton(type: .custom)
+
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupViews()
-        setupConstraints()
-        settingButton.addTarget(self, action: #selector(settingButtonTapped), for: .touchUpInside)
+        configureView()
+        settingButton.addTarget(self, action: #selector(settingTapped), for: .touchUpInside)
     }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+
+    func configure(with timetable: FrameDto, at indexPath: IndexPath, canEdit: Bool = true) {
+        self.indexPath = indexPath
+        titleLabel.text = timetable.timetableName
+        bookmarkImageView.isHidden = !canEdit || !timetable.isMain
+        settingButton.isHidden = !canEdit
     }
-    
-    // MARK: - Configure Cell
-    func configure(with timetable: FrameDto, at indexPath: IndexPath) {
-            titleLabel.text = timetable.timetableName
-            bookmarkImageView.image = timetable.isMain ? UIImage.appImage(asset: .bookmark) : UIImage()
-            self.indexPath = indexPath // 셀의 indexPath 저장
-        }
-    @objc private func settingButtonTapped() {
-           guard let indexPath = indexPath else { return }
-           delegate?.settingButtonTapped(at: indexPath) // Delegate 호출
-       }
-    
-    // MARK: - Setup UI
-    private func setupViews() {
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(bookmarkImageView)
-        contentView.addSubview(settingButton)
+
+    override func setHighlighted(_ highlighted: Bool, animated: Bool) {
+        super.setHighlighted(highlighted, animated: animated)
+        contentView.backgroundColor = .appColor(highlighted ? .neutral100 : .neutral0)
     }
-    
-    private func setupConstraints() {
-        titleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(32)
-            make.trailing.lessThanOrEqualToSuperview().offset(-150)
-            make.centerY.equalToSuperview()
+
+    @objc private func settingTapped() {
+        guard let indexPath else { return }
+        delegate?.settingButtonTapped(at: indexPath)
+    }
+
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
+    }
+
+    private func setUpStyles() {
+        backgroundColor = .appColor(.neutral0)
+        selectionStyle = .none
+        titleStackView.axis = .horizontal
+        titleStackView.alignment = .center
+        titleStackView.spacing = 8
+        titleLabel.font = .appFont(.pretendardMedium, size: 15)
+        titleLabel.textColor = .appColor(.neutral800)
+        titleLabel.lineBreakMode = .byTruncatingTail
+        titleLabel.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+        bookmarkImageView.image = .appImage(asset: .timetableBookmark)
+        bookmarkImageView.contentMode = .scaleAspectFit
+        settingButton.setImage(UIImage.appImage(asset: .profileSetting)?.resize(to: CGSize(width: 21, height: 21))?.withRenderingMode(.alwaysTemplate), for: .normal)
+        settingButton.tintColor = .appColor(.neutral500)
+        settingButton.imageView?.contentMode = .scaleAspectFit
+        settingButton.accessibilityLabel = "시간표 설정"
+    }
+
+    private func setUpLayouts() {
+        [titleLabel, bookmarkImageView].forEach { titleStackView.addArrangedSubview($0) }
+        [titleStackView, settingButton].forEach { contentView.addSubview($0) }
+    }
+
+    private func setUpConstraints() {
+        titleStackView.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(32)
+            $0.top.equalToSuperview().offset(12)
+            $0.height.equalTo(24)
+            $0.trailing.lessThanOrEqualTo(settingButton.snp.leading).offset(-8)
         }
-        bookmarkImageView.snp.makeConstraints { make in
-            make.leading.equalTo(titleLabel.snp.trailing).offset(20)
-            make.centerY.equalToSuperview()
-            make.width.equalTo(14)
-            make.height.equalTo(20)
+        bookmarkImageView.snp.makeConstraints { $0.size.equalTo(24).priority(999) }
+        settingButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.centerY.equalTo(titleStackView)
+            $0.size.equalTo(21)
         }
-        settingButton.snp.makeConstraints { make in
-            make.width.equalTo(28)
-            make.height.equalTo(26)
-            make.centerY.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-32)
+    }
+}
+
+final class FrameListSectionHeaderView: UIView {
+    // MARK: - Properties
+    private let isFirst: Bool
+    private let onAdd: (UIButton) -> Void
+
+    // MARK: - UI Components
+    private let titleLabel = UILabel()
+    private let addButton = UIButton(type: .custom)
+
+    init(semester: String, section: Int, onAdd: @escaping (UIButton) -> Void) {
+        isFirst = section == 0
+        self.onAdd = onAdd
+        super.init(frame: .zero)
+        titleLabel.text = semester.reverseFormatSemester()
+            .replacingOccurrences(of: "년 ", with: " ")
+            .replacingOccurrences(of: " 학기", with: "학기")
+        addButton.tag = section
+        configureView()
+        addButton.addTarget(self, action: #selector(addTapped), for: .touchUpInside)
+    }
+
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    @objc private func addTapped() { onAdd(addButton) }
+
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
+    }
+
+    private func setUpStyles() {
+        backgroundColor = .appColor(.neutral0)
+        titleLabel.font = .appFont(.pretendardSemiBold, size: 15)
+        titleLabel.textColor = .appColor(.neutral800)
+        addButton.setImage(.appImage(asset: .timetablePlusNeutral500), for: .normal)
+        addButton.accessibilityLabel = "시간표 추가"
+    }
+
+    private func setUpLayouts() { [titleLabel, addButton].forEach { addSubview($0) } }
+
+    private func setUpConstraints() {
+        titleLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(isFirst ? 16 : 12)
+            $0.leading.equalToSuperview().offset(20)
+            $0.height.equalTo(24)
+            $0.trailing.lessThanOrEqualTo(addButton.snp.leading).offset(-8)
+        }
+        addButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-20)
+            $0.centerY.equalTo(titleLabel)
+            $0.size.equalTo(21)
         }
     }
 }

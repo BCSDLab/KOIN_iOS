@@ -7,56 +7,72 @@
 
 import UIKit
 
-
 final class LectureView: UIView {
-    
+    // MARK: - Properties
     private(set) var info: LectureData
-    
-    let separateView = UIView().then { _ in
-    }
-    
-    let lectureNameLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.numberOfLines = 0
-    }
-    let professorNameLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 10)
-        $0.numberOfLines = 0
-    }
-    init(info: LectureData, color: UIColor) {
+    private let bodyColor: UIColor
+    private let headerColor: UIColor
+
+    // MARK: - UI Components
+    let separateView = UIView()
+    let lectureNameLabel = UILabel()
+    let professorNameLabel = UILabel()
+
+    init(info: LectureData, color: UIColor, headerColor: UIColor) {
         self.info = info
+        self.bodyColor = color
+        self.headerColor = headerColor
         super.init(frame: .zero)
-        lectureNameLabel.text = info.name
-        professorNameLabel.text = info.professor
-        setupLayouts()
-        setupConstraints()
+        configureView()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    // MARK: - Layouts
-    private func setupLayouts() {
-        addSubview(separateView)
-        addSubview(lectureNameLabel)
-        addSubview(professorNameLabel)
+
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
     }
-    
-    // MARK: - Constraints
-    private func setupConstraints() {
-        separateView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(2)
+
+    private func setUpStyles() {
+        backgroundColor = bodyColor
+        clipsToBounds = true
+        separateView.backgroundColor = headerColor
+        configureLabel(lectureNameLabel, text: info.name, size: 12)
+        configureLabel(professorNameLabel, text: info.professor, size: 10)
+    }
+
+    private func configureLabel(_ label: UILabel, text: String, size: Int) {
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.minimumLineHeight = CGFloat(size) * 1.6
+        paragraph.maximumLineHeight = CGFloat(size) * 1.6
+        paragraph.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        label.attributedText = NSAttributedString(string: text, attributes: [
+            .font: UIFont.appFont(.pretendardRegular, size: size),
+            .foregroundColor: UIColor.appColor(.neutral800),
+            .paragraphStyle: paragraph
+        ])
+    }
+
+    private func setUpLayouts() {
+        [separateView, lectureNameLabel, professorNameLabel].forEach { addSubview($0) }
+    }
+
+    private func setUpConstraints() {
+        separateView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.height.equalTo(2)
         }
-        lectureNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(separateView.snp.bottom)
-            make.leading.trailing.equalToSuperview()
-            make.height.equalTo(35)
+        lectureNameLabel.snp.makeConstraints {
+            $0.top.equalTo(separateView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
         }
-        professorNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(lectureNameLabel.snp.bottom)
-            make.leading.trailing.equalToSuperview()
+        professorNameLabel.snp.makeConstraints {
+            $0.top.equalTo(lectureNameLabel.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
         }
     }
 }

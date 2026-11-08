@@ -21,27 +21,22 @@ final class DeleteFrameModalViewController: KoinModalViewController {
         self.onDeleteButtonTapped = onDeleteButtonTapped
         self.frame = frame
 
-        let attributedString = {
-            let frameName = frame.timetableName
-            let text = "\(frameName)\(frameName.hasFinalConsonant() ? "을":"를") 삭제하시겠어요?"
-            let attributedString = NSMutableAttributedString(
-                string: text,
-                attributes: [
-                    .font: UIFont.appFont(.pretendardMedium, size: 16),
-                    .foregroundColor: UIColor.appColor(.neutral800)
-                ]
-            )
-            let range = (text as NSString).range(of: "삭제")
-            attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.danger700), range: range)
-            return attributedString
-        }()
+        let frameName = frame.timetableName
+        let title = "\(frameName)\(frameName.hasFinalConsonant() ? "을" : "를") 삭제하시겠어요?"
+        let attributedTitle = NSMutableAttributedString(string: title, attributes: [
+            .font: UIFont.appFont(.pretendardMedium, size: 16),
+            .foregroundColor: UIColor.appColor(.neutral800)
+        ])
+        attributedTitle.addAttribute(.font, value: UIFont.appFont(.pretendardSemiBold, size: 16), range: (title as NSString).range(of: "삭제", options: .backwards))
         super.init(configuration: .init(
             appearance: .destructive,
-            content: .attributedSingleTitle(title: attributedString),
+            content: .attributedSingleTitle(title: attributedTitle),
             button: .buttons(
                 leftButtonTitle: "취소",
+                leftButtonStyle: .init(textColor: .neutral600, font: .pretendardMedium, fontSize: 15, borderColor: .gray, borderWidth: 1, cornerRadius: 4),
                 rightButtonTitle: "삭제하기",
-                rightButtonAction: {}
+                rightButtonAction: {},
+                rightButtonStyle: .init(textColor: .neutral0, font: .pretendardMedium, fontSize: 15, backgroundColor: .danger700, cornerRadius: 4)
             )
         ))
     }
@@ -51,9 +46,10 @@ final class DeleteFrameModalViewController: KoinModalViewController {
 
     // MARK: - Override
     override func rightButtonTapped() {
-        dismiss(animated: true) { [weak self] in
-            guard let self else { return }
-            onDeleteButtonTapped(frame)
+        let onDelete = onDeleteButtonTapped
+        let frame = frame
+        dismiss(animated: true) {
+            onDelete(frame)
         }
     }
 }

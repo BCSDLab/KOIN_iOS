@@ -15,11 +15,17 @@ final class UserDataManager {
     private(set) var gender: Any = ""
     private(set) var major: String = ""
     private(set) var nickname: String = ""
+    // TODO: 사용자 정보 요청이 실패하거나 끝나기 전이면 로그인 사용자도 isLoggedIn == false로 보인다.
+    // TODO: 앱 시작 시 이 값을 채우는 곳은 HomeViewModel.checkForceModifyUser() 하나인데, forceModal == true면 바로 return한다.
+    //       그래서 한 번 강제 수정 대상이었던 학생은 재실행 후 로그인·프로필 수정 전까지 비로그인으로 보인다.
+    private(set) var userType: UserType?
+    var isStudent: Bool { isLoggedIn && userType == .student }
     
     private init() {}
     
     func setUserData(userData: UserDto) {
         isLoggedIn = true
+        userType = UserType(rawValue: userData.userType ?? "")
         
         guard let id = userData.id else {
             self.id = 0
@@ -55,6 +61,7 @@ final class UserDataManager {
         gender = ""
         major = ""
         nickname = ""
+        userType = nil
         Analytics.setUserID(nil)
     }
     

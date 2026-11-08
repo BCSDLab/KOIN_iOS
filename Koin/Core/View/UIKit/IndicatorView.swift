@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import SnapKit
 
 final class IndicatorView {
-    static func show() {
+    /// dimmed가 false면 배경 없이 인디케이터만 보인다. 바깥 터치는 그대로 막는다.
+    static func show(dimmed: Bool = true) {
         DispatchQueue.main.async {
             guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
             let window = windowScene.windows.first(where: { $0.isKeyWindow }) else { return }
@@ -18,11 +20,13 @@ final class IndicatorView {
                 loadingIndicatorView = existingView
             } else {
                 loadingIndicatorView = UIActivityIndicatorView(style: .large)
-                loadingIndicatorView.frame = window.bounds
-                loadingIndicatorView.backgroundColor = UIColor.black.withAlphaComponent(0.5) 
                 window.addSubview(loadingIndicatorView)
+                loadingIndicatorView.snp.makeConstraints {
+                    $0.edges.equalToSuperview()
+                }
             }
-            
+            loadingIndicatorView.backgroundColor = dimmed ? UIColor.black.withAlphaComponent(0.5) : .clear
+
             loadingIndicatorView.startAnimating()
         }
     }
