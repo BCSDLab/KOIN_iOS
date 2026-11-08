@@ -125,9 +125,8 @@ extension LostItemDataButtonsView {
         editButtonTappedPublisher.send()
     }
     @objc private func changeStateButtonTapped() {
-        if changeStateButton.backgroundColor != UIColor.appColor(.new500) {
-            changeStateButtonTappedPublisher.send()
-        }
+        guard !changeStateButton.isSelected else { return }
+        changeStateButtonTappedPublisher.send()
     }
     @objc private func chatButtonTapped() {
         chatButtonTappedPublisher.send()
@@ -140,6 +139,7 @@ extension LostItemDataButtonsView {
 extension LostItemDataButtonsView {
     
     func changeState() {
+        changeStateButton.isSelected = true
         UIView.animate(withDuration: 0.2) { [weak self] in
             self?.changeStateButton.backgroundColor = .appColor(.new500)
             self?.changeStateCircleView.transform = CGAffineTransform(translationX: 24, y: 0)

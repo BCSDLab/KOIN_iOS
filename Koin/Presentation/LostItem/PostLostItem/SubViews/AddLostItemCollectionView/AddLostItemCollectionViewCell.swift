@@ -274,25 +274,15 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         deleteCellButton.isHidden = isSingle
         
         let category = model.category
-        var isCategorySelected = false
         
         for view in categoryStackView.arrangedSubviews {
             guard let button = view as? UIButton else { continue }
-            if button.configuration?.title == category {
+            button.isSelected = button.configuration?.title == category
+            if button.isSelected {
                 button.configuration?.baseBackgroundColor = UIColor.appColor(.new500)
                 button.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
                 button.layer.borderColor = UIColor.appColor(.new500).cgColor
-                isCategorySelected = true
             } else {
-                button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                button.configuration?.baseForegroundColor = UIColor.appColor(.new500)
-                button.layer.borderColor = UIColor.appColor(.new500).cgColor
-            }
-        }
-        
-        if !isCategorySelected {
-            categoryStackView.arrangedSubviews.forEach { view in
-                guard let button = view as? UIButton else { return }
                 button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
                 button.configuration?.baseForegroundColor = UIColor.appColor(.new500)
                 button.layer.borderColor = UIColor.appColor(.new500).cgColor
@@ -426,7 +416,7 @@ extension AddLostItemCollectionViewCell {
     func validateInputs() -> Bool {
         var isValid = true
         
-        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.new500) }
+        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.isSelected }
         if selectedCategory == nil {
             categoryWarningLabel.isHidden = false
             isValid = false
