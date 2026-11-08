@@ -50,30 +50,30 @@ final class LostItemKeywordLeftAlignedCollectionView: UICollectionView {
     // MARK: - Public
     func configure(keywords: [String]) {
         self.keywords = keywords.map { LostItemKeyword(id: nil, keyword: $0) }
-        reloadSections([0])
+        reloadData()
     }
     
     func configure(keywords: [LostItemKeyword]) {
         self.keywords = keywords
-        reloadSections([0])
+        reloadData()
     }
     
     func append(keyword: LostItemKeyword) {
         keywords.append(keyword)
-        reloadSections([0])
+        reloadData()
     }
     
     func remove(id: Int) {
         if let row = keywords.firstIndex(where: { $0.id == id }) {
             keywords.remove(at: row)
-            reloadSections([0])
+            reloadData()
         }
     }
     
     func remove(keyword: String) {
         if let row = keywords.firstIndex(where: { $0.keyword == keyword }) {
             keywords.remove(at: row)
-            reloadSections([0])
+            reloadData()
         }
     }
 }

@@ -100,13 +100,13 @@ extension LostItemKeywordViewController {
             }
         }.store(in: &subscriptions)
         
-        myKeywordCollectionView.didLayoutSubviewsPublisher.sink { [weak self] height in
+        myKeywordCollectionView.didLayoutSubviewsPublisher.receive(on: DispatchQueue.main).sink { [weak self] height in
             guard let self else { return }
             let inset: CGFloat = height > 0 ? 12 * 2 : 0
             updateHeight(view: myKeywordCollectionView, height: height + inset)
         }.store(in: &subscriptions)
         
-        keywordSuggestionCollectionView.didLayoutSubviewsPublisher.sink { [weak self] height in
+        keywordSuggestionCollectionView.didLayoutSubviewsPublisher.receive(on: DispatchQueue.main).sink { [weak self] height in
             guard let self else { return }
             updateHeight(view: keywordSuggestionCollectionView, height: height)
         }.store(in: &subscriptions)
@@ -126,10 +126,6 @@ extension LostItemKeywordViewController {
     private func updateHeight(view: UIView, height: CGFloat) {
         view.snp.updateConstraints {
             $0.height.equalTo(height)
-        }
-        UIView.animate(withDuration: 0.2, delay: .zero, options: [.transitionCrossDissolve]) { [weak view] in
-            view?.superview?.setNeedsLayout()
-            view?.superview?.layoutIfNeeded()
         }
     }
 }
