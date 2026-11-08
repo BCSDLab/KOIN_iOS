@@ -11,7 +11,7 @@ import Combine
 final class ShopSummaryImagesCollectionView: UICollectionView {
     
     // MARK: - Properties
-    private(set) var orderImages: [OrderImage] = []
+    private(set) var shopImages: [ShopImage] = []
     let didScrollOutputSubject = PassthroughSubject<Int, Never>()
     let didTapThumbnailPublisher = PassthroughSubject<IndexPath, Never>()
     
@@ -24,13 +24,13 @@ final class ShopSummaryImagesCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(orderImage: [OrderImage]){
-        self.orderImages = orderImage
+    func configure(shopImages: [ShopImage]){
+        self.shopImages = shopImages
         self.reloadData()
     }
     
     func configure(images: [AppImage]) {
-        self.orderImages = images.map { OrderImage(imageUrl: $0.imageUrl, isThumbnail: false) }
+        self.shopImages = images.map { ShopImage(imageUrl: $0.imageUrl, isThumbnail: false) }
         self.reloadData()
     }
 }
@@ -38,18 +38,18 @@ final class ShopSummaryImagesCollectionView: UICollectionView {
 extension ShopSummaryImagesCollectionView: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if(orderImages.isEmpty) { return 1 }
-        return orderImages.count
+        if(shopImages.isEmpty) { return 1 }
+        return shopImages.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopSummaryImagesCollectionViewCell.identifier, for: indexPath) as? ShopSummaryImagesCollectionViewCell else {
             return UICollectionViewCell()
         }
-        if(orderImages.isEmpty) {
+        if(shopImages.isEmpty) {
             cell.configure(url: nil)
             return cell
         }
-        cell.configure(url: orderImages[indexPath.row].imageUrl)
+        cell.configure(url: shopImages[indexPath.row].imageUrl)
         return cell
     }
 

@@ -12,13 +12,9 @@ final class ShopViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad
-        case viewDidLoadB
         case changeCategory(Int)
         case sortOptionDidChange(ShopSortType)
         case filterOpenShops(Bool)
-        case getShopInfo
-        case getShopBenefits
-        case getBeneficialShops(Int)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
@@ -29,8 +25,6 @@ final class ShopViewModel: ViewModelProtocol {
         case putImage(ShopCategoryDto)
         case changeFilteredShops([Shop], Int)
         case updateEventShops([EventDto])
-        case updateShopBenefits(ShopBenefitsDto)
-        case updateBeneficialShops([Shop])
         case updateSortButtonTitle(String)
     }
     
@@ -38,17 +32,13 @@ final class ShopViewModel: ViewModelProtocol {
     private let fetchShopListUseCase: FetchShopListUseCase
     private let fetchEventListUseCase: FetchEventListUseCase
     private let fetchShopCategoryListUseCase: FetchShopCategoryListUseCase
-    private let fetchShopBenefitUseCase: FetchShopBenefitUseCase
-    private let fetchBeneficialShopUseCase: FetchBeneficialShopUseCase
 
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
     private var categories: [ShopCategory] = []
     var selectedCategoryName: String { categoryName(for: selectedId) }
-    private var lastCategoryId: Int?
     
     private var subscriptions: Set<AnyCancellable> = []
-    private var shopList: [Shop] = []
     
     
     
@@ -59,16 +49,12 @@ final class ShopViewModel: ViewModelProtocol {
     init(fetchShopListUseCase: FetchShopListUseCase,
          fetchEventListUseCase: FetchEventListUseCase,
          fetchShopCategoryListUseCase: FetchShopCategoryListUseCase,
-         fetchShopBenefitUseCase: FetchShopBenefitUseCase,
-         fetchBeneficialShopUseCase: FetchBeneficialShopUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          selectedId: Int = 1) {
         self.fetchShopListUseCase = fetchShopListUseCase
         self.fetchEventListUseCase = fetchEventListUseCase
         self.fetchShopCategoryListUseCase = fetchShopCategoryListUseCase
-        self.fetchShopBenefitUseCase = fetchShopBenefitUseCase
-        self.fetchBeneficialShopUseCase = fetchBeneficialShopUseCase
         self.selectedId = selectedId
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
         self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
@@ -84,26 +70,15 @@ final class ShopViewModel: ViewModelProtocol {
             case let .changeCategory(id):
                 if self.selectedId != id {
                     self.selectedId = id
-                    self.getShopInfo(id: self.selectedId)
+                    self.getShopInfo()
                 }
             case let .sortOptionDidChange(newSortType):
                 self.currentSortType = newSortType
                 self.sortStandard.sorter = newSortType.fetchSortType
                 self.outputSubject.send(.updateSortButtonTitle(newSortType.title))
-                self.getShopInfo(id: self.selectedId)
-            case .getShopInfo:
-                self.getShopInfo(id: self.selectedId)
-            case .getShopBenefits:
-                self.fetchShopBenefits()
-            case let .getBeneficialShops(id):
-                self.fetchBeneficialShops(id: id)
+                self.getShopInfo()
             case let .filterOpenShops(isOpen):
                 self.filterOpenShops(isOpen)
-            case .viewDidLoadB:
-                self.fetchShopBenefits()
-                self.getEventShopList()
-                self.fetchBeneficialShops(id: 1)
-                
             case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
                 
@@ -122,30 +97,7 @@ final class ShopViewModel: ViewModelProtocol {
 }
 
 extension ShopViewModel {
-    private func searchShops(_ text: String) {
-        let shops = shopList.filter { $0.name.contains(text) }
-        outputSubject.send(.changeFilteredShops(shops, selectedId))
-    }
-    
-    private func fetchShopBenefits() {
-        fetchShopBenefitUseCase.execute().sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.updateShopBenefits(response))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchBeneficialShops(id: Int) {
-        fetchBeneficialShopUseCase.execute(id: id).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] response in
-                self?.outputSubject.send(.updateBeneficialShops(response))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func getShopInfo(id: Int) {
+    private func getShopInfo() {
         fetchShopListUseCase.execute(requestModel: sortStandard).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] response in
@@ -156,7 +108,6 @@ extension ShopViewModel {
                 } else {
                     self.outputSubject.send(.changeFilteredShops(shops, self.selectedId))
                 }
-                self.shopList = response
             }
         ).store(in: &subscriptions)
     }
@@ -167,7 +118,7 @@ extension ShopViewModel {
             receiveValue: { [weak self] response in
                 guard let self = self else { return }
                 self.outputSubject.send(.updateEventShops(response.events ?? []))
-                self.getShopInfo(id: self.selectedId)
+                self.getShopInfo()
             }
         ).store(in: &subscriptions)
     }
@@ -187,12 +138,6 @@ extension ShopViewModel {
         return categories.first(where: { $0.id == id })?.name ?? "알 수 없음"
     }
     
-    private func changeCategory(_ id: Int) {
-        if selectedId != id {
-            selectedId = id
-        }
-    }
-    
     private func filterOpenShops(_ isOpen: Bool) {
         if isOpen {
             if !sortStandard.filter.contains(.open) {
@@ -203,11 +148,7 @@ extension ShopViewModel {
                 sortStandard.filter.remove(at: index)
             }
         }
-        getShopInfo(id: selectedId)
-    }
-    
-    func getShopId(at index: Int) -> Int {
-        return shopList[index].id
+        getShopInfo()
     }
 }
 

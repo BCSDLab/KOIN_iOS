@@ -1,5 +1,5 @@
 //
-//  OrderShopMenus.swift
+//  ShopMenuGroup.swift
 //  koin
 //
 //  Created by 홍기정 on 9/10/25.
@@ -7,12 +7,12 @@
 
 import Foundation
 
-struct OrderShopMenus {
-    let menuGroupName: String
-    let menus: [OrderShopMenu]
+struct ShopMenuGroup {
+    let name: String
+    let menus: [ShopMenu]
 }
 
-struct OrderShopMenu {
+struct ShopMenu {
     let id: Int
     let name: String
     let description: String?
@@ -26,20 +26,20 @@ struct Price {
     let price: Int
 }
 
-extension OrderShopMenus {
+extension ShopMenuGroup {
     init(from dto: MenuCategory) {
-        self.menuGroupName = dto.name
+        self.name = dto.name
         
         guard let menus = dto.menus else {
             self.menus = []
             return
         }
         self.menus = menus.map {
-            OrderShopMenu(from: $0)
+            ShopMenu(from: $0)
         }
     }
 }
-extension OrderShopMenu {
+extension ShopMenu {
     init(from dto: Menu) {
         self.id = dto.id
         self.name = dto.name ?? "" // nil??

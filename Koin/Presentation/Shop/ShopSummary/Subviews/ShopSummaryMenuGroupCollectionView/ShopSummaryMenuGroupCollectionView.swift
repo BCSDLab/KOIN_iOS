@@ -11,7 +11,7 @@ import Combine
 final class ShopSummaryMenuGroupCollectionView: UICollectionView, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
     
     // MARK: - Properties
-    private var menuGroup: [MenuGroup] = []
+    private var menuGroups: [ShopMenuGroup] = []
     let didScrollPublisher = PassthroughSubject<CGPoint, Never>()
     let didSelectCellPublisher = PassthroughSubject<IndexPath, Never>()
     let shouldSetContentInset = PassthroughSubject<Bool, Never>()
@@ -25,14 +25,14 @@ final class ShopSummaryMenuGroupCollectionView: UICollectionView, UICollectionVi
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(menuGroup: [MenuGroup]) {
-        self.menuGroup = menuGroup
+    func configure(menuGroups: [ShopMenuGroup]) {
+        self.menuGroups = menuGroups
         
         self.reloadData()
         self.setNeedsLayout()
         self.layoutIfNeeded()
         
-        guard menuGroup.count != 0 else { return }
+        guard menuGroups.count != 0 else { return }
         self.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
         self.configureSelectedCell(IndexPath(row: 0, section: 0))
     }
@@ -55,18 +55,18 @@ extension ShopSummaryMenuGroupCollectionView {
         configureDeselectedCell(indexPath)
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return menuGroup.count
+        return menuGroups.count
     }
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopSummaryMenuGroupCollectionViewCell.identifier, for: indexPath) as? ShopSummaryMenuGroupCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(menuGroup[indexPath.row].name)
+        cell.configure(menuGroups[indexPath.row].name)
         return cell
     }
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel().then {
-            $0.text = menuGroup[indexPath.row].name
+            $0.text = menuGroups[indexPath.row].name
             $0.font = .appFont(.pretendardSemiBold, size: 14)
         }
         return CGSize(width: label.intrinsicContentSize.width + 24, height: 34)

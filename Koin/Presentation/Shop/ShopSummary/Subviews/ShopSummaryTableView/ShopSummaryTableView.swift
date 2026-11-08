@@ -37,9 +37,9 @@ final class ShopSummaryTableView: UITableView, UITableViewDelegate, UITableViewD
         fatalError("init(coder:) has not been implemented")
     }
     
-    func configure(_ orderShopMenus: [OrderShopMenus]) {
-        orderShopMenus.forEach {
-            self.menuGroupName.append($0.menuGroupName)
+    func configure(_ menuGroups: [ShopMenuGroup]) {
+        menuGroups.forEach {
+            self.menuGroupName.append($0.name)
             
             var ids: [Int] = []
             var names: [String] = []

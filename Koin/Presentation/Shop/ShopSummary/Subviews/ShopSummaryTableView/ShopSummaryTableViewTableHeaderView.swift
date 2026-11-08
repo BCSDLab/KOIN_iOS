@@ -129,45 +129,25 @@ final class ShopSummaryTableViewTableHeaderView: UIView {
 
 extension ShopSummaryTableViewTableHeaderView {
     
-    func configure1(
-        images: [OrderImage],
-        name: String,
-        rating: Double,
-        reviewCount: Int
-    ) {
-        imagesCollectionView.configure(orderImage: images)
-        imagesPageControl.numberOfPages = images.count
-        if images.count <= 1 {
+    func configure(shopSummary: ShopSummary) {
+        imagesCollectionView.configure(shopImages: shopSummary.images)
+        imagesPageControl.numberOfPages = shopSummary.images.count
+        if shopSummary.images.count <= 1 {
             imagesPageControl.isHidden = true
         }
         shopSummaryInfoView.configure1(
-            name: name,
-            rating: rating,
-            review: reviewCount)
-    }
-    
-    func configure2(
-        delivery: Bool,
-        payBank: Bool,
-        payCard: Bool,
-        maxDeliveryTip: Int,
-        phonenumber: String,
-    ) {
+            name: shopSummary.name,
+            rating: shopSummary.ratingAverage,
+            review: shopSummary.reviewCount)
         shopSummaryInfoView.configure2(
-            isDelieveryAvailable: delivery,
-            payCard: payCard,
-            payBank: payBank,
-            maxDelieveryTip: maxDeliveryTip,
-            phonenumber: phonenumber
+            isDelieveryAvailable: shopSummary.isDeliveryAvailable,
+            payCard: shopSummary.payCard,
+            payBank: shopSummary.payBank,
+            maxDelieveryTip: shopSummary.maxDeliveryTip,
+            phonenumber: shopSummary.phone
         )
-    }
-    
-    func configure3(orderShopMenusGroups: OrderShopMenusGroups) {
-        menuGroupNameCollectionView.configure(menuGroup: orderShopMenusGroups.menuGroups)
-    }
-    
-    func configure(event: String) {
-        shopSummaryInfoView.configure(event: event)
+        shopSummaryInfoView.configure(event: shopSummary.eventTitle ?? "아직 이벤트가 없어요.")
+        menuGroupNameCollectionView.configure(menuGroups: shopSummary.menuGroups)
     }
 }
 

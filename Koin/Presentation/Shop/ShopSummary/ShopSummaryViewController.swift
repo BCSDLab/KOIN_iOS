@@ -116,30 +116,11 @@ extension ShopSummaryViewController {
             .sink { [weak self] output in
                 guard let self else { return }
                 switch output {
-                case let .update1(images, name, rating, reviewCount):
-                    self.viewModel.cachedImages = images
-                    self.tableHeaderView.configure1(
-                        images: images,
-                        name: name,
-                        rating: rating,
-                        reviewCount: reviewCount
-                    )
-                    break
-                case let .update2(delivery, payBank, payCard, maxDeliveryTip, phonenumber):
-                    self.tableHeaderView.configure2(
-                        delivery: delivery,
-                        payBank: payBank,
-                        payCard: payCard,
-                        maxDeliveryTip: maxDeliveryTip,
-                        phonenumber: phonenumber)
-                case let .update3(menusGroups, menus):
-                    self.tableHeaderView.configure3(orderShopMenusGroups: menusGroups)
-                    self.menuGroupNameCollectionViewSticky.configure(menuGroup: menusGroups.menuGroups)
-                    self.menuGroupTableView.configure(menus)
-                case let .updateShopEvent(event):
-                    self.tableHeaderView.configure(event: event ?? "아직 이벤트가 없어요.")
-                case let .updateTitle(title):
-                    self.title = title
+                case let .update(shopSummary):
+                    self.title = shopSummary.name
+                    self.tableHeaderView.configure(shopSummary: shopSummary)
+                    self.menuGroupNameCollectionViewSticky.configure(menuGroups: shopSummary.menuGroups)
+                    self.menuGroupTableView.configure(shopSummary.menuGroups)
                 }
             }
             .store(in: &subscriptions)

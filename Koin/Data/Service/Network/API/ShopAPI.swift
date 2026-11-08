@@ -17,8 +17,6 @@ enum ShopAPI {
     case fetchShopData(FetchShopDataRequest)
     case fetchShopMenuList(FetchShopDataRequest)
     case fetchShopEventList(FetchShopDataRequest)
-    case fetchShopBenefits
-    case fetchBeneficialShops(Int)
     case fetchShopMenusCategoryList(shopId: Int)
     
     case fetchReviewList(FetchShopReviewRequest)
@@ -44,8 +42,6 @@ extension ShopAPI: Router, URLRequestConvertible {
     public var path: String {
         switch self {
         case .fetchShopSummary(let id): return "/shops/\(id)/summary"
-        case .fetchShopBenefits: return "/benefit/categories"
-        case .fetchBeneficialShops(let id): return "/benefit/\(id)/shops"
         case .fetchShopList: return "/v3/shops"
         case .fetchEventList: return "/shops/events"
         case .fetchEventCount: return "/shops/events/count"
@@ -89,7 +85,7 @@ extension ShopAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchShopSummary, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .fetchShopBenefits, .fetchBeneficialShops, .postCallNotification, .searchShop, .fetchShopMenusCategoryList, .fetchEventCount, .fetchShopCount:
+        case .fetchShopSummary, .fetchEventList, .fetchShopCategoryList, .fetchReview, .deleteReview, .postCallNotification, .searchShop, .fetchShopMenusCategoryList, .fetchEventCount, .fetchShopCount:
             return nil
         case .fetchShopData(let request), .fetchShopMenuList(let request), .fetchShopEventList(let request):
             return try? request.toDictionary()

@@ -20,11 +20,7 @@ final class ShopSummaryViewModel {
     
     // MARK: - Output
     enum Output {
-        case update1(images: [OrderImage], name: String, rating: Double, reviewCount: Int)
-        case update2(delivery: Bool, payBank: Bool, payCard: Bool, maxDeliveryTip: Int = 0, phone: String)
-        case update3(menusGroups: OrderShopMenusGroups, menus: [OrderShopMenus])
-        case updateShopEvent(event: String?)
-        case updateTitle(String)
+        case update(ShopSummary)
     }
     
     // MARK: - Properties
@@ -32,32 +28,23 @@ final class ShopSummaryViewModel {
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var shopId: Int
     private(set) var phonenumber: String = ""
-    var cachedImages: [OrderImage] = []
+    private(set) var cachedImages: [ShopImage] = []
     private(set) var shopName: String
     let backCategoryName: String?
 
-    private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
-    private let fetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMenusAndGroupsFromShopUseCase
-    private let fetchShopDataUseCase: FetchShopDataUseCase
-    private let fetchShopEventListUseCase: FetchShopEventListUseCase
+    private let fetchShopSummaryUseCase: FetchShopSummaryUseCase
     
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
    
     // MARK: - Initializer
-    init(fetchOrderShopSummaryFromShopUseCase: DefaultFetchOrderShopSummaryFromShopUseCase,
-         fetchOrderShopMenusAndGroupsFromShopUseCase: DefaultFetchOrderShopMenusAndGroupsFromShopUseCase,
-         fetchShopDataUseCase: DefaultFetchShopDataUseCase,
-         fetchShopEventListUseCase: FetchShopEventListUseCase,
+    init(fetchShopSummaryUseCase: FetchShopSummaryUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int,
          shopName: String?,
          backCategoryName: String? = nil) {
-        self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
-        self.fetchOrderShopMenusAndGroupsFromShopUseCase = fetchOrderShopMenusAndGroupsFromShopUseCase
-        self.fetchShopDataUseCase = fetchShopDataUseCase
-        self.fetchShopEventListUseCase = fetchShopEventListUseCase
+        self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
         self.shopId = shopId
         self.shopName = shopName ?? ""
         self.backCategoryName = backCategoryName
@@ -72,9 +59,6 @@ final class ShopSummaryViewModel {
             switch input {
             case .viewDidLoad:
                 self.fetchShopSummary(shopId: shopId)
-                self.fetchShopMenusAndGroups(shopId: shopId)
-                self.fetchIsAvailable(shopId: shopId)
-                self.fetchShopEvenet(shopId: shopId)
             case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
                 self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
                 
@@ -92,55 +76,14 @@ final class ShopSummaryViewModel {
 
 extension ShopSummaryViewModel {
     private func fetchShopSummary(shopId: Int) {
-        fetchOrderShopSummaryFromShopUseCase.execute(id: shopId).sink(
+        fetchShopSummaryUseCase.execute(shopId: shopId).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] shopSummary in
                 guard let self else { return }
-                self.outputSubject.send(.update1(
-                    images: shopSummary.images,
-                    name: shopSummary.name,
-                    rating: shopSummary.ratingAverage,
-                    reviewCount: shopSummary.reviewCount))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchShopMenusAndGroups(shopId: Int) {
-        fetchOrderShopMenusAndGroupsFromShopUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] (shopMenusCategory, shopMenus) in
-                guard let self else { return }
-                self.outputSubject.send(.update3(
-                    menusGroups: shopMenusCategory,
-                    menus: shopMenus))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchIsAvailable(shopId: Int) {
-        fetchShopDataUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] in
-                guard let self else { return }
-                self.phonenumber = $0.phone
-                self.shopName = $0.name
-                self.outputSubject.send(.updateTitle($0.name))
-                self.outputSubject.send(.update2(
-                    delivery: $0.delivery,
-                    payBank: $0.payBank,
-                    payCard: $0.payCard,
-                    maxDeliveryTip: $0.deliveryPrice,
-                    phone: $0.phone))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchShopEvenet(shopId: Int) {
-        fetchShopEventListUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] events in
-                let event = events.first?.title
-                self?.outputSubject.send(.updateShopEvent(event: event))
+                self.phonenumber = shopSummary.phone
+                self.shopName = shopSummary.name
+                self.cachedImages = shopSummary.images
+                self.outputSubject.send(.update(shopSummary))
             }
         ).store(in: &subscriptions)
     }
