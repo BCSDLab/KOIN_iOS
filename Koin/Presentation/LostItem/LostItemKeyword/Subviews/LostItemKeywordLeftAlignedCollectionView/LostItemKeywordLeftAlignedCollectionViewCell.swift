@@ -11,6 +11,7 @@ final class LostItemKeywordLeftAlignedCollectionViewCell: UICollectionViewCell {
     
     // MARK: - UI Components
     private let layoutGuide = UILayoutGuide()
+    private let iconContainerView = UIView()
     private let keywordLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.textColor = UIColor.appColor(.neutral500)
@@ -32,6 +33,9 @@ final class LostItemKeywordLeftAlignedCollectionViewCell: UICollectionViewCell {
         keywordLabel.text = keyword
         deleteImageView.isHidden = action != .delete
         addImageView.isHidden = action != .add
+        iconContainerView.snp.updateConstraints {
+            $0.width.equalTo(action == .delete ? 16 : 18)
+        }
     }
 }
 
@@ -45,8 +49,11 @@ extension LostItemKeywordLeftAlignedCollectionViewCell {
     }
     
     private func setUpLayouts() {
-        [keywordLabel, addImageView, deleteImageView].forEach {
+        [keywordLabel, iconContainerView].forEach {
             contentView.addSubview($0)
+        }
+        [addImageView, deleteImageView].forEach {
+            iconContainerView.addSubview($0)
         }
         [layoutGuide].forEach {
             contentView.addLayoutGuide($0)
@@ -57,12 +64,18 @@ extension LostItemKeywordLeftAlignedCollectionViewCell {
         keywordLabel.snp.makeConstraints {
             $0.top.leading.bottom.equalTo(layoutGuide)
         }
-        [addImageView, deleteImageView].forEach {
-            $0.snp.makeConstraints {
-                $0.size.equalTo(18)
-                $0.leading.equalTo(keywordLabel.snp.trailing).offset(2)
-                $0.centerY.trailing.equalTo(layoutGuide)
-            }
+        iconContainerView.snp.makeConstraints {
+            $0.width.height.equalTo(18)
+            $0.leading.equalTo(keywordLabel.snp.trailing).offset(2)
+            $0.centerY.trailing.equalTo(layoutGuide)
+        }
+        addImageView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(18)
+        }
+        deleteImageView.snp.makeConstraints {
+            $0.center.equalToSuperview()
+            $0.size.equalTo(16)
         }
         layoutGuide.snp.makeConstraints {
             $0.center.equalToSuperview()

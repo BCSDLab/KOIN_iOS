@@ -13,10 +13,10 @@ final class LostItemListTableView: UITableView {
     // MARK: - Properties
     private var lostItemListData: [LostItemListData] = []
     private var isWaiting = true
+    let isEmptyPublisher = PassthroughSubject<Bool, Never>()
     let showToastPublisher = PassthroughSubject<String, Never>()
     let cellTappedPublisher = PassthroughSubject<Int, Never>()
     let loadMoreListPublisher = PassthroughSubject<Void, Never>()
-    let dismissKeyBoardPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
     init() {
@@ -32,16 +32,19 @@ final class LostItemListTableView: UITableView {
     func update(_ lostItemListData: [LostItemListData]) {
         isWaiting = false
         self.lostItemListData = lostItemListData
+        publishEmptyState()
         reloadSections([0], with: .fade)
     }
     func append(_ lostItemListData: [LostItemListData]) {
         isWaiting = false
         self.lostItemListData.append(contentsOf: lostItemListData)
+        publishEmptyState()
         reloadData()
     }
     
     func appendAtFirst(_ newData: LostItemListData) {
         lostItemListData.insert(newData, at: 0)
+        publishEmptyState()
         reloadSections([0], with: .automatic)
     }
     
@@ -62,6 +65,7 @@ final class LostItemListTableView: UITableView {
     func updateState(deletedId id: Int) {
         if let index = lostItemListData.firstIndex(where: { $0.id == id }) {
             lostItemListData.remove(at: index)
+            publishEmptyState()
             reloadData()
         }
     }
@@ -105,8 +109,6 @@ extension LostItemListTableView: UITableViewDelegate {
 extension LostItemListTableView: UIScrollViewDelegate {
  
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        dismissKeyBoardPublisher.send()
-        
         let offsetY = scrollView.contentOffset.y
         let contentHeight = scrollView.contentSize.height
         
@@ -119,7 +121,12 @@ extension LostItemListTableView: UIScrollViewDelegate {
 
 extension LostItemListTableView {
     
+    private func publishEmptyState() {
+        isEmptyPublisher.send(lostItemListData.isEmpty)
+    }
+
     private func commonInit() {
+        keyboardDismissMode = .interactive
         register(LostItemListTableViewCell.self, forCellReuseIdentifier: LostItemListTableViewCell.identifier)
         delegate = self
         dataSource = self

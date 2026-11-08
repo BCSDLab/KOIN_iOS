@@ -20,16 +20,17 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     private let inputSubject: PassthroughSubject<ReportLostItemViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private let textViewPlaceHolder = "신고 사유를 입력해주세요."
+    private var previousScrollViewSize = CGSize.zero
     weak var delegate: ReportLostItemViewControllerDelegate?
     
     // MARK: - UI Components
-    private let scrollView = UIScrollView().then { _ in
-    }
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
     
     private let reportReasonLabel = UILabel().then {
         $0.text = "신고 이유를 선택해주세요."
         $0.textColor = UIColor.appColor(.neutral800)
-        $0.font = UIFont.appFont(.pretendardBold, size: 18)
+        $0.font = UIFont.appFont(.pretendardSemiBold, size: 18)
     }
     
     private let reportGuideLabel = UILabel().then {
@@ -64,7 +65,7 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     private let textCountLabel = UILabel().then {
         $0.text = "0/150"
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.gray)
+        $0.textColor = UIColor.appColor(.neutral500)
     }
     
     private lazy var etcReportTextView = UITextView().then {
@@ -72,17 +73,20 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
         $0.layer.masksToBounds = true
         $0.layer.borderWidth = 1.0
         $0.isEditable = false
+        $0.isScrollEnabled = false
+        $0.textContainerInset = UIEdgeInsets(top: 12, left: 16, bottom: 12, right: 16)
+        $0.textContainer.lineFragmentPadding = 0
         $0.text = textViewPlaceHolder
         $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        $0.textColor = UIColor.appColor(.gray)
+        $0.textColor = UIColor.appColor(.neutral500)
         $0.font = UIFont.appFont(.pretendardRegular, size: 14)
     }
     
     private let reportButton = DebouncedButton().then {
         $0.setTitle("신고하기", for: .normal)
-        $0.titleLabel?.textColor = UIColor.appColor(.neutral0)
+        $0.setTitleColor(.appColor(.neutral0), for: .normal)
         $0.isEnabled = false
-        $0.titleLabel?.textColor = UIColor.appColor(.neutral800)
+        $0.setTitleColor(.appColor(.neutral800), for: .disabled)
         $0.backgroundColor = UIColor.appColor(.neutral400)
         $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 15)
         $0.layer.cornerRadius = 4
@@ -118,7 +122,16 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .fill)
+        configureNavigationBar(style: .empty)
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard previousScrollViewSize != scrollView.bounds.size else { return }
+        previousScrollViewSize = scrollView.bounds.size
+        if etcReportTextView.isFirstResponder {
+            scrollReportInputToVisible(animated: false)
+        }
     }
     
     // MARK: - Bind
@@ -130,7 +143,7 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
             guard let self else { return }
             switch output {
             case .showToast(let message, let success):
-                self.showToast(message: message)
+                self.showToastMessage(message: message, intent: success ? .positive : .negative)
                 if success {
                     if let previousViewController = (delegate as? LostItemDataViewController)?.delegate as? UIViewController {
                         navigationController?.popToViewController(previousViewController, animated: true)
@@ -165,12 +178,15 @@ extension ReportLostItemViewController {
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.text == textViewPlaceHolder {
             textView.text = ""
+            textView.textColor = .appColor(.neutral800)
         }
+        scrollReportInputToVisible(animated: true)
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
+            textView.textColor = .appColor(.neutral500)
         }
     }
     
@@ -181,8 +197,7 @@ extension ReportLostItemViewController {
         let anySelected = anySelectedInReportViews || anySelectedInViewController
         
         reportButton.isEnabled = anySelected
-        reportButton.titleLabel?.textColor = anySelected ? UIColor.appColor(.neutral0) : UIColor.appColor(.neutral800)
-        reportButton.backgroundColor = anySelected ? UIColor.appColor(.primary500) : UIColor.appColor(.neutral400)
+        reportButton.backgroundColor = anySelected ? UIColor.appColor(.new500) : UIColor.appColor(.neutral400)
     }
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
@@ -196,27 +211,39 @@ extension ReportLostItemViewController {
     func textViewDidChange(_ textView: UITextView) {
         let characterCount = textView.text.count
         textCountLabel.text = "\(characterCount)/150"
+        textCountLabel.textColor = .appColor(.new500)
 
         guard let font = textView.font else { return }
 
         let lineHeight = font.lineHeight
-        let maxHeight = lineHeight * 6
+        let maxHeight = lineHeight * 6 + textView.textContainerInset.top + textView.textContainerInset.bottom
 
         let size = textView.sizeThatFits(CGSize(width: textView.frame.width, height: CGFloat.greatestFiniteMagnitude))
-        let newHeight = min(size.height, maxHeight)
+        let newHeight = max(46, min(size.height, maxHeight))
 
         textView.snp.updateConstraints { make in
             make.height.equalTo(newHeight)
         }
 
         textView.isScrollEnabled = size.height > maxHeight
+        view.layoutIfNeeded()
+        scrollReportInputToVisible(animated: true)
+    }
+
+    private func scrollReportInputToVisible(animated: Bool) {
+        let rect = etcReportTextView.convert(etcReportTextView.bounds, to: scrollView)
+        scrollView.scrollRectToVisible(rect.insetBy(dx: 0, dy: -8), animated: animated)
     }
 
     
     @objc private func checkButtonTapped() {
         checkButton.isSelected.toggle()
         
-        checkButton.setImage(checkButton.isSelected ? UIImage.appImage(asset: .filledCircle) : UIImage.appImage(asset: .circle), for: .normal)
+        let image = checkButton.isSelected
+            ? UIImage.appImage(asset: .filledCircle)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal)
+            : UIImage.appImage(asset: .circle)
+        checkButton.setImage(image, for: .normal)
+        textCountLabel.textColor = .appColor(checkButton.isSelected ? .new500 : .neutral500)
         etcReportTextView.isEditable = checkButton.isSelected
         
         updateReportButtonState()
@@ -249,8 +276,9 @@ extension ReportLostItemViewController {
     private func setUpLayOuts() {
         view.addSubview(scrollView)
         view.addSubview(reportButton)
+        scrollView.addSubview(contentView)
         [reportReasonLabel, reportGuideLabel, nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView, checkButton, etcLabel, textCountLabel, etcReportTextView].forEach {
-            scrollView.addSubview($0)
+            contentView.addSubview($0)
         }
     }
     
@@ -259,43 +287,49 @@ extension ReportLostItemViewController {
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom).offset(-100)
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).priority(.high)
+            make.bottom.lessThanOrEqualTo(reportButton.snp.top).offset(-16)
+        }
+        contentView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.frameLayoutGuide)
         }
         reportReasonLabel.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(24)
-            make.leading.equalTo(view.snp.leading).offset(24)
+            make.top.equalToSuperview().offset(30)
+            make.leading.equalToSuperview().offset(24)
         }
         reportGuideLabel.snp.makeConstraints { make in
             make.top.equalTo(reportReasonLabel.snp.bottom).offset(8)
-            make.leading.equalTo(view.snp.leading).offset(24)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.lessThanOrEqualToSuperview().offset(-24)
         }
         nonSubjectReportView.snp.makeConstraints { make in
             make.top.equalTo(reportGuideLabel.snp.bottom).offset(32)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(76)
         }
         spamReportView.snp.makeConstraints { make in
             make.top.equalTo(nonSubjectReportView.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(76)
         }
         curseReportView.snp.makeConstraints { make in
             make.top.equalTo(spamReportView.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(76)
         }
         personalInfoReportView.snp.makeConstraints { make in
             make.top.equalTo(curseReportView.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
+            make.leading.equalToSuperview().offset(20)
+            make.trailing.equalToSuperview().offset(-20)
             make.height.equalTo(76)
         }
         checkButton.snp.makeConstraints { make in
             make.top.equalTo(personalInfoReportView.snp.bottom).offset(19)
-            make.leading.equalTo(view.snp.leading).offset(28)
+            make.leading.equalToSuperview().offset(28)
             make.width.equalTo(16)
             make.height.equalTo(16)
         }
@@ -305,26 +339,26 @@ extension ReportLostItemViewController {
         }
         textCountLabel.snp.makeConstraints { make in
             make.centerY.equalTo(checkButton.snp.centerY)
-            make.trailing.equalTo(view.snp.trailing).offset(-34)
+            make.trailing.equalToSuperview().offset(-34)
         }
         etcReportTextView.snp.makeConstraints { make in
             make.top.equalTo(checkButton.snp.bottom).offset(13)
-            make.leading.equalTo(view.snp.leading).offset(28)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(34)
-            make.bottom.equalTo(scrollView.snp.bottom)
+            make.leading.equalToSuperview().offset(28)
+            make.trailing.equalToSuperview().offset(-20)
+            make.height.equalTo(46)
+            make.bottom.equalToSuperview().offset(-24)
         }
         reportButton.snp.makeConstraints { make in
-            make.bottom.equalTo(view.snp.bottom).offset(-20)
-            make.leading.equalTo(view.snp.leading).offset(24)
-            make.trailing.equalTo(view.snp.trailing).offset(-24)
+            make.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom).offset(-16)
+            make.leading.equalToSuperview().offset(24)
+            make.trailing.equalToSuperview().offset(-24)
             make.height.equalTo(48)
         }
     }
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .appColor(.neutral0)
     }
 }
 

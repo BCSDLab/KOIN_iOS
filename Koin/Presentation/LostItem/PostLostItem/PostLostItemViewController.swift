@@ -28,6 +28,7 @@ final class PostLostItemViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = AddLostItemCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.keyboardDismissMode = .interactive
         return collectionView
     }()
     
@@ -41,8 +42,8 @@ final class PostLostItemViewController: UIViewController {
     
     private let writeButton = DebouncedButton().then {
         $0.setTitle("작성 완료", for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 14)
-        $0.backgroundColor = UIColor.appColor(.primary600)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardSemiBold, size: 15)
+        $0.backgroundColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 8
         $0.layer.masksToBounds = true
     }
@@ -91,7 +92,7 @@ final class PostLostItemViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .showToast(message):
-                self?.showToast(message: message, success: true)
+                self?.showToastMessage(message: message)
             case let .addImageUrl(url, index):
                 self?.addLostItemCollectionView.addImageUrl(url: url, index: index)
             case let .navigateToLostItemData(lostItemData):
@@ -116,8 +117,8 @@ extension PostLostItemViewController {
     private func addObserver() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyBoardWillShow(_:)),
-            name: UIResponder.keyboardWillShowNotification,
+            selector: #selector(keyboardWillChangeFrame(_:)),
+            name: UIResponder.keyboardWillChangeFrameNotification,
             object: nil
         )
         
@@ -128,44 +129,31 @@ extension PostLostItemViewController {
             object: nil)
     }
     
-    @objc private func keyBoardWillShow(_ notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let keyBoardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+    @objc private func keyboardWillChangeFrame(_ notification: NSNotification) {
+        guard !isPresentingDropdown,
+              let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
         }
-        
-        guard !isPresentingDropdown else { return }
 
-        let contentInset = UIEdgeInsets(
-            top: 0,
-            left: 0,
-            bottom: keyBoardSize.size.height - (view.frame.height - addLostItemCollectionView.frame.maxY) + 70,
-            right: 0
-        )
-        addLostItemCollectionView.contentInset = contentInset
-        
-        separateView.snp.updateConstraints {
-            $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(0)
-        }
+        let keyboardFrameInView = view.convert(keyboardFrame, from: nil)
+        let overlap = max(0, addLostItemCollectionView.frame.maxY - keyboardFrameInView.minY)
+        addLostItemCollectionView.contentInset.bottom = overlap > 0 ? overlap + 16 : 0
+        addLostItemCollectionView.verticalScrollIndicatorInsets.bottom = overlap
 
+        guard overlap > 0 else { return }
         guard let targetView = addLostItemCollectionView.firstResponder() else {
             return
         }
-        
+
         var rect = targetView.convert(targetView.bounds, to: addLostItemCollectionView)
         rect.size.height += 16
         addLostItemCollectionView.scrollRectToVisible(rect, animated: true)
     }
-    
+
     @objc private func keyBoardWillHide(_ notification: NSNotification) {
         guard !isPresentingDropdown else { return }
-
-        let contentInset = UIEdgeInsets.zero
-        addLostItemCollectionView.contentInset = contentInset
-        
-        separateView.snp.updateConstraints {
-            $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(-8)
-        }
+        addLostItemCollectionView.contentInset.bottom = 0
+        addLostItemCollectionView.verticalScrollIndicatorInsets.bottom = 0
     }
 }
 
@@ -280,9 +268,9 @@ extension PostLostItemViewController {
             make.bottom.equalTo(separateView.snp.top)
         }
         writeButtonBackgroundView.snp.makeConstraints {
-            $0.height.equalTo(70)
+            $0.height.equalTo(88)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         separateView.snp.makeConstraints {
             $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(-8)
@@ -291,8 +279,8 @@ extension PostLostItemViewController {
         }
         writeButton.snp.makeConstraints { make in
             make.centerX.equalTo(writeButtonBackgroundView)
-            make.width.equalTo(160)
-            make.height.equalTo(38)
+            make.leading.trailing.equalTo(writeButtonBackgroundView).inset(32)
+            make.height.equalTo(48)
             make.bottom.equalTo(writeButtonBackgroundView.snp.bottom).offset(-16)
         }
     }
@@ -300,6 +288,6 @@ extension PostLostItemViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .appColor(.neutral0)
     }
 }

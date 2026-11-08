@@ -20,7 +20,7 @@ final class AddLostItemHeaderView: UICollectionReusableView {
     }
     
     private let subMessageLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
         $0.textColor = UIColor.appColor(.neutral500)
     }
     

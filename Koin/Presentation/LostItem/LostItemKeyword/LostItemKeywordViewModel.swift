@@ -14,6 +14,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         case viewWillAppear
         case deleteKeyword(Int)
         case subscribeKeyword(String)
+        case submitKeyword(String)
         case notificationSwitchTapped(isOn: Bool)
         case logEvent(EventLabelType, EventParameter.EventCategory, Any)
     }
@@ -26,6 +27,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         case removeKeywordSuggestion(String)
         case removeMyKeyword(Int)
         case appendMyKeyword(LostItemKeyword)
+        case clearKeywordInput(String)
         case showToastExceedCount
         case showToastKeywordLength
         case showToast(String)
@@ -90,6 +92,8 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
                 deleteKeyword(id)
             case .subscribeKeyword(let keyword):
                 subscribeKeyword(keyword)
+            case .submitKeyword(let keyword):
+                subscribeKeyword(keyword, clearInputOnSuccess: true)
             case .notificationSwitchTapped(let isOn):
                 changeSubscription(isPermit: isOn)
             case let .logEvent(label, category, value):
@@ -161,7 +165,7 @@ extension LostItemKeywordViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func subscribeKeyword(_ keyword: String) {
+    private func subscribeKeyword(_ keyword: String, clearInputOnSuccess: Bool = false) {
         guard isLoggedIn else {
             outputSubject.send(.showLoginModal)
             return
@@ -182,10 +186,13 @@ extension LostItemKeywordViewModel {
                     self?.outputSubject.send(.showToast(error.message))
                 }
             },
-            receiveValue: { [weak self] keyword in
-                self?.outputSubject.send(.removeKeywordSuggestion(keyword.keyword))
-                self?.outputSubject.send(.appendMyKeyword(keyword))
+            receiveValue: { [weak self] subscribedKeyword in
+                self?.outputSubject.send(.removeKeywordSuggestion(subscribedKeyword.keyword))
+                self?.outputSubject.send(.appendMyKeyword(subscribedKeyword))
                 self?.currentCount += 1
+                if clearInputOnSuccess {
+                    self?.outputSubject.send(.clearKeywordInput(keyword))
+                }
             }
         ).store(in: &subscriptions)
     }

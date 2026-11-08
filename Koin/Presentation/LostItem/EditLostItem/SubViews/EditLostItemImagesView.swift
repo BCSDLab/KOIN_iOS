@@ -25,13 +25,13 @@ final class EditLostItemImagesView: UIView {
     }
     private lazy var pictureMessageLabel = UILabel().then {
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.gray)
+        $0.textColor = UIColor.appColor(.neutral500)
         $0.text = "\(type.description)물 사진을 업로드해주세요."
     }
     private lazy var pictureCountLabel = UILabel().then {
         $0.text = "\(images.count)/10"
         $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-        $0.textColor = UIColor.appColor(.gray)
+        $0.textColor = UIColor.appColor(.neutral500)
     }
     let imageUploadCollectionView: LostItemImageCollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -43,13 +43,13 @@ final class EditLostItemImagesView: UIView {
     }()
     private let addPictureButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .picture)
-        var text = AttributedString("사진 추가하기")
+        configuration.image = UIImage.appImage(asset: .picture)?.withTintColor(.appColor(.neutral0), renderingMode: .alwaysOriginal)
+        var text = AttributedString("사진 등록하기")
         text.font = UIFont.appFont(.pretendardMedium, size: 14)
         configuration.attributedTitle = text
-        configuration.imagePadding = 4
-        configuration.baseForegroundColor = UIColor.appColor(.primary600)
-        $0.backgroundColor = UIColor.appColor(.info200)
+        configuration.imagePadding = 8
+        configuration.baseForegroundColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.new500)
         $0.configuration = configuration
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 8
@@ -66,6 +66,7 @@ final class EditLostItemImagesView: UIView {
         addPictureButton.isEnabled = images.count < 10
         super.init(frame: .zero)
         configureView()
+        updateImageLayout(hasImages: !images.isEmpty)
         bind()
         setAddTargets()
     }
@@ -77,6 +78,7 @@ final class EditLostItemImagesView: UIView {
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] urls in
             self?.addPictureButton.isEnabled = urls.count < 10
             self?.pictureCountLabel.text = "\(urls.count)/10"
+            self?.updateImageLayout(hasImages: !urls.isEmpty)
         }.store(in: &subscriptions)
     }
     
@@ -119,11 +121,22 @@ extension EditLostItemImagesView {
             $0.height.equalTo(123)
         }
         addPictureButton.snp.makeConstraints {
-            $0.top.equalTo(imageUploadCollectionView.snp.bottom).offset(12)
+            $0.top.equalTo(imageUploadCollectionView.snp.bottom).offset(16)
+            $0.height.equalTo(38)
             $0.leading.trailing.bottom.equalToSuperview()
         }
     }
     
+    private func updateImageLayout(hasImages: Bool) {
+        imageUploadCollectionView.isHidden = !hasImages
+        imageUploadCollectionView.snp.updateConstraints {
+            $0.height.equalTo(hasImages ? 123 : 0)
+        }
+        addPictureButton.snp.updateConstraints {
+            $0.top.equalTo(imageUploadCollectionView.snp.bottom).offset(hasImages ? 16 : 0)
+        }
+    }
+
     private func configureView() {
         setUpLayouts()
         setUpConstraints()

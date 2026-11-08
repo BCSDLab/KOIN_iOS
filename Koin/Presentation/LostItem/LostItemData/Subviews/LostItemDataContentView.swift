@@ -23,7 +23,7 @@ final class LostItemDataContentView: UIView {
     
     private let imageCollectionView = ShopSummaryImagesCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then {
         $0.scrollDirection = .horizontal
-        $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 63, height: 278)
+        $0.itemSize = CGSize(width: UIScreen.main.bounds.width - 63, height: 284)
         $0.minimumLineSpacing = 0
     }).then {
         $0.showsHorizontalScrollIndicator = false
@@ -33,7 +33,7 @@ final class LostItemDataContentView: UIView {
     private let pageControl = UIPageControl().then {
         $0.currentPage = 0
         $0.pageIndicatorTintColor = UIColor.appColor(.neutral300)
-        $0.currentPageIndicatorTintColor = UIColor.appColor(.primary400)
+        $0.currentPageIndicatorTintColor = UIColor.appColor(.new500)
         $0.transform = CGAffineTransform(scaleX: 0.6, y: 0.6)
     }
     
@@ -144,7 +144,7 @@ extension LostItemDataContentView {
         
         imageCollectionView.snp.makeConstraints {
             $0.width.equalTo(UIScreen.main.bounds.width - 63)
-            $0.height.equalTo(278)
+            $0.height.equalTo(284)
         }
         
         pageControl.snp.makeConstraints {

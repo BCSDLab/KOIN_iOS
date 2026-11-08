@@ -75,7 +75,7 @@ final class LostItemDataViewController: UIViewController {
             case .appendList(let lostItemListData):
                 self.lostItemDataTableView.appendList(lostItemListData: lostItemListData)
             case .showToast(let message):
-                self.showToast(message: message)
+                self.showToastMessage(message: message)
             case .changeState(let id):
                 self.delegate?.updateState(foundDataId: id)
                 self.headerView.changeState()
@@ -247,7 +247,7 @@ extension LostItemDataViewController {
             self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.findUserDeleteConfirm, EventParameter.EventCategory.click, "확인"))
         }
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .singleTitle(text: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?"),
             button: .buttons(
                 leftButtonTitle: "취소",
@@ -278,7 +278,7 @@ extension LostItemDataViewController {
             inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFound, .click, "\(type.description)물"))
         }
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .singleTitle(text: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?"),
             button: .buttons(
                 leftButtonTitle: "취소",
@@ -326,7 +326,7 @@ extension LostItemDataViewController {
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .titles(
                 mainTitleText: "쪽지를 보내려면\n로그인이 필요해요.",
                 subTitleText: "로그인 후 대화를 시작하세요!"
@@ -363,7 +363,7 @@ extension LostItemDataViewController {
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .titles(
                 mainTitleText: "게시글을 신고하려면\n로그인이 필요해요.",
                 subTitleText: "로그인 후 이용해주세요."
