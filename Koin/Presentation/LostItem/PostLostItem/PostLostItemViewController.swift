@@ -28,6 +28,7 @@ final class PostLostItemViewController: UIViewController {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .vertical
         let collectionView = AddLostItemCollectionView(frame: .zero, collectionViewLayout: layout)
+        collectionView.keyboardDismissMode = .interactive
         return collectionView
     }()
     
@@ -116,8 +117,8 @@ extension PostLostItemViewController {
     private func addObserver() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyBoardWillShow(_:)),
-            name: UIResponder.keyboardWillShowNotification,
+            selector: #selector(keyboardWillChangeFrame(_:)),
+            name: UIResponder.keyboardWillChangeFrameNotification,
             object: nil
         )
         
@@ -128,44 +129,31 @@ extension PostLostItemViewController {
             object: nil)
     }
     
-    @objc private func keyBoardWillShow(_ notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let keyBoardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+    @objc private func keyboardWillChangeFrame(_ notification: NSNotification) {
+        guard !isPresentingDropdown,
+              let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
         }
-        
-        guard !isPresentingDropdown else { return }
 
-        let contentInset = UIEdgeInsets(
-            top: 0,
-            left: 0,
-            bottom: keyBoardSize.size.height - (view.frame.height - addLostItemCollectionView.frame.maxY) + 70,
-            right: 0
-        )
-        addLostItemCollectionView.contentInset = contentInset
-        
-        separateView.snp.updateConstraints {
-            $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(0)
-        }
+        let keyboardFrameInView = view.convert(keyboardFrame, from: nil)
+        let overlap = max(0, addLostItemCollectionView.frame.maxY - keyboardFrameInView.minY)
+        addLostItemCollectionView.contentInset.bottom = overlap > 0 ? overlap + 16 : 0
+        addLostItemCollectionView.verticalScrollIndicatorInsets.bottom = overlap
 
+        guard overlap > 0 else { return }
         guard let targetView = addLostItemCollectionView.firstResponder() else {
             return
         }
-        
+
         var rect = targetView.convert(targetView.bounds, to: addLostItemCollectionView)
         rect.size.height += 16
         addLostItemCollectionView.scrollRectToVisible(rect, animated: true)
     }
-    
+
     @objc private func keyBoardWillHide(_ notification: NSNotification) {
         guard !isPresentingDropdown else { return }
-
-        let contentInset = UIEdgeInsets.zero
-        addLostItemCollectionView.contentInset = contentInset
-        
-        separateView.snp.updateConstraints {
-            $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(-8)
-        }
+        addLostItemCollectionView.contentInset.bottom = 0
+        addLostItemCollectionView.verticalScrollIndicatorInsets.bottom = 0
     }
 }
 
@@ -282,7 +270,7 @@ extension PostLostItemViewController {
         writeButtonBackgroundView.snp.makeConstraints {
             $0.height.equalTo(88)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         separateView.snp.makeConstraints {
             $0.bottom.equalTo(writeButtonBackgroundView.snp.top).offset(-8)
