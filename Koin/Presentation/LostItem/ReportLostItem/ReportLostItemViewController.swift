@@ -20,6 +20,7 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
     private let inputSubject: PassthroughSubject<ReportLostItemViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private let textViewPlaceHolder = "신고 사유를 입력해주세요."
+    private var previousScrollViewSize = CGSize.zero
     weak var delegate: ReportLostItemViewControllerDelegate?
     
     // MARK: - UI Components
@@ -123,6 +124,15 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        guard previousScrollViewSize != scrollView.bounds.size else { return }
+        previousScrollViewSize = scrollView.bounds.size
+        if etcReportTextView.isFirstResponder {
+            scrollReportInputToVisible(animated: false)
+        }
+    }
     
     // MARK: - Bind
     
@@ -170,6 +180,7 @@ extension ReportLostItemViewController {
             textView.text = ""
             textView.textColor = .appColor(.neutral800)
         }
+        scrollReportInputToVisible(animated: true)
     }
     
     func textViewDidEndEditing(_ textView: UITextView) {
@@ -215,6 +226,13 @@ extension ReportLostItemViewController {
         }
 
         textView.isScrollEnabled = size.height > maxHeight
+        view.layoutIfNeeded()
+        scrollReportInputToVisible(animated: true)
+    }
+
+    private func scrollReportInputToVisible(animated: Bool) {
+        let rect = etcReportTextView.convert(etcReportTextView.bounds, to: scrollView)
+        scrollView.scrollRectToVisible(rect.insetBy(dx: 0, dy: -8), animated: animated)
     }
 
     
@@ -269,7 +287,8 @@ extension ReportLostItemViewController {
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(reportButton.snp.top).offset(-16)
+            make.bottom.equalTo(view.keyboardLayoutGuide.snp.top).priority(.high)
+            make.bottom.lessThanOrEqualTo(reportButton.snp.top).offset(-16)
         }
         contentView.snp.makeConstraints {
             $0.edges.equalTo(scrollView.contentLayoutGuide)
