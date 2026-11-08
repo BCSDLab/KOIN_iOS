@@ -130,7 +130,7 @@ final class ReportLostItemViewController: UIViewController, UITextViewDelegate {
             guard let self else { return }
             switch output {
             case .showToast(let message, let success):
-                self.showToast(message: message)
+                self.showToastMessage(message: message, intent: success ? .positive : .negative)
                 if success {
                     if let previousViewController = (delegate as? LostItemDataViewController)?.delegate as? UIViewController {
                         navigationController?.popToViewController(previousViewController, animated: true)

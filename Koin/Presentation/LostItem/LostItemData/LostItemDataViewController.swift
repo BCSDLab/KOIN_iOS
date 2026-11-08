@@ -75,7 +75,7 @@ final class LostItemDataViewController: UIViewController {
             case .appendList(let lostItemListData):
                 self.lostItemDataTableView.appendList(lostItemListData: lostItemListData)
             case .showToast(let message):
-                self.showToast(message: message)
+                self.showToastMessage(message: message)
             case .changeState(let id):
                 self.delegate?.updateState(foundDataId: id)
                 self.headerView.changeState()
@@ -248,13 +248,11 @@ extension LostItemDataViewController {
         }
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .new,
-            content: .singleTitle(text: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?", style: .init(textColor: .neutral600, font: .pretendardMedium, fontSize: 16)),
+            content: .singleTitle(text: "삭제 시 되돌릴 수 없습니다.\n게시글을 삭제하시겠습니까?"),
             button: .buttons(
                 leftButtonTitle: "취소",
-                leftButtonStyle: .init(textColor: .neutral600, font: .pretendardMedium, fontSize: 14, borderColor: .neutral400, borderWidth: 1, cornerRadius: 8),
                 rightButtonTitle: "확인",
-                rightButtonAction: onRightButtonTapped,
-                rightButtonStyle: .init(textColor: .neutral0, font: .pretendardMedium, fontSize: 14, backgroundColor: .new500, cornerRadius: 8)
+                rightButtonAction: onRightButtonTapped
             )
         ))
         navigationController?.present(modalViewController, animated: true)
@@ -281,13 +279,11 @@ extension LostItemDataViewController {
         }
         let modalViewController = KoinModalViewController(configuration: .init(
             appearance: .new,
-            content: .singleTitle(text: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?", style: .init(textColor: .neutral600, font: .pretendardMedium, fontSize: 16)),
+            content: .singleTitle(text: "상태 변경 시 되돌릴 수 없습니다.\n찾음으로 변경하시겠습니까?"),
             button: .buttons(
                 leftButtonTitle: "취소",
-                leftButtonStyle: .init(textColor: .neutral600, font: .pretendardMedium, fontSize: 14, borderColor: .neutral400, borderWidth: 1, cornerRadius: 8),
                 rightButtonTitle: "확인",
-                rightButtonAction: onRightButtonTapped,
-                rightButtonStyle: .init(textColor: .neutral0, font: .pretendardMedium, fontSize: 14, backgroundColor: .new500, cornerRadius: 8)
+                rightButtonAction: onRightButtonTapped
             )
         ))
         navigationController?.present(modalViewController, animated: true)

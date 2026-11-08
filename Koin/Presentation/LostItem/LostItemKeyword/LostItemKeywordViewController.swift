@@ -90,11 +90,11 @@ extension LostItemKeywordViewController {
             case let .removeKeywordSuggestion(keyword):
                 keywordSuggestionCollectionView.remove(keyword: keyword)
             case .showToastExceedCount:
-                showToast(message: "키워드는 최대 10개까지 추가할 수 있습니다.", success: false)
+                showToastMessage(message: "키워드는 최대 10개까지 추가할 수 있습니다.", intent: .negative)
             case .showToastKeywordLength:
-                showToast(message: "키워드는 2글자에서 10글자 사이여야 합니다.", success: false)
+                showToastMessage(message: "키워드는 2글자에서 10글자 사이여야 합니다.", intent: .negative)
             case .showToast(let message):
-                showToast(message: message)
+                showToastMessage(message: message)
             case .removeMyKeyword(let id):
                 myKeywordCollectionView.remove(id: id)
             }

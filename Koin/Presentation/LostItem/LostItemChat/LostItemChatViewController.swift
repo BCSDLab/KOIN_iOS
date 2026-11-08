@@ -100,7 +100,7 @@ final class LostItemChatViewController: UIViewController, UITextViewDelegate, PH
             switch output {
             case .showChatHistory(let chatHistory): chatHistoryTableView.setChatHistory(item: chatHistory)
             case .showToast(let message, let success):
-                showToast(message: message)
+                showToastMessage(message: message, intent: success ? .positive : .negative)
                 if success { navigationController?.popViewController(animated: true) }
             case .updateTitle(let title):
                 self.title = title

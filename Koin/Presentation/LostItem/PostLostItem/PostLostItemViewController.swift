@@ -91,7 +91,7 @@ final class PostLostItemViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
             case let .showToast(message):
-                self?.showToast(message: message, success: true)
+                self?.showToastMessage(message: message)
             case let .addImageUrl(url, index):
                 self?.addLostItemCollectionView.addImageUrl(url: url, index: index)
             case let .navigateToLostItemData(lostItemData):

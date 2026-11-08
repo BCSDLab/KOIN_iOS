@@ -117,7 +117,7 @@ final class LostItemListViewController: UIViewController {
         }.store(in: &subscriptions)
         
         lostItemListTableView.showToastPublisher.sink { [weak self] message in
-            self?.showToast(message: message)
+            self?.showToastMessage(message: message)
         }.store(in: &subscriptions)
         
         lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
@@ -317,7 +317,7 @@ extension LostItemListViewController {
             onFilterItemTapped: { [weak self] groupIndex, item in
                 guard let self else { return false }
                 if groupIndex == 0, item.title == "내 게시물", !viewModel.isLoggedIn {
-                    showToast(message: "로그인이 필요한 기능입니다.")
+                    showToastMessage(message: "로그인이 필요한 기능입니다.")
                     return false
                 }
                 return true

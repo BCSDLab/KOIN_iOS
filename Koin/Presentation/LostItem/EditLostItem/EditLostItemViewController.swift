@@ -97,7 +97,7 @@ final class EditLostItemViewController: UIViewController {
             case .addImageUrl(let url):
                 imagesView.imageUploadCollectionView.addImageUrl(url)
             case .showToast(let message):
-                showToast(message: message)
+                showToastMessage(message: message)
             case .updateData(let lostItemData):
                 delegate?.updateData(lostItemData: lostItemData)
                 navigationController?.popViewController(animated: true)

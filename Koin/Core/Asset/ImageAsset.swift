@@ -218,6 +218,7 @@ public enum ImageAsset: String {
     // MARK: - LostItem
     case lostItem
     case lostItemGear
+    case lostItemKeywordSettings
     case lostItemAdd
     case lostItemDelete
     
