@@ -60,6 +60,8 @@ final class KoinBottomSheetController: UIViewController {
     var resolvedHeight: CGFloat = 0
     var lastContext: KoinBottomSheetContext?
     var heightConstraint: NSLayoutConstraint?
+    /// 콘텐츠 하단과 시트 하단 사이 간격. 키보드를 닫으며 끄는 동안만 0보다 크다.
+    var contentBottomConstraint: Constraint?
 
     // MARK: - Animation
     var animator: UIViewPropertyAnimator?

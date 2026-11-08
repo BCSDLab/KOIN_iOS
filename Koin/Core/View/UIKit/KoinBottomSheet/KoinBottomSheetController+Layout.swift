@@ -88,7 +88,8 @@ extension KoinBottomSheetController {
         addChild(contentViewController)
         sheetView.addSubview(contentViewController.view)
         contentViewController.view.snp.makeConstraints {
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            contentBottomConstraint = $0.bottom.equalToSuperview().constraint
             $0.top.equalToSuperview().priority(749)
         }
         contentViewController.didMove(toParent: self)

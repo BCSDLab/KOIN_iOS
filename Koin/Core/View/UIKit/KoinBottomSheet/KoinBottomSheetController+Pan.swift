@@ -19,7 +19,6 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
 
     struct PanTracking {
         var sheetPan: UIPanGestureRecognizer?
-        var ignoresCurrentPan = false
         weak var touchedScrollView: UIScrollView?
         var touchedScrollWasDecelerating = false
     }
@@ -49,9 +48,6 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
         shouldReceive touch: UITouch
     ) -> Bool {
         guard gestureRecognizer === panTracking.sheetPan else { return true }
-        // 소비한 터치의 moved/ended로는 재인식하지 않고 새 touch에서만 다시 허용한다.
-        if touch.phase == .began { panTracking.ignoresCurrentPan = false }
-        guard !panTracking.ignoresCurrentPan else { return false }
         panTracking.touchedScrollView = nil
         var node = touch.view
         while let current = node, current !== sheetView {
@@ -73,7 +69,6 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
         }
         let velocity = pan.velocity(in: view)
         guard isActive,
-              !panTracking.ignoresCurrentPan,
               abs(velocity.y) > abs(velocity.x) else {
             return false
         }
@@ -101,7 +96,6 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
     }
 
     @objc private func handleSheetPan(_ pan: UIPanGestureRecognizer) {
-        guard !panTracking.ignoresCurrentPan else { return }
         switch pan.state {
         case .began:
             beginPan(
@@ -126,21 +120,20 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
         translation: CGFloat,
         velocity: CGFloat = 0
     ) {
-        guard isActive, !panTracking.ignoresCurrentPan else { return }
-        // 키보드가 열린 첫 아래 드래그는 키보드만 닫고 소비한다.
-        if (velocity > 0 || translation > 0), containsFirstResponder(contentViewController.view) {
-            panTracking.ignoresCurrentPan = true
-            panState = nil
-            capturePresentationLayout()
-            applyTargetHeight()
-            // transform은 기존 keyboardWillHide의 애니메이션 블록에서 identity로 복귀한다.
-            contentViewController.view.endEditing(true)
-            panTracking.sheetPan?.isEnabled = false
-            panTracking.sheetPan?.isEnabled = true
-            return
-        }
+        guard isActive else { return }
         capturePresentationLayout()
-        let height = sheetView.bounds.height
+        var height = sheetView.bounds.height
+        // 키보드가 열린 채 아래로 끌면 키보드를 닫고 pan은 이어간다.
+        // 하단이 키보드 높이만큼 내려가므로 시트를 그만큼 늘려 시트 상단을 손가락 아래에 둔다.
+        let closesKeyboard = (velocity > 0 || translation > 0) && containsFirstResponder(contentViewController.view)
+        if closesKeyboard, let host = view.superview {
+            let keyboardHeight = max(0, host.safeAreaLayoutGuide.layoutFrame.maxY - host.keyboardLayoutGuide.layoutFrame.minY)
+            // 기본 높이 시트는 콘텐츠를 하단에서 띄워 같이 내려가지 않게 한다. fullscreen은 콘텐츠가 늘어난 높이를 채운다.
+            if !isFullScreen {
+                contentBottomConstraint?.update(inset: height - contentViewController.view.frame.maxY + keyboardHeight)
+            }
+            height += keyboardHeight
+        }
         panState = PanState(
             height: height,
             offset: containerView.transform.ty,
@@ -149,14 +142,16 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
             startedFullScreen: isFullScreen,
             canExpand: canExpandByPan
         )
+        // 키보드 알림이 pan을 끊고 높이를 되돌리지 않도록 panState와 높이를 먼저 둔다.
         didExpandForKeyboard = false
         holdHeight(height)
+        if closesKeyboard {
+            contentViewController.view.endEditing(true)
+        }
     }
 
     func changePan(translation: CGFloat) {
-        guard let state = panState,
-              isActive,
-              !panTracking.ignoresCurrentPan else {
+        guard let state = panState, isActive else {
             return
         }
         let movement = state.offset + translation - state.translation
@@ -182,10 +177,13 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
             containerView.transform = CGAffineTransform(translationX: 0,
                 y: -rubberBand(-movement, dimension: state.height))
         }
-        applyNonModalDim(
-            forHeight: heightConstraint?.constant ?? state.height,
-            baseHeight: min(state.baseHeight, availableHeight)
-        )
+        // fullscreen이 될 수 없는 시트는 dim을 바꾸지 않는다. 키보드 보정으로 늘어난 높이를 펼침으로 보지 않는다.
+        if state.startedFullScreen || state.canExpand {
+            applyNonModalDim(
+                forHeight: heightConstraint?.constant ?? state.height,
+                baseHeight: min(state.baseHeight, availableHeight)
+            )
+        }
         view.layoutIfNeeded()
     }
 
@@ -193,9 +191,7 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
         velocity: CGFloat,
         cancelled: Bool = false
     ) {
-        guard let state = panState,
-              isActive,
-              !panTracking.ignoresCurrentPan else {
+        guard let state = panState, isActive else {
             return
         }
         let effective = sheetView.bounds.height - containerView.transform.ty

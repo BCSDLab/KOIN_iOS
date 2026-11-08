@@ -134,11 +134,16 @@ private extension KoinBottomSheetController {
                 .beginFromCurrentState
             ]
         ) { [weak self] in
-            if let self, self.isActive, self.panState == nil {
+            guard let self else { return }
+            let followsKeyboard = self.isActive && self.panState == nil
+            if followsKeyboard {
                 self.containerView.transform = .identity
             }
-            self?.applyDimTarget()
-            self?.view.layoutIfNeeded()
+            self.applyDimTarget()
+            self.view.layoutIfNeeded()
+            if followsKeyboard {
+                self.notifyTargetFrame()
+            }
         } completion: { [weak self] _ in
             self?.finishPresentationIfNeeded()
         }

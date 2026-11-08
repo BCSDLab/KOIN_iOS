@@ -69,6 +69,7 @@ extension KoinBottomSheetController {
             applyDimTarget()
         }
         view.layoutIfNeeded()
+        notifyTargetFrame()
         if wasAnimating {
             finishPresentationIfNeeded()
         }
@@ -85,6 +86,7 @@ extension KoinBottomSheetController {
         heightConstraint.priority = UILayoutPriority(999)
         heightConstraint.constant = isFullScreen ? max(view.bounds.height * 2, 1) : resolvedHeight
         heightConstraint.isActive = true
+        contentBottomConstraint?.update(inset: 0)
     }
 
     func holdHeight(_ height: CGFloat) {

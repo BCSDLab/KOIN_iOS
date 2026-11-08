@@ -27,5 +27,7 @@ struct KoinBottomSheetConfiguration {
     var showsShadow = false
     /// 닫힘 애니메이션이 시작될 때 호출된다. 드래그로 닫는 경우도 포함한다.
     var onWillDismiss: (() -> Void)?
+    /// 시트가 멈출 최종 frame(window 좌표)이 정해질 때 호출된다. 애니메이션 중간 위치는 알리지 않는다.
+    var onTargetFrameChange: ((CGRect) -> Void)?
     var onDismiss: (() -> Void)?
 }
