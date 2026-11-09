@@ -31,46 +31,20 @@ struct RecruitPostSchedule: Equatable {
         }
     }
 
-    /// picker min/max. 시작: MIN~MAX, 종료: (시작 ?? 오늘)~MAX, 마감: (시작 ?? MIN)~(종료 ?? MAX)
+    /// picker min/max. 필드끼리 독립: 모두 MIN~MAX. 순서는 isValid에서만 검사
     func range(for field: Field, today: Date) -> ClosedRange<Date> {
         let minimum = RecruitPostSchedule.minimumDate
         let maximum = Calendar.koin.date(byAdding: .year, value: RecruitPostSchedule.maximumYearsFromToday, to: today) ?? today
-        let lower: Date
-        let upper: Date
-        switch field {
-        case .start:
-            lower = minimum
-            upper = maximum
-        case .end:
-            lower = start ?? today
-            upper = maximum
-        case .deadline:
-            lower = start ?? minimum
-            upper = end ?? maximum
-        }
-        return lower...max(lower, upper)
+        return minimum...max(minimum, maximum)
     }
 
-    /// 값 반영 후 규칙을 위반하게 된 다른 필드는 nil
+    /// 해당 필드만 반영. 다른 필드는 건드리지 않는다
     func updating(_ field: Field, to date: Date) -> RecruitPostSchedule {
         var schedule = self
         switch field {
-        case .start:
-            schedule.start = date
-            if let end = schedule.end, isDay(end, before: date) {
-                schedule.end = nil
-            }
-            if let deadline = schedule.deadline,
-               isDay(deadline, before: date) || schedule.end.map({ isDay($0, before: deadline) }) == true {
-                schedule.deadline = nil
-            }
-        case .end:
-            schedule.end = date
-            if let deadline = schedule.deadline, isDay(date, before: deadline) {
-                schedule.deadline = nil
-            }
-        case .deadline:
-            schedule.deadline = date
+        case .start: schedule.start = date
+        case .end: schedule.end = date
+        case .deadline: schedule.deadline = date
         }
         return schedule
     }
