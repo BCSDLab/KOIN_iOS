@@ -71,12 +71,26 @@ final class KoinPickerView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// UIPickerView는 window 밖·크기 0일 때 selectRow가 휠에 반영되지 않는다(드롭다운은 열기 전에 setDate)
+    private var syncedPickerSize: CGSize = .zero
+
+    override func didMoveToWindow() {
+        super.didMoveToWindow()
+        syncedPickerSize = .zero
+        setNeedsLayout()
+    }
+
     override func layoutSubviews() {
         super.layoutSubviews()
 
         for subview in pickerView.subviews {
             subview.backgroundColor = .clear
         }
+
+        guard window != nil, pickerView.bounds.size != syncedPickerSize else { return }
+        syncedPickerSize = pickerView.bounds.size
+        pickerView.layoutIfNeeded()
+        selectRows(animated: false, force: true)
     }
 
     // MARK: - Public
@@ -123,10 +137,11 @@ extension KoinPickerView {
         selectRows(animated: animated)
     }
 
-    private func selectRows(animated: Bool) {
+    /// force: picker 내부 selectedRow와 휠 위치가 어긋났을 수 있을 때 비교 없이 다시 선택
+    private func selectRows(animated: Bool, force: Bool = false) {
         for component in 0..<columnsDataSource.numberOfComponents {
             let row = columnsDataSource.selectedRow(inComponent: component)
-            if pickerView.selectedRow(inComponent: component) != row {
+            if force || pickerView.selectedRow(inComponent: component) != row {
                 pickerView.selectRow(row, inComponent: component, animated: animated)
             }
         }

@@ -25,28 +25,18 @@ struct RecruitActivityPeriod: Equatable {
         }
     }
 
-    /// picker min/max. 시작: MIN~오늘, 종료: (시작 ?? MIN)~오늘
+    /// picker min/max. 필드끼리 독립: 모두 MIN~오늘. 순서는 isValid에서만 검사
     func range(for field: Field, today: Date) -> ClosedRange<Date> {
         let minimum = RecruitPostSchedule.minimumDate
-        let lower: Date
-        switch field {
-        case .start: lower = minimum
-        case .end: lower = start ?? minimum
-        }
-        return lower...max(lower, today)
+        return minimum...max(minimum, today)
     }
 
-    /// 값 반영 후 규칙을 위반하게 된 다른 필드는 nil
+    /// 해당 필드만 반영. 다른 필드는 건드리지 않는다
     func updating(_ field: Field, to date: Date) -> RecruitActivityPeriod {
         var period = self
         switch field {
-        case .start:
-            period.start = date
-            if let end = period.end, isDay(end, before: date) {
-                period.end = nil
-            }
-        case .end:
-            period.end = date
+        case .start: period.start = date
+        case .end: period.end = date
         }
         return period
     }
