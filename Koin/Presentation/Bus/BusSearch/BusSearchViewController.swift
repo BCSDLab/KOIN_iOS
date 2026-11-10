@@ -121,7 +121,7 @@ final class BusSearchViewController: UIViewController {
 
 extension BusSearchViewController {
     @objc private func tapSearchButton(sender: UIButton) {
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.searchBus, .click, "조회하기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchSearchClick, "조회하기"))
         let repository = DefaultBusRepository(service: DefaultBusService())
         let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
@@ -132,7 +132,7 @@ extension BusSearchViewController {
     }
     
     @objc private func tapNoticeInfoButton() {
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.busAnnouncement, .click, "교통편 조회하기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableBusNoticeOpenClick, "버스 교통편"))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag, boardId: -1)
         let viewController = NoticeDataViewController(viewModel: viewModel)
@@ -142,16 +142,16 @@ extension BusSearchViewController {
     @objc private func tapBusAreaSelectedButtons(sender: UIButton) {
         let buttonState: BusAreaButtonState = sender == departAreaSelectedButton ? .departureSelect : .arrivalSelect
         if sender == departAreaSelectedButton {
-            inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.departureBox, .click, "출발지 선택"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchSearchDepartureOpenClick, "출발지 선택"))
         }
         else {
-            inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.arrivalBox, .click, "도착지 선택"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchSearchArrivalOpenClick, "목적지 선택"))
         }
         inputSubject.send(.selectBusArea(sender.tag, buttonState))
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.busAnnouncementClose, .click, "교통편 조회하기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableBusNoticeCloseClick, "버스 교통편"))
         UserDefaults.standard.set(busNoticeWrappedView.tag, forKey: "busNoticeId")
         updateLayoutsByNotice(isDeleted: true)
     }
@@ -159,7 +159,7 @@ extension BusSearchViewController {
     @objc private func swapDepartureAndArrival(sender: UIButton) {
         guard departAreaSelectedButton.tag != 0 && arrivedAreaSelectedButton.tag != 0 else { return }
         
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.swapDestination, .click, "스왑 버튼"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchSearchSwapClick, "출발지 도착지 바꾸기"))
         let departure = BusPlace.allCases[departAreaSelectedButton.tag - 1]
         let arrival = BusPlace.allCases[arrivedAreaSelectedButton.tag - 1]
         changeBusAreaButton(sender: departAreaSelectedButton, title: arrival)
@@ -204,13 +204,13 @@ extension BusSearchViewController {
     private func selectDepartureBusArea(_ departureArea: BusPlace) {
         changeBusAreaButton(sender: departAreaSelectedButton, title: departureArea)
         updateSearchButtonIfNeeded()
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.departureLocationConfirm, .click, departureArea.koreanDescription))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchSearchDepartureConfirmSelect, departureArea.loggingValue))
     }
 
     private func selectArrivalBusArea(_ arrivalArea: BusPlace) {
         changeBusAreaButton(sender: arrivedAreaSelectedButton, title: arrivalArea)
         updateSearchButtonIfNeeded()
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.arrivalLocationConfirm, .click, arrivalArea.koreanDescription))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchSearchArrivalConfirmSelect, arrivalArea.loggingValue))
     }
 
     private func updateSearchButtonIfNeeded() {

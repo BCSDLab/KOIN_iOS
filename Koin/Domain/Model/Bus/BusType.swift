@@ -35,3 +35,16 @@ enum BusType: String, Decodable, CaseIterable {
         }
     }
 }
+
+// 화면 표시명과 명세의 분석 분류명은 별도로 유지한다.
+extension BusType {
+    var loggingValue: String {
+        switch self {
+        case .shuttleBus: return "셔틀"
+        case .expressBus: return "대성"
+        case .cityBus: return "시내"
+        case .commuteBus: return "통학버스"
+        case .noValue: return "전체 차종"
+        }
+    }
+}

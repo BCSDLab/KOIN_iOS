@@ -43,7 +43,7 @@ final class BusSearchResultViewController: UIViewController {
         inputSubject.send(.getSemesterInfo)
         // 기존과 동일하게 뒤로가기 버튼 탭만 로깅 (스와이프 제외)
         navigationItem.backAction = UIAction { [weak self] _ in
-            self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.searchResultBack, .click, "뒤로가기"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultNavigationBackClick, "뒤로가기"))
             self?.navigationController?.popViewController(animated: true)
         }
     }
@@ -81,12 +81,12 @@ final class BusSearchResultViewController: UIViewController {
         tableView.tapDepartTimeButtonPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.searchResultDepartureTime, .click, "출발 시간 설정"))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultSearchDepartureTimeOpenClick, "출발 시각 설정"))
                 self.presentBusSearchDatePickerViewController()
         }.store(in: &subscriptions)
         
         tableView.tapDepartBusTypeButtonPublisher.sink { [weak self] busType in
-            self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.searchResultBusType, .click, busType.koreanDescription))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultFilterBusTypeSelect, busType.loggingValue))
             self?.inputSubject.send(.getSearchedResult(nil, busType))
         }.store(in: &subscriptions)
     }
@@ -112,11 +112,11 @@ extension BusSearchResultViewController {
             departDate: viewModel.departDate,
             onCompleted: { [weak self] departDate, isDateChanged in
                 self?.inputSubject.send(.getSearchedResult(departDate, nil))
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.departureTimeSettingDone, .click, isDateChanged ? "Y" : "N"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultSearchDepartureTimeConfirmClick, isDateChanged ? "시간 변경" : "시간 유지"))
             },
             onDepartureNowTapped: { [weak self] in
                 self?.inputSubject.send(.departNow)
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.departureNow, .click, "지금 출발"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultSearchDepartureTimeNowClick, "지금 출발"))
             }
         )
         present(busSearchDatePickerViewController, animated: true)

@@ -169,7 +169,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         }.store(in: &subscriptions)
         
         shuttleTimetableTableView.moveDetailTimetablePublisher.sink { [weak self] id, routeType, routeName in
-            self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.areaSpecificRoute, .click, "\(routeType.prefix(2))_\(routeName)"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableShuttleRouteEntryClick, "\(routeType.prefix(2))_\(routeName)"))
             let busRepository = DefaultBusRepository(service: DefaultBusService())
             let viewController = BusTimetableDataViewController(viewModel: BusTimetableDataViewModel(fetchShuttleTimetableUseCase: DefaultFetchShuttleBusTimetableUseCase(repository: busRepository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), shuttleRouteId: id))
             viewController.title = "\(routeName) 시간표"
@@ -181,7 +181,7 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         bindRouteView(cityRouteView, busType: .cityBus)
         
         cityRouteView.secondFilterPublisher.sink { [weak self] busNumber in
-            self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.cityBusRoute, .click, busNumber))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableFilterCityRouteSelect, busNumber))
         }.store(in: &subscriptions)
         
         shuttleTimetableTableView.tapIncorrectButtonPublisher.sink { [weak self] in
@@ -216,11 +216,11 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         routeView.firstFilterPublisher.sink { [weak self] route in
             switch busType {
             case .shuttleBus:
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.shuttleBusRoute, .click, route))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableFilterShuttleRouteSelect, route))
             case .expressBus:
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.dsBusDirection, .click, route))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableFilterDaeseongDirectionSelect, route))
             default:
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.cityBusDirection, .click, route))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableFilterCityDirectionSelect, route))
             }
         }.store(in: &subscriptions)
     }
@@ -229,13 +229,13 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
         let logValue: String
         switch currentBusType() {
         case .shuttleBus:
-            logValue = "셔틀버스 시간표"
+            logValue = "셔틀"
         case .expressBus:
-            logValue = "대성버스 시간표"
+            logValue = "대성"
         default:
-            logValue = "시내버스 시간표"
+            logValue = "시내"
         }
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.errorFeedbackButton, .click, logValue))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableBusFeedbackEntryClick, logValue))
         if let url = URL(string: "https://docs.google.com/forms/d/1GR4t8IfTOrYY4jxq5YAS7YiCS8QIFtHaWu_kE-SdDKY"),
            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
@@ -243,13 +243,13 @@ final class BusTimetableViewController: UIViewController, UIScrollViewDelegate {
     }
     
     @objc private func tapDeleteNoticeInfoButton() {
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.busAnnouncementClose, .click, "\(currentBusType().koreanDescription) 시간표"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableBusNoticeCloseClick, currentBusType().loggingValue))
         UserDefaults.standard.set(busNoticeWrappedView.tag, forKey: "busNoticeId")
         updateLayoutsByNotice(isDeleted: true)
     }
     
     @objc private func tapNoticeInfoButton() {
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.busAnnouncement, .click, "\(currentBusType().koreanDescription) 시간표"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableBusNoticeOpenClick, currentBusType().loggingValue))
         let repository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let viewModel = NoticeDataViewModel(fetchNoticeDataUseCase: DefaultFetchNoticeDataUseCase(noticeListRepository: repository), fetchHotNoticeArticlesUseCase: DefaultFetchHotNoticeArticlesUseCase(noticeListRepository: repository), downloadNoticeAttachmentUseCase: DefaultDownloadNoticeAttachmentsUseCase(noticeRepository: repository), logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService())), noticeId: busNoticeWrappedView.tag, boardId: -1)
         let viewController = NoticeDataViewController(viewModel: viewModel)
@@ -308,22 +308,24 @@ extension BusTimetableViewController {
         syncInactivePageOffsets()
         selectPage(index: index)
         pagingScrollView.setContentOffset(CGPoint(x: pagingScrollView.bounds.width * CGFloat(index), y: 0), animated: true)
-    }
-    
-    /// 탭 탭·페이지 스와이프 모두 이 경로로 선택 상태를 갱신한다(로그 1회).
-    private func selectPage(index: Int) {
-        guard index != selectedIndex, busTypes.indices.contains(index) else { return }
-        selectedIndex = index
-        busTypeTabBarView.update(selectedIndex: index)
-        updateHeaderContents()
-        updateHeaderPosition()
+        guard selectedIndex == index else { return }
+        // 명세 4-4는 탭 클릭만 대상이다. 페이지 스와이프 전환은 기록하지 않는다.
         let logValue: String
         switch currentBusType() {
         case .shuttleBus: logValue = "셔틀"
         case .expressBus: logValue = "대성"
         default: logValue = "시내"
         }
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.timetableBusTypeTab, .click, logValue))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableFilterBusTypeClick, logValue))
+    }
+
+    /// 탭 탭·페이지 스와이프 모두 이 경로로 선택 상태를 갱신한다.
+    private func selectPage(index: Int) {
+        guard index != selectedIndex, busTypes.indices.contains(index) else { return }
+        selectedIndex = index
+        busTypeTabBarView.update(selectedIndex: index)
+        updateHeaderContents()
+        updateHeaderPosition()
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {

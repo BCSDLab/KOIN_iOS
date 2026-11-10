@@ -86,6 +86,29 @@ enum EventParameter {
             case shopSearchShopDetailEntryClick = "shop__shop_search__shop_detail__entry__click"
         }
 
+        enum Bus: String, EventLabelType {
+            case busSearchSearchArrivalConfirmSelect = "bus__bus_search__search__arrival_confirm__select"
+            case busSearchSearchArrivalOpenClick = "bus__bus_search__search__arrival_open__click"
+            case busSearchSearchClick = "bus__bus_search__search__click"
+            case busSearchSearchDepartureConfirmSelect = "bus__bus_search__search__departure_confirm__select"
+            case busSearchSearchDepartureOpenClick = "bus__bus_search__search__departure_open__click"
+            case busSearchSearchSwapClick = "bus__bus_search__search__swap__click"
+            case busSearchResultFilterBusTypeSelect = "bus__bus_search_result__filter__bus_type__select"
+            case busSearchResultNavigationBackClick = "bus__bus_search_result__navigation__back__click"
+            case busSearchResultSearchDepartureTimeConfirmClick = "bus__bus_search_result__search__departure_time_confirm__click"
+            case busSearchResultSearchDepartureTimeNowClick = "bus__bus_search_result__search__departure_time_now__click"
+            case busSearchResultSearchDepartureTimeOpenClick = "bus__bus_search_result__search__departure_time_open__click"
+            case busTimetableBusFeedbackEntryClick = "bus__bus_timetable__bus_feedback__entry__click"
+            case busTimetableBusNoticeCloseClick = "bus__bus_timetable__bus_notice__close__click"
+            case busTimetableBusNoticeOpenClick = "bus__bus_timetable__bus_notice__open__click"
+            case busTimetableFilterBusTypeClick = "bus__bus_timetable__filter__bus_type__click"
+            case busTimetableFilterCityDirectionSelect = "bus__bus_timetable__filter__city_direction__select"
+            case busTimetableFilterCityRouteSelect = "bus__bus_timetable__filter__city_route__select"
+            case busTimetableFilterDaeseongDirectionSelect = "bus__bus_timetable__filter__daeseong_direction__select"
+            case busTimetableFilterShuttleRouteSelect = "bus__bus_timetable__filter__shuttle_route__select"
+            case busTimetableShuttleRouteEntryClick = "bus__bus_timetable__shuttle_route__entry__click"
+        }
+
         enum Dining: String, EventLabelType {
             case accountConfigNotificationConfigEntryClick = "cafeteria__account_config__notification_config__entry__click"
             case cafeteriaCafeteriaInfoEntryClick = "cafeteria__cafeteria__cafeteria_info__entry__click"
