@@ -17,7 +17,7 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
         case delete
         case applicationSubmitted
         case didShowToast
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     // MARK: - State
@@ -64,8 +64,8 @@ final class RecruitDataViewModel: SwiftUIViewModelProtocol {
             applicationSubmitted()
         case .didShowToast:
             errorMessage = nil
-        case let .logEvent(label, category, value):
-            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        case let .logEvent(label, value):
+            logAnalyticsEventUseCase.execute(label: label, value: value)
         }
     }
 }

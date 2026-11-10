@@ -38,29 +38,26 @@ struct RecruitMyApplicationListView: ActionBindableView {
                 totalCount: viewModel.recruitList?.totalCount ?? 0,
                 onFilterButtonTapped: {
                     viewModel.execute(.logEvent(
-                        LegacyEventParameter.EventLabel.Campus.Recruit.recruitAppliedPostFilter,
-                        .click,
+                        EventParameter.EventLabel.Recruit.teamAppliedFilterOpenClick,
                         "필터"
                     ))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
                         onFilterItemTapped: { groupIndex, item in
                             if let event = RecruitMyApplicationFilter.logEvent(groupIndex: groupIndex, title: item.title) {
-                                viewModel.execute(.logEvent(event.label, .click, event.value))
+                                viewModel.execute(.logEvent(event.label, event.value))
                             }
                             return true
                         },
                         onResetTapped: {
                             viewModel.execute(.logEvent(
-                                LegacyEventParameter.EventLabel.Campus.Recruit.recruitAppliedPostFilterReset,
-                                .click,
+                                EventParameter.EventLabel.Recruit.teamAppliedFilterResetClick,
                                 "초기화"
                             ))
                         },
                         onApplyTapped: { groupModels in
                             viewModel.execute(.logEvent(
-                                LegacyEventParameter.EventLabel.Campus.Recruit.recruitAppliedPostFilterApply,
-                                .click,
+                                EventParameter.EventLabel.Recruit.teamAppliedFilterApplyClick,
                                 "적용하기"
                             ))
                             guard let filter = RecruitMyApplicationFilter(from: groupModels) else {
@@ -84,9 +81,8 @@ struct RecruitMyApplicationListView: ActionBindableView {
                             },
                             onShowChat: { chatRoomId in
                                 viewModel.execute(.logEvent(
-                                    LegacyEventParameter.EventLabel.Campus.Recruit.recruitAppliedPostChat,
-                                    .click,
-                                    recruit.title
+                                    EventParameter.EventLabel.Recruit.teamAppliedChatEntryEntryClick,
+                                    "\(recruit.category.rawValue)_\(recruit.id)"
                                 ))
                                 sendAction(.showChat(recruitmentId: recruit.id, chatRoomId: chatRoomId))
                             }

@@ -96,8 +96,8 @@ final class RecruitProfilePostViewController: UIViewController {
     private lazy var departmentDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
         guard let self else { return }
         makeLogAnalyticsEvent(
-            post: .recruitProfileCreateMajor,
-            modify: .recruitProfileModifyMajorSelect,
+            post: .teamProfileWriteTeamProfileWriteMajorSelect,
+            modify: .teamProfileEditProfileEditMajorSelect,
             value: department
         )
         basicInfo.department = department
@@ -156,8 +156,8 @@ extension RecruitProfilePostViewController {
             return
         }
         makeLogAnalyticsEvent(
-            post: .recruitProfileCreateNext,
-            modify: .recruitProfileModifyNext,
+            post: .teamProfileWriteTeamProfileWriteNextClick,
+            modify: .teamProfileEditProfileEditNextClick,
             value: "다음"
         )
         showSecondStep()
@@ -172,23 +172,22 @@ extension RecruitProfilePostViewController {
             return
         }
         makeLogAnalyticsEvent(
-            post: .recruitProfileCreateSubmit,
-            modify: .recruitProfileModifySubmit,
-            value: completeButtonTitle
+            post: .teamProfileWriteTeamProfileWriteOpenClick,
+            modify: .teamProfileEditProfileEditOpenClick,
+            value: completeModalButtonTitle
         )
         let leftButtonAction: ()->Void = { [weak self] in
             self?.makeLogAnalyticsEvent(
-                post: .recruitProfileCreateSubmitCancel,
-                modify: .recruitProfileModifySubmitCancel,
+                post: .teamProfileWriteTeamProfileWriteCancelClick,
+                modify: .teamProfileEditProfileEditCancelClick,
                 value: "취소하기"
             )
         }
         let rightButtonAction = { [weak self] in
             guard let self else { return }
             makeLogAnalyticsEvent(
-                post: .recruitProfileCreateSubmitConfirm,
-                modify: .recruitProfileModifySubmitConfirm,
-                modifyCategory: .result,
+                post: .teamProfileWriteTeamProfileWriteConfirmClick,
+                modify: .teamProfileEditProfileEditConfirmClick,
                 value: completeModalButtonTitle
             )
             inputSubject.send(.submit(basicInfo: basicInfo, request: request))
@@ -252,8 +251,8 @@ extension RecruitProfilePostViewController {
         firstStepView.loadInfoButtonTappedPublisher
             .sink { [weak self] in
                 self?.makeLogAnalyticsEvent(
-                    post: .recruitProfileCreateLoad,
-                    modify: .recruitProfileModifyLoad,
+                    post: .teamProfileWriteTeamProfileWriteLoadClick,
+                    modify: .teamProfileEditProfileEditLoadClick,
                     value: "회원정보 불러오기"
                 )
                 self?.inputSubject.send(.fetchBasicInfo)
@@ -327,8 +326,8 @@ extension RecruitProfilePostViewController {
         secondStepView.skillAddButtonTappedPublisher
             .sink { [weak self] in
                 self?.makeLogAnalyticsEvent(
-                    post: .recruitProfileCreateSkillAdd,
-                    modify: .recruitProfileModifySkillAdd,
+                    post: .teamProfileWriteTeamProfileWriteSkillAddClick,
+                    modify: .teamProfileEditProfileEditSkillAddClick,
                     value: "기술 / 자격증 추가"
                 )
             }
@@ -337,8 +336,8 @@ extension RecruitProfilePostViewController {
         secondStepView.activityAddButtonTappedPublisher
             .sink { [weak self] in
                 self?.makeLogAnalyticsEvent(
-                    post: .recruitProfileCreateActivityAdd,
-                    modify: .recruitProfileModifyActivityAdd,
+                    post: .teamProfileWriteTeamProfileWriteActivityAddClick,
+                    modify: .teamProfileEditProfileEditActivityAddClick,
                     value: "활동 이력 추가"
                 )
             }
@@ -347,8 +346,8 @@ extension RecruitProfilePostViewController {
         secondStepView.activityEditButtonTappedPublisher
             .sink { [weak self] in
                 self?.makeLogAnalyticsEvent(
-                    post: .recruitProfileCreateActivityModify,
-                    modify: .recruitProfileModifyActivityModify,
+                    post: .teamProfileWriteTeamProfileWriteActivityEditClick,
+                    modify: .teamProfileEditProfileEditActivityEditClick,
                     value: "수정"
                 )
             }
@@ -357,8 +356,8 @@ extension RecruitProfilePostViewController {
         secondStepView.activityAddCompleteButtonTappedPublisher
             .sink { [weak self] in
                 self?.makeLogAnalyticsEvent(
-                    post: .recruitProfileCreateActivityAddComplete,
-                    modify: .recruitProfileModifyActivityComplete,
+                    post: .teamProfileWriteTeamProfileWriteActivityAddConfirmClick,
+                    modify: .teamProfileEditProfileEditActivityAddConfirmClick,
                     value: "완료"
                 )
             }
@@ -367,8 +366,8 @@ extension RecruitProfilePostViewController {
         secondStepView.activityEditCompleteButtonTappedPublisher
             .sink { [weak self] in
                 self?.makeLogAnalyticsEvent(
-                    post: .recruitProfileCreateActivityModifyComplete,
-                    modify: .recruitProfileModifyActivityModifyComplete,
+                    post: .teamProfileWriteTeamProfileWriteActivityEditConfirmClick,
+                    modify: .teamProfileEditProfileEditActivityEditConfirmClick,
                     value: "수정하기"
                 )
             }
@@ -569,16 +568,15 @@ extension RecruitProfilePostViewController {
 
 extension RecruitProfilePostViewController {
     private func makeLogAnalyticsEvent(
-        post postLabel: LegacyEventParameter.EventLabel.Campus.Recruit,
-        modify modifyLabel: LegacyEventParameter.EventLabel.Campus.Recruit,
-        modifyCategory: EventParameter.EventCategory = .click,
+        post postLabel: EventParameter.EventLabel.Recruit,
+        modify modifyLabel: EventParameter.EventLabel.Recruit,
         value: Any
     ) {
         switch viewModel.mode {
         case .post:
-            inputSubject.send(.logEvent(postLabel, .click, value))
+            inputSubject.send(.logEvent(postLabel, value))
         case .modify:
-            inputSubject.send(.logEvent(modifyLabel, modifyCategory, value))
+            inputSubject.send(.logEvent(modifyLabel, value))
         }
     }
 }

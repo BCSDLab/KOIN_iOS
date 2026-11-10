@@ -39,29 +39,26 @@ struct RecruitMyPostListView: ActionBindableView {
                 totalCount: viewModel.recruitList?.totalCount ?? 0,
                 onFilterButtonTapped: {
                     viewModel.execute(.logEvent(
-                        LegacyEventParameter.EventLabel.Campus.Recruit.recruitCreatedPostFilter,
-                        .click,
+                        EventParameter.EventLabel.Recruit.teamCreatedFilterOpenClick,
                         "필터"
                     ))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
                         onFilterItemTapped: { groupIndex, item in
                             if let event = RecruitMyPostFilter.logEvent(groupIndex: groupIndex, title: item.title) {
-                                viewModel.execute(.logEvent(event.label, .click, event.value))
+                                viewModel.execute(.logEvent(event.label, event.value))
                             }
                             return true
                         },
                         onResetTapped: {
                             viewModel.execute(.logEvent(
-                                LegacyEventParameter.EventLabel.Campus.Recruit.recruitCreatedPostFilterReset,
-                                .click,
+                                EventParameter.EventLabel.Recruit.teamCreatedFilterResetClick,
                                 "초기화"
                             ))
                         },
                         onApplyTapped: { groupModels in
                             viewModel.execute(.logEvent(
-                                LegacyEventParameter.EventLabel.Campus.Recruit.recruitCreatedPostFilterApply,
-                                .click,
+                                EventParameter.EventLabel.Recruit.teamCreatedFilterApplyClick,
                                 "적용하기"
                             ))
                             guard let filter = RecruitMyPostFilter(from: groupModels) else {
@@ -85,25 +82,22 @@ struct RecruitMyPostListView: ActionBindableView {
                             },
                             onShowChat: { chatRoomId in
                                 viewModel.execute(.logEvent(
-                                    LegacyEventParameter.EventLabel.Campus.Recruit.recruitCreatedPostChat,
-                                    .click,
-                                    recruit.title
+                                    EventParameter.EventLabel.Recruit.teamCreatedChatEntryEntryClick,
+                                    "\(recruit.category.rawValue)_\(recruit.id)"
                                 ))
                                 sendAction(.showChat(recruitmentId: recruit.id, chatRoomId: chatRoomId))
                             },
                             onShowApplicants: {
                                 viewModel.execute(.logEvent(
-                                    LegacyEventParameter.EventLabel.Campus.Recruit.recruitCreatedPostApplicant,
-                                    .click,
-                                    recruit.title
+                                    EventParameter.EventLabel.Recruit.teamCreatedTeamApplicantEntryClick,
+                                    "\(recruit.category.rawValue)_\(recruit.id)"
                                 ))
                                 sendAction(.showApplicants(recruitId: recruit.id))
                             },
                             onCloseRecruit: {
                                 viewModel.execute(.logEvent(
-                                    LegacyEventParameter.EventLabel.Campus.Recruit.recruitCreatedPostClose,
-                                    .click,
-                                    recruit.title
+                                    EventParameter.EventLabel.Recruit.teamCreatedTeamDeadlineOpenClick,
+                                    "\(recruit.category.rawValue)_\(recruit.id)"
                                 ))
                                 sendAction(.showCloseModal(recruitId: recruit.id))
                             }
@@ -178,10 +172,9 @@ extension RecruitMyPostListView {
     }
 
     func makeLogAnalyticsEvent(
-        label: LegacyEventLabelType,
-        category: EventParameter.EventCategory,
+        label: EventLabelType,
         value: Any
     ) {
-        viewModel.execute(.logEvent(label, category, value))
+        viewModel.execute(.logEvent(label, value))
     }
 }

@@ -17,6 +17,7 @@ class FilterBottomSheetView: UIView, KoinBottomSheetContent {
     private var groupModels: [FilterGroupModel]
     private let onFilterItemTapped: ((Int, FilterItemModel)->Bool)?
     private let onResetTapped: (()->Void)?
+    private let onCloseTapped: (()->Void)?
     private let onApplyTapped: ([FilterGroupModel])->Void
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -39,11 +40,13 @@ class FilterBottomSheetView: UIView, KoinBottomSheetContent {
         groupModels: [FilterGroupModel],
         onFilterItemTapped: ((_ groupIndex: Int, _ item: FilterItemModel)->Bool)? = nil,
         onResetTapped: (()->Void)? = nil,
+        onCloseTapped: (()->Void)? = nil,
         onApplyTapped: @escaping ([FilterGroupModel])->Void
     ) {
         self.groupModels = groupModels
         self.onFilterItemTapped = onFilterItemTapped
         self.onResetTapped = onResetTapped
+        self.onCloseTapped = onCloseTapped
         self.onApplyTapped = onApplyTapped
         self.filterGroupViews = groupModels.map { group in
             FilterGroupView(filterGroup: group)
@@ -110,6 +113,7 @@ extension FilterBottomSheetView {
     }
     
     @objc private func closeButtonTapped() {
+        onCloseTapped?()
         delegate?.dismiss()
     }
     

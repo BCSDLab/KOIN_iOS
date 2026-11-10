@@ -49,16 +49,16 @@ extension RecruitMyApplicationFilter {
 }
 
 extension RecruitMyApplicationFilter {
-    static func logEvent(groupIndex: Int, title: String) -> (label: LegacyEventParameter.EventLabel.Campus.Recruit, value: String)? {
+    static func logEvent(groupIndex: Int, title: String) -> (label: EventParameter.EventLabel.Recruit, value: String)? {
         switch groupIndex {
         case 0:
             return (
-                .recruitAppliedPostFilterStatus, RecruitApplicationStatus(rawValue: title)?.rawValue ?? "전체")
+                .teamAppliedFilterStatusSelect, RecruitApplicationStatus(rawValue: title)?.rawValue ?? "전체")
         case 1:
             guard let sort = RecruitListSort(rawValue: title) else {
                 return nil
             }
-            return (.recruitAppliedPostFilterSort, sort.logValue)
+            return (.teamAppliedFilterSortSelect, sort.logValue)
         default:
             return nil
         }
