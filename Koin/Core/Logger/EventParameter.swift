@@ -50,6 +50,24 @@ extension EventLabelType {
 
 enum EventParameter {
     enum EventLabel {
+        enum Notice: String, EventLabelType {
+            case noticeKeywordManageLoginPopupCloseClick = "account__notice_keyword_manage__login_popup__close__click"
+            case noticeKeywordManageLoginPopupLoginEntryClick = "account__notice_keyword_manage__login_popup__login_entry__click"
+            case mainNoticeFilterKeywordSelect = "board__main_notice__filter__keyword__select"
+            case mainNoticeFilterTabSelect = "board__main_notice__filter__tab__select"
+            case mainNoticeKeywordManageEntryClick = "board__main_notice__keyword_manage__entry__click"
+            case mainNoticeNoticeListScroll = "board__main_notice__notice_list__scroll"
+            case mainNoticeSearchEntryClick = "board__main_notice__search__entry__click"
+            case noticeDetailExternalLinkOriginalEntryClick = "board__notice_detail__external_link__original_entry__click"
+            case noticeDetailNavigationNoticeListReturnClick = "board__notice_detail__navigation__notice_list_return__click"
+            case noticeDetailNoticeDetailPopularPostEntryClick = "board__notice_detail__notice_detail__popular_post_entry__click"
+            case noticeKeywordManageKeywordManageNotificationToggle = "board__notice_keyword_manage__keyword_manage__notification__toggle"
+            case noticeKeywordManageKeywordManageRecommendedKeywordSelect = "board__notice_keyword_manage__keyword_manage__recommended_keyword__select"
+            case noticeSearchSearchPopularKeywordSelect = "board__notice_search__search__popular_keyword__select"
+            case noticeSearchSearchSubmit = "board__notice_search__search__submit"
+            case notificationConfigKeywordManageEntryClick = "board__notification_config__keyword_manage__entry__click"
+        }
+
         enum Shop: String, EventLabelType {
             case shopDetailLoginPopupCloseClick = "account__shop_detail__login_popup__close__click"
             case shopDetailLoginPopupLoginEntryClick = "account__shop_detail__login_popup__login_entry__click"

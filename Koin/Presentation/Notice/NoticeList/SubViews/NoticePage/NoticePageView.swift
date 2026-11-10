@@ -50,8 +50,8 @@ extension NoticePageView {
             viewModel.execute(.didTapAllKeyword)
         case let .pageButtonTapped(page):
             viewModel.execute(.changePage(page))
-        case .didScroll:
-            viewModel.execute(.logScroll)
+        case let .didScroll(direction):
+            viewModel.execute(.logScroll(direction))
         case .searchButtonTapped:
             onSearchTapped()
         case .keywordAddTapped:

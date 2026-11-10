@@ -16,7 +16,7 @@ final class NoticeSearchViewModel: ViewModelProtocol {
         case fetchRecentSearchedWord
         case deleteAllSearchedWords
         case fetchSearchedResult(Int, String?, Bool)
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case updateHotKeyWord([String])
@@ -54,8 +54,8 @@ final class NoticeSearchViewModel: ViewModelProtocol {
                 self?.deleteAllSearchedWords()
             case let .fetchSearchedResult(page, keyWord, isNewPage):
                 self?.fetchSearchedResult(page: page, keyWord: keyWord, isNewPage: isNewPage)
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -112,8 +112,8 @@ extension NoticeSearchViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }
 

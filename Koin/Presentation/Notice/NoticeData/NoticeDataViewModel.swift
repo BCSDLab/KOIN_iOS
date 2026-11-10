@@ -14,7 +14,7 @@ final class NoticeDataViewModel: ViewModelProtocol {
         case getNoticeData
         case getPopularNotices
         case downloadFile(String, String)
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case updateNoticeData(NoticeDataInfo)
@@ -59,8 +59,8 @@ final class NoticeDataViewModel: ViewModelProtocol {
                 self?.getPopularArticle()
             case let .downloadFile(downloadUrl, fileName):
                 self?.downloadFile(downloadUrl: downloadUrl, fileName: fileName)
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -104,8 +104,8 @@ extension NoticeDataViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }
 

@@ -19,7 +19,7 @@ final class NoticePageViewModel: SwiftUIViewModelProtocol {
         case selectKeyword(String?)
         case didTapAllKeyword
         case changePage(Int)
-        case logScroll
+        case logScroll(String)
     }
 
     // MARK: - State
@@ -27,7 +27,6 @@ final class NoticePageViewModel: SwiftUIViewModelProtocol {
     private(set) var keyword: String?
     private(set) var articles: [NoticeArticleDto] = []
     private(set) var pages: NoticeListPages = .init(isPreviousPage: nil, pages: [], selectedIndex: 0, isNextPage: nil)
-    private var hasLoggedScroll = false
 
     // MARK: - Properties
     private let fetchNoticeArticlesUseCase: FetchNoticeArticlesUseCase
@@ -56,12 +55,12 @@ final class NoticePageViewModel: SwiftUIViewModelProtocol {
         case let .selectKeyword(keyword):
             selectKeyword(keyword)
         case .didTapAllKeyword:
-            logAnalyticsEventUseCase.execute(label: LegacyEventParameter.EventLabel.Campus.Notice.noticeFilterAll, category: .click, value: "모두보기")
+            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Notice.mainNoticeFilterKeywordSelect, value: "모두보기")
             selectKeyword(nil)
         case let .changePage(page):
             fetchArticles(page: page)
-        case .logScroll:
-            logScroll()
+        case let .logScroll(direction):
+            logScroll(direction)
         }
     }
 }
@@ -89,9 +88,7 @@ extension NoticePageViewModel {
             )
     }
 
-    private func logScroll() {
-        guard !hasLoggedScroll else { return }
-        hasLoggedScroll = true
-        logAnalyticsEventUseCase.execute(label: LegacyEventParameter.EventLabel.Campus.Notice.noticePage, category: .scroll, value: "공지사항")
+    private func logScroll(_ direction: String) {
+        logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Notice.mainNoticeNoticeListScroll, value: direction)
     }
 }
