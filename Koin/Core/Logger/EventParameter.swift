@@ -86,6 +86,27 @@ enum EventParameter {
             case shopSearchShopDetailEntryClick = "shop__shop_search__shop_detail__entry__click"
         }
 
+        enum CallVan: String, EventLabelType {
+            case callvanChatCallvanChatMessageSendClick = "callvan__callvan_chat__callvan_chat__message_send__click"
+            case callvanListCallvanChatCardEntryClick = "callvan__callvan_list__callvan_chat__card_entry__click"
+            case callvanListCallvanParticipationCancelResponseClick = "callvan__callvan_list__callvan_participation__cancel_response__click"
+            case callvanListCallvanParticipationJoinResponseClick = "callvan__callvan_list__callvan_participation__join_response__click"
+            case callvanListCallvanWriteEntryClick = "callvan__callvan_list__callvan_write__entry__click"
+            case callvanListContactPhoneClick = "callvan__callvan_list__contact__phone__click"
+            case callvanListFilterApplyClick = "callvan__callvan_list__filter__apply__click"
+            case callvanListFilterOpenClick = "callvan__callvan_list__filter__open__click"
+            case callvanListNavigationBackClick = "callvan__callvan_list__navigation__back__click"
+            case callvanListNavigationBackSwipe = "callvan__callvan_list__navigation__back__swipe"
+            case callvanListSearchSearchInputClick = "callvan__callvan_list__search__search_input__click"
+            case callvanParticipantListCallvanChatParticipantEntryClick = "callvan__callvan_participant_list__callvan_chat__participant_entry__click"
+            case callvanWriteCallvanWriteArrivalConfirmClick = "callvan__callvan_write__callvan_write__arrival_confirm__click"
+            case callvanWriteCallvanWriteConfirmClick = "callvan__callvan_write__callvan_write__confirm__click"
+            case callvanWriteCallvanWriteDepartureConfirmClick = "callvan__callvan_write__callvan_write__departure_confirm__click"
+            case callvanWriteCallvanWriteDepartureTimeConfirmClick = "callvan__callvan_write__callvan_write__departure_time_confirm__click"
+            case callvanWriteNavigationBackClick = "callvan__callvan_write__navigation__back__click"
+            case callvanWriteNavigationBackSwipe = "callvan__callvan_write__navigation__back__swipe"
+        }
+
         enum Home {
             enum DA1: String, EventLabelType {
                 case busMainBusEntrySearchEntryClick = "bus__main__bus_entry__search_entry__click"

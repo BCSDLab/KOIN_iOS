@@ -18,7 +18,7 @@ final class CallVanPostViewModel: ViewModelProtocol {
         case updateMaxParticipants(Int)
         case swapButtonTapped
         case postData
-        case logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
+        case logEvent(label: EventLabelType, value: Any)
     }
     enum Output {
         case enablePostButton(Bool)
@@ -73,8 +73,8 @@ final class CallVanPostViewModel: ViewModelProtocol {
                 swapPlace()
             case .postData:
                 checkRestriction()
-            case let .logEvent(label, category, value):
-                logEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                logEvent(label: label, value: value)
                 
             }
         }.store(in: &subscriptions)
@@ -167,7 +167,7 @@ extension CallVanPostViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func logEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

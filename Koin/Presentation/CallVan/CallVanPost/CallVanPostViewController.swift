@@ -21,6 +21,7 @@ final class CallVanPostViewController: UIViewController {
     private let inputSubject = PassthroughSubject<CallVanPostViewModel.Input, Never>()
     private let viewModel: CallVanPostViewModel
     private var subscriptions: Set<AnyCancellable> = []
+    private var didCompletePost = false
     /// 화면 진입 시 1회 고정. 출발일 범위·초기값 기준
     private let now = Date()
     
@@ -120,11 +121,15 @@ final class CallVanPostViewController: UIViewController {
             }.store(in: &subscriptions)
         
         timeView.timeChangedPublisher.sink { [weak self] time in
-            let value = time.string(with: .meridiemPaddedHourMinute)
-            self?.inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanWriteTime, category: .click, value: value))
             self?.inputSubject.send(.updateDepartureTime(time))
         }.store(in: &subscriptions)
         
+        timeView.dropdownContentView.dismissTappedPublisher.sink { [weak self] in
+            guard let self else { return }
+            let value = timeView.date.string(with: .meridiemPaddedHourMinute)
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.CallVan.callvanWriteCallvanWriteDepartureTimeConfirmClick, value: value))
+        }.store(in: &subscriptions)
+
         participantsView.participantsChangedPublisher.sink { [weak self] participants in
             self?.inputSubject.send(.updateMaxParticipants(participants))
         }.store(in: &subscriptions)
@@ -144,7 +149,11 @@ extension CallVanPostViewController {
 
 extension CallVanPostViewController: PopLoggable {
     func sendPopLog(category: EventParameter.EventCategory) {
-        inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanWriteBack, category: category, value: ""))
+        guard !didCompletePost else { return }
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.CallVan.callvanWriteNavigationBackSwipe
+            : EventParameter.EventLabel.CallVan.callvanWriteNavigationBackClick
+        inputSubject.send(.logEvent(label: label, value: ""))
     }
 }
 
@@ -155,7 +164,7 @@ extension CallVanPostViewController {
     
     @objc private func postButtonTapped() {
         postButton.isUserInteractionEnabled = false
-        inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanWriteDone, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: EventParameter.EventLabel.CallVan.callvanWriteCallvanWriteConfirmClick, value: ""))
         inputSubject.send(.postData)
     }
 }
@@ -197,7 +206,7 @@ extension CallVanPostViewController {
             inputSubject.send(.updateDeparture(place, customPlace))
             
             let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
-            inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanWriteDeparture, category: .click, value: value))
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.CallVan.callvanWriteCallvanWriteDepartureConfirmClick, value: value))
         }
         let contentView = CallVanPostPlaceBottomSheetView()
         contentView.configure(
@@ -216,7 +225,7 @@ extension CallVanPostViewController {
             inputSubject.send(.updateArrival(place, customPlace))
             
             let value = place == .custom ? "\(place.rawValue), \(customPlace ?? "")" : "\(place.rawValue)"
-            inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanWriteArrival, category: .click, value: value))
+            inputSubject.send(.logEvent(label: EventParameter.EventLabel.CallVan.callvanWriteCallvanWriteArrivalConfirmClick, value: value))
         }
         let contentView = CallVanPostPlaceBottomSheetView()
         contentView.configure(
@@ -232,6 +241,7 @@ extension CallVanPostViewController {
 extension CallVanPostViewController {
     
     private func postDataCompleted(_ postData: CallVanListPost) {
+        didCompletePost = true
         delegate?.appendPostData(postData)
         
         if let viewController = navigationController?.viewControllers.first(where: { $0 is CallVanListViewController }) {
