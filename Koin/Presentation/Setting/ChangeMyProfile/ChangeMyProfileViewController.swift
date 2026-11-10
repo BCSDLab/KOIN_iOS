@@ -339,10 +339,10 @@ final class ChangeMyProfileViewController: UIViewController {
                 case .save:
                     if success {
                         self?.navigationController?.popViewController(animated: true)
-                        self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.userInfo, .click, "정보수정 완료"))
+                        self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.User.userInfo, .click, "정보수정 완료"))
                     }
                     else {
-                        self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.userInfo, .click, "정보수정 실패"))
+                        self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.User.userInfo, .click, "정보수정 실패"))
                     }
                 }
                 self?.showToast(message: message, success: true)

@@ -16,7 +16,7 @@ final class RecruitMyPostApplicantViewModel: SwiftUIViewModelProtocol {
         case onFirstAppear
         case decide(RecruitApplicantDecision)
         case didShowToast
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -113,7 +113,7 @@ extension RecruitMyPostApplicantViewModel {
 
 extension RecruitMyPostApplicantViewModel {
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

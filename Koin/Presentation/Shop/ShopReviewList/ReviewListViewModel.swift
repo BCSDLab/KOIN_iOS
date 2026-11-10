@@ -60,8 +60,8 @@ final class ReviewListViewModel: ViewModelProtocol {
         case checkLoginForMyReviewFilter
         case checkLoginForReportReview((Int, Int))
         case deleteReview(Int, Int)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
-        case logEventWithDuration(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEventWithDuration(LegacyEventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
 
 
@@ -339,7 +339,7 @@ extension ReviewListViewModel {
             .store(in: &subscriptions)
     }
 
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration != nil {
             var durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
             

@@ -66,7 +66,7 @@ struct RegisterFormViewModelSelectTypeTests {
 struct RegisterFormViewModelSelectTypeLoggingTests {
 
     private let sessionId = "sign_up_0_iOS_1758713295_SDAFS"
-    private let label = EventParameter.EventLabel.User.createAccount
+    private let label = LegacyEventParameter.EventLabel.User.createAccount
 
     @Test(
         "선택한 회원 유형을 로그 값으로 전달한다",

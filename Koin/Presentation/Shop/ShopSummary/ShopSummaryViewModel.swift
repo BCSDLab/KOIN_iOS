@@ -13,8 +13,8 @@ final class ShopSummaryViewModel {
     // MARK: - Input
     enum Input {
         case viewDidLoad
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
-        case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEventDirect(LegacyEventLabelType, EventParameter.EventCategory, Any)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
     }
     
@@ -90,7 +90,7 @@ extension ShopSummaryViewModel {
 }
 
 extension ShopSummaryViewModel {
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if eventLabelNeededDuration != nil {
             var durationTime: Double = 0.0
             switch eventLabelNeededDuration {

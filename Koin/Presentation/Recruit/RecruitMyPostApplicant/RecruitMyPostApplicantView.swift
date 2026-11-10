@@ -142,7 +142,7 @@ extension RecruitMyPostApplicantView {
 
 extension RecruitMyPostApplicantView {
     private func makeLogAnalyticsEvent(_ decision: RecruitApplicantDecision) {
-        let label: EventParameter.EventLabel.Campus.Recruit
+        let label: LegacyEventParameter.EventLabel.Campus.Recruit
         switch decision {
         case .accepted:
             label = .recruitCreatedPostApplicantApprove
@@ -153,8 +153,8 @@ extension RecruitMyPostApplicantView {
     }
 
     private func showDecisionModal(_ decision: RecruitApplicantDecision) {
-        let cancelLabel: EventParameter.EventLabel.Campus.Recruit
-        let decideLabel: EventParameter.EventLabel.Campus.Recruit
+        let cancelLabel: LegacyEventParameter.EventLabel.Campus.Recruit
+        let decideLabel: LegacyEventParameter.EventLabel.Campus.Recruit
         switch decision {
         case .accepted:
             cancelLabel = .recruitCreatedPostApplicantApproveCancel

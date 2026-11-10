@@ -16,7 +16,7 @@ final class NotiViewModel: ViewModelProtocol {
         case getNotiAgreementList
         case switchChanged(SubscribeType, Bool)
         case switchDetailChanged(DetailSubscribeType, Bool)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Output
@@ -76,10 +76,10 @@ extension NotiViewModel {
              
             if type == .diningSoldOut {
                 self?.outputSubject.send(.changeButtonEnableStatus(isOn))
-                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.notificationSoldOut, category: .click, value: logValue)
+                self?.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Campus.Dining.notificationSoldOut, category: .click, value: logValue)
             }
             else if type == .diningImageUpload {
-                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.notificationMenuImageUpload, category: .click, value: logValue)
+                self?.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Campus.Dining.notificationMenuImageUpload, category: .click, value: logValue)
             }
             
         }.store(in: &subscriptions)
@@ -109,12 +109,12 @@ extension NotiViewModel {
 
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     
     private func makeLogByDetailSubsciption(type: DetailSubscribeType, value: String) {
-        let eventLabel: EventParameter.EventLabel.Campus.Dining
+        let eventLabel: LegacyEventParameter.EventLabel.Campus.Dining
         switch type {
         case .breakfast:
             eventLabel = .notificationBreakfastSoldOut

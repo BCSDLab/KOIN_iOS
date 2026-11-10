@@ -23,7 +23,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
         case didPresentNotiBottomSheet
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Proeprteis
@@ -223,7 +223,7 @@ extension DiningViewModel {
                 let result = try await assignAbTestUseCase.execute(requestModel: request).firstValue()
                 reportAbTest = DiningReportAbTest(from: result.variableName.rawValue)
                 if let reportAbTest {
-                    makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningAbtestExposure, category: .exposure, value: reportAbTest.logValue)
+                    makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningAbtestExposure, category: .exposure, value: reportAbTest.logValue)
                 }
             } catch {
                 guard !Task.isCancelled else { return }
@@ -303,14 +303,14 @@ extension DiningViewModel {
             return
         }
         makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSubmit,
+            label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSubmit,
             category: category,
             value: "\(reportAbTestName)_\(selectedPlace.name)"
         )
     }
     
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

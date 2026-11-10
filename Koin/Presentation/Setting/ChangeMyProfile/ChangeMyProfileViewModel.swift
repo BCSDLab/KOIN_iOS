@@ -16,7 +16,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     }
     enum Input {
         case modifyProfile(UserPutRequest)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case showToastMessage(String, Bool)
@@ -169,7 +169,7 @@ extension ChangeMyProfileViewModel {
             .assign(to: &$isFormValid)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

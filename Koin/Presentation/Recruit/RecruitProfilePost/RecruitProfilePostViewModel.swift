@@ -19,7 +19,7 @@ final class RecruitProfilePostViewModel: ViewModelProtocol {
         case viewDidLoad
         case fetchBasicInfo
         case submit(basicInfo: BasicInfo, request: RecruitProfileRequest)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     enum Output {
@@ -147,7 +147,7 @@ extension RecruitProfilePostViewModel {
 
 extension RecruitProfilePostViewModel {
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

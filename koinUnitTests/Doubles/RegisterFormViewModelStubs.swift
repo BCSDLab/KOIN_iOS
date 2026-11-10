@@ -23,13 +23,13 @@ final class SpyLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
     var executeWithSessionIdCallCount: Int { sessionEvents.count }
 
     func execute(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) { }
 
     func executeWithDuration(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any,
         previousPage: String?,
@@ -38,7 +38,7 @@ final class SpyLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
     ) { }
 
     func executeWithSessionId(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any,
         sessionId: String
@@ -52,6 +52,8 @@ final class SpyLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
             )
         )
     }
+
+    func execute(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String]) {}
 }
 
 final class StubCheckDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase {

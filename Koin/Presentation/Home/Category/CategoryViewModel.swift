@@ -14,7 +14,7 @@ import Combine
 final class CategoryViewModel: SwiftUIViewModelProtocol {
     enum Input {
         case checkAuth
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     private let checkLoginUseCase: CheckLoginUseCase

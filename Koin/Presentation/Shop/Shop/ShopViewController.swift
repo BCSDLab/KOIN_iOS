@@ -90,7 +90,7 @@ final class ShopViewController: UIViewController {
             let currentPage  = self.viewModel.categoryName(for: categoryId)
             
             self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, currentPage, previousPage, nil, nil, .shopCategories))
+            self.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopCategories, .click, currentPage, previousPage, nil, nil, .shopCategories))
             
             self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
             self.inputSubject.send(.changeCategory(categoryId))
@@ -119,7 +119,7 @@ final class ShopViewController: UIViewController {
             viewController.title = shopName
             let currentPage = shopName
             self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, currentPage, previousPage, nil, nil, .shopClick))
+            self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopClick, .click, currentPage, previousPage, nil, nil, .shopClick))
 
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
@@ -147,7 +147,7 @@ extension ShopViewController: PopLoggable {
         let previousPage = viewModel.selectedCategoryName
         let currentPage = "메인"
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategoriesBack))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBack, category, currentPage, previousPage, nil, nil, .shopCategoriesBack))
+        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopCategoriesBack, category, currentPage, previousPage, nil, nil, .shopCategoriesBack))
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
     }
 }
@@ -179,7 +179,7 @@ extension ShopViewController {
             case .review: value = "check_review_\(categoryName)"
             case .rating: value = "check_star_\(categoryName)"
             }
-            self?.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
+            self?.inputSubject.send(.logEventDirect(LegacyEventParameter.EventLabel.Business.shopCan, .click, value))
         }
 
         presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.2), cornerRadius: 32))
@@ -190,7 +190,7 @@ extension ShopViewController {
     private func handleOpenShopToggle(isSelected: Bool) {
         let categoryName = viewModel.selectedCategoryName
         let value = "check_open_\(categoryName)"
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
+        inputSubject.send(.logEventDirect(LegacyEventParameter.EventLabel.Business.shopCan, .click, value))
         inputSubject.send(.filterOpenShops(isSelected))
     }
 
@@ -208,7 +208,7 @@ extension ShopViewController {
     }
     private func makeScrollLog() {
         let categoryName = viewModel.selectedCategoryName
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategories, .scroll, "scroll in \(categoryName)"))
+        inputSubject.send(.logEventDirect(LegacyEventParameter.EventLabel.Business.shopCategories, .scroll, "scroll in \(categoryName)"))
     }
 
 }

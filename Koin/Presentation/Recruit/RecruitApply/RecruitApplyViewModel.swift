@@ -19,7 +19,7 @@ final class RecruitApplyViewModel: ViewModelProtocol {
             profileRequest: RecruitProfileRequest,
             applyRequest: RecruitApplyRequest
         )
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     enum Output {

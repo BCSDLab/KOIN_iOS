@@ -12,8 +12,8 @@ final class LoginViewModel: ViewModelProtocol {
     
     enum Input {
         case login(String, String)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
-        case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logSessionEvent(LegacyEventLabelType, EventParameter.EventCategory, Any, String)
     }
     enum Output {
         case showErrorMessage(String)
@@ -67,7 +67,7 @@ extension LoginViewModel {
         } receiveValue: { [weak self] response in
             KeychainWorker.shared.create(key: .access, token: response.token)
             KeychainWorker.shared.create(key: .refresh, token: response.refreshToken)
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인")
+            self?.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.User.login, category: .click, value: "로그인")
             self?.setUserInfo()
             self?.sendDeviceTokenIfNeededUseCase.execute()
         }.store(in: &subscriptions)
@@ -103,11 +103,11 @@ extension LoginViewModel {
 
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     
-    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+    private func makeLogAnalyticsSessionEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
         logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
 }

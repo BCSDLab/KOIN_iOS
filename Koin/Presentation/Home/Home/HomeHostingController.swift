@@ -202,7 +202,7 @@ extension HomeHostingController {
         contentView.setBanners(banner.banners)
 
         logAnalyticsEventUseCase.execute(
-            label: EventParameter.EventLabel.Campus.Home.mainModalEntry,
+            label: LegacyEventParameter.EventLabel.Campus.Home.mainModalEntry,
             category: .entry,
             value: banner.banners.first?.title ?? ""
         )
@@ -214,7 +214,7 @@ extension HomeHostingController {
             repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
         )
         logAnalyticsEventUseCase.execute(
-            label: EventParameter.EventLabel.Campus.Home.mainModal,
+            label: LegacyEventParameter.EventLabel.Campus.Home.mainModal,
             category: .click,
             value: banner.title
         )

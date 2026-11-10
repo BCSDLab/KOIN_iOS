@@ -278,7 +278,7 @@ final class CertificationFormViewController: UIViewController {
                 self?.nextButton.backgroundColor = UIColor.appColor(.new500)
                 self?.nextButton.setTitleColor(.white, for: .normal)
                 let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-                self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, "인증완료", customSessionId))
+                self?.inputSubject.send(.logEventWithSessionId(LegacyEventParameter.EventLabel.User.identityVerification, .click, "인증완료", customSessionId))
             default:
                 break
             }
@@ -445,7 +445,7 @@ extension CertificationFormViewController {
         
         inputSubject.send(.sendVerificationCode(phoneNumber))
         let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, "인증번호 발송", customSessionId))
+        inputSubject.send(.logEventWithSessionId(LegacyEventParameter.EventLabel.User.identityVerification, .click, "인증번호 발송", customSessionId))
     }
     
     private func lockCertificationInputs() {

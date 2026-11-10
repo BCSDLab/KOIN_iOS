@@ -19,7 +19,7 @@ final class RecruitMyPostListViewModel: SwiftUIViewModelProtocol {
         case close(id: Int)
         case delete(id: Int)
         case didShowToast
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -144,7 +144,7 @@ extension RecruitMyPostListViewModel {
 
 extension RecruitMyPostListViewModel {
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

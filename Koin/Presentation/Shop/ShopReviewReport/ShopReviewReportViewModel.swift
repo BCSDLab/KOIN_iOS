@@ -66,11 +66,11 @@ extension ShopReviewReportViewModel {
             self.outputSubject.send(.sendReviewInfo(self.reviewId, self.shopId))
             let value = selectedItems.joined(separator: ",")
             
-            self.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReport, category: .click, value: value)
+            self.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Business.shopDetailViewReviewReport, category: .click, value: value)
         }.store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

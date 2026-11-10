@@ -15,7 +15,7 @@ final class BusSearchResultViewModel: ViewModelProtocol {
         /// 모달 열기 직전. 날짜가 바뀐 경우에만 now 갱신
         case refreshNowIfDayChanged
         case getSemesterInfo
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateSemesterInfo(SemesterInfo)
@@ -123,7 +123,7 @@ extension BusSearchResultViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

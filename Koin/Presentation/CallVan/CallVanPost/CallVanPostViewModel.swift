@@ -18,7 +18,7 @@ final class CallVanPostViewModel: ViewModelProtocol {
         case updateMaxParticipants(Int)
         case swapButtonTapped
         case postData
-        case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
+        case logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
     }
     enum Output {
         case enablePostButton(Bool)
@@ -167,7 +167,7 @@ extension CallVanPostViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

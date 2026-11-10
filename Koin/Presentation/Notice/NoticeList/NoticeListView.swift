@@ -54,7 +54,7 @@ extension NoticeListView {
         NoticeTabBarRepresentable(
             selectedNoticeType: viewModel.selectedNoticeType,
             onTap: { type in
-                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeTab, .click, type.displayName))
+                viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Notice.noticeTab, .click, type.displayName))
                 viewModel.execute(.changeSelectedNoticeType(type))
             }
         )
@@ -101,15 +101,15 @@ extension NoticeListView {
                 isSelected: viewModel.selectedNoticeType == type,
                 shouldShowTooltip: viewModel.shouldShowTooltip,
                 onSearchTapped: {
-                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeSearch, .click, "검색"))
+                    viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Notice.noticeSearch, .click, "검색"))
                     sendAction(.navigateToSearch)
                 },
                 onAddKeywordTapped: {
-                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Notice.addKeyword, .click, "키워드추가"))
+                    viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Notice.addKeyword, .click, "키워드추가"))
                     sendAction(.navigateToManageKeyword)
                 },
                 onManageKeywordTapped: {
-                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Notice.manageKeyword, .click, "키워드관리"))
+                    viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Notice.manageKeyword, .click, "키워드관리"))
                     sendAction(.navigateToManageKeyword)
                 },
                 onArticleTapped: { noticeId, boardId in

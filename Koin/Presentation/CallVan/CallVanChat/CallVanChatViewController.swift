@@ -75,7 +75,7 @@ final class CallVanChatViewController: UIViewController {
                 self?.inputSubject.send(.sendMessage(message))
                 self?.inputSubject.send(
                     .logEvent(
-                        label: EventParameter.EventLabel.Campus.CallVan.callvanChatSend,
+                        label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanChatSend,
                         category: .click,
                         value: ""
                     )

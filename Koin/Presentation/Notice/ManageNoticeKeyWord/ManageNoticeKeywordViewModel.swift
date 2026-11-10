@@ -15,7 +15,7 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
         case getMyKeyword
         case changeNotification(isOn: Bool)
         case fetchSubscription
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateKeyword([NoticeKeywordDto])
@@ -91,7 +91,7 @@ extension ManageNoticeKeywordViewModel {
                         case .sameKeyword:
                             self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
                         case .success:
-                            if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Notice.recommendedKeyword, category: .click, value: keyword) }
+                            if isRecommended { self?.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Campus.Notice.recommendedKeyword, category: .click, value: keyword) }
                             self?.fetchMyKeyword()
                         }
                     }
@@ -160,12 +160,12 @@ extension ManageNoticeKeywordViewModel {
             receiveValue: { [weak self] response in
                 self?.outputSubject.send(.updateSwitch(isOn: isOn))
                 let value = isOn ? "on" : "off"
-                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Notice.keywordNotification, category: .click, value: value)
+                self?.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Campus.Notice.keywordNotification, category: .click, value: value)
             }
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

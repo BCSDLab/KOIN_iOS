@@ -16,7 +16,7 @@ final class CallVanChatViewModel: ViewModelProtocol {
         case viewWillDisappear
         case sendMessage(String)
         case sendImage(Data)
-        case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
+        case logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
     }
     enum Output {
         case update(CallVanChat)
@@ -142,7 +142,7 @@ extension CallVanChatViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

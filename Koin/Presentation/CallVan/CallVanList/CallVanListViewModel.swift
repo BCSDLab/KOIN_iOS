@@ -24,7 +24,7 @@ final class CallVanListViewModel: ViewModelProtocol {
         case reopen(Int)
         case complete(Int)
         
-        case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
+        case logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
         case checkRestriction(reason: CheckRestrictionReason)
         case checkNotification
     }
@@ -295,7 +295,7 @@ extension CallVanListViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     

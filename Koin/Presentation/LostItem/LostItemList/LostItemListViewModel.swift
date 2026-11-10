@@ -18,7 +18,7 @@ final class LostItemListViewModel {
         case updateTitle(String?)
         case updateFilter(FetchLostItemListRequest)
         case updateKeyword(String)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case update([LostItemListData])
@@ -84,7 +84,7 @@ final class LostItemListViewModel {
 
 extension LostItemListViewModel {
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     

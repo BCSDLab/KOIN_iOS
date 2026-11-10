@@ -18,7 +18,7 @@ final class RecruitPostViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case submit(RecruitPostRequest)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateLoading(Bool)

@@ -12,7 +12,7 @@ final class ShopSearchViewModel {
     
     enum Input {
         case keywordDidChange(String)
-        case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
+        case logEventDirect(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case update(ShopSearch)
@@ -51,7 +51,7 @@ final class ShopSearchViewModel {
 
 extension ShopSearchViewModel {
     
-    func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     

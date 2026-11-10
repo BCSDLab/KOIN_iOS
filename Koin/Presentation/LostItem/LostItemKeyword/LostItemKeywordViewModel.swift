@@ -16,7 +16,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         case subscribeKeyword(String)
         case submitKeyword(String)
         case notificationSwitchTapped(isOn: Bool)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case showLoginModal
@@ -106,7 +106,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
 
 extension LostItemKeywordViewModel {
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     

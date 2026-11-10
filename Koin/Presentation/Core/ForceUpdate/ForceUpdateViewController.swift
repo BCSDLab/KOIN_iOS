@@ -147,7 +147,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         // 백그라운드 진입 시
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
+                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
             }.store(in: &subscriptions)
         
         // 포그라운드 복귀 시
@@ -169,7 +169,7 @@ extension ForceUpdateViewController {
     
     @objc private func updateButtonTapped() {
         openStore()
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateConfirm, .update, "업데이트하기"))
+        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.ForceUpdate.forceUpdateConfirm, .update, "업데이트하기"))
     }
     
     private func openStore() {
@@ -189,17 +189,17 @@ extension ForceUpdateViewController {
             button: .buttons(
                 leftButtonTitle: "닫기",
                 leftButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
+                    self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
                 },
                 rightButtonTitle: "스토어 가기",
                 rightButtonAction: { [weak self] in
                     self?.openStore()
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
+                    self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
                 }
             )
         ))
         present(modalViewController, animated: true, completion: nil)
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
+        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
     }
 }
 

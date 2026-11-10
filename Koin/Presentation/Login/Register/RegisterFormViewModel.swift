@@ -34,7 +34,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkDuplicatedNickname(String)
         case tryStudentRegister(StudentRegisterFormRequest)
         case tryGeneralRegister(GeneralRegisterFormRequest)
-        case logEventWithSessionId(EventLabelType, EventParameter.EventCategory, Any, String)
+        case logEventWithSessionId(LegacyEventLabelType, EventParameter.EventCategory, Any, String)
     }
     
     enum Output {
@@ -222,7 +222,7 @@ extension RegisterFormViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
+    private func makeLogAnalyticsSessionEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
         logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
 }

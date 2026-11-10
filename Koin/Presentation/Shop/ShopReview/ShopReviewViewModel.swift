@@ -25,7 +25,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let shopId: Int
     
     enum Input {
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
         case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
         case writeReview(WriteReviewRequest)
         case uploadFile([Data])
@@ -134,7 +134,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
         
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, durationType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
         if durationType != nil {
             let durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: false)
             logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: self.shopName, previousPage: nil, currentPage: nil, durationTime: "\(durationTime)")

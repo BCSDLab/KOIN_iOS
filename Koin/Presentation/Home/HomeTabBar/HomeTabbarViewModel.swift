@@ -9,7 +9,7 @@ import Combine
 
 final class HomeTabBarViewModel: ViewModelProtocol {
     enum Input {
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
         case checkNotification
     }
     
@@ -50,7 +50,7 @@ final class HomeTabBarViewModel: ViewModelProtocol {
 extension HomeTabBarViewModel {
     
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

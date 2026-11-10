@@ -40,7 +40,7 @@ struct CategoryView: ActionBindableView {
 
     // MARK: - Public
     func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {
@@ -157,7 +157,7 @@ private extension CategoryView {
         }
     }
 
-    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus.Home, value: String)? {
+    private func loggingInfo(for action: Action) -> (label: LegacyEventParameter.EventLabel.Campus.Home, value: String)? {
         switch action {
         case .showRecruit:
             return nil // TODO: 로깅 추가

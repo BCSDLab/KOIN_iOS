@@ -110,7 +110,7 @@ extension ReviewListViewController: PopLoggable {
     func sendPopLog(category: EventParameter.EventCategory) {
         let shopName = self.viewModel.getShopName()
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBack))
-        inputSubject.send(.logEventWithDuration(EventParameter.EventLabel.Business.shopDetailViewReviewBack, category, shopName, nil, nil, nil, .shopDetailViewReviewBack))
+        inputSubject.send(.logEventWithDuration(LegacyEventParameter.EventLabel.Business.shopDetailViewReviewBack, category, shopName, nil, nil, nil, .shopDetailViewReviewBack))
     }
 }
 
@@ -242,12 +242,12 @@ extension ReviewListViewController: UIScrollViewDelegate {
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
+            inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
         }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
+        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
     }
 
 }
@@ -295,7 +295,7 @@ extension ReviewListViewController {
             .sink { [weak self] index in
                 let selectedSortType = ReviewSortType.allCases[index]
                 
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewCan, .click, options[index]))
+                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopDetailViewReviewCan, .click, options[index]))
                 self?.inputSubject.send(.changeFilter(sorter: selectedSortType, isMine: nil))
             }
             .store(in: &cancellables)
@@ -306,7 +306,7 @@ extension ReviewListViewController {
     private func handleDeleteReview(_ parameter: (Int, Int)) {
         viewModel.deleteParameter = parameter
         inputSubject.send(.logEvent(
-            EventParameter.EventLabel.Business.shopDetailViewReviewDelete,
+            LegacyEventParameter.EventLabel.Business.shopDetailViewReviewDelete,
             .click,
             viewModel.getShopName()
         ))
@@ -317,11 +317,11 @@ extension ReviewListViewController {
             button: .buttons(
                 leftButtonTitle: "취소하기",
                 leftButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
+                    self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
                 },
                 rightButtonTitle: "삭제하기",
                 rightButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
+                    self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
                     self?.deleteReview()
                 }
             )
@@ -356,11 +356,11 @@ extension ReviewListViewController {
                 leftButtonTitle: "닫기",
                 leftButtonAction: { [weak self] in
                     guard message == "작성", let self else { return }
-                    inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
+                    inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
                 },
                 rightButtonTitle: "로그인하기",
                 rightButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
+                    self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
                     self?.showLoginScreen()
                 }
             )
@@ -399,7 +399,7 @@ extension ReviewListViewController {
         bindShopReviewViewController(viewController)
         
         inputSubject.send(.logEvent(
-            EventParameter.EventLabel.Business.shopDetailViewReviewWrite,
+            LegacyEventParameter.EventLabel.Business.shopDetailViewReviewWrite,
             .click,
             viewModel.getShopName()
         ))

@@ -15,7 +15,7 @@ final class RecruitProfileViewModel: SwiftUIViewModelProtocol {
         case didAppear
         case didShowToast
         case profileUpdated(RecruitProfile)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State

@@ -17,7 +17,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
         case checkLogIn(CheckLoginOption)
         case changeState(Int)
         case deleteData
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateData(LostItemData)
@@ -96,7 +96,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
 
 extension LostItemDataViewModel {
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     

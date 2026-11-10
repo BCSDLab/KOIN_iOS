@@ -144,13 +144,13 @@ struct RegisterFormViewModelCertificationTests {
         _ = sut.transform(with: input.eraseToAnyPublisher())
 
         input.send(
-            .logEventWithSessionId(EventParameter.EventLabel.User.identityVerification, .click, value, sessionId)
+            .logEventWithSessionId(LegacyEventParameter.EventLabel.User.identityVerification, .click, value, sessionId)
         )
 
         #expect(spy.executeWithSessionIdCallCount == 1)
         #expect(
             spy.sessionEvents.first == .init(
-                label: EventParameter.EventLabel.User.identityVerification.rawValue,
+                label: LegacyEventParameter.EventLabel.User.identityVerification.rawValue,
                 category: .click,
                 value: value,
                 sessionId: sessionId

@@ -17,7 +17,7 @@ final class RecruitMyApplicationListViewModel: SwiftUIViewModelProtocol {
         case updateFilter(RecruitMyApplicationFilter)
         case loadNextPage
         case didShowToast
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -119,7 +119,7 @@ extension RecruitMyApplicationListViewModel {
 
 extension RecruitMyApplicationListViewModel {
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

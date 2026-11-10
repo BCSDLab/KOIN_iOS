@@ -108,7 +108,7 @@ final class CallVanListViewController: UIViewController {
 
 extension CallVanListViewController: PopLoggable {
     func sendPopLog(category: EventParameter.EventCategory) {
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanBack, category: category, value: ""))
+        inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanBack, category: category, value: ""))
     }
 }
 
@@ -154,7 +154,7 @@ extension CallVanListViewController {
     }
     
     @objc private func writeButtonTapped() {
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanCreate, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanCreate, category: .click, value: ""))
         if viewModel.isLoggedIn {
             inputSubject.send(.checkRestriction(reason: .post))
         } else {
@@ -214,7 +214,7 @@ extension CallVanListViewController {
                 return
             }
             self?.inputSubject.send(.updateFilterState(request))
-            self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanFilterApply, category: .click, value: ""))
+            self?.inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanFilterApply, category: .click, value: ""))
         }
         let contentView = FilterBottomSheetView(
             groupModels: viewModel.filterState.toFilterGroupModels(),
@@ -223,7 +223,7 @@ extension CallVanListViewController {
         )
         presentBottomSheet(contentView)
 
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanFilter, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanFilter, category: .click, value: ""))
     }
     
     @objc private func searchButtonTapped() {
@@ -246,7 +246,7 @@ extension CallVanListViewController {
     }
 
     func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanSearch, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanSearch, category: .click, value: ""))
         return true
     }
     
@@ -280,18 +280,18 @@ extension CallVanListViewController {
         case .참여하기:
             onMainButtonTapped = { [weak self] in
                 self?.inputSubject.send(.checkRestriction(reason: .paritipate(postId: postId)))
-                self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanJoin, category: .click, value: "예"))
+                self?.inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanJoin, category: .click, value: "예"))
             }
             onCloseButtonTapped = { [weak self] in
-                self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanJoin, category: .click, value: "아니요"))
+                self?.inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanJoin, category: .click, value: "아니요"))
             }
         case .참여취소:
             onMainButtonTapped = { [weak self] in
                 self?.inputSubject.send(.quit(postId))
-                self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanJoinCancel, category: .click, value: "예"))
+                self?.inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanJoinCancel, category: .click, value: "예"))
             }
             onCloseButtonTapped = { [weak self] in
-                self?.inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanJoinCancel, category: .click, value: "아니요"))
+                self?.inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanJoinCancel, category: .click, value: "아니요"))
             }
         case .마감하기:
             onMainButtonTapped = { [weak self] in
@@ -360,7 +360,7 @@ extension CallVanListViewController {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let viewController = CallVanChatViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanChat, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanChat, category: .click, value: ""))
     }
     
     private func callButtonTapped() {
@@ -381,7 +381,7 @@ extension CallVanListViewController {
             selectedId: 11)
         let shopViewController = ShopViewController(viewModel: viewModel)
         navigationController?.pushViewController(shopViewController, animated: true)
-        inputSubject.send(.logEvent(label: EventParameter.EventLabel.Campus.CallVan.callvanCall, category: .click, value: ""))
+        inputSubject.send(.logEvent(label: LegacyEventParameter.EventLabel.Campus.CallVan.callvanCall, category: .click, value: ""))
     }
     
     private func showRestrictedModal(type: RestrictionType?, until: String?) {

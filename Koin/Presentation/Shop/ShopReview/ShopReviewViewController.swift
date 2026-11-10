@@ -254,7 +254,7 @@ final class ShopReviewViewController: UIViewController, UIGestureRecognizerDeleg
             case let .reviewWriteSuccess(isPost, reviewId, reviewItem):
                 self?.writeCompletePublisher.send((isPost, reviewId, reviewItem))
                 self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, nil))
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteDone, .click, "", .leaveVC, nil))
+                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopDetailViewReviewWriteDone, .click, "", .leaveVC, nil))
             }
         }.store(in: &subscriptions)
         

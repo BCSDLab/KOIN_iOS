@@ -20,7 +20,7 @@ final class NoticeViewModel: SwiftUIViewModelProtocol {
         case changeSelectedNoticeType(NoticeListType)
         case didShowToast
         case didTapCloseTooltip
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -119,7 +119,7 @@ extension NoticeViewModel {
     }
 
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

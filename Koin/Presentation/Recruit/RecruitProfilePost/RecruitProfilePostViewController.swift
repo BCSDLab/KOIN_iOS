@@ -569,8 +569,8 @@ extension RecruitProfilePostViewController {
 
 extension RecruitProfilePostViewController {
     private func makeLogAnalyticsEvent(
-        post postLabel: EventParameter.EventLabel.Campus.Recruit,
-        modify modifyLabel: EventParameter.EventLabel.Campus.Recruit,
+        post postLabel: LegacyEventParameter.EventLabel.Campus.Recruit,
+        modify modifyLabel: LegacyEventParameter.EventLabel.Campus.Recruit,
         modifyCategory: EventParameter.EventCategory = .click,
         value: Any
     ) {

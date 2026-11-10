@@ -19,7 +19,7 @@ final class HomeViewModel: SwiftUIViewModelProtocol {
         case refresh
         case didShowToast
         case didShowBanner
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     // MARK: - State
@@ -197,7 +197,7 @@ extension HomeViewModel {
     }
 
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

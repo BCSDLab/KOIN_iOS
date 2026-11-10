@@ -22,7 +22,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
         case delete(id: Int)
         case didShowToast
         case updateProfile(RecruitProfile)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - State
@@ -215,7 +215,7 @@ extension RecruitListViewModel {
 
 extension RecruitListViewModel {
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

@@ -17,7 +17,7 @@ final class NotificationViewModel: ViewModelProtocol {
         case deleteNotification(id: String)
         case deleteAllNotifications
         case markAllAsRead
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     
     enum Output {
@@ -102,7 +102,7 @@ private extension NotificationViewModel {
         outputSubject.send(.selectedNotification(notification))
         
         makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Notification.notificationList,
+            label: LegacyEventParameter.EventLabel.Campus.Notification.notificationList,
             category: .click,
             value: logValue
         )
@@ -154,7 +154,7 @@ private extension NotificationViewModel {
     }
     
     private func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {

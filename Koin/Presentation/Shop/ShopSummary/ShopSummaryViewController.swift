@@ -103,7 +103,7 @@ extension ShopSummaryViewController: PopLoggable {
         let shopName = self.viewModel.shopName
         let currentPage = self.viewModel.backCategoryName
         inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewBack))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewBack, category, shopName, nil, currentPage, nil, .shopDetailViewBack))
+        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopDetailViewBack, category, shopName, nil, currentPage, nil, .shopDetailViewBack))
     }
 }
 
@@ -148,7 +148,7 @@ extension ShopSummaryViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 guard let self else { return }
-                self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopPictureSwipe, .swipe, self.viewModel.shopName))
+                self.inputSubject.send(.logEventDirect(LegacyEventParameter.EventLabel.Business.shopPictureSwipe, .swipe, self.viewModel.shopName))
             }
             .store(in: &subscriptions)
         
@@ -171,7 +171,7 @@ extension ShopSummaryViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] shouldHighlight in
                 guard let self else { return }
-                self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewInfo, .click, self.viewModel.shopName))
+                self.inputSubject.send(.logEventDirect(LegacyEventParameter.EventLabel.Business.shopDetailViewInfo, .click, self.viewModel.shopName))
                 let shopService = DefaultShopService()
                 let shopRepository = DefaultShopRepository(service: shopService)
                 let fetchOrderShopDetailFromShopUseCase = DefaultFetchOrderShopDetailFromShopUseCase(repository: shopRepository)
@@ -190,7 +190,7 @@ extension ShopSummaryViewController {
                 
                 guard let self else { return }
                 self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCall))
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, self.viewModel.shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
+                self.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopCall, EventParameter.EventCategory.click, self.viewModel.shopName, nil, nil, nil, EventParameter.EventLabelNeededDuration.shopCall))
             }
             .store(in: &subscriptions)
         
@@ -198,7 +198,7 @@ extension ShopSummaryViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 guard let self else { return }
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitEntry, .click, self.viewModel.shopName, nil, nil, nil, nil))
+                self.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopBenefitEntry, .click, self.viewModel.shopName, nil, nil, nil, nil))
                 navigateToShopBenefit()
             }
             .store(in: &subscriptions)
@@ -252,7 +252,7 @@ extension ShopSummaryViewController {
             .sink { [ weak self ] in
                 guard let self else { return }
                 if !self.hasLoggedInitialScroll {
-                    self.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailView, .scroll, self.viewModel.shopName))
+                    self.inputSubject.send(.logEventDirect(LegacyEventParameter.EventLabel.Business.shopDetailView, .scroll, self.viewModel.shopName))
                     self.hasLoggedInitialScroll = true
                 }
             }
@@ -339,7 +339,7 @@ extension ShopSummaryViewController {
     private func navigateToReviewListViewController() {
         let reviewListViewController = ReviewListViewController(shopId: viewModel.shopId, shopName: viewModel.shopName)
         reviewListViewController.title = "리뷰"
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopDetailViewReview, .click, viewModel.shopName))
+        inputSubject.send(.logEventDirect(LegacyEventParameter.EventLabel.Business.shopDetailViewReview, .click, viewModel.shopName))
         navigationController?.pushViewController(reviewListViewController, animated: true)
     }
     

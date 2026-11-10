@@ -12,7 +12,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
         case getBusRoute(BusType)
         case getBusTimetable(BusType, Int, Int?)
         case getEmergencyNotice
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
 
     enum Output {
@@ -115,7 +115,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

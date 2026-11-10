@@ -125,7 +125,7 @@ extension DiningHostingController {
     @objc private func didTapReportButton() {
         if let reportAbTestName {
             rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
+                label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
                 category: .click,
                 value: reportAbTestName
             )
@@ -135,7 +135,7 @@ extension DiningHostingController {
     
     @objc private func didTapCoopInfoButton() {
         rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Dining.cafeteriaInfo,
+            label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaInfo,
             category: .click,
             value: "학생식당정보"
         )
@@ -202,7 +202,7 @@ extension DiningHostingController {
                 }
                 if let reportAbTestName, let selectedPlace = modalView?.selectedPlace {
                     rootView.makeLogAnalyticsEvent(
-                        label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutExit,
+                        label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutExit,
                         category: .click,
                         value: "\(reportAbTestName)_\(selectedPlace.name)_이탈"
                     )
@@ -214,7 +214,7 @@ extension DiningHostingController {
                     return
                 }
                 rootView.makeLogAnalyticsEvent(
-                    label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSelect,
+                    label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSelect,
                     category: .select,
                     value: "\(reportAbTestName)_\(place.name)"
                 )
@@ -225,7 +225,7 @@ extension DiningHostingController {
                 }
                 if let reportAbTestName, let selectedPlace = modalView?.selectedPlace {
                     rootView.makeLogAnalyticsEvent(
-                        label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutPhoto,
+                        label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutPhoto,
                         category: .click,
                         value: "\(reportAbTestName)_\(selectedPlace.name)"
                     )

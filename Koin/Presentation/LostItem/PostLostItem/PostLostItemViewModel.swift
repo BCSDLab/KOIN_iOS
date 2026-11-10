@@ -15,7 +15,7 @@ final class PostLostItemViewModel: ViewModelProtocol {
     enum Input {
         case uploadFile([Data])
         case postLostItem([PostLostItemRequest])
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     
     // MARK: - Output
@@ -61,7 +61,7 @@ final class PostLostItemViewModel: ViewModelProtocol {
 
 extension PostLostItemViewModel {
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
     

@@ -12,7 +12,7 @@ final class GA4Logger {
     
     private init() { }
     
-    func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         let parameters = [
             "event_label": label.rawValue,
             "event_category": category.rawValue,

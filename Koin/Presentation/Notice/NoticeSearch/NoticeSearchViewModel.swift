@@ -16,7 +16,7 @@ final class NoticeSearchViewModel: ViewModelProtocol {
         case fetchRecentSearchedWord
         case deleteAllSearchedWords
         case fetchSearchedResult(Int, String?, Bool)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
     }
     enum Output {
         case updateHotKeyWord([String])
@@ -112,7 +112,7 @@ extension NoticeSearchViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

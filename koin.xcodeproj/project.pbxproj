@@ -1195,6 +1195,7 @@
 		D2FB236C2C0409900098BA2B /* LogAnalyticsEventUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */; };
 		D2FB236E2C0410510098BA2B /* LogAnalyticsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB236D2C0410510098BA2B /* LogAnalyticsService.swift */; };
 		D2FB23712C0412C70098BA2B /* EventParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23702C0412C70098BA2B /* EventParameter.swift */; };
+		EDBC7EBB449D60084BAF8494 /* LegacyEventParameter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95EB893906928DC9C3E5CBA4 /* LegacyEventParameter.swift */; };
 		D2FB23742C0432CD0098BA2B /* GA4AnalyticsRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */; };
 		D2FB23762C0498780098BA2B /* SearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */; };
 		D2FCBEA42D08060C0097A388 /* RollbackFrameUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */; };
@@ -2461,6 +2462,7 @@
 		D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsEventUseCase.swift; sourceTree = "<group>"; };
 		D2FB236D2C0410510098BA2B /* LogAnalyticsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogAnalyticsService.swift; sourceTree = "<group>"; };
 		D2FB23702C0412C70098BA2B /* EventParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventParameter.swift; sourceTree = "<group>"; };
+		95EB893906928DC9C3E5CBA4 /* LegacyEventParameter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegacyEventParameter.swift; sourceTree = "<group>"; };
 		D2FB23732C0432CD0098BA2B /* GA4AnalyticsRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GA4AnalyticsRepository.swift; sourceTree = "<group>"; };
 		D2FB23752C0498780098BA2B /* SearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchShopUseCase.swift; sourceTree = "<group>"; };
 		D2FCBEA32D08060C0097A388 /* RollbackFrameUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RollbackFrameUseCase.swift; sourceTree = "<group>"; };
@@ -6146,6 +6148,7 @@
 			children = (
 				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
 				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
+				95EB893906928DC9C3E5CBA4 /* LegacyEventParameter.swift */,
 				D27DD07F2BA608310081FD36 /* Log.swift */,
 				836242352BD9522400845499 /* FirebaseLog.swift */,
 				83C509612BFA0CBB007379A0 /* ScrollLog.swift */,
@@ -7980,6 +7983,7 @@
 				7CF77B3A300254BE003642C1 /* ProfileHostingController.swift in Sources */,
 				7CA63A272F1AF80000226F86 /* LostItemListViewModel.swift in Sources */,
 				D2FB23712C0412C70098BA2B /* EventParameter.swift in Sources */,
+				EDBC7EBB449D60084BAF8494 /* LegacyEventParameter.swift in Sources */,
 				D2CA2DD22C1CAE4E0036F02C /* ShopEvent.swift in Sources */,
 				7CE1341C306A2F930011B052 /* DecideRecruitApplicantUseCase.swift in Sources */,
 				D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */,

@@ -14,7 +14,7 @@ final class BannerView: UIView, KoinBottomSheetContent {
 
     // MARK: - Properties
     private let onBannerTap: (Banner) -> Void
-    private let onLogEvent: (EventLabelType, EventParameter.EventCategory, Any) -> Void
+    private let onLogEvent: (LegacyEventLabelType, EventParameter.EventCategory, Any) -> Void
 
     // MARK: - UI Components
     private let noShowButton = UIButton()
@@ -27,7 +27,7 @@ final class BannerView: UIView, KoinBottomSheetContent {
             self?.setCountLabel(index: index, totalCount: totalCount)
         },
         onBannerSwiped: { [weak self] banner in
-            self?.onLogEvent(EventParameter.EventLabel.Campus.Home.mainNextModal, .swipe, banner.title)
+            self?.onLogEvent(LegacyEventParameter.EventLabel.Campus.Home.mainNextModal, .swipe, banner.title)
         }
     )
     private let countLabel = UILabel()
@@ -35,7 +35,7 @@ final class BannerView: UIView, KoinBottomSheetContent {
     // MARK: - Initializer
     init(
         onBannerTap: @escaping (Banner) -> Void,
-        onLogEvent: @escaping (EventLabelType, EventParameter.EventCategory, Any) -> Void
+        onLogEvent: @escaping (LegacyEventLabelType, EventParameter.EventCategory, Any) -> Void
     ) {
         self.onBannerTap = onBannerTap
         self.onLogEvent = onLogEvent
@@ -66,7 +66,7 @@ extension BannerView {
         UserDefaults.standard.set(Date(), forKey: "noShowBanner")
 
         if let title = collectionView.currentTitle {
-            onLogEvent(EventParameter.EventLabel.Campus.Home.mainModalHide7d, .click, title)
+            onLogEvent(LegacyEventParameter.EventLabel.Campus.Home.mainModalHide7d, .click, title)
         }
     }
 
@@ -74,7 +74,7 @@ extension BannerView {
         delegate?.dismiss()
 
         if let title = collectionView.currentTitle {
-            onLogEvent(EventParameter.EventLabel.Campus.Home.mainModalClose, .click, title)
+            onLogEvent(LegacyEventParameter.EventLabel.Campus.Home.mainModalClose, .click, title)
         }
     }
 }

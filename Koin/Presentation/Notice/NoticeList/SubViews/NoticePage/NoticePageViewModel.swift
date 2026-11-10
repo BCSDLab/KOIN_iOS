@@ -56,7 +56,7 @@ final class NoticePageViewModel: SwiftUIViewModelProtocol {
         case let .selectKeyword(keyword):
             selectKeyword(keyword)
         case .didTapAllKeyword:
-            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.Notice.noticeFilterAll, category: .click, value: "모두보기")
+            logAnalyticsEventUseCase.execute(label: LegacyEventParameter.EventLabel.Campus.Notice.noticeFilterAll, category: .click, value: "모두보기")
             selectKeyword(nil)
         case let .changePage(page):
             fetchArticles(page: page)
@@ -92,6 +92,6 @@ extension NoticePageViewModel {
     private func logScroll() {
         guard !hasLoggedScroll else { return }
         hasLoggedScroll = true
-        logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.Notice.noticePage, category: .scroll, value: "공지사항")
+        logAnalyticsEventUseCase.execute(label: LegacyEventParameter.EventLabel.Campus.Notice.noticePage, category: .scroll, value: "공지사항")
     }
 }

@@ -61,14 +61,14 @@ final class ShopBenefitViewController: UIViewController {
 
         benefitsTableView.detailExpandedPublisher.sink { [weak self] in
             guard let self else { return }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitDetail, EventParameter.EventCategory.click, self.viewModel.shopName))
+            self.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopBenefitDetail, EventParameter.EventCategory.click, self.viewModel.shopName))
         }.store(in: &subscriptions)
     }
 }
 
 extension ShopBenefitViewController: PopLoggable {
     func sendPopLog(category: EventParameter.EventCategory) {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitBack, category, viewModel.shopName))
+        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Business.shopBenefitBack, category, viewModel.shopName))
     }
 }
 

@@ -103,7 +103,7 @@ final class ShopSearchViewController: UIViewController {
         }.store(in: &subscriptions)
         
         shopSearchTableView.didTapCellPublisher.sink { [weak self] (shopId, shopName) in
-            self?.viewModel.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearchClick, category: .click, value: shopName)
+            self?.viewModel.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Business.shopCategoriesSearchClick, category: .click, value: shopName)
             self?.navigateTo(shopId: shopId, shopName: shopName)
         }.store(in: &subscriptions)
         
@@ -130,7 +130,7 @@ extension ShopSearchViewController {
     
     @objc private func searchDidBegin(_ textField: UITextField) {
         let currentCategoryName = viewModel.selectedCategoryName
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategoriesSearch, .click, "search in \(currentCategoryName)"))
+        inputSubject.send(.logEventDirect(LegacyEventParameter.EventLabel.Business.shopCategoriesSearch, .click, "search in \(currentCategoryName)"))
     }
 
     @objc private func keywordDidChange(_ sender: UITextField) {

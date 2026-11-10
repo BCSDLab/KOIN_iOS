@@ -10,7 +10,7 @@ import Combine
 final class ForceUpdateViewModel: ViewModelProtocol {
     
     enum Input {
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
         case checkVersion
     }
     enum Output {
@@ -52,7 +52,7 @@ extension ForceUpdateViewModel {
     }
 
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
+    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

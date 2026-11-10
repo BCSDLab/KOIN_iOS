@@ -51,7 +51,7 @@ struct DiningView: ActionBindableView {
         }
         .refreshable {
             viewModel.execute(.refresh)
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .click, viewModel.selectedDiningType.name))
+            viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Dining.menuTime, .click, viewModel.selectedDiningType.name))
         }
         .onChange(of: viewModel.toastMessage) {
             if let toastMessage = viewModel.toastMessage {
@@ -83,7 +83,7 @@ struct DiningView: ActionBindableView {
     
     // MARK: - Public
     func makeLogAnalyticsEvent(
-        label: EventLabelType,
+        label: LegacyEventLabelType,
         category: EventParameter.EventCategory,
         value: Any
     ) {
@@ -128,7 +128,7 @@ extension DiningView {
             types: DiningType.allCases,
             selectedType: viewModel.selectedDiningType
         ) { type in
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .click, type.name))
+            viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Dining.menuTime, .click, type.name))
             viewModel.execute(.changeSelectedDiningType(type))
         }
         .applySketchShadow(
@@ -184,15 +184,15 @@ extension DiningView {
                 if let imageUrl = item.image.imageUrl {
                     sendAction(.showZoomedImage(imageUrl: imageUrl))
                 }
-                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuImage, .click, "\(viewModel.selectedDiningType.name)_\(item.place.name)"))
+                viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Dining.menuImage, .click, "\(viewModel.selectedDiningType.name)_\(item.place.name)"))
             },
             onScrolledDown: {
-                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuTime, .scroll, list.diningType.name))
+                viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Dining.menuTime, .scroll, list.diningType.name))
             },
             shouldShowShareTooltip: viewModel.shouldShowShareTooltip,
             onShareTapped: { item in
                 viewModel.execute(.didTapShare(item))
-                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.menuShare, .click, "공유하기"))
+                viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Dining.menuShare, .click, "공유하기"))
             },
             onCloseShareTooltipTapped: {
                 viewModel.execute(.didTapCloseShareTooltip)
@@ -201,7 +201,7 @@ extension DiningView {
             shouldShowReportTooltip: viewModel.reportAbTest == .card && viewModel.shouldShowReportTooltip,
             onReportTapped: { item in
                 let value = item.map { "\(DiningReportAbTest.card.logValue)_\($0.place.name)" } ?? DiningReportAbTest.card.logValue
-                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart, .click, value))
+                viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart, .click, value))
                 sendAction(.showReportModal(selectedPlace: item?.place))
             },
             onCloseReportTooltipTapped: {
