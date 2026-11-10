@@ -16,7 +16,7 @@ final class NotiViewModel: ViewModelProtocol {
         case getNotiAgreementList
         case switchChanged(SubscribeType, Bool)
         case switchDetailChanged(DetailSubscribeType, Bool)
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     // MARK: - Output
@@ -54,8 +54,8 @@ final class NotiViewModel: ViewModelProtocol {
                 self?.subscribeNoti(type: type, isOn: isOn)
             case let .switchDetailChanged(detailType,isOn):
                 self?.subscribeDetailNoti(detailType: detailType, isOn: isOn)
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -72,14 +72,12 @@ extension NotiViewModel {
                 self?.outputSubject.send(.requestLogInAgain)
             }
         } receiveValue: { [weak self] response in
-            let logValue = isOn ? "on" : "off"
-             
             if type == .diningSoldOut {
                 self?.outputSubject.send(.changeButtonEnableStatus(isOn))
-                self?.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Campus.Dining.notificationSoldOut, category: .click, value: logValue)
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Dining.notificationConfigSoldOutToggle, value: isOn ? "켜짐" : "꺼짐")
             }
             else if type == .diningImageUpload {
-                self?.makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Campus.Dining.notificationMenuImageUpload, category: .click, value: logValue)
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Dining.notificationConfigNotificationConfigPhotoUploadToggle, value: isOn ? "켜짐" : "꺼짐")
             }
             
         }.store(in: &subscriptions)
@@ -92,8 +90,7 @@ extension NotiViewModel {
                 self?.outputSubject.send(.requestLogInAgain)
             }
         } receiveValue: { [weak self] response in
-            let logValue = isOn ? "on" : "off"
-            self?.makeLogByDetailSubsciption(type: detailType, value: logValue)
+            self?.makeLogByDetailSubsciption(type: detailType, isOn: isOn)
         }.store(in: &subscriptions)
 
     }
@@ -109,20 +106,20 @@ extension NotiViewModel {
 
     }
     
-    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
-    
-    private func makeLogByDetailSubsciption(type: DetailSubscribeType, value: String) {
-        let eventLabel: LegacyEventParameter.EventLabel.Campus.Dining
+
+    private func makeLogByDetailSubsciption(type: DetailSubscribeType, isOn: Bool) {
+        let mealTime: String
         switch type {
         case .breakfast:
-            eventLabel = .notificationBreakfastSoldOut
+            mealTime = "아침"
         case .lunch:
-            eventLabel = .notificationLunchSoldOut
-        default:
-            eventLabel = .notificationDinnerSoldOut
+            mealTime = "점심"
+        case .dinner:
+            mealTime = "저녁"
         }
-        makeLogAnalyticsEvent(label: eventLabel, category: .click, value: value)
+        makeLogAnalyticsEvent(label: EventParameter.EventLabel.Dining.notificationConfigSoldOutMealToggle, value: "\(mealTime)_\(isOn ? "켜짐" : "꺼짐")")
     }
 }

@@ -176,12 +176,11 @@ extension SettingsViewController {
     
     @objc private func profileButtonTapped() {
         inputSubject.send(.checkLogin(.profile))
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.User.hamburger, .click, "정보수정 시도"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Account.accountConfigProfileEditEntryClick, "정보수정 시도"))
     }
     
     @objc private func changePasswordButtonTapped() {
         inputSubject.send(.checkLogin(.changePassword))
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.User.hamburger, .click, "정보수정 시도"))
     }
     
     @objc private func notiButtonTapped() {
@@ -208,7 +207,7 @@ extension SettingsViewController {
     }
     
     private func navigateToNoti() {
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Notification.notification, .click, "알림설정"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Dining.accountConfigNotificationConfigEntryClick, "알림설정"))
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let changeNotiUseCase = DefaultChangeNotiUseCase(notiRepository: notiRepository)
         let changeNotiDetailUseCase = DefaultChangeNotiDetailUseCase(notiRepository: notiRepository)
