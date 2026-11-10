@@ -286,11 +286,9 @@ extension NotificationViewController {
         let repository = DefaultShopRepository(service: DefaultShopService())
         let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(shopRepository: repository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopSummaryViewModel(
             fetchShopSummaryUseCase: fetchShopSummaryUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             shopId: shopId,
             shopName: nil
         )

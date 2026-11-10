@@ -371,13 +371,11 @@ extension CallVanListViewController {
         let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             selectedId: 11)
         let shopViewController = ShopViewController(viewModel: viewModel)
         navigationController?.pushViewController(shopViewController, animated: true)

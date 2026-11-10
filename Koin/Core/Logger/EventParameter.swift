@@ -50,6 +50,42 @@ extension EventLabelType {
 
 enum EventParameter {
     enum EventLabel {
+        enum Shop: String, EventLabelType {
+            case shopDetailLoginPopupCloseClick = "account__shop_detail__login_popup__close__click"
+            case shopDetailLoginPopupLoginEntryClick = "account__shop_detail__login_popup__login_entry__click"
+            case shopBenefitNavigationBackClick = "shop__shop_benefit__navigation__back__click"
+            case shopBenefitNavigationBackSwipe = "shop__shop_benefit__navigation__back__swipe"
+            case shopBenefitShopEventExpandClick = "shop__shop_benefit__shop_event__expand__click"
+            case shopDetailContactPhoneClick = "shop__shop_detail__contact__phone__click"
+            case shopDetailFilterReviewSortClick = "shop__shop_detail__filter__review_sort__click"
+            case shopDetailNavigationBackClick = "shop__shop_detail__navigation__back__click"
+            case shopDetailNavigationBackSwipe = "shop__shop_detail__navigation__back__swipe"
+            case shopDetailNavigationReviewExitClick = "shop__shop_detail__navigation__review_exit__click"
+            case shopDetailNavigationReviewExitSwipe = "shop__shop_detail__navigation__review_exit__swipe"
+            case shopDetailPhotoViewSlideSwipe = "shop__shop_detail__photo_view__slide__swipe"
+            case shopDetailReviewDeleteCancelClick = "shop__shop_detail__review_delete__cancel__click"
+            case shopDetailReviewDeleteConfirmClick = "shop__shop_detail__review_delete__confirm__click"
+            case shopDetailReviewDeleteOpenClick = "shop__shop_detail__review_delete__open__click"
+            case shopDetailReviewReportConfirmClick = "shop__shop_detail__review_report__confirm__click"
+            case shopDetailReviewReportEntryClick = "shop__shop_detail__review_report__entry__click"
+            case shopDetailReviewWriteEntryClick = "shop__shop_detail__review_write__entry__click"
+            case shopDetailShopEventEntryClick = "shop__shop_detail__shop_event__entry__click"
+            case shopDetailShopInfoEntryClick = "shop__shop_detail__shop_info__entry__click"
+            case shopDetailShopMenuScroll = "shop__shop_detail__shop_menu__scroll"
+            case shopDetailShopReviewEntryClick = "shop__shop_detail__shop_review__entry__click"
+            case shopDetailShopReviewScroll = "shop__shop_detail__shop_review__scroll"
+            case shopListFilterCategoryClick = "shop__shop_list__filter__category__click"
+            case shopListFilterQuickFilterSelect = "shop__shop_list__filter__quick_filter__select"
+            case shopListFilterSortSelect = "shop__shop_list__filter__sort__select"
+            case shopListNavigationBackClick = "shop__shop_list__navigation__back__click"
+            case shopListNavigationBackSwipe = "shop__shop_list__navigation__back__swipe"
+            case shopListSearchClick = "shop__shop_list__search__click"
+            case shopListShopDetailEntryClick = "shop__shop_list__shop_detail__entry__click"
+            case shopListShopListScroll = "shop__shop_list__shop_list__scroll"
+            case shopReviewWriteReviewWriteConfirmClick = "shop__shop_review_write__review_write__confirm__click"
+            case shopSearchShopDetailEntryClick = "shop__shop_search__shop_detail__entry__click"
+        }
+
         enum Home {
             enum DA1: String, EventLabelType {
                 case busMainBusEntrySearchEntryClick = "bus__main__bus_entry__search_entry__click"

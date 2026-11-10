@@ -93,13 +93,11 @@ extension HomeHostingController {
         let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         return ShopViewController(viewModel: viewModel)
     }

@@ -12,7 +12,7 @@ final class ShopBenefitViewModel: ViewModelProtocol {
     
     enum Input {
         case fetchEvents
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case updateEvents(events: [ShopEvent])
@@ -48,8 +48,8 @@ final class ShopBenefitViewModel: ViewModelProtocol {
             switch input {
             case .fetchEvents:
                 fetchEvents()
-            case let .logEvent(label, category, value):
-                makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputPublisher.eraseToAnyPublisher()
@@ -68,10 +68,9 @@ extension ShopBenefitViewModel {
     }
 
     private func makeLogAnalyticsEvent(
-        label: LegacyEventLabelType,
-        category: EventParameter.EventCategory,
+        label: EventLabelType,
         value: Any
     ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

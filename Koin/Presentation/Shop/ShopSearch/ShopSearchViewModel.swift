@@ -12,7 +12,7 @@ final class ShopSearchViewModel {
     
     enum Input {
         case keywordDidChange(String)
-        case logEventDirect(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case update(ShopSearch)
@@ -23,15 +23,12 @@ final class ShopSearchViewModel {
     private let outputSubject = PassthroughSubject<Output, Never>()
     private let fetchSearchShopUseCase: FetchSearchShopUseCase
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    let selectedCategoryName: String
     
     // MARK: - Initializer
     init(fetchSearchShopUseCase: FetchSearchShopUseCase,
-         logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-         selectedCategoryName: String) {
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchSearchShopUseCase = fetchSearchShopUseCase
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.selectedCategoryName = selectedCategoryName
     }
     
     // MARK: - Transform
@@ -41,8 +38,8 @@ final class ShopSearchViewModel {
             switch input {
             case .keywordDidChange(let keyword):
                 self.fetchSearchShop(keyword)
-            case let .logEventDirect(label, category, value):
-                self.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self.logAnalyticsEventUseCase.execute(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -51,8 +48,8 @@ final class ShopSearchViewModel {
 
 extension ShopSearchViewModel {
     
-    func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
     
     private func fetchSearchShop(_ keyword: String) {
