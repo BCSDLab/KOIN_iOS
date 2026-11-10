@@ -282,8 +282,7 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.success700)
                     )
                 self?.checkIdDuplicateButton.updateState(isEnabled: false)
-                let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-                self?.inputSubject.send(.logEventWithSessionId(LegacyEventParameter.EventLabel.User.createAccount, .click, "아이디 생성", customSessionId))
+                self?.inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.inputUserInfoSignUpIdAvailableClick, "아이디생성"))
             case let .showDeptDropDownList(deptList):
                 strongSelf.deptDropdownContentView.configure(departments: deptList)
             case let .showNicknameHttpResult(message, color):
@@ -302,8 +301,7 @@ final class EnterFormViewController: UIViewController {
                     font: .appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.success700))
                 self?.nicknameResponseLabel.isHidden = false
-                let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-                self?.inputSubject.send(.logEventWithSessionId(LegacyEventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
+                self?.inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.inputUserInfoSignUpNicknameAvailableClick, "닉네임생성"))
             case let .failRegister(message):
                 let alertController = UIAlertController(title: "회원가입 실패", message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "확인", style: .default))
@@ -312,8 +310,7 @@ final class EnterFormViewController: UIViewController {
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
                 self?.navigationController?.pushViewController(viewController, animated: true)
-                let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-                self?.inputSubject.send(.logEventWithSessionId(LegacyEventParameter.EventLabel.User.signUpCompleted, .click, "회원가입완료", customSessionId))
+                self?.inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.inputUserInfoSignUpConfirmClick, "회원가입완료"))
             default:
                 break
             }

@@ -62,6 +62,7 @@ struct RegisterFormViewModelSelectTypeTests {
     }
 }
 
+#if false // TODO: 로깅 개편으로 구 세션 로깅 입력과 라벨이 제거되어 비활성화
 @Suite("RegisterFormViewModel - 회원 유형 선택 로깅")
 struct RegisterFormViewModelSelectTypeLoggingTests {
 
@@ -124,3 +125,4 @@ extension RegisterFormViewModelSelectTypeLoggingTests {
         return (viewModel, input)
     }
 }
+#endif

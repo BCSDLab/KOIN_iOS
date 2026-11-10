@@ -208,10 +208,8 @@ final class LoginViewController: UIViewController {
             case let .showErrorMessage(message):
                 self?.warningImageView.isHidden = false
                 self?.passwordWarningLabel.text = message
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.User.login, .click, "로그인 실패"))
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.User.login, .click, "로그인 완료"))
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .showModifyModal:
@@ -274,13 +272,13 @@ extension LoginViewController {
     @objc private func findIdButtonTapped() {
         let viewController = FindPhoneIdViewController(viewModel: FindIdViewModel())
         navigationController?.pushViewController(viewController, animated: true)
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.User.login, .click, "아이디 찾기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Account.loginAccountRecoveryIdEntryClick, "아이디 찾기"))
     }
     
     @objc private func findPasswordButtonTapped() {
         let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
         navigationController?.pushViewController(findPasswordViewController, animated: true)
-        inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.User.login, .click, "비밀번호 찾기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Account.loginAccountRecoveryPasswordEntryClick, "비밀번호 찾기"))
     }
 
     @objc private func ownerButtonTapped() {
@@ -329,8 +327,7 @@ extension LoginViewController {
         registerViewController.title = "회원가입"
         navigationController?.pushViewController(registerViewController, animated: true)
         
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-        inputSubject.send(.logSessionEvent(LegacyEventParameter.EventLabel.User.startSignUp, .click, "회원가입 시작", customSessionId))
+        inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.loginSignUpEntryClick, "회원가입 시작"))
     }
 }
 

@@ -50,6 +50,22 @@ extension EventLabelType {
 
 enum EventParameter {
     enum EventLabel {
+        enum Account: String, EventLabelType {
+            case accountConfigProfileEditEntryClick = "account__account_config__profile_edit__entry__click"
+            case editProfileProfileEditConfirmClick = "account__edit_profile__profile_edit__confirm__click"
+            case identityVerificationSignUpCodeVerifySuccessClick = "account__identity_verification__sign_up__code_verify_success__click"
+            case identityVerificationSignUpSendCodeClick = "account__identity_verification__sign_up__send_code__click"
+            case inputUserInfoSignUpConfirmClick = "account__input_user_info__sign_up__confirm__click"
+            case inputUserInfoSignUpIdAvailableClick = "account__input_user_info__sign_up__id_available__click"
+            case inputUserInfoSignUpNicknameAvailableClick = "account__input_user_info__sign_up__nickname_available__click"
+            case loginAccountRecoveryIdEntryClick = "account__login__account_recovery__id_entry__click"
+            case loginAccountRecoveryPasswordEntryClick = "account__login__account_recovery__password_entry__click"
+            case loginLoginConfirmClick = "account__login__login__confirm__click"
+            case loginSignUpEntryClick = "account__login__sign_up__entry__click"
+            case signUpPolicySignUpTermsAgreeClick = "account__sign_up_policy__sign_up__terms_agree__click"
+            case userTypeSelectionSignUpUserTypeClick = "account__user_type_selection__sign_up__user_type__click"
+        }
+
         enum Notice: String, EventLabelType {
             case noticeKeywordManageLoginPopupCloseClick = "account__notice_keyword_manage__login_popup__close__click"
             case noticeKeywordManageLoginPopupLoginEntryClick = "account__notice_keyword_manage__login_popup__login_entry__click"
