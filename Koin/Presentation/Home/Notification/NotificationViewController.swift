@@ -70,7 +70,7 @@ private extension NotificationViewController {
                 guard let self else { return }
                 self.inputSubject.send(.deleteNotification(id: id))
                 self.showToastMessage(message: "알림이 삭제되었습니다.")
-                self.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Notification.notificationListDelete, .click, "알림 삭제"))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListDeleteClick, "알림 삭제"))
             }
             .store(in: &subscriptions)
         
@@ -129,7 +129,6 @@ extension NotificationViewController {
         }
     }
 }
-
 
 extension NotificationViewController {
     private func parseQuery(uri: String) -> [String: String]? {
@@ -311,13 +310,13 @@ private extension NotificationViewController {
             markAllAsRead: { [weak self] in
                 self?.inputSubject.send(.markAllAsRead)
                 self?.notificationListView.markAllAsRead()
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Notification.notificationListReadAll, .click, "모두 읽음으로 표시"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListReadAllClick, "모두 읽음으로 표시"))
             },
             deleteAll: { [weak self] in
                 self?.inputSubject.send(.deleteAllNotifications)
                 self?.notificationListView.deleteAll()
                 self?.showToastMessage(message: "알림이 삭제되었습니다.")
-                self?.inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Notification.notificationListDeleteAll, .click, "알림 전체 삭제"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListDeleteAllClick, "알림 전체 삭제"))
             }
         )
         popUpViewController.modalPresentationStyle = .overFullScreen

@@ -191,22 +191,21 @@ extension HomeHostingController {
                     self?.handleBannerTap(banner, isLoggedIn: isLoggedIn)
                 }
             },
-            onLogEvent: { label, category, value in
+            onLogEvent: { label, value in
                 logAnalyticsEventUseCase.execute(
                     label: label,
-                    category: category,
                     value: value
                 )
             }
         )
         contentView.setBanners(banner.banners)
 
-        logAnalyticsEventUseCase.execute(
-            label: LegacyEventParameter.EventLabel.Campus.Home.mainModalEntry,
-            category: .entry,
-            value: banner.banners.first?.title ?? ""
-        )
         sheet = presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 8))
+        guard sheet != nil else { return }
+        logAnalyticsEventUseCase.execute(
+            label: EventParameter.EventLabel.Home.DA2.bannerMainModalExposure,
+            value: banner.banners[0].id
+        )
     }
 
     private func handleBannerTap(_ banner: Banner, isLoggedIn: Bool) {
@@ -214,9 +213,8 @@ extension HomeHostingController {
             repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
         )
         logAnalyticsEventUseCase.execute(
-            label: LegacyEventParameter.EventLabel.Campus.Home.mainModal,
-            category: .click,
-            value: banner.title
+            label: EventParameter.EventLabel.Home.DA2.bannerMainModalClick,
+            value: banner.id
         )
 
         if let version = banner.version,

@@ -9,7 +9,7 @@ import Combine
 import Foundation
 
 protocol FetchHomeDiningListUseCase {
-    func execute() -> AnyPublisher<[HomeDiningItem], ErrorResponse>
+    func execute() -> AnyPublisher<HomeDiningResult, ErrorResponse>
 }
 
 final class DefaultFetchHomeDiningListUseCase: FetchHomeDiningListUseCase {
@@ -27,7 +27,7 @@ final class DefaultFetchHomeDiningListUseCase: FetchHomeDiningListUseCase {
         self.dateProvider = dateProvider
     }
 
-    func execute() -> AnyPublisher<[HomeDiningItem], ErrorResponse> {
+    func execute() -> AnyPublisher<HomeDiningResult, ErrorResponse> {
         let dateInfo = dateProvider.execute(date: Date())
         
         return fetchDiningListUseCase.execute(diningInfo: dateInfo)
@@ -35,7 +35,7 @@ final class DefaultFetchHomeDiningListUseCase: FetchHomeDiningListUseCase {
             .map { (diningItems, coopShopData) in
                 let weekdayOperatingTimes = self.weekdayOperatingTimes(from: coopShopData)
 
-                return diningItems
+                let items = diningItems
                     .filter { $0.place != .secondCampus }
                     .map {
                         HomeDiningItem(
@@ -43,6 +43,7 @@ final class DefaultFetchHomeDiningListUseCase: FetchHomeDiningListUseCase {
                             timeText: weekdayOperatingTimes[$0.type]
                         )
                     }
+                return HomeDiningResult(diningType: dateInfo.diningType, items: items)
             }
             .eraseToAnyPublisher()
     }

@@ -35,11 +35,10 @@ struct HomeView: ActionBindableView {
     
     // MARK: - Public
     func makeLogAnalyticsEvent(
-        label: LegacyEventLabelType,
-        category: EventParameter.EventCategory,
+        label: EventLabelType,
         value: Any
     ) {
-        viewModel.execute(.logEvent(label, category, value))
+        viewModel.execute(.logEvent(label, value))
     }
     
     // MARK: - Body
@@ -51,13 +50,18 @@ struct HomeView: ActionBindableView {
                 HomeDiningView(
                     diningItems: viewModel.diningItems,
                     onTapAll: {
-                        viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Dining.todayMeal, .click, "전체보기"))
+                        if let diningType = viewModel.diningResult?.diningType {
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.mainMainMealClick, "\(diningType.name)_전체보기"))
+                        }
                         sendAction(.showDining)
                     },
                     onTapCorner: { item in
-                        viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Dining.menuCorner, .click, item.placeName))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.mainMainCornerSelect, item.placeName))
                     },
                     onTapMenu: { _ in
+                        if let diningType = viewModel.diningResult?.diningType {
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.mainMainMealClick, "\(diningType.name)_카드"))
+                        }
                         sendAction(.showDining)
                     }
                 )
@@ -65,19 +69,19 @@ struct HomeView: ActionBindableView {
                 MobilityView(
                     callVanRecruitingCount: viewModel.callVanRecruitingCount,
                     onTapShuttleTicket: {
-                        viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.shuttleTicket, .click, "셔틀 탑승권"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA1.ticketMainBusEntryTicketEntryClick, "셔틀 탑승권"))
                         sendAction(.showQRCode)
                     },
                     onTapCallVan: {
-                        viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.CallVan.callvanpot, .click, "콜밴팟 모집보기"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.callvanMainCallvanEntryRecruitmentListEntryClick, "콜밴팟 모집보기"))
                         sendAction(.showCallVan)
                     },
                     onTapBusTimetable: {
-                        viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.busTimetable, .click, "버스 시간표 조회하기"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.mainMainBusEntryTimetableEntryClick, "버스 시간표"))
                         sendAction(.showBusTimetable)
                     },
                     onTapBusRoute: {
-                        viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Campus.Bus.busRoute, .click, "버스 노선 조회하기"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA1.busMainBusEntrySearchEntryClick, "버스 노선 조회"))
                         sendAction(.showBusSearch)
                     }
                 )
@@ -87,11 +91,11 @@ struct HomeView: ActionBindableView {
                     openShopCount: viewModel.openShopCount,
                     totalShopCount: viewModel.totalShopCount,
                     onTapAll: {
-                        viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Business.shop, .click, "전체보기"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.mainMainShopEntryMainEntryClick, "주변상점"))
                         sendAction(.showShop)
                     },
                     onTapShopCard: {
-                        viewModel.execute(.logEvent(LegacyEventParameter.EventLabel.Business.popularShop, .click, "많이 찾는 상점 둘러보기"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA1.shopMainShopEntryPopularEntryClick, "많이 찾는 상점 둘러보기"))
                         sendAction(.showShop)
                     }
                 )

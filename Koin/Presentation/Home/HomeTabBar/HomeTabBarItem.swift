@@ -44,16 +44,16 @@ enum HomeTab: Int, CaseIterable {
         }
     }
 
-    var logLabel: LegacyEventParameter.EventLabel.Campus.Home {
+    var logLabel: EventParameter.EventLabel.Home.DA2 {
         switch self {
         case .home:
-            return .navHome
+            return .mainMainNavigationMainEntryClick
         case .category:
-            return .navCategory
+            return .mainMainNavigationCategoryMenuEntryClick
         case .board:
-            return .navBulletin
+            return .mainMainNoticeEntryNavigationEntryClick
         case .profile:
-            return .navProfile
+            return .mainMainNavigationProfileEntryClick
         }
     }
 }

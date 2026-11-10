@@ -11,13 +11,14 @@ final class BannerCollectionView: AutoScrollableInfiniteCarouselCollectionView {
 
     // MARK: - Properties
     private var banners: [Banner] = []
+    private var lastDisplayedIndex = 0
     private let onBannerTap: (Banner) -> Void
     private let onPageChanged: (Int, Int) -> Void
     private let onBannerSwiped: (Banner) -> Void
 
-    var currentTitle: String? {
+    var currentBanner: Banner? {
         if let currentItemIndex, banners.indices.contains(currentItemIndex) {
-            return banners[currentItemIndex].title
+            return banners[currentItemIndex]
         } else {
             return nil
         }
@@ -46,6 +47,7 @@ final class BannerCollectionView: AutoScrollableInfiniteCarouselCollectionView {
     // MARK: - Methods
     func setBanners(_ banners: [Banner]) {
         self.banners = banners
+        lastDisplayedIndex = 0
         reloadCarouselData()
         onPageChanged(0, banners.count)
     }
@@ -83,8 +85,10 @@ extension BannerCollectionView: AutoScrollableInfiniteCarouselCollectionViewProt
         didMoveToItemAt index: Int,
         isUserInitiated: Bool
     ) {
+        let didChangePage = lastDisplayedIndex != index
+        lastDisplayedIndex = index
         onPageChanged(index, banners.count)
-        if isUserInitiated {
+        if isUserInitiated && didChangePage {
             onBannerSwiped(banners[index])
         }
     }

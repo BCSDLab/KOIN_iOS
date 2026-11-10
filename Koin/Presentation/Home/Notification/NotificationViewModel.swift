@@ -17,7 +17,7 @@ final class NotificationViewModel: ViewModelProtocol {
         case deleteNotification(id: String)
         case deleteAllNotifications
         case markAllAsRead
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     enum Output {
@@ -66,8 +66,8 @@ final class NotificationViewModel: ViewModelProtocol {
                 self?.deleteAllNotifications()
             case .markAllAsRead:
                 self?.markAllAsRead()
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }
         .store(in: &subscriptions)
@@ -93,8 +93,7 @@ private extension NotificationViewModel {
     }
 
     private func selectNotification(id: String) {
-        guard let notification = notificationHistoryItems.first(where: { $0.id == id }),
-              let logValue = notification.logValue else {
+        guard let notification = notificationHistoryItems.first(where: { $0.id == id }) else {
             return
         }
         markAsRead(id: id)
@@ -102,9 +101,8 @@ private extension NotificationViewModel {
         outputSubject.send(.selectedNotification(notification))
         
         makeLogAnalyticsEvent(
-            label: LegacyEventParameter.EventLabel.Campus.Notification.notificationList,
-            category: .click,
-            value: logValue
+            label: EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListItemEntryClick,
+            value: notification.title
         )
     }
 
@@ -154,10 +152,9 @@ private extension NotificationViewModel {
     }
     
     private func makeLogAnalyticsEvent(
-        label: LegacyEventLabelType,
-        category: EventParameter.EventCategory,
+        label: EventLabelType,
         value: Any
     ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

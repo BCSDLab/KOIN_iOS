@@ -14,7 +14,7 @@ final class BannerView: UIView, KoinBottomSheetContent {
 
     // MARK: - Properties
     private let onBannerTap: (Banner) -> Void
-    private let onLogEvent: (LegacyEventLabelType, EventParameter.EventCategory, Any) -> Void
+    private let onLogEvent: (EventLabelType, Any) -> Void
 
     // MARK: - UI Components
     private let noShowButton = UIButton()
@@ -27,7 +27,7 @@ final class BannerView: UIView, KoinBottomSheetContent {
             self?.setCountLabel(index: index, totalCount: totalCount)
         },
         onBannerSwiped: { [weak self] banner in
-            self?.onLogEvent(LegacyEventParameter.EventLabel.Campus.Home.mainNextModal, .swipe, banner.title)
+            self?.onLogEvent(EventParameter.EventLabel.Home.DA2.bannerMainModalNextSwipe, banner.id)
         }
     )
     private let countLabel = UILabel()
@@ -35,7 +35,7 @@ final class BannerView: UIView, KoinBottomSheetContent {
     // MARK: - Initializer
     init(
         onBannerTap: @escaping (Banner) -> Void,
-        onLogEvent: @escaping (LegacyEventLabelType, EventParameter.EventCategory, Any) -> Void
+        onLogEvent: @escaping (EventLabelType, Any) -> Void
     ) {
         self.onBannerTap = onBannerTap
         self.onLogEvent = onLogEvent
@@ -65,16 +65,16 @@ extension BannerView {
         delegate?.dismiss()
         UserDefaults.standard.set(Date(), forKey: "noShowBanner")
 
-        if let title = collectionView.currentTitle {
-            onLogEvent(LegacyEventParameter.EventLabel.Campus.Home.mainModalHide7d, .click, title)
+        if let banner = collectionView.currentBanner {
+            onLogEvent(EventParameter.EventLabel.Home.DA2.bannerMainModalHide7dClick, banner.id)
         }
     }
 
     @objc private func closeButtonTapped() {
         delegate?.dismiss()
 
-        if let title = collectionView.currentTitle {
-            onLogEvent(LegacyEventParameter.EventLabel.Campus.Home.mainModalClose, .click, title)
+        if let banner = collectionView.currentBanner {
+            onLogEvent(EventParameter.EventLabel.Home.DA2.bannerMainModalCloseClick, banner.id)
         }
     }
 }
