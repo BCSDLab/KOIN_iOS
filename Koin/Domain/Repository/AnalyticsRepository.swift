@@ -10,6 +10,4 @@ import Foundation
 protocol AnalyticsRepository {
     func logEvent(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String])
     func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?)
-    func logEventWithSessionId(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String)
 }

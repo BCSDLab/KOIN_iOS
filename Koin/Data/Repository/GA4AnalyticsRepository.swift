@@ -19,12 +19,4 @@ final class GA4AnalyticsRepository: AnalyticsRepository {
     func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         service.logEvent(label: label, category: category, value: value)
     }
-
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?) {
-        service.logEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: durationTime)
-    }
-
-    func logEventWithSessionId(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        service.logEventWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
-    }
 }

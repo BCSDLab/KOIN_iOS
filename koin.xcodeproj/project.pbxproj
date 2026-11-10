@@ -784,9 +784,7 @@
 		7CFC442B3085217F00623C1F /* DiningNotiBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CFC442A3085217F00623C1F /* DiningNotiBottomSheetContentView.swift */; };
 		831ABDC42CA29A120099B70C /* NoticeKeywordsFetchResult.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */; };
 		831ABDC62CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */; };
-		831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */; };
 		832FCC932CD667AC0044AF23 /* diningShare.gif in Resources */ = {isa = PBXBuildFile; fileRef = 832FCC912CD667940044AF23 /* diningShare.gif */; };
-		833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C042C68F8BA00982145 /* ScreenActionType.swift */; };
 		833D9C122C6B26A900982145 /* NoticeListType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C112C6B26A900982145 /* NoticeListType.swift */; };
 		833D9C222C6B4F6E00982145 /* NoticeListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C212C6B4F6E00982145 /* NoticeListDto.swift */; };
 		833D9C282C6B58ED00982145 /* NoticeKeywordDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 833D9C272C6B58ED00982145 /* NoticeKeywordDto.swift */; };
@@ -814,7 +812,6 @@
 		835DC1FB2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC1FA2C84B96500488506 /* FetchHotSearchingKeywordUseCase.swift */; };
 		835DC2042C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2032C84C39E00488506 /* ManageRecentSearchedWordUseCase.swift */; };
 		835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */; };
-		836242362BD9522400845499 /* FirebaseLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 836242352BD9522400845499 /* FirebaseLog.swift */; };
 		8380FDC32BC1CBB800120036 /* BusCourseDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8380FDC22BC1CBB800120036 /* BusCourseDto.swift */; };
 		838F114E2CA51C6C00BF3B25 /* (null) in Sources */ = {isa = PBXBuildFile; };
 		838F11502CA5330900BF3B25 /* AddNoticeKeywordType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */; };
@@ -2047,9 +2044,7 @@
 		82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostViewController.swift; sourceTree = "<group>"; };
 		831ABDC32CA29A120099B70C /* NoticeKeywordsFetchResult.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordsFetchResult.swift; sourceTree = "<group>"; };
 		831ABDC52CA2A7C20099B70C /* FetchRecentSearchedWordUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecentSearchedWordUseCase.swift; sourceTree = "<group>"; };
-		831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GetUserScreenTimeUseCase.swift; path = ScreenTime/GetUserScreenTimeUseCase.swift; sourceTree = "<group>"; };
 		832FCC912CD667940044AF23 /* diningShare.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = diningShare.gif; sourceTree = "<group>"; };
-		833D9C042C68F8BA00982145 /* ScreenActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScreenActionType.swift; sourceTree = "<group>"; };
 		833D9C112C6B26A900982145 /* NoticeListType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListType.swift; sourceTree = "<group>"; };
 		833D9C212C6B4F6E00982145 /* NoticeListDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeListDto.swift; sourceTree = "<group>"; };
 		833D9C272C6B58ED00982145 /* NoticeKeywordDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeKeywordDto.swift; sourceTree = "<group>"; };
@@ -2079,7 +2074,6 @@
 		835DC2052C84D09400488506 /* FetchRecommendedSearchWordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchRecommendedSearchWordRequest.swift; sourceTree = "<group>"; };
 		835DC2072C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataClass.swift"; sourceTree = "<group>"; };
 		835DC2082C84F5FD00488506 /* RecentSearchedWordInfo+CoreDataProperties.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "RecentSearchedWordInfo+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		836242352BD9522400845499 /* FirebaseLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLog.swift; sourceTree = "<group>"; };
 		8380FDC22BC1CBB800120036 /* BusCourseDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusCourseDto.swift; sourceTree = "<group>"; };
 		838F114F2CA5330900BF3B25 /* AddNoticeKeywordType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddNoticeKeywordType.swift; sourceTree = "<group>"; };
 		839D71162BEB1570001BC7F7 /* NotificationService.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = NotificationService.appex; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -6147,10 +6141,8 @@
 			isa = PBXGroup;
 			children = (
 				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
-				833D9C042C68F8BA00982145 /* ScreenActionType.swift */,
 				95EB893906928DC9C3E5CBA4 /* LegacyEventParameter.swift */,
 				D27DD07F2BA608310081FD36 /* Log.swift */,
-				836242352BD9522400845499 /* FirebaseLog.swift */,
 				83C509612BFA0CBB007379A0 /* ScrollLog.swift */,
 				D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */,
 			);
@@ -6628,7 +6620,6 @@
 		D2FB236A2C0409590098BA2B /* Analytics */ = {
 			isa = PBXGroup;
 			children = (
-				831C469F2C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift */,
 				D2FB236B2C0409900098BA2B /* LogAnalyticsEventUseCase.swift */,
 			);
 			path = Analytics;
@@ -6974,7 +6965,6 @@
 				7CA6867B2FFCB758007937E9 /* DefaultNotificationHistoryRepository.swift in Sources */,
 				7C58FB2E30920D43006B4655 /* DiningReportRequest.swift in Sources */,
 				7CFC441B30822E3400623C1F /* DiningReportAbTest.swift in Sources */,
-				833D9C052C68F8BA00982145 /* ScreenActionType.swift in Sources */,
 				835DC2062C84D09400488506 /* FetchRecommendedSearchWordRequest.swift in Sources */,
 				7CFC441D30837E4900623C1F /* CancelableImage.swift in Sources */,
 				7CF77B873005F642003642C1 /* FetchMainFrameUseCase.swift in Sources */,
@@ -7214,7 +7204,6 @@
 				D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */,
 				D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */,
 				83DD0DCA2C5651D900278ABD /* FetchExpressTimetableUseCase.swift in Sources */,
-				831C46A02C63C94000CF84C0 /* GetUserScreenTimeUseCase.swift in Sources */,
 				D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */,
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				7C0C18972F68A91A001781B3 /* PostCallVanChatUseCase.swift in Sources */,
@@ -7278,7 +7267,6 @@
 				835C991A2C7EDB63002E02D3 /* FetchNotificationKeywordUseCase.swift in Sources */,
 				7CB11C132FB1BD9B004E0C80 /* FetchLostItemMyKeywordUseCase.swift in Sources */,
 				7CB11C782FB32656004E0C80 /* SubscribeKeywordRequest.swift in Sources */,
-				836242362BD9522400845499 /* FirebaseLog.swift in Sources */,
 				83DD0DEA2C57486400278ABD /* CityBusTimetableDto.swift in Sources */,
 				7CDCD0BD30559E70004204DA /* DeleteRecruitDataUseCase.swift in Sources */,
 				7C7BD71F302B2B37003C5A15 /* PostLostItemUseCase.swift in Sources */,

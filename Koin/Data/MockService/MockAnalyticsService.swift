@@ -15,12 +15,4 @@ final class MockAnalyticsService: LogAnalyticsService {
     func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         debugPrint("\(label) \(category) \(value)")
     }
-
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?) {
-        debugPrint("\(label) \(category) \(value) \(previousPage ?? "") \(currentPage ?? "") \(durationTime ?? "")")
-    }
-
-    func logEventWithSessionId(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        debugPrint("\(label) \(category) \(value) \(sessionId)")
-    }
 }

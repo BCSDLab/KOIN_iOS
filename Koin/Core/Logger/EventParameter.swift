@@ -391,15 +391,4 @@ enum EventParameter {
         case fail
     }
     
-    enum EventLabelNeededDuration: String {
-        case shopCategories
-        case shopClick
-        case shopCall
-        case shopDetailViewBack
-        case shopDetailViewReviewBackByTab = "shopDetailViewReviewBackByTab"
-        case shopDetailViewReviewBackByCall = "shopDetailViewReviewBackByCall"
-        case shopDetailViewReviewBackByCategory = "shopDetailViewReviewBackByCategory"
-        case shopCategoriesBack
-        case shopDetailViewReviewBack = "shop_detail_view_review_back"
-    }
 }

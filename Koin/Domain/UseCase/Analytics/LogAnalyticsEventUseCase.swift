@@ -10,8 +10,6 @@ import Foundation
 protocol LogAnalyticsEventUseCase {
     func execute(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String])
     func execute(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
-    func executeWithDuration(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?)
-    func executeWithSessionId(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String)
 }
 
 extension LogAnalyticsEventUseCase {
@@ -39,13 +37,5 @@ final class DefaultLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
 
     func execute(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         repository.logEvent(label: label, category: category, value: value)
-    }
-
-    func executeWithDuration(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, durationTime: String? = nil) {
-        repository.logEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: durationTime)
-    }
-
-    func executeWithSessionId(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        repository.logEventWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
     }
 }

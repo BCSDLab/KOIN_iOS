@@ -87,7 +87,7 @@ private extension RecruitNotificationListViewController {
                 }
                 if isUserTap,
                    let title = notificationList?.notifications.first(where: { $0.id == id })?.title {
-                    inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Campus.Notification.notificationList, .click, title))
+                    inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Recruit.notificationList, .click, title))
                 }
                 self.notificationList?.markAsRead(id: id)
                 handleNavigation(id: id)

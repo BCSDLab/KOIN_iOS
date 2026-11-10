@@ -10,8 +10,6 @@ import FirebaseAnalytics
 protocol LogAnalyticsService {
     func logEvent(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String])
     func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?)
-    func logEventWithSessionId(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String)
 }
 
 final class GA4AnalyticsService: LogAnalyticsService {
@@ -44,43 +42,6 @@ final class GA4AnalyticsService: LogAnalyticsService {
 
     func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
         sendEvent(label.team, makeParameters(label: label.rawValue, category: category.rawValue, value: value))
-    }
-
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, durationTime: String? = nil) {
-        var defaultParameters = [
-            "event_label": label.rawValue,
-            "event_category": category.rawValue,
-            "value": value,
-            "gender": UserDataManager.shared.gender,
-            "major": UserDataManager.shared.major
-        ]
-        
-        if let previousPage = previousPage {
-            defaultParameters["previous_page"] = previousPage
-        }
-        
-        if let currentPage = currentPage {
-            defaultParameters["current_page"] = currentPage
-        }
-        
-        if let durationTime = durationTime {
-            defaultParameters["duration_time"] = durationTime
-        }
-        
-        Analytics.logEvent(label.team, parameters: defaultParameters)
-    }
-
-    func logEventWithSessionId(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        let parameters: [String: Any] = [
-            "event_label": label.rawValue,
-            "event_category": category.rawValue,
-            "value": value,
-            "custom_session_id": sessionId,
-            "gender": UserDataManager.shared.gender,
-            "major": UserDataManager.shared.major
-        ]
-
-        Analytics.logEvent(label.team, parameters: parameters)
     }
 
     private func makeParameters(label: String, category: String, value: Any) -> [String: Any] {
