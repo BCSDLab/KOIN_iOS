@@ -23,7 +23,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
         case didPresentNotiBottomSheet
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any, category: EventParameter.EventCategory? = nil)
     }
     
     // MARK: - Proeprteis
@@ -127,8 +127,8 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
             changeNoti(isOn: isOn, type: .diningImageUpload)
         case .didPresentNotiBottomSheet:
             didPresentNotiBottomSheet()
-        case let .logEvent(label, category, value):
-            makeLogAnalyticsEvent(label: label, category: category, value: value)
+        case let .logEvent(label, value, category):
+            makeLogAnalyticsEvent(label: label, value: value, category: category)
         }
     }
 }
@@ -223,7 +223,7 @@ extension DiningViewModel {
                 let result = try await assignAbTestUseCase.execute(requestModel: request).firstValue()
                 reportAbTest = DiningReportAbTest(from: result.variableName.rawValue)
                 if let reportAbTest {
-                    makeLogAnalyticsEvent(label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningAbtestExposure, category: .exposure, value: reportAbTest.logValue)
+                    makeLogAnalyticsEvent(label: EventParameter.EventLabel.Dining.SoldOutReport.cafeteriaDiningAbtestExposure, value: reportAbTest.logValue)
                 }
             } catch {
                 guard !Task.isCancelled else { return }
@@ -303,18 +303,18 @@ extension DiningViewModel {
             return
         }
         makeLogAnalyticsEvent(
-            label: LegacyEventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSubmit,
-            category: category,
-            value: "\(reportAbTestName)_\(selectedPlace.name)"
+            label: EventParameter.EventLabel.Dining.SoldOutReport.cafeteriaDiningSoldoutSubmit,
+            value: "\(reportAbTestName)_\(selectedPlace.name)",
+            category: category
         )
     }
     
     private func makeLogAnalyticsEvent(
-        label: LegacyEventLabelType,
-        category: EventParameter.EventCategory,
-        value: Any
+        label: EventLabelType,
+        value: Any,
+        category: EventParameter.EventCategory? = nil
     ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        logAnalyticsEventUseCase.execute(label: label, value: value, category: category)
     }
 }
 

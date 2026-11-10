@@ -86,6 +86,31 @@ enum EventParameter {
             case shopSearchShopDetailEntryClick = "shop__shop_search__shop_detail__entry__click"
         }
 
+        enum Dining: String, EventLabelType {
+            case accountConfigNotificationConfigEntryClick = "cafeteria__account_config__notification_config__entry__click"
+            case cafeteriaCafeteriaInfoEntryClick = "cafeteria__cafeteria__cafeteria_info__entry__click"
+            case cafeteriaMealTimeScroll = "cafeteria__cafeteria__meal_time__scroll"
+            case cafeteriaMealTimeSelect = "cafeteria__cafeteria__meal_time__select"
+            case cafeteriaPhotoViewOpenClick = "cafeteria__cafeteria__photo_view__open__click"
+            case cafeteriaShareKakaoClick = "cafeteria__cafeteria__share__kakao__click"
+            case fromExternalCafeteriaEntryKakaoEntryClick = "cafeteria__from_external__cafeteria_entry__kakao_entry__click"
+            case notificationConfigNotificationConfigPhotoUploadToggle = "cafeteria__notification_config__notification_config__photo_upload__toggle"
+            case notificationConfigSoldOutToggle = "cafeteria__notification_config__sold_out__toggle"
+            case notificationConfigSoldOutMealToggle = "cafeteria__notification_config__sold_out_meal__toggle"
+
+            /// 품절 제보·실험. label은 현행 명세 그대로지만 screen_view가 page 구간과 다르고,
+            /// 일부 category가 마지막 구간과 달라 호출 시 넘긴다.
+            enum SoldOutReport: String, EventLabelType {
+                case cafeteriaDiningAbtestExposure = "cafeteria__dining__abtest__exposure"
+                case cafeteriaDiningSoldoutStart = "cafeteria__dining__soldout__start"
+                case cafeteriaDiningSoldoutSelect = "cafeteria__dining__soldout__select"
+                case cafeteriaDiningSoldoutPhoto = "cafeteria__dining__soldout__photo"
+                case cafeteriaDiningSoldoutSubmit = "cafeteria__dining__soldout__submit"
+                case cafeteriaDiningSoldoutExit = "cafeteria__dining__soldout__exit"
+                var screenView: String? { "cafeteria" }
+            }
+        }
+
         enum CallVan: String, EventLabelType {
             case callvanChatCallvanChatMessageSendClick = "callvan__callvan_chat__callvan_chat__message_send__click"
             case callvanListCallvanChatCardEntryClick = "callvan__callvan_list__callvan_chat__card_entry__click"

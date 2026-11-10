@@ -102,7 +102,7 @@ extension SceneDelegate {
         if let date = parameters["date"], let type = parameters["type"], let place = parameters["place"] {
             handleDiningNavigation(date: date, type: type, place: place, navigationController: navigationController)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            logAnalyticsEventUseCase.execute(label: LegacyEventParameter.EventLabel.Campus.Dining.menuShare, category: .click, value: "코인으로 이동")
+            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Dining.fromExternalCafeteriaEntryKakaoEntryClick, value: "코인으로 이동")
             return
         }
     }
