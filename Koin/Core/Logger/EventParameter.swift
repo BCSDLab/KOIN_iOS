@@ -66,6 +66,39 @@ enum EventParameter {
             case userTypeSelectionSignUpUserTypeClick = "account__user_type_selection__sign_up__user_type__click"
         }
 
+        enum LostItem: String, EventLabelType {
+            case lostItemDetailLostItemEditEntryClick = "board__lost_item_detail__lost_item_edit__entry__click"
+            case lostItemEditLostItemEditSubmit = "board__lost_item_edit__lost_item_edit__submit"
+            case foundItemEditLostItemEditSubmit = "board__found_item_edit__lost_item_edit__submit"
+            case lostItemDetailLoginPopupCloseClick = "account__lost_item_detail__login_popup__close__click"
+            case lostItemDetailLoginPopupLoginEntryClick = "account__lost_item_detail__login_popup__login_entry__click"
+            case lostItemListLoginPopupCloseClick = "account__lost_item_list__login_popup__close__click"
+            case lostItemListLoginPopupLoginEntryClick = "account__lost_item_list__login_popup__login_entry__click"
+            case foundItemWriteLostItemWriteItemAddClick = "board__found_item_write__lost_item_write__item_add__click"
+            case foundItemWriteLostItemWriteItemCategorySelect = "board__found_item_write__lost_item_write__item_category__select"
+            case foundItemWriteLostItemWriteSubmit = "board__found_item_write__lost_item_write__submit"
+            case lostItemDetailLostItemDeleteConfirmClick = "board__lost_item_detail__lost_item_delete__confirm__click"
+            case lostItemDetailLostItemDeleteOpenClick = "board__lost_item_detail__lost_item_delete__open__click"
+            case lostItemDetailLostItemMessageEntryClick = "board__lost_item_detail__lost_item_message__entry__click"
+            case lostItemDetailLostItemReportEntryClick = "board__lost_item_detail__lost_item_report__entry__click"
+            case lostItemDetailLostItemStatusFoundConfirmClick = "board__lost_item_detail__lost_item_status__found_confirm__click"
+            case lostItemDetailLostItemStatusOpenClick = "board__lost_item_detail__lost_item_status__open__click"
+            case lostItemKeywordManageKeywordManageAddSubmit = "board__lost_item_keyword_manage__keyword_manage__add__submit"
+            case lostItemKeywordManageKeywordManageDeleteClick = "board__lost_item_keyword_manage__keyword_manage__delete__click"
+            case lostItemKeywordManageKeywordManageNotificationClick = "board__lost_item_keyword_manage__keyword_manage__notification__click"
+            case lostItemKeywordManageKeywordManageRecommendedKeywordSelect = "board__lost_item_keyword_manage__keyword_manage__recommended_keyword__select"
+            case lostItemListFilterApplyClick = "board__lost_item_list__filter__apply__click"
+            case lostItemListFilterOpenClick = "board__lost_item_list__filter__open__click"
+            case lostItemListKeywordManageEntryClick = "board__lost_item_list__keyword_manage__entry__click"
+            case lostItemListLostItemDetailEntryClick = "board__lost_item_list__lost_item_detail__entry__click"
+            case lostItemListLostItemWriteEntryClick = "board__lost_item_list__lost_item_write__entry__click"
+            case lostItemListLostItemWritePostTypeSelect = "board__lost_item_list__lost_item_write__post_type__select"
+            case lostItemReportLostItemReportSubmit = "board__lost_item_report__lost_item_report__submit"
+            case lostItemWriteLostItemWriteItemAddClick = "board__lost_item_write__lost_item_write__item_add__click"
+            case lostItemWriteLostItemWriteItemCategorySelect = "board__lost_item_write__lost_item_write__item_category__select"
+            case lostItemWriteLostItemWriteSubmit = "board__lost_item_write__lost_item_write__submit"
+        }
+
         enum Notice: String, EventLabelType {
             case noticeKeywordManageLoginPopupCloseClick = "account__notice_keyword_manage__login_popup__close__click"
             case noticeKeywordManageLoginPopupLoginEntryClick = "account__notice_keyword_manage__login_popup__login_entry__click"
@@ -187,6 +220,10 @@ enum EventParameter {
             case callvanWriteCallvanWriteDepartureTimeConfirmClick = "callvan__callvan_write__callvan_write__departure_time_confirm__click"
             case callvanWriteNavigationBackClick = "callvan__callvan_write__navigation__back__click"
             case callvanWriteNavigationBackSwipe = "callvan__callvan_write__navigation__back__swipe"
+        }
+
+        enum Chat: String, EventLabelType {
+            case chatListChatConversationEntryClick = "chat__chat_list__chat_conversation__entry__click"
         }
 
         enum Home {

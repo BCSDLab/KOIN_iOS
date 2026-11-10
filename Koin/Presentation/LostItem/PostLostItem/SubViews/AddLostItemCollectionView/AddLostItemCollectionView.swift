@@ -13,7 +13,7 @@ final class AddLostItemCollectionView: UICollectionView {
     // MARK: - Properties
     private var footerCancellables = Set<AnyCancellable>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
-    let logPublisher = PassthroughSubject<(LegacyEventLabelType, EventParameter.EventCategory, Any), Never>()
+    let logPublisher = PassthroughSubject<(EventLabelType, Any), Never>()
     
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
@@ -100,8 +100,8 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
             guard let strongSelf = self else { return }
             self?.articles[indexPath.row].category = value
             switch strongSelf.type {
-            case .found: self?.logPublisher.send((LegacyEventParameter.EventLabel.Campus.LostItem.findUserCategory, .click, value))
-            case .lost: self?.logPublisher.send((LegacyEventParameter.EventLabel.Campus.LostItem.lostItemCategory, .click, value))
+            case .found: self?.logPublisher.send((EventParameter.EventLabel.LostItem.foundItemWriteLostItemWriteItemCategorySelect, value))
+            case .lost: self?.logPublisher.send((EventParameter.EventLabel.LostItem.lostItemWriteLostItemWriteItemCategorySelect, value))
             }
         }.store(in: &cell.cancellables)
         cell.locationPublisher.sink { [weak self] value in
@@ -137,8 +137,8 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
                     self?.reloadData()
                 }
                 switch strongSelf.type {
-                case .found: self?.logPublisher.send((LegacyEventParameter.EventLabel.Campus.LostItem.findUserAddItem, .click, "물품 추가"))
-                case .lost: self?.logPublisher.send((LegacyEventParameter.EventLabel.Campus.LostItem.lostItemAddItem, .click, "물품 추가"))
+                case .found: self?.logPublisher.send((EventParameter.EventLabel.LostItem.foundItemWriteLostItemWriteItemAddClick, "물품 추가"))
+                case .lost: self?.logPublisher.send((EventParameter.EventLabel.LostItem.lostItemWriteLostItemWriteItemAddClick, "물품 추가"))
                 }
             }.store(in: &footerCancellables)
             return footerView

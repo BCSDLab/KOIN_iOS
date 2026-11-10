@@ -77,3 +77,25 @@ extension FetchLostItemListRequest {
         }
     }
 }
+
+extension FetchLostItemListRequest {
+    /// 물품 종류는 Set의 순서와 관계없이 필터 UI 순서로 전송한다.
+    var loggingParameters: [String: String] {
+        let orderedCategories: [LostItemCategory] = [.card, .id, .wallet, .electronics, .etc]
+        let itemType = category.isEmpty || category.contains(.all)
+            ? "전체"
+            : orderedCategories.filter { category.contains($0) }.map(\.description).joined(separator: "|")
+        let status: String
+        switch foundStatus {
+        case .all: status = "전체"
+        case .notFound: status = "찾는중"
+        case .found: status = "찾음"
+        }
+        return [
+            "filter_scope": author == .my ? "내 게시물" : "전체",
+            "filter_post_type": type.map { "\($0.description)물" } ?? "전체",
+            "filter_item_type": itemType,
+            "filter_status": status
+        ]
+    }
+}

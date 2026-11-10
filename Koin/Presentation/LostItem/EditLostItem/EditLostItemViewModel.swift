@@ -31,14 +31,17 @@ final class EditLostItemViewModel: ViewModelProtocol {
     
     private let uploadFileUseCase = DefaultUploadFileUseCase(coreRepository: DefaultCoreRepository(service: DefaultCoreService()))
     private let updateLostItemUseCase: UpdateLostItemUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
 
     // MARK: - Initialization
     init(updateLostItemUseCase: UpdateLostItemUseCase,
-         lostItemData: LostItemData
+         lostItemData: LostItemData,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     ) {
         self.updateLostItemUseCase = updateLostItemUseCase
         self.lostItemData = lostItemData
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -76,7 +79,11 @@ extension EditLostItemViewModel {
         _ foundPlace: String,
         _ content: String?
     ) {
-        
+        let label: EventLabelType = lostItemData.type == .lost
+            ? EventParameter.EventLabel.LostItem.lostItemEditLostItemEditSubmit
+            : EventParameter.EventLabel.LostItem.foundItemEditLostItemEditSubmit
+        logAnalyticsEventUseCase.execute(label: label, value: "\(lostItemData.type.description)물")
+
         updateLostItemUseCase.execute(
             id: lostItemData.id,
             lostItemData: lostItemData,

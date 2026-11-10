@@ -15,7 +15,7 @@ final class LostItemChatListTableViewModel: ViewModelProtocol {
     enum Input {
         case fetchChatRooms
         case viewWillDisappear
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     // MARK: - Output
@@ -50,8 +50,8 @@ final class LostItemChatListTableViewModel: ViewModelProtocol {
                 guard let self else { return }
                 pollingSubscriptions?.cancel()
                 pollingSubscriptions = nil
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -78,7 +78,7 @@ extension LostItemChatListTableViewModel {
             }
     }
     
-    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

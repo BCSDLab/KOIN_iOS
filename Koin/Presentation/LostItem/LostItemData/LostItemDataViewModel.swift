@@ -17,7 +17,7 @@ final class LostItemDataViewModel: ViewModelProtocol {
         case checkLogIn(CheckLoginOption)
         case changeState(Int)
         case deleteData
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case updateData(LostItemData)
@@ -86,8 +86,8 @@ final class LostItemDataViewModel: ViewModelProtocol {
                 self.changeState(id)
             case .deleteData:
                 self.deleteData()
-            case let .logEvent(label, category, value):
-                self.logEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self.logEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -96,8 +96,8 @@ final class LostItemDataViewModel: ViewModelProtocol {
 
 extension LostItemDataViewModel {
     
-    private func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func logEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
     
     private func loadData() {

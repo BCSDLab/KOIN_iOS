@@ -14,7 +14,7 @@ final class ReportLostItemViewModel: ViewModelProtocol {
     
     enum Input {
         case reportLostItemArticle(ReportLostItemRequest)
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     // MARK: - Output
@@ -43,8 +43,8 @@ final class ReportLostItemViewModel: ViewModelProtocol {
             switch input {
             case .reportLostItemArticle(let request):
                 self?.reportLostItemArticle(request: request)
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -63,7 +63,7 @@ extension ReportLostItemViewModel {
         }.store(in: &subscriptions)
     
     }
-    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

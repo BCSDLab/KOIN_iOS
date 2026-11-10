@@ -15,7 +15,7 @@ final class LostItemListTableView: UITableView {
     private var isWaiting = true
     let isEmptyPublisher = PassthroughSubject<Bool, Never>()
     let showToastPublisher = PassthroughSubject<String, Never>()
-    let cellTappedPublisher = PassthroughSubject<Int, Never>()
+    let cellTappedPublisher = PassthroughSubject<(id: Int, type: LostItemType), Never>()
     let loadMoreListPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initializer
@@ -101,7 +101,8 @@ extension LostItemListTableView: UITableViewDelegate {
         if lostItemListData[indexPath.row].isReported {
             showToastPublisher.send("신고된 게시글을 더 이상 볼 수 없습니다.")
         } else {
-            cellTappedPublisher.send(lostItemListData[indexPath.row].id)
+            let item = lostItemListData[indexPath.row]
+            cellTappedPublisher.send((item.id, item.type))
         }
     }
 }
