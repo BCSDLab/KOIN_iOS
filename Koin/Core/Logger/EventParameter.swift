@@ -216,6 +216,7 @@ enum EventParameter {
             case timetableNavigationBackSwipe = "timetable__timetable__navigation__back__swipe"
             case timetableTimetableExportImageSaveClick = "timetable__timetable__timetable_export__image_save__click"
             case timetableTimetableListEntryClick = "timetable__timetable__timetable_list__entry__click"
+            case timetableTimetableEditEntryClick = "timetable__timetable__timetable_edit__entry__click"
             case timetableListTimetableListSelect = "timetable__timetable_list__timetable_list__select"
         }
 

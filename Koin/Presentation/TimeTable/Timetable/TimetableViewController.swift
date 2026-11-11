@@ -535,6 +535,7 @@ extension TimetableViewController {
     }
     @objc private func modifyTimetableButtonTapped() {
         guard requireStudentAccess() else { return }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableTimetableEditEntryClick, "시간표 수정"))
         addClassCollectionView.setUpSelectedDept(dept: nil)
         inputSubject.send(.selectedDepartment(nil))
         
