@@ -174,8 +174,14 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
         // 셀 탭 이벤트 처리
         let section = indexPath.section
         let row = indexPath.row
+        let isNewSelection = viewModel.selectedFrameId != viewModel.frameData[section].frame[row].id
         viewModel.selectedSemester = viewModel.frameData[section].semester
         viewModel.selectedFrameId = viewModel.frameData[section].frame[row].id
+        if isNewSelection {
+            // 명세 2-27 value: {연도}_{학기}_{시간표명} (예: 2026_2학기_기본 시간표)
+            let semesterValue = viewModel.frameData[section].semester.reverseFormatSemester().replacingOccurrences(of: "년 ", with: "_")
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableListTimetableListSelect, "\(semesterValue)_\(viewModel.frameData[section].frame[row].timetableName)"))
+        }
         navigationController?.popViewController(animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

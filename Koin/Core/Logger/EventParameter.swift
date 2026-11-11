@@ -211,6 +211,14 @@ enum EventParameter {
             }
         }
 
+        enum Timetable: String, EventLabelType {
+            case timetableNavigationBackClick = "timetable__timetable__navigation__back__click"
+            case timetableNavigationBackSwipe = "timetable__timetable__navigation__back__swipe"
+            case timetableTimetableExportImageSaveClick = "timetable__timetable__timetable_export__image_save__click"
+            case timetableTimetableListEntryClick = "timetable__timetable__timetable_list__entry__click"
+            case timetableListTimetableListSelect = "timetable__timetable_list__timetable_list__select"
+        }
+
         enum RealEstate: String, EventLabelType {
             case roomDetailPhotoViewSlideClick = "real_estate__room_detail__photo_view__slide__click"
             case roomListRoomDetailEntryClick = "real_estate__room_list__room_detail__entry__click"
