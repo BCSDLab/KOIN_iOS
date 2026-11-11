@@ -11,7 +11,7 @@ import UIKit
 final class LandCollectionView: UICollectionView, UICollectionViewDataSource, UICollectionViewDelegate {
     
     private var landList = [LandItem]()
-    let cellTapPublisher = PassthroughSubject<Int, Never>()
+    let cellTapPublisher = PassthroughSubject<LandItem, Never>()
     
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         super.init(frame: frame, collectionViewLayout: layout)
@@ -51,6 +51,6 @@ extension LandCollectionView {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        cellTapPublisher.send(landList[indexPath.row].id)
+        cellTapPublisher.send(landList[indexPath.row])
     }
 }

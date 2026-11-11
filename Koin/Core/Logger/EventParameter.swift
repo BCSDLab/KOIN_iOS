@@ -211,6 +211,11 @@ enum EventParameter {
             }
         }
 
+        enum RealEstate: String, EventLabelType {
+            case roomDetailPhotoViewSlideClick = "real_estate__room_detail__photo_view__slide__click"
+            case roomListRoomDetailEntryClick = "real_estate__room_list__room_detail__entry__click"
+        }
+
         enum Department: String, EventLabelType {
             case departmentListSearchClick = "department__department_list__search__click"
             case departmentListContactPhoneCopyClick = "department__department_list__contact__phone_copy__click"

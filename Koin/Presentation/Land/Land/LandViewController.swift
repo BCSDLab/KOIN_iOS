@@ -74,8 +74,9 @@ final class LandViewController: UIViewController {
         }.store(in: &subscriptions)
         
         landCollectionView.cellTapPublisher
-            .sink { [weak self] shopId in
-                self?.navigateToLandDetailViewController(id: shopId)
+            .sink { [weak self] land in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListRoomDetailEntryClick, land.landName))
+                self?.navigateToLandDetailViewController(id: land.id)
             }
             .store(in: &subscriptions)
     }
