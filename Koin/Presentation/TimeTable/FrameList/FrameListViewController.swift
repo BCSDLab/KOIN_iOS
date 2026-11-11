@@ -151,13 +151,25 @@ extension FrameListViewController: TimetableCellDelegate {
 
     private func applySemesterChanges(addedSemesters: [String], removedSemesters: [String]) {
         guard requireStudentAccess() else { return }
+        if !addedSemesters.isEmpty {
+            logSemesterChange(action: "추가", semesters: addedSemesters)
+        }
         inputSubject.send(.modifySemester(addedSemesters, []))
         guard !removedSemesters.isEmpty else { return }
 
         let deleteSemesterModalViewController = DeleteSemesterModalViewController(semesters: removedSemesters) { [weak self] semesters in
+            self?.logSemesterChange(action: "삭제", semesters: semesters)
             self?.inputSubject.send(.modifySemester([], semesters))
         }
         present(deleteSemesterModalViewController, animated: true)
+    }
+
+    /// 명세 2-13·2-14 value: {추가 또는 삭제}_{연도}_{학기}, 여러 학기는 쉼표로 잇는다 (예: 추가_2026_겨울학기).
+    private func logSemesterChange(action: String, semesters: [String]) {
+        let value = semesters
+            .map { "\(action)_\($0.prefix(4))_\(ModifySemesterModalViewController.title(of: $0))" }
+            .joined(separator: ",")
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableSemesterManageEditApplyClick, value))
     }
 
     private func presentDeleteFrameModal(frame: FrameDto) {

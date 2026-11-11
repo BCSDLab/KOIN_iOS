@@ -119,7 +119,7 @@ extension ModifySemesterModalViewController {
         }
     }
 
-    private static func title(of code: String) -> String {
+    static func title(of code: String) -> String {
         switch code.dropFirst(4) {
         case "1": return "1학기"
         case "-여름": return "여름학기"
