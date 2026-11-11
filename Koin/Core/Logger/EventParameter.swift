@@ -13,6 +13,8 @@ protocol EventLabelType {
     var rawValue: String { get }
     /// 기본값은 page 구간. 명세의 screen_view가 page 구간과 다른 label만 재정의한다.
     var screenView: String? { get }
+    /// 기본값은 service 구간의 담당 팀. 명세의 event_name이 다른 label만 재정의한다.
+    var team: String { get }
 }
 
 extension EventLabelType {
@@ -359,6 +361,16 @@ enum EventParameter {
 
         enum Chat: String, EventLabelType {
             case chatListChatConversationEntryClick = "chat__chat_list__chat_conversation__entry__click"
+        }
+
+        enum ForceUpdate: String, EventLabelType {
+            case forcedUpdateAppUpdateExposure = "main__forced_update__app_update__exposure"
+            case forcedUpdateAppUpdateStoreEntryClick = "main__forced_update__app_update__store_entry__click"
+            case forcedUpdateAppUpdateAlreadyDoneClick = "main__forced_update__app_update__already_done__click"
+            case forcedUpdateUpdatePopupCloseClick = "main__forced_update__update_popup__close__click"
+            case forcedUpdateUpdatePopupStoreEntryClick = "main__forced_update__update_popup__store_entry__click"
+            // 명세 event_name이 main 구간의 DA2가 아닌 DA1이다.
+            var team: String { "DA1" }
         }
 
         enum Home {

@@ -10,7 +10,8 @@ import Combine
 final class ForceUpdateViewModel: ViewModelProtocol {
     
     enum Input {
-        case logEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
+        case logLegacyEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
         case checkVersion
     }
     enum Output {
@@ -30,8 +31,10 @@ final class ForceUpdateViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.logAnalyticsEventUseCase.execute(label: label, value: value)
+            case let .logLegacyEvent(label, category, value):
+                self?.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
             case .checkVersion:
                 self?.checkVersion()
             }
@@ -49,10 +52,5 @@ extension ForceUpdateViewModel {
                 self?.outputSubject.send(.isLowVersion(response.0))
             }
         ).store(in: &subscriptions)
-    }
-
-    
-    private func makeLogAnalyticsEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
     }
 }

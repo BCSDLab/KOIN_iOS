@@ -16,9 +16,6 @@ enum LegacyEventParameter {
     enum EventLabel {
         enum ForceUpdate: String, LegacyEventLabelType {
             case forceUpdateExit = "forced_update_exit"
-            case forceUpdateConfirm = "forced_update_confirm"
-            case forceUpdateAlreadyDone = "forced_update_already_done"
-            case alreadyUpdatePopup = "already_update_popup"
             var team: String {
                 return "FORCE_UPDATE"
             }
