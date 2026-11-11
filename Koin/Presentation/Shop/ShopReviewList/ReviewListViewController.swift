@@ -97,7 +97,6 @@ final class ReviewListViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
-        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopDetailViewReviewBack))
     }
     
     private func bind() {
@@ -108,9 +107,10 @@ final class ReviewListViewController: UIViewController {
 
 extension ReviewListViewController: PopLoggable {
     func sendPopLog(category: EventParameter.EventCategory) {
-        let shopName = self.viewModel.getShopName()
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopDetailViewReviewBack))
-        inputSubject.send(.logEventWithDuration(EventParameter.EventLabel.Business.shopDetailViewReviewBack, category, shopName, nil, nil, nil, .shopDetailViewReviewBack))
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.Shop.shopDetailNavigationReviewExitSwipe
+            : EventParameter.EventLabel.Shop.shopDetailNavigationReviewExitClick
+        inputSubject.send(.logEvent(label, category == .swipe ? "스와이프" : "뒤로가기"))
     }
 }
 
@@ -200,7 +200,8 @@ extension ReviewListViewController {
         
         reviewListCollectionView.reportButtonPublisher
             .sink { [weak self] parameter in
-                self?.inputSubject.send(.checkLoginForReportReview(parameter))
+                guard let self else { return }
+                inputSubject.send(.checkLoginForReportReview(parameter))
             }
             .store(in: &cancellables)
         
@@ -242,12 +243,12 @@ extension ReviewListViewController: UIScrollViewDelegate {
     }
     func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
         if !decelerate {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailShopReviewScroll, viewModel.getShopName()))
         }
     }
     
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReview, .scroll, viewModel.getShopName()))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailShopReviewScroll, viewModel.getShopName()))
     }
 
 }
@@ -295,7 +296,7 @@ extension ReviewListViewController {
             .sink { [weak self] index in
                 let selectedSortType = ReviewSortType.allCases[index]
                 
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewCan, .click, options[index]))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailFilterReviewSortClick, options[index]))
                 self?.inputSubject.send(.changeFilter(sorter: selectedSortType, isMine: nil))
             }
             .store(in: &cancellables)
@@ -306,8 +307,7 @@ extension ReviewListViewController {
     private func handleDeleteReview(_ parameter: (Int, Int)) {
         viewModel.deleteParameter = parameter
         inputSubject.send(.logEvent(
-            EventParameter.EventLabel.Business.shopDetailViewReviewDelete,
-            .click,
+            EventParameter.EventLabel.Shop.shopDetailReviewDeleteOpenClick,
             viewModel.getShopName()
         ))
         
@@ -317,11 +317,11 @@ extension ReviewListViewController {
             button: .buttons(
                 leftButtonTitle: "취소하기",
                 leftButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "X"))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailReviewDeleteCancelClick, self?.viewModel.getShopName() ?? ""))
                 },
                 rightButtonTitle: "삭제하기",
                 rightButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewDeleteDone, .click, "O"))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailReviewDeleteConfirmClick, self?.viewModel.getShopName() ?? ""))
                     self?.deleteReview()
                 }
             )
@@ -355,12 +355,12 @@ extension ReviewListViewController {
             button: .buttons(
                 leftButtonTitle: "닫기",
                 leftButtonAction: { [weak self] in
-                    guard message == "작성", let self else { return }
-                    inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteCancel, .click, viewModel.getShopName()))
+                    guard let self else { return }
+                    inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailLoginPopupCloseClick, viewModel.getShopName()))
                 },
                 rightButtonTitle: "로그인하기",
                 rightButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.loginPrompt, .click, "리뷰 \(message) 팝업"))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailLoginPopupLoginEntryClick, self?.viewModel.getShopName() ?? ""))
                     self?.showLoginScreen()
                 }
             )
@@ -399,8 +399,7 @@ extension ReviewListViewController {
         bindShopReviewViewController(viewController)
         
         inputSubject.send(.logEvent(
-            EventParameter.EventLabel.Business.shopDetailViewReviewWrite,
-            .click,
+            EventParameter.EventLabel.Shop.shopDetailReviewWriteEntryClick,
             viewModel.getShopName()
         ))
         
@@ -417,6 +416,7 @@ extension ReviewListViewController {
     }
     
     private func navigateToReportReview(reviewId: Int, shopId: Int) {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailReviewReportEntryClick, viewModel.getShopName()))
         let viewController = makeShopReviewReportViewController(reviewId: reviewId, shopId: shopId, shopName: viewModel.getShopName())
         
         bindShopReviewReportViewController(viewController)
@@ -443,7 +443,6 @@ extension ReviewListViewController {
             logAnalyticsEventUseCase: DefaultLogAnalyticsEventUseCase(
                 repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
             ),
-            getUserScreenTimeUseCase: DefaultGetUserScreenTimeUseCase(),
             reviewId: reviewId,
             shopId: shopId,
             shopName: shopName

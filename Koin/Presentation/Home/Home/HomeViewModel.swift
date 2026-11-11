@@ -19,12 +19,13 @@ final class HomeViewModel: SwiftUIViewModelProtocol {
         case refresh
         case didShowToast
         case didShowBanner
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
 
     // MARK: - State
     private(set) var header: HomeHeader = HomeHeader.empty()
-    private(set) var diningItems: [HomeDiningItem] = []
+    private(set) var diningResult: HomeDiningResult?
+    var diningItems: [HomeDiningItem] { diningResult?.items ?? [] }
     private(set) var callVanRecruitingCount: Int = 0
     private(set) var eventCount: Int = 0
     private(set) var openShopCount: Int = 0
@@ -88,8 +89,8 @@ final class HomeViewModel: SwiftUIViewModelProtocol {
             toastMessage = nil
         case .didShowBanner:
             bannerToPresent = nil
-        case let .logEvent(label, category, value):
-            makeLogAnalyticsEvent(label: label, category: category, value: value)
+        case let .logEvent(label, value):
+            makeLogAnalyticsEvent(label: label, value: value)
         }
     }
 }
@@ -164,9 +165,9 @@ extension HomeViewModel {
                     self?.isLoading = false
                 }
             },
-            receiveValue: { [weak self] header, diningItems, counts in
+            receiveValue: { [weak self] header, diningResult, counts in
                 self?.header = header
-                self?.diningItems = diningItems
+                self?.diningResult = diningResult
                 self?.callVanRecruitingCount = counts.callVanRecruitingCount
                 self?.eventCount = counts.eventCount
                 self?.openShopCount = counts.openShopCount
@@ -198,9 +199,8 @@ extension HomeViewModel {
 
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

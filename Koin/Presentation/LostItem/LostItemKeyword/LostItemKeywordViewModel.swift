@@ -16,7 +16,7 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
         case subscribeKeyword(String)
         case submitKeyword(String)
         case notificationSwitchTapped(isOn: Bool)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case showLoginModal
@@ -96,8 +96,8 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
                 subscribeKeyword(keyword, clearInputOnSuccess: true)
             case .notificationSwitchTapped(let isOn):
                 changeSubscription(isPermit: isOn)
-            case let .logEvent(label, category, value):
-                self.logEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self.logEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -106,8 +106,8 @@ final class LostItemKeywordViewModel: ViewModelProtocol {
 
 extension LostItemKeywordViewModel {
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func logEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
     
     private func checkLogin(completion: @escaping (Bool)->Void) {
@@ -179,6 +179,12 @@ extension LostItemKeywordViewModel {
             outputSubject.send(.showToastKeywordLength)
             return
         }
+        // 비로그인·개수·길이로 거부된 시도는 기록하지 않는다.
+        if clearInputOnSuccess {
+            logEvent(label: EventParameter.EventLabel.LostItem.lostItemKeywordManageKeywordManageAddSubmit, value: keyword)
+        } else {
+            logEvent(label: EventParameter.EventLabel.LostItem.lostItemKeywordManageKeywordManageRecommendedKeywordSelect, value: keyword)
+        }
         
         subscribeKeywordUseCase.execute(keyword: keyword).sink(
             receiveCompletion: { [weak self] completion in
@@ -201,6 +207,7 @@ extension LostItemKeywordViewModel {
             outputSubject.send(.showLoginModal)
             return
         }
+        logEvent(label: EventParameter.EventLabel.LostItem.lostItemKeywordManageKeywordManageNotificationClick, value: isPermit ? "받기" : "끄기")
         changeNotiUseCase.execute(method: isPermit ? .post : .delete, type: .lostItemKeyword).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {

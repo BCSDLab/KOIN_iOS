@@ -25,11 +25,10 @@ final class CustomNavigationController: UINavigationController, UIGestureRecogni
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
         guard let transitionCoordinator = navigationController.transitionCoordinator,
-              let fromVC = transitionCoordinator.viewController(forKey: .from),
-              let toVC = transitionCoordinator.viewController(forKey: .to) else {
+              let fromVC = transitionCoordinator.viewController(forKey: .from) else {
             return
         }
-        let isPop = navigationController.viewControllers.contains(toVC)
+        let isPop = !navigationController.viewControllers.contains(fromVC)
         let isSwipe = transitionCoordinator.isInteractive
         
         if isPop, let loggableVC = fromVC as? PopLoggable {

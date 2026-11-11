@@ -17,6 +17,7 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
         case setAllNotificationsRead
         case deleteNotification(Int)
         case deleteAllNotifications
+        case logEvent(EventLabelType, Any)
     }
     
     enum Output {
@@ -30,6 +31,7 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
     private let postAllNotificationsReadUseCase: PostAllNotificationsReadUseCase
     private let deleteAllNotificationsUseCase: DeleteAllNotificationsUseCase
     private let deleteNotificationUseCase: DeleteNotificationUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
@@ -38,12 +40,14 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
          postNotificationReadUseCase: PostNotificationReadUseCase,
          postAllNotificationsReadUseCase: PostAllNotificationsReadUseCase,
          deleteNotificationUseCase: DeleteNotificationUseCase,
-         deleteAllNotificationsUseCase: DeleteAllNotificationsUseCase) {
+         deleteAllNotificationsUseCase: DeleteAllNotificationsUseCase,
+         logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchCallVanNotificationListUseCase = fetchCallVanNotificationListUseCase
         self.postNotificationReadUseCase = postNotificationReadUseCase
         self.postAllNotificationsReadUseCase = postAllNotificationsReadUseCase
         self.deleteNotificationUseCase = deleteNotificationUseCase
         self.deleteAllNotificationsUseCase = deleteAllNotificationsUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     // MARK: - Transform
@@ -61,6 +65,8 @@ final class CallVanNotificationViewModel: ViewModelProtocol {
                 deleteNotification(notificationId)
             case .deleteAllNotifications:
                 deleteAllNotifications()
+            case let .logEvent(label, value):
+                logAnalyticsEventUseCase.execute(label: label, value: value)
             case .refresh:
                 refresh()
             }

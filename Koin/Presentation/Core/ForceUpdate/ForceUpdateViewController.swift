@@ -117,6 +117,8 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         navigationController?.navigationBar.isHidden = true
+        let version = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdateAppUpdateExposure, "v\(version)"))
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -147,7 +149,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         // 백그라운드 진입 시
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdateAppUpdateExit, "앱 이탈"))
             }.store(in: &subscriptions)
         
         // 포그라운드 복귀 시
@@ -169,7 +171,7 @@ extension ForceUpdateViewController {
     
     @objc private func updateButtonTapped() {
         openStore()
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateConfirm, .update, "업데이트하기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdateAppUpdateStoreEntryClick, "업데이트하기"))
     }
     
     private func openStore() {
@@ -189,17 +191,17 @@ extension ForceUpdateViewController {
             button: .buttons(
                 leftButtonTitle: "닫기",
                 leftButtonAction: { [weak self] in
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "확인"))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdateUpdatePopupCloseClick, "닫기"))
                 },
                 rightButtonTitle: "스토어 가기",
                 rightButtonAction: { [weak self] in
                     self?.openStore()
-                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.alreadyUpdatePopup, .click, "스토어로 가기"))
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdateUpdatePopupStoreEntryClick, "스토어 가기"))
                 }
             )
         ))
         present(modalViewController, animated: true, completion: nil)
-        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forceUpdateAlreadyDone, .click, "이미업데이트"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdateAppUpdateAlreadyDoneClick, "이미업데이트"))
     }
 }
 

@@ -151,13 +151,25 @@ extension FrameListViewController: TimetableCellDelegate {
 
     private func applySemesterChanges(addedSemesters: [String], removedSemesters: [String]) {
         guard requireStudentAccess() else { return }
+        if !addedSemesters.isEmpty {
+            logSemesterChange(action: "추가", semesters: addedSemesters)
+        }
         inputSubject.send(.modifySemester(addedSemesters, []))
         guard !removedSemesters.isEmpty else { return }
 
         let deleteSemesterModalViewController = DeleteSemesterModalViewController(semesters: removedSemesters) { [weak self] semesters in
+            self?.logSemesterChange(action: "삭제", semesters: semesters)
             self?.inputSubject.send(.modifySemester([], semesters))
         }
         present(deleteSemesterModalViewController, animated: true)
+    }
+
+    /// 명세 2-13·2-14 value: {추가 또는 삭제}_{연도}_{학기}, 여러 학기는 쉼표로 잇는다 (예: 추가_2026_겨울학기).
+    private func logSemesterChange(action: String, semesters: [String]) {
+        let value = semesters
+            .map { "\(action)_\($0.prefix(4))_\(ModifySemesterModalViewController.title(of: $0))" }
+            .joined(separator: ",")
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableSemesterManageEditApplyClick, value))
     }
 
     private func presentDeleteFrameModal(frame: FrameDto) {
@@ -174,8 +186,14 @@ extension FrameListViewController: UITableViewDelegate, UITableViewDataSource {
         // 셀 탭 이벤트 처리
         let section = indexPath.section
         let row = indexPath.row
+        let isNewSelection = viewModel.selectedFrameId != viewModel.frameData[section].frame[row].id
         viewModel.selectedSemester = viewModel.frameData[section].semester
         viewModel.selectedFrameId = viewModel.frameData[section].frame[row].id
+        if isNewSelection {
+            // 명세 2-27 value: {연도}_{학기}_{시간표명} (예: 2026_2학기_기본 시간표)
+            let semesterValue = viewModel.frameData[section].semester.reverseFormatSemester().replacingOccurrences(of: "년 ", with: "_")
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableListTimetableListSelect, "\(semesterValue)_\(viewModel.frameData[section].frame[row].timetableName)"))
+        }
         navigationController?.popViewController(animated: true)
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

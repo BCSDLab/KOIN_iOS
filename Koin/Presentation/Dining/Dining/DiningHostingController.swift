@@ -125,9 +125,9 @@ extension DiningHostingController {
     @objc private func didTapReportButton() {
         if let reportAbTestName {
             rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutStart,
-                category: .click,
-                value: reportAbTestName
+                label: EventParameter.EventLabel.Dining.SoldOutReport.cafeteriaDiningSoldoutStart,
+                value: reportAbTestName,
+                category: .click
             )
         }
         showReportModal(selectedPlace: nil)
@@ -135,8 +135,7 @@ extension DiningHostingController {
     
     @objc private func didTapCoopInfoButton() {
         rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Dining.cafeteriaInfo,
-            category: .click,
+            label: EventParameter.EventLabel.Dining.cafeteriaCafeteriaInfoEntryClick,
             value: "학생식당정보"
         )
         navigateToCoopInfo()
@@ -202,9 +201,9 @@ extension DiningHostingController {
                 }
                 if let reportAbTestName, let selectedPlace = modalView?.selectedPlace {
                     rootView.makeLogAnalyticsEvent(
-                        label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutExit,
-                        category: .click,
-                        value: "\(reportAbTestName)_\(selectedPlace.name)_이탈"
+                        label: EventParameter.EventLabel.Dining.SoldOutReport.cafeteriaDiningSoldoutExit,
+                        value: "\(reportAbTestName)_\(selectedPlace.name)_이탈",
+                        category: .click
                     )
                 }
                 dismiss(animated: true)
@@ -214,8 +213,7 @@ extension DiningHostingController {
                     return
                 }
                 rootView.makeLogAnalyticsEvent(
-                    label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSelect,
-                    category: .select,
+                    label: EventParameter.EventLabel.Dining.SoldOutReport.cafeteriaDiningSoldoutSelect,
                     value: "\(reportAbTestName)_\(place.name)"
                 )
             },
@@ -225,9 +223,9 @@ extension DiningHostingController {
                 }
                 if let reportAbTestName, let selectedPlace = modalView?.selectedPlace {
                     rootView.makeLogAnalyticsEvent(
-                        label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutPhoto,
-                        category: .click,
-                        value: "\(reportAbTestName)_\(selectedPlace.name)"
+                        label: EventParameter.EventLabel.Dining.SoldOutReport.cafeteriaDiningSoldoutPhoto,
+                        value: "\(reportAbTestName)_\(selectedPlace.name)",
+                        category: .click
                     )
                 }
                 checkAndPresentPicker()

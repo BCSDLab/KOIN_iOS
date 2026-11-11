@@ -103,7 +103,7 @@ final class ShopSearchViewController: UIViewController {
         }.store(in: &subscriptions)
         
         shopSearchTableView.didTapCellPublisher.sink { [weak self] (shopId, shopName) in
-            self?.viewModel.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopCategoriesSearchClick, category: .click, value: shopName)
+            self?.viewModel.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Shop.shopSearchShopDetailEntryClick, value: shopName)
             self?.navigateTo(shopId: shopId, shopName: shopName)
         }.store(in: &subscriptions)
         
@@ -118,7 +118,6 @@ extension ShopSearchViewController {
     
     private func setAddTarget() {
         searchTextField.addTarget(self, action: #selector(keywordDidChange(_:)), for: .editingChanged)
-        searchTextField.addTarget(self, action: #selector(searchDidBegin(_:)), for: .editingDidBegin)
     }
     private func setDelegate() {
         searchTextField.delegate = self
@@ -128,11 +127,6 @@ extension ShopSearchViewController {
 // MARK: - @objc
 extension ShopSearchViewController {
     
-    @objc private func searchDidBegin(_ textField: UITextField) {
-        let currentCategoryName = viewModel.selectedCategoryName
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategoriesSearch, .click, "search in \(currentCategoryName)"))
-    }
-
     @objc private func keywordDidChange(_ sender: UITextField) {
         guard let text = searchTextField.text else { return }
         if text == "" {
@@ -161,11 +155,9 @@ extension ShopSearchViewController {
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopSummaryViewModel(
             fetchShopSummaryUseCase: fetchShopSummaryUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             shopId: shopId,
             shopName: shopName
         )

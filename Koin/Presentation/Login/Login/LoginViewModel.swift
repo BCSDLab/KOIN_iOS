@@ -12,8 +12,8 @@ final class LoginViewModel: ViewModelProtocol {
     
     enum Input {
         case login(String, String)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
-        case logSessionEvent(EventLabelType, EventParameter.EventCategory, Any, String)
+        case logEvent(EventLabelType, Any)
+        case logSignUpEvent(EventLabelType, Any)
     }
     enum Output {
         case showErrorMessage(String)
@@ -46,10 +46,10 @@ final class LoginViewModel: ViewModelProtocol {
             switch input {
             case let .login(loginId, loginPw):
                 self?.login(loginId: loginId, loginPw: loginPw)
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
-            case let .logSessionEvent(label, category, value, sessionId):
-                self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
+            case let .logSignUpEvent(label, value):
+                self?.makeSignUpLogEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         
@@ -62,19 +62,26 @@ extension LoginViewModel {
     private func login(loginId: String, loginPw: String) {
         loginUseCase.execute(loginId: loginId, loginPw: loginPw).sink { [weak self] completion in
             if case .failure(let error) = completion {
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Account.loginLoginConfirmClick, value: "로그인 실패")
                 self?.outputSubject.send(.showErrorMessage(error.message))
             }
         } receiveValue: { [weak self] response in
             KeychainWorker.shared.create(key: .access, token: response.token)
             KeychainWorker.shared.create(key: .refresh, token: response.refreshToken)
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.User.login, category: .click, value: "로그인")
             self?.setUserInfo()
             self?.sendDeviceTokenIfNeededUseCase.execute()
         }.store(in: &subscriptions)
     }
+    /// 명세 2-3: 기존처럼 사용자 정보를 저장한 뒤 로그인 성공을 알릴 때 기록한다.
+    private func sendLoginSuccess() {
+        makeLogAnalyticsEvent(label: EventParameter.EventLabel.Account.loginLoginConfirmClick, value: "로그인 완료")
+        outputSubject.send(.loginSuccess)
+    }
+
     private func setUserInfo() {
         fetchUserDataUseCase.execute().sink { [weak self] completion in
             if case .failure(let error) = completion {
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Account.loginLoginConfirmClick, value: "로그인 실패")
                 self?.outputSubject.send(.showErrorMessage(error.message))
             }
         } receiveValue: { [weak self] response in
@@ -94,21 +101,24 @@ extension LoginViewModel {
                     }
                     
                 } else {
-                    self?.outputSubject.send(.loginSuccess)
+                    self?.sendLoginSuccess()
                 }
             } else {
-                self?.outputSubject.send(.loginSuccess)
+                self?.sendLoginSuccess()
             }
         }.store(in: &subscriptions)
 
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
-    
-    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
+
+    /// 회원가입 계약은 명세상 15분 유지되는 custom_session_id를 함께 보낸다.
+    private func makeSignUpLogEvent(label: EventLabelType, value: Any) {
+        let sessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
+        logAnalyticsEventUseCase.execute(label: label, value: value, parameters: ["custom_session_id": sessionId])
     }
+
 }
 

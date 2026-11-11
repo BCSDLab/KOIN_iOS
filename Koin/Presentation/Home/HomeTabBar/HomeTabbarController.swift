@@ -195,8 +195,7 @@ extension HomeTabBarController {
     
     @objc private func rightBarButtonTapped() {
         inputSubject.send(.logEvent(
-            EventParameter.EventLabel.Campus.Notification.notification,
-            .click,
+            EventParameter.EventLabel.Home.DA2.mainMainNotificationListEntryClick,
             "알림 아이콘"
         ))
         navigateToNotification()
@@ -258,7 +257,7 @@ extension HomeTabBarController {
     
     private func makeLogEvent(tag: Int) {
         if let tab = HomeTab.init(rawValue: tag) {
-            inputSubject.send(.logEvent(tab.logLabel, .click, tab.title))
+            inputSubject.send(.logEvent(tab.logLabel, tab == .board ? "공지사항" : tab.title))
         }
     }
 }

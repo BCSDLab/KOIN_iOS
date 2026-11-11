@@ -40,6 +40,7 @@ struct DiningCarousel: View {
                         title: item.placeName,
                         isSelected: selectedID == item.id
                     ) {
+                        guard selectedID != item.id else { return }
                         withAnimation(.easeInOut(duration: 0.2)) {
                             selectedID = item.id
                         }

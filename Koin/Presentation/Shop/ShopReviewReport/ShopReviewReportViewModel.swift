@@ -12,7 +12,7 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     // MARK: - Input
     
     enum Input {
-        case reportReview(ReportReviewRequest,[String])
+        case reportReview(ReportReviewRequest)
     }
     
     // MARK: - Output
@@ -45,8 +45,8 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .reportReview(requestModel,selectedItems):
-                self?.reportReview(requestModel,selectedItems)
+            case let .reportReview(requestModel):
+                self?.reportReview(requestModel)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -56,7 +56,8 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
 
 extension ShopReviewReportViewModel {
    
-    private func reportReview(_ requestModel: ReportReviewRequest, _ selectedItems: [String]) {
+    private func reportReview(_ requestModel: ReportReviewRequest) {
+        makeLogAnalyticsEvent(label: EventParameter.EventLabel.Shop.shopDetailReviewReportConfirmClick, value: shopName)
         reportReviewReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.outputSubject.send(.showToast(error.message))
@@ -64,13 +65,10 @@ extension ShopReviewReportViewModel {
         } receiveValue: { [weak self] _ in
             guard let self = self else { return }
             self.outputSubject.send(.sendReviewInfo(self.reviewId, self.shopId))
-            let value = selectedItems.joined(separator: ",")
-            
-            self.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Business.shopDetailViewReviewReport, category: .click, value: value)
         }.store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

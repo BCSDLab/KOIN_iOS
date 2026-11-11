@@ -42,3 +42,13 @@ enum BusPlace: String, Decodable, CaseIterable {
         }
     }
 }
+
+extension BusPlace {
+    var loggingValue: String {
+        switch self {
+        case .koreatech: return "코리아텍"
+        case .station: return "천안역"
+        case .terminal: return "천안터미널"
+        }
+    }
+}

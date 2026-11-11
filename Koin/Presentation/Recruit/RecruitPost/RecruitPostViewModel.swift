@@ -18,7 +18,7 @@ final class RecruitPostViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
         case submit(RecruitPostRequest)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case updateLoading(Bool)
@@ -61,8 +61,8 @@ final class RecruitPostViewModel: ViewModelProtocol {
                 applyDataIfModifying()
             case let .submit(form):
                 submit(form)
-            case let .logEvent(label, category, value):
-                logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                logAnalyticsEventUseCase.execute(label: label, value: value)
             }
         }.store(in: &subscriptions)
         

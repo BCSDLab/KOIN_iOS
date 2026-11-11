@@ -398,6 +398,7 @@ extension TimetableViewController {
             dismissTimetableSheet()
             return
         }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableTimetableListEntryClick, "학기 시간표 선택"))
         navigationController?.pushViewController(FrameListViewController(viewModel: viewModel), animated: true)
     }
     private func updateTimetable(lectureData: [LectureData]) {
@@ -534,6 +535,7 @@ extension TimetableViewController {
     }
     @objc private func modifyTimetableButtonTapped() {
         guard requireStudentAccess() else { return }
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableTimetableEditEntryClick, "시간표 수정"))
         addClassCollectionView.setUpSelectedDept(dept: nil)
         inputSubject.send(.selectedDepartment(nil))
         
@@ -704,6 +706,7 @@ extension TimetableViewController {
             ))
             present(modal, animated: true)
         } else {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableTimetableExportImageSaveClick, "이미지 저장"))
             showToastMessage(message: "시간표를 저장했어요")
         }
     }
@@ -957,5 +960,15 @@ extension UIViewController {
         }
         present(KoinModalViewController(configuration: configuration), animated: true)
         return false
+    }
+}
+
+extension TimetableViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        if category == .swipe {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableNavigationBackSwipe, "OS 스와이프"))
+        } else {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Timetable.timetableNavigationBackClick, "뒤로가기"))
+        }
     }
 }

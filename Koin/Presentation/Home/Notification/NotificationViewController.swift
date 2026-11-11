@@ -66,11 +66,14 @@ private extension NotificationViewController {
             .store(in: &subscriptions)
         
         notificationListView.deletePublisher
-            .sink { [weak self] id in
+            .sink { [weak self] deletion in
                 guard let self else { return }
-                self.inputSubject.send(.deleteNotification(id: id))
+                self.inputSubject.send(.deleteNotification(id: deletion.id))
                 self.showToastMessage(message: "알림이 삭제되었습니다.")
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListDelete, .click, "알림 삭제"))
+                let label: EventLabelType = deletion.isSwipe
+                    ? EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListDeleteSwipe
+                    : EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListDeleteClick
+                self.inputSubject.send(.logEvent(label, "알림 삭제"))
             }
             .store(in: &subscriptions)
         
@@ -129,7 +132,6 @@ extension NotificationViewController {
         }
     }
 }
-
 
 extension NotificationViewController {
     private func parseQuery(uri: String) -> [String: String]? {
@@ -287,11 +289,9 @@ extension NotificationViewController {
         let repository = DefaultShopRepository(service: DefaultShopService())
         let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(shopRepository: repository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopSummaryViewModel(
             fetchShopSummaryUseCase: fetchShopSummaryUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             shopId: shopId,
             shopName: nil
         )
@@ -311,13 +311,13 @@ private extension NotificationViewController {
             markAllAsRead: { [weak self] in
                 self?.inputSubject.send(.markAllAsRead)
                 self?.notificationListView.markAllAsRead()
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListReadAll, .click, "모두 읽음으로 표시"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListReadAllClick, "모두 읽음으로 표시"))
             },
             deleteAll: { [weak self] in
                 self?.inputSubject.send(.deleteAllNotifications)
                 self?.notificationListView.deleteAll()
                 self?.showToastMessage(message: "알림이 삭제되었습니다.")
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notification.notificationListDeleteAll, .click, "알림 전체 삭제"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListDeleteAllClick, "알림 전체 삭제"))
             }
         )
         popUpViewController.modalPresentationStyle = .overFullScreen

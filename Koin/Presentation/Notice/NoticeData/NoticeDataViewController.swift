@@ -156,7 +156,7 @@ final class NoticeDataViewController: UIViewController, UIGestureRecognizerDeleg
         
         hotNoticeArticlesTableView.tapHotArticlePublisher.sink { [weak self] noticeId, noticeTitle, boardId in
             self?.navigateToOtherNoticeDataPage(noticeId: noticeId, boardId: boardId)
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.popularNotice, .click, "\(noticeTitle)"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.noticeDetailNoticeDetailPopularPostEntryClick, noticeId))
         }.store(in: &subscriptions)
         
         noticeAttachmentsTableView.tapDownloadButtonPublisher
@@ -170,13 +170,13 @@ extension NoticeDataViewController {
 
     @objc private func tapUrlRedirectButton(sender: UIButton) {
         if let url = URL(string: noticeUrl), UIApplication.shared.canOpenURL(url) {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeOriginalShortcut, .click, "\(urlRedirectButton.currentTitle ?? "")"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.noticeDetailExternalLinkOriginalEntryClick, "\(urlRedirectButton.currentTitle ?? "")"))
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
     
     @objc private func tapInventoryButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.inventory, .click, "목록"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.noticeDetailNavigationNoticeListReturnClick, "목록으로 돌아가기"))
         guard let navigationController = navigationController else { return }
         if let noticeListViewController = navigationController.viewControllers.last(where: { $0 is NoticeListHostingController }) {
             navigationController.popToViewController(noticeListViewController, animated: true)

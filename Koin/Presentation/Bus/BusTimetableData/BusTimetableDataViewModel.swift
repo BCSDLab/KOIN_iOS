@@ -11,7 +11,7 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
 
     enum Input {
         case getBusTimetable
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
 
     enum Output {
@@ -35,8 +35,8 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
             switch input {
             case .getBusTimetable:
                 self?.getShuttleBusTimetable()
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -52,8 +52,8 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }
 

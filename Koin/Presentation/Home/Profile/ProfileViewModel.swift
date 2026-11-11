@@ -15,7 +15,7 @@ final class ProfileViewModel: SwiftUIViewModelProtocol {
     enum Input {
         case viewDidAppear
         case logout
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     // MARK: - Properties
@@ -48,8 +48,8 @@ final class ProfileViewModel: SwiftUIViewModelProtocol {
         case .viewDidAppear:
             fetchUserInfo()
             fetchTimeTable()
-        case let .logEvent(label, category, value):
-            makeLogAnalyticsEvent(label: label, category: category, value: value)
+        case let .logEvent(label, value):
+            makeLogAnalyticsEvent(label: label, value: value)
         case .logout:
             logout()
         }
@@ -108,9 +108,8 @@ extension ProfileViewModel {
     
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

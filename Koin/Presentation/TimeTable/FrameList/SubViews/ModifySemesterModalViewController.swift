@@ -119,7 +119,7 @@ extension ModifySemesterModalViewController {
         }
     }
 
-    private static func title(of code: String) -> String {
+    static func title(of code: String) -> String {
         switch code.dropFirst(4) {
         case "1": return "1학기"
         case "-여름": return "여름학기"
@@ -132,7 +132,7 @@ extension ModifySemesterModalViewController {
     private func resetSemesterSelection() {
         rebuildSemesterButtons()
         selectedSemesters = Set(semesterCodes).intersection(frameList.map(\.semester))
-        // 항상 1개 이상 선택한다. 등록된 학기가 없는 연도는 가장 최근 학기를 미리 고른다.
+        // 등록된 학기가 없는 연도는 가장 최근 학기를 미리 고른다.
         if selectedSemesters.isEmpty, let latest = semesterCodes.last {
             selectedSemesters.insert(latest)
         }
@@ -166,8 +166,8 @@ extension ModifySemesterModalViewController {
 
     @objc private func semesterButtonPressed(_ sender: RadioButton) {
         let code = semesterCodes[sender.tag]
+        // 모두 해제하고 적용하면 해당 연도의 학기를 모두 삭제한다.
         if selectedSemesters.contains(code) {
-            guard selectedSemesters.count > 1 else { return }
             selectedSemesters.remove(code)
         } else {
             selectedSemesters.insert(code)

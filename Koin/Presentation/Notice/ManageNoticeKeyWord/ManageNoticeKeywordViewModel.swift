@@ -15,7 +15,7 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
         case getMyKeyword
         case changeNotification(isOn: Bool)
         case fetchSubscription
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case updateKeyword([NoticeKeywordDto])
@@ -59,8 +59,8 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
                 self?.changeNotification(isOn: isOn)
             case .fetchSubscription:
                 self?.fetchSubscription()
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -91,7 +91,10 @@ extension ManageNoticeKeywordViewModel {
                         case .sameKeyword:
                             self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
                         case .success:
-                            if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Notice.recommendedKeyword, category: .click, value: keyword) }
+                            let label: EventLabelType = isRecommended
+                                ? EventParameter.EventLabel.Notice.noticeKeywordManageKeywordManageRecommendedKeywordSelect
+                                : EventParameter.EventLabel.Notice.noticeKeywordManageKeywordManageAddSubmit
+                            self?.makeLogAnalyticsEvent(label: label, value: keyword)
                             self?.fetchMyKeyword()
                         }
                     }
@@ -159,14 +162,14 @@ extension ManageNoticeKeywordViewModel {
             },
             receiveValue: { [weak self] response in
                 self?.outputSubject.send(.updateSwitch(isOn: isOn))
-                let value = isOn ? "on" : "off"
-                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Notice.keywordNotification, category: .click, value: value)
+                let value = isOn ? "알림 켜기" : "알림 끄기"
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Notice.noticeKeywordManageKeywordManageNotificationToggle, value: value)
             }
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }
 

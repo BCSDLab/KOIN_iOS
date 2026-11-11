@@ -13,9 +13,9 @@ final class ShopSummaryViewModel {
     // MARK: - Input
     enum Input {
         case viewDidLoad
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
-        case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
-        case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
+
+        case logEvent(EventLabelType, Any)
+
     }
     
     // MARK: - Output
@@ -30,26 +30,20 @@ final class ShopSummaryViewModel {
     private(set) var phonenumber: String = ""
     private(set) var cachedImages: [ShopImage] = []
     private(set) var shopName: String
-    let backCategoryName: String?
 
     private let fetchShopSummaryUseCase: FetchShopSummaryUseCase
     
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
    
     // MARK: - Initializer
     init(fetchShopSummaryUseCase: FetchShopSummaryUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-         getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int,
-         shopName: String?,
-         backCategoryName: String? = nil) {
+         shopName: String?) {
         self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
         self.shopId = shopId
         self.shopName = shopName ?? ""
-        self.backCategoryName = backCategoryName
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
     
     // MARK: - Transform
@@ -59,14 +53,10 @@ final class ShopSummaryViewModel {
             switch input {
             case .viewDidLoad:
                 self.fetchShopSummary(shopId: shopId)
-            case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
-                self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
-                
-            case let .logEventDirect(label, category, value):
-                self.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
-                
-            case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
-                self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+
+            case let .logEvent(label, value):
+                self.logAnalyticsEventUseCase.execute(label: label, value: value)
+
             }
         }
         .store(in: &subscriptions)
@@ -87,27 +77,4 @@ extension ShopSummaryViewModel {
             }
         ).store(in: &subscriptions)
     }
-}
-
-extension ShopSummaryViewModel {
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        if eventLabelNeededDuration != nil {
-            var durationTime: Double = 0.0
-            switch eventLabelNeededDuration {
-            case .shopDetailViewBack, .shopCall:
-                durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
-            default:
-                break
-            }
-            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
-        }
-        else {
-            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
-        }
-    }
-    
-    private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
-    }
-
 }

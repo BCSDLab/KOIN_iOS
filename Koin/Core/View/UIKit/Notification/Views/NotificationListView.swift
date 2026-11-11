@@ -20,7 +20,7 @@ final class NotificationListView: UIView {
     // MARK: - Properties
     let refreshPublisher = PassthroughSubject<Void, Never>()
     let itemTappedPublisher = PassthroughSubject<String, Never>()
-    let deletePublisher = PassthroughSubject<String, Never>()
+    let deletePublisher = PassthroughSubject<(id: String, isSwipe: Bool), Never>()
     let reachedBottomPublisher = PassthroughSubject<Void, Never>()
     private var subscriptions = Set<AnyCancellable>()
     
@@ -88,10 +88,10 @@ private extension NotificationListView {
             .store(in: &subscriptions)
         
         tableView.deletePublisher
-            .sink { [weak self] id in
+            .sink { [weak self] deletion in
                 guard let self else { return }
                 updateStateViews(isEmpty: tableView.isEmpty)
-                deletePublisher.send(id)
+                deletePublisher.send(deletion)
             }
             .store(in: &subscriptions)
         

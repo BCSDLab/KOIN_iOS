@@ -119,12 +119,11 @@ extension LostItemKeywordViewController {
         myKeywordCollectionView.didTapItemPublisher.sink { [weak self] keyword in
             guard let id = keyword.id else { return }
             self?.inputSubject.send(.deleteKeyword(id))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordRemove, .click, keyword.keyword))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemKeywordManageKeywordManageDeleteClick, keyword.keyword))
         }.store(in: &subscriptions)
         
         keywordSuggestionCollectionView.didTapItemPublisher.sink { [weak self] keyword in
             self?.inputSubject.send(.subscribeKeyword(keyword.keyword))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordRecommend, .click, keyword.keyword))
         }.store(in: &subscriptions)
     }
     
@@ -146,15 +145,11 @@ extension LostItemKeywordViewController {
     @objc private func myKeywordAddButtonTapped() {
         if myKeywordAddButton.isEnabled, let text = myKeywordTextField.text {
             inputSubject.send(.submitKeyword(text))
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordAdd, .click, "키워드 추가"))
         }
     }
     
     @objc private func notificationSwitchTapped() {
         inputSubject.send(.notificationSwitchTapped(isOn: notificationSwitch.isOn))
-        if notificationSwitch.isOn {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordAlarm, .click, "키워드 알림받기"))
-        }
     }
 }
 

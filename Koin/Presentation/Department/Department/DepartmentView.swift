@@ -36,6 +36,7 @@ struct DepartmentView: ActionBindableView {
                 VStack(spacing: 0) {
                     DepartmentSearchView(
                         searchButtonTapped: { keyword in
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Department.departmentListSearchClick, keyword))
                             isSearching = true
                             viewModel.execute(.search(keyword))
                         },
@@ -50,6 +51,7 @@ struct DepartmentView: ActionBindableView {
                         VStack(spacing: Layout.rowSpacing) {
                             ForEach(isSearching ? viewModel.searchingDepartments : viewModel.departments) { department in
                                 DepartmentRow(department: department) { phoneNumber in
+                                    viewModel.execute(.logEvent(EventParameter.EventLabel.Department.departmentListContactPhoneCopyClick, "전화번호 복사"))
                                     UIPasteboard.general.string = phoneNumber
                                     sendAction(.showCopyToast)
                                 }

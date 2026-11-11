@@ -30,10 +30,9 @@ struct ProfileView: ActionBindableView {
     }
     func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
-        viewModel.execute(.logEvent(label, category, value))
+        viewModel.execute(.logEvent(label, value))
     }
     
     // MARK: - Body
@@ -45,15 +44,15 @@ struct ProfileView: ActionBindableView {
                 ProfileUserInfoView(
                     loginButtonTapped: {
                         sendAction(.showLogin)
-                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Home.homeLogin, .click, "로그인"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.accountMainProfileLoginEntryClick, "로그인"))
                     },
                     logoutButtonTapped: {
                         sendAction(.showLogout)
-                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Home.homeLogout, .click, "로그아웃"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.accountMainProfileLogoutClick, "로그아웃"))
                     },
                     settingButtonTapped: {
                         sendAction(.showSetting)
-                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Home.homeSettings, .click, "설정"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA2.accountMainProfileAccountConfigEntryClick, "설정"))
                     },
                     userInfo: viewModel.userInfo
                 )
@@ -64,7 +63,7 @@ struct ProfileView: ActionBindableView {
                     lectures: viewModel.lectures,
                     timeTableTapped: {
                         sendAction(.showTimeTable(viewModel.mainFrame))
-                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Home.homeTimetable, .click, "내 시간표"))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Home.DA1.timetableMainProfileTimetableEntryEntryClick, "내 시간표"))
                     }
                 )
                 

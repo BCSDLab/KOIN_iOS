@@ -142,34 +142,34 @@ extension RecruitMyPostApplicantView {
 
 extension RecruitMyPostApplicantView {
     private func makeLogAnalyticsEvent(_ decision: RecruitApplicantDecision) {
-        let label: EventParameter.EventLabel.Campus.Recruit
+        let label: EventParameter.EventLabel.Recruit
         switch decision {
         case .accepted:
-            label = .recruitCreatedPostApplicantApprove
+            label = .teamApplicantDetailTeamApplicationReviewApproveOpenClick
         case .denied:
-            label = .recruitCreatedPostApplicantReject
+            label = .teamApplicantDetailTeamApplicationReviewRejectOpenClick
         }
-        viewModel.execute(.logEvent(label, .click, "\(decision.rawValue)하기"))
+        viewModel.execute(.logEvent(label, "\(decision.rawValue)하기"))
     }
 
     private func showDecisionModal(_ decision: RecruitApplicantDecision) {
-        let cancelLabel: EventParameter.EventLabel.Campus.Recruit
-        let decideLabel: EventParameter.EventLabel.Campus.Recruit
+        let cancelLabel: EventParameter.EventLabel.Recruit
+        let decideLabel: EventParameter.EventLabel.Recruit
         switch decision {
         case .accepted:
-            cancelLabel = .recruitCreatedPostApplicantApproveCancel
-            decideLabel = .recruitCreatedPostApplicantApproveConfirm
+            cancelLabel = .teamApplicantDetailTeamApplicationReviewApproveCancelClick
+            decideLabel = .teamApplicantDetailTeamApplicationReviewApproveConfirmClick
         case .denied:
-            cancelLabel = .recruitCreatedPostApplicantRejectCancel
-            decideLabel = .recruitCreatedPostApplicantRejectConfirm
+            cancelLabel = .teamApplicantDetailTeamApplicationReviewRejectCancelClick
+            decideLabel = .teamApplicantDetailTeamApplicationReviewRejectConfirmClick
         }
         sendAction(.showDecisionModal(
             decision: decision,
             onCancelTapped: {
-                viewModel.execute(.logEvent(cancelLabel, .click, "취소하기"))
+                viewModel.execute(.logEvent(cancelLabel, "취소하기"))
             },
             onDecideTapped: {
-                viewModel.execute(.logEvent(decideLabel, .click, "\(decision.rawValue)하기"))
+                viewModel.execute(.logEvent(decideLabel, "\(decision.rawValue)하기"))
                 decide(decision)
             }
         ))

@@ -22,7 +22,7 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
         case delete(id: Int)
         case didShowToast
         case updateProfile(RecruitProfile)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     // MARK: - State
@@ -101,8 +101,8 @@ final class RecruitListViewModel: SwiftUIViewModelProtocol {
             errorMessage = nil
         case .updateProfile(let profile):
             myRecruitProfile = profile
-        case let .logEvent(label, category, value):
-            makeLogAnalyticsEvent(label: label, category: category, value: value)
+        case let .logEvent(label, value):
+            makeLogAnalyticsEvent(label: label, value: value)
         }
     }
 }
@@ -216,12 +216,10 @@ extension RecruitListViewModel {
 extension RecruitListViewModel {
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
         logAnalyticsEventUseCase.execute(
             label: label,
-            category: category,
             value: value
         )
     }

@@ -7,6 +7,11 @@
 
 import Foundation
 
+struct HomeDiningResult: Equatable {
+    let diningType: DiningType
+    let items: [HomeDiningItem]
+}
+
 struct HomeDiningItem: Equatable, Identifiable {
     let id: Int
     let placeName: String

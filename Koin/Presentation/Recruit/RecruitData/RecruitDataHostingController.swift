@@ -15,6 +15,7 @@ final class RecruitDataHostingController: UIHostingController<RecruitDataView>, 
     
     // MARK: - Propertoes
     private weak var delegate: RecruitDataHostingControllerDelegate?
+    private var isDeleted = false
     
     // MARK: - Initializer
     init(
@@ -108,21 +109,19 @@ extension RecruitDataHostingController {
                     let data = rootView.data else {
                     return
                 }
-                rootView.makeLogAnalyticsEvent(
-                    label: EventParameter.EventLabel.Campus.Recruit.recruitPostEdit,
-                    category: .click,
-                    value: "편집하기"
-                )
                 guard data.state == .recruiting else {
                     showToastMessage(message: "마감된 팀원 모집글입니다.")
                     return
                 }
+                rootView.makeLogAnalyticsEvent(
+                    label: EventParameter.EventLabel.Recruit.teamDetailTeamEditEntryClick,
+                    value: "편집하기"
+                )
                 navigateToEdit(data: data)
             },
             onDeleteButtonTapped: { [weak self] in
                 self?.rootView.makeLogAnalyticsEvent(
-                    label: EventParameter.EventLabel.Campus.Recruit.recruitPostDelete,
-                    category: .click,
+                    label: EventParameter.EventLabel.Recruit.teamDetailTeamDeleteOpenClick,
                     value: "삭제하기"
                 )
                 self?.showDeleteModal()
@@ -138,15 +137,13 @@ extension RecruitDataHostingController {
     private func showDeleteModal() {
         let onCancelButtonTapped: ()->Void = { [weak self] in
             self?.rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.Recruit.recruitPostDeleteCancel,
-                category: .click,
+                label: EventParameter.EventLabel.Recruit.teamDetailTeamDeleteCancelClick,
                 value: "취소하기"
             )
         }
         let onDeleteButtonTapped: ()->Void = { [weak self] in
             self?.rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.Recruit.recruitPostDeleteConfirm,
-                category: .click,
+                label: EventParameter.EventLabel.Recruit.teamDetailTeamDeleteConfirmClick,
                 value: "삭제하기"
             )
             self?.rootView.didTapDelete()
@@ -235,6 +232,7 @@ extension RecruitDataHostingController {
             return
         }
         delegate?.delete(id: id)
+        isDeleted = true
         navigationController?.popViewController(animated: true)
     }
     
@@ -251,6 +249,14 @@ extension RecruitDataHostingController {
         )
         let viewController = RecruitPostViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
+    }
+}
+
+extension RecruitDataHostingController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        // 명세는 뒤로가기 버튼 클릭만 정의한다. 삭제 후 자동으로 돌아가는 경우는 제외한다.
+        guard category == .click, !isDeleted else { return }
+        rootView.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Recruit.teamDetailNavigationBackClick, value: "뒤로가기")
     }
 }
 

@@ -24,6 +24,7 @@ final class TimetableViewModel: ViewModelProtocol {
         case saveCustomLecture(TimetableLecture)
         
         case selectedDepartment(String?)
+        case logEvent(EventLabelType, Any)
     }
     
     // MARK: - Output
@@ -42,6 +43,7 @@ final class TimetableViewModel: ViewModelProtocol {
         case modifyFrame(FrameDto)
         case modifySemester([String], [String])
         case fetchSemesters
+        case logEvent(EventLabelType, Any)
     }
     enum NextOutput {
         case reloadData
@@ -100,6 +102,7 @@ final class TimetableViewModel: ViewModelProtocol {
     private lazy var fetchDeptListUseCase = DefaultFetchDeptListUseCase(timetableRepository: timetableRepository)
     private lazy var fetchLectureUseCase = DefaultFetchLectureUseCase(timetableRepository: timetableRepository)
     private lazy var fetchSemesterUseCase = DefaultFetchSemesterUseCase(timetableRepository: timetableRepository)
+    private lazy var logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
     
     // 현재 선택된 학기
     var selectedSemester: String? {
@@ -161,6 +164,8 @@ final class TimetableViewModel: ViewModelProtocol {
                 self?.saveCustomLecture(request)
             case let .selectedDepartment(selectedDepartment):
                 self?.selectedDepartment = selectedDepartment
+            case let .logEvent(label, value):
+                self?.logAnalyticsEventUseCase.execute(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -188,6 +193,8 @@ final class TimetableViewModel: ViewModelProtocol {
                 }
             case .fetchSemesters:
                 self?.fetchSemesters(showsModal: true)
+            case let .logEvent(label, value):
+                self?.logAnalyticsEventUseCase.execute(label: label, value: value)
             }
             return Empty()
         }

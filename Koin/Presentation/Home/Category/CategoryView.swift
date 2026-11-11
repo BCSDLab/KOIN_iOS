@@ -41,10 +41,9 @@ struct CategoryView: ActionBindableView {
     // MARK: - Public
     func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
-        viewModel.execute(.logEvent(label, category, value))
+        viewModel.execute(.logEvent(label, value))
     }
 
     // MARK: - Body
@@ -122,7 +121,7 @@ private extension CategoryView {
         sendAction(action)
         
         if let loggingInfo = loggingInfo(for: action) {
-            viewModel.execute(.logEvent(loggingInfo.label, .click, loggingInfo.value))
+            viewModel.execute(.logEvent(loggingInfo.label, loggingInfo.value))
         }
     }
 
@@ -157,34 +156,34 @@ private extension CategoryView {
         }
     }
 
-    private func loggingInfo(for action: Action) -> (label: EventParameter.EventLabel.Campus.Home, value: String)? {
+    private func loggingInfo(for action: Action) -> (label: EventLabelType, value: String)? {
         switch action {
         case .showRecruit:
-            return nil // TODO: 로깅 추가
+            return (EventParameter.EventLabel.Home.DA1.teamRecruitMainCategoryCategoryNavigationTeamRecruitEntryClick, "팀원 모집")
         case .showLostItem:
-            return (.categoryLostProperty, "분실물")
+            return (EventParameter.EventLabel.Home.DA2.boardMainCategoryCategoryNavigationLostItemEntryClick, "분실물")
         case .showFacility:
-            return (.categoryCampus, "교내 시설물 정보")
+            return (EventParameter.EventLabel.Home.DA2.facilityMainCategoryCategoryNavigationFacilityEntryClick, "교내 시설물 정보")
         case .showDepartment:
-            return (.categoryCampus, "학교 부서정보")
+            return (EventParameter.EventLabel.Home.DA2.departmentMainCategoryCategoryNavigationDepartmentEntryClick, "학교 부서 정보")
         case .showDining:
-            return (.categoryCampus, "식단")
+            return (EventParameter.EventLabel.Home.DA1.cafeteriaMainCategoryCategoryNavigationCafeteriaEntryClick, "식단")
         case .showShop:
-            return (.categoryCampus, "주변상점")
+            return (EventParameter.EventLabel.Home.DA1.shopMainCategoryCategoryNavigationShopEntryClick, "주변상점")
         case .showTimetable:
-            return (.categoryTimetable, "시간표") // TODO: 로깅 수정
+            return (EventParameter.EventLabel.Home.DA1.timetableMainCategoryCategoryNavigationTimetableEntryClick, "시간표")
         case .showBusTimetable:
-            return (.categoryTransportation, "버스 시간표")
+            return (EventParameter.EventLabel.Home.DA1.busMainCategoryCategoryNavigationTimetableEntryClick, "버스 시간표")
         case .showBusRoute:
-            return (.categoryTransportation, "교통편 조회하기")
+            return (EventParameter.EventLabel.Home.DA1.busMainCategoryCategoryNavigationSearchEntryClick, "교통편 조회하기")
         case .showCallVan:
-            return (.categoryTransportation, "콜밴팟 모집")
+            return (EventParameter.EventLabel.Home.DA2.callvanMainCategoryCategoryNavigationCallvanEntryClick, "콜벤팟 모집")
         case .showChatList:
-            return (.categoryEtc, "채팅")
+            return (EventParameter.EventLabel.Home.DA2.chatMainCategoryCategoryNavigationChatEntryClick, "채팅")
         case .showLand:
-            return (.categoryEtc, "복덕방")
+            return (EventParameter.EventLabel.Home.DA1.realEstateMainCategoryCategoryNavigationRealEstateEntryClick, "복덕방")
         case .showBusiness:
-            return (.categoryEtc, "코인 for Business")
+            return (EventParameter.EventLabel.Home.DA1.ownerMainCategoryCategoryNavigationOwnerEntryClick, "코인 for Business")
         case .showLoginToast:
             return nil
         }

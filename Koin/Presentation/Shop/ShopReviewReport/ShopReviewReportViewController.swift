@@ -195,6 +195,7 @@ extension ShopReviewReportViewController: UITextViewDelegate {
         let characterCount = textView.text.count
         etcTextCountLabel.text = "\(characterCount)/150"
         etcReportPlaceholderLabel.isHidden = !textView.text.isEmpty
+        updateReportButtonState()
         
         UIView.animate(withDuration: 0.2) {
             self.view.layoutIfNeeded()
@@ -261,14 +262,16 @@ extension ShopReviewReportViewController {
 
 extension ShopReviewReportViewController {
     
-    private func updateReportButtonState() {
+    /// 사유를 하나 이상 골랐고, 기타를 골랐다면 사유를 입력했을 때만 신고할 수 있다.
+    private var isReportValid: Bool {
         let anySelectedInReportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView].contains { $0.isCheckButtonSelected() }
-        let anySelectedInViewController = etcCheckButton.isSelected
-        
-        let anySelected = anySelectedInReportViews || anySelectedInViewController
-        
-        reportButton.isEnabled = anySelected
-        reportButton.backgroundColor = anySelected ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
+        let isEtcFilled = !(etcReportTextView.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        return (anySelectedInReportViews || etcCheckButton.isSelected) && (!etcCheckButton.isSelected || isEtcFilled)
+    }
+
+    private func updateReportButtonState() {
+        reportButton.isEnabled = isReportValid
+        reportButton.backgroundColor = isReportValid ? UIColor.appColor(.new500) : UIColor.appColor(.neutral300)
     }
     
     @objc private func etcContainerTapped() {
@@ -291,7 +294,6 @@ extension ShopReviewReportViewController {
     
     @objc private func reportButtonTapped() {
         var reports: [Report] = []
-        var selectedItems: [String] = []
         let reportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView]
         
         for reportView in reportViews {
@@ -299,15 +301,14 @@ extension ShopReviewReportViewController {
                 let reportInfo = reportView.getReportInfo()
                 let report = Report(title: reportInfo.title, content: reportInfo.content)
                 reports.append(report)
-                selectedItems.append(reportInfo.title)
             }
         }
-        if etcCheckButton.isSelected, let etcText = etcReportTextView.text {
-            selectedItems.append("기타 (\(etcText))")
+        if etcCheckButton.isSelected {
+            reports.append(Report(title: "기타", content: etcReportTextView.text ?? ""))
         }
-    
+
         let requestModel = ReportReviewRequest(reports: reports)
-        inputSubject.send(.reportReview(requestModel,selectedItems))
+        inputSubject.send(.reportReview(requestModel))
     }
 }
 
