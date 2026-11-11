@@ -202,7 +202,8 @@ extension SettingsViewController {
         let fetchUserDataUseCase = DefaultFetchUserDataUseCase(userRepository: userRepository)
         let checkPasswordUseCase = DefaultCheckPasswordUseCase(userRepository: userRepository)
         let modifyUseCase = DefaultModifyUseCase(userRepository: userRepository)
-        let viewController = ChangePasswordViewController(viewModel: ChangePasswordViewModel(fetchUserDataUseCase: fetchUserDataUseCase, checkPasswordUseCase: checkPasswordUseCase, modifyUseCase: modifyUseCase))
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewController = ChangePasswordViewController(viewModel: ChangePasswordViewModel(fetchUserDataUseCase: fetchUserDataUseCase, checkPasswordUseCase: checkPasswordUseCase, modifyUseCase: modifyUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase))
         navigationController?.pushViewController(viewController, animated: true)
     }
     

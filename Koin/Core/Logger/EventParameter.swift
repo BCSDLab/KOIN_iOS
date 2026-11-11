@@ -53,6 +53,7 @@ enum EventParameter {
         enum Account: String, EventLabelType {
             case accountConfigProfileEditEntryClick = "account__account_config__profile_edit__entry__click"
             case editProfileProfileEditConfirmClick = "account__edit_profile__profile_edit__confirm__click"
+            case passwordChangePasswordChangeConfirmClick = "account__password_change__password_change__confirm__click"
             case identityVerificationSignUpCodeVerifySuccessClick = "account__identity_verification__sign_up__code_verify_success__click"
             case identityVerificationSignUpSendCodeClick = "account__identity_verification__sign_up__send_code__click"
             case inputUserInfoSignUpConfirmClick = "account__input_user_info__sign_up__confirm__click"

@@ -34,6 +34,7 @@ final class ChangePasswordViewModel: ViewModelProtocol {
     private let fetchUserDataUseCase: FetchUserDataUseCase
     private let checkPasswordUseCase: CheckPasswordUseCase
     private let modifyUseCase: ModifyUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let changePasswordUseCase = DefaultChangePasswordUseCase(userRepository: DefaultUserRepository(service: DefaultUserService()))
     private(set) var currentStep: Int = 1
     private var userDto: UserDto? = nil
@@ -46,10 +47,11 @@ final class ChangePasswordViewModel: ViewModelProtocol {
     
     // MARK: - Initialization
     
-    init(fetchUserDataUseCase: FetchUserDataUseCase, checkPasswordUseCase: CheckPasswordUseCase, modifyUseCase: ModifyUseCase) {
+    init(fetchUserDataUseCase: FetchUserDataUseCase, checkPasswordUseCase: CheckPasswordUseCase, modifyUseCase: ModifyUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchUserDataUseCase = fetchUserDataUseCase
         self.checkPasswordUseCase = checkPasswordUseCase
         self.modifyUseCase = modifyUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
@@ -74,10 +76,12 @@ extension ChangePasswordViewModel {
         changePasswordUseCase.execute(requestModel: .init(newPassword: EncodingWorker().sha256(text: password))).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
+                    self?.logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Account.passwordChangePasswordChangeConfirmClick, value: "비밀번호 수정 실패")
                     self?.outputSubject.send(.showToast(error.message, false, false))
                 }
             },
             receiveValue: { [weak self] _ in
+                self?.logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Account.passwordChangePasswordChangeConfirmClick, value: "비밀번호 수정 완료")
                 self?.outputSubject.send(.showToast("비밀번호 변경이 완료되었습니다.", true, true))
             }
         ).store(in: &subscriptions)
