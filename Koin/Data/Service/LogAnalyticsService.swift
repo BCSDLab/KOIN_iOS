@@ -17,14 +17,7 @@ final class GA4AnalyticsService: LogAnalyticsService {
         let resolvedCategory = category ?? EventParameter.EventCategory(rawValue: label.lastSegment)
         assert(resolvedCategory != nil, "Logging label must end with a category or be called with one: \(label.rawValue)")
         var parameters = makeParameters(label: label.rawValue, category: resolvedCategory?.rawValue ?? label.lastSegment, value: value)
-        var reservedKeys: Set<String> = ["event_label", "event_category", "value", "gender", "major", "screen_view", "previous_page", "current_page", "duration_time", "custom_session_id"]
-        // 현행 명세에서 custom_session_id는 회원가입(feature=sign_up) 계약에만 있다.
-        if label.rawValue.components(separatedBy: "__").dropFirst(2).first == "sign_up" {
-            reservedKeys.remove("custom_session_id")
-        }
-        for (key, value) in additionalParameters where !reservedKeys.contains(key) {
-            parameters[key] = value
-        }
+        parameters.merge(additionalParameters) { _, new in new }
         if let screenView = label.screenView { parameters["screen_view"] = screenView }
         guard !label.team.isEmpty else { return }
         Analytics.logEvent(label.team, parameters: parameters)
