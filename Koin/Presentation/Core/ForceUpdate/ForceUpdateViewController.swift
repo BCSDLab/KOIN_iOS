@@ -149,7 +149,7 @@ final class ForceUpdateViewController: UIViewController, LottieAnimationManageab
         // 백그라운드 진입 시
         NotificationCenter.default.publisher(for: UIApplication.didEnterBackgroundNotification)
             .sink { [weak self] _ in
-                self?.inputSubject.send(.logLegacyEvent(LegacyEventParameter.EventLabel.ForceUpdate.forceUpdateExit, .pageExit, "홈버튼"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.ForceUpdate.forcedUpdateAppUpdateExit, "앱 이탈"))
             }.store(in: &subscriptions)
         
         // 포그라운드 복귀 시

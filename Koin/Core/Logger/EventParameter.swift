@@ -372,6 +372,7 @@ enum EventParameter {
             case forcedUpdateAppUpdateExposure = "main__forced_update__app_update__exposure"
             case forcedUpdateAppUpdateStoreEntryClick = "main__forced_update__app_update__store_entry__click"
             case forcedUpdateAppUpdateAlreadyDoneClick = "main__forced_update__app_update__already_done__click"
+            case forcedUpdateAppUpdateExit = "main__forced_update__app_update__exit"
             case forcedUpdateUpdatePopupCloseClick = "main__forced_update__update_popup__close__click"
             case forcedUpdateUpdatePopupStoreEntryClick = "main__forced_update__update_popup__store_entry__click"
         }
@@ -432,6 +433,7 @@ enum EventParameter {
         case scroll
         case swipe
         case pageExit = "page_exit"
+        case exit
         case update = "update"
         case exposure
         case select

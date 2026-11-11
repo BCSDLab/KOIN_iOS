@@ -11,7 +11,6 @@ final class ForceUpdateViewModel: ViewModelProtocol {
     
     enum Input {
         case logEvent(EventLabelType, Any)
-        case logLegacyEvent(LegacyEventLabelType, EventParameter.EventCategory, Any)
         case checkVersion
     }
     enum Output {
@@ -33,8 +32,6 @@ final class ForceUpdateViewModel: ViewModelProtocol {
             switch input {
             case let .logEvent(label, value):
                 self?.logAnalyticsEventUseCase.execute(label: label, value: value)
-            case let .logLegacyEvent(label, category, value):
-                self?.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
             case .checkVersion:
                 self?.checkVersion()
             }

@@ -11,14 +11,3 @@ protocol LegacyEventLabelType {
     var rawValue: String { get }
     var team: String { get }
 }
-
-enum LegacyEventParameter {
-    enum EventLabel {
-        enum ForceUpdate: String, LegacyEventLabelType {
-            case forceUpdateExit = "forced_update_exit"
-            var team: String {
-                return "FORCE_UPDATE"
-            }
-        }
-    }
-}
