@@ -148,6 +148,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
             guard let self else { return }
             switch event {
             case .noticeRowTapped(let noticeId, let boardId):
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.noticeSearchNoticeDetailEntryClick, noticeId))
                 navigateToNoticeData(noticeId: noticeId, boardId: boardId)
             case let .nextPageButtonTapped(page):
                 inputSubject.send(.fetchSearchedResult(page, nil, false))

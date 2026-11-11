@@ -172,6 +172,11 @@ extension SceneDelegate {
                 viewController = makeLostItemData(lostItemId: noticeId)
             } else {
                 viewController = makeNoticeDataViewController(noticeId: noticeId, boardId: boardId)
+                // 명세 9-1: 공지 키워드 알림으로 진입. schemeUri: keyword?id=&keyword=&board-id=
+                if let keyword = parsedQuery["keyword"] {
+                    let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                    logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Notice.fromExternalNoticeDetailKeywordNotificationEntryClick, value: keyword)
+                }
             }
             navigationController?.pushViewController(viewController, animated: true)
         }

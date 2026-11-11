@@ -113,6 +113,7 @@ extension NoticeListView {
                     sendAction(.navigateToManageKeyword)
                 },
                 onArticleTapped: { noticeId, boardId in
+                    viewModel.execute(.logEvent(EventParameter.EventLabel.Notice.mainNoticeNoticeDetailEntryClick, noticeId))
                     sendAction(.navigateToNoticeData(noticeId: noticeId, boardId: boardId))
                 },
                 onCloseTooltipTapped: {
