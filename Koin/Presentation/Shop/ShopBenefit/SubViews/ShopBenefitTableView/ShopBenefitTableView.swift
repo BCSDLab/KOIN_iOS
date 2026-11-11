@@ -13,6 +13,7 @@ final class ShopBenefitTableView: UITableView {
     // MARK: - Properties
     let imageTapPublisher = PassthroughSubject<([String], IndexPath), Never>()
     let detailExpandedPublisher = PassthroughSubject<Void, Never>()
+    let willBeginDraggingPublisher = PassthroughSubject<Void, Never>()
     private var events: [ShopEvent] = []
     
     // MARK: - Initialzier
@@ -32,6 +33,10 @@ final class ShopBenefitTableView: UITableView {
 }
 
 extension ShopBenefitTableView: UITableViewDelegate {
+    
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        willBeginDraggingPublisher.send()
+    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         toggleExpanded(at: indexPath)

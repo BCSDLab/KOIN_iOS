@@ -63,6 +63,12 @@ final class ShopBenefitViewController: UIViewController {
             guard let self else { return }
             self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopBenefitShopEventExpandClick, self.viewModel.shopName))
         }.store(in: &subscriptions)
+
+        // 명세 3-9: 이벤트 목록을 스크롤하면 화면에 들어올 때마다 한 번만 기록한다.
+        benefitsTableView.willBeginDraggingPublisher.first().sink { [weak self] in
+            guard let self else { return }
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailShopEventScroll, self.viewModel.shopName))
+        }.store(in: &subscriptions)
     }
 }
 

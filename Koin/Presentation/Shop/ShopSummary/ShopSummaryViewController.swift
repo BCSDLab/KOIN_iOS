@@ -135,6 +135,7 @@ extension ShopSummaryViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] indexPath in
                 guard let self = self else { return }
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailShopMenuEntryClick, self.viewModel.shopName))
                 let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
                 self.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
                 self.menuGroupNameCollectionViewSticky.configure(selectedIndexPath: indexPath)
@@ -212,6 +213,7 @@ extension ShopSummaryViewController {
             .receive(on: DispatchQueue.main)
             .sink { [weak self] indexPath in
                 guard let self = self else { return }
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailShopMenuEntryClick, self.viewModel.shopName))
                 let tableViewIndexPath = IndexPath(row: 0, section: indexPath.row)
                 self.menuGroupTableView.scrollToRow(at: tableViewIndexPath, at: .top, animated: true)
                 self.menuGroupNameCollectionViewSticky.configure(selectedIndexPath: indexPath)
@@ -289,6 +291,7 @@ extension ShopSummaryViewController {
                       0 < self.viewModel.cachedImages.count,
                       self.viewModel.cachedImages.first?.imageUrl != nil else { return }
                 
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailPhotoViewOpenClick, self.viewModel.shopName))
                 let zoomedViewController = ZoomedImageViewControllerB()
                 zoomedViewController.configure(urls: viewModel.cachedImages.map { return $0.imageUrl },
                                                initialIndexPath: indexPath)
