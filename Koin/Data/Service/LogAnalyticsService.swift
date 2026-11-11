@@ -13,15 +13,6 @@ protocol LogAnalyticsService {
 }
 
 final class GA4AnalyticsService: LogAnalyticsService {
-    private let sendEvent: (String, [String: Any]) -> Void
-
-    convenience init() {
-        self.init(sendEvent: { Analytics.logEvent($0, parameters: $1) })
-    }
-
-    init(sendEvent: @escaping (String, [String: Any]) -> Void) {
-        self.sendEvent = sendEvent
-    }
 
     func logEvent(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters additionalParameters: [String: String]) {
         let resolvedCategory = category ?? EventParameter.EventCategory(rawValue: label.lastSegment)
@@ -37,11 +28,11 @@ final class GA4AnalyticsService: LogAnalyticsService {
         }
         if let screenView = label.screenView { parameters["screen_view"] = screenView }
         guard !label.team.isEmpty else { return }
-        sendEvent(label.team, parameters)
+        Analytics.logEvent(label.team, parameters: parameters)
     }
 
     func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        sendEvent(label.team, makeParameters(label: label.rawValue, category: category.rawValue, value: value))
+        Analytics.logEvent(label.team, parameters: makeParameters(label: label.rawValue, category: category.rawValue, value: value))
     }
 
     private func makeParameters(label: String, category: String, value: Any) -> [String: Any] {
