@@ -9,7 +9,6 @@ import Foundation
 
 protocol LogAnalyticsEventUseCase {
     func execute(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String])
-    func execute(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
 }
 
 extension LogAnalyticsEventUseCase {
@@ -33,9 +32,5 @@ final class DefaultLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
     
     func execute(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String]) {
         repository.logEvent(label: label, value: value, category: category, parameters: parameters)
-    }
-
-    func execute(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        repository.logEvent(label: label, category: category, value: value)
     }
 }

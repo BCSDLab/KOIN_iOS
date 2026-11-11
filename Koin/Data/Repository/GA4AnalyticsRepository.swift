@@ -15,8 +15,4 @@ final class GA4AnalyticsRepository: AnalyticsRepository {
     func logEvent(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String]) {
         service.logEvent(label: label, value: value, category: category, parameters: parameters)
     }
-
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        service.logEvent(label: label, category: category, value: value)
-    }
 }

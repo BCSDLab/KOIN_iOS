@@ -11,8 +11,4 @@ final class MockAnalyticsService: LogAnalyticsService {
     func logEvent(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String]) {
         debugPrint("\(label) \(value) \(String(describing: category)) \(parameters)")
     }
-
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        debugPrint("\(label) \(category) \(value)")
-    }
 }

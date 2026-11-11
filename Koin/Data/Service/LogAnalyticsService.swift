@@ -9,7 +9,6 @@ import FirebaseAnalytics
 
 protocol LogAnalyticsService {
     func logEvent(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String])
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any)
 }
 
 final class GA4AnalyticsService: LogAnalyticsService {
@@ -29,10 +28,6 @@ final class GA4AnalyticsService: LogAnalyticsService {
         if let screenView = label.screenView { parameters["screen_view"] = screenView }
         guard !label.team.isEmpty else { return }
         Analytics.logEvent(label.team, parameters: parameters)
-    }
-
-    func logEvent(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {
-        Analytics.logEvent(label.team, parameters: makeParameters(label: label.rawValue, category: category.rawValue, value: value))
     }
 
     private func makeParameters(label: String, category: String, value: Any) -> [String: Any] {

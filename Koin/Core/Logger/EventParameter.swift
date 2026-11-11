@@ -432,9 +432,7 @@ enum EventParameter {
         case click
         case scroll
         case swipe
-        case pageExit = "page_exit"
         case exit
-        case update = "update"
         case exposure
         case select
         case toggle

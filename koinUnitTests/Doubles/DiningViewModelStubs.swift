@@ -49,11 +49,5 @@ final class StubFetchNotiListUseCase: FetchNotiListUseCase {
 }
 
 final class StubLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
-    func execute(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any) {}
-
-    func executeWithDuration(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?) {}
-
-    func executeWithSessionId(label: LegacyEventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {}
-
     func execute(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String]) {}
 }
