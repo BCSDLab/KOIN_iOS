@@ -19,7 +19,7 @@ final class NotificationTableView: UITableView {
     }
     
     // MARK: - Publisher
-    let deletePublisher = PassthroughSubject<String, Never>()
+    let deletePublisher = PassthroughSubject<(id: String, isSwipe: Bool), Never>()
     let tapNotificationPublisher = PassthroughSubject<String, Never>()
     let reachedBottomPublisher = PassthroughSubject<Void, Never>()
     
@@ -242,13 +242,15 @@ extension NotificationTableView: UITableViewDelegate {
         
         let item = notifications[indexPath.row]
         
-        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, _, completion in
+        let deleteAction = UIContextualAction(style: .destructive, title: nil) { [weak self] _, sourceView, completion in
             guard let self else {
                 completion(false)
                 return
             }
+            // 버튼 탭이면 버튼 폭, 끝까지 밀기면 행 폭에 가깝게 늘어난 상태로 호출된다.
+            let isSwipe = sourceView.bounds.width > tableView.bounds.width / 2
             self.didDeleteNotification(id: item.id)
-            self.deletePublisher.send(item.id)
+            self.deletePublisher.send((id: item.id, isSwipe: isSwipe))
             completion(true)
         }
         deleteAction.image = .appImage(asset: .notificationTrash)

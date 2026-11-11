@@ -69,14 +69,17 @@ private extension RecruitNotificationListViewController {
             .store(in: &subscriptions)
         
         notificationListView.deletePublisher
-            .sink { [weak self] id in
+            .sink { [weak self] deletion in
                 guard let self,
-                      let id = Int(id) else {
+                      let id = Int(deletion.id) else {
                     return
                 }
                 self.notificationList?.delete(id: id)
                 self.inputSubject.send(.deleteNotification(id: id))
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Recruit.teamNotificationNotificationListDeleteClick, "알림 삭제"))
+                let label: EventLabelType = deletion.isSwipe
+                    ? EventParameter.EventLabel.Recruit.teamNotificationNotificationListDeleteSwipe
+                    : EventParameter.EventLabel.Recruit.teamNotificationNotificationListDeleteClick
+                self.inputSubject.send(.logEvent(label, "알림 삭제"))
             }
             .store(in: &subscriptions)
         

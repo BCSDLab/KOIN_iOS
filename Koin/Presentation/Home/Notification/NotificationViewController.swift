@@ -66,11 +66,14 @@ private extension NotificationViewController {
             .store(in: &subscriptions)
         
         notificationListView.deletePublisher
-            .sink { [weak self] id in
+            .sink { [weak self] deletion in
                 guard let self else { return }
-                self.inputSubject.send(.deleteNotification(id: id))
+                self.inputSubject.send(.deleteNotification(id: deletion.id))
                 self.showToastMessage(message: "알림이 삭제되었습니다.")
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListDeleteClick, "알림 삭제"))
+                let label: EventLabelType = deletion.isSwipe
+                    ? EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListDeleteSwipe
+                    : EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListDeleteClick
+                self.inputSubject.send(.logEvent(label, "알림 삭제"))
             }
             .store(in: &subscriptions)
         
