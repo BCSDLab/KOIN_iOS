@@ -211,6 +211,14 @@ enum EventParameter {
             }
         }
 
+        enum Department: String, EventLabelType {
+            case departmentListSearchClick = "department__department_list__search__click"
+            case departmentListContactPhoneCopyClick = "department__department_list__contact__phone_copy__click"
+            case departmentMainDepartmentCategoryClick = "department__department_main__department_category__click"
+            case departmentMainSearchClick = "department__department_main__search__click"
+            case departmentMainContactPhoneCopyClick = "department__department_main__contact__phone_copy__click"
+        }
+
         enum Recruit: String, EventLabelType {
             case teamListTeamNotificationEntryClick = "team_recruit__team_list__team_notification__entry__click"
             case teamListSearchClick = "team_recruit__team_list__search__click"
