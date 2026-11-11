@@ -81,9 +81,9 @@ final class ShopViewController: UIViewController {
         shopCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
             guard let self else { return }
             
-            let currentPage  = self.viewModel.categoryName(for: categoryId)
-            
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopListFilterCategoryClick, currentPage))
+            if categoryId != self.viewModel.selectedId {
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopListFilterCategoryClick, self.viewModel.categoryName(for: categoryId)))
+            }
             
             self.inputSubject.send(.changeCategory(categoryId))
             

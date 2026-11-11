@@ -158,7 +158,6 @@ struct RecruitListView: ActionBindableView {
     @ViewBuilder
     private var postButton: some View {
         Button {
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListTeamWriteEntryClick, "모집하기"))
             guard UserDataManager.shared.isLoggedIn else {
                 sendAction(.showLoginToast)
                 return
@@ -167,6 +166,7 @@ struct RecruitListView: ActionBindableView {
                 sendAction(.showProfilePostToast)
                 return
             }
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListTeamWriteEntryClick, "모집하기"))
             sendAction(.showRecruitPost)
         } label: {
             HStack(alignment: .center, spacing: 4) {

@@ -100,10 +100,13 @@ private extension NotificationViewModel {
         
         outputSubject.send(.selectedNotification(notification))
         
-        makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListItemEntryClick,
-            value: notification.title
-        )
+        // 명세: value는 알림 분류값이며 알림 제목·본문은 수집하지 않는다.
+        if let logValue = notification.logValue {
+            makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListItemEntryClick,
+                value: logValue
+            )
+        }
     }
 
     private func deleteNotification(id: String) {

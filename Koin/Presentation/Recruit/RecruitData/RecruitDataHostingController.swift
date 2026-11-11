@@ -109,14 +109,14 @@ extension RecruitDataHostingController {
                     let data = rootView.data else {
                     return
                 }
-                rootView.makeLogAnalyticsEvent(
-                    label: EventParameter.EventLabel.Recruit.teamDetailTeamEditEntryClick,
-                    value: "편집하기"
-                )
                 guard data.state == .recruiting else {
                     showToastMessage(message: "마감된 팀원 모집글입니다.")
                     return
                 }
+                rootView.makeLogAnalyticsEvent(
+                    label: EventParameter.EventLabel.Recruit.teamDetailTeamEditEntryClick,
+                    value: "편집하기"
+                )
                 navigateToEdit(data: data)
             },
             onDeleteButtonTapped: { [weak self] in

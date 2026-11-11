@@ -68,14 +68,20 @@ extension LoginViewModel {
         } receiveValue: { [weak self] response in
             KeychainWorker.shared.create(key: .access, token: response.token)
             KeychainWorker.shared.create(key: .refresh, token: response.refreshToken)
-            self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Account.loginLoginConfirmClick, value: "로그인 완료")
             self?.setUserInfo()
             self?.sendDeviceTokenIfNeededUseCase.execute()
         }.store(in: &subscriptions)
     }
+    /// 명세 2-3: 기존처럼 사용자 정보를 저장한 뒤 로그인 성공을 알릴 때 기록한다.
+    private func sendLoginSuccess() {
+        makeLogAnalyticsEvent(label: EventParameter.EventLabel.Account.loginLoginConfirmClick, value: "로그인 완료")
+        outputSubject.send(.loginSuccess)
+    }
+
     private func setUserInfo() {
         fetchUserDataUseCase.execute().sink { [weak self] completion in
             if case .failure(let error) = completion {
+                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Account.loginLoginConfirmClick, value: "로그인 실패")
                 self?.outputSubject.send(.showErrorMessage(error.message))
             }
         } receiveValue: { [weak self] response in
@@ -95,10 +101,10 @@ extension LoginViewModel {
                     }
                     
                 } else {
-                    self?.outputSubject.send(.loginSuccess)
+                    self?.sendLoginSuccess()
                 }
             } else {
-                self?.outputSubject.send(.loginSuccess)
+                self?.sendLoginSuccess()
             }
         }.store(in: &subscriptions)
 

@@ -50,7 +50,6 @@ final class ManageNoticeKeywordViewModel: ViewModelProtocol {
         input.sink { [weak self] input in
             switch input {
             case let .addKeyword(keyword, isRecommended):
-                if isRecommended { self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Notice.noticeKeywordManageKeywordManageRecommendedKeywordSelect, value: keyword) }
                 self?.addKeyword(keyword: keyword, isRecommended: isRecommended)
             case .getMyKeyword:
                 self?.fetchMyKeyword()
@@ -92,6 +91,9 @@ extension ManageNoticeKeywordViewModel {
                         case .sameKeyword:
                             self?.outputSubject.send(.keywordIsIllegal("이미 같은 키워드가 존재합니다."))
                         case .success:
+                            if isRecommended {
+                                self?.makeLogAnalyticsEvent(label: EventParameter.EventLabel.Notice.noticeKeywordManageKeywordManageRecommendedKeywordSelect, value: keyword)
+                            }
                             self?.fetchMyKeyword()
                         }
                     }
