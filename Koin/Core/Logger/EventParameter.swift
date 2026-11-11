@@ -169,6 +169,8 @@ enum EventParameter {
             case busSearchResultSearchDepartureTimeNowClick = "bus__bus_search_result__search__departure_time_now__click"
             case busSearchResultSearchDepartureTimeOpenClick = "bus__bus_search_result__search__departure_time_open__click"
             case busTimetableBusFeedbackEntryClick = "bus__bus_timetable__bus_feedback__entry__click"
+            case busTimetableDetailFilterToSchoolClick = "bus__bus_timetable_detail__filter__to_school__click"
+            case busTimetableDetailFilterToHomeClick = "bus__bus_timetable_detail__filter__to_home__click"
             case busTimetableBusNoticeCloseClick = "bus__bus_timetable__bus_notice__close__click"
             case busTimetableBusNoticeOpenClick = "bus__bus_timetable__bus_notice__open__click"
             case busTimetableFilterBusTypeClick = "bus__bus_timetable__filter__bus_type__click"
