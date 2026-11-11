@@ -236,6 +236,10 @@ enum EventParameter {
 
         enum Recruit: String, EventLabelType {
             case teamListTeamNotificationEntryClick = "team_recruit__team_list__team_notification__entry__click"
+            case teamNotificationNotificationListItemEntryClick = "team_recruit__team_notification__notification_list__item_entry__click"
+            case teamNotificationNotificationListDeleteClick = "team_recruit__team_notification__notification_list__delete__click"
+            case teamNotificationNotificationListReadAllClick = "team_recruit__team_notification__notification_list__read_all__click"
+            case teamNotificationNotificationListDeleteAllClick = "team_recruit__team_notification__notification_list__delete_all__click"
             case teamListSearchClick = "team_recruit__team_list__search__click"
             case teamApplicantTeamApplicantDetailEntryClick = "team_recruit__team_applicant__team_applicant_detail__entry__click"
             case teamApplicantChatEntryApplicantEntryClick = "team_recruit__team_applicant__chat_entry__applicant_entry__click"

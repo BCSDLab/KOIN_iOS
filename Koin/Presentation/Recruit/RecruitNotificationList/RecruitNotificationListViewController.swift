@@ -76,6 +76,7 @@ private extension RecruitNotificationListViewController {
                 }
                 self.notificationList?.delete(id: id)
                 self.inputSubject.send(.deleteNotification(id: id))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Recruit.teamNotificationNotificationListDeleteClick, "알림 삭제"))
             }
             .store(in: &subscriptions)
         
@@ -85,9 +86,9 @@ private extension RecruitNotificationListViewController {
                       let id = Int(id) else {
                     return
                 }
-                if isUserTap,
-                   let title = notificationList?.notifications.first(where: { $0.id == id })?.title {
-                    inputSubject.send(.logEvent(LegacyEventParameter.EventLabel.Recruit.notificationList, .click, title))
+                // 명세 0-1: 푸시로 진입해 자동으로 누른 경우는 제외하고, value는 고정값이다.
+                if isUserTap {
+                    inputSubject.send(.logEvent(EventParameter.EventLabel.Recruit.teamNotificationNotificationListItemEntryClick, "팀원모집"))
                 }
                 self.notificationList?.markAsRead(id: id)
                 handleNavigation(id: id)
@@ -201,11 +202,16 @@ extension RecruitNotificationListViewController {
     private func showPopUpView() {
         let popUpViewController = NotificationPopUpViewController(
             markAllAsRead: { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Recruit.teamNotificationNotificationListReadAllClick, "모두 읽음으로 표시"))
                 self?.inputSubject.send(.markAllAsRead)
                 self?.notificationList?.markAllAsRead()
                 self?.notificationListView.markAllAsRead()
             },
             deleteAll: { [weak self] in
+                // 명세 0-5: 빈 목록에서는 보내지 않는다.
+                if self?.notificationList?.notifications.isEmpty == false {
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Recruit.teamNotificationNotificationListDeleteAllClick, "알림 전체 삭제"))
+                }
                 self?.inputSubject.send(.deleteAllNotifications)
                 self?.notificationList?.deleteAll()
                 self?.notificationListView.deleteAll()

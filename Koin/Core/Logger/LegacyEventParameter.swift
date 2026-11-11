@@ -23,12 +23,5 @@ enum LegacyEventParameter {
                 return "FORCE_UPDATE"
             }
         }
-
-        enum Recruit: String, LegacyEventLabelType {
-            case notificationList = "notification_list"
-            var team: String {
-                return "CAMPUS"
-            }
-        }
     }
 }
