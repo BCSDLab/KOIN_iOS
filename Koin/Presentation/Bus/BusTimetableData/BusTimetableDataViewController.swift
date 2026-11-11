@@ -58,7 +58,8 @@ final class BusTimetableDataViewController: UIViewController, UIScrollViewDelega
     private let tabBarContainerView = UIView()
 
     private var tabBarView: BusTimetableTabBarView?
-    private var tabTitles: [String] = []
+    /// 주중 노선의 등교/하교 탭 화면인지. 탭 문자열(서버 값, 다국어 예정)이 아니라 페이지 구성으로 판단한다.
+    private var isCommuteTabs = false
 
     private let pagingScrollView = UIScrollView().then {
         $0.isPagingEnabled = true
@@ -138,6 +139,7 @@ extension BusTimetableDataViewController {
         subBusTimetablePlaceLabel.text = timetable.subName
         subBusTimetablePlaceLabel.isHidden = timetable.subName?.isEmpty ?? true
         let (titles, pages) = makePages(timetable: timetable)
+        isCommuteTabs = timetable.routeType == .weekday && timetable.routeInfo.count >= 2
         configureTabBar(titles: titles)
         configurePages(pages)
     }
@@ -176,7 +178,6 @@ extension BusTimetableDataViewController {
     }
 
     private func configureTabBar(titles: [String]) {
-        tabTitles = titles
         tabBarView?.removeFromSuperview()
         tabBarView = nil
         let hasTabs = titles.count > 1
@@ -241,14 +242,12 @@ extension BusTimetableDataViewController {
 extension BusTimetableDataViewController {
     private func tapTab(index: Int) {
         guard index != selectedIndex else { return }
-        // 명세 4-7·4-8: 주중 노선의 등교/하교 탭 클릭만 기록한다.
-        switch tabTitles.indices.contains(index) ? tabTitles[index] : nil {
-        case "등교":
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableDetailFilterToSchoolClick, routeLogValue))
-        case "하교":
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busTimetableDetailFilterToHomeClick, routeLogValue))
-        default:
-            break
+        // 명세 4-7·4-8: 주중 노선 탭은 첫 번째가 등교, 나머지가 하교다 (makePages의 정류장 순서 기준과 같음).
+        if isCommuteTabs {
+            let label: EventLabelType = index == 0
+                ? EventParameter.EventLabel.Bus.busTimetableDetailFilterToSchoolClick
+                : EventParameter.EventLabel.Bus.busTimetableDetailFilterToHomeClick
+            inputSubject.send(.logEvent(label, routeLogValue))
         }
         selectPage(index: index)
         pagingScrollView.setContentOffset(CGPoint(x: pagingScrollView.bounds.width * CGFloat(index), y: 0), animated: true)
