@@ -111,18 +111,4 @@ extension Date {
         return dateFormatter.string(from: self)
     }
     
-    func generateDateArray<S: Sequence>(formatter: DateFormatter, sequence: S) -> [String] where S.Element == Int {
-        var dateArray: [String] = []
-        let today = Date()
-        dateArray.append("오늘")
-        dateArray.append("내일")
-        for dayOffset in sequence {
-            let futureDate = Calendar.current.date(byAdding: .day, value: dayOffset, to: today) ?? Date()
-            let formattedDate = formatter.string(from: futureDate)
-            dateArray.append(formattedDate)
-        }
-        
-        return dateArray
-    }
-    
 }

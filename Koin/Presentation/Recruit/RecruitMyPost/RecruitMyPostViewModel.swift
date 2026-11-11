@@ -17,7 +17,7 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
         case loadNextPage
         case didShowToast
         case refresh
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
 
     // MARK: - State
@@ -50,8 +50,8 @@ final class RecruitMyPostViewModel: SwiftUIViewModelProtocol {
             loadNextPage()
         case .didShowToast:
             errorMessage = nil
-        case let .logEvent(label, category, value):
-            makeLogAnalyticsEvent(label: label, category: category, value: value)
+        case let .logEvent(label, value):
+            makeLogAnalyticsEvent(label: label, value: value)
         }
     }
 }
@@ -100,12 +100,10 @@ extension RecruitMyPostViewModel {
 extension RecruitMyPostViewModel {
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
         logAnalyticsEventUseCase.execute(
             label: label,
-            category: category,
             value: value
         )
     }

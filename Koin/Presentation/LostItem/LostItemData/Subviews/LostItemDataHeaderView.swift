@@ -20,11 +20,11 @@ final class LostItemDataHeaderView: UIView {
     private let titleStackView = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 4
-        $0.alignment = .fill
+        $0.alignment = .center
     }
     private let categoryLabel = paddingLabel(padding: UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 8)).then {
-        $0.backgroundColor = .appColor(.primary500)
-        $0.layer.cornerRadius = 11
+        $0.font = .appFont(.pretendardMedium, size: 10)
+        $0.layer.cornerRadius = 9
         $0.clipsToBounds = true
         $0.textAlignment = .center
     }
@@ -62,7 +62,10 @@ final class LostItemDataHeaderView: UIView {
     
     func configure(lostItemData: LostItemData) {
         typeLabel.text = "\(lostItemData.type.description)물"
+        let categoryColors = LostItemColorAsset(rawValue: lostItemData.category) ?? .unknown
         categoryLabel.text = lostItemData.category
+        categoryLabel.backgroundColor = .appColor(categoryColors.background)
+        categoryLabel.textColor = .appColor(categoryColors.foreground)
         foundPlaceLabel.text = lostItemData.foundPlace
         foundDateLabel.text = lostItemData.foundDate
         registeredDateLabel.text = lostItemData.registeredAt
@@ -70,12 +73,12 @@ final class LostItemDataHeaderView: UIView {
         
         if lostItemData.isFound {
             isFoundLabel.text = "찾음"
-            isFoundLabel.textColor = .appColor(.neutral400)
-            isFoundLabel.backgroundColor = .appColor(.neutral100)
+            isFoundLabel.textColor = .appColor(.neutral0)
+            isFoundLabel.backgroundColor = .appColor(.neutral400)
         } else {
             isFoundLabel.text = "찾는중"
             isFoundLabel.textColor = .appColor(.neutral0)
-            isFoundLabel.backgroundColor = UIColor(hexCode: "FFA928")
+            isFoundLabel.backgroundColor = .appColor(.new700)
         }
     }
     
@@ -83,8 +86,8 @@ final class LostItemDataHeaderView: UIView {
         UIView.animate(withDuration: 0.2) { [weak self] in
             guard let self else { return }
             isFoundLabel.text = "찾음"
-            isFoundLabel.textColor = .appColor(.neutral400)
-            isFoundLabel.backgroundColor = .appColor(.neutral100)
+            isFoundLabel.textColor = .appColor(.neutral0)
+            isFoundLabel.backgroundColor = .appColor(.neutral400)
         }
     }
 }
@@ -93,16 +96,15 @@ extension LostItemDataHeaderView {
     
     private func configureLabels() {
         // textColor
-        [typeLabel].forEach { $0.textColor = .appColor(.primary600) }
-        [categoryLabel].forEach { $0.textColor = .appColor(.neutral0) }
+        [typeLabel].forEach { $0.textColor = .appColor(.new500) }
         [foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel].forEach { $0.textColor = .appColor(.neutral800) }
         [authorLabel, registeredDateLabel].forEach { $0.textColor = .appColor(.neutral500) }
         [authorSeparatorLabel].forEach { $0.textColor = .appColor(.neutral400) }
         
         // font
-        [typeLabel].forEach { $0.font = .appFont(.pretendardSemiBold, size: 12) }
-        [categoryLabel, foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 14) }
-        [authorLabel, authorSeparatorLabel, registeredDateLabel].forEach { $0.font = .appFont(.pretendardRegular, size: 12) }
+        [typeLabel].forEach { $0.font = .appFont(.pretendardSemiBold, size: 14) }
+        [foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 14) }
+        [registeredDateLabel, authorSeparatorLabel, authorLabel].forEach { $0.font = .appFont(.pretendardRegular, size: 12) }
         [isFoundLabel].forEach { $0.font = .appFont(.pretendardMedium, size: 12) }
     }
     
@@ -110,7 +112,7 @@ extension LostItemDataHeaderView {
         [categoryLabel, foundPlaceLabel, foundPlaceSeparatorLabel, foundDateLabel].forEach {
             titleStackView.addArrangedSubview($0)
         }
-        [authorLabel, authorSeparatorLabel, registeredDateLabel].forEach {
+        [registeredDateLabel, authorSeparatorLabel, authorLabel].forEach {
             authorStackView.addArrangedSubview($0)
         }
         [typeLabel, isFoundLabel, titleStackView, authorStackView, separatorView].forEach {
@@ -122,13 +124,16 @@ extension LostItemDataHeaderView {
         typeLabel.snp.makeConstraints {
             $0.top.equalToSuperview().offset(12)
             $0.leading.equalToSuperview().offset(24)
-            $0.height.equalTo(19)
+            $0.height.equalTo(22)
         }
         isFoundLabel.snp.makeConstraints {
             $0.width.equalTo(40)
             $0.height.equalTo(23)
-            $0.top.equalToSuperview().offset(33)
+            $0.top.equalToSuperview().offset(36)
             $0.trailing.equalToSuperview().offset(-24)
+        }
+        categoryLabel.snp.makeConstraints {
+            $0.height.equalTo(18)
         }
         titleStackView.snp.makeConstraints {
             $0.top.equalTo(typeLabel.snp.bottom).offset(2)
@@ -152,6 +157,6 @@ extension LostItemDataHeaderView {
         configureLabels()
         setLayouts()
         setConstraints()
-        backgroundColor = .white
+        backgroundColor = .appColor(.neutral0)
     }
 }

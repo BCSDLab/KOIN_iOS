@@ -98,9 +98,9 @@ extension BusAreaSelectedCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
         label.text = busAreaLists[indexPath.row].0.koreanDescription
-        label.font = .appFont(.pretendardMedium, size: 15)
-        let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 48))
-        return CGSize(width: size.width + 32, height: 48)
+        label.font = .appFont(.pretendardSemiBold, size: 14)
+        let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34))
+        return CGSize(width: size.width + 24, height: 34)
     }
 }
 

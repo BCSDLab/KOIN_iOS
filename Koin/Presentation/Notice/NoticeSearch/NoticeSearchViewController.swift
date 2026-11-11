@@ -140,7 +140,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
             }.store(in: &subscriptions)
         
         recommendedSearchCollectionView.tapRecommendedWord.sink { [weak self] word in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.popularSearchingWord, .click, "\(word)"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.noticeSearchSearchPopularKeywordSelect, "\(word)"))
             self?.textField.text = word
         }.store(in: &subscriptions)
         
@@ -148,6 +148,7 @@ final class NoticeSearchViewController: UIViewController, UIGestureRecognizerDel
             guard let self else { return }
             switch event {
             case .noticeRowTapped(let noticeId, let boardId):
+                inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.noticeSearchNoticeDetailEntryClick, noticeId))
                 navigateToNoticeData(noticeId: noticeId, boardId: boardId)
             case let .nextPageButtonTapped(page):
                 inputSubject.send(.fetchSearchedResult(page, nil, false))
@@ -181,7 +182,7 @@ extension NoticeSearchViewController {
     @objc private func searchButtonTapped() {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeSearchEvent, .click, "검색하기"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.noticeSearchSearchSubmit, text))
             inputSubject.send(.searchWord(text, Date(), 0))
             inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()
@@ -196,7 +197,7 @@ extension NoticeSearchViewController {
     override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if let text = textField.text?.trimmingCharacters(in: .whitespacesAndNewlines), !text.isEmpty {
             IndicatorView.show()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.noticeSearchEvent, .click, "검색하기"))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.noticeSearchSearchSubmit, text))
             inputSubject.send(.searchWord(text, Date(), 0))
             inputSubject.send(.fetchSearchedResult(1, text, true))
             IndicatorView.dismiss()

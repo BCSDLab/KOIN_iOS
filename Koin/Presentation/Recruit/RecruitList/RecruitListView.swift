@@ -14,6 +14,7 @@ struct RecruitListView: ActionBindableView {
             filterState: RecruitListFilter,
             onFilterItemTapped: (Int, FilterItemModel)->Bool,
             onResetTapped: ()->Void,
+            onCloseTapped: ()->Void,
             onApplyTapped: ([FilterGroupModel])->Void
         )
         case showToast(message: String)
@@ -43,25 +44,28 @@ struct RecruitListView: ActionBindableView {
                 filterState: viewModel.filterState,
                 onSearchTapped: { keyword in
                     if !keyword.isEmpty {
-                        viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitSearch, .click, keyword))
+                        viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListSearchClick, "검색"))
                     }
                     viewModel.execute(.updateFilter(keyword: keyword))
                 },
                 onFilterButtonTapped: {
-                    viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitFilter, .click, "필터"))
+                    viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListFilterOpenClick, "필터"))
                     sendAction(.showFilterBottomSheet(
                         filterState: viewModel.filterState,
                         onFilterItemTapped: { groupIndex, item in
                             if let event = RecruitListFilter.logEvent(groupIndex: groupIndex, title: item.title) {
-                                viewModel.execute(.logEvent(event.label, .click, event.value))
+                                viewModel.execute(.logEvent(event.label, event.value))
                             }
                             return true
                         },
                         onResetTapped: {
-                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitFilterReset, .click, "초기화"))
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListFilterResetClick, "초기화"))
+                        },
+                        onCloseTapped: {
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListFilterCloseClick, "닫기"))
                         },
                         onApplyTapped: { filterGroups in
-                            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitFilterApply, .click, "적용하기"))
+                            viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListFilterApplyClick, "적용하기"))
                             viewModel.execute(.updateFilter(filterState: RecruitListFilter(from: filterGroups)))
                         }
                     ))
@@ -85,7 +89,7 @@ struct RecruitListView: ActionBindableView {
                     LazyVStack(spacing: 8) {
                         ForEach(recruits) { recruit in
                             Button {
-                                viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitPostSelect, .click, recruit.title))
+                                viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListTeamDetailEntryClick, "\(recruit.category.rawValue)_\(recruit.id)"))
                                 sendAction(.showRecruitData(id: recruit.id))
                             } label: {
                                 RecruitListRowView(model: recruit)
@@ -154,7 +158,6 @@ struct RecruitListView: ActionBindableView {
     @ViewBuilder
     private var postButton: some View {
         Button {
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitRecruit, .click, "모집하기"))
             guard UserDataManager.shared.isLoggedIn else {
                 sendAction(.showLoginToast)
                 return
@@ -163,6 +166,7 @@ struct RecruitListView: ActionBindableView {
                 sendAction(.showProfilePostToast)
                 return
             }
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamListTeamWriteEntryClick, "모집하기"))
             sendAction(.showRecruitPost)
         } label: {
             HStack(alignment: .center, spacing: 4) {
@@ -190,9 +194,8 @@ struct RecruitListView: ActionBindableView {
     
     func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
-        viewModel.execute(.logEvent(label, category, value))
+        viewModel.execute(.logEvent(label, value))
     }
 }

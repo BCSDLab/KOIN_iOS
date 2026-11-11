@@ -6,9 +6,10 @@
 //
 
 import Combine
+import Foundation
 
 protocol BusRepository {
-    func searchBusInformation(requestModel: SearchBusInfoRequest) -> AnyPublisher<BusSearchDto, ErrorResponse>
+    func searchBusInformation(date: Date, busType: BusType, departure: BusPlace, arrival: BusPlace) -> AnyPublisher<BusSearchDto, ErrorResponse>
     func fetchExpressBusTimetableList(requestModel: FetchBusTimetableRequest) -> AnyPublisher<ExpressTimetableDto, ErrorResponse>
     func fetchShuttleRouteList() -> AnyPublisher<ShuttleRouteDto, ErrorResponse>
     func fetchCityBusTimetableList(requestModel: FetchCityBusTimetableRequest) -> AnyPublisher<CityBusTimetableDto, ErrorResponse>

@@ -143,26 +143,16 @@ final class EnterFormViewController: UIViewController {
         $0.isHidden = true
     }
     
-    private let departmentDropdownButton = UIButton().then {
-        $0.applyDropdownStyle(
-            title: "학부를 선택해주세요.",
-            font: UIFont.appFont(.pretendardRegular, size: 14),
-            titleColor: .appColor(.neutral400),
-            borderColor: .white,
-            backgroundColor: .appColor(.neutral0),
-            icon: UIImage.appImage(symbol: .chevronDown)
-        )
-        $0.layer.shadowColor = UIColor.black.cgColor
-        $0.layer.shadowOpacity = 0.06
-        $0.layer.shadowOffset = CGSize(width: 0, height: 1)
-        $0.layer.shadowRadius = 4
-        $0.layer.cornerRadius = 12
+    private let departmentDropdownButton = RecruitDropdownTriggerButton(placeholder: "학부를 선택해주세요.").then {
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.06, x: 0, y: 1, blur: 9, spread: 0)
         $0.isHidden = true
     }
-    
-    private let deptDropDown = DropDown().then {
-        $0.backgroundColor = .white
-        $0.isHidden = true
+
+    private var selectedDepartment: String?
+
+    private lazy var deptDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
+        self?.selectedDepartment = department
+        self?.departmentDropdownButton.configure(text: department)
     }
     
     private let studentIdTextField = DefaultTextField(
@@ -252,18 +242,11 @@ final class EnterFormViewController: UIViewController {
         bind()
         inputSubject.send(.getDeptList)
         hideKeyboardWhenTappedAround()
-        addKeyboardNotifications()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
-        addKeyboardNotifications()
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        removeKeyboardNotifications()
     }
     
     override func viewDidLayoutSubviews() {
@@ -299,10 +282,9 @@ final class EnterFormViewController: UIViewController {
                     textColor: .appColor(.success700)
                     )
                 self?.checkIdDuplicateButton.updateState(isEnabled: false)
-                let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-                self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "아이디 생성", customSessionId))
+                self?.inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.inputUserInfoSignUpIdAvailableClick, "아이디생성"))
             case let .showDeptDropDownList(deptList):
-                self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.departmentDropdownButton, dataSource: deptList)
+                strongSelf.deptDropdownContentView.configure(departments: deptList)
             case let .showNicknameHttpResult(message, color):
                 self?.nicknameResponseLabel.setImageText(
                     image: UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
@@ -319,8 +301,7 @@ final class EnterFormViewController: UIViewController {
                     font: .appFont(.pretendardRegular, size: 12),
                     textColor: .appColor(.success700))
                 self?.nicknameResponseLabel.isHidden = false
-                let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-                self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.createAccount, .click, "닉네임 생성", customSessionId))
+                self?.inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.inputUserInfoSignUpNicknameAvailableClick, "닉네임생성"))
             case let .failRegister(message):
                 let alertController = UIAlertController(title: "회원가입 실패", message: message, preferredStyle: .alert)
                 alertController.addAction(UIAlertAction(title: "확인", style: .default))
@@ -329,8 +310,7 @@ final class EnterFormViewController: UIViewController {
                 let viewController = RegisterCompletionViewController()
                 viewController.title = "회원가입"
                 self?.navigationController?.pushViewController(viewController, animated: true)
-                let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-                self?.inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.signUpCompleted, .click, "회원가입완료", customSessionId))
+                self?.inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.inputUserInfoSignUpConfirmClick, "회원가입완료"))
             default:
                 break
             }
@@ -359,31 +339,6 @@ final class EnterFormViewController: UIViewController {
 }
 
 extension EnterFormViewController {
-    private func addKeyboardNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(_:)), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide(_:)), name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
-    private func removeKeyboardNotifications() {
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-    }
-
-    @objc private func keyboardWillShow(_ notification: Notification) {
-        guard let userInfo = notification.userInfo,
-              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
-            return
-        }
-        let bottomInset = keyboardFrame.height - (view.frame.height - nextButton.frame.minY)
-        
-        scrollView.contentInset.bottom = bottomInset
-        scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
-    }
-
-    @objc private func keyboardWillHide(_ notification: Notification) {
-        scrollView.contentInset.bottom = 0
-        scrollView.verticalScrollIndicatorInsets.bottom = 0
-    }
     
     @objc private func idTextFieldDidChange(_ textField: UITextField) {
         guard let input = textField.text else { return }
@@ -456,8 +411,11 @@ extension EnterFormViewController {
     }
     
     @objc func departmentButtonTapped(_ sender: UIButton) {
-        self.view.layoutIfNeeded()
-        deptDropDown.show()
+        presentDropdown(
+            anchor: departmentDropdownButton,
+            content: deptDropdownContentView,
+            configuration: .init(direction: .down(spacing: 12), shadow: .shadow2)
+        )
     }
     
     @objc private func clearStudentIdTextField() {
@@ -526,7 +484,7 @@ extension EnterFormViewController {
 
         switch userType {
         case .student:
-            let department = departmentDropdownButton.titleLabel?.text ?? ""
+            let department = selectedDepartment ?? ""
             let studentNumber = studentIdTextField.text ?? ""
 
             let emailInput = studentEmailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -596,7 +554,6 @@ extension EnterFormViewController {
             correctPasswordLabel,
             studentInfoGuideLabel,
             departmentDropdownButton,
-            deptDropDown,
             studentIdTextField,
             studentIdWarningLabel,
             nicknameTextField,
@@ -637,7 +594,9 @@ extension EnterFormViewController {
         scrollView.snp.makeConstraints {
             $0.top.equalTo(progressView.snp.bottom).offset(16)
             $0.horizontalEdges.equalToSuperview().inset(24)
-            $0.bottom.equalTo(nextButton.snp.top).offset(-32)
+            $0.bottom.lessThanOrEqualTo(nextButton.snp.top).offset(-32)
+            $0.bottom.lessThanOrEqualTo(view.keyboardLayoutGuide.snp.top)
+            $0.bottom.equalTo(nextButton.snp.top).offset(-32).priority(.high)
         }
 
         contentView.snp.makeConstraints {
@@ -817,7 +776,7 @@ extension EnterFormViewController {
         
         switch userType {
         case .student:
-            fields = [studentInfoGuideLabel, departmentDropdownButton, deptDropDown,
+            fields = [studentInfoGuideLabel, departmentDropdownButton,
                       studentIdTextField, nicknameTextField, nicknameDuplicateButton,
                       studentEmailTextField, koreatechEmailLabel]
         case .general:
@@ -837,31 +796,6 @@ extension EnterFormViewController {
     private func setUpTextFieldUnderline() {
         [idTextField, passwordTextField1, passwordTextField2, studentIdTextField, nicknameTextField, studentEmailTextField, generalEmailTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
-        }
-    }
-    
-    private func setUpDropDown(dropDown: DropDown, button: UIButton, dataSource: [String]) {
-        dropDown.anchorView = button
-        dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
-        dropDown.dataSource = dataSource
-        dropDown.direction = .bottom
-        dropDown.selectionAction = { (index: Int, item: String) in
-            var buttonConfiguration = UIButton.Configuration.plain()
-            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
-            
-            var attributedTitle = AttributedString(item)
-            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 14)
-            attributedTitle.foregroundColor = UIColor.appColor(.neutral500)
-            buttonConfiguration.attributedTitle = attributedTitle
-            button.configuration = buttonConfiguration
-
-            if let imageView = button.subviews.compactMap({ $0 as? UIImageView }).first {
-                imageView.image = UIImage.appImage(symbol: .chevronDown)
-                NSLayoutConstraint.activate([
-                    imageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
-                    imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
-                ])
-            }
         }
     }
     

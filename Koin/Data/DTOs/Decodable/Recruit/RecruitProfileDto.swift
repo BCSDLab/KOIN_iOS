@@ -60,14 +60,14 @@ extension RecruitProfileDto {
 
 extension RecruitProfileActivityDto {
     func toDomain() -> RecruitProfileActivity? {
-        guard let startedAt = startedAt.toDateFromYYYYMMDD() else {
+        guard let startedAt = Date(string: startedAt, format: .yearMonthDayHyphen) else {
             return nil
         }
         return RecruitProfileActivity(
             id: id,
             title: title,
             startedAt: startedAt,
-            endedAt: endedAt?.toDateFromYYYYMMDD(),
+            endedAt: endedAt.flatMap { Date(string: $0, format: .yearMonthDayHyphen) },
             isOngoing: isOngoing,
             description: description
         )

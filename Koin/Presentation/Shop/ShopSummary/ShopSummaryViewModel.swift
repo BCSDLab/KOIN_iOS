@@ -13,18 +13,14 @@ final class ShopSummaryViewModel {
     // MARK: - Input
     enum Input {
         case viewDidLoad
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any, String? = nil, String? = nil, ScreenActionType? = nil, EventParameter.EventLabelNeededDuration? = nil)
-        case logEventDirect(EventLabelType, EventParameter.EventCategory, Any)
-        case getUserScreenAction(Date, ScreenActionType, EventParameter.EventLabelNeededDuration? = nil)
+
+        case logEvent(EventLabelType, Any)
+
     }
     
     // MARK: - Output
     enum Output {
-        case update1(images: [OrderImage], name: String, rating: Double, reviewCount: Int)
-        case update2(delivery: Bool, payBank: Bool, payCard: Bool, maxDeliveryTip: Int = 0, phone: String)
-        case update3(menusGroups: OrderShopMenusGroups, menus: [OrderShopMenus])
-        case updateShopEvent(event: String?)
-        case updateTitle(String)
+        case update(ShopSummary)
     }
     
     // MARK: - Properties
@@ -32,37 +28,22 @@ final class ShopSummaryViewModel {
     private var subscriptions: Set<AnyCancellable> = []
     private(set) var shopId: Int
     private(set) var phonenumber: String = ""
-    var cachedImages: [OrderImage] = []
+    private(set) var cachedImages: [ShopImage] = []
     private(set) var shopName: String
-    let backCategoryName: String?
 
-    private let fetchOrderShopSummaryFromShopUseCase: FetchOrderShopSummaryFromShopUseCase
-    private let fetchOrderShopMenusAndGroupsFromShopUseCase: FetchOrderShopMenusAndGroupsFromShopUseCase
-    private let fetchShopDataUseCase: FetchShopDataUseCase
-    private let fetchShopEventListUseCase: FetchShopEventListUseCase
+    private let fetchShopSummaryUseCase: FetchShopSummaryUseCase
     
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
-    private let getUserScreenTimeUseCase: GetUserScreenTimeUseCase
    
     // MARK: - Initializer
-    init(fetchOrderShopSummaryFromShopUseCase: DefaultFetchOrderShopSummaryFromShopUseCase,
-         fetchOrderShopMenusAndGroupsFromShopUseCase: DefaultFetchOrderShopMenusAndGroupsFromShopUseCase,
-         fetchShopDataUseCase: DefaultFetchShopDataUseCase,
-         fetchShopEventListUseCase: FetchShopEventListUseCase,
+    init(fetchShopSummaryUseCase: FetchShopSummaryUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
-         getUserScreenTimeUseCase: GetUserScreenTimeUseCase,
          shopId: Int,
-         shopName: String?,
-         backCategoryName: String? = nil) {
-        self.fetchOrderShopSummaryFromShopUseCase = fetchOrderShopSummaryFromShopUseCase
-        self.fetchOrderShopMenusAndGroupsFromShopUseCase = fetchOrderShopMenusAndGroupsFromShopUseCase
-        self.fetchShopDataUseCase = fetchShopDataUseCase
-        self.fetchShopEventListUseCase = fetchShopEventListUseCase
+         shopName: String?) {
+        self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
         self.shopId = shopId
         self.shopName = shopName ?? ""
-        self.backCategoryName = backCategoryName
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
-        self.getUserScreenTimeUseCase = getUserScreenTimeUseCase
     }
     
     // MARK: - Transform
@@ -72,17 +53,10 @@ final class ShopSummaryViewModel {
             switch input {
             case .viewDidLoad:
                 self.fetchShopSummary(shopId: shopId)
-                self.fetchShopMenusAndGroups(shopId: shopId)
-                self.fetchIsAvailable(shopId: shopId)
-                self.fetchShopEvenet(shopId: shopId)
-            case let .logEvent(label, category, value, previousPage, currentPage, durationType, eventLabelNeededDuration):
-                self.makeLogAnalyticsEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, screenActionType: durationType, eventLabelNeededDuration: eventLabelNeededDuration)
-                
-            case let .logEventDirect(label, category, value):
-                self.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
-                
-            case let .getUserScreenAction(time, screenActionType, eventLabelNeededDuration):
-                self.getScreenAction(time: time, screenActionType: screenActionType, eventLabelNeededDuration: eventLabelNeededDuration)
+
+            case let .logEvent(label, value):
+                self.logAnalyticsEventUseCase.execute(label: label, value: value)
+
             }
         }
         .store(in: &subscriptions)
@@ -92,79 +66,15 @@ final class ShopSummaryViewModel {
 
 extension ShopSummaryViewModel {
     private func fetchShopSummary(shopId: Int) {
-        fetchOrderShopSummaryFromShopUseCase.execute(id: shopId).sink(
+        fetchShopSummaryUseCase.execute(shopId: shopId).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] shopSummary in
                 guard let self else { return }
-                self.outputSubject.send(.update1(
-                    images: shopSummary.images,
-                    name: shopSummary.name,
-                    rating: shopSummary.ratingAverage,
-                    reviewCount: shopSummary.reviewCount))
+                self.phonenumber = shopSummary.phone
+                self.shopName = shopSummary.name
+                self.cachedImages = shopSummary.images
+                self.outputSubject.send(.update(shopSummary))
             }
         ).store(in: &subscriptions)
     }
-    
-    private func fetchShopMenusAndGroups(shopId: Int) {
-        fetchOrderShopMenusAndGroupsFromShopUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] (shopMenusCategory, shopMenus) in
-                guard let self else { return }
-                self.outputSubject.send(.update3(
-                    menusGroups: shopMenusCategory,
-                    menus: shopMenus))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchIsAvailable(shopId: Int) {
-        fetchShopDataUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] in
-                guard let self else { return }
-                self.phonenumber = $0.phone
-                self.shopName = $0.name
-                self.outputSubject.send(.updateTitle($0.name))
-                self.outputSubject.send(.update2(
-                    delivery: $0.delivery,
-                    payBank: $0.payBank,
-                    payCard: $0.payCard,
-                    maxDeliveryTip: $0.deliveryPrice,
-                    phone: $0.phone))
-            }
-        ).store(in: &subscriptions)
-    }
-    
-    private func fetchShopEvenet(shopId: Int) {
-        fetchShopEventListUseCase.execute(shopId: shopId).sink(
-            receiveCompletion: { _ in },
-            receiveValue: { [weak self] events in
-                let event = events.first?.title
-                self?.outputSubject.send(.updateShopEvent(event: event))
-            }
-        ).store(in: &subscriptions)
-    }
-}
-
-extension ShopSummaryViewModel {
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String? = nil, currentPage: String? = nil, screenActionType: ScreenActionType? = nil, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        if eventLabelNeededDuration != nil {
-            var durationTime: Double = 0.0
-            switch eventLabelNeededDuration {
-            case .shopDetailViewBack, .shopCall:
-                durationTime = getUserScreenTimeUseCase.returnUserScreenTime(isEventTime: true)
-            default:
-                break
-            }
-            logAnalyticsEventUseCase.executeWithDuration(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: "\(durationTime)")
-        }
-        else {
-            logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
-        }
-    }
-    
-    private func getScreenAction(time: Date, screenActionType: ScreenActionType, eventLabelNeededDuration: EventParameter.EventLabelNeededDuration? = nil) {
-        getUserScreenTimeUseCase.getUserScreenAction(time: time, screenActionType: screenActionType, screenEventLabel: eventLabelNeededDuration)
-    }
-
 }

@@ -47,8 +47,8 @@ final class RecruitListHostingController: UIHostingController<RecruitListView>, 
         switch action {
         case .configureRightButtons(let hasNotification):
             updateNotificationBarButton(hasNotification)
-        case .showFilterBottomSheet(let filterState, let onFilterItemTapped, let onResetTapped, let onApplyTapped):
-            showFilterBottomSheet(filterState, onFilterItemTapped, onResetTapped, onApplyTapped)
+        case .showFilterBottomSheet(let filterState, let onFilterItemTapped, let onResetTapped, let onCloseTapped, let onApplyTapped):
+            showFilterBottomSheet(filterState, onFilterItemTapped, onResetTapped, onCloseTapped, onApplyTapped)
         case .showToast(let message):
             showToastMessage(message: message, bottomInset: toastMessageBottomInset)
         case .showLoginToast:
@@ -192,17 +192,17 @@ extension RecruitListHostingController {
         _ filterState: RecruitListFilter,
         _ onFilterItemTapped: @escaping (Int, FilterItemModel)->Bool,
         _ onResetTapped: @escaping ()->Void,
+        _ onCloseTapped: @escaping ()->Void,
         _ onApplyTapped: @escaping ([FilterGroupModel])->Void
     ) {
         let filterBottomSheetView = FilterBottomSheetView(
             groupModels: filterState.toGroupModels(),
             onFilterItemTapped: onFilterItemTapped,
             onResetTapped: onResetTapped,
+            onCloseTapped: onCloseTapped,
             onApplyTapped: onApplyTapped
         )
-        let bottomSheetViewController = BottomSheetViewControllerB(contentView: filterBottomSheetView)
-        filterBottomSheetView.delegate = bottomSheetViewController
-        present(bottomSheetViewController, animated: true)
+        presentBottomSheet(filterBottomSheetView)
     }    
 }
 
@@ -218,8 +218,7 @@ extension RecruitListHostingController {
             return
         }
         rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Recruit.recruitNotification,
-            category: .click,
+            label: EventParameter.EventLabel.Recruit.teamListTeamNotificationEntryClick,
             value: "알림"
         )
         showRecruitNotificationList()
@@ -231,8 +230,7 @@ extension RecruitListHostingController {
             return
         }
         rootView.makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Recruit.recruitProfile,
-            category: .click,
+            label: EventParameter.EventLabel.Recruit.teamListTeamProfileEntryClick,
             value: "프로필"
         )
         showRecruitProfile()

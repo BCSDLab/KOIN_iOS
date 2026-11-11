@@ -22,7 +22,10 @@ final class LostItemImageCollectionViewCell: UICollectionViewCell {
     }
 
     private let cancelButton =  UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .cancelBlue), for: .normal)
+        var configuration = UIButton.Configuration.plain()
+        configuration.image = UIImage.appImage(asset: .lostItemPhotoDelete)?.withRenderingMode(.alwaysOriginal)
+        configuration.contentInsets = .zero
+        $0.configuration = configuration
     }
 
     // MARK: - Initializer

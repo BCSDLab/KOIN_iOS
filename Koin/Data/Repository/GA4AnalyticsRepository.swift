@@ -5,7 +5,6 @@
 //  Created by 김나훈 on 5/27/24.
 //
 
-
 final class GA4AnalyticsRepository: AnalyticsRepository {
     
     private let service: LogAnalyticsService
@@ -13,18 +12,7 @@ final class GA4AnalyticsRepository: AnalyticsRepository {
     init(service: LogAnalyticsService) {
         self.service = service
     }
-    func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        
-        return service.logEvent(label: label, category: category, value: value)
-    }
-    
-    func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, previousPage: String?, currentPage: String?, durationTime: String?) {
-        
-        return service.logEvent(label: label, category: category, value: value, previousPage: previousPage, currentPage: currentPage, durationTime: durationTime)
-    }
-    
-    
-    func logEventWithSessionId(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        return service.logEventWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
+    func logEvent(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String]) {
+        service.logEvent(label: label, value: value, category: category, parameters: parameters)
     }
 }

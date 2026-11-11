@@ -19,7 +19,7 @@ final class RecruitApplyViewModel: ViewModelProtocol {
             profileRequest: RecruitProfileRequest,
             applyRequest: RecruitApplyRequest
         )
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
 
     enum Output {
@@ -74,8 +74,8 @@ final class RecruitApplyViewModel: ViewModelProtocol {
                         profileRequest: profileRequest,
                         applyRequest: applyRequest
                     )
-                case let .logEvent(label, category, value):
-                    self?.logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+                case let .logEvent(label, value):
+                    self?.logAnalyticsEventUseCase.execute(label: label, value: value)
                 }
             }
             .store(in: &subscriptions)

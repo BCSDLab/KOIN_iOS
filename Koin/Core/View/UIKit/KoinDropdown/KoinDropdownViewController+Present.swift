@@ -1,0 +1,84 @@
+//
+//  KoinDropdownViewController+Present.swift
+//  koin
+//
+//  Created by 홍기정 on 11/1/26.
+//
+
+import UIKit
+
+// MARK: - Present
+extension KoinDropdownViewController {
+    /// 부모가 child containment(addChild, addSubview, didMove)를 마친 뒤 호출한다.
+    func presentDropdown() -> Bool {
+        guard let anchor else { return false }
+        parent?.view.layoutIfNeeded()
+        scrollView = nearestScrollView(to: anchor)
+
+        contentView.transform = .identity
+        resolveDirection()
+        guard layoutPanel() else { return false }
+        applyShadow()
+        let target = prepareScrollIfNeeded()
+        UIView.animate(withDuration: KoinDropdownAnimator.Metric.presentDuration) {
+            if let target {
+                self.scrollView?.contentOffset = target
+            }
+            self.layoutPanel()
+        }
+        animator.present(
+            view: contentView,
+            hiddenOffsetY: hiddenOffsetY
+        )
+        lastLayoutSize = view.bounds.size
+        isPresented = true
+        parent?.view.addGestureRecognizer(outsideTouchRecognizer)
+        return true
+    }
+}
+
+// MARK: - Dismiss
+extension KoinDropdownViewController {
+    func dismissDropdown(animated: Bool = true) {
+        guard !isDismissing, !isDismissed else { return }
+        isPresented = false
+        isDismissing = true
+
+        if animated {
+            UIView.animate(withDuration: KoinDropdownAnimator.Metric.dismissDuration) {
+                self.restoreScrollView()
+                self.layoutPanel()
+            }
+            animator.dismiss(
+                view: contentView,
+                hiddenOffsetY: hiddenOffsetY
+            ) { [weak self] in
+                self?.finishDismiss()
+            }
+        } else {
+            contentView.layer.removeAllAnimations()
+            restoreScrollView()
+            finishDismiss()
+        }
+    }
+
+    func dismissAfterLayout() {
+        DispatchQueue.main.async { [weak self] in
+            self?.dismissDropdown(animated: false)
+        }
+    }
+
+    @objc func handleOutsideTouch(_ recognizer: UIGestureRecognizer) {
+        guard recognizer.state == .began else { return }
+        dismissDropdown()
+    }
+
+    private func finishDismiss() {
+        guard !isDismissed else { return }
+        isDismissed = true
+        outsideTouchRecognizer.view?.removeGestureRecognizer(outsideTouchRecognizer)
+        willMove(toParent: nil)
+        view.removeFromSuperview()
+        removeFromParent()
+    }
+}

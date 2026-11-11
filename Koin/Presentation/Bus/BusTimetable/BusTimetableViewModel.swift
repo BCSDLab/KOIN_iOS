@@ -12,7 +12,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
         case getBusRoute(BusType)
         case getBusTimetable(BusType, Int, Int?)
         case getEmergencyNotice
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
 
     enum Output {
@@ -20,7 +20,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
         case updateBusTimetable(busType: BusType, busTimetableInfo: BusTimetableInfo)
         case updateShuttleBusRoutes(busRoutes: ShuttleRouteDto)
         case updateEmergencyNotice(notice: BusNoticeDto)
-        case updateStopLabel(busStop: String)
+        case updateStopLabel(busType: BusType, busStop: String)
     }
     
     // MARK: - properties
@@ -55,8 +55,8 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 self?.getBusTimetable(busType: busType, firstFilterIdx: firstFilterIdx, secondFilterIdx: secondFilterIdx)
             case .getEmergencyNotice:
                 self?.getEmergencyNotice()
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -92,7 +92,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 receiveValue: { [weak self] timetable, busDirection in
                     self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
                     let busStop = busDirection == .from ? "천안 터미널 승차" : "코리아텍 승차"
-                    self?.outputSubject.send(.updateStopLabel(busStop: busStop))
+                    self?.outputSubject.send(.updateStopLabel(busType: busType, busStop: busStop))
                 }
             ).store(in: &subscriptions)
         default:
@@ -100,7 +100,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
                 receiveCompletion: { _ in },
                 receiveValue: { [weak self] timetable, busDirection in
                     self?.outputSubject.send(.updateBusTimetable(busType: busType, busTimetableInfo: timetable))
-                    self?.outputSubject.send(.updateStopLabel(busStop: "\(busDirection) 승차"))
+                    self?.outputSubject.send(.updateStopLabel(busType: busType, busStop: "\(busDirection) 승차"))
                 }
             ).store(in: &subscriptions)
         }
@@ -115,7 +115,7 @@ final class BusTimetableViewModel: ViewModelProtocol {
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

@@ -62,11 +62,12 @@ struct RegisterFormViewModelSelectTypeTests {
     }
 }
 
+#if false // TODO: 로깅 개편으로 구 세션 로깅 입력과 라벨이 제거되어 비활성화
 @Suite("RegisterFormViewModel - 회원 유형 선택 로깅")
 struct RegisterFormViewModelSelectTypeLoggingTests {
 
     private let sessionId = "sign_up_0_iOS_1758713295_SDAFS"
-    private let label = EventParameter.EventLabel.User.createAccount
+    private let label = LegacyEventParameter.EventLabel.User.createAccount
 
     @Test(
         "선택한 회원 유형을 로그 값으로 전달한다",
@@ -124,3 +125,4 @@ extension RegisterFormViewModelSelectTypeLoggingTests {
         return (viewModel, input)
     }
 }
+#endif

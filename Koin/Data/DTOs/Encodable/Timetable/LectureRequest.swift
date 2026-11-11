@@ -23,12 +23,13 @@ struct TimetableLecture: Codable {
     let professor: String?
     let grades: String
     let memo: String
+    var id: Int? = nil
 
     enum CodingKeys: String, CodingKey {
         case lectureID = "lecture_id"
         case classTitle = "class_title"
         case classInfos = "class_infos"
-        case professor, grades, memo
+        case professor, grades, memo, id
     }
 }
 

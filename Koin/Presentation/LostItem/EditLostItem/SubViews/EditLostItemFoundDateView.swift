@@ -14,10 +14,16 @@ final class EditLostItemFoundDateView: UIView {
     private var type: LostItemType
     private var subscriptions: Set<AnyCancellable> = []
     
+    /// 서버 값이 비었거나 파싱되지 않으면 날짜를 고르기 전까지 무효
     var isValid: Bool {
-        dateWarningLabel.isHidden
+        foundDateValue != nil
     }
-    private(set) var foundDate: String
+    /// 서버 found_date(yyyy-MM-dd). 사용자가 바꾸기 전에는 서버 값 그대로
+    var foundDate: String {
+        foundDateValue?.string(with: .yearMonthDayHyphen) ?? originalFoundDate
+    }
+    private let originalFoundDate: String
+    private var foundDateValue: Date?
     
     // MARK: - UI Components
     private lazy var dateLabel = UILabel().then {
@@ -64,47 +70,33 @@ final class EditLostItemFoundDateView: UIView {
         $0.image = UIImage.appImage(asset: .chevronDown)
         $0.isUserInteractionEnabled = false
     }
-    private lazy var dropdownView = DatePickerDropdownView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.layer.cornerRadius = 12
-    }
+    private let dropdownView: KoinPickerDropDownView
 
-    // MARK: - Dropdown
-    var dropdownTrigger: UIView { dateButton }
-    var dropdownContentView: UIView & KoinDropdownContentView { dropdownView }
-    private var dropdown: KoinDropdown?
-    
     // MARK: - Initializer
-    init(type: LostItemType, foundDate: String) {
+    /// now: 화면 진입 시 고정한 시각(습득일 범위 기준)
+    init(type: LostItemType, foundDate: String, now: Date) {
         self.type = type
-        self.foundDate = foundDate
+        self.originalFoundDate = foundDate
+        // 서버 값은 보정하지 않고 그대로 표시
+        self.foundDateValue = Date(string: foundDate, format: .yearMonthDayHyphen)
+        self.dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.new500)).then {
+            $0.backgroundColor = UIColor.appColor(.neutral100)
+            $0.layer.cornerRadius = 12
+        }
         
         super.init(frame: .zero)
         configureView()
         setAddTargets()
         bind()
-        
-        let dateFormatter = {
-            let formatter = DateFormatter()
-            formatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
-            formatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
-            return formatter
-        }()
-        if let dateValue = dateFormatter.date(from: foundDate) {
-            dropdownView.dateValue = dateValue
-        }
-        
-        let formattedDate: String = dateFormatter.string(from: dropdownView.dateValue)
-        dateButton.setTitle(formattedDate, for: .normal)
-        dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+        updateDateButton()
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private func bind() {
-        dropdownView.valueChangedPublisher.sink { [weak self] in
-            self?.dropdownValueChanged()
+        dropdownView.datePublisher.sink { [weak self] date in
+            self?.updateFoundDate(date)
         }.store(in: &subscriptions)
     }
     
@@ -112,39 +104,43 @@ final class EditLostItemFoundDateView: UIView {
         dateButton.addTarget(self, action: #selector(dateButtonTapped), for: .touchUpInside)
     }
     
+    /// 드롭다운형: 값 있으면 setDate, 없으면 보정된 picker.date 즉시 반영(setDate는 이벤트 없음)
     @objc private func dateButtonTapped(button: UIButton) {
-        endEditing(true)
-        dropdown?.toggle()
-    }
-
-    /// ScrollView 를 아는 호출부가 Host 를 넘겨준다.
-    func prepareDropdown(host: KoinDropdownHost) {
-        guard dropdown == nil else { return }
-        dropdown = host.makeDropdown(
+        if let foundDateValue {
+            dropdownView.setDate(foundDateValue)
+        } else {
+            dropdownView.setDate(Date())
+            updateFoundDate(dropdownView.date)
+        }
+        presentDropdown(
             anchor: dateButton,
-            contentView: dropdownView,
-            configuration: .init(topPadding: 4, shadow: .shadow2)
+            content: dropdownView,
+            configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
         )
     }
     
-    private func dropdownValueChanged() {
-        // shouldScrollTo(dropdownView)
-        
-        let displayDate = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy년 M월 d일"
-            return formatter.string(from: dropdownView.dateValue)
-        }()
-        dateButton.setTitle(displayDate, for: .normal)
-        dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+    /// 저장 시점 검증: 무효면 경고 라벨 표시
+    func validateInput() -> Bool {
+        dateWarningLabel.isHidden = isValid
+        return isValid
+    }
+    
+    private func updateFoundDate(_ date: Date) {
+        foundDateValue = date
+        updateDateButton()
         dateWarningLabel.isHidden = true
-        
-        let formattedDate = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy-MM-dd"
-            return formatter.string(from: dropdownView.dateValue)
-        }()
-        self.foundDate = formattedDate
+    }
+    
+    private func updateDateButton() {
+        if let foundDateValue {
+            dateButton.setTitle(foundDateValue.string(with: .yearMonthDay), for: .normal)
+            dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            dateButton.titleLabel?.font = .appFont(.pretendardRegular, size: 14)
+        } else {
+            dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
+            dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+            dateButton.titleLabel?.font = .appFont(.pretendardRegular, size: 12)
+        }
     }
 }
 

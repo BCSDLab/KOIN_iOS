@@ -8,6 +8,16 @@
 import Foundation
 
 public enum ImageAsset: String {
+    // MARK: - Timetable
+    case timetableSquarePen
+    case timetableDownload
+    case timetablePlusNew500
+    case timetableMinusDanger
+    case timetablePlusNeutral500
+    case timetableBookmark
+    case timetableChevronDown
+    case timetableUpDownArrow
+
     // MARK: - Bus
     case bus
     case busStop
@@ -63,7 +73,6 @@ public enum ImageAsset: String {
     case diningTooltip
     case nonMenuImage
     case nonMenuWeekendImage
-    case diningReport
     case diningReportTooltipNav
     case diningReportTooltipCard
     case diningReportImageEvidence
@@ -209,8 +218,10 @@ public enum ImageAsset: String {
     // MARK: - LostItem
     case lostItem
     case lostItemGear
+    case lostItemKeywordSettings
     case lostItemAdd
     case lostItemDelete
+    case lostItemPhotoDelete
     
     // MARK: - Notice
     case noticeAISummary

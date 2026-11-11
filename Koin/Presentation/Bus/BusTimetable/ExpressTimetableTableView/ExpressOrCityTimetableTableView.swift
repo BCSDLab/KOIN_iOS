@@ -6,6 +6,7 @@
 //
 
 import Combine
+import SnapKit
 import UIKit
 
 final class ExpressOrCityTimetableTableView: UITableView {
@@ -14,7 +15,6 @@ final class ExpressOrCityTimetableTableView: UITableView {
     private var busInfo: [BusArrivalInfo] = []
     private var updatedAt: String = ""
     let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
-    let heightPublisher = PassthroughSubject<CGFloat, Never>()
     
     // MARK: - Initialization
     override init(frame: CGRect, style: UITableView.Style) {
@@ -33,7 +33,8 @@ final class ExpressOrCityTimetableTableView: UITableView {
         dataSource = self
         separatorStyle = .none
         showsVerticalScrollIndicator = false
-        isScrollEnabled = false
+        isScrollEnabled = true
+        contentInsetAdjustmentBehavior = .never
         backgroundColor = .systemBackground
         register(BusTimetableTableViewFooterView.self, forHeaderFooterViewReuseIdentifier: BusTimetableTableViewFooterView.identifier)
     }
@@ -43,12 +44,7 @@ final class ExpressOrCityTimetableTableView: UITableView {
         self.updatedAt = busInfo.updatedAt
         reloadData()
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        heightPublisher.send(self.contentSize.height)
     }
-}
 
 extension ExpressOrCityTimetableTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -78,10 +74,17 @@ extension ExpressOrCityTimetableTableView: UITableViewDataSource {
             $0.textAlignment = .left
             view.addSubview($0)
         }
-        morningLabel.frame = .init(x: 24, y: 16, width: 163, height: 26)
-        afternoonLabel.frame = .init(x: tableView.frame.width - 24 - 163, y: 16, width: 163, height: 26)
-        
-        view.frame = CGRect(x: 0, y: 16, width: tableView.frame.width, height: 50)
+        morningLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(16)
+            $0.leading.equalToSuperview().offset(24)
+            $0.height.equalTo(26)
+        }
+        afternoonLabel.snp.makeConstraints {
+            $0.top.height.equalTo(morningLabel)
+            $0.leading.equalTo(morningLabel.snp.trailing).offset(16)
+            $0.trailing.equalToSuperview().inset(24)
+            $0.width.equalTo(morningLabel)
+        }
         return view
     }
     
@@ -110,7 +113,11 @@ extension ExpressOrCityTimetableTableView: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 60
+        return UITableView.automaticDimension
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+        return 66
     }
 }
 

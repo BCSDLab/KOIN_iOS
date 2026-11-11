@@ -7,21 +7,15 @@
 
 import Combine
 
-enum ShuttleTimetableType {
-    case goSchool
-    case dropOffSchool
-    case manyRoute
-}
-
 final class BusTimetableDataViewModel: ViewModelProtocol {
 
     enum Input {
-        case getBusTimetable(ShuttleTimetableType)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case getBusTimetable
+        case logEvent(EventLabelType, Any)
     }
 
     enum Output {
-        case updateBusRoute(ShuttleBusTimetable, ShuttleTimetableType)
+        case updateBusRoute(ShuttleBusTimetable)
     }
     
     private let outputSubject = PassthroughSubject<Output, Never>()
@@ -39,27 +33,27 @@ final class BusTimetableDataViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .getBusTimetable(shuttleTimetableType):
-                self?.getShuttleBusTimetable(shuttleTimetableType: shuttleTimetableType)
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case .getBusTimetable:
+                self?.getShuttleBusTimetable()
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
     }
     
-    private func getShuttleBusTimetable(shuttleTimetableType: ShuttleTimetableType) {
+    private func getShuttleBusTimetable() {
         fetchShuttleTimetableUseCase.execute(id: shuttleRouteId).sink(
             receiveCompletion: { _ in },
             receiveValue: { [weak self] timetable in
                 guard let self else { return }
-                self.outputSubject.send(.updateBusRoute(timetable, shuttleTimetableType))
+                self.outputSubject.send(.updateBusRoute(timetable))
             }
         ).store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }
 

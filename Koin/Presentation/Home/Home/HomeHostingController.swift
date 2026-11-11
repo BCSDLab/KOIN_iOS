@@ -92,18 +92,12 @@ extension HomeHostingController {
         let fetchShopListUseCase = DefaultFetchShopListUseCase(shopRepository: shopRepository)
         let fetchEventListUseCase = DefaultFetchEventListUseCase(shopRepository: shopRepository)
         let fetchShopCategoryListUseCase = DefaultFetchShopCategoryListUseCase(shopRepository: shopRepository)
-        let fetchShopBenefitUseCase = DefaultFetchShopBenefitUseCase(shopRepository: shopRepository)
-        let fetchBeneficialShopUseCase = DefaultFetchBeneficialShopUseCase(shopRepository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopViewModel(
             fetchShopListUseCase: fetchShopListUseCase,
             fetchEventListUseCase: fetchEventListUseCase,
             fetchShopCategoryListUseCase: fetchShopCategoryListUseCase,
-            fetchShopBenefitUseCase: fetchShopBenefitUseCase,
-            fetchBeneficialShopUseCase: fetchBeneficialShopUseCase,
-            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         return ShopViewController(viewModel: viewModel)
     }
@@ -188,43 +182,37 @@ extension HomeHostingController {
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
             repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
         )
-        let bannerViewController = NewBannerViewController(
+        weak var sheet: KoinBottomSheetController?
+        let contentView = BannerView(
             onBannerTap: { [weak self] banner in
-                self?.handleBannerTap(banner, isLoggedIn: isLoggedIn)
+                sheet?.dismiss { [weak self] in
+                    self?.handleBannerTap(banner, isLoggedIn: isLoggedIn)
+                }
             },
-            onLogEvent: { label, category, value in
+            onLogEvent: { label, value in
                 logAnalyticsEventUseCase.execute(
                     label: label,
-                    category: category,
                     value: value
                 )
             }
         )
-        bannerViewController.setBanners(banner.banners)
+        contentView.setBanners(banner.banners)
 
-        let bottomSheetViewController = BottomSheetViewController(
-            contentViewController: bannerViewController,
-            defaultHeight: 341 + UIApplication.bottomSafeAreaHeight()
-        )
-        bottomSheetViewController.modalPresentationStyle = .overFullScreen
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
+        sheet = presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 8))
+        guard sheet != nil else { return }
         logAnalyticsEventUseCase.execute(
-            label: EventParameter.EventLabel.Campus.Home.mainModalEntry,
-            category: .entry,
-            value: banner.banners.first?.title ?? ""
+            label: EventParameter.EventLabel.Home.DA2.bannerMainModalExposure,
+            value: banner.banners[0].id
         )
-        present(bottomSheetViewController, animated: true)
     }
 
     private func handleBannerTap(_ banner: Banner, isLoggedIn: Bool) {
-        dismiss(animated: true)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(
             repository: GA4AnalyticsRepository(service: GA4AnalyticsService())
         )
         logAnalyticsEventUseCase.execute(
-            label: EventParameter.EventLabel.Campus.Home.mainModal,
-            category: .click,
-            value: banner.title
+            label: EventParameter.EventLabel.Home.DA2.bannerMainModalClick,
+            value: banner.id
         )
 
         if let version = banner.version,

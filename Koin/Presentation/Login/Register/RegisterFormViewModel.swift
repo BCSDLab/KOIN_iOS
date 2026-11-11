@@ -34,7 +34,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkDuplicatedNickname(String)
         case tryStudentRegister(StudentRegisterFormRequest)
         case tryGeneralRegister(GeneralRegisterFormRequest)
-        case logEventWithSessionId(EventLabelType, EventParameter.EventCategory, Any, String)
+        case logEvent(EventLabelType, Any)
+        case logSignUpEvent(EventLabelType, Any)
     }
     
     enum Output {
@@ -93,8 +94,10 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.studentRegister(registerRequest: request)
             case let .tryGeneralRegister(request):
                 self?.generalRegister(registerRequest: request)
-            case let .logEventWithSessionId(label, category, value, sessionId):
-                self?.makeLogAnalyticsSessionEvent(label: label, category: category, value: value, sessionId: sessionId)
+            case let .logEvent(label, value):
+                self?.logAnalyticsEventUseCase.execute(label: label, value: value)
+            case let .logSignUpEvent(label, value):
+                self?.makeSignUpLogEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         
@@ -103,6 +106,12 @@ final class RegisterFormViewModel: ViewModelProtocol {
 }
 
 extension RegisterFormViewModel {
+    /// 회원가입 계약은 명세상 15분 유지되는 custom_session_id를 함께 보낸다.
+    private func makeSignUpLogEvent(label: EventLabelType, value: Any) {
+        let sessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
+        logAnalyticsEventUseCase.execute(label: label, value: value, parameters: ["custom_session_id": sessionId])
+    }
+
     private func checkDuplicatedPhoneNumber(phone: String) {
         checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
             if case let .failure(error) = completion {
@@ -222,7 +231,4 @@ extension RegisterFormViewModel {
         }.store(in: &subscriptions)
     }
     
-    private func makeLogAnalyticsSessionEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any, sessionId: String) {
-        logAnalyticsEventUseCase.executeWithSessionId(label: label, category: category, value: value, sessionId: sessionId)
-    }
 }

@@ -10,48 +10,7 @@ import Foundation
 @testable import koin
 
 final class SpyLogAnalyticsEventUseCase: LogAnalyticsEventUseCase {
-
-    struct SessionEvent: Equatable {
-        let label: String
-        let category: EventParameter.EventCategory
-        let value: String
-        let sessionId: String
-    }
-
-    private(set) var sessionEvents: [SessionEvent] = []
-
-    var executeWithSessionIdCallCount: Int { sessionEvents.count }
-
-    func execute(
-        label: EventLabelType,
-        category: EventParameter.EventCategory,
-        value: Any
-    ) { }
-
-    func executeWithDuration(
-        label: EventLabelType,
-        category: EventParameter.EventCategory,
-        value: Any,
-        previousPage: String?,
-        currentPage: String?,
-        durationTime: String?
-    ) { }
-
-    func executeWithSessionId(
-        label: EventLabelType,
-        category: EventParameter.EventCategory,
-        value: Any,
-        sessionId: String
-    ) {
-        sessionEvents.append(
-            SessionEvent(
-                label: label.rawValue,
-                category: category,
-                value: "\(value)",
-                sessionId: sessionId
-            )
-        )
-    }
+    func execute(label: EventLabelType, value: Any, category: EventParameter.EventCategory?, parameters: [String: String]) {}
 }
 
 final class StubCheckDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase {

@@ -215,7 +215,6 @@ final class ShopReviewViewController: UIViewController, UIGestureRecognizerDeleg
         setDelegate()
         setAddTarget()
         setUpKeyboard()
-        setNotification()
         
         inputSubject.send(.checkModify)
         inputSubject.send(.updateShopName)
@@ -229,7 +228,6 @@ final class ShopReviewViewController: UIViewController, UIGestureRecognizerDeleg
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
         setGestureDelegate()
-        inputSubject.send(.getUserScreenAction(Date(), .enterVC, nil))
         setNavigationItem()
         
     }
@@ -253,8 +251,6 @@ final class ShopReviewViewController: UIViewController, UIGestureRecognizerDeleg
                 self?.shopNameLabel.text = shopName
             case let .reviewWriteSuccess(isPost, reviewId, reviewItem):
                 self?.writeCompletePublisher.send((isPost, reviewId, reviewItem))
-                self?.inputSubject.send(.getUserScreenAction(Date(), .leaveVC, nil))
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopDetailViewReviewWriteDone, .click, "", .leaveVC, nil))
             }
         }.store(in: &subscriptions)
         
@@ -295,22 +291,10 @@ final class ShopReviewViewController: UIViewController, UIGestureRecognizerDeleg
         navigationController?.interactivePopGestureRecognizer?.isEnabled = true
     }
     
-    private func setNotification() {
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground), name: UIApplication.didEnterBackgroundNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(appWillEnterForeground), name: UIApplication.willEnterForegroundNotification, object: nil)
-    }
 }
 
 extension ShopReviewViewController {
-    
-    @objc private func appDidEnterBackground() {
-        inputSubject.send(.getUserScreenAction(Date(), .enterBackground, nil))
-    }
-    
-    @objc private func appWillEnterForeground() {
-        inputSubject.send(.getUserScreenAction(Date(), .enterForeground, nil))
-    }
-    
+
     private func calculateTextViewHeight() {
         let width = reviewTextView.bounds.width
         guard width > 0 else {return}
@@ -356,6 +340,10 @@ extension ShopReviewViewController {
     }
     
     private func submitReviewButtonTapped() {
+        // 명세 3-13은 작성(등록) 완료만 대상이다. 수정 완료 계약은 없다.
+        if !viewModel.isEdit {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopReviewWriteReviewWriteConfirmClick, viewModel.shopName))
+        }
         let requestModel: WriteReviewRequest = .init(rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: tagCollectionView.items)
         inputSubject.send(.writeReview(requestModel))
     }

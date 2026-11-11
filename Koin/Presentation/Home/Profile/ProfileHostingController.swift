@@ -28,8 +28,8 @@ final class ProfileHostingController: UIHostingController<ProfileView>, HostingC
             showLogOutAlert()
         case .showSetting:
             navigationController?.pushViewController(makeSettingsViewController(), animated: true)
-        case .showTimeTable:
-            navigationController?.pushViewController(makeTimeTableViewController(), animated: true)
+        case let .showTimeTable(mainFrame):
+            navigationController?.pushViewController(makeTimeTableViewController(mainFrame: mainFrame), animated: true)
         }
     }
 }
@@ -64,8 +64,8 @@ extension ProfileHostingController {
         return LoginViewController(viewModel: viewModel)
     }
     
-    private func makeTimeTableViewController() -> UIViewController {
-        return TimetableViewController(viewModel: TimetableViewModel())
+    private func makeTimeTableViewController(mainFrame: MainTimetableFrame?) -> UIViewController {
+        return TimetableViewController(viewModel: TimetableViewModel(initialFrame: mainFrame))
     }
     
     private func makeSettingsViewController() -> UIViewController {

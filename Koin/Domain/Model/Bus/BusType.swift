@@ -34,15 +34,17 @@ enum BusType: String, Decodable, CaseIterable {
             return "전체 차종"
         }
     }
-    
-    func returnBusTypeColor() -> String {
+}
+
+// 화면 표시명과 명세의 분석 분류명은 별도로 유지한다.
+extension BusType {
+    var loggingValue: String {
         switch self {
-        case .shuttleBus:
-            return "D7FBEB"
-        case .expressBus:
-            return "D7E6FB"
-        default:
-            return "FBEBD7"
+        case .shuttleBus: return "셔틀"
+        case .expressBus: return "대성"
+        case .cityBus: return "시내"
+        case .commuteBus: return "통학버스"
+        case .noValue: return "전체 차종"
         }
     }
 }

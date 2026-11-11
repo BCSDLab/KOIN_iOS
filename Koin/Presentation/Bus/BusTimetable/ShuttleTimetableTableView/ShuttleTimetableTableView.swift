@@ -13,7 +13,6 @@ final class ShuttleTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     let moveDetailTimetablePublisher = PassthroughSubject<(String, String, String), Never>()
-    let heightPublisher = PassthroughSubject<CGFloat, Never>()
     let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
     private var busInfo: [RouteRegion] = []
     private var semesterInfo: SemesterInfo = SemesterInfo(name: "", from: "", to: "")
@@ -36,7 +35,8 @@ final class ShuttleTimetableTableView: UITableView {
         dataSource = self
         separatorStyle = .none
         showsVerticalScrollIndicator = false
-        isScrollEnabled = false
+        isScrollEnabled = true
+        contentInsetAdjustmentBehavior = .never
         contentInset = .zero
         self.backgroundColor = .systemBackground
     }
@@ -46,12 +46,7 @@ final class ShuttleTimetableTableView: UITableView {
         self.semesterInfo = busInfo.semesterInfo
         reloadData()
     }
-    
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        heightPublisher.send(self.contentSize.height)
     }
-}
 
 extension ShuttleTimetableTableView: UITableViewDataSource {
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -81,11 +76,12 @@ extension ShuttleTimetableTableView: UITableViewDataSource {
             let view = UIView()
             let coloredView = UIView()
             view.backgroundColor = .systemBackground
-            coloredView.backgroundColor = .appColor(.neutral100)
+            coloredView.backgroundColor = .appColor(.neutral50)
             view.addSubview(coloredView)
-            
-            view.frame = .init(x: 0, y: 0, width: tableView.frame.width, height: 14)
-            coloredView.frame = .init(x: 0, y: 7, width: tableView.frame.width, height: 7)
+            coloredView.snp.makeConstraints {
+                $0.leading.trailing.bottom.equalToSuperview()
+                $0.height.equalTo(7)
+            }
             return view
         }
         else {
@@ -135,10 +131,19 @@ extension ShuttleTimetableTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section != busInfo.count - 1 {
-            return 14
+            return 15
         }
         else {
-            return 60
+            return UITableView.automaticDimension
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, estimatedHeightForFooterInSection section: Int) -> CGFloat {
+        if section != busInfo.count - 1 {
+            return 15
+        }
+        else {
+            return 88
         }
     }
 }

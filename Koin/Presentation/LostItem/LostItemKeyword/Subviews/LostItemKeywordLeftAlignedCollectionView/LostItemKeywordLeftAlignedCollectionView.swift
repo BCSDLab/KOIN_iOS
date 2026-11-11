@@ -50,30 +50,30 @@ final class LostItemKeywordLeftAlignedCollectionView: UICollectionView {
     // MARK: - Public
     func configure(keywords: [String]) {
         self.keywords = keywords.map { LostItemKeyword(id: nil, keyword: $0) }
-        reloadSections([0])
+        reloadData()
     }
     
     func configure(keywords: [LostItemKeyword]) {
         self.keywords = keywords
-        reloadSections([0])
+        reloadData()
     }
     
     func append(keyword: LostItemKeyword) {
         keywords.append(keyword)
-        reloadSections([0])
+        reloadData()
     }
     
     func remove(id: Int) {
         if let row = keywords.firstIndex(where: { $0.id == id }) {
             keywords.remove(at: row)
-            reloadSections([0])
+            reloadData()
         }
     }
     
     func remove(keyword: String) {
         if let row = keywords.firstIndex(where: { $0.keyword == keyword }) {
             keywords.remove(at: row)
-            reloadSections([0])
+            reloadData()
         }
     }
 }
@@ -97,7 +97,7 @@ extension LostItemKeywordLeftAlignedCollectionView: UICollectionViewDelegateFlow
         let font = UIFont.appFont(.pretendardMedium, size: 14)
         let inset = 16 * 2
         let padding = 2
-        let imageWidth = 18
+        let imageWidth = action == .delete ? 16 : 18
         let keyword = keywords[indexPath.row].keyword
         var width = Int((keyword as NSString).size(withAttributes: [.font : font]).width)
         width = width + inset + padding + imageWidth

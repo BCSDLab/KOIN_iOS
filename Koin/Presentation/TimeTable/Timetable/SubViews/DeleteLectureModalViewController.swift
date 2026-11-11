@@ -21,18 +21,25 @@ final class DeleteLectureModalViewController: KoinModalViewController {
         self.lectureData = lectureData
         self.onDeleteButtonTapped = onDeleteButtonTapped
         
-        let attributedString = Self.makeAttributedString(lectureName: lectureData.name)
-        
+        let title = "\(lectureData.name)\(lectureData.name.hasFinalConsonant() ? "을" : "를") 삭제하시겠어요?"
+        let attributedTitle = NSMutableAttributedString(string: title, attributes: [
+            .font: UIFont.appFont(.pretendardMedium, size: 16),
+            .foregroundColor: UIColor.appColor(.neutral800)
+        ])
+        attributedTitle.addAttribute(.font, value: UIFont.appFont(.pretendardSemiBold, size: 16), range: (title as NSString).range(of: "삭제", options: .backwards))
+        let subtitle = NSAttributedString(string: "삭제한 강의는 수업추가에서 다시 추가할 수 있어요.", attributes: [
+            .font: UIFont.appFont(.pretendardMedium, size: 15),
+            .foregroundColor: UIColor.appColor(.neutral800)
+        ])
         super.init(configuration: .init(
             appearance: .destructive,
-            content: .attributedSingleTitle(title: attributedString),
+            content: .attributedTitles(mainTitle: attributedTitle, subTitle: subtitle),
             button: .buttons(
                 leftButtonTitle: "취소",
+                leftButtonStyle: .init(textColor: .neutral600, font: .pretendardMedium, fontSize: 15, borderColor: .gray, borderWidth: 1, cornerRadius: 4),
                 rightButtonTitle: "삭제하기",
-                rightButtonAction: {}
-            ),
-            layout: .init(
-                paddingBetweenContentAndButton: 24 - 9.6
+                rightButtonAction: {},
+                rightButtonStyle: .init(textColor: .neutral0, font: .pretendardMedium, fontSize: 15, backgroundColor: .danger700, cornerRadius: 4)
             )
         ))
     }
@@ -42,45 +49,10 @@ final class DeleteLectureModalViewController: KoinModalViewController {
     
     // MARK: - Override
     override func rightButtonTapped() {
-        dismiss(animated: true) { [weak self] in
-            guard let self else { return }
-            onDeleteButtonTapped(lectureData)
+        let onDelete = onDeleteButtonTapped
+        let lecture = lectureData
+        dismiss(animated: true) {
+            onDelete(lecture)
         }
-    }
-}
-
-extension DeleteLectureModalViewController {
-    private static func makeAttributedString(lectureName: String) -> NSAttributedString {
-        let textMedium16 = "\(lectureName)\(lectureName.hasFinalConsonant() ? "을":"를") 삭제하시겠어요?"
-        let textMedium15 = "삭제한 강의는 수업추가에서\n다시 추가할 수 있어요."
-        let text = textMedium16 + "\n" + textMedium15
-        
-        let rangeMedium16 = (text as NSString).range(of: textMedium16)
-        let rangeMedium15 = (text as NSString).range(of: textMedium15)
-        let range1 = (text as NSString).range(of: "삭제")
-        let range2 = (text as NSString).range(of: "수업추가")
-        
-        let attributedString = NSMutableAttributedString(string: text)
-        
-        attributedString.addAttributes([
-            .font: UIFont.appFont(.pretendardMedium, size: 16),
-            .foregroundColor: UIColor.appColor(.neutral800)
-        ], range: rangeMedium16)
-        
-        attributedString.addAttributes([
-            .font: UIFont.appFont(.pretendardMedium, size: 15),
-            .foregroundColor: UIColor.appColor(.neutral800)
-        ], range: rangeMedium15)
-        
-        attributedString.addAttributes([
-            .font: UIFont.appFont(.pretendardBold, size: 16),
-            .foregroundColor: UIColor.appColor(.danger700)
-        ], range: range1)
-        
-        attributedString.addAttributes([
-            .foregroundColor: UIColor.appColor(.primary500)
-        ], range: range2)
-        
-        return attributedString
     }
 }

@@ -12,6 +12,7 @@ final class OneBusTimetableTableView: UITableView {
     // MARK: - Properties
     private var subscribtions = Set<AnyCancellable>()
     private var busInfo: ([NodeInfo], [String?]) = ([], [])
+    private var timeHeaderText = "시간"
     let tapIncorrectButtonPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Initialization
@@ -36,15 +37,16 @@ final class OneBusTimetableTableView: UITableView {
         backgroundColor = .systemBackground
     }
     
-    func configure(nodeInfo: [NodeInfo], routeInfo: [String?]) {
+    func configure(nodeInfo: [NodeInfo], routeInfo: [String?], timeHeaderText: String) {
         self.busInfo = (nodeInfo, routeInfo)
+        self.timeHeaderText = timeHeaderText
         reloadData()
     }
 }
 
 extension OneBusTimetableTableView: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return busInfo.1.count
+        return min(busInfo.0.count, busInfo.1.count)
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -58,7 +60,7 @@ extension OneBusTimetableTableView: UITableViewDataSource {
         let view = UIView()
         let timeGuideLabel = UILabel()
         let placeGuideLabel = UILabel()
-        timeGuideLabel.text = "등교"
+        timeGuideLabel.text = timeHeaderText
         placeGuideLabel.text = "승하차장명"
         timeGuideLabel.textAlignment = .center
         placeGuideLabel.textAlignment = .left
@@ -67,10 +69,8 @@ extension OneBusTimetableTableView: UITableViewDataSource {
             $0.textColor = .appColor(.neutral600)
             view.addSubview($0)
         }
-        timeGuideLabel.frame = .init(x: 24, y: 18, width: 62, height: 22)
-        placeGuideLabel.frame = .init(x: 104, y: 18, width: 200, height: 22)
-        
-        view.frame = CGRect(x: 0, y: 0, width: tableView.frame.width, height: 52)
+        timeGuideLabel.frame = .init(x: 24, y: 8, width: 62, height: 22)
+        placeGuideLabel.frame = .init(x: 102, y: 8, width: 200, height: 22)
         view.backgroundColor = .appColor(.neutral100)
         return view
     }
@@ -91,11 +91,13 @@ extension OneBusTimetableTableView: UITableViewDataSource {
 
 extension OneBusTimetableTableView: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 46
+        // padding 8 v + 정류장명 26 (+ 부명칭 19) + 행 간 gap 4
+        let hasDetail = !(busInfo.0[indexPath.row].detail ?? "").isEmpty
+        return hasDetail ? 65 : 46
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 52
+        return 38
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {

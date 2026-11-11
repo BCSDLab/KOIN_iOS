@@ -78,10 +78,9 @@ struct RecruitDataView: ActionBindableView {
     
     func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
-        viewModel.execute(.logEvent(label, category, value))
+        viewModel.execute(.logEvent(label, value))
     }
 }
 
@@ -92,12 +91,12 @@ extension RecruitDataView {
         }
         
         if data.isAuthor {
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitPostApplicantCheck, .click, data.title))
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamDetailTeamApplicantEntryClick, "\(data.category.rawValue)_\(data.id)"))
             sendAction(.showApplicant)
             return
         }
         if data.canApply {
-            viewModel.execute(.logEvent(EventParameter.EventLabel.Campus.Recruit.recruitPostApply, .click, data.title))
+            viewModel.execute(.logEvent(EventParameter.EventLabel.Recruit.teamDetailTeamApplyEntryClick, "\(data.category.rawValue)_\(data.id)"))
             sendAction(.showApply)
             return
         }

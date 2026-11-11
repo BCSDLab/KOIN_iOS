@@ -49,6 +49,8 @@ final class LoginViewController: UIViewController {
         $0.textContentType = .username
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardRegular, size: 16)
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 4, height: 0))
+        $0.leftViewMode = .always
     }
     
     private let separateView1 = UIView().then {
@@ -72,6 +74,8 @@ final class LoginViewController: UIViewController {
         $0.textColor = UIColor.appColor(.neutral800)
         $0.font = UIFont.appFont(.pretendardRegular, size: 16)
         $0.isSecureTextEntry = true
+        $0.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 4, height: 0))
+        $0.leftViewMode = .always
     }
     
     private let changeSecureButton = UIButton().then { button in
@@ -204,10 +208,8 @@ final class LoginViewController: UIViewController {
             case let .showErrorMessage(message):
                 self?.warningImageView.isHidden = false
                 self?.passwordWarningLabel.text = message
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "로그인 실패"))
             case .loginSuccess:
                 self?.navigationController?.popViewController(animated: true)
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "로그인 완료"))
             case .showForceModal:
                 self?.navigationController?.setViewControllers([ForceModifyUserViewController()], animated: true)
             case .showModifyModal:
@@ -270,13 +272,13 @@ extension LoginViewController {
     @objc private func findIdButtonTapped() {
         let viewController = FindPhoneIdViewController(viewModel: FindIdViewModel())
         navigationController?.pushViewController(viewController, animated: true)
-        inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "아이디 찾기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Account.loginAccountRecoveryIdEntryClick, "아이디 찾기"))
     }
     
     @objc private func findPasswordButtonTapped() {
         let findPasswordViewController = FindPasswordCertViewController(viewModel: FindPasswordViewModel())
         navigationController?.pushViewController(findPasswordViewController, animated: true)
-        inputSubject.send(.logEvent(EventParameter.EventLabel.User.login, .click, "비밀번호 찾기"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Account.loginAccountRecoveryPasswordEntryClick, "비밀번호 찾기"))
     }
 
     @objc private func ownerButtonTapped() {
@@ -325,8 +327,7 @@ extension LoginViewController {
         registerViewController.title = "회원가입"
         navigationController?.pushViewController(registerViewController, animated: true)
         
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-        inputSubject.send(.logSessionEvent(EventParameter.EventLabel.User.startSignUp, .click, "회원가입 시작", customSessionId))
+        inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.loginSignUpEntryClick, "회원가입 시작"))
     }
 }
 
@@ -371,13 +372,13 @@ extension LoginViewController {
             $0.height.equalTo(66)
         }
         logoTextImageView.snp.makeConstraints {
-            $0.top.equalTo(logoImageView.snp.bottom).offset(9)
+            $0.top.equalTo(logoImageView.snp.bottom).offset(4)
             $0.centerX.equalTo(contentLayoutGuide)
             $0.width.equalTo(102)
-            $0.height.equalTo(41)
+            $0.height.equalTo(34)
         }
         idTextField.snp.makeConstraints {
-            $0.top.equalTo(logoTextImageView.snp.bottom).offset(52)
+            $0.top.equalTo(logoTextImageView.snp.bottom).offset(55.5)
             $0.leading.trailing.equalTo(contentLayoutGuide).inset(48)
             $0.height.equalTo(40)
         }
@@ -452,7 +453,7 @@ extension LoginViewController {
         }
         ownerButton.snp.makeConstraints {
             $0.top.centerX.equalTo(footerLayoutGuide)
-            $0.bottom.equalTo(copyrightLabel.snp.top).offset(-21)
+            $0.bottom.equalTo(copyrightLabel.snp.top).offset(-24)
             $0.height.equalTo(29)
         }
         

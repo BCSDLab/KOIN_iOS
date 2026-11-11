@@ -53,6 +53,7 @@ final class AgreementFormViewController: UIViewController {
     
     private let nextButton = UIButton().then {
         $0.setTitle("다음", for: .normal)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 16)
         $0.layer.cornerRadius = 8
         $0.isEnabled = false
         $0.backgroundColor = UIColor.appColor(.neutral300)
@@ -214,8 +215,7 @@ extension AgreementFormViewController {
         let viewController = CertificationFormViewController(viewModel: viewModel)
         viewController.title = "회원가입"
         navigationController?.pushViewController(viewController, animated: true)
-        let customSessionId = CustomSessionManager.getOrCreateSessionId(duration: .fifteenMinutes, eventName: "sign_up", loginStatus: 0, platform: "iOS")
-        inputSubject.send(.logEventWithSessionId(EventParameter.EventLabel.User.termsAgreement, .click, "약관동의", customSessionId))
+        inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.signUpPolicySignUpTermsAgreeClick, "약관동의"))
     }
 }
 
@@ -299,6 +299,12 @@ private final class AgreementItemView: UIStackView {
     let agreement: AgreementText
     let checkButton = UIButton(type: .system)
     let textView = UITextView()
+    private let dashedBorderLayer = CAShapeLayer().then {
+        $0.strokeColor = UIColor(hexCode: "D2DAE2").cgColor
+        $0.fillColor = UIColor.clear.cgColor
+        $0.lineWidth = 1
+        $0.lineDashPattern = [2, 2]
+    }
 
     init(agreement: AgreementText) {
         self.agreement = agreement
@@ -313,7 +319,7 @@ private final class AgreementItemView: UIStackView {
         config.image = resizedImage
         config.imagePlacement = .leading
         config.imagePadding = 8
-        config.baseForegroundColor = UIColor.appColor(.gray)
+        config.baseForegroundColor = UIColor.appColor(.neutral500)
 
         var attrTitle = AttributedString(agreement.title)
         attrTitle.font = UIFont.appFont(.pretendardMedium, size: 14)
@@ -327,7 +333,7 @@ private final class AgreementItemView: UIStackView {
         }
         checkButton.configurationUpdateHandler = { button in
             var updatedConfig = button.configuration
-            updatedConfig?.baseForegroundColor = UIColor.appColor(.gray)
+            updatedConfig?.baseForegroundColor = UIColor.appColor(.neutral500)
             updatedConfig?.background.backgroundColor = .clear
             button.configuration = updatedConfig
         }
@@ -335,9 +341,6 @@ private final class AgreementItemView: UIStackView {
         textView.text = agreement.description
         textView.textColor = UIColor.appColor(.neutral800)
         textView.font = UIFont.systemFont(ofSize: 9)
-        textView.layer.borderColor = UIColor(hexCode: "D2DAE2").cgColor
-        textView.layer.borderWidth = 1.0
-        textView.layer.cornerRadius = 5.0
         textView.isEditable = false
         textView.isScrollEnabled = true
         textView.showsVerticalScrollIndicator = false
@@ -347,6 +350,16 @@ private final class AgreementItemView: UIStackView {
         [checkButton, textView].forEach {
             addArrangedSubview($0)
         }
+        // textView 자체 layer에 그리면 스크롤 시 테두리가 같이 움직여 스택뷰에 그림
+        layer.addSublayer(dashedBorderLayer)
+    }
+
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        CATransaction.begin()
+        CATransaction.setDisableActions(true)
+        dashedBorderLayer.path = UIBezierPath(rect: textView.frame.insetBy(dx: 0.5, dy: 0.5)).cgPath
+        CATransaction.commit()
     }
 
     required init(coder: NSCoder) {

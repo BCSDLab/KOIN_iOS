@@ -18,7 +18,7 @@ final class CallVanDataViewModel: ViewModelProtocol {
     enum Input {
         case viewWillAppear
         case refresh
-        case logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any)
+        case logEvent(label: EventLabelType, value: Any)
     }
     
     // MARK: - Properties
@@ -52,8 +52,8 @@ final class CallVanDataViewModel: ViewModelProtocol {
                 fetchNotification()
             case .refresh:
                 refresh()
-            case let .logEvent(label, category, value):
-                logEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                logEvent(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -96,7 +96,7 @@ extension CallVanDataViewModel {
         ).store(in: &subscriptions)
     }
     
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func logEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

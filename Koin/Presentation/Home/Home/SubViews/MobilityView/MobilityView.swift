@@ -55,7 +55,7 @@ struct MobilityView: View {
                 )
                 MobilitySmallButton(
                     imageAsset: .categoryBusSearch,
-                    title: "버스 노선 조회",
+                    title: "교통편 조회하기",
                     subtitle: "가장 빠른 버스 찾기",
                     action: onTapBusRoute
                 )

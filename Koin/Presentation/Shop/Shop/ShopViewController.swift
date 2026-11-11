@@ -43,10 +43,6 @@ final class ShopViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .newBackground)
-        inputSubject.send(.getUserScreenAction(Date(), .enterVC))
-        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
-        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategoriesBack))
-        inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -75,11 +71,9 @@ final class ShopViewController: UIViewController {
                 self.updateEventShops(eventShops)
             case let .updateSortButtonTitle(newTitle):
                 self.shopCollectionView.updateSortButtonTitle(newTitle)
-            default: break
             }
         }.store(in: &subscriptions)
 
-        
         shopCollectionView.sortOptionDidChangePublisher.sink { [weak self] sortType in
             self?.inputSubject.send(.sortOptionDidChange(sortType))
         }.store(in: &subscriptions)
@@ -87,46 +81,30 @@ final class ShopViewController: UIViewController {
         shopCollectionView.selectedCategoryPublisher.sink { [weak self] categoryId in
             guard let self else { return }
             
-            let previousPage = self.viewModel.selectedCategoryName
-            let currentPage  = self.viewModel.categoryName(for: categoryId)
+            if categoryId != self.viewModel.selectedId {
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopListFilterCategoryClick, self.viewModel.categoryName(for: categoryId)))
+            }
             
-            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategories, .click, currentPage, previousPage, nil, nil, .shopCategories))
-            
-            self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopCategories))
             self.inputSubject.send(.changeCategory(categoryId))
             
-            self.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
-            self.inputSubject.send(.getUserScreenAction(Date(), .beginEvent, .shopClick))
         }.store(in: &subscriptions)
         
         shopCollectionView.cellTapPublisher.sink { [weak self] shopId, shopName in
             let service = DefaultShopService()
             let repository = DefaultShopRepository(service: service)
             
-            let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
-            let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
-            let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
-            let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: repository)
+            let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(shopRepository: repository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
-            let previousPage = self?.viewModel.selectedCategoryName ?? "알 수 없음" 
             let viewModel = ShopSummaryViewModel(
-                fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-                fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-                fetchShopDataUseCase: fetchShopDataUseCase,
-                fetchShopEventListUseCase: fetchShopEventListUseCase,
+                fetchShopSummaryUseCase: fetchShopSummaryUseCase,
                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                getUserScreenTimeUseCase: getUserScreenTimeUseCase,
                 shopId: shopId,
-                shopName: shopName,
-                backCategoryName: previousPage
+                shopName: shopName
             )
             let viewController = ShopSummaryViewController(viewModel: viewModel)
             viewController.title = shopName
             let currentPage = shopName
-            self?.inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopClick))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopClick, .click, currentPage, previousPage, nil, nil, .shopClick))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopListShopDetailEntryClick, currentPage))
 
             self?.navigationController?.pushViewController(viewController, animated: true)
         }.store(in: &subscriptions)
@@ -151,67 +129,44 @@ final class ShopViewController: UIViewController {
 
 extension ShopViewController: PopLoggable {
     func sendPopLog(category: EventParameter.EventCategory) {
-        let previousPage = viewModel.selectedCategoryName
-        let currentPage = "메인"
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategoriesBack))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopCategoriesBack, category, currentPage, previousPage, nil, nil, .shopCategoriesBack))
-        inputSubject.send(.getUserScreenAction(Date(), .endEvent, .shopCategories))
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.Shop.shopListNavigationBackSwipe
+            : EventParameter.EventLabel.Shop.shopListNavigationBackClick
+        inputSubject.send(.logEvent(label, "메인"))
     }
 }
 
 // MARK: - @objc
 extension ShopViewController {
     @objc private func searchBarButtonTapped() {
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopListSearchClick, viewModel.selectedCategoryName))
         let shopService = DefaultShopService()
         let shopRepository = DefaultShopRepository(service: shopService)
         let fetchSearchShopUseCase = DefaultFetchSearchShopUseCase(repository: shopRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = ShopSearchViewModel(fetchSearchShopUseCase: fetchSearchShopUseCase,
-                                            logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-                                            selectedCategoryName: viewModel.selectedCategoryName)
+                                            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let viewController = ShopSearchViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
 
     @objc private func sortButtonTapped() {
-        guard presentedViewController == nil else { return }
-        
-        let bottomSheetViewController = ShopSortOptionSheetViewController(current: viewModel.currentSortType)
-        
-        let categoryName = viewModel.selectedCategoryName
+        let contentView = ShopSortOptionSheetView(current: viewModel.currentSortType)
 
-        bottomSheetViewController.onOptionSelected = { [weak self] sort in
+        contentView.onOptionSelected = { [weak self] sort in
             self?.inputSubject.send(.sortOptionDidChange(sort))
-            let value: String
-            switch sort {
-            case .basic: value = "check_default_\(categoryName)"
-            case .review: value = "check_review_\(categoryName)"
-            case .rating: value = "check_star_\(categoryName)"
-            }
-            self?.inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopListFilterSortSelect, sort.title))
         }
-        
-        bottomSheetViewController.modalPresentationStyle = .pageSheet
-        if let sheet = bottomSheetViewController.sheetPresentationController {
-            if #available(iOS 16.0, *) {
-                let detent = UISheetPresentationController.Detent.custom(identifier: .init("fixed233")) { _ in 233 }
-                sheet.detents = [detent]
-                sheet.selectedDetentIdentifier = detent.identifier
-            } else {
-                sheet.detents = [.medium()]
-            }
-            sheet.prefersGrabberVisible = true
-            sheet.preferredCornerRadius = 32
-        }
-        present(bottomSheetViewController, animated: true)
+
+        presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.2), cornerRadius: 32))
     }
 }
 
 extension ShopViewController {
     private func handleOpenShopToggle(isSelected: Bool) {
-        let categoryName = viewModel.selectedCategoryName
-        let value = "check_open_\(categoryName)"
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCan, .click, value))
+        if isSelected {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopListFilterQuickFilterSelect, "영업중"))
+        }
         inputSubject.send(.filterOpenShops(isSelected))
     }
 
@@ -229,7 +184,7 @@ extension ShopViewController {
     }
     private func makeScrollLog() {
         let categoryName = viewModel.selectedCategoryName
-        inputSubject.send(.logEventDirect(EventParameter.EventLabel.Business.shopCategories, .scroll, "scroll in \(categoryName)"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopListShopListScroll, categoryName))
     }
 
 }

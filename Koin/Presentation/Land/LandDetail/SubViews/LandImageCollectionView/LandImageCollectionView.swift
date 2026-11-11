@@ -40,16 +40,19 @@ final class LandImageCollectionView: UICollectionView, UICollectionViewDataSourc
         indexPublisher.send("\(1)/\(imageList.count)")
         self.reloadData()
     }
-    func scrollToPreviousItem() {
-        let previousIndex = max(currentIndex - 1, 0)
-        let indexPath = IndexPath(item: previousIndex, section: 0)
+    /// 실제로 사진이 넘어가면 true를 돌려준다.
+    func scrollToPreviousItem() -> Bool {
+        guard currentIndex > 0 else { return false }
+        let indexPath = IndexPath(item: currentIndex - 1, section: 0)
         self.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        return true
     }
     
-    func scrollToNextItem() {
-        let nextIndex = min(currentIndex + 1, self.numberOfItems(inSection: 0) - 1)
-        let indexPath = IndexPath(item: nextIndex, section: 0)
+    func scrollToNextItem() -> Bool {
+        guard currentIndex < self.numberOfItems(inSection: 0) - 1 else { return false }
+        let indexPath = IndexPath(item: currentIndex + 1, section: 0)
         self.scrollToItem(at: indexPath, at: .centeredHorizontally, animated: true)
+        return true
     }
 }
 

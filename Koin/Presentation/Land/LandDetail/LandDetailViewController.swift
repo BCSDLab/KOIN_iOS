@@ -226,11 +226,15 @@ extension LandDetailViewController {
     }
     
     @objc func prevButtonTapped() {
-        imageCollectionView.scrollToPreviousItem()
+        if imageCollectionView.scrollToPreviousItem() {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomDetailPhotoViewSlideClick, "이전"))
+        }
     }
 
     @objc func nextButtonTapped() {
-        imageCollectionView.scrollToNextItem()
+        if imageCollectionView.scrollToNextItem() {
+            inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomDetailPhotoViewSlideClick, "다음"))
+        }
     }
 }
 

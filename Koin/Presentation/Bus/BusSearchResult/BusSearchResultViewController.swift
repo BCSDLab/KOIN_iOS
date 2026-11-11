@@ -9,7 +9,7 @@ import Combine
 import SnapKit
 import UIKit
 
-final class BusSearchResultViewController: UIViewController, UIGestureRecognizerDelegate {
+final class BusSearchResultViewController: UIViewController {
     // MARK: - Properties
     private let viewModel: BusSearchResultViewModel
     private let inputSubject: PassthroughSubject<BusSearchResultViewModel.Input, Never> = .init()
@@ -19,6 +19,7 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
     // MARK: - UI Components
     
     private let tableView = BusSearchResultTableView(frame: .zero, style: .plain)
+    private let refreshControl = UIRefreshControl()
     
     // MARK: - Initialization
     
@@ -38,22 +39,18 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         super.viewDidLoad()
         configureView()
         bind()
-        inputSubject.send(.getDatePickerData)
-        getTodayData()
-        let backButton = UIBarButtonItem(image: .appImage(asset: .arrowBack), style: .done, target: self, action: #selector(tapLeftBarButton))
-       navigationItem.leftBarButtonItem = backButton
-        
-        
-        let deleteButton = UIBarButtonItem(barButtonSystemItem: .stop, target: self, action: #selector(tapRightBarButton))
-        navigationItem.rightBarButtonItem = deleteButton
-        
+        inputSubject.send(.getSearchedResult(viewModel.departDate, nil))
         inputSubject.send(.getSemesterInfo)
+        // 기존과 동일하게 뒤로가기 버튼 탭만 로깅 (스와이프 제외)
+        navigationItem.backAction = UIAction { [weak self] _ in
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultNavigationBackClick, "뒤로가기"))
+            self?.navigationController?.popViewController(animated: true)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
-        self.navigationController?.interactivePopGestureRecognizer?.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -68,8 +65,14 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             switch output {
-            case let .udpatesSearchedResult(departTime, busSearchedResult):
-                self?.updateSearchedResult(departTime: departTime, departInfo: busSearchedResult)
+            case let .updateDepartDate(departDate, now):
+                self?.tableView.setBusSearchTime(departTime: departDate.relativeDayTimeString(today: now))
+            case let .udpatesSearchedResult(busSearchedResult):
+                self?.tableView.setBusSearchResult(busSearchResult: busSearchedResult)
+            case .clearSearchedResult:
+                self?.tableView.clearBusSearchResult()
+            case .searchCompleted:
+                self?.refreshControl.endRefreshing()
             case let .updateSemesterInfo(semesterInfo):
                 self?.updateSemesterInfo(semesterInfo: semesterInfo)
             }
@@ -78,74 +81,44 @@ final class BusSearchResultViewController: UIViewController, UIGestureRecognizer
         tableView.tapDepartTimeButtonPublisher
             .sink { [weak self] in
                 guard let self = self else { return }
-                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultDepartureTime, .click, "출발 시간 설정"))
+                self.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultSearchDepartureTimeOpenClick, "출발 시각 설정"))
                 self.presentBusSearchDatePickerViewController()
         }.store(in: &subscriptions)
         
         tableView.tapDepartBusTypeButtonPublisher.sink { [weak self] busType in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultBusType, .click, busType.koreanDescription))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultFilterBusTypeSelect, busType.loggingValue))
             self?.inputSubject.send(.getSearchedResult(nil, busType))
         }.store(in: &subscriptions)
     }
 }
 
 extension BusSearchResultViewController {
-    @objc private func tapLeftBarButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultBack, .click, "뒤로가기"))
-        navigationController?.popViewController(animated: true)
-    }
-    
-    @objc private func tapRightBarButton() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.searchResultClose, .click, "뒤로가기"))
-        navigationController?.popViewController(animated: true)
-    }
-    
-    private func getTodayData() {
-        let currentDate = Date()
-        let calendar = Calendar.current
-        let hour = calendar.component(.hour, from: currentDate)
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "ko_KR")
-        formatter.dateFormat = "h:mm"
-    
-        let amPm = hour < 12 ? "오전" : "오후"
-        let formattedTime = formatter.string(from: currentDate)
-       
-        let today = "오늘 \(amPm) \(formattedTime)"
-        inputSubject.send(.getSearchedResult(today, .noValue))
-    }
-    
-    private func updateSearchedResult(departTime: String?, departInfo: SearchBusInfoResult) {
-        if let time = departTime {
-            tableView.setBusSearchTime(departTime: "\(time)")
-        }
-        tableView.setBusSearchResult(busSearchResult: departInfo)
+    /// 당겨서 새로고침 = 지금 출발
+    @objc private func didPullToRefresh() {
+        inputSubject.send(.departNow)
     }
     
     private func updateSemesterInfo(semesterInfo: SemesterInfo) {
         datePickerSubTitle = "현재는 \(semesterInfo.name)(\(semesterInfo.to)까지)의 시간표를 제공하고 있어요."
     }
 
+    /// 모달형: 열 때 현재 departDate 표시, 완료 시에만 적용, 닫기는 미적용
     private func presentBusSearchDatePickerViewController() {
-        guard let datePickerData = viewModel.datePickerData else { return }
-
+        // Input은 동기 처리라 아래에서 갱신된 now를 읽음
+        inputSubject.send(.refreshNowIfDayChanged)
         let busSearchDatePickerViewController = BusSearchDatePickerViewController(
             subTitle: datePickerSubTitle,
-            onPickerDateChanged: { [weak self] isChanged in
-                let logValue = isChanged != nil ? "Y" : "N"
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.departureTimeSettingDone, .click, logValue))
-            },
-            onPickerItemsSelected: { [weak self] selectedItems in
-                guard selectedItems.count > 3 else { return }
-                self?.inputSubject.send(.updateDatePickerSelectedItems(selectedItems))
-                let time = "\(selectedItems[0]) \(selectedItems[1]) \(selectedItems[2]):\(selectedItems[3])"
-                self?.inputSubject.send(.getSearchedResult(time, nil))
+            now: viewModel.now,
+            departDate: viewModel.departDate,
+            onCompleted: { [weak self] departDate, isDateChanged in
+                self?.inputSubject.send(.getSearchedResult(departDate, nil))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultSearchDepartureTimeConfirmClick, isDateChanged ? "시간 변경" : "시간 유지"))
             },
             onDepartureNowTapped: { [weak self] in
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Bus.departureNow, .click, "지금 출발"))
+                self?.inputSubject.send(.departNow)
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Bus.busSearchResultSearchDepartureTimeNowClick, "지금 출발"))
             }
         )
-        busSearchDatePickerViewController.setPickerItems(items: datePickerData.0, selectedItems: datePickerData.1)
         present(busSearchDatePickerViewController, animated: true)
     }
 }
@@ -168,5 +141,7 @@ extension BusSearchResultViewController {
         setUpLayOuts()
         setUpConstraints()
         self.view.backgroundColor = .systemBackground
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(didPullToRefresh), for: .valueChanged)
     }
 }

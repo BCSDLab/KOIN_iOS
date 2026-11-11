@@ -27,15 +27,14 @@ final class ChangeMyProfileViewController: UIViewController {
     private let scrollView = UIScrollView().then { scrollView in
     }
     
-    private lazy var deptButton = UIButton().then {
-        $0.isHidden = userType == .general ? true : false
+    private lazy var deptButton = RecruitDropdownTriggerButton(placeholder: "선택된 전공이 없습니다.").then {
+        $0.isHidden = userType == .general
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.06, x: 0, y: 1, blur: 9, spread: 0)
     }
     
-    private let deptDropDown: DropDown = {
-        let dropDown = DropDown()
-        dropDown.backgroundColor = .systemBackground
-        return dropDown
-    }()
+    private lazy var deptDropdownContentView = RecruitProfilePostDepartmentDropdownView { [weak self] department in
+        self?.selectDept(department)
+    }
     
     private let primaryInfoLabel = InsetLabel(top: 0, left: 24, bottom: 0, right: 0).then {
         $0.text = "기본정보"
@@ -151,14 +150,6 @@ final class ChangeMyProfileViewController: UIViewController {
     private lazy var majorTitleLabel = UILabel().then {
         $0.text = "전공"
         $0.isHidden = userType == .general ? true : false
-    }
-    
-    private lazy var majorButton = UIButton().then { button in
-        button.layer.borderWidth = 1.0
-        button.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        button.layer.cornerRadius = 8
-        button.layer.masksToBounds = true
-        button.isHidden = userType == .general ? true : false
     }
     
     private let genderTitleLabel = UILabel().then {
@@ -348,10 +339,10 @@ final class ChangeMyProfileViewController: UIViewController {
                 case .save:
                     if success {
                         self?.navigationController?.popViewController(animated: true)
-                        self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.userInfo, .click, "정보수정 완료"))
+                        self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Account.editProfileProfileEditConfirmClick, "정보수정 완료"))
                     }
                     else {
-                        self?.inputSubject.send(.logEvent(EventParameter.EventLabel.User.userInfo, .click, "정보수정 실패"))
+                        self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Account.editProfileProfileEditConfirmClick, "정보수정 실패"))
                     }
                 }
                 self?.showToast(message: message, success: true)
@@ -361,7 +352,7 @@ final class ChangeMyProfileViewController: UIViewController {
             case let .showProfile(profile):
                 self?.showProfile(profile)
             case let .showDeptDropDownList(deptList):
-                self?.setUpDropDown(dropDown: strongSelf.deptDropDown, button: strongSelf.deptButton, dataSource: deptList)
+                strongSelf.deptDropdownContentView.configure(departments: deptList)
             }
         }.store(in: &subscriptions)
         
@@ -481,7 +472,11 @@ extension ChangeMyProfileViewController {
     }
     
     @objc private func deptButtonTapped() {
-        deptDropDown.show()
+        presentDropdown(
+            anchor: deptButton,
+            content: deptDropdownContentView,
+            configuration: .init(direction: .down(spacing: 12), shadow: .shadow2)
+        )
     }
     
     @objc private func saveButtonTapped() {
@@ -496,14 +491,7 @@ extension ChangeMyProfileViewController {
         phoneTextField.text = profile.phoneNumber
         studentNumberTextField.text = profile.studentNumber
         emailTextField.text = (profile.email ?? "").replacingOccurrences(of: "@koreatech.ac.kr", with: "", options: [.backwards, .anchored])
-        if let major = profile.major {
-            guard var buttonConfiguration = deptButton.configuration else { return }
-            var attributedTitle = AttributedString(major)
-            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 16)
-            attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
-            buttonConfiguration.attributedTitle = attributedTitle
-            deptButton.configuration = buttonConfiguration
-        }
+        deptButton.configure(text: profile.major)
         if let genderIntValue = profile.gender {
             if genderIntValue == 0 {
                 maleButton.isSelected = true
@@ -513,22 +501,9 @@ extension ChangeMyProfileViewController {
         }
     }
     
-    private func setUpDropDown(dropDown: DropDown, button: UIButton, dataSource: [String]) {
-        dropDown.anchorView = button
-        dropDown.bottomOffset = CGPoint(x: 0, y: button.bounds.height)
-        dropDown.dataSource = dataSource
-        dropDown.direction = .bottom
-        dropDown.selectionBackgroundColor = .clear
-        dropDown.selectionAction = { [weak self] (index: Int, item: String) in
-            var buttonConfiguration = UIButton.Configuration.plain()
-            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
-            var attributedTitle = AttributedString(item)
-            self?.viewModel.modifyUserData?.major = item
-            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 16)
-            attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
-            buttonConfiguration.attributedTitle = attributedTitle
-            button.configuration = buttonConfiguration
-        }
+    private func selectDept(_ dept: String) {
+        viewModel.modifyUserData?.major = dept
+        deptButton.configure(text: dept)
     }
     
 }
@@ -547,7 +522,9 @@ extension ChangeMyProfileViewController {
     private func setUpConstraints() {
         scrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.bottom.equalTo(view.snp.bottom).offset(-80)
+            make.bottom.lessThanOrEqualTo(saveButton.snp.top)
+            make.bottom.lessThanOrEqualTo(view.keyboardLayoutGuide.snp.top)
+            make.bottom.equalTo(saveButton.snp.top).priority(.high)
         }
         primaryInfoLabel.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.top)
@@ -697,11 +674,11 @@ extension ChangeMyProfileViewController {
             make.leading.equalTo(nameTitleLabel.snp.leading)
         }
         deptButton.snp.makeConstraints { make in
-            make.top.equalTo(majorTitleLabel.snp.bottom).offset(5)
+            make.top.equalTo(majorTitleLabel.snp.bottom).offset(8)
             make.leading.equalTo(nameTitleLabel.snp.leading)
             make.trailing.equalTo(studentNumberTextField)
-            make.height.equalTo(46)
-            make.bottom.equalTo(scrollView.snp.bottom).offset(-400)
+            make.height.equalTo(40)
+            make.bottom.equalTo(scrollView.snp.bottom).offset(-32)
         }
         saveButton.snp.makeConstraints { make in
             make.leading.equalTo(view.snp.leading).offset(24)
@@ -726,32 +703,6 @@ extension ChangeMyProfileViewController {
         emailTextLabel.textColor = .black
     }
     
-    private func setUpButtons() {
-        [deptButton].forEach { button in
-            var buttonConfiguration = UIButton.Configuration.plain()
-            buttonConfiguration.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
-            var attributedTitle: AttributedString = "선택된 전공이 없습니다."
-            attributedTitle.font = UIFont.appFont(.pretendardRegular, size: 16)
-            attributedTitle.foregroundColor = UIColor.appColor(.neutral800)
-            buttonConfiguration.attributedTitle = attributedTitle
-            button.configuration = buttonConfiguration
-            button.tintColor = UIColor.appColor(.neutral800)
-            button.contentHorizontalAlignment = .leading
-            button.layer.borderWidth = 1.0
-            button.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-            button.backgroundColor = UIColor.appColor(.neutral0)
-            if let image = UIImage.appImage(asset: .chevronUp) {
-                let imageView = UIImageView(image: image)
-                imageView.tintColor = UIColor.appColor(.neutral800)
-                imageView.translatesAutoresizingMaskIntoConstraints = false
-                button.addSubview(imageView)
-                NSLayoutConstraint.activate([
-                    imageView.trailingAnchor.constraint(equalTo: button.trailingAnchor, constant: -10),
-                    imageView.centerYAnchor.constraint(equalTo: button.centerYAnchor)
-                ])
-            }
-        }
-    }
     private func setUpTextFieldUnderline() {
         [nameTextField, nicknameTextField, phoneTextField, studentNumberTextField, emailTextField, idTextField, certNumberTextField].forEach {
             $0.setUnderline(color: .appColor(.neutral300), thickness: 1, leftPadding: 0, rightPadding: 0)
@@ -760,7 +711,6 @@ extension ChangeMyProfileViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        setUpButtons()
         setUpLabels()
         self.view.backgroundColor = .systemBackground
     }

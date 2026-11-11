@@ -15,12 +15,13 @@ final class ProfileViewModel: SwiftUIViewModelProtocol {
     enum Input {
         case viewDidAppear
         case logout
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     // MARK: - Properties
     private(set) var userInfo: UserDto? = nil
-    private(set) var lectures: [LectureData] = []
+    private(set) var mainFrame: MainTimetableFrame?
+    var lectures: [LectureData] { mainFrame?.lectures ?? [] }
     
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let deleteDeviceTokenUseCase: DeleteDeviceTokenUseCase
@@ -47,8 +48,8 @@ final class ProfileViewModel: SwiftUIViewModelProtocol {
         case .viewDidAppear:
             fetchUserInfo()
             fetchTimeTable()
-        case let .logEvent(label, category, value):
-            makeLogAnalyticsEvent(label: label, category: category, value: value)
+        case let .logEvent(label, value):
+            makeLogAnalyticsEvent(label: label, value: value)
         case .logout:
             logout()
         }
@@ -64,7 +65,7 @@ extension ProfileViewModel {
                 receiveCompletion: { [weak self] completion in
                     if case .failure = completion {
                         self?.userInfo = nil
-                        self?.lectures.removeAll()
+                        self?.mainFrame = nil
                     }
                 },
                 receiveValue: { [weak self] response in
@@ -82,9 +83,8 @@ extension ProfileViewModel {
                         print(error.message)
                     }
                 },
-                receiveValue: { [weak self] lectures in
-                    print(lectures)
-                    self?.lectures = lectures
+                receiveValue: { [weak self] mainFrame in
+                    self?.mainFrame = mainFrame
                 }
             )
             .store(in: &subscriptions)
@@ -99,7 +99,7 @@ extension ProfileViewModel {
                 KeychainWorker.shared.delete(key: .refresh)
                 UserDataManager.shared.resetUserData()
                 userInfo = nil
-                lectures.removeAll()
+                mainFrame = nil
             }.store(in: &subscriptions)
     }
 }
@@ -108,9 +108,8 @@ extension ProfileViewModel {
     
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

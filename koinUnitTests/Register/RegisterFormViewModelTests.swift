@@ -10,10 +10,11 @@ import Foundation
 import Testing
 @testable import koin
 
+#if false // TODO: 로깅 개편으로 구 세션 로깅 입력과 라벨이 제거되어 비활성화
 @Suite("RegisterFormViewModel - 약관 동의 이벤트 로깅")
 struct RegisterFormViewModelTests {
 
-    private let label = EventParameter.EventLabel.User.termsAgreement
+    private let label = LegacyEventParameter.EventLabel.User.termsAgreement
     private let sessionId = "sign_up_0_iOS_1758713295_SDAFS"
 
     @Test("약관 동의 로그 입력을 UseCase로 전달한다")
@@ -68,3 +69,4 @@ extension RegisterFormViewModelTests {
         return (viewModel, input)
     }
 }
+#endif

@@ -174,7 +174,6 @@ extension RecruitChatViewController {
     private func presentZoomedImageViewControllerB(_ imageUrl: String) {
         let viewController = ZoomedImageViewControllerB(shouldShowTitle: false)
         viewController.configure(url: imageUrl)
-        viewController.modalTransitionStyle = .crossDissolve
         viewController.modalPresentationStyle = .overFullScreen
         present(viewController, animated: true)
     }

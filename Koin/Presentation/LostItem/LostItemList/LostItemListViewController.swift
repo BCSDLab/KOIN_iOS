@@ -22,57 +22,64 @@ final class LostItemListViewController: UIViewController {
         $0.leftViewMode = .always
         $0.rightViewMode = .always
         $0.attributedPlaceholder = NSAttributedString(string: "검색어를 입력해주세요.", attributes: [
-            .font : UIFont.appFont(.pretendardRegular, size: 14),
-            .foregroundColor : UIColor.appColor(.gray)
+            .font : UIFont.appFont(.pretendardRegular, size: 12),
+            .foregroundColor : UIColor.appColor(.neutral500)
         ])
-        $0.font = .appFont(.pretendardRegular, size: 14)
+        $0.font = .appFont(.pretendardRegular, size: 12)
+        $0.returnKeyType = .search
         $0.textColor = .appColor(.neutral800)
-        $0.backgroundColor = .appColor(.neutral100)
-        $0.layer.cornerRadius = 4
+        $0.backgroundColor = .appColor(.neutral0)
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        $0.layer.cornerRadius = 18
     }
     private let searchButton = UIButton().then {
-        $0.setImage(.appImage(asset: .search), for: .normal)
-        $0.tintColor = .appColor(.neutral600)
+        $0.setImage(.appImage(asset: .search)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), for: .normal)
     }
     private let filterButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
         configuration.attributedTitle = AttributedString("필터", attributes: AttributeContainer([
-            .font: UIFont.appFont(.pretendardBold, size: 14),
-            .foregroundColor: UIColor.appColor(.neutral600)
+            .font: UIFont.appFont(.pretendardSemiBold, size: 14),
+            .foregroundColor: UIColor.appColor(.neutral0)
         ]))
-        configuration.image = .appImage(asset: .filter)?.withTintColor(.appColor(.primary600), renderingMode: .alwaysTemplate).resize(to: CGSize(width: 20, height: 20))
+        configuration.image = .appImage(asset: .filter)?.withTintColor(.appColor(.neutral0), renderingMode: .alwaysOriginal).resize(to: CGSize(width: 20, height: 20))
         configuration.imagePadding = 4
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 6, leading: 12, bottom: 6, trailing: 12)
         configuration.imagePlacement = .trailing
         $0.configuration = configuration
         $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.04, x: 0, y: 2, blur: 4, spread: 0)
-        $0.layer.cornerRadius = 17
+        $0.layer.cornerRadius = 18
         $0.clipsToBounds = true
         $0.layer.masksToBounds = false
-        $0.backgroundColor = .appColor(.info200)
+        $0.backgroundColor = .appColor(.new500)
         $0.setContentCompressionResistancePriority(.defaultHigh, for: .horizontal)
     }
     private let lostItemKeywordCollectionView = LostItemKeywordCollectionView().then {
         $0.contentInset = UIEdgeInsets(top: 16, left: 24, bottom: 16, right: 24)
     }
     private let lostItemListTableView = LostItemListTableView()
+    private let emptyLayoutGuide = UILayoutGuide()
+    private let emptyView = LostItemListEmptyView().then {
+        $0.isHidden = true
+    }
     
     private let writeButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = .appImage(asset: .pencil)?.withTintColor(.appColor(.neutral600), renderingMode: .alwaysTemplate).resize(to: CGSize(width: 24, height: 24))
+        configuration.image = .appImage(asset: .pencil)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal).resize(to: CGSize(width: 24, height: 24))
         configuration.attributedTitle = AttributedString("글쓰기", attributes: AttributeContainer([
             .font: UIFont.appFont(.pretendardMedium, size: 16),
-            .foregroundColor: UIColor.appColor(.neutral600)
+            .foregroundColor: UIColor.appColor(.new500)
         ]))
         configuration.imagePadding = 4
-        configuration.imagePlacement = .leading
+        configuration.imagePlacement = .trailing
         configuration.contentInsets = NSDirectionalEdgeInsets(top: 8, leading: 12, bottom: 8, trailing: 12)
         $0.configuration = configuration
         $0.backgroundColor = .appColor(.neutral50)
-        $0.layer.borderColor = UIColor.appColor(.neutral400).cgColor
+        $0.layer.borderColor = UIColor.appColor(.new500).cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 21
-        $0.clipsToBounds = true
+        $0.clipsToBounds = false
+        $0.layer.applySketchShadow(color: .appColor(.neutral800), alpha: 0.08, x: 0, y: 8, blur: 10, spread: 0)
     }
     
     // MARK: - Initializer
@@ -115,13 +122,17 @@ final class LostItemListViewController: UIViewController {
         }.store(in: &subscriptions)
         
         lostItemListTableView.showToastPublisher.sink { [weak self] message in
-            self?.showToast(message: message)
+            self?.showToastMessage(message: message)
+        }.store(in: &subscriptions)
+
+        lostItemListTableView.isEmptyPublisher.sink { [weak self] isEmpty in
+            self?.emptyView.isHidden = !isEmpty
         }.store(in: &subscriptions)
         
-        lostItemListTableView.cellTappedPublisher.sink { [weak self] id in
+        lostItemListTableView.cellTappedPublisher.sink { [weak self] id, type in
             self?.dismissKeyboard()
             
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemPostEntry, .click, "분실물"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListLostItemDetailEntryClick, "\(type.description)물"))
             
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let lostItemRepository = DefaultLostItemRepository(service: DefaultLostItemService())
@@ -151,13 +162,9 @@ final class LostItemListViewController: UIViewController {
             self?.inputSubject.send(.loadMore)
         }.store(in: &subscriptions)
         
-        lostItemListTableView.dismissKeyBoardPublisher.sink { [weak self] in
-            self?.dismissKeyboard()
-        }.store(in: &subscriptions)
-        
         lostItemKeywordCollectionView.didTapSettingPublisher.sink { [weak self] in
             self?.navigateToLostItemKeyword()
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordSetting, .click, "키워드 설정"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListKeywordManageEntryClick, "키워드 설정"))
         }.store(in: &subscriptions)
         lostItemKeywordCollectionView.didTapAllPublisher.sink { [weak self] in
             self?.inputSubject.send(.reset)
@@ -170,6 +177,13 @@ final class LostItemListViewController: UIViewController {
     
     private func setDelegate() {
         searchTextField.delegate = self
+    }
+
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === searchTextField {
+            searchButtonTapped()
+        }
+        return super.textFieldShouldReturn(textField)
     }
 }
 
@@ -204,10 +218,10 @@ extension LostItemListViewController {
     
     private func showLogin() {
         let onLeftButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemWriteLoginRequest, .click, "닫기"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListLoginPopupCloseClick, "닫기"))
         }
         let onRightButtonTapped: ()->Void = { [weak self] in
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemWriteLoginRequest, .click, "로그인하기"))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListLoginPopupLoginEntryClick, "로그인하기"))
             let userRepository = DefaultUserRepository(service: DefaultUserService())
             let analyticsRepository = GA4AnalyticsRepository(service: GA4AnalyticsService())
             let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
@@ -228,7 +242,7 @@ extension LostItemListViewController {
             self?.navigationController?.pushViewController(loginViewController, animated: true)
         }
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .titles(
                 mainTitleText: "게시글을 작성하려면\n로그인이 필요해요.",
                 subTitleText: "로그인 후 글을 작성해주세요!"
@@ -244,33 +258,30 @@ extension LostItemListViewController {
     }
     
     private func presentPostTypeModal() {
-        let onFoundButtonTapped = { [weak self] in
-            guard let self else { return }
-            dismissView()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.findUserWrite, .click, "주인을 찾아요"))
-            let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
-            viewController.delegate = self
-            navigationController?.pushViewController(viewController, animated: true)
+        weak var sheet: KoinBottomSheetController?
+        let onFoundButtonTapped: () -> Void = { [weak self] in
+            sheet?.dismiss { [weak self] in
+                guard let self else { return }
+                inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListLostItemWritePostTypeSelect, "주인을 찾아요"))
+                let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .found))
+                viewController.delegate = self
+                navigationController?.pushViewController(viewController, animated: true)
+            }
         }
-        let onLostButtonTapped = { [weak self] in
-            guard let self else { return }
-            dismissView()
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemWrite, .click, "잃어버렸어요"))
-            let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
-            viewController.delegate = self
-            navigationController?.pushViewController(viewController, animated: true)
+        let onLostButtonTapped: () -> Void = { [weak self] in
+            sheet?.dismiss { [weak self] in
+                guard let self else { return }
+                inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListLostItemWritePostTypeSelect, "잃어버렸어요"))
+                let viewController = PostLostItemViewController(viewModel: PostLostItemViewModel(type: .lost))
+                viewController.delegate = self
+                navigationController?.pushViewController(viewController, animated: true)
+            }
         }
-        let postOptionViewController = LostItemPostOptionController(
+        let contentView = LostItemPostOptionView(
             onFoundButtonTapped: onFoundButtonTapped,
             onLostButtonTapped: onLostButtonTapped
         )
-        let bottomSheetViewController = BottomSheetViewController(
-            contentViewController: postOptionViewController,
-            defaultHeight: 191 + UIApplication.bottomSafeAreaHeight(),
-            cornerRadius: 32
-        )
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        navigationController?.present(bottomSheetViewController, animated: true)
+        sheet = presentBottomSheet(contentView, configuration: .init(style: .modal(), cornerRadius: 32))
     }
 }
 
@@ -311,27 +322,29 @@ extension LostItemListViewController {
     @objc private func filterButtonTapped() {
         dismissKeyboard()
         
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFilter, .click, "분실물"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListFilterOpenClick, "분실물"))
         
-        let filterViewController = LostItemListFilterViewController(
-            isLoggedIn: self.viewModel.isLoggedIn,
-            filterState: self.viewModel.filterState,
-            onApplyFilterButtonTapped: { [weak self] filter in
-                self?.dismissView()
+        let contentView = FilterBottomSheetView(
+            groupModels: viewModel.filterState.toFilterGroupModels(),
+            onFilterItemTapped: { [weak self] groupIndex, item in
+                guard let self else { return false }
+                if groupIndex == 0, item.title == "내 게시물", !viewModel.isLoggedIn {
+                    showToastMessage(message: "로그인이 필요한 기능입니다.")
+                    return false
+                }
+                return true
+            },
+            onApplyTapped: { [weak self] groups in
+                guard let filter = FetchLostItemListRequest(from: groups) else { return }
                 self?.inputSubject.send(.updateFilter(filter))
-                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemFilterApply, .click, "분실물"))
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListFilterApplyClick, "분실물", parameters: filter.loggingParameters))
             }
         )
-        let bottomSheetViewController = BottomSheetViewController(
-            contentViewController: filterViewController,
-            defaultHeight: 627 + UIApplication.bottomSafeAreaHeight(),
-            cornerRadius: 32)
-        bottomSheetViewController.modalTransitionStyle = .crossDissolve
-        navigationController?.present(bottomSheetViewController, animated: true)
+        presentBottomSheet(contentView)
     }
     
     @objc private func writeButtonTapped() {
-        self.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.itemWrite, .click, "글쓰기"))
+        self.inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemListLostItemWriteEntryClick, "글쓰기"))
         viewModel.isLoggedIn ? presentPostTypeModal() : showLogin()
     }
     
@@ -344,7 +357,8 @@ extension LostItemListViewController {
 extension LostItemListViewController {
     
     private func setLayouts() {
-        [lostItemListTableView, searchTextField, searchButton, filterButton, lostItemKeywordCollectionView, writeButton].forEach {
+        view.addLayoutGuide(emptyLayoutGuide)
+        [lostItemListTableView, emptyView, searchTextField, searchButton, filterButton, lostItemKeywordCollectionView, writeButton].forEach {
             view.addSubview($0)
         }
     }
@@ -354,7 +368,7 @@ extension LostItemListViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide).offset(4)
             $0.leading.equalToSuperview().offset(24)
             $0.trailing.equalTo(filterButton.snp.leading).offset(-12)
-            $0.height.equalTo(40)
+            $0.height.equalTo(36)
         }
         searchButton.snp.makeConstraints {
             $0.centerY.equalTo(searchTextField)
@@ -362,7 +376,7 @@ extension LostItemListViewController {
             $0.trailing.equalTo(searchTextField.snp.trailing).offset(-16)
         }
         filterButton.snp.makeConstraints {
-            $0.height.equalTo(34)
+            $0.height.equalTo(36)
             $0.width.equalTo(73)
             $0.centerY.equalTo(searchTextField)
             $0.trailing.equalToSuperview().offset(-24)
@@ -375,6 +389,14 @@ extension LostItemListViewController {
         lostItemListTableView.snp.makeConstraints {
             $0.top.equalTo(lostItemKeywordCollectionView.snp.bottom)
             $0.leading.trailing.bottom.equalToSuperview()
+        }
+        emptyLayoutGuide.snp.makeConstraints {
+            $0.top.equalTo(searchTextField.snp.bottom)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+        }
+        emptyView.snp.makeConstraints {
+            $0.edges.equalTo(emptyLayoutGuide)
         }
         writeButton.snp.makeConstraints {
             $0.width.equalTo(94)

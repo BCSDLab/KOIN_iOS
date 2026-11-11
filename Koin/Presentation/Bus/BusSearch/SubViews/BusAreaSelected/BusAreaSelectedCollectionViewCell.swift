@@ -11,7 +11,7 @@ final class BusAreaSelectedCollectionViewCell: UICollectionViewCell {
     // MARK: - UI Components
     private let busPlaceLabel = UILabel().then {
         $0.textAlignment = .center
-        $0.font = .appFont(.pretendardMedium, size: 15)
+        $0.font = .appFont(.pretendardSemiBold, size: 14)
     }
     
     // MARK: - Initialization
@@ -26,19 +26,13 @@ final class BusAreaSelectedCollectionViewCell: UICollectionViewCell {
     
     func configure(busPlace: String, isSelected: Bool) {
         busPlaceLabel.text = busPlace
-        if isSelected {
-            busPlaceLabel.textColor = .appColor(.neutral0)
-            contentView.backgroundColor = .appColor(.primary500)
-        }
-        else {
-            busPlaceLabel.textColor = .appColor(.neutral600)
-            contentView.backgroundColor = .appColor(.neutral200)
-        }
+        busPlaceLabel.textColor = isSelected ? .appColor(.new500) : .appColor(.neutral500)
+        contentView.layer.borderColor = isSelected ? UIColor.appColor(.new500).cgColor : UIColor.appColor(.neutral300).cgColor
     }
     
     func disableCell() {
-        contentView.backgroundColor = .appColor(.neutral50)
         busPlaceLabel.textColor = .appColor(.neutral300)
+        contentView.layer.borderColor = UIColor.appColor(.neutral300).cgColor
     }
 }
 
@@ -58,6 +52,7 @@ extension BusAreaSelectedCollectionViewCell {
     private func configureView() {
         setUpLayouts()
         setUpConstraints()
-        contentView.layer.cornerRadius = 4
+        contentView.layer.cornerRadius = 17
+        contentView.layer.borderWidth = 1
     }
 }

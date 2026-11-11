@@ -19,7 +19,7 @@ final class RecruitMyPostListViewModel: SwiftUIViewModelProtocol {
         case close(id: Int)
         case delete(id: Int)
         case didShowToast
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
 
     // MARK: - State
@@ -67,8 +67,8 @@ final class RecruitMyPostListViewModel: SwiftUIViewModelProtocol {
         case .didShowToast:
             errorMessage = nil
             successMessage = nil
-        case let .logEvent(label, category, value):
-            makeLogAnalyticsEvent(label: label, category: category, value: value)
+        case let .logEvent(label, value):
+            makeLogAnalyticsEvent(label: label, value: value)
         }
     }
 }
@@ -145,12 +145,10 @@ extension RecruitMyPostListViewModel {
 extension RecruitMyPostListViewModel {
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
         logAnalyticsEventUseCase.execute(
             label: label,
-            category: category,
             value: value
         )
     }

@@ -75,8 +75,7 @@ final class CallVanChatViewController: UIViewController {
                 self?.inputSubject.send(.sendMessage(message))
                 self?.inputSubject.send(
                     .logEvent(
-                        label: EventParameter.EventLabel.Campus.CallVan.callvanChatSend,
-                        category: .click,
+                        label: EventParameter.EventLabel.CallVan.callvanChatCallvanChatMessageSendClick,
                         value: ""
                     )
                 )
@@ -94,7 +93,6 @@ final class CallVanChatViewController: UIViewController {
             .sink { [weak self] imageUrl in
                 let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
                 zoomedImageViewController.configure(url: imageUrl)
-                zoomedImageViewController.modalTransitionStyle = .crossDissolve
                 zoomedImageViewController.modalPresentationStyle = .overFullScreen
                 self?.present(zoomedImageViewController, animated: true)
             }

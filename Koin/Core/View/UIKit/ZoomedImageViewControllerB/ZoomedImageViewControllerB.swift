@@ -18,7 +18,7 @@ final class ZoomedImageViewControllerB: UINavigationController {
         super.init(rootViewController: rootViewController)
         
         modalPresentationStyle = .overCurrentContext
-        modalTransitionStyle = .crossDissolve
+        modalTransitionStyle = .coverVertical
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

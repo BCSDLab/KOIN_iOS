@@ -10,28 +10,15 @@ import UIKit
 
 final class AddDirectHeaderView: UICollectionReusableView {
     
+    // MARK: - Properties
     static let identifier = "AddDirectHeaderView"
-    let classButtonPublisher = PassthroughSubject<Void, Never>()
-    let completeButtonPublisher = PassthroughSubject<Void, Never>()
+    let nameChangedPublisher = PassthroughSubject<String, Never>()
+    let professorChangedPublisher = PassthroughSubject<String, Never>()
+    let rowChangedPublisher = PassthroughSubject<AddDirectCollectionView.Row, Never>()
+    private var row = AddDirectCollectionView.Row()
+    private var subscriptions = Set<AnyCancellable>()
     
-    private let addDirectLabel = UILabel().then {
-        $0.text = "직접추가"
-        $0.font = UIFont.appFont(.pretendardBold, size: 18)
-        $0.textColor = UIColor.appColor(.primary600)
-    }
-    
-    private let classButton = UIButton().then {
-        $0.setTitle("수업추가", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.primary500), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    
-    private let completeButton = UIButton().then {
-        $0.setTitle("완료", for: .normal)
-        $0.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardMedium, size: 18)
-    }
-    
+    // MARK: - UI Components
     let calendarView = ClassComponentView(text: "일정명", isPoint: true).then { _ in
     }
     
@@ -46,72 +33,77 @@ final class AddDirectHeaderView: UICollectionReusableView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setupViews()
-        classButton.addTarget(self, action: #selector(classButtonTapped), for: .touchUpInside)
-        completeButton.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
+        configureView()
+        bind()
     }
     
+    func configure(name: String, professor: String, row: AddDirectCollectionView.Row) {
+        self.row = row
+        calendarView.setText(name)
+        professorNameView.setText(professor)
+        selectTimeView.configure(row: row)
+        placeView.setText(row.place)
+    }
+
+    private func bind() {
+        calendarView.textChangedPublisher.sink { [weak self] in
+            self?.nameChangedPublisher.send($0)
+        }.store(in: &subscriptions)
+        professorNameView.textChangedPublisher.sink { [weak self] in
+            self?.professorChangedPublisher.send($0)
+        }.store(in: &subscriptions)
+        placeView.textChangedPublisher.sink { [weak self] value in
+            guard let self else { return }
+            self.row.place = value
+            self.rowChangedPublisher.send(self.row)
+        }.store(in: &subscriptions)
+        selectTimeView.selectionChangedPublisher.sink { [weak self] in
+            guard let self else { return }
+            self.row.day = self.selectTimeView.dayIndex
+            self.row.startMinute = self.selectTimeView.startMinute
+            self.row.endMinute = self.selectTimeView.endMinute
+            self.rowChangedPublisher.send(self.row)
+        }.store(in: &subscriptions)
+    }
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 }
 
 extension AddDirectHeaderView {
-    @objc private func classButtonTapped() {
-        classButtonPublisher.send()
+    private func configureView() {
+        setUpStyles()
+        setUpLayouts()
+        setUpConstraints()
     }
-    @objc private func completeButtonTapped() {
-        completeButtonPublisher.send()
+
+    private func setUpStyles() {
+        backgroundColor = .appColor(.neutral0)
     }
-    
-}
-extension AddDirectHeaderView {
-    private func setupViews() {
-        self.backgroundColor = .systemBackground
-        [addDirectLabel, classButton, completeButton, calendarView, professorNameView, selectTimeView, placeView].forEach {
-            self.addSubview($0)
+
+    private func setUpLayouts() {
+        [calendarView, professorNameView, selectTimeView, placeView].forEach { addSubview($0) }
+    }
+
+    private func setUpConstraints() {
+        calendarView.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(35)
         }
-        [calendarView, professorNameView, placeView].forEach {
-            $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-            $0.layer.borderWidth = 1.0
-            $0.layer.cornerRadius = 4
-            $0.layer.masksToBounds = true
+        professorNameView.snp.makeConstraints {
+            $0.top.equalTo(calendarView.snp.bottom).offset(8)
+            $0.leading.trailing.height.equalTo(calendarView)
         }
-        
-        addDirectLabel.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(10)
-            make.leading.equalTo(self.snp.leading).offset(24)
-            make.width.equalTo(63)
-            make.height.equalTo(29)
+        selectTimeView.snp.makeConstraints {
+            $0.top.equalTo(professorNameView.snp.bottom).offset(8)
+            $0.leading.trailing.height.equalTo(calendarView)
         }
-        classButton.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(10)
-            make.centerX.equalTo(self.snp.centerX)
-            make.height.equalTo(29)
-        }
-        completeButton.snp.makeConstraints { make in
-            make.top.equalTo(self.snp.top).offset(10)
-            make.trailing.equalTo(self.snp.trailing).offset(-24)
-            make.width.equalTo(35)
-            make.height.equalTo(29)
-        }
-        calendarView.snp.makeConstraints { make in
-            make.top.equalTo(addDirectLabel.snp.bottom).offset(22)
-            make.leading.equalToSuperview().offset(24)
-            make.trailing.equalToSuperview().offset(-24)
-            make.height.equalTo(35)
-        }
-        professorNameView.snp.makeConstraints { make in
-            make.top.equalTo(calendarView.snp.bottom).offset(8)
-            make.leading.trailing.height.equalTo(calendarView)
-        }
-        selectTimeView.snp.makeConstraints { make in
-            make.top.equalTo(professorNameView.snp.bottom).offset(8)
-            make.leading.trailing.height.equalTo(calendarView)
-        }
-        placeView.snp.makeConstraints { make in
-            make.top.equalTo(selectTimeView.snp.bottom).offset(8)
-            make.leading.trailing.height.equalTo(calendarView)
+        placeView.snp.makeConstraints {
+            $0.top.equalTo(selectTimeView.snp.bottom).offset(8)
+            $0.leading.trailing.height.equalTo(calendarView)
+            $0.bottom.equalToSuperview()
         }
     }
 }

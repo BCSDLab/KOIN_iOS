@@ -15,13 +15,15 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     private var cancellable = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
     let addImageButtonPublisher = PassthroughSubject<Void, Never>()
-    let datePublisher = PassthroughSubject<String, Never>()
+    /// 습득일 변경(휠·초기화, 값 없이 열었을 때 보정값)
+    let datePublisher = PassthroughSubject<Date, Never>()
     let categoryPublisher = PassthroughSubject<String, Never>()
     let locationPublisher = PassthroughSubject<String, Never>()
     let contentPublisher = PassthroughSubject<String, Never>()
     let imageUrlsPublisher = PassthroughSubject<[String], Never>()
     
     private var type: LostItemType = .lost
+    private var foundDate: Date?
     private var textViewPlaceHolder = ""
     private var textFieldPlaceHolder = ""
     
@@ -31,16 +33,18 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     private let itemCountLabel = UILabel().then {
-        $0.textColor = UIColor.appColor(.primary600)
-        $0.backgroundColor = UIColor.appColor(.info200)
+        $0.textColor = UIColor.appColor(.new500)
+        $0.backgroundColor = UIColor.appColor(.neutral0)
+        $0.layer.borderWidth = 1
+        $0.layer.borderColor = UIColor.appColor(.new500).cgColor
         $0.textAlignment = .center
         $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         $0.layer.masksToBounds = true
-        $0.layer.cornerRadius = 12
+        $0.layer.cornerRadius = 15
     }
     
     private let deleteCellButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .trashcanBlue), for: .normal)
+        $0.setImage(UIImage.appImage(asset: .trashcanBlue)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal), for: .normal)
     }
     
     private let pictureLabel = UILabel().then {
@@ -69,13 +73,13 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     
     private let addPictureButton = UIButton().then {
         var configuration = UIButton.Configuration.plain()
-        configuration.image = UIImage.appImage(asset: .picture)
+        configuration.image = UIImage.appImage(asset: .picture)?.withTintColor(.appColor(.neutral0), renderingMode: .alwaysOriginal)
         var text = AttributedString("사진 등록하기")
         text.font = UIFont.appFont(.pretendardMedium, size: 14)
         configuration.attributedTitle = text
-        configuration.imagePadding = 4
-        configuration.baseForegroundColor = UIColor.appColor(.primary600)
-        $0.backgroundColor = UIColor.appColor(.info200)
+        configuration.imagePadding = 8
+        configuration.baseForegroundColor = UIColor.appColor(.neutral0)
+        $0.backgroundColor = UIColor.appColor(.new500)
         $0.configuration = configuration
         $0.layer.masksToBounds = true
         $0.layer.cornerRadius = 8
@@ -184,12 +188,8 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - Dropdown
-    private lazy var dropdownView = DatePickerDropdownView().then {
-        $0.backgroundColor = UIColor.appColor(.neutral100)
-        $0.layer.cornerRadius = 12
-    }
-
-    private var dropdown: KoinDropdown?
+    private var dropdownView: KoinPickerDropDownView?
+    private weak var dropdown: KoinDropdownViewController?
     
     // MARK: - Initializer
     override init(frame: CGRect) {
@@ -210,10 +210,8 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         imageUploadCollectionView.imageCountPublisher.sink { [weak self] urls in
             self?.addPictureButton.isEnabled = urls.count < 10
             self?.pictureCountLabel.text = "\(urls.count)/10"
+            self?.updateImageLayout(hasImages: !urls.isEmpty)
             self?.imageUrlsPublisher.send(urls)
-            }.store(in: &cancellable)
-        dropdownView.valueChangedPublisher.sink { [weak self] in
-            self?.dropdownValueChanged()
             }.store(in: &cancellable)
     }
     required init?(coder: NSCoder) {
@@ -221,25 +219,29 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
     }
     
     // MARK: - PrepareForReuse
-    /// ScrollView 를 아는 CollectionView 가 Host 를 넘겨준다. 셀당 한 번만 만든다.
-    func prepareDropdown(host: KoinDropdownHost) {
-        guard dropdown == nil else { return }
-        dropdown = host.makeDropdown(
-            anchor: dateButton,
-            contentView: dropdownView,
-            configuration: .init(topPadding: 4, shadow: .shadow2)
-        )
-    }
-
     override func prepareForReuse() {
         super.prepareForReuse()
+        dropdown?.dismissDropdown(animated: false)
+        dropdown = nil
         cancellables.forEach { $0.cancel() }
         cancellables.removeAll()
     }
     
     // MARK: - Configure
-    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType) {
+    /// now: CollectionView 가 넘겨주는 화면 진입 시각(습득일 범위 기준). picker 는 셀당 한 번만 만든다.
+    func configure(index: Int, isSingle: Bool, model: PostLostItemRequest, type: LostItemType, now: Date) {
+        if dropdownView == nil {
+            let dropdownView = KoinPickerDropDownView(configuration: .lostItemDate(now: now), buttonColor: .appColor(.new500)).then {
+                $0.backgroundColor = UIColor.appColor(.neutral100)
+                $0.layer.cornerRadius = 12
+            }
+            dropdownView.datePublisher.sink { [weak self] date in
+                self?.updateFoundDate(date)
+            }.store(in: &cancellable)
+            self.dropdownView = dropdownView
+        }
         self.type = type
+        updateImageLayout(hasImages: !(model.images ?? []).isEmpty)
         textFieldPlaceHolder = "\(type.description) 장소를 입력해주세요."
         textViewPlaceHolder = "물품이나 \(type.description) 장소에 대한 추가 설명이 있다면 작성해주세요."
         
@@ -255,55 +257,36 @@ final class AddLostItemCollectionViewCell: UICollectionViewCell {
         case false:
             locationTextField.text = model.location
             locationTextField.textColor = UIColor.appColor(.neutral800)
+            locationTextField.font = .appFont(.pretendardRegular, size: 14)
         }
         
-        if model.foundDate.isEmpty {
-            dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
-            dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
-        } else {
-            dateButton.setTitle(model.foundDate, for: .normal)
-            dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        }
+        foundDate = Date(string: model.foundDate, format: .yearMonthDayHyphen)
+        updateDateButton()
         if let content = model.content, content.isEmpty {
             contentTextView.textColor = UIColor.appColor(.neutral500)
+            contentTextView.font = .appFont(.pretendardRegular, size: 12)
             contentTextView.text = textViewPlaceHolder
         } else {
             contentTextView.textColor = UIColor.appColor(.neutral800)
+            contentTextView.font = .appFont(.pretendardRegular, size: 14)
             contentTextView.text = model.content
         }
         deleteCellButton.isHidden = isSingle
         
         let category = model.category
-        var isCategorySelected = false
         
         for view in categoryStackView.arrangedSubviews {
             guard let button = view as? UIButton else { continue }
-            if button.configuration?.title == category {
-                button.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+            button.isSelected = button.configuration?.title == category
+            if button.isSelected {
+                button.configuration?.baseBackgroundColor = UIColor.appColor(.new500)
                 button.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
-                button.layer.borderColor = UIColor.appColor(.primary600).cgColor
-                isCategorySelected = true
+                button.layer.borderColor = UIColor.appColor(.new500).cgColor
             } else {
                 button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-                button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+                button.configuration?.baseForegroundColor = UIColor.appColor(.new500)
+                button.layer.borderColor = UIColor.appColor(.new500).cgColor
             }
-        }
-        
-        if !isCategorySelected {
-            categoryStackView.arrangedSubviews.forEach { view in
-                guard let button = view as? UIButton else { return }
-                button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-                button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-                button.layer.borderColor = UIColor.appColor(.primary500).cgColor
-            }
-        }
-        
-        let dateFormatter = DateFormatter()
-        dateFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
-        dateFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
-        if let dateValue = dateFormatter.date(from: model.foundDate) {
-            dropdownView.dateValue = dateValue
         }
         
         locationEssentialLabel.isHidden = self.type == .lost
@@ -361,19 +344,33 @@ extension AddLostItemCollectionViewCell{
                guard let button = view as? UIButton else { return }
                button.isSelected = false
                button.configuration?.baseBackgroundColor = UIColor.appColor(.neutral0)
-               button.configuration?.baseForegroundColor = UIColor.appColor(.primary500)
-               button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+               button.configuration?.baseForegroundColor = UIColor.appColor(.new500)
+               button.layer.borderColor = UIColor.appColor(.new500).cgColor
            }
 
            sender.isSelected = true
-           sender.configuration?.baseBackgroundColor = UIColor.appColor(.primary600)
+           sender.configuration?.baseBackgroundColor = UIColor.appColor(.new500)
            sender.configuration?.baseForegroundColor = UIColor.appColor(.neutral0)
-           sender.layer.borderColor = UIColor.appColor(.primary600).cgColor
+           sender.layer.borderColor = UIColor.appColor(.new500).cgColor
     }
 }
 
 extension AddLostItemCollectionViewCell {
     
+    private func updateImageLayout(hasImages: Bool) {
+        let visibilityChanged = imageUploadCollectionView.isHidden == hasImages
+        imageUploadCollectionView.isHidden = !hasImages
+        imageUploadCollectionView.snp.updateConstraints {
+            $0.height.equalTo(hasImages ? 123 : 0)
+        }
+        addPictureButton.snp.updateConstraints {
+            $0.top.equalTo(imageUploadCollectionView.snp.bottom).offset(hasImages ? 16 : 0)
+        }
+        if visibilityChanged {
+            (superview as? UICollectionView)?.collectionViewLayout.invalidateLayout()
+        }
+    }
+
     func setImage(url: [String]) {
         imageUploadCollectionView.updateImageUrls(url)
     }
@@ -396,9 +393,6 @@ extension AddLostItemCollectionViewCell {
             }
         }
         
-        let foundDate = dateButton.titleLabel?.text ?? ""
-        let formattedFoundDate = convertToISODate(from: foundDate) ?? ""
-        
         let content: String?
         if contentTextView.textColor != .appColor(.neutral500),
            let rawContent = contentTextView.text,
@@ -411,7 +405,7 @@ extension AddLostItemCollectionViewCell {
         return PostLostItemRequest(
             category: category,
             location: location,
-            foundDate: formattedFoundDate,
+            foundDate: foundDate?.string(with: .yearMonthDayHyphen) ?? "",
             content: content,
             images: imageUploadCollectionView.imageUrls,
             registeredAt: "2025-01-10",
@@ -419,32 +413,16 @@ extension AddLostItemCollectionViewCell {
         )
     }
     
-    func convertToISODate(from koreanDate: String) -> String? {
-        let inputFormatter = DateFormatter()
-        inputFormatter.locale = Locale(identifier: "ko_KR") // 한국어 로케일
-        inputFormatter.dateFormat = "yyyy년 M월 d일" // 입력 형식
-        
-        let outputFormatter = DateFormatter()
-        outputFormatter.locale = Locale(identifier: "en_US_POSIX") // ISO 형식
-        outputFormatter.dateFormat = "yyyy-MM-dd" // 원하는 출력 형식
-        
-        if let date = inputFormatter.date(from: koreanDate) {
-            return outputFormatter.string(from: date) // 변환된 ISO 형식 날짜
-        } else {
-            return nil
-        }
-    }
-    
     func validateInputs() -> Bool {
         var isValid = true
         
-        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.configuration?.baseBackgroundColor == UIColor.appColor(.primary600) }
+        let selectedCategory = categoryStackView.arrangedSubviews.compactMap { $0 as? UIButton }.first { $0.isSelected }
         if selectedCategory == nil {
             categoryWarningLabel.isHidden = false
             isValid = false
         }
         
-        if let title = dateButton.title(for: .normal), title.contains("일자") {
+        if foundDate == nil {
             dateWarningLabel.isHidden = false
             isValid = false
         }
@@ -464,21 +442,39 @@ extension AddLostItemCollectionViewCell {
 extension AddLostItemCollectionViewCell {
     
     // MARK: - dropdown 열기/닫기
+    /// 드롭다운형: 값 있으면 setDate, 없으면 보정된 picker.date 즉시 반영(setDate는 이벤트 없음)
     @objc private func dateButtonTapped(button: UIButton) {
-        // KoinDropdown 은 표시 중 키보드가 없다고 전제한다. 먼저 내린다.
-        dropdown?.toggle()
+        guard let dropdownView else { return }
+        if let foundDate {
+            dropdownView.setDate(foundDate)
+        } else {
+            dropdownView.setDate(Date())
+            updateFoundDate(dropdownView.date)
+        }
+        dropdown = presentDropdown(
+            anchor: dateButton,
+            content: dropdownView,
+            configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+        )
     }
     
-    private func dropdownValueChanged() {
-        let formattedDate = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy년 M월 d일"
-            return formatter.string(from: dropdownView.dateValue)
-        }()
-        dateButton.setTitle(formattedDate, for: .normal)
-        dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
-        datePublisher.send(formattedDate)
+    private func updateFoundDate(_ date: Date) {
+        foundDate = date
+        updateDateButton()
+        datePublisher.send(date)
         dateWarningLabel.isHidden = true
+    }
+    
+    private func updateDateButton() {
+        if let foundDate {
+            dateButton.setTitle(foundDate.string(with: .yearMonthDay), for: .normal)
+            dateButton.setTitleColor(UIColor.appColor(.neutral800), for: .normal)
+            dateButton.titleLabel?.font = .appFont(.pretendardRegular, size: 14)
+        } else {
+            dateButton.setTitle("\(type.description) 일자를 입력해주세요.", for: .normal)
+            dateButton.setTitleColor(UIColor.appColor(.neutral500), for: .normal)
+            dateButton.titleLabel?.font = .appFont(.pretendardRegular, size: 12)
+        }
     }
 }
 
@@ -490,6 +486,7 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         if textView.text == textViewPlaceHolder && textView.textColor == UIColor.appColor(.neutral500) {
             textView.text = ""
             textView.textColor = UIColor.appColor(.neutral800)
+            textView.font = .appFont(.pretendardRegular, size: 14)
         }
     }
     
@@ -511,6 +508,7 @@ extension AddLostItemCollectionViewCell: UITextViewDelegate {
         if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
             textView.text = textViewPlaceHolder
             textView.textColor = UIColor.appColor(.neutral500)
+            textView.font = .appFont(.pretendardRegular, size: 12)
         }
     }
     
@@ -530,6 +528,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         if textField.textColor == UIColor.appColor(.neutral500) {
             textField.text = ""
             textField.textColor = UIColor.appColor(.neutral800)
+            textField.font = .appFont(.pretendardRegular, size: 14)
         }
     }
     
@@ -546,6 +545,7 @@ extension AddLostItemCollectionViewCell: UITextFieldDelegate {
         //  placeholder 만들기
         if (textField.text?.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?? true) {
             textField.textColor = UIColor.appColor(.neutral500)
+            textField.font = .appFont(.pretendardRegular, size: 12)
             textField.text = "\(type.description) 장소를 입력해주세요."
         }
     }
@@ -628,8 +628,10 @@ extension AddLostItemCollectionViewCell {
         }
         categoryStackView.snp.makeConstraints { make in
             make.top.equalTo(categoryMessageLabel.snp.bottom).offset(12)
-            make.leading.equalTo(contentView.snp.leading).offset(29.5)
-            make.trailing.equalTo(contentView.snp.trailing).offset(-29.5)
+            make.centerX.equalToSuperview()
+            make.width.equalTo(316).priority(999)
+            make.leading.greaterThanOrEqualToSuperview().offset(24)
+            make.trailing.lessThanOrEqualToSuperview().offset(-24)
             make.height.equalTo(38)
         }
         dateLabel.snp.makeConstraints { make in
@@ -669,7 +671,7 @@ extension AddLostItemCollectionViewCell {
             make.top.equalTo(locationLabel.snp.bottom).offset(8)
             make.leading.equalTo(itemCountLabel.snp.leading)
             make.trailing.equalTo(dateButton.snp.trailing)
-            make.height.equalTo(35)
+            make.height.equalTo(38)
         }
         contentLabel.snp.makeConstraints { make in
             make.top.equalTo(locationTextField.snp.bottom).offset(16)
@@ -707,12 +709,12 @@ extension AddLostItemCollectionViewCell {
     
     private func setUpAttributes() {
         [pictureMessageLabel, pictureCountLabel, categoryMessageLabel, contentTextCountLabel].forEach {
-            $0.font = UIFont.appFont(.pretendardMedium, size: 12)
+            $0.font = UIFont.appFont(.pretendardRegular, size: 12)
             $0.textColor = UIColor.appColor(.neutral500)
         }
         [pictureLabel, categoryLabel, dateLabel, locationLabel, contentLabel].forEach {
             $0.textColor = UIColor.appColor(.neutral800)
-            $0.font = UIFont.appFont(.pretendardMedium, size: 15)
+            $0.font = UIFont.appFont(.pretendardMedium, size: 14)
         }
     }
     private func setUpTexts(_ type: LostItemType) {
@@ -752,9 +754,9 @@ extension AddLostItemCollectionViewCell {
             let button = UIButton(type: .system)
             var configuration = UIButton.Configuration.filled()
             configuration.title = title
-            configuration.baseForegroundColor = UIColor.appColor(.primary500)
+            configuration.baseForegroundColor = UIColor.appColor(.new500)
             configuration.baseBackgroundColor = UIColor.appColor(.neutral0)
-            configuration.cornerStyle = .medium
+            configuration.cornerStyle = .capsule
             button.configuration = configuration
             
             let attributedTitle = AttributedString(title, attributes: AttributeContainer([
@@ -763,7 +765,7 @@ extension AddLostItemCollectionViewCell {
             button.configuration?.attributedTitle = attributedTitle
             
             button.layer.borderWidth = 1
-            button.layer.borderColor = UIColor.appColor(.primary500).cgColor
+            button.layer.borderColor = UIColor.appColor(.new500).cgColor
             button.layer.cornerRadius = 19
             button.clipsToBounds = true
             button.titleLabel?.numberOfLines = 1

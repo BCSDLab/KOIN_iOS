@@ -115,7 +115,7 @@ extension LostItemDataRecentTableView {
         register(LostItemDataRecentTableViewCell.self, forCellReuseIdentifier: LostItemDataRecentTableViewCell.identifier)
         
         separatorStyle = .none
-        backgroundColor = .white
+        backgroundColor = .appColor(.neutral0)
         sectionHeaderTopPadding = .zero
         sectionFooterHeight = .zero
         rowHeight = 54

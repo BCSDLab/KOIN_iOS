@@ -70,7 +70,7 @@ extension LostItemChatListTableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let chat = viewModel.chatList[indexPath.row]
         let viewController = LostItemChatViewController(viewModel: LostItemChatViewModel(articleId: chat.articleId, chatRoomId: chat.chatRoomId, articleTitle: chat.articleTitle))
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.messageListSelect, .click, "쪽지"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Chat.chatListChatConversationEntryClick, "쪽지"))
         navigationController?.pushViewController(viewController, animated: true)
     }
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -101,7 +101,7 @@ extension LostItemChatListTableViewController {
             $0.clipsToBounds = true
         }
         let titleLabel = UILabel().then {
-            $0.font = UIFont.appFont(.pretendardMedium, size: 16)
+            $0.font = UIFont.appFont(.pretendardMedium, size: 14)
             $0.textColor = UIColor.appColor(.neutral800)
             $0.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
         }
@@ -115,9 +115,9 @@ extension LostItemChatListTableViewController {
             $0.textAlignment = .right
         }
         let unreadMessageLabel = UILabel().then {
-            $0.layer.cornerRadius = 12
+            $0.layer.cornerRadius = 10
             $0.clipsToBounds = true
-            $0.backgroundColor = UIColor.appColor(.primary500)
+            $0.backgroundColor = UIColor.appColor(.new500)
             $0.textColor = UIColor.appColor(.neutral0)
             $0.textAlignment = .center
             $0.font = UIFont.appFont(.pretendardMedium, size: 12)
@@ -130,7 +130,7 @@ extension LostItemChatListTableViewController {
                 make.width.height.equalTo(48)
             }
         } else {
-            thumbnailImageView.image = UIImage.appImage(asset: .basicPicture)
+            thumbnailImageView.image = UIImage.appImage(asset: .basicPicture)?.withTintColor(.appColor(.new500), renderingMode: .alwaysOriginal)
             thumbnailImageView.snp.remakeConstraints { make in
                 make.centerY.centerX.equalToSuperview()
                 make.width.height.equalTo(32)
@@ -149,10 +149,6 @@ extension LostItemChatListTableViewController {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
             $0.width.height.equalTo(48)
-        }
-        thumbnailImageView.snp.remakeConstraints { make in
-            make.centerY.centerX.equalToSuperview()
-            make.width.height.equalTo(32)
         }
         titleLabel.snp.makeConstraints {
             $0.top.equalTo(thumbnailContainerView.snp.top).offset(3)
@@ -177,9 +173,6 @@ extension LostItemChatListTableViewController {
             $0.width.equalTo(unreadMessageLabel.intrinsicContentSize.width + 12)
             $0.trailing.equalTo(recentTimeLabel)
         }
-        DispatchQueue.main.async {
-            unreadMessageLabel.layer.cornerRadius = unreadMessageLabel.frame.height / 2
-        }
         return cell
     }
     
@@ -200,6 +193,6 @@ extension LostItemChatListTableViewController {
     private func configureView() {
         setUpLayOuts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+        self.view.backgroundColor = .appColor(.neutral0)
     }
 }

@@ -201,7 +201,7 @@ final class NotiViewController: UIViewController {
     
     private let diningImageUploadDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "식단사진이 업로드 될 경우 알림을 받습니다."
+        label.text = "식단 사진이 업로드 될 경우 알림을 받습니다."
         return label
     }()
     
@@ -213,7 +213,7 @@ final class NotiViewController: UIViewController {
     
     private let reviewDescriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = "전화 주문 시 리뷰 작성 요청 알림을 받습니다."
+        label.text = "주문 시 리뷰 작성 요청 알림을 받습니다."
         return label
     }()
     
@@ -344,7 +344,7 @@ final class NotiViewController: UIViewController {
 extension NotiViewController {
     
     @objc private func moveManageKeywordVC() {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.Notice.notificationManageKeyword, .click, "공지사항 키워드 알림"))
+        inputSubject.send(.logEvent(EventParameter.EventLabel.Notice.notificationConfigKeywordManageEntryClick, "공지사항 키워드 알림"))
         let noticeListRepository = DefaultNoticeListRepository(service: DefaultNoticeService())
         let notiRepository = DefaultNotiRepository(service: DefaultNotiService())
         let ga4Repository = GA4AnalyticsRepository(service: GA4AnalyticsService())

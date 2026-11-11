@@ -18,7 +18,7 @@ final class LostItemListViewModel {
         case updateTitle(String?)
         case updateFilter(FetchLostItemListRequest)
         case updateKeyword(String)
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any, parameters: [String: String] = [:])
     }
     enum Output {
         case update([LostItemListData])
@@ -74,8 +74,8 @@ final class LostItemListViewModel {
                 self.update(filter: filter)
             case .updateKeyword(let keyword):
                 self.update(keyword: keyword)
-            case let .logEvent(label, category, value):
-                self.logEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value, parameters):
+                logAnalyticsEventUseCase.execute(label: label, value: value, parameters: parameters)
             }
         }.store(in: &subscription)
         return outputSubject.eraseToAnyPublisher()
@@ -83,10 +83,6 @@ final class LostItemListViewModel {
 }
 
 extension LostItemListViewModel {
-    
-    private func logEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
-    }
     
     private func checkLogin() {
         checkLoginUseCase.execute().sink(

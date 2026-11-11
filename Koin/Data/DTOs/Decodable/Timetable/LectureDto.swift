@@ -22,10 +22,24 @@ struct LectureDto: Codable {
 
 extension LectureDto {
     func toDomain() -> [LectureData] {
-           return timetable?.map { timetable in
-               LectureData(id: timetable.id, name: timetable.classTitle, professor: timetable.professor ?? "", classTime: timetable.classInfos?.first?.classTime ?? [], grades: timetable.grades)
-           } ?? []
-       }
+        timetable?.map { timetable in
+            let times = timetable.classInfos?.flatMap { $0.classTime ?? [] } ?? []
+            return LectureData(
+                id: timetable.id,
+                name: timetable.classTitle,
+                professor: timetable.professor ?? "",
+                classTime: Array(Set(times)).sorted(),
+                grades: timetable.grades,
+                lectureId: timetable.lectureID,
+                code: timetable.code,
+                lectureClass: timetable.lectureClass,
+                classInfos: timetable.classInfos?.map {
+                    LectureClassInfo(classTime: $0.classTime ?? [], classPlace: $0.classPlace ?? "")
+                },
+                memo: timetable.memo
+            )
+        } ?? []
+    }
 }
 
 struct Timetable: Codable {

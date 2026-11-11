@@ -13,7 +13,7 @@ final class ManyBusTimetableTableViewCell: UITableViewCell {
     private let busPlaceLabel = UILabel().then {
         $0.font = .appFont(.pretendardMedium, size: 16)
         $0.textAlignment = .left
-        $0.textColor = .black
+        $0.textColor = .appColor(.neutral800)
     }
     
     private let subBusPlaceLabel = UILabel().then {
@@ -26,7 +26,6 @@ final class ManyBusTimetableTableViewCell: UITableViewCell {
         $0.axis = .vertical
         $0.alignment = .leading
         $0.distribution = .fill
-        $0.spacing = 2
     }
    
     //MARK: - Initialization
@@ -67,9 +66,16 @@ extension ManyBusTimetableTableViewCell {
     }
     
     private func setUpConstraints() {
+        // 한 줄이면 행 중앙, 두 줄이면 정류장명 26 + 부명칭 19 묶음을 행 중앙에 둔다(UIKit 라벨 높이를 피그마 줄높이로 고정).
         busLabelStackView.snp.makeConstraints {
             $0.centerY.equalToSuperview()
             $0.leading.equalToSuperview().offset(24)
+        }
+        busPlaceLabel.snp.makeConstraints {
+            $0.height.equalTo(26)
+        }
+        subBusPlaceLabel.snp.makeConstraints {
+            $0.height.equalTo(19)
         }
     }
     

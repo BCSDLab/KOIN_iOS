@@ -17,12 +17,16 @@ final class EditLostItemViewController: UIViewController {
     
     // MARK: - Properties
     private let viewModel: EditLostItemViewModel
+    /// 화면 진입 시 1회 고정. 습득일 범위 기준
+    private let now = Date()
     private let inputSubject = PassthroughSubject<EditLostItemViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     weak var delegate: EditLostItemViewControllerDelegate?
     
     // MARK: - UI Components
-    private let scrollView = UIScrollView()
+    private let scrollView = UIScrollView().then {
+        $0.keyboardDismissMode = .interactive
+    }
     
     private let scrollContentView = UIView()
     
@@ -36,7 +40,7 @@ final class EditLostItemViewController: UIViewController {
     
     private lazy var categoryView = EditLostItemCategoryView(selectedCategory: viewModel.lostItemData.category)
     
-    private lazy var foundDateView = EditLostItemFoundDateView(type: viewModel.lostItemData.type, foundDate: viewModel.lostItemData.foundDate)
+    private lazy var foundDateView = EditLostItemFoundDateView(type: viewModel.lostItemData.type, foundDate: viewModel.lostItemData.foundDate, now: now)
     
     private lazy var foundPlaceView = EditLostItemFoundPlaceView(type: viewModel.lostItemData.type, foundPlace: viewModel.lostItemData.foundPlace)
     
@@ -52,14 +56,11 @@ final class EditLostItemViewController: UIViewController {
     
     private let editButton = DebouncedButton().then {
         $0.setTitle("수정 완료", for: .normal)
-        $0.titleLabel?.font = UIFont.appFont(.pretendardBold, size: 14)
-        $0.backgroundColor = UIColor.appColor(.primary600)
+        $0.titleLabel?.font = UIFont.appFont(.pretendardSemiBold, size: 15)
+        $0.backgroundColor = UIColor.appColor(.new500)
         $0.layer.cornerRadius = 8
         $0.layer.masksToBounds = true
     }
-    
-    // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
     
     // MARK: - Initializer
     init(viewModel: EditLostItemViewModel) {
@@ -98,7 +99,7 @@ final class EditLostItemViewController: UIViewController {
             case .addImageUrl(let url):
                 imagesView.imageUploadCollectionView.addImageUrl(url)
             case .showToast(let message):
-                showToast(message: message)
+                showToastMessage(message: message)
             case .updateData(let lostItemData):
                 delegate?.updateData(lostItemData: lostItemData)
                 navigationController?.popViewController(animated: true)
@@ -109,7 +110,6 @@ final class EditLostItemViewController: UIViewController {
             self?.addImageButtonTapped()
         }.store(in: &subscriptions)
         
-        foundDateView.prepareDropdown(host: dropdownHost)
     }
 }
 
@@ -120,12 +120,10 @@ extension EditLostItemViewController {
     }
     
     @objc private func editButtonTapped() {
-        guard !dropdownHost.isPresenting else {
-            return
-        }
         dismissKeyboard()
         
-        if foundDateView.isValid && foundPlaceView.isValid {
+        let isFoundDateValid = foundDateView.validateInput()
+        if isFoundDateValid && foundPlaceView.isValid {
             let imageUrls = imagesView.imageUploadCollectionView.imageUrls
             let category = categoryView.selectedCategory
             let foundDate = foundDateView.foundDate
@@ -156,8 +154,8 @@ extension EditLostItemViewController {
     private func addObserver() {
         NotificationCenter.default.addObserver(
             self,
-            selector: #selector(keyBoardWillShow(_:)),
-            name: UIResponder.keyboardWillShowNotification,
+            selector: #selector(keyboardWillChangeFrame(_:)),
+            name: UIResponder.keyboardWillChangeFrameNotification,
             object: nil
         )
         
@@ -168,47 +166,32 @@ extension EditLostItemViewController {
             object: nil)
     }
     
-    @objc private func keyBoardWillShow(_ notification: NSNotification) {
-        guard let userInfo = notification.userInfo,
-              let keyBoardSize = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
+    @objc private func keyboardWillChangeFrame(_ notification: NSNotification) {
+        guard !isPresentingDropdown,
+              let keyboardFrame = notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else {
             return
         }
-        
-        guard !dropdownHost.isPresenting else { return }
 
-        let contentInset = UIEdgeInsets(
-            top: 0,
-            left: 0,
-            bottom: keyBoardSize.size.height - (view.frame.height - scrollView.frame.maxY) + 70,
-            right: 0
-        )
-        scrollView.contentInset = contentInset
-        scrollView.scrollIndicatorInsets = contentInset
-        
-        bottomSeparateView.snp.updateConstraints {
-            $0.bottom.equalTo(editButtonBackgroundView.snp.top).offset(0)
-        }
-        
+        let keyboardFrameInView = view.convert(keyboardFrame, from: nil)
+        let overlap = max(0, scrollView.frame.maxY - keyboardFrameInView.minY)
+        scrollView.contentInset.bottom = overlap > 0 ? overlap + 16 : 0
+        scrollView.verticalScrollIndicatorInsets.bottom = overlap
+
+        guard overlap > 0 else { return }
         guard let targetView = [foundPlaceView.locationTextField,
                                 contentView.contentTextView].first(where: { $0.isFirstResponder }) else {
             return
         }
-        
+
         var rect = targetView.convert(targetView.bounds, to: scrollView)
         rect.size.height += 16
         scrollView.scrollRectToVisible(rect, animated: true)
     }
-    
-    @objc private func keyBoardWillHide(_ notification: NSNotification) {
-        guard !dropdownHost.isPresenting else { return }
 
-        let contentInset = UIEdgeInsets.zero
-        scrollView.contentInset = contentInset
-        scrollView.scrollIndicatorInsets = contentInset
-        
-        bottomSeparateView.snp.updateConstraints {
-            $0.bottom.equalTo(editButtonBackgroundView.snp.top).offset(-8)
-        }
+    @objc private func keyBoardWillHide(_ notification: NSNotification) {
+        guard !isPresentingDropdown else { return }
+        scrollView.contentInset.bottom = 0
+        scrollView.verticalScrollIndicatorInsets.bottom = 0
     }
 }
 
@@ -304,9 +287,9 @@ extension EditLostItemViewController {
         }
         
         editButtonBackgroundView.snp.makeConstraints {
-            $0.height.equalTo(70)
+            $0.height.equalTo(88)
             $0.leading.trailing.equalToSuperview()
-            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.bottom)
         }
         bottomSeparateView.snp.makeConstraints {
             $0.height.equalTo(1)
@@ -314,8 +297,8 @@ extension EditLostItemViewController {
             $0.bottom.equalTo(editButtonBackgroundView.snp.top).offset(-8)
         }
         editButton.snp.makeConstraints {
-            $0.width.equalTo(160)
-            $0.height.equalTo(38)
+            $0.leading.trailing.equalToSuperview().inset(32)
+            $0.height.equalTo(48)
             $0.centerX.equalToSuperview()
             $0.bottom.equalTo(editButtonBackgroundView.snp.bottom).offset(-16)
         }

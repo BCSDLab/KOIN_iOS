@@ -98,15 +98,13 @@ extension RecruitMyPostListHostingController: RecruitDataHostingControllerDelega
     private func showCloseModal(recruitId: Int) {
         let onCancelButtonTapped: ()->Void = { [weak self] in
             self?.rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostCloseCancel,
-                category: .click,
+                label: EventParameter.EventLabel.Recruit.teamCreatedTeamDeadlineCancelClick,
                 value: "취소하기"
             )
         }
         let onCloseButtonTapped: ()->Void = { [weak self] in
             self?.rootView.makeLogAnalyticsEvent(
-                label: EventParameter.EventLabel.Campus.Recruit.recruitCreatedPostCloseConfirm,
-                category: .click,
+                label: EventParameter.EventLabel.Recruit.teamCreatedTeamDeadlineConfirmClick,
                 value: "마감하기"
             )
             self?.rootView.close(id: recruitId)
@@ -142,8 +140,6 @@ extension RecruitMyPostListHostingController {
             onResetTapped: onResetTapped,
             onApplyTapped: onApplyTapped
         )
-        let bottomSheetViewController = BottomSheetViewControllerB(contentView: filterBottomSheetView)
-        filterBottomSheetView.delegate = bottomSheetViewController
-        present(bottomSheetViewController, animated: true)
+        presentBottomSheet(filterBottomSheetView)
     }
 }

@@ -10,26 +10,22 @@ import UIKit
 
 final class AddDirectCollectionViewCell: UICollectionViewCell {
     
+    // MARK: - Properties
     var cancellables = Set<AnyCancellable>()
     let deleteButtonPublisher = PassthroughSubject<Void, Never>()
+    let rowChangedPublisher = PassthroughSubject<AddDirectCollectionView.Row, Never>()
+    private var row = AddDirectCollectionView.Row()
+    private var inputSubscriptions = Set<AnyCancellable>()
 
-    let selectTimeView = SelectTimeView(frame: .zero, size: .small).then { _ in
-    }
-    
-    private let placeView = ClassComponentView(text: "장소", isPoint: false).then {
-        $0.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        $0.layer.borderWidth = 1.0
-        $0.layer.cornerRadius = 4
-        $0.layer.masksToBounds = true
-    }
-    
-    private let deleteButton = UIButton().then {
-        $0.setImage(UIImage.appImage(asset: .delete), for: .normal)
-    }
-    
+    // MARK: - UI Components
+    let selectTimeView = SelectTimeView(frame: .zero, size: .small)
+    private let placeView = ClassComponentView(text: "장소", isPoint: false)
+    private let deleteButton = UIButton(type: .system)
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         configureView()
+        bind()
         deleteButton.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
     }
     
@@ -43,8 +39,25 @@ final class AddDirectCollectionViewCell: UICollectionViewCell {
         cancellables.removeAll()
     }
     
-    func configure(text: String) {
-        
+    func configure(row: AddDirectCollectionView.Row) {
+        self.row = row
+        selectTimeView.configure(row: row)
+        placeView.setText(row.place)
+    }
+
+    private func bind() {
+        placeView.textChangedPublisher.sink { [weak self] value in
+            guard let self else { return }
+            self.row.place = value
+            self.rowChangedPublisher.send(self.row)
+        }.store(in: &inputSubscriptions)
+        selectTimeView.selectionChangedPublisher.sink { [weak self] in
+            guard let self else { return }
+            self.row.day = self.selectTimeView.dayIndex
+            self.row.startMinute = self.selectTimeView.startMinute
+            self.row.endMinute = self.selectTimeView.endMinute
+            self.rowChangedPublisher.send(self.row)
+        }.store(in: &inputSubscriptions)
     }
 }
 
@@ -62,33 +75,36 @@ extension AddDirectCollectionViewCell {
     }
     
     private func setUpConstraints() {
-        deleteButton.snp.makeConstraints { make in
-            make.top.trailing.equalToSuperview()
-            make.width.height.equalTo(24)
+        deleteButton.snp.makeConstraints {
+            $0.top.leading.equalToSuperview().offset(12)
+            $0.size.equalTo(16)
         }
-        selectTimeView.snp.makeConstraints { make in
-            make.top.equalTo(deleteButton.snp.bottom).offset(6)
-            make.leading.equalTo(self.snp.leading).offset(13.5)
-            make.trailing.equalTo(self.snp.trailing).offset(-13.5)
-            make.height.equalTo(35)
+        selectTimeView.snp.makeConstraints {
+            $0.top.equalTo(deleteButton.snp.bottom).offset(8)
+            $0.leading.trailing.equalToSuperview().inset(12)
+            $0.height.equalTo(35)
         }
-        placeView.snp.makeConstraints { make in
-            make.top.equalTo(selectTimeView.snp.bottom).offset(8)
-            make.leading.trailing.equalTo(selectTimeView)
-            make.height.equalTo(38)
+        placeView.snp.makeConstraints {
+            $0.top.equalTo(selectTimeView.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(selectTimeView)
+            $0.height.equalTo(35)
+            $0.bottom.equalToSuperview().offset(-12)
         }
     }
-    
-    private func setUpBorder() {
-        self.layer.borderColor = UIColor.appColor(.neutral300).cgColor
-        self.layer.borderWidth = 1.0
-        self.layer.cornerRadius = 4
-        self.layer.masksToBounds = true
+
+    private func setUpStyles() {
+        contentView.layer.borderColor = UIColor.appColor(.neutral300).cgColor
+        contentView.layer.borderWidth = 0.5
+        contentView.layer.cornerRadius = 16
+        deleteButton.setImage(UIImage.appImage(asset: .cancel)?.withRenderingMode(.alwaysTemplate), for: .normal)
+        deleteButton.imageView?.contentMode = .scaleAspectFit
+        deleteButton.tintColor = .appColor(.neutral800)
+        deleteButton.accessibilityLabel = "시간 및 장소 삭제"
     }
-    
+
     private func configureView() {
+        setUpStyles()
         setUpLayouts()
         setUpConstraints()
-        setUpBorder()
     }
 }

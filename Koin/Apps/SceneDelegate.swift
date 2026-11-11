@@ -102,7 +102,7 @@ extension SceneDelegate {
         if let date = parameters["date"], let type = parameters["type"], let place = parameters["place"] {
             handleDiningNavigation(date: date, type: type, place: place, navigationController: navigationController)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Campus.Dining.menuShare, category: .click, value: "코인으로 이동")
+            logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Dining.fromExternalCafeteriaEntryKakaoEntryClick, value: "코인으로 이동")
             return
         }
     }
@@ -172,6 +172,11 @@ extension SceneDelegate {
                 viewController = makeLostItemData(lostItemId: noticeId)
             } else {
                 viewController = makeNoticeDataViewController(noticeId: noticeId, boardId: boardId)
+                // 명세 9-1: 공지 키워드 알림으로 진입. schemeUri: keyword?id=&keyword=&board-id=
+                if let keyword = parsedQuery["keyword"] {
+                    let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+                    logAnalyticsEventUseCase.execute(label: EventParameter.EventLabel.Notice.fromExternalNoticeDetailKeywordNotificationEntryClick, value: keyword)
+                }
             }
             navigationController?.pushViewController(viewController, animated: true)
         }
@@ -494,19 +499,11 @@ extension SceneDelegate {
     
     private func makeShopSummaryViewController(shopId: Int) -> UIViewController {
         let repository = DefaultShopRepository(service: DefaultShopService())
-        let fetchOrderShopSummaryFromShopUseCase = DefaultFetchOrderShopSummaryFromShopUseCase(repository: repository)
-        let fetchOrderShopMenusAndGroupsFromShopUseCase = DefaultFetchOrderShopMenusAndGroupsFromShopUseCase(shopRepository: repository)
-        let fetchShopDataUseCase = DefaultFetchShopDataUseCase(shopRepository: repository)
-        let fetchShopEventListUseCase = DefaultFetchShopEventListUseCase(shopRepository: repository)
+        let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(shopRepository: repository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let getUserScreenTimeUseCase = DefaultGetUserScreenTimeUseCase()
         let viewModel = ShopSummaryViewModel(
-            fetchOrderShopSummaryFromShopUseCase: fetchOrderShopSummaryFromShopUseCase,
-            fetchOrderShopMenusAndGroupsFromShopUseCase: fetchOrderShopMenusAndGroupsFromShopUseCase,
-            fetchShopDataUseCase: fetchShopDataUseCase,
-            fetchShopEventListUseCase: fetchShopEventListUseCase,
+            fetchShopSummaryUseCase: fetchShopSummaryUseCase,
             logAnalyticsEventUseCase: logAnalyticsEventUseCase,
-            getUserScreenTimeUseCase: getUserScreenTimeUseCase,
             shopId: shopId,
             shopName: nil
         )

@@ -63,6 +63,22 @@ final class RecruitPostViewController: UIViewController {
             validate()
         }
     }
+    /// 화면 진입 시 1회 고정. 모집 일정 최대 범위 기준
+    private let today = Date()
+    /// request의 시작·종료·마감일. 반영 시 라벨도 함께 갱신
+    private var schedule: RecruitPostSchedule {
+        get {
+            RecruitPostSchedule(start: request.startDate, end: request.endDate, deadline: request.deadline)
+        }
+        set {
+            var request = request
+            request.startDate = newValue.start
+            request.endDate = newValue.end
+            request.deadline = newValue.deadline
+            self.request = request
+            scheduleView.configure(schedule: newValue)
+        }
+    }
     
     // MARK: - UI Components
     private let scrollView = UIScrollView()
@@ -101,32 +117,15 @@ final class RecruitPostViewController: UIViewController {
     private let postButton = UIButton()
     
     // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: scrollView)
-    
-    private lazy var categoryDropdown = dropdownHost.makeDropdown(
-        anchor: categoryView.dropdownAnchor,
-        contentView: RecruitPostCategoryDropdownView { [weak self] category in
-            self?.logEvent(post: .recruitRecruitCategory, modify: .recruitPostEditCategory, value: category.rawValue)
-            self?.request.category = category
-            self?.categoryView.configure(category: category)
-        },
-        configuration: .init(topPadding: 4, shadow: .shadow2)
-    )
-    private lazy var startDateDropdown = dropdownHost.makeDropdown(
-        anchor: scheduleView.activityPeriodDropdownAnchor,
-        contentView: scheduleView.startDateDropdownContentView,
-        configuration: .init(topPadding: 4, shadow: .shadow2)
-    )
-    private lazy var endDateDropdown = dropdownHost.makeDropdown(
-        anchor: scheduleView.activityPeriodDropdownAnchor,
-        contentView: scheduleView.endDateDropdownContentView,
-        configuration: .init(topPadding: 4, shadow: .shadow2)
-    )
-    private lazy var deadlineDateDropdown = dropdownHost.makeDropdown(
-        anchor: scheduleView.deadlineDateDropdownAnchor,
-        contentView: scheduleView.deadlineDateDropdownContentView,
-        configuration: .init(topPadding: 4, shadow: .shadow2)
-    )
+    private lazy var categoryDropdownContentView = RecruitPostCategoryDropdownView { [weak self] category in
+        self?.logEvent(
+            post: .teamWriteTeamWriteCategorySelect,
+            modify: .teamEditTeamEditCategorySelect,
+            value: category.rawValue
+        )
+        self?.request.category = category
+        self?.categoryView.configure(category: category)
+    }
     
     // MARK: - Initializer
     init(
@@ -193,8 +192,11 @@ extension RecruitPostViewController {
     private func bindSections() {
         categoryView.categoryButtonTappedPublisher.sink { [weak self] in
             guard let self else { return }
-            view.endEditing(true)
-            categoryDropdown.toggle()
+            presentDropdown(
+                anchor: categoryView.dropdownAnchor,
+                content: categoryDropdownContentView,
+                configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+            )
         }.store(in: &subscriptions)
         
         titleView.textChangedPublisher.sink { [weak self] text in
@@ -205,7 +207,7 @@ extension RecruitPostViewController {
             guard let self else {
                 return
             }
-            logEvent(post: .recruitRecruitMethod, modify: .recruitPostEditMethod, value: meetingType.logValue)
+            logEvent(post: .teamWriteTeamWriteMethodSelect, modify: .teamEditTeamEditMethodSelect, value: meetingType.logValue)
             request.meetingType = meetingType
             
             let rect = meetingTypeView.convert(
@@ -216,57 +218,31 @@ extension RecruitPostViewController {
         }.store(in: &subscriptions)
         
         scheduleView.startDateButtonTappedPublisher.sink { [weak self] in
-            guard let self else { return }
-            view.endEditing(true)
-            scheduleView.startDateDropdownContentView.reset(initialDate: request.startDate ?? Date())
-            startDateDropdown.toggle()
+            self?.openScheduleDropdown(.start)
         }.store(in: &subscriptions)
         
         scheduleView.endDateButtonTappedPublisher.sink { [weak self] in
-            guard let self else { return }
-            view.endEditing(true)
-            scheduleView.endDateDropdownContentView.reset(initialDate: request.endDate ?? Date())
-            endDateDropdown.toggle()
+            self?.openScheduleDropdown(.end)
         }.store(in: &subscriptions)
         
         scheduleView.deadlineDateButtonTappedPublisher.sink { [weak self] in
-            guard let self else { return }
-            view.endEditing(true)
-            scheduleView.deadlineDateDropdownContentView.reset(initialDate: request.deadline ?? Date())
-            deadlineDateDropdown.toggle()
+            self?.openScheduleDropdown(.deadline)
         }.store(in: &subscriptions)
         
-        scheduleView.startDateDropdownContentView.selectedItemPublisher.sink { [weak self] selectedItems in
-            let startDate = self?.date(from: selectedItems)
-            if self?.request.startDate != startDate {
-                self?.request.startDate = startDate
-                self?.scheduleView.configure(startDate: startDate)
-            }
-        }.store(in: &subscriptions)
-        
-        scheduleView.endDateDropdownContentView.selectedItemPublisher.sink { [weak self] selectedItems in
-            let endDate = self?.date(from: selectedItems)
-            if self?.request.endDate != endDate {
-                self?.request.endDate = endDate
-                self?.scheduleView.configure(endDate: endDate)
-            }
-        }.store(in: &subscriptions)
-        
-        scheduleView.deadlineDateDropdownContentView.selectedItemPublisher.sink { [weak self] selectedItems in
-            let deadline = self?.date(from: selectedItems)
-            if self?.request.deadline != deadline {
-                self?.request.deadline = deadline
-                self?.scheduleView.configure(deadlineDate: deadline)
-            }
-        }.store(in: &subscriptions)
+        [RecruitPostSchedule.Field.start, .end, .deadline].forEach { field in
+            scheduleView.dropdownContentView(for: field).datePublisher.sink { [weak self] date in
+                guard let self else { return }
+                schedule = schedule.updating(field, to: date)
+            }.store(in: &subscriptions)
+        }
         
         roleView.roleTypeChangedPublisher.sink { [weak self] roleType in
-            self?.logEvent(post: .recruitRecruitRole, modify: .recruitPostEditRole, value: "역할 구분 없이 모집하기")
+            self?.logEvent(post: .teamWriteTeamWriteRoleClick, modify: .teamEditTeamEditRoleClick, value: "역할 구분 없이 모집하기")
             self?.request.type = roleType
         }.store(in: &subscriptions)
         
         roleView.addRoleButtonTappedPublisher.sink { [weak self] in
-            self?.logEvent(post: .recruitRecruitRole, modify: .recruitPostEditRole, value: "역할 추가")
+            self?.logEvent(post: .teamWriteTeamWriteRoleClick, modify: .teamEditTeamEditRoleClick, value: "역할 추가")
         }.store(in: &subscriptions)
         
         roleView.rolesChangedPublisher.sink { [weak self] roles in
@@ -323,20 +299,22 @@ extension RecruitPostViewController {
         }.store(in: &subscriptions)
     }
 
-    private func date(from selectedItems: [String]) -> Date? {
-        guard selectedItems.count == 3,
-              let year = Int(selectedItems[0].filter { $0.isNumber }),
-              let month = Int(selectedItems[1].filter { $0.isNumber }),
-              let day = Int(selectedItems[2].filter { $0.isNumber }) else {
-            return nil
+    /// 드롭다운형: 범위 적용 후 값 표시. 값이 없으면 보정된 picker.date를 즉시 반영(setDate는 이벤트 없음)
+    private func openScheduleDropdown(_ field: RecruitPostSchedule.Field) {
+        let picker = scheduleView.dropdownContentView(for: field)
+        let range = schedule.range(for: field, today: today)
+        picker.setRange(minimum: range.lowerBound, maximum: range.upperBound)
+        if let date = schedule.date(for: field) {
+            picker.setDate(date)
+        } else {
+            picker.setDate(Date())
+            schedule = schedule.updating(field, to: picker.date)
         }
-        var components = DateComponents()
-        components.calendar = Calendar(identifier: .gregorian)
-        components.timeZone = TimeZone.current
-        components.year = year
-        components.month = month
-        components.day = day
-        return components.date
+        presentDropdown(
+            anchor: field == .deadline ? scheduleView.deadlineDateDropdownAnchor : scheduleView.activityPeriodDropdownAnchor,
+            content: picker,
+            configuration: .init(direction: .down(spacing: 4), shadow: .shadow2)
+        )
     }
 }
 
@@ -410,11 +388,12 @@ extension RecruitPostViewController {
         categoryView.configure(category: data.category)
         titleView.configure(text: data.title)
         meetingTypeView.configure(meetingType: data.meetingType)
-        scheduleView.configure(
-            startDate: data.startDate,
-            endDate: data.endDate,
-            deadlineDate: data.deadlineDate
-        )
+        // 서버 값은 보정하지 않고 그대로 표시
+        scheduleView.configure(schedule: RecruitPostSchedule(
+            start: data.startDate,
+            end: data.endDate,
+            deadline: data.deadlineDate
+        ))
         roleView.configure(
             roleType: data.type,
             roles: data.roles.map { RecruitRoleRequest(from: $0) },
@@ -433,9 +412,8 @@ extension RecruitPostViewController {
     }
     
     @objc private func postButtonTapped() {
-        guard !dropdownHost.isPresenting else { return }
         view.endEditing(true)
-        logEvent(post: .recruitRecruitSubmit, modify: .recruitPostEditSubmit, value: submitLogValue)
+        logEvent(post: .teamWriteTeamWriteOpenClick, modify: .teamEditTeamEditOpenClick, value: submitLogValue)
         showSubmitModal()
     }
     
@@ -445,25 +423,25 @@ extension RecruitPostViewController {
     }
     
     private func logEvent(
-        post postLabel: EventParameter.EventLabel.Campus.Recruit,
-        modify modifyLabel: EventParameter.EventLabel.Campus.Recruit,
+        post postLabel: EventParameter.EventLabel.Recruit,
+        modify modifyLabel: EventParameter.EventLabel.Recruit,
         value: Any
     ) {
         switch viewModel.mode {
         case .post:
-            inputSubject.send(.logEvent(postLabel, .click, value))
+            inputSubject.send(.logEvent(postLabel, value))
         case .modify:
-            inputSubject.send(.logEvent(modifyLabel, .click, value))
+            inputSubject.send(.logEvent(modifyLabel, value))
         }
     }
     
     private func showSubmitModal() {
         let onCancelButtonTapped: ()->Void = { [weak self] in
-            self?.logEvent(post: .recruitRecruitSubmitCancel, modify: .recruitPostEditSubmitCancel, value: "취소하기")
+            self?.logEvent(post: .teamWriteTeamWriteCancelClick, modify: .teamEditTeamEditCancelClick, value: "취소하기")
         }
         let onSubmitButtonTapped: ()->Void = { [weak self] in
             guard let self else { return }
-            logEvent(post: .recruitRecruitSubmitConfirm, modify: .recruitPostEditSubmitConfirm, value: submitButtonTitle)
+            logEvent(post: .teamWriteTeamWriteConfirmClick, modify: .teamEditTeamEditConfirmClick, value: submitButtonTitle)
             submit()
         }
         let modalViewController = KoinModalViewController(

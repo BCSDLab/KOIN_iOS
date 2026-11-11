@@ -31,7 +31,7 @@ final class LostItemKeywordCollectionViewKeywordCell: UICollectionViewCell {
     private var textColor: UIColor? {
         switch isSelected {
         case true:
-            UIColor.white
+            UIColor.appColor(.neutral0)
         case false:
             UIColor.appColor(.neutral500)
         }
@@ -40,7 +40,7 @@ final class LostItemKeywordCollectionViewKeywordCell: UICollectionViewCell {
     private var chipColor: UIColor? {
         switch isSelected {
         case true:
-            UIColor.appColor(.primary500)
+            UIColor.appColor(.new500)
         case false:
             UIColor.appColor(.neutral100)
         }

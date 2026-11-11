@@ -29,8 +29,6 @@ protocol ShopService {
     func modifyReview(requestModel: WriteReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func deleteReview(reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
     func reportReview(requestModel: ReportReviewRequest, reviewId: Int, shopId: Int) -> AnyPublisher<Void, ErrorResponse>
-    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, ErrorResponse>
-    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, ErrorResponse>
     
     func postCallNotification(shopId: Int) -> AnyPublisher<Void, ErrorResponse>    
     func fetchSearchShop(requestModel: FetchShopSearchRequest) -> AnyPublisher<ShopSearchDto, ErrorResponse>
@@ -47,14 +45,6 @@ final class DefaultShopService: ShopService {
     
     func fetchShopSummary(id: Int) -> AnyPublisher<ShopSummaryDto, ErrorResponse> {
         return networkService.requestWithResponse(api: ShopAPI.fetchShopSummary(id))
-    }
-    
-    func fetchShopBenefits() -> AnyPublisher<ShopBenefitsDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: ShopAPI.fetchShopBenefits)
-    }
-    
-    func fetchBeneficialShops(id: Int) -> AnyPublisher<ShopsDto, ErrorResponse> {
-        return networkService.requestWithResponse(api: ShopAPI.fetchBeneficialShops(id))
     }
     
     func fetchReviewList(requestModel: FetchShopReviewRequest) -> AnyPublisher<ReviewsDto, ErrorResponse> {

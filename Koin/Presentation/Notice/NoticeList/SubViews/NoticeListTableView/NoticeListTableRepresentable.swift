@@ -19,7 +19,7 @@ struct NoticeListTableRepresentable: UIViewRepresentable {
         case keywordAllTapped
         case keywordTapped(keyword: NoticeKeywordDto)
         case keywordManageTapped
-        case didScroll
+        case didScroll(String)
         case keywordAddButtonDidMove(minX: CGFloat)
         case contentOffsetDidChange(offsetY: CGFloat)
     }
@@ -106,8 +106,8 @@ extension NoticeListTableRepresentable {
                     onEvent(.keywordTapped(keyword: keyword))
                 case .keywordManageTapped:
                     onEvent(.keywordManageTapped)
-                case .didScroll:
-                    onEvent(.didScroll)
+                case let .didScroll(direction):
+                    onEvent(.didScroll(direction))
                 case let .keywordAddButtonDidMove(minX):
                     onEvent(.keywordAddButtonDidMove(minX: minX))
                 case let .contentOffsetDidChange(offsetY):

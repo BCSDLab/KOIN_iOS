@@ -51,7 +51,7 @@ struct ShopDto: Decodable {
 
 extension ShopDto {
     func toDomain() -> Shop {
-        return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payCard, payCard: payCard, phone: phone, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails ?? [], images: images)
+        return .init(categoryIds: categoryIds, delivery: delivery, id: id, name: name, payBank: payBank, payCard: payCard, phone: phone, isEvent: isEvent, isOpen: isOpen, reviewCount: reviewCount, averageRate: averageRate, benefitDetails: benefitDetails ?? [], images: images)
     }
 }
 

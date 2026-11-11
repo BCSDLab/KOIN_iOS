@@ -55,21 +55,29 @@ final class ShopBenefitViewController: UIViewController {
             guard let self else { return }
             let zoomedImageViewController = ZoomedImageViewControllerB()
             zoomedImageViewController.configure(urls: imageUrls, initialIndexPath: indexPath)
-            zoomedImageViewController.modalTransitionStyle = .crossDissolve
             zoomedImageViewController.modalPresentationStyle = .fullScreen
             present(zoomedImageViewController, animated: true)
         }.store(in: &subscriptions)
 
         benefitsTableView.detailExpandedPublisher.sink { [weak self] in
             guard let self else { return }
-            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitDetail, EventParameter.EventCategory.click, self.viewModel.shopName))
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopBenefitShopEventExpandClick, self.viewModel.shopName))
+        }.store(in: &subscriptions)
+
+        // 명세 3-9: 이벤트 목록을 스크롤하면 화면에 들어올 때마다 한 번만 기록한다.
+        benefitsTableView.willBeginDraggingPublisher.first().sink { [weak self] in
+            guard let self else { return }
+            self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailShopEventScroll, self.viewModel.shopName))
         }.store(in: &subscriptions)
     }
 }
 
 extension ShopBenefitViewController: PopLoggable {
     func sendPopLog(category: EventParameter.EventCategory) {
-        inputSubject.send(.logEvent(EventParameter.EventLabel.Business.shopBenefitBack, category, viewModel.shopName))
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.Shop.shopBenefitNavigationBackSwipe
+            : EventParameter.EventLabel.Shop.shopBenefitNavigationBackClick
+        inputSubject.send(.logEvent(label, viewModel.shopName))
     }
 }
 

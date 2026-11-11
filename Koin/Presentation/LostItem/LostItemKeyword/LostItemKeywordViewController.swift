@@ -70,7 +70,7 @@ final class LostItemKeywordViewController: UIViewController {
 extension LostItemKeywordViewController {
     
     private func bind() {
-        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).sink { [weak self] output in
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher()).receive(on: DispatchQueue.main).sink { [weak self] output in
             guard let self else { return }
             switch output {
             case .showLoginModal:
@@ -87,26 +87,31 @@ extension LostItemKeywordViewController {
                 updateMyKeywordCountLabel(count)
             case let .appendMyKeyword(keyword):
                 myKeywordCollectionView.append(keyword: keyword)
+            case let .clearKeywordInput(submittedText):
+                if myKeywordTextField.text == submittedText {
+                    myKeywordTextField.text = ""
+                    updateKeywordAddButton()
+                }
             case let .removeKeywordSuggestion(keyword):
                 keywordSuggestionCollectionView.remove(keyword: keyword)
             case .showToastExceedCount:
-                showToast(message: "키워드는 최대 10개까지 추가할 수 있습니다.", success: false)
+                showToastMessage(message: "키워드는 최대 10개까지 추가할 수 있습니다.", intent: .negative)
             case .showToastKeywordLength:
-                showToast(message: "키워드는 2글자에서 10글자 사이여야 합니다.", success: false)
+                showToastMessage(message: "키워드는 2글자에서 10글자 사이여야 합니다.", intent: .negative)
             case .showToast(let message):
-                showToast(message: message)
+                showToastMessage(message: message)
             case .removeMyKeyword(let id):
                 myKeywordCollectionView.remove(id: id)
             }
         }.store(in: &subscriptions)
         
-        myKeywordCollectionView.didLayoutSubviewsPublisher.sink { [weak self] height in
+        myKeywordCollectionView.didLayoutSubviewsPublisher.receive(on: DispatchQueue.main).sink { [weak self] height in
             guard let self else { return }
-            let inset: CGFloat = 12 * 2
+            let inset: CGFloat = height > 0 ? 12 * 2 : 0
             updateHeight(view: myKeywordCollectionView, height: height + inset)
         }.store(in: &subscriptions)
         
-        keywordSuggestionCollectionView.didLayoutSubviewsPublisher.sink { [weak self] height in
+        keywordSuggestionCollectionView.didLayoutSubviewsPublisher.receive(on: DispatchQueue.main).sink { [weak self] height in
             guard let self else { return }
             updateHeight(view: keywordSuggestionCollectionView, height: height)
         }.store(in: &subscriptions)
@@ -114,22 +119,17 @@ extension LostItemKeywordViewController {
         myKeywordCollectionView.didTapItemPublisher.sink { [weak self] keyword in
             guard let id = keyword.id else { return }
             self?.inputSubject.send(.deleteKeyword(id))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordRemove, .click, keyword.keyword))
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.LostItem.lostItemKeywordManageKeywordManageDeleteClick, keyword.keyword))
         }.store(in: &subscriptions)
         
         keywordSuggestionCollectionView.didTapItemPublisher.sink { [weak self] keyword in
             self?.inputSubject.send(.subscribeKeyword(keyword.keyword))
-            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordRecommend, .click, keyword.keyword))
         }.store(in: &subscriptions)
     }
     
     private func updateHeight(view: UIView, height: CGFloat) {
         view.snp.updateConstraints {
             $0.height.equalTo(height)
-        }
-        UIView.animate(withDuration: 0.2, delay: .zero, options: [.transitionCrossDissolve]) { [weak view] in
-            view?.superview?.setNeedsLayout()
-            view?.superview?.layoutIfNeeded()
         }
     }
 }
@@ -138,21 +138,18 @@ extension LostItemKeywordViewController {
     
     private func setAddTargets() {
         myKeywordAddButton.addTarget(self, action: #selector(myKeywordAddButtonTapped), for: .touchUpInside)
+        myKeywordTextField.addTarget(self, action: #selector(keywordTextDidChange), for: .editingChanged)
         notificationSwitch.addTarget(self, action: #selector(notificationSwitchTapped), for: .valueChanged)
     }
     
     @objc private func myKeywordAddButtonTapped() {
-        if let text = myKeywordTextField.text {
-            inputSubject.send(.subscribeKeyword(text))
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordAdd, .click, "키워드 추가"))
+        if myKeywordAddButton.isEnabled, let text = myKeywordTextField.text {
+            inputSubject.send(.submitKeyword(text))
         }
     }
     
     @objc private func notificationSwitchTapped() {
         inputSubject.send(.notificationSwitchTapped(isOn: notificationSwitch.isOn))
-        if notificationSwitch.isOn {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Campus.LostItem.lostItemKeywordAlarm, .click, "키워드 알림받기"))
-        }
     }
 }
 
@@ -163,17 +160,33 @@ extension LostItemKeywordViewController {
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        myKeywordTextField.layer.borderColor = UIColor.appColor(.primary400).cgColor
-        myKeywordAddButton.backgroundColor = .appColor(.primary500)
-        changeButtonForegroundColor(to: .appColor(.neutral0))
+        myKeywordTextField.layer.borderColor = UIColor.appColor(.new500).cgColor
+        updateKeywordAddButton()
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
         myKeywordTextField.layer.borderColor = UIColor.clear.cgColor
-        myKeywordAddButton.backgroundColor = .appColor(.neutral300)
-        changeButtonForegroundColor(to: .appColor(.neutral600))
+        updateKeywordAddButton()
     }
     
+    override func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField === myKeywordTextField {
+            myKeywordAddButtonTapped()
+        }
+        return super.textFieldShouldReturn(textField)
+    }
+
+    @objc private func keywordTextDidChange() {
+        updateKeywordAddButton()
+    }
+
+    private func updateKeywordAddButton() {
+        let hasText = !(myKeywordTextField.text ?? "").trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        myKeywordAddButton.isEnabled = hasText
+        myKeywordAddButton.backgroundColor = .appColor(hasText ? .new500 : .neutral300)
+        changeButtonForegroundColor(to: .appColor(hasText ? .neutral0 : .neutral600))
+    }
+
     private func changeButtonForegroundColor(to color: UIColor) {
         if let currentAttributedTitle = myKeywordAddButton.currentAttributedTitle {
             let mutableAttributedTitle = NSMutableAttributedString(attributedString: currentAttributedTitle)
@@ -196,7 +209,7 @@ extension LostItemKeywordViewController {
             self?.navigateToLogin()
         }
         let modalViewController = KoinModalViewController(configuration: .init(
-            appearance: .primary,
+            appearance: .new,
             content: .titles(
                 mainTitleText: "키워드 알림을 받으려면\n로그인이 필요해요.",
                 subTitleText: "로그인 후 간편하게 분실물 키워드\n알림을 받아보세요!"
@@ -248,11 +261,12 @@ extension LostItemKeywordViewController {
                 string: "잃어버린 물건을 입력해 주세요.",
                 attributes: [
                     .font : UIFont.appFont(.pretendardRegular, size: 14),
-                    .foregroundColor : UIColor.appColor(.gray)
+                    .foregroundColor : UIColor.appColor(.neutral500)
                 ]
             )
             $0.textColor = .appColor(.neutral800)
             $0.font = .appFont(.pretendardRegular, size: 14)
+            $0.returnKeyType = .done
             
             $0.backgroundColor = .appColor(.neutral100)
             $0.layer.cornerRadius = 4
@@ -269,6 +283,7 @@ extension LostItemKeywordViewController {
                     ]),
                 for: .normal)
             $0.backgroundColor = .appColor(.neutral300)
+            $0.isEnabled = false
             $0.layer.cornerRadius = 4
         }
         myKeywordCollectionView.do {
@@ -290,8 +305,8 @@ extension LostItemKeywordViewController {
             $0.textColor = .appColor(.neutral800)
         }
         notificationSubTitleLabel.do {
-            $0.text = "분실물 키워드 알림 받기"
-            $0.textColor = .black
+            $0.text = "분실물 키워드 알림받기"
+            $0.textColor = .appColor(.neutral800)
             $0.font = .appFont(.pretendardMedium, size: 16)
         }
         notificationDescriptionLabel.do {
@@ -300,7 +315,7 @@ extension LostItemKeywordViewController {
             $0.textColor = .appColor(.neutral500)
         }
         notificationSwitch.do {
-            $0.onTintColor = .appColor(.primary500)
+            $0.onTintColor = .appColor(.new500)
         }
         bottomSeparatorView.do {
             $0.backgroundColor = .appColor(.neutral100)
@@ -333,7 +348,7 @@ extension LostItemKeywordViewController {
         // MARK: - 내 키워드
         myKeywordTitleLabel.snp.makeConstraints {
             $0.height.equalTo(29)
-            $0.top.equalToSuperview().offset(16)
+            $0.top.equalToSuperview().offset(8)
             $0.leading.equalToSuperview().offset(24)
         }
         myKeywordCountLabel.snp.makeConstraints {

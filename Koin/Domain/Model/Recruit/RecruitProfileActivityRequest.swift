@@ -19,23 +19,10 @@ extension RecruitProfileActivityRequest {
     var isValid: Bool {
         guard let title,
               !title.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty,
-              let startedAt,
               let description,
               !description.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
             return false
         }
-
-        let calendar = Calendar.current
-        let startDay = calendar.startOfDay(for: startedAt)
-        let today = calendar.startOfDay(for: Date())
-        guard startDay <= today else { return false }
-
-        if isOngoing {
-            return true
-        }
-
-        guard let endedAt else { return false }
-        let endDay = calendar.startOfDay(for: endedAt)
-        return startDay <= endDay
+        return RecruitActivityPeriod(start: startedAt, end: endedAt, isOngoing: isOngoing).isValid(today: Date())
     }
 }

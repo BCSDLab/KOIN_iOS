@@ -17,7 +17,7 @@ final class NotificationViewModel: ViewModelProtocol {
         case deleteNotification(id: String)
         case deleteAllNotifications
         case markAllAsRead
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     enum Output {
@@ -66,8 +66,8 @@ final class NotificationViewModel: ViewModelProtocol {
                 self?.deleteAllNotifications()
             case .markAllAsRead:
                 self?.markAllAsRead()
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }
         .store(in: &subscriptions)
@@ -93,19 +93,20 @@ private extension NotificationViewModel {
     }
 
     private func selectNotification(id: String) {
-        guard let notification = notificationHistoryItems.first(where: { $0.id == id }),
-              let logValue = notification.logValue else {
+        guard let notification = notificationHistoryItems.first(where: { $0.id == id }) else {
             return
         }
         markAsRead(id: id)
         
         outputSubject.send(.selectedNotification(notification))
         
-        makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Notification.notificationList,
-            category: .click,
-            value: logValue
-        )
+        // 명세: value는 알림 분류값이며 알림 제목·본문은 수집하지 않는다.
+        if let logValue = notification.logValue {
+            makeLogAnalyticsEvent(
+                label: EventParameter.EventLabel.Home.DA2.mainNotificationListNotificationListItemEntryClick,
+                value: logValue
+            )
+        }
     }
 
     private func deleteNotification(id: String) {
@@ -155,9 +156,8 @@ private extension NotificationViewModel {
     
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
         value: Any
     ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

@@ -18,7 +18,7 @@ final class NoticeListTableView: UITableView {
         case keywordAllTapped
         case keywordTapped(keyword: NoticeKeywordDto)
         case keywordManageTapped
-        case didScroll
+        case didScroll(String)
         case keywordAddButtonDidMove(minX: CGFloat)
         case contentOffsetDidChange(offsetY: CGFloat)
         case pageButtonTapped(Int)
@@ -31,7 +31,10 @@ final class NoticeListTableView: UITableView {
     
     let eventPublisher = PassthroughSubject<Event, Never>()
     
-    private var scrollDirection: ScrollLog = .scrollToDown
+    private var scrollStopReferenceY: CGFloat?
+    private var lastUserOffsetY: CGFloat = 0
+    private var lastObservedOffsetY: CGFloat = 0
+    private var scrollStopWorkItem: DispatchWorkItem?
     private var subscriptions = Set<AnyCancellable>()
     private var isForSearch: Bool = false
     private var isLastSearchedPage: Bool = false
@@ -134,29 +137,46 @@ final class NoticeListTableView: UITableView {
 }
 
 extension NoticeListTableView: UIScrollViewDelegate {
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        let contentOffsetY = self.contentOffset.y
-        let screenHeight = self.frame.height
-        if scrollDirection == .scrollToDown && contentOffsetY > screenHeight * 0.7 && scrollDirection != .scrollChecked {
-            scrollDirection = .scrollChecked
-            eventPublisher.send(.didScroll)
+    // 명세 4-2: 사용자 스크롤 offset이 200ms 동안 변하지 않으면 정지로 본다(손가락을 댄 채 멈춘 경우 포함).
+    // 직전 정지 위치와 50 이상 차이 날 때만 방향을 기록하고, 정지마다 기준점을 갱신한다.
+    // 사용자 조작이 아닌 offset 변화(프로그램 스크롤·위치 복원)는 이동량에 넣지 않는다.
+    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+        if scrollStopWorkItem == nil {
+            scrollStopReferenceY = scrollView.contentOffset.y
         }
+        lastUserOffsetY = scrollView.contentOffset.y
+        lastObservedOffsetY = scrollView.contentOffset.y
     }
-    
-    func scrollViewDidEndDragging(_ scrollView: UIScrollView, willDecelerate decelerate: Bool) {
-        let velocity = scrollView.panGestureRecognizer.velocity(in: scrollView.superview)
-        if velocity.y > 0 {
-            scrollDirection = .scrollToTop
-        }
-        else {
-            if scrollDirection != .scrollChecked {
-                scrollDirection = .scrollToDown
-            }
-        }
-    }
-    
+
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let offsetY = scrollView.contentOffset.y
+        let offsetChange = offsetY - lastObservedOffsetY
+        lastObservedOffsetY = offsetY
         eventPublisher.send(.contentOffsetDidChange(offsetY: scrollView.contentOffset.y))
+        guard let reference = scrollStopReferenceY else { return }
+        guard isUserScrolling else {
+            // 자동 이동은 사용자 이동량과 200ms 기한을 유지한 채 좌표만 보정한다.
+            scrollStopReferenceY = reference + offsetChange
+            lastUserOffsetY += offsetChange
+            return
+        }
+        lastUserOffsetY = offsetY
+        scrollStopWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in self?.handleScrollStop() }
+        scrollStopWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2, execute: workItem)
+    }
+
+    private var isUserScrolling: Bool { isTracking || isDragging || isDecelerating }
+
+    private func handleScrollStop() {
+        scrollStopWorkItem = nil
+        guard let reference = scrollStopReferenceY else { return }
+        let delta = lastUserOffsetY - reference
+        // 조작이 끝났으면 다음 드래그 시작 위치를 새 기준점으로 삼는다.
+        scrollStopReferenceY = isUserScrolling ? lastUserOffsetY : nil
+        guard abs(delta) >= 50 else { return }
+        eventPublisher.send(.didScroll(delta > 0 ? "아래로" : "위로"))
     }
 }
 

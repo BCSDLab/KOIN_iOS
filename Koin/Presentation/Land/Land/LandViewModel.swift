@@ -12,6 +12,7 @@ final class LandViewModel: ViewModelProtocol {
     
     enum Input {
         case viewDidLoad
+        case logEvent(EventLabelType, Any)
     }
     enum Output {
         case showLandList([LandItem])
@@ -32,6 +33,8 @@ final class LandViewModel: ViewModelProtocol {
             switch input {
             case .viewDidLoad:
                 self?.getLandList()
+            case let .logEvent(label, value):
+                self?.logAnalyticsEventUseCase.execute(label: label, value: value)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()

@@ -113,7 +113,7 @@ extension SelectDeptModalViewController {
     private func setUpStyles() {
         titleLabel.do {
             $0.text = "전공선택"
-            $0.textColor = .appColor(.primary500)
+            $0.textColor = .appColor(.new500)
             $0.font = .appFont(.pretendardSemiBold, size: 18)
         }
         
@@ -138,6 +138,7 @@ extension SelectDeptModalViewController {
                     ]),
                 for: .normal
             )
+            $0.layer.cornerRadius = 6
         }
         completeButton.do {
             $0.setAttributedTitle(
@@ -149,7 +150,7 @@ extension SelectDeptModalViewController {
                     ]),
                 for: .normal
             )
-            $0.backgroundColor = .appColor(.primary500)
+            $0.backgroundColor = .appColor(.new500)
             $0.layer.cornerRadius = 6
         }
     }
@@ -180,13 +181,14 @@ extension SelectDeptModalViewController {
         
         departmentScrollView.snp.makeConstraints {
             $0.top.equalTo(titleLabel.snp.bottom).offset(12)
-            $0.leading.trailing.equalToSuperview().inset(24)
+            $0.leading.equalToSuperview().offset(24)
+            $0.trailing.equalToSuperview().offset(-4)
             $0.height.equalTo(323)
         }
         
         departmentStackView.snp.makeConstraints {
             $0.edges.equalTo(departmentScrollView.contentLayoutGuide)
-            $0.width.equalTo(departmentScrollView)
+            $0.width.equalTo(departmentScrollView).offset(-20)
         }
         
         departmentRadioButtons.forEach {

@@ -18,7 +18,7 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
         case deleteNotification(id: Int)
         case deleteAllNotifications
         case markAllAsRead
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any)
     }
     
     enum Output {
@@ -76,8 +76,8 @@ final class RecruitNotificationListViewModel: ViewModelProtocol {
             case .markAllAsRead:
                 self?.notificationList?.markAllAsRead()
                 self?.markAllAsRead()
-            case let .logEvent(label, category, value):
-                self?.makeLogAnalyticsEvent(label: label, category: category, value: value)
+            case let .logEvent(label, value):
+                self?.makeLogAnalyticsEvent(label: label, value: value)
             }
         }
         .store(in: &subscriptions)
@@ -203,7 +203,7 @@ private extension RecruitNotificationListViewModel {
         }
     }
     
-    private func makeLogAnalyticsEvent(label: EventLabelType, category: EventParameter.EventCategory, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+    private func makeLogAnalyticsEvent(label: EventLabelType, value: Any) {
+        logAnalyticsEventUseCase.execute(label: label, value: value)
     }
 }

@@ -23,7 +23,7 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
         case didTapSoldOutSwitch(Bool)
         case didTapImageUploadSwitch(Bool)
         case didPresentNotiBottomSheet
-        case logEvent(EventLabelType, EventParameter.EventCategory, Any)
+        case logEvent(EventLabelType, Any, category: EventParameter.EventCategory? = nil)
     }
     
     // MARK: - Proeprteis
@@ -62,6 +62,11 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
     
     // MARK: - AbTest
     private(set) var reportAbTest: DiningReportAbTest?
+    /// 서버·캐시 배정 모두 실패해 로컬에서 임의로 `.nav`를 배정한 경우. 비교군 오염 방지를 위해 ABTest 로그를 남기지 않는다.
+    private var isReportAbTestLocallyAssigned = false
+    var reportAbTestLogValue: String? {
+        isReportAbTestLocallyAssigned ? nil : reportAbTest?.logValue
+    }
     
     // MARK: - Initializer
     init(
@@ -122,8 +127,8 @@ final class DiningViewModel: SwiftUIViewModelProtocol {
             changeNoti(isOn: isOn, type: .diningImageUpload)
         case .didPresentNotiBottomSheet:
             didPresentNotiBottomSheet()
-        case let .logEvent(label, category, value):
-            makeLogAnalyticsEvent(label: label, category: category, value: value)
+        case let .logEvent(label, value, category):
+            makeLogAnalyticsEvent(label: label, value: value, category: category)
         }
     }
 }
@@ -218,12 +223,14 @@ extension DiningViewModel {
                 let result = try await assignAbTestUseCase.execute(requestModel: request).firstValue()
                 reportAbTest = DiningReportAbTest(from: result.variableName.rawValue)
                 if let reportAbTest {
-                    makeLogAnalyticsEvent(label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningAbtestExposure, category: .exposure, value: reportAbTest.logValue)
+                    makeLogAnalyticsEvent(label: EventParameter.EventLabel.Dining.SoldOutReport.cafeteriaDiningAbtestExposure, value: reportAbTest.logValue)
                 }
             } catch {
                 guard !Task.isCancelled else { return }
                 let errorMessage = (error as? ErrorResponse)?.message ?? error.localizedDescription
                 print(errorMessage)
+                isReportAbTestLocallyAssigned = true
+                reportAbTest = .nav
             }
         }
     }
@@ -292,22 +299,22 @@ extension DiningViewModel {
         category: EventParameter.EventCategory,
         selectedPlace: DiningPlace
     ) {
-        guard let reportAbTestName = reportAbTest?.logValue else {
+        guard let reportAbTestName = reportAbTestLogValue else {
             return
         }
         makeLogAnalyticsEvent(
-            label: EventParameter.EventLabel.Campus.Dining.cafeteriaDiningSoldoutSubmit,
-            category: category,
-            value: "\(reportAbTestName)_\(selectedPlace.name)"
+            label: EventParameter.EventLabel.Dining.SoldOutReport.cafeteriaDiningSoldoutSubmit,
+            value: "\(reportAbTestName)_\(selectedPlace.name)",
+            category: category
         )
     }
     
     private func makeLogAnalyticsEvent(
         label: EventLabelType,
-        category: EventParameter.EventCategory,
-        value: Any
+        value: Any,
+        category: EventParameter.EventCategory? = nil
     ) {
-        logAnalyticsEventUseCase.execute(label: label, category: category, value: value)
+        logAnalyticsEventUseCase.execute(label: label, value: value, category: category)
     }
 }
 

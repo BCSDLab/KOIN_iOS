@@ -29,11 +29,10 @@ final class BusTimetableRouteCollectionView: UICollectionView, UICollectionViewD
     private func commonInit() {
         register(BusTimetableRouteCollectionViewCell.self, forCellWithReuseIdentifier: BusTimetableRouteCollectionViewCell.identifier)
         showsHorizontalScrollIndicator = false
-        contentInset = .zero
+        contentInset = UIEdgeInsets(top: 12, left: 24, bottom: 12, right: 24)
         delegate = self
         dataSource = self
-        isScrollEnabled = false
-        backgroundColor = .appColor(.neutral100)
+        backgroundColor = .appColor(.neutral0)
     }
     
     func configure(routeList: [String]) {
@@ -78,13 +77,17 @@ extension BusTimetableRouteCollectionView: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let label = UILabel()
         label.text = routeList[indexPath.row]
-        label.font = .appFont(.pretendardMedium, size: 14)
+        label.font = selectedList[indexPath.row] ? .appFont(.pretendardSemiBold, size: 14) : .appFont(.pretendardMedium, size: 14)
         let size = label.sizeThatFits(CGSize(width: CGFloat.greatestFiniteMagnitude, height: 34))
         return CGSize(width: size.width + 32, height: 34)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 0
+        return 4
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 4
     }
 }
 

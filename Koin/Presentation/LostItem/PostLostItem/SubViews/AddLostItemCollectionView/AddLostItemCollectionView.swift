@@ -10,20 +10,15 @@ import UIKit
 
 final class AddLostItemCollectionView: UICollectionView {
 
-    // MARK: - Dropdown
-    private lazy var dropdownHost = KoinDropdownHost(scrollView: self)
-    
     // MARK: - Properties
     private var footerCancellables = Set<AnyCancellable>()
     let uploadImageButtonPublisher = PassthroughSubject<Int, Never>()
-    let logPublisher = PassthroughSubject<(EventLabelType, EventParameter.EventCategory, Any), Never>()
+    let logPublisher = PassthroughSubject<(EventLabelType, Any), Never>()
     
     private var type: LostItemType = .lost
     private var articles: [PostLostItemRequest] = []
-    
-    var isDropdownPresenting: Bool {
-        dropdownHost.isPresenting
-    }
+    /// 화면 진입 시 1회 고정. 습득일 범위·기본값 기준
+    private let now = Date()
     
     // MARK: - Initializer
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
@@ -47,21 +42,12 @@ final class AddLostItemCollectionView: UICollectionView {
         dataSource = self
         delegate = self
         
-        let formattedDate: String = {
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy년 M월 d일"
-            return formatter.string(from: Date())
-        }()
-        articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
+        articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: now.string(with: .yearMonthDayHyphen), content: "", images: [], registeredAt: "", updatedAt: ""))
     }
 }
 
 extension AddLostItemCollectionView {
     
-    func dismissDropdown() {
-        dropdownHost.dismissPresented()
-    }
-
     func setType(type: LostItemType) {
         self.type = type
         reloadData()
@@ -96,7 +82,7 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AddLostItemCollectionViewCell.identifier, for: indexPath) as? AddLostItemCollectionViewCell else {
             return UICollectionViewCell()
         }
-        cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type)
+        cell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type, now: now)
         cell.setImage(url: articles[indexPath.row].images ?? [])
         cell.deleteButtonPublisher.sink { [weak self] _ in
             DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
@@ -107,15 +93,15 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         cell.addImageButtonPublisher.sink { [weak self] _ in
             self?.uploadImageButtonPublisher.send(indexPath.row)
         }.store(in: &cell.cancellables)
-        cell.datePublisher.sink { [weak self] value in
-            self?.articles[indexPath.row].foundDate = value
+        cell.datePublisher.sink { [weak self] date in
+            self?.articles[indexPath.row].foundDate = date.string(with: .yearMonthDayHyphen)
         }.store(in: &cell.cancellables)
         cell.categoryPublisher.sink { [weak self] value in
             guard let strongSelf = self else { return }
             self?.articles[indexPath.row].category = value
             switch strongSelf.type {
-            case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.LostItem.findUserCategory, .click, value))
-            case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.LostItem.lostItemCategory, .click, value))
+            case .found: self?.logPublisher.send((EventParameter.EventLabel.LostItem.foundItemWriteLostItemWriteItemCategorySelect, value))
+            case .lost: self?.logPublisher.send((EventParameter.EventLabel.LostItem.lostItemWriteLostItemWriteItemCategorySelect, value))
             }
         }.store(in: &cell.cancellables)
         cell.locationPublisher.sink { [weak self] value in
@@ -127,7 +113,6 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
         cell.imageUrlsPublisher.sink { [weak self] urls in
             self?.articles[indexPath.row].images = urls
         }.store(in: &cell.cancellables)
-        cell.prepareDropdown(host: dropdownHost)
         return cell
     }
     
@@ -146,19 +131,14 @@ extension AddLostItemCollectionView: UICollectionViewDataSource {
             footerCancellables.removeAll()
             footerView.addItemButtonPublisher.sink { [weak self] in
                 guard let strongSelf = self else { return }
-                let formattedDate: String = {
-                    let formatter = DateFormatter()
-                    formatter.dateFormat = "yyyy년 M월 d일"
-                    return formatter.string(from: Date())
-                }()
-                self?.dismissDropdown()
+                let foundDate = strongSelf.now.string(with: .yearMonthDayHyphen)
                 DispatchQueue.main.asyncAfter(deadline: .now()+0.1) {
-                    self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: formattedDate, content: "", images: [], registeredAt: "", updatedAt: ""))
+                    self?.articles.append(PostLostItemRequest(type: .found, category: "", location: "", foundDate: foundDate, content: "", images: [], registeredAt: "", updatedAt: ""))
                     self?.reloadData()
                 }
                 switch strongSelf.type {
-                case .found: self?.logPublisher.send((EventParameter.EventLabel.Campus.LostItem.findUserAddItem, .click, "물품 추가"))
-                case .lost: self?.logPublisher.send((EventParameter.EventLabel.Campus.LostItem.lostItemAddItem, .click, "물품 추가"))
+                case .found: self?.logPublisher.send((EventParameter.EventLabel.LostItem.foundItemWriteLostItemWriteItemAddClick, "물품 추가"))
+                case .lost: self?.logPublisher.send((EventParameter.EventLabel.LostItem.lostItemWriteLostItemWriteItemAddClick, "물품 추가"))
                 }
             }.store(in: &footerCancellables)
             return footerView
@@ -172,7 +152,7 @@ extension AddLostItemCollectionView: UICollectionViewDelegateFlowLayout {
         let width = collectionView.frame.width
         let estimatedHeight: CGFloat = 1500
         let dummyCell = AddLostItemCollectionViewCell(frame: CGRect(x: 0, y: 0, width: width, height: estimatedHeight))
-        dummyCell.configure(index: 0, isSingle: true, model: PostLostItemRequest(type: .found, category: "", location: "", foundDate: "", content: "", registeredAt: "", updatedAt: ""), type: type)
+        dummyCell.configure(index: indexPath.row, isSingle: articles.count < 2, model: articles[indexPath.row], type: type, now: now)
         dummyCell.setNeedsLayout()
         dummyCell.layoutIfNeeded()
         let targetSize = CGSize(width: width, height: UIView.layoutFittingCompressedSize.height)

@@ -48,7 +48,7 @@ final class ExpressOrCityTimetableTableViewCell: UITableViewCell {
 extension ExpressOrCityTimetableTableViewCell {
     private func setUpTimeLabels() {
         [morningBusTimeLabel, afternoonBusTimeLabel].forEach {
-            $0.font = .appFont(.pretendardMedium, size: 16)
+            $0.font = .appFont(.pretendardBold, size: 18)
             $0.textAlignment = .left
         }
     }
@@ -60,7 +60,6 @@ extension ExpressOrCityTimetableTableViewCell {
     
     private func setUpConstraints() {
         morningBusTimeLabel.snp.makeConstraints {
-            $0.width.equalTo((UIScreen.main.bounds.width - 64) / 2)
             $0.leading.equalToSuperview().offset(24)
             $0.top.bottom.equalToSuperview()
             $0.height.equalTo(61)
@@ -68,6 +67,7 @@ extension ExpressOrCityTimetableTableViewCell {
         afternoonBusTimeLabel.snp.makeConstraints {
             $0.leading.equalTo(morningBusTimeLabel.snp.trailing).offset(16)
             $0.trailing.equalToSuperview().inset(24)
+            $0.width.equalTo(morningBusTimeLabel)
             $0.top.bottom.equalToSuperview()
             $0.height.equalTo(61)
         }
