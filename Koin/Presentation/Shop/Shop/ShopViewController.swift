@@ -95,13 +95,11 @@ final class ShopViewController: UIViewController {
             
             let fetchShopSummaryUseCase = DefaultFetchShopSummaryUseCase(shopRepository: repository)
             let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-            let previousPage = self?.viewModel.selectedCategoryName ?? "알 수 없음" 
             let viewModel = ShopSummaryViewModel(
                 fetchShopSummaryUseCase: fetchShopSummaryUseCase,
                 logAnalyticsEventUseCase: logAnalyticsEventUseCase,
                 shopId: shopId,
-                shopName: shopName,
-                backCategoryName: previousPage
+                shopName: shopName
             )
             let viewController = ShopSummaryViewController(viewModel: viewModel)
             viewController.title = shopName

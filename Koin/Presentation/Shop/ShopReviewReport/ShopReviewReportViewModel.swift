@@ -12,7 +12,7 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     // MARK: - Input
     
     enum Input {
-        case reportReview(ReportReviewRequest,[String])
+        case reportReview(ReportReviewRequest)
     }
     
     // MARK: - Output
@@ -45,8 +45,8 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
         input.sink { [weak self] input in
             switch input {
-            case let .reportReview(requestModel,selectedItems):
-                self?.reportReview(requestModel,selectedItems)
+            case let .reportReview(requestModel):
+                self?.reportReview(requestModel)
             }
         }.store(in: &subscriptions)
         return outputSubject.eraseToAnyPublisher()
@@ -56,7 +56,7 @@ final class ShopReviewReportViewModel: ViewModelProtocol {
 
 extension ShopReviewReportViewModel {
    
-    private func reportReview(_ requestModel: ReportReviewRequest, _ selectedItems: [String]) {
+    private func reportReview(_ requestModel: ReportReviewRequest) {
         makeLogAnalyticsEvent(label: EventParameter.EventLabel.Shop.shopDetailReviewReportConfirmClick, value: shopName)
         reportReviewReviewUseCase.execute(requestModel: requestModel, reviewId: reviewId, shopId: shopId).sink { [weak self] completion in
             if case let .failure(error) = completion {

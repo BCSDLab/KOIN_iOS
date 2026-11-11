@@ -291,7 +291,6 @@ extension ShopReviewReportViewController {
     
     @objc private func reportButtonTapped() {
         var reports: [Report] = []
-        var selectedItems: [String] = []
         let reportViews = [nonSubjectReportView, spamReportView, curseReportView, personalInfoReportView]
         
         for reportView in reportViews {
@@ -299,15 +298,11 @@ extension ShopReviewReportViewController {
                 let reportInfo = reportView.getReportInfo()
                 let report = Report(title: reportInfo.title, content: reportInfo.content)
                 reports.append(report)
-                selectedItems.append(reportInfo.title)
             }
         }
-        if etcCheckButton.isSelected, let etcText = etcReportTextView.text {
-            selectedItems.append("기타 (\(etcText))")
-        }
-    
+
         let requestModel = ReportReviewRequest(reports: reports)
-        inputSubject.send(.reportReview(requestModel,selectedItems))
+        inputSubject.send(.reportReview(requestModel))
     }
 }
 

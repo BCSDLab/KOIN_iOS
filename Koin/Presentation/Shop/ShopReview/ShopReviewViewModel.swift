@@ -20,7 +20,7 @@ final class ShopReviewViewModel: ViewModelProtocol {
     private let fetchShopDataUseCase: FetchShopDataUseCase
     private let reviewId: Int?
     var isEdit: Bool { reviewId != nil}
-    private let shopName: String
+    let shopName: String
     private let shopId: Int
     
     enum Input {
@@ -65,8 +65,8 @@ final class ShopReviewViewModel: ViewModelProtocol {
                 if let _ = reviewId { fetchShopReview() }
             case .updateShopName:
                 self.updateShopName()
-            case let .logEvent(label, _):
-                self.logAnalyticsEventUseCase.execute(label: label, value: self.shopName)
+            case let .logEvent(label, value):
+                self.logAnalyticsEventUseCase.execute(label: label, value: value)
 
             }
             

@@ -377,13 +377,8 @@ enum EventParameter {
         case click
         case scroll
         case swipe
-        case signup
-        case entry
-        case pageView = "page_view"
         case pageExit = "page_exit"
         case update = "update"
-        case notification
-        case result
         case exposure
         case select
         case toggle

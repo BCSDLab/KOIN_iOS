@@ -171,7 +171,7 @@ private extension CategoryView {
         case .showShop:
             return (EventParameter.EventLabel.Home.DA1.shopMainCategoryCategoryNavigationShopEntryClick, "주변상점")
         case .showTimetable:
-            return (EventParameter.EventLabel.Home.DA1.timetableMainCategoryCategoryNavigationTimetableEntryClick, "시간표") // TODO: 로깅 수정
+            return (EventParameter.EventLabel.Home.DA1.timetableMainCategoryCategoryNavigationTimetableEntryClick, "시간표")
         case .showBusTimetable:
             return (EventParameter.EventLabel.Home.DA1.busMainCategoryCategoryNavigationTimetableEntryClick, "버스 시간표")
         case .showBusRoute:

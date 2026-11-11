@@ -820,7 +820,6 @@
 		83B7457B2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457A2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift */; };
 		83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83B7457C2C9B2EBB005868BD /* IndicatorView.swift */; };
 		83BB83132CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83BB83122CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift */; };
-		83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83C509612BFA0CBB007379A0 /* ScrollLog.swift */; };
 		83D5E9C82CCB844D00C6D4CD /* (null) in Resources */ = {isa = PBXBuildFile; };
 		83DD0D742C4F6FD000278ABD /* BusType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D732C4F6FD000278ABD /* BusType.swift */; };
 		83DD0D762C4F6FDE00278ABD /* BusPlace.swift in Sources */ = {isa = PBXBuildFile; fileRef = 83DD0D752C4F6FDE00278ABD /* BusPlace.swift */; };
@@ -2082,7 +2081,6 @@
 		83B7457A2C9AA902005868BD /* DownloadNoticeAttachmentsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadNoticeAttachmentsUseCase.swift; sourceTree = "<group>"; };
 		83B7457C2C9B2EBB005868BD /* IndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IndicatorView.swift; sourceTree = "<group>"; };
 		83BB83122CEC814800946623 /* FetchKeywordNoticePhraseUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchKeywordNoticePhraseUseCase.swift; sourceTree = "<group>"; };
-		83C509612BFA0CBB007379A0 /* ScrollLog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScrollLog.swift; sourceTree = "<group>"; };
 		83DD0D732C4F6FD000278ABD /* BusType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusType.swift; sourceTree = "<group>"; };
 		83DD0D752C4F6FDE00278ABD /* BusPlace.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusPlace.swift; sourceTree = "<group>"; };
 		83DD0D772C4F6FF000278ABD /* BusDirection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BusDirection.swift; sourceTree = "<group>"; };
@@ -6143,7 +6141,6 @@
 				D2FB23702C0412C70098BA2B /* EventParameter.swift */,
 				95EB893906928DC9C3E5CBA4 /* LegacyEventParameter.swift */,
 				D27DD07F2BA608310081FD36 /* Log.swift */,
-				83C509612BFA0CBB007379A0 /* ScrollLog.swift */,
 				D837FB112E254BD8002BFB9F /* CustomSessionManager.swift */,
 			);
 			path = Logger;
@@ -7257,7 +7254,6 @@
 				7CA60D732F66218C007C08C1 /* CallVanListDto.swift in Sources */,
 				D21572642CEDDCA80061E725 /* SemesterLecture.swift in Sources */,
 				833D9C282C6B58ED00982145 /* NoticeKeywordDto.swift in Sources */,
-				83C509622BFA0CBB007379A0 /* ScrollLog.swift in Sources */,
 				B61FAA172EA3A39D005BE539 /* Typography.swift in Sources */,
 				7C61D3532F22E686005FAC3A /* DeleteLostItemUseCase.swift in Sources */,
 				8344D5C52C9BA2C9007CA555 /* SearchNoticeArticlesUseCase.swift in Sources */,

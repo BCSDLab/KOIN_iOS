@@ -84,10 +84,6 @@ final class LostItemListViewModel {
 
 extension LostItemListViewModel {
     
-    private func logEvent(label: EventLabelType, value: Any) {
-        logAnalyticsEventUseCase.execute(label: label, value: value)
-    }
-    
     private func checkLogin() {
         checkLoginUseCase.execute().sink(
             receiveCompletion: { _ in },

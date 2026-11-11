@@ -342,7 +342,7 @@ extension ShopReviewViewController {
     private func submitReviewButtonTapped() {
         // 명세 3-13은 작성(등록) 완료만 대상이다. 수정 완료 계약은 없다.
         if !viewModel.isEdit {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopReviewWriteReviewWriteConfirmClick, ""))
+            inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopReviewWriteReviewWriteConfirmClick, viewModel.shopName))
         }
         let requestModel: WriteReviewRequest = .init(rating: Int(totalScoreView.rating), content: reviewTextView.text, imageUrls: imageUploadCollectionView.imageUrls, menuNames: tagCollectionView.items)
         inputSubject.send(.writeReview(requestModel))

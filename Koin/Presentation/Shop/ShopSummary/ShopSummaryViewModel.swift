@@ -30,7 +30,6 @@ final class ShopSummaryViewModel {
     private(set) var phonenumber: String = ""
     private(set) var cachedImages: [ShopImage] = []
     private(set) var shopName: String
-    let backCategoryName: String?
 
     private let fetchShopSummaryUseCase: FetchShopSummaryUseCase
     
@@ -40,12 +39,10 @@ final class ShopSummaryViewModel {
     init(fetchShopSummaryUseCase: FetchShopSummaryUseCase,
          logAnalyticsEventUseCase: LogAnalyticsEventUseCase,
          shopId: Int,
-         shopName: String?,
-         backCategoryName: String? = nil) {
+         shopName: String?) {
         self.fetchShopSummaryUseCase = fetchShopSummaryUseCase
         self.shopId = shopId
         self.shopName = shopName ?? ""
-        self.backCategoryName = backCategoryName
         self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
     
