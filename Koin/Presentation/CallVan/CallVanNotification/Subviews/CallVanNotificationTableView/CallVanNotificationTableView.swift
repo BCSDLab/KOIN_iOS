@@ -13,7 +13,7 @@ final class CallVanNotificationTableView: UITableView {
     // MARK: - Properties
     private var notifications: [CallVanNotification] = []
     let cellTapPublisher = PassthroughSubject<(postId: Int, notificationId: Int), Never>()
-    let deleteNotificationPublisher = PassthroughSubject<Int, Never>()
+    let deleteNotificationPublisher = PassthroughSubject<(id: Int, isSwipe: Bool), Never>()
     let emptyNotificationPublisher = PassthroughSubject<Void, Never>()
     
     // MARK: - Intiailizer
@@ -62,17 +62,27 @@ extension CallVanNotificationTableView: UITableViewDelegate {
         reloadRows(at: [indexPath], with: .automatic)
     }
     
-    func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCell.EditingStyle {
-        return .delete
-    }
-    
-    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        deleteNotificationPublisher.send(notifications[indexPath.row].id)
-        notifications.remove(at: indexPath.row)
-        tableView.deleteRows(at: [indexPath], with: .automatic)
-        if notifications.count == 0 {
-            emptyNotificationPublisher.send()
+    // 기본 삭제(commit editingStyle)로는 버튼 탭과 끝까지 밀기를 구분할 수 없어 같은 모양의 contextual action을 쓴다.
+    func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        guard notifications.indices.contains(indexPath.row) else { return nil }
+        let id = notifications[indexPath.row].id
+        let deleteAction = UIContextualAction(style: .destructive, title: "삭제") { [weak self] _, sourceView, completion in
+            guard let self,
+                  let row = notifications.firstIndex(where: { $0.id == id }) else {
+                completion(false)
+                return
+            }
+            // 버튼 탭이면 버튼 폭, 끝까지 밀기면 행 폭에 가깝게 늘어난 상태로 호출된다.
+            let isSwipe = sourceView.bounds.width > tableView.bounds.width / 2
+            deleteNotificationPublisher.send((id: id, isSwipe: isSwipe))
+            notifications.remove(at: row)
+            tableView.deleteRows(at: [IndexPath(row: row, section: 0)], with: .automatic)
+            if notifications.isEmpty {
+                emptyNotificationPublisher.send()
+            }
+            completion(true)
         }
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }
 

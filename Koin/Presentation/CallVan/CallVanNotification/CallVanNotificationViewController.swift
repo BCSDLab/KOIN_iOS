@@ -65,8 +65,12 @@ final class CallVanNotificationViewController: UIViewController {
             self?.navigateToCallVanData(postId)
         }.store(in: &subscriptions)
         
-        notificationTableView.deleteNotificationPublisher.sink { [weak self] notificationId in
-            self?.inputSubject.send(.deleteNotification(notificationId))
+        notificationTableView.deleteNotificationPublisher.sink { [weak self] deletion in
+            self?.inputSubject.send(.deleteNotification(deletion.id))
+            let label: EventLabelType = deletion.isSwipe
+                ? EventParameter.EventLabel.CallVan.callvanNotificationNotificationListDeleteSwipe
+                : EventParameter.EventLabel.CallVan.callvanNotificationNotificationListDeleteClick
+            self?.inputSubject.send(.logEvent(label, "알림 삭제"))
         }.store(in: &subscriptions)
         
         notificationTableView.emptyNotificationPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
@@ -134,9 +138,11 @@ extension CallVanNotificationViewController {
         let onReadButtonTapped: ()->Void = { [weak self] in
             self?.notificationTableView.markAllNotificationsRead()
             self?.inputSubject.send(.setAllNotificationsRead)
+            self?.inputSubject.send(.logEvent(EventParameter.EventLabel.CallVan.callvanNotificationNotificationListReadAllClick, "모두 읽음으로 표시"))
         }
         let onDeleteButtonTapped = { [weak self] in
             guard let self else { return }
+            inputSubject.send(.logEvent(EventParameter.EventLabel.CallVan.callvanNotificationNotificationListDeleteAllOpenClick, "알림 전체 삭제"))
             let subTitleLabel = UILabel().then {
                 $0.text = "삭제한 알림은 되돌릴 수 없습니다."
                 $0.font = UIFont.appFont(.pretendardRegular, size: 14)
@@ -149,13 +155,18 @@ extension CallVanNotificationViewController {
                 self?.notificationTableView.configure(notifications: [])
                 self?.showEmptyView()
                 self?.inputSubject.send(.deleteAllNotifications)
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.CallVan.callvanNotificationNotificationListDeleteAllConfirmClick, "예"))
+            }
+            let onCloseButtonTapped: () -> Void = { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.CallVan.callvanNotificationNotificationListDeleteAllCancelClick, "아니요"))
             }
             let contentView = CallVanBottomSheetView(
                 titleText: "알림을 모두 삭제할까요?",
                 subTitleLabel: subTitleLabel,
                 mainButtonText: "예",
                 closeButtonText: "아니요",
-                onMainButtonTapped: onMainButtonTapped)
+                onMainButtonTapped: onMainButtonTapped,
+                onCloseButtonTapped: onCloseButtonTapped)
             presentBottomSheet(contentView, configuration: .init(style: .modal(dimAlpha: 0.49), cornerRadius: 16))
         }
         let dropdownViewController = CallVanNotificationDropdownViewController(

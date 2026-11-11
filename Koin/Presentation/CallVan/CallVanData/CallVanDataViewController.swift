@@ -137,12 +137,14 @@ extension CallVanDataViewController {
         let postAllNotificationsReadUseCase = DefaultPostAllNotificationsReadUseCase(repository: callVanRepository)
         let deleteNotificationUseCase = DefaultDeleteNotificationUseCase(repository: callVanRepository)
         let deleteAllNotificationsUseCase = DefaultDeleteAllNotificationsUseCase(repository: callVanRepository)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
         let viewModel = CallVanNotificationViewModel(
             fetchCallVanNotificationListUseCase: fetchCallVanNotificationListUseCase,
             postNotificationReadUseCase: postNotificationReadUseCase,
             postAllNotificationsReadUseCase: postAllNotificationsReadUseCase,
             deleteNotificationUseCase: deleteNotificationUseCase,
-            deleteAllNotificationsUseCase: deleteAllNotificationsUseCase)
+            deleteAllNotificationsUseCase: deleteAllNotificationsUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase)
         let viewController = CallVanNotificationViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
