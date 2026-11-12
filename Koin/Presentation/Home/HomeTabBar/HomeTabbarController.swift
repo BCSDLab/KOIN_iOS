@@ -33,7 +33,12 @@ final class HomeTabBarController: UITabBarController {
     private var subscriptions: Set<AnyCancellable> = []
     
     private let items: [HomeTabBarItem]
-    private var tabBars: [HomeTabBar] = []
+
+    // MARK: - UI Components
+    private lazy var homeTabBar = HomeTabBar(tabs: items.map(\.tab)) { [weak self] tag in
+        self?.handleTabSelection(tag: tag)
+        self?.makeLogEvent(tag: tag)
+    }
     
     // MARK: - Initializer
     init(
@@ -55,6 +60,7 @@ final class HomeTabBarController: UITabBarController {
         bind()
         setUpObserver()
         setUpViewControllers()
+        setUpTabBar()
         if let firstTab = items.first?.tab {
             selectTab(index: firstTab.rawValue)
         }
@@ -120,77 +126,37 @@ extension HomeTabBarController {
 
 extension HomeTabBarController {
     private func setUpViewControllers() {
-        let viewControllers = setUpTabBar(items: items)
-        configureNavigationBar(viewControllers: viewControllers)
-        self.viewControllers = viewControllers.map { CustomNavigationController(rootViewController: $0) }
+        navigationItem.leftBarButtonItem = UIBarButtonItem(customView: HomeLogoView())
+        self.viewControllers = items.map(\.viewController)
     }
-    
-    private func setUpTabBar(items: [HomeTabBarItem]) -> [UIViewController] {
-        items.map { configuration in
-            let tabBar = HomeTabBar(
-                tabs: items.map(\.tab),
-                selectedTab: configuration.tab
-            ) { [weak self] tag in
-                self?.handleTabSelection(tag: tag)
-                self?.makeLogEvent(tag: tag)
-            }
-            
-            tabBars.append(tabBar)
-            
-            let rootViewController = configuration.viewController.then {
-                $0.view?.addSubview(tabBar)
-                tabBar.snp.makeConstraints {
-                    $0.leading.trailing.bottom.equalToSuperview()
-                    $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
-                }
-            }
-            
-            return rootViewController
+
+    private func setUpTabBar() {
+        view.addSubview(homeTabBar)
+        homeTabBar.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
         }
     }
     
-    private func configureNavigationBar(viewControllers: [UIViewController]) {
-        var viewControllers = viewControllers
-        
-        for index in items.indices {
-            var navigationBarStyle: NavigationBarStyle
-            switch items[index].tab {
-            case .home, .category, .profile:
-                navigationBarStyle = .newBackground
-            case .board:
-                navigationBarStyle = .empty
-            }
-            
-            viewControllers[index].configureNavigationBar(style: navigationBarStyle)
+    private func configureNavigationBar(tab: HomeTab) {
+        switch tab {
+        case .home, .category, .profile:
+            configureNavigationBar(style: .newBackground)
+        case .board:
+            configureNavigationBar(style: .empty)
         }
-        
-        viewControllers.forEach { viewController in
-            configureLeftBarItem(viewController: viewController)
-        }
-    }
-    
-    private func configureLeftBarItem(viewController: UIViewController) {
-        let viewController = viewController
-        let leftBarButtonItem = UIBarButtonItem(customView: HomeLogoView())
-        viewController.navigationItem.leftBarButtonItem = leftBarButtonItem
     }
 }
 
 extension HomeTabBarController {
     
     private func configureRightBarButton(hasUnreadNotifications hasDot: Bool = false) {
-        viewControllers?.forEach { navigationController in
-            guard let rootViewController = (navigationController as? UINavigationController)?.viewControllers.first else {
-                return
-            }
-            let rightBarButtonItem = UIBarButtonItem(
-                image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
-                style: .plain,
-                target: self,
-                action: #selector(rightBarButtonTapped)
-            )
-            rootViewController.navigationItem.rightBarButtonItem = rightBarButtonItem
-        }
+        navigationItem.rightBarButtonItem = UIBarButtonItem(
+            image: .appImage(asset: hasDot ? .homeBellDot : .homeBell)?.withRenderingMode(.alwaysOriginal),
+            style: .plain,
+            target: self,
+            action: #selector(rightBarButtonTapped)
+        )
     }
     
     @objc private func rightBarButtonTapped() {
@@ -215,7 +181,7 @@ extension HomeTabBarController {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = NotificationViewController(viewModel: viewModel)
-        (selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
@@ -227,11 +193,8 @@ extension HomeTabBarController {
     }
     
     private func updateTabBarLayout() {
-        tabBars.forEach {
-            $0.snp.remakeConstraints {
-                $0.leading.trailing.bottom.equalToSuperview()
-                $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
-            }
+        homeTabBar.snp.updateConstraints {
+            $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
         }
     }
 }
@@ -246,13 +209,9 @@ extension HomeTabBarController {
     }
 
     private func selectTab(index: Int) {
-        UIView.performWithoutAnimation {
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-            selectedIndex = index
-            view.layoutIfNeeded()
-            CATransaction.commit()
-        }
+        configureNavigationBar(tab: items[index].tab)
+        homeTabBar.select(tab: items[index].tab)
+        selectedIndex = index
     }
     
     private func makeLogEvent(tag: Int) {

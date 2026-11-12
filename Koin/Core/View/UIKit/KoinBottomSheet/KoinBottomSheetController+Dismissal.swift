@@ -90,9 +90,7 @@ extension KoinBottomSheetController {
 
     func updateNavigationGesture(host: UIViewController? = nil) {
         guard let host = host ?? parent else { return }
-        let navigation = (host as? UINavigationController)
-            ?? host.navigationController
-            ?? ((host as? UITabBarController)?.selectedViewController as? UINavigationController)
+        let navigation = (host as? UINavigationController) ?? host.navigationController
         // 시트가 떠 있는 동안은 style·높이와 관계없이 스와이프 pop을 막는다.
         let isBlocked = host.children
             .compactMap { $0 as? KoinBottomSheetController }

@@ -14,15 +14,7 @@ final class HomeTabBar: UIView {
     private enum Layout {
         static let contentWidth: CGFloat = 35
         static let horizontalEdgesPadding: CGFloat = 24
-        static let baseHeight: CGFloat = 52
-        static let topPadding: CGFloat = 12
         static let cornerRadius: CGFloat = 16
-    }
-    private var additionalHeight: CGFloat {
-        safeAreaInsets.bottom < 0.5 ? 6 : 0
-    }
-    private var bottomPadding: CGFloat {
-        safeAreaInsets.bottom < 0.5 ? 6 : safeAreaInsets.bottom
     }
     private var interItemSpacing: CGFloat {
         let occupiedWidth = Layout.contentWidth * CGFloat(TabBarButtons.count)
@@ -32,21 +24,18 @@ final class HomeTabBar: UIView {
     }
     
     // MARK: - Properties
-    static let viewTag = 2143534265
     private let onTapItem: (Int) -> Void
     
     // MARK: - UI Components
     private var TabBarButtons: [HomeTabBarButton] = []
     
     // MARK: - Initializer
-    init(tabs: [HomeTab], selectedTab: HomeTab, onTapItem: @escaping (Int)->Void) {
+    init(tabs: [HomeTab], onTapItem: @escaping (Int)->Void) {
         self.onTapItem = onTapItem
         super.init(frame: .zero)
-        self.tag = Self.viewTag
         self.TabBarButtons = tabs.map { tab in
             let TabBarButton = HomeTabBarButton(title: tab.title, imageAsset: tab.imageAsset)
             TabBarButton.tag = tab.rawValue
-            TabBarButton.updateSelection(isSelected: tab == selectedTab)
             TabBarButton.addTarget(self, action: #selector(handleTap(_:)), for: .touchUpInside)
             return TabBarButton
         }
@@ -60,6 +49,12 @@ final class HomeTabBar: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateButtonInsets()
+    }
+
+    func select(tab: HomeTab) {
+        TabBarButtons.forEach {
+            $0.updateSelection(isSelected: $0.tag == tab.rawValue)
+        }
     }
 }
 
