@@ -33,7 +33,12 @@ final class HomeTabBarController: UITabBarController {
     private var subscriptions: Set<AnyCancellable> = []
     
     private let items: [HomeTabBarItem]
-    private var tabBars: [HomeTabBar] = []
+
+    // MARK: - UI Components
+    private lazy var homeTabBar = HomeTabBar(tabs: items.map(\.tab)) { [weak self] tag in
+        self?.handleTabSelection(tag: tag)
+        self?.makeLogEvent(tag: tag)
+    }
     
     // MARK: - Initializer
     init(
@@ -55,6 +60,7 @@ final class HomeTabBarController: UITabBarController {
         bind()
         setUpObserver()
         setUpViewControllers()
+        setUpTabBar()
         if let firstTab = items.first?.tab {
             selectTab(index: firstTab.rawValue)
         }
@@ -121,30 +127,14 @@ extension HomeTabBarController {
 extension HomeTabBarController {
     private func setUpViewControllers() {
         navigationItem.leftBarButtonItem = UIBarButtonItem(customView: HomeLogoView())
-        self.viewControllers = setUpTabBar(items: items)
+        self.viewControllers = items.map(\.viewController)
     }
-    
-    private func setUpTabBar(items: [HomeTabBarItem]) -> [UIViewController] {
-        items.map { configuration in
-            let tabBar = HomeTabBar(
-                tabs: items.map(\.tab),
-                selectedTab: configuration.tab
-            ) { [weak self] tag in
-                self?.handleTabSelection(tag: tag)
-                self?.makeLogEvent(tag: tag)
-            }
-            
-            tabBars.append(tabBar)
-            
-            let rootViewController = configuration.viewController.then {
-                $0.view?.addSubview(tabBar)
-                tabBar.snp.makeConstraints {
-                    $0.leading.trailing.bottom.equalToSuperview()
-                    $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
-                }
-            }
-            
-            return rootViewController
+
+    private func setUpTabBar() {
+        view.addSubview(homeTabBar)
+        homeTabBar.snp.makeConstraints {
+            $0.leading.trailing.bottom.equalToSuperview()
+            $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
         }
     }
     
@@ -203,11 +193,8 @@ extension HomeTabBarController {
     }
     
     private func updateTabBarLayout() {
-        tabBars.forEach {
-            $0.snp.remakeConstraints {
-                $0.leading.trailing.bottom.equalToSuperview()
-                $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
-            }
+        homeTabBar.snp.updateConstraints {
+            $0.height.equalTo(Layout.TabBarBaseHeight + TabBarBottomPadding)
         }
     }
 }
@@ -223,6 +210,7 @@ extension HomeTabBarController {
 
     private func selectTab(index: Int) {
         configureNavigationBar(tab: items[index].tab)
+        homeTabBar.select(tab: items[index].tab)
         UIView.performWithoutAnimation {
             CATransaction.begin()
             CATransaction.setDisableActions(true)

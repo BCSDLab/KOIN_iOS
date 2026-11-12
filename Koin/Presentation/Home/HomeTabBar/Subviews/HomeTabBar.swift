@@ -39,14 +39,13 @@ final class HomeTabBar: UIView {
     private var TabBarButtons: [HomeTabBarButton] = []
     
     // MARK: - Initializer
-    init(tabs: [HomeTab], selectedTab: HomeTab, onTapItem: @escaping (Int)->Void) {
+    init(tabs: [HomeTab], onTapItem: @escaping (Int)->Void) {
         self.onTapItem = onTapItem
         super.init(frame: .zero)
         self.tag = Self.viewTag
         self.TabBarButtons = tabs.map { tab in
             let TabBarButton = HomeTabBarButton(title: tab.title, imageAsset: tab.imageAsset)
             TabBarButton.tag = tab.rawValue
-            TabBarButton.updateSelection(isSelected: tab == selectedTab)
             TabBarButton.addTarget(self, action: #selector(handleTap(_:)), for: .touchUpInside)
             return TabBarButton
         }
@@ -60,6 +59,12 @@ final class HomeTabBar: UIView {
     override func layoutSubviews() {
         super.layoutSubviews()
         updateButtonInsets()
+    }
+
+    func select(tab: HomeTab) {
+        TabBarButtons.forEach {
+            $0.updateSelection(isSelected: $0.tag == tab.rawValue)
+        }
     }
 }
 
