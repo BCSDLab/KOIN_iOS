@@ -23,6 +23,12 @@ protocol ViewModelProtocol {          // Koin/Core/Protocol/ViewModelProtocol.sw
 - Side effects and network calls stay in the ViewModel or lower layers.
 - Navigation (push/present) happens in the ViewController after building dependencies with local `let`s.
 
+## Home tab screens
+
+- Structure: window root `CustomNavigationController` → `HomeTabBarController` → tab screens (plain VC or HostingController). Tabs are not wrapped in a navigation controller.
+- A tab screen's `navigationController` is the main one. Pushing from a tab hides the tab bar; Back returns to the same tab.
+- The navigation bar shows `HomeTabBarController.navigationItem`. Tab screens do not set `navigationItem` or call `configureNavigationBar`; `HomeTabBarController` sets the logo, bell, and per-tab bar style when the tab changes.
+
 ## Reference files
 
 - `Koin/Presentation/LostItem/LostItemList/LostItemListViewModel.swift`
