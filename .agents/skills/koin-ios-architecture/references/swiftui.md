@@ -65,7 +65,7 @@ Example: `Koin/Presentation/Home/Category/`.
 - Pure UI actions (close, fixed navigation) can call `sendAction` directly from the View. When business logic decides, go ViewModel → state → View → `sendAction`.
 - ViewModels never touch `UINavigationController`, ViewControllers, toast, or dismiss. They expose state; the View forwards it.
 - Use cases stay Combine-based (`.sink`, `subscriptions`). Do not introduce async/await or new task containers in a feature without asking.
-- Do not add `NavigationStack`. Use the UIKit navigation bar and `UITabBarController`.
+- Do not add `NavigationStack`. Use the UIKit navigation bar and `UITabBarController`. Do not put a navigation controller inside a tab (see `uikit.md` → Home tab screens).
 - The View does not create services, repositories, or use cases.
 
 ## View helpers (`Koin/Core/Extensions/SwiftUI/`)

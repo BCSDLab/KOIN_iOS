@@ -4,6 +4,7 @@
 
 ## 프로젝트
 - UIKit + SwiftUI 혼합 앱. 화면 이동은 UIKit(`UINavigationController`)이 맡고, SwiftUI 화면은 HostingController로 감싼다.
+- 화면 구조: window root = `CustomNavigationController` 하나 → 그 root가 `HomeTabBarController`. 탭 안에 `UINavigationController`를 넣지 않는다. 탭 화면에서 push하면 탭바가 함께 가려진다.
 - 비동기는 Combine, 레이아웃은 SnapKit·Then, 네트워크는 Alamofire.
 - 레이어: `Presentation` → `Domain`(UseCase·Repository protocol) → `Data`(Repository·Service·DTO).
 

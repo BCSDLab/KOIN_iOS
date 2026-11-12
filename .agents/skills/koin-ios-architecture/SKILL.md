@@ -41,7 +41,7 @@ Presentation (ViewController / HostingController + View, ViewModel)
 | Font | `UIFont.appFont(_:size:)` / `Font.appFont(_:size:)` with `FontAsset`, or `Typography` (`.Typography(.body1)` in SwiftUI) |
 | Image | `UIImage.appImage(asset:)` / `Image.appImage(asset:)` with `ImageAsset`. Never string names |
 | Toast | `showToastMessage(message:intent:)`, `showToastMessageWithButton(...)` on `UIViewController` |
-| Modal / sheet | `KoinModalViewController`, `presentBottomSheet(_:configuration:)` (`KoinBottomSheet`) |
+| Modal / sheet | `KoinModalViewController`, `presentBottomSheet(_:configuration:)` (`KoinBottomSheet`). The sheet attaches to `navigationController ?? tabBarController ?? self`, so its dim covers the navigation bar and tab bar |
 | Back navigation logging | `PopLoggable` + `CustomNavigationController` (see the logging skill) |
 
 Reusable UIKit views live in `Koin/Core/View/UIKit`, extensions in `Koin/Core/Extensions/{UIKit,SwiftUI,Common}`, protocols in `Koin/Core/Protocol`.

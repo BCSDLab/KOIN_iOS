@@ -107,7 +107,7 @@ extension ShopViewController: PopLoggable {
 - **Spec defines only click:** `guard category == .click else { return }`.
 - **Pops done by code** (for example after a delete): set a flag and skip, as `RecruitDataHostingController.isDeleted` does.
 - `CustomNavigationController` logs only real pops. It does not log pushes or cancelled swipes.
-- `PopLoggable` works only inside `CustomNavigationController`. The tab bar wraps every tab in one.
+- `PopLoggable` works only inside `CustomNavigationController`. The window root is a single `CustomNavigationController` whose root is `HomeTabBarController`; tabs have no navigation controller of their own. Tab root screens are never popped, so `PopLoggable` applies to pushed screens only.
 
 ### Scroll
 
