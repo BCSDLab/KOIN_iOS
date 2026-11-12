@@ -18,7 +18,7 @@
 - 의존성(UseCase·Repository·Service)은 화면을 만드는 곳에서 지역 `let`으로 만든 뒤 넘긴다. 이니셜라이저 인자 안에서 바로 생성하지 않는다.
 - 접근 제어는 `private extension`보다 메서드별 `private func`를 쓴다. 기존 `private extension`은 일부러 바꾸지 않는다.
 - `UITableView`·`UITableViewCell`의 이벤트는 기본적으로 publisher로 내보낸다. 사용자가 요청하지 않으면 클로저를 주입하지 않는다.
-- 이미지는 `UIImage.appImage(asset:)` / `Image.appImage(asset:)`로만 쓴다. 문자열 이름(`UIImage(named:)`, `Image("…")`)을 쓰지 않는다.
+- 에셋 카탈로그 이미지는 `UIImage.appImage(asset:)` / `Image.appImage(asset:)`로만 쓴다. 문자열 이름(`UIImage(named:)`, `Image("…")`)을 쓰지 않는다. SF Symbol은 `appImage(symbol:)`을 쓴다.
 - xcassets에 이미지를 추가하면 `Koin/Core/Asset/ImageAsset.swift`의 `// MARK: - <xcassets 폴더명>` 아래에 `.imageset` 이름 그대로 case를 추가한다.
 - 색상은 `appColor(_: ColorAsset)`와 `ColorSystem`(`Koin/Core/DesignSystem/Color/ColorSystem.swift`)이 공존한다. 주변 코드가 쓰는 쪽을 따른다. 폰트는 `appFont(_:size:)` 또는 `Typography`.
 

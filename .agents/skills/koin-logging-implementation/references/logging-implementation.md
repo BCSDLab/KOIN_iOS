@@ -146,8 +146,8 @@ let label: EventLabelType = deletion.isSwipe ? …DeleteSwipe : …DeleteClick
 | Shuttle route | `"{노선 구분}_{세부 노선}"` (for example "주중_천안역") |
 | Timetable select | `"{연도}_{학기}_{시간표명}"`. Build it with `semester.reverseFormatSemester()` and replace `"년 "` with `"_"` |
 | Notification list item | the category value (`NotificationHistoryItem.logValue`), never the title |
-| Toggles | "켜짐" / "꺼짐" (sold-out meal: `"{아침|점심|저녁}_{켜짐|꺼짐}"`) |
-| Semester edit (timetable 2-13/2-14) | `"{추가|삭제}_{연도}_{학기}"`, several joined with `,`. Add logs at apply, delete logs at the delete-confirm button |
+| Toggles | "켜짐" / "꺼짐" (sold-out meal: `"{아침\|점심\|저녁}_{켜짐\|꺼짐}"`) |
+| Semester edit (timetable 2-13/2-14) | `"{추가\|삭제}_{연도}_{학기}"`, several joined with `,`. Add logs at apply, delete logs at the delete-confirm button |
 | Force update exposure | `"v{CFBundleShortVersionString}"`, logged in `viewDidAppear` |
 
 ## Legacy labels
