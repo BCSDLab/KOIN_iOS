@@ -15,7 +15,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     private var handledMessageIds: [String] = []
     
     var navigationController: UINavigationController? {
-        (window?.rootViewController as? HomeTabBarController)?.selectedViewController as? UINavigationController
+        window?.rootViewController as? UINavigationController
     }
     
     // MARK: - Initializer
@@ -42,7 +42,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // cold start
         guard let windowScene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: windowScene)
-        window.rootViewController = makeHomeTabBarController()
+        window.rootViewController = CustomNavigationController(rootViewController: makeHomeTabBarController())
         
         self.window = window
         window.makeKeyAndVisible()
@@ -303,9 +303,10 @@ extension SceneDelegate {
         }
         
         let completion: ()->Void = { [weak self] in
-            self?.window?.rootViewController = self?.makeHomeTabBarController()
-            self?.window?.rootViewController?.dismiss(animated: true) {
-                self?.isPresentingErrorViewController = false
+            guard let self else { return }
+            window?.rootViewController = CustomNavigationController(rootViewController: makeHomeTabBarController())
+            window?.rootViewController?.dismiss(animated: true) {
+                self.isPresentingErrorViewController = false
             }
         }
         let errorViewController = ErrorViewController(completion: completion).then {

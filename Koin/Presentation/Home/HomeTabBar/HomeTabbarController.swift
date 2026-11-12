@@ -122,7 +122,7 @@ extension HomeTabBarController {
     private func setUpViewControllers() {
         let viewControllers = setUpTabBar(items: items)
         configureNavigationBar(viewControllers: viewControllers)
-        self.viewControllers = viewControllers.map { CustomNavigationController(rootViewController: $0) }
+        self.viewControllers = viewControllers
     }
     
     private func setUpTabBar(items: [HomeTabBarItem]) -> [UIViewController] {
@@ -215,7 +215,7 @@ extension HomeTabBarController {
             logAnalyticsEventUseCase: logAnalyticsEventUseCase
         )
         let viewController = NotificationViewController(viewModel: viewModel)
-        (selectedViewController as? UINavigationController)?.pushViewController(viewController, animated: true)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
