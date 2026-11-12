@@ -211,13 +211,7 @@ extension HomeTabBarController {
     private func selectTab(index: Int) {
         configureNavigationBar(tab: items[index].tab)
         homeTabBar.select(tab: items[index].tab)
-        UIView.performWithoutAnimation {
-            CATransaction.begin()
-            CATransaction.setDisableActions(true)
-            selectedIndex = index
-            view.layoutIfNeeded()
-            CATransaction.commit()
-        }
+        selectedIndex = index
     }
     
     private func makeLogEvent(tag: Int) {
