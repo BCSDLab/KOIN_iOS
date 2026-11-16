@@ -460,15 +460,17 @@ extension CertificationFormViewController {
     }
 
     private func startTimer() {
-        timerLabel.text = verificationTimer.formattedRemainingTime
+        guard let sentAt = sendPolicy.lastSentAt else { return }
+
+        timerLabel.text = verificationTimer.formattedRemainingTime(at: Date(), sentAt: sentAt)
         verificationHelpLabel.isHidden = true
-        
+
         timer = Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self = self else { return }
-            
-            if !self.verificationTimer.isExpired {
-                self.verificationTimer.elapseOneSecond()
-                self.timerLabel.text = self.verificationTimer.formattedRemainingTime
+
+            let now = Date()
+            if !self.verificationTimer.isExpired(at: now, sentAt: sentAt) {
+                self.timerLabel.text = self.verificationTimer.formattedRemainingTime(at: now, sentAt: sentAt)
             } else {
                 self.timer?.invalidate()
                 self.timer = nil
@@ -480,10 +482,9 @@ extension CertificationFormViewController {
     }
     
     private func handleSendVerificationCodeSuccess(response: SendVerificationCodeDto) {
-        verificationTimer.reset()
-        startTimer()
         sendPolicy.markSent(at: Date())
         sendVerificationButton.setTitle(sendPolicy.buttonTitle, for: .normal)
+        startTimer()
 
         [verificationTextField, timerLabel, verificationButton, phoneNumberReponseLabel].forEach { $0.isHidden = false }
 

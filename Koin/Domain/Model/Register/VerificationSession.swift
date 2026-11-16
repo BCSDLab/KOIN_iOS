@@ -11,27 +11,18 @@ struct VerificationTimer: Equatable {
 
     static let validitySeconds = 180
 
-    private(set) var remainingSeconds: Int
-
-    init() {
-        remainingSeconds = Self.validitySeconds
+    func remainingSeconds(at now: Date, sentAt: Date) -> Int {
+        let remaining = TimeInterval(Self.validitySeconds) - now.timeIntervalSince(sentAt)
+        return max(0, Int(remaining.rounded()))
     }
 
-    var isExpired: Bool {
-        return remainingSeconds <= 0
+    func isExpired(at now: Date, sentAt: Date) -> Bool {
+        return now.timeIntervalSince(sentAt) >= TimeInterval(Self.validitySeconds)
     }
 
-    var formattedRemainingTime: String {
-        return String(format: "%02d:%02d", remainingSeconds / 60, remainingSeconds % 60)
-    }
-
-    mutating func reset() {
-        remainingSeconds = Self.validitySeconds
-    }
-
-    mutating func elapseOneSecond() {
-        guard remainingSeconds > 0 else { return }
-        remainingSeconds -= 1
+    func formattedRemainingTime(at now: Date, sentAt: Date) -> String {
+        let seconds = remainingSeconds(at: now, sentAt: sentAt)
+        return String(format: "%02d:%02d", seconds / 60, seconds % 60)
     }
 }
 
