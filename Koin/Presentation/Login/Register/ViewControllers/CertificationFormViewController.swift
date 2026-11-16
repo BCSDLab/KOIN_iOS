@@ -589,7 +589,6 @@ extension CertificationFormViewController {
         contentView.snp.makeConstraints {
             $0.edges.equalToSuperview()
             $0.width.equalToSuperview()
-            $0.height.greaterThanOrEqualToSuperview()
         }
         
         nameAndGenderLabel.snp.makeConstraints {
@@ -699,6 +698,7 @@ extension CertificationFormViewController {
         verificationHelpLabel.snp.makeConstraints {
             $0.top.equalTo(verificationTextField.snp.bottom).offset(8)
             $0.leading.equalTo(verificationTextField.snp.leading).offset(4)
+            $0.bottom.equalToSuperview().offset(-12)
             $0.height.equalTo(19)
         }
     }
