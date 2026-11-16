@@ -478,6 +478,7 @@ extension CertificationFormViewController {
             } else {
                 self.timer?.invalidate()
                 self.timer = nil
+                self.timerLabel.text = self.verificationTimer.formattedRemainingTime(at: now, sentAt: sentAt)
                 self.verificationHelpLabel.isHidden = false
                 self.verificationHelpLabel.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
                 self.unlockSendVerification()
