@@ -17,7 +17,7 @@ final class CertificationFormViewController: UIViewController {
     private let inputSubject: PassthroughSubject<RegisterFormViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
     private var timer: Timer?
-    private var verificationTimer = VerificationTimer()
+    private let verificationTimer = VerificationTimer()
     private var sendPolicy = VerificationSendPolicy()
     private var selectedGender: Gender?
 
@@ -210,6 +210,10 @@ final class CertificationFormViewController: UIViewController {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        timer?.invalidate()
+    }
 
     // MARK: - Life Cycle
     
@@ -247,7 +251,7 @@ final class CertificationFormViewController: UIViewController {
                     self?.showHttpResult(message, labelColor)
                 }
             case .changeSendVerificationButtonStatus:
-                guard let self else { return }
+                guard let self, self.phoneNumberTextField.isUserInteractionEnabled else { return }
                 self.phoneNumberReponseLabel.isHidden = true
                 self.sendVerificationButton.updateState(
                     isEnabled: self.sendPolicy.canSend(at: Date()) && PhoneNumberInput.isComplete(self.phoneNumberTextField.text ?? "")
