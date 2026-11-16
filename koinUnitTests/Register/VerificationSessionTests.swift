@@ -73,16 +73,16 @@ struct VerificationSendPolicyTests {
         #expect(sut.canSend(at: sentAt) == false)
     }
 
-    @Test("3초 이내에는 재발송할 수 없다")
-    func 삼초_이내에는_재발송할_수_없다() {
+    @Test("180초 이내에는 재발송할 수 없다")
+    func 백팔십초_이내에는_재발송할_수_없다() {
         var sut = VerificationSendPolicy()
         sut.markSent(at: sentAt)
 
-        #expect(sut.canSend(at: sentAt.addingTimeInterval(2.9)) == false)
+        #expect(sut.canSend(at: sentAt.addingTimeInterval(VerificationSendPolicy.resendCooldown - 0.1)) == false)
     }
 
-    @Test("발송 후 3초가 지나면 재발송할 수 있다")
-    func 발송_후_삼초가_지나면_재발송할_수_있다() {
+    @Test("발송 후 180초가 지나면 재발송할 수 있다")
+    func 발송_후_백팔십초가_지나면_재발송할_수_있다() {
         var sut = VerificationSendPolicy()
         sut.markSent(at: sentAt)
 

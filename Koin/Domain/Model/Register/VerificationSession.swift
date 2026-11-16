@@ -37,7 +37,7 @@ struct VerificationTimer: Equatable {
 
 struct VerificationSendPolicy: Equatable {
 
-    static let resendCooldown: TimeInterval = 3
+    static let resendCooldown = TimeInterval(VerificationTimer.validitySeconds)
 
     private(set) var sentCount = 0
     private(set) var lastSentAt: Date?
