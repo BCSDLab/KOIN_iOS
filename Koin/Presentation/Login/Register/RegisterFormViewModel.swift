@@ -44,6 +44,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case showNicknameHttpResult(String, ColorAsset)
         case changeSendVerificationButtonStatus
         case sendVerificationCodeSuccess(response: SendVerificationCodeDto)
+        case sendVerificationCodeFailure(String, ColorAsset)
         case correctVerificationCode
         case successCheckDuplicatedId(loginId: String)
         case showDeptDropDownList([String])
@@ -128,7 +129,7 @@ extension RegisterFormViewModel {
             .sink { [weak self] completion in
                 guard let self else { return }
                 if case let .failure(error) = completion {
-                    self.outputSubject.send(.showHttpResult(error.message, .sub500))
+                    self.outputSubject.send(.sendVerificationCodeFailure(error.message, .sub500))
                 }
             } receiveValue: { [weak self] response in
                 self?.outputSubject.send(.sendVerificationCodeSuccess(response: response))
