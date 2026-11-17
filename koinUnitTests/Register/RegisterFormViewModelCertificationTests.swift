@@ -128,7 +128,7 @@ struct RegisterFormViewModelCertificationTests {
 
         recorder.send(.checkVerificationCode(phoneNumber, verificationCode))
 
-        #expect(recorder.httpResultColors == [expected])
+        #expect(recorder.checkVerificationCodeFailureColors == [expected])
     }
 
     // MARK: - 로깅

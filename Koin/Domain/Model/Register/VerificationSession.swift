@@ -29,28 +29,43 @@ struct VerificationTimer: Equatable {
 struct VerificationSendPolicy: Equatable {
 
     static let resendCooldown = TimeInterval(VerificationTimer.validitySeconds)
+    static let maxVerifyAttempts = 5
 
     private(set) var sentCount = 0
     private(set) var lastSentAt: Date?
     private(set) var isBlockedByDailyLimit = false
+    private(set) var failedVerifyAttempts = 0
 
     var buttonTitle: String {
         return sentCount == 0 ? "인증번호 발송" : "인증번호 재발송"
     }
 
+    var hasRemainingVerifyAttempts: Bool {
+        return failedVerifyAttempts < Self.maxVerifyAttempts
+    }
+
     func canSend(at now: Date) -> Bool {
         guard !isBlockedByDailyLimit else { return false }
-        guard let lastSentAt else { return true }
+        guard let lastSentAt, hasRemainingVerifyAttempts else { return true }
         return now.timeIntervalSince(lastSentAt) >= Self.resendCooldown
     }
 
     mutating func markSent(at now: Date) {
         sentCount += 1
         lastSentAt = now
+        failedVerifyAttempts = 0
     }
 
     mutating func blockByDailyLimit() {
         isBlockedByDailyLimit = true
+    }
+
+    mutating func markVerifyFailed() {
+        failedVerifyAttempts += 1
+    }
+
+    mutating func discardVerificationCode() {
+        failedVerifyAttempts = Self.maxVerifyAttempts
     }
 
     static func sentMessage(remainingCount: Int, totalCount: Int) -> String {

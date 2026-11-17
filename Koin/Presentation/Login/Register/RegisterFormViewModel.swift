@@ -45,6 +45,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case changeSendVerificationButtonStatus
         case sendVerificationCodeSuccess(response: SendVerificationCodeDto)
         case sendVerificationCodeFailure(String, ColorAsset)
+        case checkVerificationCodeFailure(statusCode: Int?, message: String, color: ColorAsset)
         case correctVerificationCode
         case successCheckDuplicatedId(loginId: String)
         case showDeptDropDownList([String])
@@ -140,15 +141,8 @@ extension RegisterFormViewModel {
     private func checkVerificationCode(phoneNumber: String, verificationCode: String) {
         checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: verificationCode).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                if let code = Int(error.code) {
-                    if code == 400 {
-                        self?.outputSubject.send(.showHttpResult(error.message, .sub500))
-                    } else if code == 404 {
-                        self?.outputSubject.send(.showHttpResult(error.message, .danger700))
-                    }
-                } else {
-                    self?.outputSubject.send(.showHttpResult(error.message, .sub500))
-                }
+                let color: ColorAsset = error.statusCode == 404 ? .danger700 : .sub500
+                self?.outputSubject.send(.checkVerificationCodeFailure(statusCode: error.statusCode, message: error.message, color: color))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.correctVerificationCode)

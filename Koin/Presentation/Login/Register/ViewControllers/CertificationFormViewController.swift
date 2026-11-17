@@ -20,6 +20,7 @@ final class CertificationFormViewController: UIViewController {
     private let verificationTimer = VerificationTimer()
     private var sendPolicy = VerificationSendPolicy()
     private var selectedGender: Gender?
+    private var isVerifyingCode = false
 
     // MARK: - UI Components
     
@@ -188,7 +189,12 @@ final class CertificationFormViewController: UIViewController {
         $0.updateState(isEnabled: false)
         $0.isHidden = true
     }
-    
+
+    private let verificationLoadingIndicator = UIActivityIndicatorView(style: .medium).then {
+        $0.color = .white
+        $0.hidesWhenStopped = true
+    }
+
     private let verificationHelpLabel = UILabel().then {
         $0.setImageText(
             image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal),
@@ -261,7 +267,10 @@ final class CertificationFormViewController: UIViewController {
             case let .sendVerificationCodeFailure(message, labelColor):
                 self?.showHttpResult(message, labelColor)
                 self?.unlockSendVerification()
+            case let .checkVerificationCodeFailure(statusCode, message, color):
+                self?.handleCheckVerificationCodeFailure(statusCode: statusCode, message: message, color: color)
             case .correctVerificationCode:
+                self?.updateVerifyingState(false)
                 self?.verificationHelpLabel.isHidden = false
                 self?.timer?.invalidate()
                 self?.timer = nil
@@ -380,7 +389,7 @@ extension CertificationFormViewController {
     @objc private func verificationTextFieldDidChange(_ textField: UITextField) {
         guard let text = textField.text else { return }
         textField.text = VerificationCodeInput.acceptedDigits(from: text)
-        changeVerificationButtonStatus(textField.text ?? "")
+        updateVerificationInputState()
     }
     
     private func showVerificationHelpResult(_ message: String, _ color: ColorAsset) {
@@ -393,8 +402,51 @@ extension CertificationFormViewController {
         )
     }
     
-    private func changeVerificationButtonStatus(_ text: String) {
-        verificationButton.updateState(isEnabled: VerificationCodeInput.isReadyToConfirm(text))
+    private func updateVerificationInputState() {
+        let isExpired = sendPolicy.lastSentAt.map { verificationTimer.isExpired(at: Date(), sentAt: $0) } ?? true
+        let canVerify = !isExpired && sendPolicy.hasRemainingVerifyAttempts
+
+        if !canVerify {
+            verificationTextField.resignFirstResponder()
+        }
+        verificationTextField.isUserInteractionEnabled = canVerify
+        verificationButton.updateState(
+            isEnabled: canVerify && !isVerifyingCode && VerificationCodeInput.isReadyToConfirm(verificationTextField.text ?? "")
+        )
+    }
+
+    private func updateVerifyingState(_ isVerifying: Bool) {
+        isVerifyingCode = isVerifying
+        verificationButton.setTitle(isVerifying ? nil : "인증번호 확인", for: .normal)
+        if isVerifying {
+            verificationLoadingIndicator.startAnimating()
+        } else {
+            verificationLoadingIndicator.stopAnimating()
+        }
+        updateVerificationInputState()
+    }
+
+    private func handleCheckVerificationCodeFailure(statusCode: Int?, message: String, color: ColorAsset) {
+        if statusCode == 400 {
+            sendPolicy.markVerifyFailed()
+        } else if statusCode == 404 {
+            sendPolicy.discardVerificationCode()
+        }
+
+        updateVerifyingState(false)
+
+        if !sendPolicy.hasRemainingVerifyAttempts {
+            timer?.invalidate()
+            timer = nil
+            timerLabel.text = "00:00"
+            unlockSendVerification()
+        }
+
+        if statusCode == 400 && !sendPolicy.hasRemainingVerifyAttempts {
+            showVerificationHelpResult("인증번호를 여러 번 틀렸어요. 인증번호를 다시 받아 주세요.", color)
+        } else {
+            showVerificationHelpResult(message, color)
+        }
     }
     
     private func showHttpResult(_ message: String, _ color: ColorAsset) {
@@ -436,7 +488,7 @@ extension CertificationFormViewController {
 
         timer?.invalidate()
 
-        [contactButton, verificationTextField, timerLabel, verificationButton].forEach { $0.isHidden = true }
+        [contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach { $0.isHidden = true }
 
         phoneNumberTextField.resignFirstResponder()
         phoneNumberTextField.isUserInteractionEnabled = false
@@ -482,6 +534,7 @@ extension CertificationFormViewController {
                 self.verificationHelpLabel.isHidden = false
                 self.verificationHelpLabel.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
                 self.unlockSendVerification()
+                self.updateVerificationInputState()
             }
         }
     }
@@ -496,7 +549,7 @@ extension CertificationFormViewController {
         phoneNumberReponseLabel.setImageAttributedText(image: .appImage(asset: .checkGreenCircle), attributedText: makeVerificationMessage(remainingCount: response.remainingCount, totalCount: response.totalCount))
         
         verificationTextField.text = ""
-        verificationButton.updateState(isEnabled: false)
+        updateVerificationInputState()
         
         if VerificationSendPolicy.showsContactEntry(currentCount: response.currentCount) {
             [verificationHelpLabel, contactButton].forEach { $0.isHidden = false }
@@ -530,11 +583,12 @@ extension CertificationFormViewController {
     }
     
     @objc private func verificationButtonTapped() {
-        if let verificationText = verificationTextField.text, let phoneNumber = phoneNumberTextField.text {
-            inputSubject.send(.checkVerificationCode(phoneNumber, verificationText))
-        } else {
-            return
-        }
+        guard !isVerifyingCode,
+              let verificationText = verificationTextField.text,
+              let phoneNumber = phoneNumberTextField.text else { return }
+
+        updateVerifyingState(true)
+        inputSubject.send(.checkVerificationCode(phoneNumber, verificationText))
     }
     
     @objc private func nextButtonTapped() {
@@ -558,6 +612,7 @@ extension CertificationFormViewController {
         [nameAndGenderLabel, nameTextField, nameHelpLabel, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, sendVerificationButton, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach {
             contentView.addSubview($0)
         }
+        verificationButton.addSubview(verificationLoadingIndicator)
     }
     
     private func setUpConstraints() {
@@ -699,7 +754,11 @@ extension CertificationFormViewController {
             $0.trailing.equalTo(sendVerificationButton.snp.trailing)
             $0.height.equalTo(32)
         }
-        
+
+        verificationLoadingIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+
         verificationHelpLabel.snp.makeConstraints {
             $0.top.equalTo(verificationTextField.snp.bottom).offset(8)
             $0.leading.equalTo(verificationTextField.snp.leading).offset(4)
