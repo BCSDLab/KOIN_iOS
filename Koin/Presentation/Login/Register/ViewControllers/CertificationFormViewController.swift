@@ -296,6 +296,7 @@ final class CertificationFormViewController: UIViewController {
     private func setUpButtonTargets() {
         nameTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearNameTextField))
         nameTextField.addTarget(self, action: #selector(nameTextFieldDidChange(_:)), for: .editingChanged)
+        nameTextField.addTarget(self, action: #selector(nameTextFieldDidEndEditing(_:)), for: .editingDidEnd)
         femaleButton.addTarget(self, action: #selector(femaleButtonTapped), for: .touchUpInside)
         maleButton.addTarget(self, action: #selector(maleButtonTapped), for: .touchUpInside)
         phoneNumberTextField.setRightButton(image: UIImage.appImage(asset: .cancelNeutral500), target: self, action: #selector(clearPhoneNumberTextField))
@@ -319,9 +320,16 @@ extension CertificationFormViewController {
 
         nameHelpLabel.isHidden = !name.isTooShort
 
-        if !name.isTooShort {
+        if name.canProceedToPhoneNumber {
             updatePhoneNumberSectionVisibility()
         }
+    }
+
+    @objc private func nameTextFieldDidEndEditing(_ textField: UITextField) {
+        let name = NameInput(textField.text ?? "")
+
+        nameHelpLabel.isHidden = name.canProceedToPhoneNumber
+        updatePhoneNumberSectionVisibility()
     }
     
     @objc private func femaleButtonTapped() {

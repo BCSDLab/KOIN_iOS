@@ -32,13 +32,22 @@ struct NameInput: Equatable {
         return acceptedText.count < Self.minimumCharacterCount
     }
 
+    var hasIncompleteKorean: Bool {
+        return acceptedText.contains(where: Self.isKoreanJamo)
+    }
+
     var canProceedToPhoneNumber: Bool {
-        return !isTooShort
+        return !isTooShort && !hasIncompleteKorean
     }
 
     private static func isKorean(_ character: Character) -> Bool {
         guard let scalar = character.unicodeScalars.first else { return false }
-        return (0xAC00...0xD7A3).contains(scalar.value) || (0x3131...0x318E).contains(scalar.value)
+        return (0xAC00...0xD7A3).contains(scalar.value) || isKoreanJamo(character)
+    }
+
+    private static func isKoreanJamo(_ character: Character) -> Bool {
+        guard let scalar = character.unicodeScalars.first else { return false }
+        return (0x3131...0x318E).contains(scalar.value)
     }
 
     private static func isEnglish(_ character: Character) -> Bool {
