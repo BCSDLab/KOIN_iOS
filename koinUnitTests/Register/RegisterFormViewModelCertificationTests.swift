@@ -52,7 +52,7 @@ struct RegisterFormViewModelCertificationTests {
 
         recorder.send(.checkDuplicatedPhoneNumber(phoneNumber))
 
-        #expect(recorder.httpResultMessages == ["이미 존재하는 전화번호입니다."])
+        #expect(recorder.phoneNumberHttpResultMessages == ["이미 존재하는 전화번호입니다."])
     }
 
     // MARK: - 인증번호 발송
@@ -128,7 +128,7 @@ struct RegisterFormViewModelCertificationTests {
 
         recorder.send(.checkVerificationCode(phoneNumber, verificationCode))
 
-        #expect(recorder.httpResultColors == [expected])
+        #expect(recorder.checkVerificationCodeFailureColors == [expected])
     }
 
     // MARK: - 로깅

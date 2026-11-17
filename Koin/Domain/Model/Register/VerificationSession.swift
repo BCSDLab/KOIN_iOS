@@ -11,55 +11,64 @@ struct VerificationTimer: Equatable {
 
     static let validitySeconds = 180
 
-    private(set) var remainingSeconds: Int
-
-    init() {
-        remainingSeconds = Self.validitySeconds
+    func remainingSeconds(at now: Date, sentAt: Date) -> Int {
+        let remaining = TimeInterval(Self.validitySeconds) - now.timeIntervalSince(sentAt)
+        return max(0, Int(remaining.rounded(.up)))
     }
 
-    var isExpired: Bool {
-        return remainingSeconds <= 0
+    func isExpired(at now: Date, sentAt: Date) -> Bool {
+        return now.timeIntervalSince(sentAt) >= TimeInterval(Self.validitySeconds)
     }
 
-    var formattedRemainingTime: String {
-        return String(format: "%02d:%02d", remainingSeconds / 60, remainingSeconds % 60)
-    }
-
-    mutating func reset() {
-        remainingSeconds = Self.validitySeconds
-    }
-
-    mutating func elapseOneSecond() {
-        guard remainingSeconds > 0 else { return }
-        remainingSeconds -= 1
+    func formattedRemainingTime(at now: Date, sentAt: Date) -> String {
+        let seconds = remainingSeconds(at: now, sentAt: sentAt)
+        return String(format: "%02d:%02d", seconds / 60, seconds % 60)
     }
 }
 
 struct VerificationSendPolicy: Equatable {
 
-    static let resendCooldown: TimeInterval = 3
+    static let resendCooldown = TimeInterval(VerificationTimer.validitySeconds)
+    static let maxVerifyAttempts = 5
 
     private(set) var sentCount = 0
     private(set) var lastSentAt: Date?
     private(set) var isBlockedByDailyLimit = false
+    private(set) var failedVerifyAttempts = 0
 
     var buttonTitle: String {
         return sentCount == 0 ? "인증번호 발송" : "인증번호 재발송"
     }
 
+    var hasRemainingVerifyAttempts: Bool {
+        return failedVerifyAttempts < Self.maxVerifyAttempts
+    }
+
     func canSend(at now: Date) -> Bool {
         guard !isBlockedByDailyLimit else { return false }
         guard let lastSentAt else { return true }
+        if !hasRemainingVerifyAttempts {
+            return true
+        }
         return now.timeIntervalSince(lastSentAt) >= Self.resendCooldown
     }
 
     mutating func markSent(at now: Date) {
         sentCount += 1
         lastSentAt = now
+        failedVerifyAttempts = 0
     }
 
     mutating func blockByDailyLimit() {
         isBlockedByDailyLimit = true
+    }
+
+    mutating func markVerifyFailed() {
+        failedVerifyAttempts += 1
+    }
+
+    mutating func discardVerificationCode() {
+        failedVerifyAttempts = Self.maxVerifyAttempts
     }
 
     static func sentMessage(remainingCount: Int, totalCount: Int) -> String {
@@ -93,15 +102,5 @@ enum CertificationError: Equatable {
 
     var blocksResend: Bool {
         return self == .dailySendLimitExceeded
-    }
-}
-
-enum CertificationErrorTarget: Equatable {
-
-    case phoneNumber
-    case verificationCode
-
-    init(verificationCodeText: String) {
-        self = verificationCodeText.isEmpty ? .phoneNumber : .verificationCode
     }
 }
