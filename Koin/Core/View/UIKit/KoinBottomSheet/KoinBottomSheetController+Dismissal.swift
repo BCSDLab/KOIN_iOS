@@ -15,7 +15,11 @@ extension KoinBottomSheetController: KoinBottomSheetDelegate {
     }
 
     func invalidateHeight(animated: Bool) {
-        guard isActive, let context = heightContext else { return }
+        guard isActive else { return }
+        guard let context = heightContext else {
+            lastContext = nil
+            return
+        }
         // capture와 resolver가 레이아웃을 불러도 같은 맥락을 중복 측정하지 않는다.
         lastContext = context
         cancelPanForAction()

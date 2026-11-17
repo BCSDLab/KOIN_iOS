@@ -12,6 +12,10 @@ struct KoinBottomSheetConfiguration {
     enum Style {
         case modal(dimAlpha: CGFloat = 0.7)
         case nonModal
+        /// owner 화면의 child로 붙어 화면과 함께 움직인다. 사용자 동작으로 닫히지 않고, dim이 없으며, swipe pop을 막지 않는다.
+        /// owner의 viewDidLoad에서 띄우면 애니메이션 없이 처음부터 보인다.
+        /// configuration 클로저와 콘텐츠 뷰의 클로저는 owner를 [weak self]로 잡아야 owner와 함께 해제된다.
+        case persistent
     }
 
     struct Behavior {

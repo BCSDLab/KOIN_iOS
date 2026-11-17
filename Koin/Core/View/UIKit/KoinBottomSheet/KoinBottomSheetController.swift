@@ -28,6 +28,12 @@ final class KoinBottomSheetController: UIViewController {
         }
         return false
     }
+    var isPersistent: Bool {
+        if case .persistent = configuration.style {
+            return true
+        }
+        return false
+    }
     var ownerWindowObserver: UIView?
 
     // MARK: - State
@@ -45,6 +51,9 @@ final class KoinBottomSheetController: UIViewController {
     }
     /// dim이 받아 시트를 닫을 터치. 바깥 전체를 막지 않을 때도 nav 영역(상단 한계 위)은 받는다.
     func dimReceivesTouch(at point: CGPoint) -> Bool {
+        if isPersistent {
+            return false
+        }
         guard !blocksOutside else { return true }
         guard let host = view.superview, let topLimitY else { return false }
         return dimView.convert(point, to: host).y < topLimitY
@@ -129,15 +138,27 @@ final class KoinBottomSheetController: UIViewController {
         updateHeightIfNeeded()
     }
 
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        guard isPersistent, lastContext == nil, heightConstraint != nil else { return }
+        view.setNeedsLayout()
+        parent?.view.layoutIfNeeded()
+    }
+
     // MARK: - Presentation
     func presentSheet() {
         installHostGuideConstraintsIfNeeded()
-        view.superview?.layoutIfNeeded()
-        view.layoutIfNeeded()
+        // window 밖 owner를 레이아웃하면 owner의 viewDidLoad 도중 레이아웃 콜백이 불리므로 먼저 거른다.
         guard owner?.viewIfLoaded?.window != nil else {
-            teardown()
+            if isPersistent {
+                state = .presented
+            } else {
+                teardown()
+            }
             return
         }
+        view.superview?.layoutIfNeeded()
+        view.layoutIfNeeded()
         observeOwnerWindow()
         updateHeightIfNeeded()
         containerView.transform = CGAffineTransform(
@@ -153,6 +174,9 @@ final class KoinBottomSheetController: UIViewController {
     }
 
     private func observeOwnerWindow() {
+        if isPersistent {
+            return
+        }
         guard let ownerView = owner?.viewIfLoaded else { return }
         let observer = OwnerWindowObserverView().then {
             $0.isHidden = true
