@@ -578,7 +578,6 @@ extension TimetableViewController {
         configuration.style = .nonModal
         configuration.behavior.expandToFullScreenOnDrag = allowsFullScreen
         configuration.behavior.expandToFullScreenOnKeyboard = allowsFullScreen
-        configuration.showsShadow = true
         configuration.onTargetFrameChange = { [weak self, weak sheetContent] frame in
             guard let self, let sheetContent, self.sheetContentView === sheetContent,
                   !self.isResettingTimetableInset else { return }

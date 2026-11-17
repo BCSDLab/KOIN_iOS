@@ -26,6 +26,10 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
     /// 놓을 때 이 시간(초)만큼 현재 속도로 더 움직인 높이로 목적지를 정한다.
     private static let releaseProjectionSeconds: CGFloat = 0.2
 
+    private var canDismissByDrag: Bool {
+        !isPersistent && configuration.behavior.dismissOnDrag
+    }
+
     /// 위로 끄는 pan이 시트를 fullscreen까지 펼칠 수 있는지.
     private var canExpandByPan: Bool {
         configuration.behavior.expandToFullScreenOnDrag && !isFullScreen
@@ -33,7 +37,9 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
     }
 
     func configurePan() {
-        guard configuration.behavior.dismissOnDrag || configuration.behavior.expandToFullScreenOnDrag else { return }
+        guard isPersistent
+            || configuration.behavior.dismissOnDrag
+            || configuration.behavior.expandToFullScreenOnDrag else { return }
         let pan = UIPanGestureRecognizer(
             target: self,
             action: #selector(handleSheetPan(_:))
@@ -164,7 +170,7 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
             let shrink = min(max(0, movement - state.offset), free)
             holdHeight(state.height - shrink)
             let rest = movement - shrink
-            let distance = configuration.behavior.dismissOnDrag ? rest : rubberBand(rest, dimension: state.height)
+            let distance = canDismissByDrag ? rest : rubberBand(rest, dimension: state.height)
             containerView.transform = CGAffineTransform(translationX: 0, y: distance)
         } else if state.canExpand && !state.startedFullScreen && state.height < availableHeight - 0.5 {
             let desiredHeight = state.height - movement
@@ -202,7 +208,7 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
         var close = false
         if !cancelled {
             full = projected >= midpoint && (state.startedFullScreen || state.canExpand)
-            close = !full && projected < base * 2 / 3 && configuration.behavior.dismissOnDrag
+            close = !full && projected < base * 2 / 3 && canDismissByDrag
         }
         panState = nil
         if close {
