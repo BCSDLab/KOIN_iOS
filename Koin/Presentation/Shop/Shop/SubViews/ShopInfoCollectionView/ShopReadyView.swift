@@ -17,7 +17,7 @@ final class ShopReadyView: UIView {
         $0.textColor = UIColor.appColor(.neutral0)
     }
     
-    private let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .regular)).then {
+    private let visualEffectView = UIVisualEffectView(effect: UIBlurEffect(style: .systemUltraThinMaterialDark)).then {
         $0.backgroundColor = .black
         $0.alpha = 0.6
     }
@@ -42,7 +42,7 @@ final class ShopReadyView: UIView {
     
     
     func setShopTitle(text: String) {
-        shopReadyLabel.text = "영업을 준비중이에요"
+        shopReadyLabel.text = "지금은 영업시간이 아니예요"
     }
     
 }
