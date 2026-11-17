@@ -141,14 +141,4 @@ struct CertificationErrorTests {
         #expect(sut.showsLoginEntry == false)
         #expect(sut.blocksResend == false)
     }
-
-    @Test(
-        "인증번호를 입력한 뒤의 오류는 인증번호 안내로 표시한다",
-        arguments: [("", CertificationErrorTarget.phoneNumber), ("123456", .verificationCode)]
-    )
-    func 인증번호를_입력한_뒤의_오류는_인증번호_안내로_표시한다(
-        verificationCodeText: String, expected: CertificationErrorTarget
-    ) {
-        #expect(CertificationErrorTarget(verificationCodeText: verificationCodeText) == expected)
-    }
 }

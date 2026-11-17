@@ -249,13 +249,8 @@ final class CertificationFormViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard self != nil else { return }
             switch output {
-            case let .showHttpResult(message, labelColor):
-                switch CertificationErrorTarget(verificationCodeText: self?.verificationTextField.text ?? "") {
-                case .verificationCode:
-                    self?.showVerificationHelpResult(message, labelColor)
-                case .phoneNumber:
-                    self?.showHttpResult(message, labelColor)
-                }
+            case let .showPhoneNumberHttpResult(message, labelColor):
+                self?.showHttpResult(message, labelColor)
             case .changeSendVerificationButtonStatus:
                 guard let self, self.phoneNumberTextField.isUserInteractionEnabled else { return }
                 self.phoneNumberReponseLabel.isHidden = true

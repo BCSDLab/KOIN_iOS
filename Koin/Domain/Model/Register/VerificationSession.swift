@@ -101,13 +101,3 @@ enum CertificationError: Equatable {
         return self == .dailySendLimitExceeded
     }
 }
-
-enum CertificationErrorTarget: Equatable {
-
-    case phoneNumber
-    case verificationCode
-
-    init(verificationCodeText: String) {
-        self = verificationCodeText.isEmpty ? .phoneNumber : .verificationCode
-    }
-}
