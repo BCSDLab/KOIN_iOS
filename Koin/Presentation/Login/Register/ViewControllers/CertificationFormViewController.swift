@@ -263,8 +263,10 @@ final class CertificationFormViewController: UIViewController {
                 self?.showHttpResult(message, labelColor)
                 self?.unlockSendVerification()
             case let .checkVerificationCodeFailure(statusCode, message, color):
+                guard self?.isVerifyingCode == true else { return }
                 self?.handleCheckVerificationCodeFailure(statusCode: statusCode, message: message, color: color)
             case .correctVerificationCode:
+                guard self?.isVerifyingCode == true else { return }
                 self?.updateVerifyingState(false)
                 self?.verificationHelpLabel.isHidden = false
                 self?.timer?.invalidate()
@@ -534,6 +536,10 @@ extension CertificationFormViewController {
                 self.timer?.invalidate()
                 self.timer = nil
                 self.timerLabel.text = self.verificationTimer.formattedRemainingTime(at: now, sentAt: sentAt)
+                if self.isVerifyingCode {
+                    self.inputSubject.send(.cancelCheckVerificationCode)
+                    self.updateVerifyingState(false)
+                }
                 self.verificationHelpLabel.isHidden = false
                 self.verificationHelpLabel.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
                 self.unlockSendVerification()

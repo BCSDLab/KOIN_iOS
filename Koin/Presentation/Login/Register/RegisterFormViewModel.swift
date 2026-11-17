@@ -29,6 +29,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkDuplicatedPhoneNumber(String)
         case sendVerificationCode(String)
         case checkVerificationCode(String, String)
+        case cancelCheckVerificationCode
         case checkDuplicatedId(String)
         case getDeptList
         case checkDuplicatedNickname(String)
@@ -56,7 +57,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    
+    private var checkVerificationCodeCancellable: AnyCancellable?
+
     private let checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase
     private let sendVerificationCodeUseCase: SendVerificationCodeUsecase
     private let checkVerificationCodeUseCase: CheckVerificationCodeUsecase
@@ -86,6 +88,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.sendVerificationCode(phoneNumber: phoneNumber)
             case let .checkVerificationCode(phoneNumber, verificationCode):
                 self?.checkVerificationCode(phoneNumber: phoneNumber, verificationCode: verificationCode)
+            case .cancelCheckVerificationCode:
+                self?.checkVerificationCodeCancellable?.cancel()
             case let .checkDuplicatedId(loginId):
                 self?.checkDuplicatedId(loginId: loginId)
             case .getDeptList:
@@ -139,7 +143,7 @@ extension RegisterFormViewModel {
     }
     
     private func checkVerificationCode(phoneNumber: String, verificationCode: String) {
-        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: verificationCode).sink { [weak self] completion in
+        checkVerificationCodeCancellable = checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: verificationCode).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 let color: ColorAsset = error.statusCode == 404 ? .danger700 : .sub500
                 self?.outputSubject.send(.checkVerificationCodeFailure(statusCode: error.statusCode, message: error.message, color: color))
@@ -147,7 +151,6 @@ extension RegisterFormViewModel {
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.correctVerificationCode)
         }
-        .store(in: &subscriptions)
     }
     
     private func checkDuplicatedId(loginId: String) {
