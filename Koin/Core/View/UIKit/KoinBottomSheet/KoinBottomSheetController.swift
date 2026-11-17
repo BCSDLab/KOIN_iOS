@@ -118,7 +118,7 @@ final class KoinBottomSheetController: UIViewController {
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         guard state != .dismissed else { return }
-        if configuration.showsShadow {
+        if !isModal {
             // path를 지정해 애니메이션 중 매 프레임 그림자 모양을 다시 계산하지 않게 한다.
             containerView.layer.shadowPath = UIBezierPath(
                 roundedRect: containerView.bounds,
