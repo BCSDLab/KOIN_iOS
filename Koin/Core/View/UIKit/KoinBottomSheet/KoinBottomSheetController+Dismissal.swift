@@ -64,13 +64,11 @@ extension KoinBottomSheetController {
 
     func teardown() {
         guard state != .dismissed else { return }
-        let oldHost = parent
         state = .dismissed
         cancelPanForAction()
         animator?.stopAnimation(true)
         animator = nil
         stopObservingKeyboard()
-        navigationObservation = nil
         ownerWindowObserver?.removeFromSuperview()
         ownerWindowObserver = nil
         contentViewController.willMove(toParent: nil)
@@ -79,39 +77,12 @@ extension KoinBottomSheetController {
         willMove(toParent: nil)
         view.removeFromSuperview()
         removeFromParent()
-        updateNavigationGesture(host: oldHost)
         let onDismiss = configuration.onDismiss
         let action = pendingAction
         configuration.onDismiss = nil
         pendingAction = nil
         onDismiss?()
         action?()
-    }
-
-    func updateNavigationGesture(host: UIViewController? = nil) {
-        guard let host = host ?? parent else { return }
-        let navigation = (host as? UINavigationController) ?? host.navigationController
-        // 시트가 떠 있는 동안은 style·높이와 관계없이 스와이프 pop을 막는다.
-        let isBlocked = host.children
-            .compactMap { $0 as? KoinBottomSheetController }
-            .contains { $0.state != .dismissed }
-        navigation?.interactivePopGestureRecognizer?.isEnabled = !isBlocked
-            && (navigation?.viewControllers.count ?? 0) > 1
-        // iOS 26의 화면 전체 스와이프 pop은 가장자리 pop과 별도 제스처다.
-        if #available(iOS 26.0, *) {
-            navigation?.interactiveContentPopGestureRecognizer?.isEnabled = !isBlocked
-        }
-        if state != .dismissed, navigationObservation == nil {
-            navigationObservation = navigation?.interactivePopGestureRecognizer?.observe(
-                \.isEnabled, options: [.new]) { [weak self] gesture, _ in
-                MainActor.assumeIsolated {
-                    guard let self, self.state != .dismissed, gesture.isEnabled else { return }
-                    // CustomNavigationController가 push/pop 뒤 이 값을 다시 계산할 수 있다.
-                    // 그 delegate는 바꾸지 않고, 마지막 teardown까지 modal 잠금을 유지한다.
-                    gesture.isEnabled = false
-                }
-            }
-        }
     }
 
     @objc func dimTapped() {

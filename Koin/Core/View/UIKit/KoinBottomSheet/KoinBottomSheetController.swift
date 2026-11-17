@@ -69,7 +69,6 @@ final class KoinBottomSheetController: UIViewController {
     // MARK: - Gesture
     var panState: PanState?
     var panTracking = PanTracking()
-    var navigationObservation: NSKeyValueObservation?
 
     // MARK: - Keyboard
     var keyboardState = KeyboardState()
@@ -141,7 +140,6 @@ final class KoinBottomSheetController: UIViewController {
         }
         observeOwnerWindow()
         updateHeightIfNeeded()
-        updateNavigationGesture()
         containerView.transform = CGAffineTransform(
             translationX: 0,
             y: view.bounds.maxY - containerView.frame.minY
