@@ -57,6 +57,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var checkDuplicatedPhoneNumberCancellable: AnyCancellable?
     private var checkVerificationCodeCancellable: AnyCancellable?
 
     private let checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase
@@ -119,14 +120,13 @@ extension RegisterFormViewModel {
     }
 
     private func checkDuplicatedPhoneNumber(phone: String) {
-        checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
+        checkDuplicatedPhoneNumberCancellable = checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.outputSubject.send(.showPhoneNumberHttpResult(error.message, .new600))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.changeSendVerificationButtonStatus)
         }
-        .store(in: &subscriptions)
     }
     
     private func sendVerificationCode(phoneNumber: String) {

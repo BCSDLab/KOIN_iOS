@@ -13,7 +13,7 @@ struct VerificationTimer: Equatable {
 
     func remainingSeconds(at now: Date, sentAt: Date) -> Int {
         let remaining = TimeInterval(Self.validitySeconds) - now.timeIntervalSince(sentAt)
-        return max(0, Int(remaining.rounded()))
+        return max(0, Int(remaining.rounded(.up)))
     }
 
     func isExpired(at now: Date, sentAt: Date) -> Bool {
@@ -46,7 +46,10 @@ struct VerificationSendPolicy: Equatable {
 
     func canSend(at now: Date) -> Bool {
         guard !isBlockedByDailyLimit else { return false }
-        guard let lastSentAt, hasRemainingVerifyAttempts else { return true }
+        guard let lastSentAt else { return true }
+        if !hasRemainingVerifyAttempts {
+            return true
+        }
         return now.timeIntervalSince(lastSentAt) >= Self.resendCooldown
     }
 

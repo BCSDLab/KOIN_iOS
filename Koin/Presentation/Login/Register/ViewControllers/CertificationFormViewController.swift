@@ -21,6 +21,8 @@ final class CertificationFormViewController: UIViewController {
     private var sendPolicy = VerificationSendPolicy()
     private var selectedGender: Gender?
     private var isVerifyingCode = false
+    private var isCheckingPhoneNumber = false
+    private var sendRequestedAt: Date?
 
     // MARK: - UI Components
     
@@ -127,6 +129,11 @@ final class CertificationFormViewController: UIViewController {
     ).then {
         $0.updateState(isEnabled: false)
         $0.isHidden = true
+    }
+
+    private let phoneNumberLoadingIndicator = UIActivityIndicatorView(style: .medium).then {
+        $0.color = .white
+        $0.hidesWhenStopped = true
     }
 
     private let phoneNumberReponseLabel = UILabel().then {
@@ -250,13 +257,14 @@ final class CertificationFormViewController: UIViewController {
             guard self != nil else { return }
             switch output {
             case let .showPhoneNumberHttpResult(message, labelColor):
-                self?.showHttpResult(message, labelColor)
+                guard let self, self.isCheckingPhoneNumber else { return }
+                self.updateCheckingPhoneNumberState(false)
+                self.sendVerificationButton.updateState(isEnabled: false)
+                self.showHttpResult(message, labelColor)
             case .changeSendVerificationButtonStatus:
-                guard let self, self.phoneNumberTextField.isUserInteractionEnabled else { return }
+                guard let self, self.isCheckingPhoneNumber else { return }
+                self.updateCheckingPhoneNumberState(false)
                 self.phoneNumberReponseLabel.isHidden = true
-                self.sendVerificationButton.updateState(
-                    isEnabled: self.sendPolicy.canSend(at: Date()) && PhoneNumberInput.isComplete(self.phoneNumberTextField.text ?? "")
-                )
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
             case let .sendVerificationCodeFailure(message, labelColor):
@@ -372,7 +380,7 @@ extension CertificationFormViewController {
     
     @objc private func clearPhoneNumberTextField() {
         phoneNumberTextField.text = ""
-        sendVerificationButton.updateState(isEnabled: false)
+        updateCheckingPhoneNumberState(false)
         [goToLoginButton, phoneNotFoundLabel, contactButton, phoneNumberReponseLabel].forEach {
             $0.isHidden = true
         }
@@ -385,9 +393,9 @@ extension CertificationFormViewController {
         
         if textField.text?.isEmpty ?? true {
             phoneNumberReponseLabel.isHidden = true
-            sendVerificationButton.updateState(isEnabled: false)
         }
-        
+
+        updateCheckingPhoneNumberState(true)
         inputSubject.send(.checkDuplicatedPhoneNumber(textField.text ?? ""))
     }
     
@@ -441,10 +449,7 @@ extension CertificationFormViewController {
         updateVerifyingState(false)
 
         if !sendPolicy.hasRemainingVerifyAttempts {
-            timer?.invalidate()
-            timer = nil
-            timerLabel.text = "00:00"
-            unlockSendVerification()
+            endVerificationSession()
         }
 
         if statusCode == 400 && !sendPolicy.hasRemainingVerifyAttempts {
@@ -492,6 +497,7 @@ extension CertificationFormViewController {
               sendPolicy.canSend(at: Date()) else { return }
 
         timer?.invalidate()
+        sendRequestedAt = Date()
 
         [contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach { $0.isHidden = true }
 
@@ -515,9 +521,36 @@ extension CertificationFormViewController {
 
     private func unlockSendVerification() {
         phoneNumberTextField.isUserInteractionEnabled = true
+        updateSendVerificationButtonState()
+    }
+
+    private func updateSendVerificationButtonState() {
         sendVerificationButton.updateState(
-            isEnabled: sendPolicy.canSend(at: Date()) && PhoneNumberInput.isComplete(phoneNumberTextField.text ?? "")
+            isEnabled: !isCheckingPhoneNumber && sendPolicy.canSend(at: Date()) && PhoneNumberInput.isComplete(phoneNumberTextField.text ?? "")
         )
+    }
+
+    private func updateCheckingPhoneNumberState(_ isChecking: Bool) {
+        isCheckingPhoneNumber = isChecking
+        sendVerificationButton.setTitle(isChecking ? nil : sendPolicy.buttonTitle, for: .normal)
+        if isChecking {
+            phoneNumberLoadingIndicator.startAnimating()
+        } else {
+            phoneNumberLoadingIndicator.stopAnimating()
+        }
+        updateSendVerificationButtonState()
+    }
+
+    private func endVerificationSession() {
+        timer?.invalidate()
+        timer = nil
+        timerLabel.text = "00:00"
+        if isVerifyingCode {
+            inputSubject.send(.cancelCheckVerificationCode)
+            updateVerifyingState(false)
+        }
+        unlockSendVerification()
+        updateVerificationInputState()
     }
 
     private func startTimer() {
@@ -533,24 +566,17 @@ extension CertificationFormViewController {
             if !self.verificationTimer.isExpired(at: now, sentAt: sentAt) {
                 self.timerLabel.text = self.verificationTimer.formattedRemainingTime(at: now, sentAt: sentAt)
             } else {
-                self.timer?.invalidate()
-                self.timer = nil
-                self.timerLabel.text = self.verificationTimer.formattedRemainingTime(at: now, sentAt: sentAt)
-                if self.isVerifyingCode {
-                    self.inputSubject.send(.cancelCheckVerificationCode)
-                    self.updateVerifyingState(false)
-                }
+                self.endVerificationSession()
                 self.verificationHelpLabel.isHidden = false
                 self.verificationHelpLabel.setImageText(image: .appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal), text: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.", font: .appFont(.pretendardRegular, size: 12), textColor: .appColor(.new600))
-                self.unlockSendVerification()
-                self.updateVerificationInputState()
             }
         }
     }
     
     private func handleSendVerificationCodeSuccess(response: SendVerificationCodeDto) {
-        sendPolicy.markSent(at: Date())
+        sendPolicy.markSent(at: sendRequestedAt ?? Date())
         sendVerificationButton.setTitle(sendPolicy.buttonTitle, for: .normal)
+        nameTextField.isUserInteractionEnabled = false
         startTimer()
 
         [verificationTextField, timerLabel, verificationButton, phoneNumberReponseLabel].forEach { $0.isHidden = false }
@@ -621,6 +647,7 @@ extension CertificationFormViewController {
         [nameAndGenderLabel, nameTextField, nameHelpLabel, femaleButton, maleButton, phoneNumberLabel, phoneNumberTextField, sendVerificationButton, phoneNumberReponseLabel, goToLoginButton, phoneNotFoundLabel, contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach {
             contentView.addSubview($0)
         }
+        sendVerificationButton.addSubview(phoneNumberLoadingIndicator)
         verificationButton.addSubview(verificationLoadingIndicator)
     }
     
@@ -764,8 +791,10 @@ extension CertificationFormViewController {
             $0.height.equalTo(32)
         }
 
-        verificationLoadingIndicator.snp.makeConstraints {
-            $0.center.equalToSuperview()
+        [phoneNumberLoadingIndicator, verificationLoadingIndicator].forEach {
+            $0.snp.makeConstraints {
+                $0.center.equalToSuperview()
+            }
         }
 
         verificationHelpLabel.snp.makeConstraints {
