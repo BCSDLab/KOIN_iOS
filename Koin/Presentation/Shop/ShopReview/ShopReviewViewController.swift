@@ -387,7 +387,7 @@ extension ShopReviewViewController {
         calculateTextViewHeight()
     }
     
-    @objc private func backButtonTapped(){
+    private func backButtonTapped() {
         if viewModel.isEdit {
             presentExitConfirm()
         } else {
@@ -415,10 +415,9 @@ extension ShopReviewViewController {
     }
     
     private func setNavigationItem() {
-        navigationItem.hidesBackButton = true
-        navigationItem.leftBarButtonItem = UIBarButtonItem(
-            image: UIImage.appImage(asset: .arrowBack), style: .plain, target: self, action: #selector(backButtonTapped)
-        )
+        navigationItem.backAction = UIAction { [weak self] _ in
+            self?.backButtonTapped()
+        }
     }
 }
 
