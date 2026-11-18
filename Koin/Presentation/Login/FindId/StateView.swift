@@ -41,6 +41,18 @@ final class StateView: UIView {
         messageLabel.setImageAttributedText(image: image(for: state), attributedText: attributedMessage)
     }
 
+    func setVerificationSentState(remainingCount: Int, totalCount: Int) {
+        let fullText = VerificationSendPolicy.sentMessage(remainingCount: remainingCount, totalCount: totalCount)
+        let attributedString = NSMutableAttributedString(
+            string: fullText,
+            attributes: [.font: UIFont.appFont(.pretendardRegular, size: 12), .foregroundColor: textColor(for: .success)]
+        )
+        if let countRange = fullText.range(of: "남은 횟수 (\(remainingCount)/\(totalCount))") {
+            attributedString.addAttribute(.foregroundColor, value: UIColor.appColor(.neutral500), range: NSRange(countRange, in: fullText))
+        }
+        setState(state: .success, attributedMessage: attributedString)
+    }
+
     private func image(for state: State) -> UIImage? {
         switch state {
         case .success:

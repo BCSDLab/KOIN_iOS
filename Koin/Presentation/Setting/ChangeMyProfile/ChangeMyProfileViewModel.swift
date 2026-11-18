@@ -46,6 +46,9 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     let nicknameMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let phoneNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let certNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
+    let sendVerificationCodeSuccessPublisher = PassthroughSubject<SendVerificationCodeDto, Never>()
+    let checkVerificationCodeFailurePublisher = PassthroughSubject<(Int?, String), Never>()
+    private var checkVerificationCodeCancellable: AnyCancellable?
     
     init(modifyUseCase: ModifyUseCase, fetchDeptListUseCase: FetchDeptListUseCase, fetchUserDataUseCase: FetchUserDataUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
@@ -86,16 +89,16 @@ extension ChangeMyProfileViewModel {
             if case let .failure(error) = completion {
                 self?.phoneNumberMessagePublisher.send((error.message, false))
             }
-        } receiveValue: { [weak self] _ in
-            self?.phoneNumberMessagePublisher.send(("인증번호가 발송되었습니다.", true))
+        } receiveValue: { [weak self] response in
+            self?.sendVerificationCodeSuccessPublisher.send(response)
         }.store(in: &subscriptions)
     }
     
     func checkVerificationCode(phoneNumber: String, code: String) {
-        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink(
+        checkVerificationCodeCancellable = checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
-                    self?.certNumberMessagePublisher.send((error.message, false))
+                    self?.checkVerificationCodeFailurePublisher.send((error.statusCode, error.message))
                 }
             },
             receiveValue: { [weak self] response in
@@ -103,7 +106,11 @@ extension ChangeMyProfileViewModel {
                 self?.modifyUserData?.phoneNumber = phoneNumber
                 self?.phoneNumberSuccess = true
             }
-        ).store(in: &subscriptions)
+        )
+    }
+
+    func cancelCheckVerificationCode() {
+        checkVerificationCodeCancellable?.cancel()
     }
     
     func checkDuplicatedNickname(nickname: String) {
