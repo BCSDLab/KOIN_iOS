@@ -16,11 +16,7 @@ final class StateView: UIView {
         case dangerous
     }
     
-    private let imageView = UIImageView()
-    
-    private let messageLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-    }
+    private let messageLabel = UILabel()
     
     init() {
         super.init(frame: .zero)
@@ -32,51 +28,55 @@ final class StateView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    
-     func setState(state: State, message: String) {
-         messageLabel.text = message
+    func setState(state: State, message: String) {
+        messageLabel.setImageText(
+            image: image(for: state),
+            text: message,
+            font: UIFont.appFont(.pretendardRegular, size: 12),
+            textColor: textColor(for: state)
+        )
+    }
+
+    func setState(state: State, attributedMessage: NSAttributedString) {
+        messageLabel.setImageAttributedText(image: image(for: state), attributedText: attributedMessage)
+    }
+
+    private func image(for state: State) -> UIImage? {
         switch state {
         case .success:
-            imageView.image = UIImage.appImage(asset: .successCircle)
-            messageLabel.textColor = UIColor.appColor(.success700)
+            return UIImage.appImage(asset: .successCircle)
         case .warning:
-            imageView.image = UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600))
-            messageLabel.textColor = UIColor.appColor(.new600)
+            return UIImage.appImage(asset: .warningOrange)?.withTintColor(.appColor(.new600), renderingMode: .alwaysOriginal)
         case .dangerous:
-            imageView.image = UIImage.appImage(asset: .warningRed)
-            messageLabel.textColor = UIColor.appColor(.danger700)
+            return UIImage.appImage(asset: .warningRed)
+        }
+    }
+
+    private func textColor(for state: State) -> UIColor {
+        switch state {
+        case .success:
+            return UIColor.appColor(.success700)
+        case .warning:
+            return UIColor.appColor(.new600)
+        case .dangerous:
+            return UIColor.appColor(.danger700)
         }
     }
 }
 
 extension StateView {
     private func setupLayouts() {
-        [imageView, messageLabel].forEach {
-            self.addSubview($0)
-        }
+        addSubview(messageLabel)
     }
     
     private func setupConstraints() {
-        imageView.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
-            make.top.equalToSuperview()
-            make.height.equalToSuperview()
-            make.width.equalTo(imageView.snp.height)
+        messageLabel.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
-        messageLabel.snp.makeConstraints { make in
-            make.centerY.equalTo(imageView)
-            make.leading.equalTo(imageView.snp.trailing)
-            make.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
-        }
-    }
-    private func setupComponents() {
-        
     }
     
     private func setupUI() {
         setupLayouts()
         setupConstraints()
-        setupComponents()
     }
 }
