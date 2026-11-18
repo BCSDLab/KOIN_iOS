@@ -39,6 +39,9 @@ final class FindPasswordViewModel {
     
     let sendMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let checkMessagePublisher = PassthroughSubject<(String, Bool), Never>()
+    let sendVerificationCodeSuccessPublisher = PassthroughSubject<SendVerificationCodeDto, Never>()
+    let checkVerificationCodeFailurePublisher = PassthroughSubject<(Int?, String), Never>()
+    private var checkVerificationCodeCancellable: AnyCancellable?
     let changeSuccessPublisher = PassthroughSubject<Void, Never>()
     let toastMessagePublisher = PassthroughSubject<String, Never>()
     let passwordMessagePublisher = PassthroughSubject<(String, Bool), Never>()
@@ -79,21 +82,25 @@ extension FindPasswordViewModel {
             if case let .failure(error) = completion {
                 self?.sendMessagePublisher.send((error.message, false))
             }
-        } receiveValue: { [weak self] _ in
-            self?.sendMessagePublisher.send(("인증번호가 발송되었습니다.", true))
+        } receiveValue: { [weak self] response in
+            self?.sendVerificationCodeSuccessPublisher.send(response)
         }.store(in: &subscriptions)
     }
     
     func checkVerificationCode() {
-        checkVerificationCodeUseCase.execute(phoneNumber: inputData, verificationCode: certNumber).sink(
+        checkVerificationCodeCancellable = checkVerificationCodeUseCase.execute(phoneNumber: inputData, verificationCode: certNumber).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
-                    self?.checkMessagePublisher.send((error.message, false))
+                    self?.checkVerificationCodeFailurePublisher.send((error.statusCode, error.message))
                 }
             }, receiveValue: { [weak self] response in
                 self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
             }
-        ).store(in: &subscriptions)
+        )
+    }
+
+    func cancelCheckVerificationCode() {
+        checkVerificationCodeCancellable?.cancel()
     }
     
     func findPasswordSms() {
