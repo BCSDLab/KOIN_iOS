@@ -123,6 +123,11 @@ final class FindPhoneIdViewController: UIViewController {
         super.viewWillAppear(animated)
         configureNavigationBar(style: .empty)
     }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        view.endEditing(true)
+    }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
