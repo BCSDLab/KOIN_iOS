@@ -40,7 +40,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
     }
     
     enum Output {
-        case showPhoneNumberHttpResult(String, ColorAsset)
+        case showPhoneNumberHttpResult(String, ColorAsset, statusCode: Int?)
         case showIdHttpResult(loginId: String, message: String, color: ColorAsset)
         case showNicknameHttpResult(String, ColorAsset)
         case checkDuplicatedPhoneNumberSuccess
@@ -122,7 +122,7 @@ extension RegisterFormViewModel {
     private func checkDuplicatedPhoneNumber(phone: String) {
         checkDuplicatedPhoneNumberCancellable = checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showPhoneNumberHttpResult(error.message, .new600))
+                self?.outputSubject.send(.showPhoneNumberHttpResult(error.message, .new600, statusCode: error.statusCode))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.checkDuplicatedPhoneNumberSuccess)

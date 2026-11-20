@@ -112,7 +112,7 @@ final class OutputRecorder {
     }
 
     var phoneNumberHttpResultMessages: [String] {
-        outputs.compactMap { if case let .showPhoneNumberHttpResult(message, _) = $0 { return message } else { return nil } }
+        outputs.compactMap { if case let .showPhoneNumberHttpResult(message, _, _) = $0 { return message } else { return nil } }
     }
 
     var checkVerificationCodeFailureColors: [ColorAsset] {

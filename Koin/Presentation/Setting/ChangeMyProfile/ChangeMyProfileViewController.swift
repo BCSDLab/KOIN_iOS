@@ -300,11 +300,13 @@ final class ChangeMyProfileViewController: UIViewController {
             unlockSendVerification()
         }.store(in: &subscriptions)
 
-        viewModel.checkDuplicatedPhoneNumberFailurePublisher.receive(on: DispatchQueue.main).sink { [weak self] message in
+        viewModel.checkDuplicatedPhoneNumberFailurePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
             guard let self = self else { return }
-            rejectedPhoneNumber = phoneTextField.text
+            if CertificationError.rejectsPhoneNumber(statusCode: response.0) {
+                rejectedPhoneNumber = phoneTextField.text
+            }
             phoneStateView.isHidden = false
-            phoneStateView.setState(state: .warning, message: message)
+            phoneStateView.setState(state: .warning, message: response.1)
             unlockSendVerification()
         }.store(in: &subscriptions)
 

@@ -23,6 +23,7 @@ final class CertificationFormViewController: UIViewController {
     private var isVerifyingCode = false
     private var isCheckingPhoneNumber = false
     private var sendRequestedAt: Date?
+    private var rejectedPhoneNumber: String?
 
     // MARK: - UI Components
     
@@ -256,11 +257,13 @@ final class CertificationFormViewController: UIViewController {
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
             guard self != nil else { return }
             switch output {
-            case let .showPhoneNumberHttpResult(message, labelColor):
+            case let .showPhoneNumberHttpResult(message, labelColor, statusCode):
                 guard let self, self.isCheckingPhoneNumber else { return }
+                if CertificationError.rejectsPhoneNumber(statusCode: statusCode) {
+                    self.rejectedPhoneNumber = self.phoneNumberTextField.text
+                }
                 self.updateCheckingPhoneNumberState(false)
                 self.phoneNumberTextField.isUserInteractionEnabled = true
-                self.sendVerificationButton.updateState(isEnabled: false)
                 self.showHttpResult(message, labelColor)
             case .checkDuplicatedPhoneNumberSuccess:
                 guard let self, self.isCheckingPhoneNumber else { return }
@@ -528,7 +531,10 @@ extension CertificationFormViewController {
 
     private func updateSendVerificationButtonState() {
         sendVerificationButton.updateState(
-            isEnabled: !isCheckingPhoneNumber && sendPolicy.canSend(at: Date()) && PhoneNumberInput.isComplete(phoneNumberTextField.text ?? "")
+            isEnabled: !isCheckingPhoneNumber
+                && phoneNumberTextField.text != rejectedPhoneNumber
+                && sendPolicy.canSend(at: Date())
+                && PhoneNumberInput.isComplete(phoneNumberTextField.text ?? "")
         )
     }
 
