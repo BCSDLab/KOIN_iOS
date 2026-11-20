@@ -906,6 +906,7 @@
 		AA20000000000000000024 /* RegisterFormViewModelStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000024 /* RegisterFormViewModelStubs.swift */; };
 		AA20000000000000000030 /* CertificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000030 /* CertificationInput.swift */; };
 		AA20000000000000000031 /* VerificationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000031 /* VerificationSession.swift */; };
+		AA200000000000000000F1 /* VerificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F1 /* VerificationInput.swift */; };
 		AA20000000000000000032 /* CertificationInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000032 /* CertificationInputTests.swift */; };
 		AA20000000000000000033 /* VerificationSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000033 /* VerificationSessionTests.swift */; };
 		AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */; };
@@ -2162,6 +2163,7 @@
 		AA10000000000000000024 /* RegisterFormViewModelStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelStubs.swift; sourceTree = "<group>"; };
 		AA10000000000000000030 /* CertificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInput.swift; sourceTree = "<group>"; };
 		AA10000000000000000031 /* VerificationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSession.swift; sourceTree = "<group>"; };
+		AA100000000000000000F1 /* VerificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationInput.swift; sourceTree = "<group>"; };
 		AA10000000000000000032 /* CertificationInputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInputTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000033 /* VerificationSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSessionTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelCertificationTests.swift; sourceTree = "<group>"; };
@@ -6261,6 +6263,8 @@
 			isa = PBXGroup;
 			children = (
 				D224216D2C8A3E2D00E8B480 /* PolicyModel.swift */,
+				AA10000000000000000031 /* VerificationSession.swift */,
+				AA100000000000000000F1 /* VerificationInput.swift */,
 			);
 			path = User;
 			sourceTree = "<group>";
@@ -6699,7 +6703,6 @@
 				D29F21E42C4F4C3700994554 /* AgreementText.swift */,
 				E1A70C002D9A4F1100AGSEL0 /* AgreementSelection.swift */,
 				AA10000000000000000030 /* CertificationInput.swift */,
-				AA10000000000000000031 /* VerificationSession.swift */,
 				AA10000000000000000037 /* RegisterInfoInput.swift */,
 				AA10000000000000000041 /* EnterFormState.swift */,
 			);
@@ -7281,6 +7284,7 @@
 				E1A70C012D9A4F1100AGSEL1 /* AgreementSelection.swift in Sources */,
 				AA20000000000000000030 /* CertificationInput.swift in Sources */,
 				AA20000000000000000031 /* VerificationSession.swift in Sources */,
+				AA200000000000000000F1 /* VerificationInput.swift in Sources */,
 				AA20000000000000000037 /* RegisterInfoInput.swift in Sources */,
 				AA20000000000000000041 /* EnterFormState.swift in Sources */,
 				7CA63A302F1B13F100226F86 /* LostItemStats.swift in Sources */,
