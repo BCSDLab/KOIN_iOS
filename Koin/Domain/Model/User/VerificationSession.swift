@@ -116,4 +116,9 @@ enum CertificationError: Equatable {
     var blocksResend: Bool {
         return self == .dailySendLimitExceeded
     }
+
+    static func rejectsPhoneNumber(statusCode: Int?) -> Bool {
+        guard let statusCode else { return false }
+        return (400..<500).contains(statusCode)
+    }
 }

@@ -48,7 +48,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     let phoneNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let certNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let sendVerificationCodeSuccessPublisher = PassthroughSubject<SendVerificationCodeDto, Never>()
-    let checkDuplicatedPhoneNumberFailurePublisher = PassthroughSubject<String, Never>()
+    let checkDuplicatedPhoneNumberFailurePublisher = PassthroughSubject<(Int?, String), Never>()
     let checkVerificationCodeFailurePublisher = PassthroughSubject<(Int?, String), Never>()
     private var checkVerificationCodeCancellable: AnyCancellable?
     
@@ -89,7 +89,7 @@ extension ChangeMyProfileViewModel {
     func checkDuplicatedPhoneNumberAndSendVerificationCode(phoneNumber: String) {
         checkDuplicatedPhoneNumberUseCase.execute(phone: phoneNumber).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.checkDuplicatedPhoneNumberFailurePublisher.send(error.message)
+                self?.checkDuplicatedPhoneNumberFailurePublisher.send((error.statusCode, error.message))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.sendVerificationCode(phoneNumber: phoneNumber)
