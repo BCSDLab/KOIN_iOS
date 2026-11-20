@@ -116,6 +116,7 @@ final class FindPhoneIdViewController: UIViewController {
         certNumberButton.addTarget(self, action: #selector(certNumberButtonTapped), for: .touchUpInside)
         changeButton.addTarget(self, action: #selector(changeButtonTapped), for: .touchUpInside)
         saveButton.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        updateVerificationInputState()
     }
     
     override func viewWillAppear(_ animated: Bool) {
