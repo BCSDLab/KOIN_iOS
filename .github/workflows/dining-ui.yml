@@ -102,6 +102,16 @@ jobs:
               termination = data.get("termination", {})
               print(report.name, exception.get("type"), exception.get("signal"),
                     termination.get("namespace"), termination.get("code"))
+              threads = data.get("threads", [])
+              thread = next((t for t in threads if t.get("triggered")), None)
+              index = data.get("faultingThread")
+              if thread is None and isinstance(index, int) and 0 <= index < len(threads):
+                  thread = threads[index]
+              images = data.get("usedImages", [])
+              for frame in (thread or {}).get("frames", [])[:20]:
+                  index = frame.get("imageIndex")
+                  image = images[index] if isinstance(index, int) and 0 <= index < len(images) else {}
+                  print(image.get("name"), frame.get("symbol"), frame.get("imageOffset"))
           PY
 
       - name: Upload dining UI evidence
