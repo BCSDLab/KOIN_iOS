@@ -7,7 +7,7 @@ on:
       - '.github/workflows/dining-ui.yml'
       - '.maestro/dining.yaml'
       - 'Koin/Presentation/Dining/**'
-      - 'Koin/Presentation/Home/SubViews/DiningView/**'
+      - 'Koin/Presentation/Home/Home/SubViews/DiningView/**'
 
 permissions:
   contents: read
