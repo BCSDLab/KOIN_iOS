@@ -37,6 +37,11 @@ jobs:
           printf '%s' "$DEBUG_XCCONFIG" | base64 --decode > Koin/Core/Configuration/Debug.xcconfig
           printf '%s' "$GOOGLE_SERVICE_STAGE_PLIST" | base64 --decode > GoogleService-Info-Stage.plist
 
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: SourcePackages
+          key: spm-${{ hashFiles('koin.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+
       - name: Build and install Stage on iPhone Simulator
         run: |
           sudo xcode-select -s /Applications/Xcode_26.4.1.app
@@ -44,12 +49,16 @@ jobs:
           xcrun simctl bootstatus "$device" -b
           xcodebuild build -project koin.xcodeproj -scheme koin-stage \
             -configuration Debug -destination "platform=iOS Simulator,id=$device" \
-            -derivedDataPath build/dining-ui CODE_SIGNING_ALLOWED=NO
+            -derivedDataPath build/dining-ui -clonedSourcePackagesDirPath SourcePackages \
+            CODE_SIGNING_ALLOWED=NO
           for app in build/dining-ui/Build/Products/Debug-iphonesimulator/*.app; do
             bundle=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$app/Info.plist")
             if [[ "$bundle" == com.bcsdlab.koin.stage ]]; then
+              plutil -lint "$app/GoogleService-Info.plist"
+              executable=$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Info.plist")
               xcrun simctl install "$device" "$app"
               printf 'DINING_DEVICE=%s\n' "$device" >> "$GITHUB_ENV"
+              printf 'DINING_EXECUTABLE=%s\n' "$executable" >> "$GITHUB_ENV"
               exit 0
             fi
           done
@@ -66,6 +75,34 @@ jobs:
           cd build/dining-ui/evidence
           "$HOME/.maestro/bin/maestro" --device "$DINING_DEVICE" test ../../../.maestro/dining.yaml \
             --format junit --output junit.xml --test-output-dir .
+
+      - name: Diagnose Stage launch after a UI failure
+        if: ${{ failure() && env.DINING_DEVICE != '' }}
+        run: |
+          mkdir -p build/dining-ui/evidence
+          out=build/dining-ui/evidence
+          xcrun simctl terminate "$DINING_DEVICE" com.bcsdlab.koin.stage || true
+          xcrun simctl launch "$DINING_DEVICE" com.bcsdlab.koin.stage > "$out/launch.txt" 2>&1 || true
+          sleep 8
+          xcrun simctl io "$DINING_DEVICE" screenshot "$out/standalone-launch.png" || true
+          python3 - <<'PY' | tee "$out/crash-summary.txt"
+          import json
+          import os
+          from pathlib import Path
+
+          executable = os.environ["DINING_EXECUTABLE"]
+          report_dir = Path.home() / "Library/Logs/DiagnosticReports"
+          for report in sorted(report_dir.glob(f"{executable}-*.ips")):
+              try:
+                  _, body = report.read_text().split("\n", 1)
+                  data = json.loads(body)
+              except (OSError, ValueError):
+                  continue
+              exception = data.get("exception", {})
+              termination = data.get("termination", {})
+              print(report.name, exception.get("type"), exception.get("signal"),
+                    termination.get("namespace"), termination.get("code"))
+          PY
 
       - name: Upload dining UI evidence
         if: always()
