@@ -176,6 +176,10 @@ final class FindPasswordCertViewController: UIViewController {
             }
         }.store(in: &subscriptions)
         
+        viewModel.idMatchFailurePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            self?.handleIdMatchFailure(statusCode: response.0, message: response.1)
+        }.store(in: &subscriptions)
+
         viewModel.sendVerificationCodeSuccessPublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
             self?.handleSendVerificationCodeSuccess(response: response)
         }.store(in: &subscriptions)
@@ -280,7 +284,7 @@ extension FindPasswordCertViewController {
     }
 
     private func updateSendButtonState() {
-        let canSend = isInputComplete && sendPolicy.canSend(at: Date())
+        let canSend = !(idtextField.text ?? "").isEmpty && isInputComplete && sendPolicy.canSend(at: Date())
         sendButton.setState(state: canSend ? .usable : .unusable)
     }
 
@@ -289,7 +293,15 @@ extension FindPasswordCertViewController {
         return certType == .phone ? PhoneNumberInput.isComplete(text) : EmailInput.isValid(text)
     }
 
+    private func handleIdMatchFailure(statusCode: Int?, message: String) {
+        let stateView = statusCode == 404 ? idStateView : phoneStateView
+        stateView.isHidden = false
+        stateView.setState(state: .warning, message: message)
+        unlockSendVerification()
+    }
+
     private func unlockSendVerification() {
+        idtextField.isUserInteractionEnabled = true
         phoneTextField.isUserInteractionEnabled = true
         updateSendButtonState()
     }
@@ -332,17 +344,19 @@ extension FindPasswordCertViewController {
         [helpLabel, changeButton].forEach {
             $0.isHidden = true
         }
-        guard isInputComplete, sendPolicy.canSend(at: Date()) else { return }
+        guard !(idtextField.text ?? "").isEmpty, isInputComplete, sendPolicy.canSend(at: Date()) else { return }
 
         timer?.cancel()
         sendRequestedAt = Date()
-        phoneTextField.resignFirstResponder()
+        view.endEditing(true)
+        idtextField.isUserInteractionEnabled = false
         phoneTextField.isUserInteractionEnabled = false
         sendButton.setState(state: .unusable)
+        [idStateView, phoneStateView].forEach { $0.isHidden = true }
 
         switch certType {
-        case .phone: viewModel.sendVerificationCode()
-        case .email: viewModel.sendVerificationEmail()
+        case .phone: viewModel.matchIdAndSendVerificationCode()
+        case .email: viewModel.matchIdAndSendVerificationEmail()
         }
     }
     @objc private func saveButtonTapped() {
@@ -377,6 +391,7 @@ extension FindPasswordCertViewController {
         } else if textField == idtextField {
             viewModel.id = textField.text ?? ""
             updateSaveButtonState()
+            updateSendButtonState()
         }
     }
 }

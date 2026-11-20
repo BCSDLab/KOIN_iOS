@@ -17,6 +17,8 @@ final class FindPasswordViewModel {
     private lazy var findPasswordEmailUseCase = DefaultResetPasswordEmailUseCase(userRepository: userRepository)
     private lazy var findPasswordSmsUseCase = DefaultResetPasswordSmsUseCase(userRepository: userRepository)
     private lazy var sendVerificationCodeUseCase = DefaultSendVerificationCodeUseCase(userRepository: userRepository)
+    private lazy var matchIdPhoneUseCase = DefaultMatchIdPhoneUseCase(userRepository: userRepository)
+    private lazy var matchIdEmailUseCase = DefaultMatchIdEmailUseCase(userRepository: userRepository)
     private lazy var checkVerificationCodeUseCase = DefaultCheckVerificationCodeUsecase(userRepository: userRepository)
     private lazy var sendVerificationEmailUseCase = DefaultSendVerificationEmailUseCase(userRepository: userRepository)
     private lazy var checkVerificationEmailUseCase = DefaultCheckVerificationEmailUseCase(userRepository: userRepository)
@@ -41,6 +43,7 @@ final class FindPasswordViewModel {
     let checkMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let sendVerificationCodeSuccessPublisher = PassthroughSubject<SendVerificationCodeDto, Never>()
     let checkVerificationCodeFailurePublisher = PassthroughSubject<(Int?, String), Never>()
+    let idMatchFailurePublisher = PassthroughSubject<(Int?, String), Never>()
     private var checkVerificationCodeCancellable: AnyCancellable?
     let changeSuccessPublisher = PassthroughSubject<Void, Never>()
     let toastMessagePublisher = PassthroughSubject<String, Never>()
@@ -77,6 +80,26 @@ extension FindPasswordViewModel {
         }
         updatePasswordValidationState()
     }
+    func matchIdAndSendVerificationCode() {
+        matchIdPhoneUseCase.execute(requestModel: .init(loginId: id, phoneNumber: inputData)).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.idMatchFailurePublisher.send((error.statusCode, error.message))
+            }
+        } receiveValue: { [weak self] (_: Void) in
+            self?.sendVerificationCode()
+        }.store(in: &subscriptions)
+    }
+
+    func matchIdAndSendVerificationEmail() {
+        matchIdEmailUseCase.execute(requestModel: .init(loginId: id, email: inputData)).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.idMatchFailurePublisher.send((error.statusCode, error.message))
+            }
+        } receiveValue: { [weak self] (_: Void) in
+            self?.sendVerificationEmail()
+        }.store(in: &subscriptions)
+    }
+
     func sendVerificationCode() {
         sendVerificationCodeUseCase.execute(request: .init(phoneNumber: inputData)).sink { [weak self] completion in
             if case let .failure(error) = completion {
