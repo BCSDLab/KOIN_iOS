@@ -259,12 +259,14 @@ final class CertificationFormViewController: UIViewController {
             case let .showPhoneNumberHttpResult(message, labelColor):
                 guard let self, self.isCheckingPhoneNumber else { return }
                 self.updateCheckingPhoneNumberState(false)
+                self.phoneNumberTextField.isUserInteractionEnabled = true
                 self.sendVerificationButton.updateState(isEnabled: false)
                 self.showHttpResult(message, labelColor)
             case .changeSendVerificationButtonStatus:
                 guard let self, self.isCheckingPhoneNumber else { return }
                 self.updateCheckingPhoneNumberState(false)
                 self.phoneNumberReponseLabel.isHidden = true
+                self.requestVerificationCode()
             case let .sendVerificationCodeSuccess(response):
                 self?.handleSendVerificationCodeSuccess(response: response)
             case let .sendVerificationCodeFailure(message, labelColor):
@@ -395,8 +397,7 @@ extension CertificationFormViewController {
             phoneNumberReponseLabel.isHidden = true
         }
 
-        updateCheckingPhoneNumberState(true)
-        inputSubject.send(.checkDuplicatedPhoneNumber(textField.text ?? ""))
+        updateSendVerificationButtonState()
     }
     
     @objc private func verificationTextFieldDidChange(_ textField: UITextField) {
@@ -485,22 +486,32 @@ extension CertificationFormViewController {
     @objc private func sendVerificationButtonTapped() {
         guard let phoneNumber = phoneNumberTextField.text,
               PhoneNumberInput.isComplete(phoneNumber),
-              sendPolicy.canSend(at: Date()) else { return }
+              sendPolicy.canSend(at: Date()),
+              !isCheckingPhoneNumber else { return }
+
+        phoneNumberTextField.resignFirstResponder()
+        phoneNumberTextField.isUserInteractionEnabled = false
+        [goToLoginButton, phoneNotFoundLabel, contactButton, phoneNumberReponseLabel].forEach { $0.isHidden = true }
+        updateCheckingPhoneNumberState(true)
+
+        inputSubject.send(.checkDuplicatedPhoneNumber(phoneNumber))
+        inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.identityVerificationSignUpSendCodeClick, "인증번호 발송"))
+    }
+
+    private func requestVerificationCode() {
+        guard let phoneNumber = phoneNumberTextField.text else { return }
 
         timer?.invalidate()
         sendRequestedAt = Date()
 
         [contactButton, verificationTextField, timerLabel, verificationButton, verificationHelpLabel].forEach { $0.isHidden = true }
 
-        phoneNumberTextField.resignFirstResponder()
-        phoneNumberTextField.isUserInteractionEnabled = false
         sendVerificationButton.updateState(isEnabled: false)
         verificationHelpLabel.text = "인증번호 발송이 안 되시나요?"
         verificationHelpLabel.font = UIFont.appFont(.pretendardRegular, size: 12)
         verificationHelpLabel.textColor = UIColor.appColor(.neutral500)
         
         inputSubject.send(.sendVerificationCode(phoneNumber))
-        inputSubject.send(.logSignUpEvent(EventParameter.EventLabel.Account.identityVerificationSignUpSendCodeClick, "인증번호 발송"))
     }
     
     private func lockCertificationInputs() {
