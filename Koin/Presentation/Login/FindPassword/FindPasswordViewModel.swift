@@ -124,15 +124,15 @@ extension FindPasswordViewModel {
     }
     
     func checkVerificationEmail() {
-        checkVerificationEmailUseCase.execute(requestModel: .init(email: inputData, verificationCode: certNumber)).sink(
+        checkVerificationCodeCancellable = checkVerificationEmailUseCase.execute(requestModel: .init(email: inputData, verificationCode: certNumber)).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
-                    self?.checkMessagePublisher.send((error.message, false))
+                    self?.checkVerificationCodeFailurePublisher.send((error.statusCode, error.message))
                 }
             }, receiveValue: { [weak self] response in
                 self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
             }
-        ).store(in: &subscriptions)
+        )
     }
     
     func findPasswordEmail() {
