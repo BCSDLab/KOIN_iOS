@@ -1,0 +1,76 @@
+name: iOS Dining UI
+
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - '.github/workflows/dining-ui.yml'
+      - '.maestro/dining.yaml'
+      - 'Koin/Presentation/Dining/**'
+      - 'Koin/Presentation/Home/SubViews/DiningView/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dining-ui-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  dining:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Prepare Stage configuration
+        env:
+          DEBUG_XCCONFIG: ${{ secrets.DEBUG_XCCONFIG }}
+          GOOGLE_SERVICE_STAGE_PLIST: ${{ secrets.GOOGLE_SERVICE_STAGE_PLIST }}
+        run: |
+          test -n "$DEBUG_XCCONFIG"
+          test -n "$GOOGLE_SERVICE_STAGE_PLIST"
+          mkdir -p Koin/Core/Configuration
+          printf '%s' "$DEBUG_XCCONFIG" | base64 --decode > Koin/Core/Configuration/Debug.xcconfig
+          printf '%s' "$GOOGLE_SERVICE_STAGE_PLIST" | base64 --decode > GoogleService-Info-Stage.plist
+
+      - name: Build and install Stage on iPhone Simulator
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.4.1.app
+          device=$(xcrun simctl list devices available -j | jq -er '[.devices | to_entries | sort_by(.key) | reverse | .[].value[] | select(.name == "iPhone 17 Pro") | .udid][0]')
+          xcrun simctl bootstatus "$device" -b
+          xcodebuild build -project koin.xcodeproj -scheme koin-stage \
+            -configuration Debug -destination "platform=iOS Simulator,id=$device" \
+            -derivedDataPath build/dining-ui CODE_SIGNING_ALLOWED=NO
+          for app in build/dining-ui/Build/Products/Debug-iphonesimulator/*.app; do
+            bundle=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$app/Info.plist")
+            if [[ "$bundle" == com.bcsdlab.koin.stage ]]; then
+              xcrun simctl install "$device" "$app"
+              printf 'DINING_DEVICE=%s\n' "$device" >> "$GITHUB_ENV"
+              exit 0
+            fi
+          done
+          echo 'Stage simulator app not found' >&2
+          exit 1
+
+      - name: Verify guest dining entry and meal change
+        env:
+          MAESTRO_VERSION: '2.2.0'
+        run: |
+          export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+          curl -fsSL https://get.maestro.mobile.dev | bash
+          mkdir -p build/dining-ui/evidence
+          cd build/dining-ui/evidence
+          "$HOME/.maestro/bin/maestro" --device "$DINING_DEVICE" test ../../../.maestro/dining.yaml \
+            --format junit --output junit.xml --test-output-dir .
+
+      - name: Upload dining UI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-dining-ui
+          path: build/dining-ui/evidence/
+          retention-days: 7

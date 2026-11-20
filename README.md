@@ -165,6 +165,12 @@ Koin
 └── Frameworks                      # 외부 프레임워크
 ```
 
+### 식단 UI 검증
+
+같은 저장소의 식단 관련 PR에서는 `iOS Dining UI`가 iPhone 17 Pro 시뮬레이터에서 Stage 앱을 검증합니다.
+비로그인 상태로 식단에 진입해 아침에서 저녁으로 전환한 뒤, 저녁 목록이 나타나고 이전 목록이 사라지는지 확인합니다.
+스크린샷과 JUnit 결과는 Actions의 `ios-dining-ui` 산출물에서 확인할 수 있습니다.
+
 ---
 
 ### 🧑‍🧑‍🧒‍🧒 Team Members
