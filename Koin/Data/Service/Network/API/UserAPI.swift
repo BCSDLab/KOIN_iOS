@@ -31,6 +31,8 @@ enum UserAPI {
     case sendVerificationEmail(SendVerificationEmailRequest)
     case checkVerificationEmail(CheckVerificationEmailRequest)
     case findIdSms(FindIdSmsRequest)
+    case matchIdPhone(MatchIdPhoneRequest)
+    case matchIdEmail(MatchIdEmailRequest)
     case findIdEmail(FindIdEmailRequest)
     case resetPasswordSms(ResetPasswordSmsRequest)
     case resetPasswordEmail(ResetPasswordEmailRequest)
@@ -69,6 +71,8 @@ extension UserAPI: Router, URLRequestConvertible {
         case .studentRegisterForm: return "/v2/users/students/register"
         case .generalRegisterForm: return "/v2/users/register"
         case .findIdSms: return "/users/id/find/sms"
+        case .matchIdPhone: return "/users/id/match/phone"
+        case .matchIdEmail: return "/users/id/match/email"
         case .findIdEmail: return "/users/id/find/email"
         case .resetPasswordSms: return "/users/password/reset/sms"
         case .resetPasswordEmail: return "/users/password/reset/email"
@@ -80,7 +84,7 @@ extension UserAPI: Router, URLRequestConvertible {
     
     public var method: Alamofire.HTTPMethod {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdSms, .findIdEmail, .resetPasswordSms, .resetPasswordEmail: return .post
+        case .findPassword, .register, .login, .checkPassword, .refreshToken, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdSms, .findIdEmail, .matchIdPhone, .matchIdEmail, .resetPasswordSms, .resetPasswordEmail: return .post
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchStudentUserData, .checkAuth, .checkLogin, .checkDuplicatedId, .fetchGeneralUserData: return .get
         case .modifyStudentUserData, .modifyGeneralUserData, .changePassword, .modifyStudentAcademicInfo: return .put
         case .fetchStudentAcademicInfo: return .get
@@ -92,7 +96,7 @@ extension UserAPI: Router, URLRequestConvertible {
         var baseHeaders: [String: String] = [:]
         
         switch self {
-        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modifyStudentUserData, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdEmail, .findIdSms, .modifyGeneralUserData, .resetPasswordSms, .resetPasswordEmail, .changePassword, .modifyStudentAcademicInfo:
+        case .findPassword, .register, .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .login, .checkPassword, .modifyStudentUserData, .refreshToken, .sendVerificationCode, .checkVerificationCode, .checkDuplicatedId, .studentRegisterForm, .generalRegisterForm, .sendVerificationEmail, .checkVerificationEmail, .findIdEmail, .findIdSms, .matchIdPhone, .matchIdEmail, .modifyGeneralUserData, .resetPasswordSms, .resetPasswordEmail, .changePassword, .modifyStudentAcademicInfo:
             baseHeaders["Content-Type"] = "application/json"
         case .fetchStudentUserData, .revoke, .checkAuth, .checkLogin, .fetchGeneralUserData, .fetchStudentAcademicInfo:
             break
@@ -146,6 +150,10 @@ extension UserAPI: Router, URLRequestConvertible {
             return try? JSONEncoder().encode(request)
         case .findIdSms(let request):
             return try? JSONEncoder().encode(request)
+        case .matchIdPhone(let request):
+            return try? JSONEncoder().encode(request)
+        case .matchIdEmail(let request):
+            return try? JSONEncoder().encode(request)
         case .findIdEmail(let request):
             return try? JSONEncoder().encode(request)
         case .resetPasswordSms(let request):
@@ -163,7 +171,7 @@ extension UserAPI: Router, URLRequestConvertible {
     
     public var encoding: Alamofire.ParameterEncoding? {
         switch self {
-        case .findPassword, .register, .login, .checkPassword, .modifyStudentUserData, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .checkVerificationEmail, .sendVerificationEmail, .findIdSms, .findIdEmail, .modifyGeneralUserData, .resetPasswordSms, .resetPasswordEmail, .changePassword, .modifyStudentAcademicInfo: return JSONEncoding.default
+        case .findPassword, .register, .login, .checkPassword, .modifyStudentUserData, .sendVerificationCode, .checkVerificationCode, .studentRegisterForm, .generalRegisterForm, .checkVerificationEmail, .sendVerificationEmail, .findIdSms, .findIdEmail, .matchIdPhone, .matchIdEmail, .modifyGeneralUserData, .resetPasswordSms, .resetPasswordEmail, .changePassword, .modifyStudentAcademicInfo: return JSONEncoding.default
         case .checkDuplicatedPhoneNumber, .checkDuplicatedNickname, .fetchStudentUserData, .checkAuth, .checkDuplicatedId, .fetchGeneralUserData: return URLEncoding.default
         case .checkLogin: return URLEncoding.queryString
         case .revoke, .refreshToken, .fetchStudentAcademicInfo: return nil

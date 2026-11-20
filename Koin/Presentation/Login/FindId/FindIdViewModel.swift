@@ -23,6 +23,10 @@ final class FindIdViewModel {
     
     let sendMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let checkMessagePublisher = PassthroughSubject<(String, Bool), Never>()
+    let sendVerificationCodeSuccessPublisher = PassthroughSubject<SendVerificationCodeDto, Never>()
+    let checkVerificationCodeFailurePublisher = PassthroughSubject<(Int?, String), Never>()
+    let verificationCodeAcceptedPublisher = PassthroughSubject<Void, Never>()
+    private var checkVerificationCodeCancellable: AnyCancellable?
 }
 
 extension FindIdViewModel {
@@ -31,32 +35,37 @@ extension FindIdViewModel {
             if case let .failure(error) = completion {
                 self?.sendMessagePublisher.send((error.message, false))
             }
-        } receiveValue: { [weak self] _ in
-            self?.sendMessagePublisher.send(("인증번호가 발송되었습니다.", true))
+        } receiveValue: { [weak self] response in
+            self?.sendVerificationCodeSuccessPublisher.send(response)
         }.store(in: &subscriptions)
     }
     
     func checkVerificationCode(phoneNumber: String, code: String) {
-        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink(
+        checkVerificationCodeCancellable = checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
-                    self?.checkMessagePublisher.send((error.message, false))
+                    self?.checkVerificationCodeFailurePublisher.send((error.statusCode, error.message))
                 }
             },
             receiveValue: { [weak self] response in
+                self?.verificationCodeAcceptedPublisher.send(())
                 self?.findIdSms(phoneNumber: phoneNumber)
             }
-        ).store(in: &subscriptions)
+        )
+    }
+
+    func cancelCheckVerificationCode() {
+        checkVerificationCodeCancellable?.cancel()
     }
     
     func findIdSms(phoneNumber: String) {
-        findIdSmsUseCase.execute(requestModel: .init(phoneNumber: phoneNumber)).sink { [weak self] completion in
+        checkVerificationCodeCancellable = findIdSmsUseCase.execute(requestModel: .init(phoneNumber: phoneNumber)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.checkMessagePublisher.send((error.message, false))            }
         } receiveValue: { [weak self] response in
             self?.loginId = response.loginID
             self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
-        }.store(in: &subscriptions)
+        }
     }
     
     func sendVerificationEmail(email: String) {
@@ -70,20 +79,21 @@ extension FindIdViewModel {
     }
     
     func checkVerificationEmail(email: String, code: String) {
-        checkVerificationEmailUseCase.execute(requestModel: .init(email: email, verificationCode: code)).sink(
+        checkVerificationCodeCancellable = checkVerificationEmailUseCase.execute(requestModel: .init(email: email, verificationCode: code)).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
-                    self?.checkMessagePublisher.send((error.message, false))
+                    self?.checkVerificationCodeFailurePublisher.send((error.statusCode, error.message))
                 }
             },
             receiveValue: { [weak self] response in
+                self?.verificationCodeAcceptedPublisher.send(())
                 self?.findIdEmail(email: email)
             }
-        ).store(in: &subscriptions)
+        )
     }
     
     func findIdEmail(email: String) {
-        findIdEmailUseCase.execute(requestModel: .init(email: email)).sink(
+        checkVerificationCodeCancellable = findIdEmailUseCase.execute(requestModel: .init(email: email)).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     self?.checkMessagePublisher.send((error.message, false))
@@ -93,6 +103,6 @@ extension FindIdViewModel {
                 self?.loginId = response.loginID
                 self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
             }
-        ).store(in: &subscriptions)
+        )
     }
 }

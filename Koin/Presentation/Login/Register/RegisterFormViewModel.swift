@@ -43,7 +43,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case showPhoneNumberHttpResult(String, ColorAsset)
         case showIdHttpResult(loginId: String, message: String, color: ColorAsset)
         case showNicknameHttpResult(String, ColorAsset)
-        case changeSendVerificationButtonStatus
+        case checkDuplicatedPhoneNumberSuccess
         case sendVerificationCodeSuccess(response: SendVerificationCodeDto)
         case sendVerificationCodeFailure(String, ColorAsset)
         case checkVerificationCodeFailure(statusCode: Int?, message: String, color: ColorAsset)
@@ -125,7 +125,7 @@ extension RegisterFormViewModel {
                 self?.outputSubject.send(.showPhoneNumberHttpResult(error.message, .new600))
             }
         } receiveValue: { [weak self] (_: Void) in
-            self?.outputSubject.send(.changeSendVerificationButtonStatus)
+            self?.outputSubject.send(.checkDuplicatedPhoneNumberSuccess)
         }
     }
     
