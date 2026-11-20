@@ -19,7 +19,6 @@ final class FindPhoneIdViewController: UIViewController {
     private let certType: CertType
     private var subscriptions: Set<AnyCancellable> = []
     @Published private var remainCount = 5
-    @Published private var remainTime = 300
     private var timer: AnyCancellable?
     private let verificationTimer = VerificationTimer()
     private var sendPolicy = VerificationSendPolicy()
@@ -137,33 +136,13 @@ final class FindPhoneIdViewController: UIViewController {
     // MARK: - Bind
     
     private func bind() {
-        $remainTime
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] seconds in
-                print(seconds)
-                guard let self = self else { return }
-                let minutes = seconds / 60
-                let remainingSeconds = seconds % 60
-                remainTimeLabel.text = String(format: "%02d:%02d", minutes, remainingSeconds)
-                remainTimeLabel.isHidden = seconds == 0 || seconds == 300
-                if seconds == 0 {
-                    certNumberStateView.setState(state: .warning, message: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.")
-                    certNumberStateView.isHidden = false
-                }
-            }.store(in: &subscriptions)
-        
         viewModel.sendMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
             guard let self else { return }
-            if certType == .phone {
-                handleSendVerificationCodeFailure(message: response.0)
-                return
-            }
-            phoneStateView.setState(state: response.1 ? .success : .warning , message: response.0)
-            phoneStateView.isHidden = false
             if response.1 {
-                startTimer()
+                handleSendVerificationEmailSuccess(message: response.0)
+            } else {
+                handleSendVerificationCodeFailure(message: response.0)
             }
-            certNumberStateView.isHidden = true
         }.store(in: &subscriptions)
 
         viewModel.sendVerificationCodeSuccessPublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
@@ -176,14 +155,11 @@ final class FindPhoneIdViewController: UIViewController {
         }.store(in: &subscriptions)
         
         viewModel.checkMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
-            guard let self else { return }
-            if certType == .phone {
-                guard isVerifyingCode else { return }
-                updateVerifyingState(false)
-                if response.1 {
-                    view.endEditing(true)
-                    certNumberTextField.isUserInteractionEnabled = false
-                }
+            guard let self, isVerifyingCode else { return }
+            updateVerifyingState(false)
+            if response.1 {
+                view.endEditing(true)
+                certNumberTextField.isUserInteractionEnabled = false
             }
             certNumberStateView.isHidden = false
             if !response.1 {
@@ -201,21 +177,6 @@ final class FindPhoneIdViewController: UIViewController {
 }
 
 extension FindPhoneIdViewController {
-    private func startTimer() {
-        remainTime = 300
-        timer?.cancel()
-        
-        timer = Timer.publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                guard let self = self else { return }
-                if self.remainTime > 0 {
-                    self.remainTime -= 1
-                } else {
-                    self.timer?.cancel()
-                }
-            }
-    }
     private func startVerificationTimer() {
         guard let sentAt = sendPolicy.lastSentAt else { return }
 
@@ -238,10 +199,19 @@ extension FindPhoneIdViewController {
     }
 
     private func handleSendVerificationCodeSuccess(response: SendVerificationCodeDto) {
+        phoneStateView.setVerificationSentState(remainingCount: response.remainingCount, totalCount: response.totalCount)
+        startVerificationSession()
+    }
+
+    private func handleSendVerificationEmailSuccess(message: String) {
+        phoneStateView.setState(state: .success, message: message)
+        startVerificationSession()
+    }
+
+    private func startVerificationSession() {
         sendPolicy.markSent(at: sendRequestedAt ?? Date())
         startVerificationTimer()
 
-        phoneStateView.setVerificationSentState(remainingCount: response.remainingCount, totalCount: response.totalCount)
         phoneStateView.isHidden = false
         certNumberStateView.isHidden = true
         certNumberTextField.text = ""
@@ -272,8 +242,13 @@ extension FindPhoneIdViewController {
     }
 
     private func updateSendButtonState() {
-        let canSend = PhoneNumberInput.isComplete(phoneNumberTextField.text ?? "") && sendPolicy.canSend(at: Date())
+        let canSend = isInputComplete && sendPolicy.canSend(at: Date())
         sendButton.setState(state: canSend ? .usable : .unusable)
+    }
+
+    private var isInputComplete: Bool {
+        let text = phoneNumberTextField.text ?? ""
+        return certType == .phone ? PhoneNumberInput.isComplete(text) : EmailInput.isValid(text)
     }
 
     private func unlockSendVerification() {
@@ -320,25 +295,26 @@ extension FindPhoneIdViewController {
             $0.isHidden = true
         }
         
-        if certType == .phone {
-            guard let phoneNumber = phoneNumberTextField.text,
-                  PhoneNumberInput.isComplete(phoneNumber),
-                  sendPolicy.canSend(at: Date()) else { return }
+        guard isInputComplete, sendPolicy.canSend(at: Date()) else { return }
+        let input = phoneNumberTextField.text ?? ""
 
-            timer?.cancel()
-            sendRequestedAt = Date()
-            phoneNumberTextField.resignFirstResponder()
-            phoneNumberTextField.isUserInteractionEnabled = false
-            sendButton.setState(state: .unusable)
-            viewModel.sendVerificationCode(phoneNumber: phoneNumber)
+        timer?.cancel()
+        sendRequestedAt = Date()
+        phoneNumberTextField.resignFirstResponder()
+        phoneNumberTextField.isUserInteractionEnabled = false
+        sendButton.setState(state: .unusable)
+
+        if certType == .phone {
+            viewModel.sendVerificationCode(phoneNumber: input)
         } else {
-            viewModel.sendVerificationEmail(email: phoneNumberTextField.text ?? "")
+            viewModel.sendVerificationEmail(email: input)
         }
     }
     @objc private func certNumberButtonTapped() {
+        guard !isVerifyingCode else { return }
+        updateVerifyingState(true)
+
         if certType == .phone {
-            guard !isVerifyingCode else { return }
-            updateVerifyingState(true)
             viewModel.checkVerificationCode(phoneNumber: phoneNumberTextField.text ?? "", code: certNumberTextField.text ?? "")
         } else {
             viewModel.checkVerificationEmail(email: phoneNumberTextField.text ?? "", code: certNumberTextField.text ?? "")
@@ -356,28 +332,14 @@ extension FindPhoneIdViewController {
         navigationController?.pushViewController(FoundIdViewController(viewModel: viewModel), animated: true)
     }
     @objc private func textFieldDidChange(textField: UITextField) {
-        if certType == .phone {
-            if textField == phoneNumberTextField {
-                textField.text = PhoneNumberInput.acceptedDigits(from: textField.text ?? "")
-                updateSendButtonState()
-            } else {
-                textField.text = VerificationCodeInput.acceptedDigits(from: textField.text ?? "")
-                updateVerificationInputState()
-            }
-            return
-        }
         if textField == phoneNumberTextField {
-            if textField.text == "" {
-                sendButton.setState(state: .unusable)
-            } else {
-                sendButton.setState(state: .usable)
+            if certType == .phone {
+                textField.text = PhoneNumberInput.acceptedDigits(from: textField.text ?? "")
             }
+            updateSendButtonState()
         } else {
-            if textField.text == "" {
-                certNumberButton.setState(state: .unusable)
-            } else {
-                certNumberButton.setState(state: .usable)
-            }
+            textField.text = VerificationCodeInput.acceptedDigits(from: textField.text ?? "")
+            updateVerificationInputState()
         }
     }
 }

@@ -77,20 +77,20 @@ extension FindIdViewModel {
     }
     
     func checkVerificationEmail(email: String, code: String) {
-        checkVerificationEmailUseCase.execute(requestModel: .init(email: email, verificationCode: code)).sink(
+        checkVerificationCodeCancellable = checkVerificationEmailUseCase.execute(requestModel: .init(email: email, verificationCode: code)).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
-                    self?.checkMessagePublisher.send((error.message, false))
+                    self?.checkVerificationCodeFailurePublisher.send((error.statusCode, error.message))
                 }
             },
             receiveValue: { [weak self] response in
                 self?.findIdEmail(email: email)
             }
-        ).store(in: &subscriptions)
+        )
     }
     
     func findIdEmail(email: String) {
-        findIdEmailUseCase.execute(requestModel: .init(email: email)).sink(
+        checkVerificationCodeCancellable = findIdEmailUseCase.execute(requestModel: .init(email: email)).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     self?.checkMessagePublisher.send((error.message, false))
@@ -100,6 +100,6 @@ extension FindIdViewModel {
                 self?.loginId = response.loginID
                 self?.checkMessagePublisher.send(("인증번호가 일치합니다.", true))
             }
-        ).store(in: &subscriptions)
+        )
     }
 }
