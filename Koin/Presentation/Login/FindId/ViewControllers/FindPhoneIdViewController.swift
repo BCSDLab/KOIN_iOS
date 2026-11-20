@@ -259,11 +259,7 @@ extension FindPhoneIdViewController {
     }
 
     private func handleCheckVerificationCodeFailure(statusCode: Int?, message: String) {
-        if statusCode == 400 {
-            sendPolicy.markVerifyFailed()
-        } else if statusCode == 404 {
-            sendPolicy.discardVerificationCode()
-        }
+        sendPolicy.recordVerifyFailure(statusCode: statusCode)
 
         updateVerifyingState(false)
 
@@ -272,11 +268,7 @@ extension FindPhoneIdViewController {
         }
 
         certNumberStateView.isHidden = false
-        if statusCode == 400 && !sendPolicy.hasRemainingVerifyAttempts {
-            certNumberStateView.setState(state: .warning, message: "인증번호를 여러 번 틀렸어요. 인증번호를 다시 받아 주세요.")
-        } else {
-            certNumberStateView.setState(state: .warning, message: message)
-        }
+        certNumberStateView.setState(state: .warning, message: sendPolicy.verifyFailureMessage(statusCode: statusCode, serverMessage: message))
     }
 
     private func updateSendButtonState() {
@@ -290,8 +282,7 @@ extension FindPhoneIdViewController {
     }
 
     private func updateVerificationInputState() {
-        let isExpired = sendPolicy.lastSentAt.map { verificationTimer.isExpired(at: Date(), sentAt: $0) } ?? true
-        let canVerify = !isExpired && sendPolicy.hasRemainingVerifyAttempts
+        let canVerify = sendPolicy.canVerify(at: Date())
 
         if !canVerify {
             certNumberTextField.resignFirstResponder()

@@ -416,8 +416,7 @@ extension CertificationFormViewController {
     }
     
     private func updateVerificationInputState() {
-        let isExpired = sendPolicy.lastSentAt.map { verificationTimer.isExpired(at: Date(), sentAt: $0) } ?? true
-        let canVerify = !isExpired && sendPolicy.hasRemainingVerifyAttempts
+        let canVerify = sendPolicy.canVerify(at: Date())
 
         if !canVerify {
             verificationTextField.resignFirstResponder()
@@ -440,11 +439,7 @@ extension CertificationFormViewController {
     }
 
     private func handleCheckVerificationCodeFailure(statusCode: Int?, message: String, color: ColorAsset) {
-        if statusCode == 400 {
-            sendPolicy.markVerifyFailed()
-        } else if statusCode == 404 {
-            sendPolicy.discardVerificationCode()
-        }
+        sendPolicy.recordVerifyFailure(statusCode: statusCode)
 
         updateVerifyingState(false)
 
@@ -452,11 +447,7 @@ extension CertificationFormViewController {
             endVerificationSession()
         }
 
-        if statusCode == 400 && !sendPolicy.hasRemainingVerifyAttempts {
-            showVerificationHelpResult("인증번호를 여러 번 틀렸어요. 인증번호를 다시 받아 주세요.", color)
-        } else {
-            showVerificationHelpResult(message, color)
-        }
+        showVerificationHelpResult(sendPolicy.verifyFailureMessage(statusCode: statusCode, serverMessage: message), color)
     }
     
     private func showHttpResult(_ message: String, _ color: ColorAsset) {

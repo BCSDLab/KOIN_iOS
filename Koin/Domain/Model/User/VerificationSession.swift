@@ -30,6 +30,7 @@ struct VerificationSendPolicy: Equatable {
 
     static let resendCooldown = TimeInterval(VerificationTimer.validitySeconds)
     static let maxVerifyAttempts = 5
+    static let verifyLimitExceededMessage = "인증번호를 여러 번 틀렸어요. 인증번호를 다시 받아 주세요."
 
     private(set) var sentCount = 0
     private(set) var lastSentAt: Date?
@@ -63,12 +64,24 @@ struct VerificationSendPolicy: Equatable {
         isBlockedByDailyLimit = true
     }
 
-    mutating func markVerifyFailed() {
-        failedVerifyAttempts += 1
+    func canVerify(at now: Date) -> Bool {
+        guard let lastSentAt else { return false }
+        return !VerificationTimer().isExpired(at: now, sentAt: lastSentAt) && hasRemainingVerifyAttempts
     }
 
-    mutating func discardVerificationCode() {
-        failedVerifyAttempts = Self.maxVerifyAttempts
+    mutating func recordVerifyFailure(statusCode: Int?) {
+        if statusCode == 400 {
+            failedVerifyAttempts += 1
+        } else if statusCode == 404 {
+            failedVerifyAttempts = Self.maxVerifyAttempts
+        }
+    }
+
+    func verifyFailureMessage(statusCode: Int?, serverMessage: String) -> String {
+        if statusCode == 400 && !hasRemainingVerifyAttempts {
+            return Self.verifyLimitExceededMessage
+        }
+        return serverMessage
     }
 
     static func sentMessage(remainingCount: Int, totalCount: Int) -> String {
