@@ -499,6 +499,7 @@ extension ChangeMyProfileViewController {
     @objc private func phoneNumberTextFieldDidChange(textField: UITextField) {
         textField.text = PhoneNumberInput.acceptedDigits(from: textField.text ?? "")
         if textField.text == viewModel.userData?.phoneNumber {
+            viewModel.modifyUserData?.phoneNumber = viewModel.userData?.phoneNumber
             viewModel.phoneNumberSuccess = true
             saveButton.setTitle("저장", for: .normal)
             sendButton.setState(state: .unusable)
