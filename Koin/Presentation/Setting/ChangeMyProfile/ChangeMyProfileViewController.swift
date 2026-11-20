@@ -315,6 +315,7 @@ final class ChangeMyProfileViewController: UIViewController {
                 view.endEditing(true)
                 certNumberTextField.isUserInteractionEnabled = false
                 certNumberCheckButton.setState(state: .unusable)
+                unlockSendVerification()
             }
         }.store(in: &subscriptions)
 

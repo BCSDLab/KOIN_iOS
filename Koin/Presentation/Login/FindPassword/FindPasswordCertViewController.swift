@@ -22,6 +22,7 @@ final class FindPasswordCertViewController: UIViewController {
     private let verificationTimer = VerificationTimer()
     private var sendPolicy = VerificationSendPolicy()
     private var isVerifyingCode = false
+    private var isCodeVerified = false
     private var sendRequestedAt: Date?
     
     // MARK: - UI Components
@@ -192,9 +193,8 @@ final class FindPasswordCertViewController: UIViewController {
             certNumberStateView.isHidden = false
             certNumberStateView.setState(state: response.1 ? .success : .warning, message: response.0)
             if response.1 {
-                if let idText = idtextField.text, !idText.isEmpty {
-                    saveButton.setState(state: .usable)
-                }
+                isCodeVerified = true
+                updateSaveButtonState()
                 timer?.cancel()
                 timer = nil
                 remainTimeLabel.isHidden = true
@@ -269,6 +269,11 @@ extension FindPasswordCertViewController {
 
         certNumberStateView.isHidden = false
         certNumberStateView.setState(state: .warning, message: sendPolicy.verifyFailureMessage(statusCode: statusCode, serverMessage: message))
+    }
+
+    private func updateSaveButtonState() {
+        let canProceed = isCodeVerified && !(idtextField.text ?? "").isEmpty
+        saveButton.setState(state: canProceed ? .usable : .unusable)
     }
 
     private func updateSendButtonState() {
@@ -368,6 +373,7 @@ extension FindPasswordCertViewController {
             viewModel.certNumber = textField.text ?? ""
         } else if textField == idtextField {
             viewModel.id = textField.text ?? ""
+            updateSaveButtonState()
         }
     }
 }

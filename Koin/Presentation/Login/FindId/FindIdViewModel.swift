@@ -25,6 +25,7 @@ final class FindIdViewModel {
     let checkMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let sendVerificationCodeSuccessPublisher = PassthroughSubject<SendVerificationCodeDto, Never>()
     let checkVerificationCodeFailurePublisher = PassthroughSubject<(Int?, String), Never>()
+    let verificationCodeAcceptedPublisher = PassthroughSubject<Void, Never>()
     private var checkVerificationCodeCancellable: AnyCancellable?
 }
 
@@ -47,6 +48,7 @@ extension FindIdViewModel {
                 }
             },
             receiveValue: { [weak self] response in
+                self?.verificationCodeAcceptedPublisher.send(())
                 self?.findIdSms(phoneNumber: phoneNumber)
             }
         )
@@ -84,6 +86,7 @@ extension FindIdViewModel {
                 }
             },
             receiveValue: { [weak self] response in
+                self?.verificationCodeAcceptedPublisher.send(())
                 self?.findIdEmail(email: email)
             }
         )

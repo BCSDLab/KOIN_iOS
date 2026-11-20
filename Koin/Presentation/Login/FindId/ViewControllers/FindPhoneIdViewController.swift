@@ -149,6 +149,12 @@ final class FindPhoneIdViewController: UIViewController {
             self?.handleSendVerificationCodeSuccess(response: response)
         }.store(in: &subscriptions)
 
+        viewModel.verificationCodeAcceptedPublisher.receive(on: DispatchQueue.main).sink { [weak self] in
+            guard let self, isVerifyingCode else { return }
+            timer?.cancel()
+            timer = nil
+        }.store(in: &subscriptions)
+
         viewModel.checkVerificationCodeFailurePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
             guard let self, isVerifyingCode else { return }
             handleCheckVerificationCodeFailure(statusCode: response.0, message: response.1)
@@ -163,6 +169,13 @@ final class FindPhoneIdViewController: UIViewController {
             }
             certNumberStateView.isHidden = false
             if !response.1 {
+                if timer == nil {
+                    if sendPolicy.canVerify(at: Date()) {
+                        startVerificationTimer()
+                    } else {
+                        endVerificationSession()
+                    }
+                }
                 certNumberStateView.setState(state: .warning, message: response.0)
             } else {
                 certNumberStateView.setState(state: .success, message: response.0)

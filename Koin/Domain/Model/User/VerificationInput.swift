@@ -34,6 +34,8 @@ enum VerificationCodeInput {
 enum EmailInput {
 
     static func isValid(_ text: String) -> Bool {
+        guard !text.contains(where: { $0.isWhitespace }) else { return false }
+
         let parts = text.split(separator: "@", omittingEmptySubsequences: false)
         guard parts.count == 2, !parts[0].isEmpty else { return false }
 
