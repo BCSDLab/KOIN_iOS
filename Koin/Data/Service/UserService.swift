@@ -28,6 +28,8 @@ protocol UserService {
     func sendVerificationEmail(requestModel: SendVerificationEmailRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkVerificationEmail(requestModel: CheckVerificationEmailRequest) -> AnyPublisher<Void, ErrorResponse>
     func findIdSms(requestModel: FindIdSmsRequest) -> AnyPublisher<FindIdSmsResponse, ErrorResponse>
+    func matchIdPhone(requestModel: MatchIdPhoneRequest) -> AnyPublisher<Void, ErrorResponse>
+    func matchIdEmail(requestModel: MatchIdEmailRequest) -> AnyPublisher<Void, ErrorResponse>
     func findIdEmail(requestModel: FindIdEmailRequest) -> AnyPublisher<FindIdEmailResponse, ErrorResponse>
     func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse>
     func resetPasswordEmail(requestModel: ResetPasswordEmailRequest) -> AnyPublisher<Void, ErrorResponse>
@@ -54,6 +56,14 @@ final class DefaultUserService: UserService {
     
     func findIdSms(requestModel: FindIdSmsRequest) -> AnyPublisher<FindIdSmsResponse, ErrorResponse> {
         return networkService.requestWithResponse(api: UserAPI.findIdSms(requestModel))
+    }
+
+    func matchIdPhone(requestModel: MatchIdPhoneRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.matchIdPhone(requestModel))
+    }
+
+    func matchIdEmail(requestModel: MatchIdEmailRequest) -> AnyPublisher<Void, ErrorResponse> {
+        return networkService.request(api: UserAPI.matchIdEmail(requestModel))
     }
     
     func findIdEmail(requestModel: FindIdEmailRequest) -> AnyPublisher<FindIdEmailResponse, ErrorResponse> {

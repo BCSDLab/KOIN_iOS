@@ -30,6 +30,14 @@ final class DefaultUserRepository: UserRepository {
     func findIdSms(requestModel: FindIdSmsRequest) -> AnyPublisher<FindIdSmsResponse, ErrorResponse> {
         service.findIdSms(requestModel: requestModel)
     }
+
+    func matchIdPhone(requestModel: MatchIdPhoneRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.matchIdPhone(requestModel: requestModel)
+    }
+
+    func matchIdEmail(requestModel: MatchIdEmailRequest) -> AnyPublisher<Void, ErrorResponse> {
+        service.matchIdEmail(requestModel: requestModel)
+    }
     
     func findIdEmail(requestModel: FindIdEmailRequest) -> AnyPublisher<FindIdEmailResponse, ErrorResponse> {
         service.findIdEmail(requestModel: requestModel)

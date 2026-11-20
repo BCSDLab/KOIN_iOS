@@ -1033,6 +1033,10 @@
 		D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */; };
 		D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */; };
 		D20AD7052E0367E00067760A /* ResetPasswordSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */; };
+		AA200000000000000000F5 /* MatchIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F5 /* MatchIdEmailUseCase.swift */; };
+		AA200000000000000000F4 /* MatchIdPhoneUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */; };
+		AA200000000000000000F3 /* MatchIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F3 /* MatchIdEmailRequest.swift */; };
+		AA200000000000000000F2 /* MatchIdPhoneRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F2 /* MatchIdPhoneRequest.swift */; };
 		D20AD7072E0367F10067760A /* ResetPasswordEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */; };
 		D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */; };
 		D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */; };
@@ -2293,6 +2297,10 @@
 		D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailUseCase.swift; sourceTree = "<group>"; };
 		D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsRequest.swift; sourceTree = "<group>"; };
+		AA100000000000000000F5 /* MatchIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailUseCase.swift; sourceTree = "<group>"; };
+		AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneUseCase.swift; sourceTree = "<group>"; };
+		AA100000000000000000F3 /* MatchIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailRequest.swift; sourceTree = "<group>"; };
+		AA100000000000000000F2 /* MatchIdPhoneRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneRequest.swift; sourceTree = "<group>"; };
 		D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailRequest.swift; sourceTree = "<group>"; };
 		D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailUseCase.swift; sourceTree = "<group>"; };
@@ -6229,6 +6237,8 @@
 				D20AD6EE2E029B250067760A /* CheckVerificationEmailRequest.swift */,
 				D20AD6F02E029B560067760A /* SendVerificationEmailRequest.swift */,
 				D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */,
+				AA100000000000000000F3 /* MatchIdEmailRequest.swift */,
+				AA100000000000000000F2 /* MatchIdPhoneRequest.swift */,
 				D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */,
 				D2C163D52E252C1200DC68A8 /* ChangePasswordRequest.swift */,
 				9D3B08333D4FA77CC935917B /* StudentAcademicInfoRequestDto.swift */,
@@ -6358,6 +6368,8 @@
 				D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */,
 				D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */,
 				D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */,
+				AA100000000000000000F5 /* MatchIdEmailUseCase.swift */,
+				AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */,
 				D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */,
 				D2C163D72E252DB500DC68A8 /* ChangePasswordUseCase.swift */,
 				8D2525B9C0134B21C89671CB /* FetchBasicInfoUseCase.swift */,
@@ -7209,6 +7221,10 @@
 				D21572622CEDD2CF0061E725 /* PostLectureUseCase.swift in Sources */,
 				83DD0DEE2C575C9300278ABD /* BusNumber.swift in Sources */,
 				D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */,
+				AA200000000000000000F5 /* MatchIdEmailUseCase.swift in Sources */,
+				AA200000000000000000F4 /* MatchIdPhoneUseCase.swift in Sources */,
+				AA200000000000000000F3 /* MatchIdEmailRequest.swift in Sources */,
+				AA200000000000000000F2 /* MatchIdPhoneRequest.swift in Sources */,
 				D27A5D9E2C6BE8B700C4275F /* Shop.swift in Sources */,
 				D2FB23692C0409370098BA2B /* AnalyticsRepository.swift in Sources */,
 				7CC42B422F598E7E00940CE1 /* CallVanNotificationEmptyView.swift in Sources */,
