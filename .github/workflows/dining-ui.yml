@@ -55,9 +55,11 @@ jobs:
             bundle=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$app/Info.plist")
             if [[ "$bundle" == com.bcsdlab.koin.stage ]]; then
               plutil -lint "$app/GoogleService-Info.plist"
-              codesign -d --entitlements :- "$app" > "$RUNNER_TEMP/dining-entitlements.plist"
-              /usr/libexec/PlistBuddy -c 'Print :com.apple.security.application-groups' \
-                "$RUNNER_TEMP/dining-entitlements.plist" | grep -Fq 'group.com.bcsdlab.koin'
+              # Xcode embeds simulator App Groups from the simulated entitlement payload,
+              # not the host-side ad hoc signature inspected by codesign -d.
+              simulated=build/dining-ui/Build/Intermediates.noindex/koin.build/Debug-iphonesimulator/koin.build/koin.app-Simulated.xcent
+              /usr/libexec/PlistBuddy -c 'Print :com.apple.security.application-groups:0' \
+                "$simulated" | grep -Fxq 'group.com.bcsdlab.koin'
               executable=$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Info.plist")
               xcrun simctl install "$device" "$app"
               printf 'DINING_DEVICE=%s\n' "$device" >> "$GITHUB_ENV"
