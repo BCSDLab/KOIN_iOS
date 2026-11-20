@@ -65,7 +65,9 @@ final class FindPasswordCertViewController: UIViewController {
         $0.text = certType == .phone ? "휴대전화 번호" : "이메일"
     }
     
-    private lazy var phoneTextField = DefaultTextField(placeholder: certType == .phone ? "휴대전화 번호" : "등록한 이메일을 입력해주세요", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14))
+    private lazy var phoneTextField = DefaultTextField(placeholder: certType == .phone ? "휴대전화 번호" : "등록한 이메일을 입력해주세요", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
+        $0.keyboardType = certType == .phone ? .numberPad : .emailAddress
+    }
     
     private let sendButton = StateButton(title: "인증번호 발송")
     
@@ -85,6 +87,7 @@ final class FindPasswordCertViewController: UIViewController {
     
     private let certNumberTextField = DefaultTextField(placeholder: "인증번호를 입력해주세요.", placeholderColor: UIColor.appColor(.neutral400), font: UIFont.appFont(.pretendardRegular, size: 14)).then {
         $0.isHidden = true
+        $0.keyboardType = .numberPad
     }
     
     private let remainTimeLabel = UILabel().then {
