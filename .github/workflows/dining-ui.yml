@@ -83,7 +83,12 @@ jobs:
           out=build/dining-ui/evidence
           xcrun simctl terminate "$DINING_DEVICE" com.bcsdlab.koin.stage || true
           xcrun simctl launch "$DINING_DEVICE" com.bcsdlab.koin.stage > "$out/launch.txt" 2>&1 || true
-          sleep 8
+          for attempt in {1..12}; do
+            if find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -name "$DINING_EXECUTABLE-*.ips" -print -quit | grep -q .; then
+              break
+            fi
+            sleep 5
+          done
           xcrun simctl io "$DINING_DEVICE" screenshot "$out/standalone-launch.png" || true
           python3 - <<'PY' | tee "$out/crash-summary.txt"
           import json
@@ -103,6 +108,8 @@ jobs:
               print(report.name, exception.get("type"), exception.get("signal"),
                     termination.get("namespace"), termination.get("code"))
               threads = data.get("threads", [])
+              if not threads:
+                  print("No threads recorded in report")
               thread = next((t for t in threads if t.get("triggered")), None)
               index = data.get("faultingThread")
               if thread is None and isinstance(index, int) and 0 <= index < len(threads):
