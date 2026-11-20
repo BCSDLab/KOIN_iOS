@@ -315,7 +315,6 @@ final class ChangeMyProfileViewController: UIViewController {
                 view.endEditing(true)
                 certNumberTextField.isUserInteractionEnabled = false
                 certNumberCheckButton.setState(state: .unusable)
-                unlockSendVerification()
             }
         }.store(in: &subscriptions)
 
@@ -482,7 +481,7 @@ extension ChangeMyProfileViewController {
         phoneTextField.resignFirstResponder()
         phoneTextField.isUserInteractionEnabled = false
         sendButton.setState(state: .unusable)
-        viewModel.sendVerificationCode(phoneNumber: phoneNumber)
+        viewModel.checkDuplicatedPhoneNumberAndSendVerificationCode(phoneNumber: phoneNumber)
     }
     
     @objc private func nicknameCheckButtonTapped(_ sender: UIButton) {

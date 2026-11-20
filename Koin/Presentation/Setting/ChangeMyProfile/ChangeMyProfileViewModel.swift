@@ -33,6 +33,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     private let checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase
     private let userRepository = DefaultUserRepository(service: DefaultUserService())
     private lazy var sendVerificationCodeUseCase = DefaultSendVerificationCodeUseCase(userRepository: userRepository)
+    private lazy var checkDuplicatedPhoneNumberUseCase = DefaultCheckDuplicatedPhoneNumberUseCase(userRepository: userRepository)
     private lazy var checkVerificationCodeUseCase = DefaultCheckVerificationCodeUsecase(userRepository: userRepository)
     private lazy var revokeUseCase = DefaultRevokeUseCase(userRepository: userRepository)
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
@@ -84,6 +85,16 @@ extension ChangeMyProfileViewModel {
         }.store(in: &subscriptions)
     }
     
+    func checkDuplicatedPhoneNumberAndSendVerificationCode(phoneNumber: String) {
+        checkDuplicatedPhoneNumberUseCase.execute(phone: phoneNumber).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.phoneNumberMessagePublisher.send((error.message, false))
+            }
+        } receiveValue: { [weak self] (_: Void) in
+            self?.sendVerificationCode(phoneNumber: phoneNumber)
+        }.store(in: &subscriptions)
+    }
+
     func sendVerificationCode(phoneNumber: String) {
         sendVerificationCodeUseCase.execute(request: .init(phoneNumber: phoneNumber)).sink { [weak self] completion in
             if case let .failure(error) = completion {
