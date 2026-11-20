@@ -23,6 +23,7 @@ final class ChangeMyProfileViewController: UIViewController {
     private var sendPolicy = VerificationSendPolicy()
     private var isVerifyingCode = false
     private var sendRequestedAt: Date?
+    private var rejectedPhoneNumber: String?
     private let userType: UserType
     
     // MARK: - UI Components
@@ -299,6 +300,14 @@ final class ChangeMyProfileViewController: UIViewController {
             unlockSendVerification()
         }.store(in: &subscriptions)
 
+        viewModel.checkDuplicatedPhoneNumberFailurePublisher.receive(on: DispatchQueue.main).sink { [weak self] message in
+            guard let self = self else { return }
+            rejectedPhoneNumber = phoneTextField.text
+            phoneStateView.isHidden = false
+            phoneStateView.setState(state: .warning, message: message)
+            unlockSendVerification()
+        }.store(in: &subscriptions)
+
         viewModel.sendVerificationCodeSuccessPublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
             self?.handleSendVerificationCodeSuccess(response: response)
         }.store(in: &subscriptions)
@@ -413,6 +422,7 @@ final class ChangeMyProfileViewController: UIViewController {
     private func updateSendButtonState() {
         let phoneNumber = phoneTextField.text ?? ""
         let canSend = phoneNumber != viewModel.userData?.phoneNumber
+            && phoneNumber != rejectedPhoneNumber
             && PhoneNumberInput.isComplete(phoneNumber)
             && sendPolicy.canSend(at: Date())
         sendButton.setState(state: canSend ? .usable : .unusable)
@@ -498,7 +508,6 @@ extension ChangeMyProfileViewController {
     @objc private func phoneNumberTextFieldDidChange(textField: UITextField) {
         textField.text = PhoneNumberInput.acceptedDigits(from: textField.text ?? "")
         if textField.text == viewModel.userData?.phoneNumber {
-            viewModel.modifyUserData?.phoneNumber = viewModel.userData?.phoneNumber
             viewModel.phoneNumberSuccess = true
             saveButton.setTitle("저장", for: .normal)
             sendButton.setState(state: .unusable)

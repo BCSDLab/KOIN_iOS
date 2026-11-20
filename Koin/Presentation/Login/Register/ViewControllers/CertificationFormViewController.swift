@@ -262,7 +262,7 @@ final class CertificationFormViewController: UIViewController {
                 self.phoneNumberTextField.isUserInteractionEnabled = true
                 self.sendVerificationButton.updateState(isEnabled: false)
                 self.showHttpResult(message, labelColor)
-            case .changeSendVerificationButtonStatus:
+            case .checkDuplicatedPhoneNumberSuccess:
                 guard let self, self.isCheckingPhoneNumber else { return }
                 self.updateCheckingPhoneNumberState(false)
                 self.phoneNumberReponseLabel.isHidden = true
