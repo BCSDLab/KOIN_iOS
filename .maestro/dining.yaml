@@ -6,8 +6,11 @@ name: Guest dining entry and meal content change
     permissions:
       all: allow
 - extendedWaitUntil:
-    visible: '오늘의 식단'
+    visible: '닫기|오늘의 식단'
     timeout: 60000
+- tapOn:
+    text: '닫기'
+    optional: true
 - tapOn:
     id: home-dining-view-all
 - extendedWaitUntil:
