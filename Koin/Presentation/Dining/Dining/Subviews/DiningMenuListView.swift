@@ -80,6 +80,7 @@ struct DiningMenuListView: View {
             .padding(.vertical, 20)
         }
         .scrollIndicators(.hidden)
+        .accessibilityIdentifier("dining-menu-\(list.diningType.index)")
         .background{
             if list.items.isEmpty {
                 DiningEmptyView()
