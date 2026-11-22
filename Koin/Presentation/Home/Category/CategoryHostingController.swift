@@ -47,8 +47,7 @@ final class CategoryHostingController: UIHostingController<CategoryView>, Hostin
         case .showChatList:
             navigationController?.pushViewController(makeChatListViewController(), animated: true)
         case .showLand:
-            // TODO: 복덕방 리디자인 화면 연결
-            break
+            navigationController?.pushViewController(makeLandListViewController(), animated: true)
         case .showBusiness:
             presentBusiness()
         case .showRecruit:
@@ -206,6 +205,14 @@ extension CategoryHostingController {
     
     private func makeChatListViewController() -> UIViewController {
         return LostItemChatListTableViewController(viewModel: LostItemChatListTableViewModel())
+    }
+    
+    private func makeLandListViewController() -> UIViewController {
+        let landService = DefaultLandService()
+        let landRepository = DefaultLandRepository(service: landService)
+        let fetchLandListUseCase = DefaultFetchLandListUseCase(landRepository: landRepository)
+        let viewModel = LandListViewModel(fetchLandListUseCase: fetchLandListUseCase)
+        return LandListViewController(viewModel: viewModel)
     }
 
     private func makeRecruitListViewController() -> UIViewController {
