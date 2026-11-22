@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A83115679000000000000008 /* LostItemListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000009 /* LostItemListEmptyView.swift */; };
 		004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */; };
 		0A6D1C1BA5922E1A28882034 /* BusRouteTagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B13E077479AB081D3DB06C /* BusRouteTagLabel.swift */; };
 		0D3DC4E723268AE45A326D07 /* RecruitChatDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */; };
@@ -877,6 +876,8 @@
 		A51C00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */; };
 		A5F8FD7A714E689BC4F3321B /* RecruitMyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645CEE62E516B130B4E2D784 /* RecruitMyApplication.swift */; };
 		A83115679000000000000001 /* LostItemColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000002 /* LostItemColorAsset.swift */; };
+		A83115679000000000000008 /* LostItemListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000009 /* LostItemListEmptyView.swift */; };
+		A83115679000000000000010 /* ChatListModel+LostItemChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000011 /* ChatListModel+LostItemChat.swift */; };
 		AA20000000000000000001 /* Publisher+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* Publisher+.swift */; };
 		AA20000000000000000002 /* DiningFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000002 /* DiningFixtures.swift */; };
 		AA20000000000000000003 /* SpyDiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000003 /* SpyDiningRepository.swift */; };
@@ -894,7 +895,6 @@
 		AA20000000000000000024 /* RegisterFormViewModelStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000024 /* RegisterFormViewModelStubs.swift */; };
 		AA20000000000000000030 /* CertificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000030 /* CertificationInput.swift */; };
 		AA20000000000000000031 /* VerificationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000031 /* VerificationSession.swift */; };
-		AA200000000000000000F1 /* VerificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F1 /* VerificationInput.swift */; };
 		AA20000000000000000032 /* CertificationInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000032 /* CertificationInputTests.swift */; };
 		AA20000000000000000033 /* VerificationSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000033 /* VerificationSessionTests.swift */; };
 		AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */; };
@@ -906,6 +906,11 @@
 		AA20000000000000000040 /* EnterFormUseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000040 /* EnterFormUseCaseSpies.swift */; };
 		AA20000000000000000041 /* EnterFormState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000041 /* EnterFormState.swift */; };
 		AA20000000000000000042 /* EnterFormStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000042 /* EnterFormStateTests.swift */; };
+		AA200000000000000000F1 /* VerificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F1 /* VerificationInput.swift */; };
+		AA200000000000000000F2 /* MatchIdPhoneRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F2 /* MatchIdPhoneRequest.swift */; };
+		AA200000000000000000F3 /* MatchIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F3 /* MatchIdEmailRequest.swift */; };
+		AA200000000000000000F4 /* MatchIdPhoneUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */; };
+		AA200000000000000000F5 /* MatchIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F5 /* MatchIdEmailUseCase.swift */; };
 		AB2000000000000000000061 /* MainTimetableFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1000000000000000000061 /* MainTimetableFrame.swift */; };
 		B0495459FC164809B16A96B6 /* RecruitPostTextViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54351A8A0C1A4046C3155481 /* RecruitPostTextViewView.swift */; };
 		B438AEE42E756AB600E889C4 /* ShopImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* ShopImage.swift */; };
@@ -1021,10 +1026,6 @@
 		D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */; };
 		D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */; };
 		D20AD7052E0367E00067760A /* ResetPasswordSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */; };
-		AA200000000000000000F5 /* MatchIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F5 /* MatchIdEmailUseCase.swift */; };
-		AA200000000000000000F4 /* MatchIdPhoneUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */; };
-		AA200000000000000000F3 /* MatchIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F3 /* MatchIdEmailRequest.swift */; };
-		AA200000000000000000F2 /* MatchIdPhoneRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F2 /* MatchIdPhoneRequest.swift */; };
 		D20AD7072E0367F10067760A /* ResetPasswordEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */; };
 		D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */; };
 		D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */; };
@@ -1243,7 +1244,6 @@
 		FE0100000000000000002B /* KoinDropdownViewController+Scroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0100000000000000001B /* KoinDropdownViewController+Scroll.swift */; };
 		FE0100000000000000002C /* KoinDropdownViewController+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0100000000000000001C /* KoinDropdownViewController+Layout.swift */; };
 		FE0B6B2358364622BC242C74 /* RecruitDataButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AB6864692D44B9849E0447 /* RecruitDataButton.swift */; };
-		A83115679000000000000010 /* ChatListModel+LostItemChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000011 /* ChatListModel+LostItemChat.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1278,7 +1278,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A83115679000000000000009 /* LostItemListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListEmptyView.swift; sourceTree = "<group>"; };
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatPostRequestDto.swift; sourceTree = "<group>"; };
 		13EEDE9C4E0CA4F9CF7AB1F8 /* RecruitActivityPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitActivityPeriod.swift; sourceTree = "<group>"; };
@@ -2126,6 +2125,8 @@
 		A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityEditTableViewCell.swift; sourceTree = "<group>"; };
 		A644536454EB046B5895D793 /* PickerColumnsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerColumnsDataSource.swift; sourceTree = "<group>"; };
 		A83115679000000000000002 /* LostItemColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemColorAsset.swift; sourceTree = "<group>"; };
+		A83115679000000000000009 /* LostItemListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListEmptyView.swift; sourceTree = "<group>"; };
+		A83115679000000000000011 /* ChatListModel+LostItemChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatListModel+LostItemChat.swift"; sourceTree = "<group>"; };
 		AA10000000000000000001 /* Publisher+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+.swift"; sourceTree = "<group>"; };
 		AA10000000000000000002 /* DiningFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningFixtures.swift; sourceTree = "<group>"; };
 		AA10000000000000000003 /* SpyDiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyDiningRepository.swift; sourceTree = "<group>"; };
@@ -2143,7 +2144,6 @@
 		AA10000000000000000024 /* RegisterFormViewModelStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelStubs.swift; sourceTree = "<group>"; };
 		AA10000000000000000030 /* CertificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInput.swift; sourceTree = "<group>"; };
 		AA10000000000000000031 /* VerificationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSession.swift; sourceTree = "<group>"; };
-		AA100000000000000000F1 /* VerificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationInput.swift; sourceTree = "<group>"; };
 		AA10000000000000000032 /* CertificationInputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInputTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000033 /* VerificationSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSessionTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelCertificationTests.swift; sourceTree = "<group>"; };
@@ -2155,6 +2155,11 @@
 		AA10000000000000000040 /* EnterFormUseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormUseCaseSpies.swift; sourceTree = "<group>"; };
 		AA10000000000000000041 /* EnterFormState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormState.swift; sourceTree = "<group>"; };
 		AA10000000000000000042 /* EnterFormStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormStateTests.swift; sourceTree = "<group>"; };
+		AA100000000000000000F1 /* VerificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationInput.swift; sourceTree = "<group>"; };
+		AA100000000000000000F2 /* MatchIdPhoneRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneRequest.swift; sourceTree = "<group>"; };
+		AA100000000000000000F3 /* MatchIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailRequest.swift; sourceTree = "<group>"; };
+		AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneUseCase.swift; sourceTree = "<group>"; };
+		AA100000000000000000F5 /* MatchIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailUseCase.swift; sourceTree = "<group>"; };
 		AB1000000000000000000061 /* MainTimetableFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTimetableFrame.swift; sourceTree = "<group>"; };
 		B2FBEEB767094CE8B219095B /* RecruitDataTextSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataTextSectionView.swift; sourceTree = "<group>"; };
 		B438AEE32E756AB600E889C4 /* ShopImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopImage.swift; sourceTree = "<group>"; };
@@ -2273,10 +2278,6 @@
 		D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailUseCase.swift; sourceTree = "<group>"; };
 		D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsRequest.swift; sourceTree = "<group>"; };
-		AA100000000000000000F5 /* MatchIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailUseCase.swift; sourceTree = "<group>"; };
-		AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneUseCase.swift; sourceTree = "<group>"; };
-		AA100000000000000000F3 /* MatchIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailRequest.swift; sourceTree = "<group>"; };
-		AA100000000000000000F2 /* MatchIdPhoneRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneRequest.swift; sourceTree = "<group>"; };
 		D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailRequest.swift; sourceTree = "<group>"; };
 		D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailUseCase.swift; sourceTree = "<group>"; };
@@ -2502,7 +2503,6 @@
 		FE0100000000000000001A /* KoinDropdownViewController+Present.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Present.swift"; sourceTree = "<group>"; };
 		FE0100000000000000001B /* KoinDropdownViewController+Scroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Scroll.swift"; sourceTree = "<group>"; };
 		FE0100000000000000001C /* KoinDropdownViewController+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Layout.swift"; sourceTree = "<group>"; };
-		A83115679000000000000011 /* ChatListModel+LostItemChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatListModel+LostItemChat.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
