@@ -550,32 +550,27 @@
 		7CED90C12EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD32EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift */; };
 		7CED90C32EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCC2EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift */; };
 		7CED90C62EF2D1F900457128 /* TimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED909A2EF2D1F900457128 /* TimetableCollectionViewCell.swift */; };
-		7CED90CA2EF2D1F900457128 /* LandOptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B02EF2D1F900457128 /* LandOptionCollectionViewCell.swift */; };
 		7CED90CB2EF2D1F900457128 /* LostItemChatListTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EF92EF2D1F900457128 /* LostItemChatListTableViewModel.swift */; };
 		7CED90CE2EF2D1F900457128 /* ForceModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */; };
 		7CED90CF2EF2D1F900457128 /* ChangeMyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F0C2EF2D1F900457128 /* ChangeMyProfileViewModel.swift */; };
 		7CED90D12EF2D1F900457128 /* NoticeSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F572EF2D1F900457128 /* NoticeSearchViewController.swift */; };
 		7CED90D22EF2D1F900457128 /* TagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90152EF2D1F900457128 /* TagCollectionViewCell.swift */; };
-		7CED90D32EF2D1F900457128 /* LandCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A92EF2D1F900457128 /* LandCollectionView.swift */; };
 		7CED90D52EF2D1F900457128 /* SelectDeptModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908E2EF2D1F900457128 /* SelectDeptModalViewController.swift */; };
 		7CED90D72EF2D1F900457128 /* RecommendedKeywordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F5A2EF2D1F900457128 /* RecommendedKeywordCollectionView.swift */; };
 		7CED90DA2EF2D1F900457128 /* RecentSearchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F532EF2D1F900457128 /* RecentSearchTableView.swift */; };
 		7CED90DC2EF2D1F900457128 /* ShopSummaryDeliveryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FC42EF2D1F900457128 /* ShopSummaryDeliveryButton.swift */; };
 		7CED90DD2EF2D1F900457128 /* AddDirectCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90912EF2D1F900457128 /* AddDirectCollectionViewCell.swift */; };
-		7CED90DF2EF2D1F900457128 /* LandDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B72EF2D1F900457128 /* LandDetailViewModel.swift */; };
 		7CED90E02EF2D1F900457128 /* ShopSummaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCF2EF2D1F900457128 /* ShopSummaryTableViewCell.swift */; };
 		7CED90E22EF2D1F900457128 /* PointLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90892EF2D1F900457128 /* PointLabel.swift */; };
 		7CED90E32EF2D1F900457128 /* FindPhoneIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F2F2EF2D1F900457128 /* FindPhoneIdViewController.swift */; };
 		7CED90E42EF2D1F900457128 /* SubstituteTimetableModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908D2EF2D1F900457128 /* SubstituteTimetableModalViewController.swift */; };
 		7CED90E72EF2D1F900457128 /* ForceUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE02EF2D1F900457128 /* ForceUpdateViewController.swift */; };
-		7CED90EB2EF2D1F900457128 /* LandViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AC2EF2D1F900457128 /* LandViewController.swift */; };
 		7CED90EF2EF2D1F900457128 /* ShopReviewReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90212EF2D1F900457128 /* ShopReviewReportViewModel.swift */; };
 		7CED90F02EF2D1F900457128 /* RevokeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F0B2EF2D1F900457128 /* RevokeModalViewController.swift */; };
 		7CED90F12EF2D1F900457128 /* ForceUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EDF2EF2D1F900457128 /* ForceUpdateViewModel.swift */; };
 		7CED90F22EF2D1F900457128 /* ShopSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FBF2EF2D1F900457128 /* ShopSearchViewModel.swift */; };
 		7CED90F42EF2D1F900457128 /* LostItemChatListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EFA2EF2D1F900457128 /* LostItemChatListTableViewController.swift */; };
 		7CED90F72EF2D1F900457128 /* ReviewImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90032EF2D1F900457128 /* ReviewImageCollectionViewCell.swift */; };
-		7CED90FA2EF2D1F900457128 /* LandDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B82EF2D1F900457128 /* LandDetailViewController.swift */; };
 		7CED90FB2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3E2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift */; };
 		7CED90FD2EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90182EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift */; };
 		7CED90FE2EF2D1F900457128 /* SelectTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908B2EF2D1F900457128 /* SelectTimeView.swift */; };
@@ -590,7 +585,6 @@
 		7CED91092EF2D1F900457128 /* FacilityInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A42EF2D1F900457128 /* FacilityInfoViewController.swift */; };
 		7CED910A2EF2D1F900457128 /* LeftAlignedFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90132EF2D1F900457128 /* LeftAlignedFlowLayout.swift */; };
 		7CED910B2EF2D1F900457128 /* AddClassCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90952EF2D1F900457128 /* AddClassCollectionView.swift */; };
-		7CED910C2EF2D1F900457128 /* LandImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B22EF2D1F900457128 /* LandImageCollectionView.swift */; };
 		7CED910D2EF2D1F900457128 /* RecommendedSearchCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F502EF2D1F900457128 /* RecommendedSearchCollectionView.swift */; };
 		7CED910E2EF2D1F900457128 /* ShopSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FBE2EF2D1F900457128 /* ShopSearchViewController.swift */; };
 		7CED910F2EF2D1F900457128 /* ShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */; };
@@ -599,7 +593,6 @@
 		7CED91152EF2D1F900457128 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F232EF2D1F900457128 /* LoginViewModel.swift */; };
 		7CED91162EF2D1F900457128 /* ShopSortOptionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FB52EF2D1F900457128 /* ShopSortOptionSheetView.swift */; };
 		7CED91172EF2D1F900457128 /* TimetableText+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A02EF2D1F900457128 /* TimetableText+.swift */; };
-		7CED91182EF2D1F900457128 /* LandViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AB2EF2D1F900457128 /* LandViewModel.swift */; };
 		7CED911C2EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90772EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift */; };
 		7CED911D2EF2D1F900457128 /* NoticeListTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F432EF2D1F900457128 /* NoticeListTableViewFooter.swift */; };
 		7CED911E2EF2D1F900457128 /* ShopReadyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FAF2EF2D1F900457128 /* ShopReadyView.swift */; };
@@ -642,7 +635,6 @@
 		7CED915D2EF2D1F900457128 /* ShopSearchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FBA2EF2D1F900457128 /* ShopSearchTableView.swift */; };
 		7CED915E2EF2D1F900457128 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F072EF2D1F900457128 /* SettingsViewModel.swift */; };
 		7CED91602EF2D1F900457128 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FAA2EF2D1F900457128 /* CategoryCollectionViewCell.swift */; };
-		7CED91632EF2D1F900457128 /* HouseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AE2EF2D1F900457128 /* HouseInfoView.swift */; };
 		7CED91642EF2D1F900457128 /* ShopSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD92EF2D1F900457128 /* ShopSummaryViewModel.swift */; };
 		7CED91652EF2D1F900457128 /* NoticeListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F452EF2D1F900457128 /* NoticeListHeaderView.swift */; };
 		7CED91662EF2D1F900457128 /* CertificationFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F272EF2D1F900457128 /* CertificationFormViewController.swift */; };
@@ -650,7 +642,6 @@
 		7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F5E2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift */; };
 		7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90932EF2D1F900457128 /* AddDirectFooterView.swift */; };
 		7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90122EF2D1F900457128 /* DashedBorderButton.swift */; };
-		7CED91732EF2D1F900457128 /* LandOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B52EF2D1F900457128 /* LandOptionView.swift */; };
 		7CED91752EF2D1F900457128 /* ShopReviewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90222EF2D1F900457128 /* ShopReviewReportViewController.swift */; };
 		7CED91782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift */; };
 		7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCE2EF2D1F900457128 /* ShopSummaryTableView.swift */; };
@@ -697,7 +688,6 @@
 		7CED91CD2EF2D1F900457128 /* LostItemChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F022EF2D1F900457128 /* LostItemChatViewModel.swift */; };
 		7CED91CE2EF2D1F900457128 /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F142EF2D1F900457128 /* NotiViewModel.swift */; };
 		7CED91CF2EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F622EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift */; };
-		7CED91D22EF2D1F900457128 /* LandImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B32EF2D1F900457128 /* LandImageCollectionViewCell.swift */; };
 		7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE82EF2D1F900457128 /* ShopDetailViewModel.swift */; };
 		7CED91D82EF2D1F900457128 /* ClassComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908A2EF2D1F900457128 /* ClassComponentView.swift */; };
 		7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE02EF2D1F900457128 /* ShopDetailTableViewNameCell.swift */; };
@@ -712,7 +702,6 @@
 		7CED91F42EF2D1F900457128 /* NonReviewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED900B2EF2D1F900457128 /* NonReviewListView.swift */; };
 		7CED91F52EF2D1F900457128 /* PolicyContentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F182EF2D1F900457128 /* PolicyContentCollectionViewCell.swift */; };
 		7CED91F82EF2D1F900457128 /* TimetableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED909E2EF2D1F900457128 /* TimetableViewModel.swift */; };
-		7CED91F92EF2D1F900457128 /* LandOptionCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AF2EF2D1F900457128 /* LandOptionCollectionView.swift */; };
 		7CED91FA2EF2D1F900457128 /* DeliveryTipsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FDD2EF2D1F900457128 /* DeliveryTipsCollectionViewCell.swift */; };
 		7CED91FE2EF2D1F900457128 /* LostArticleImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE92EF2D1F900457128 /* LostArticleImageCollectionViewCell.swift */; };
 		7CED91FF2EF2D1F900457128 /* FoundIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F302EF2D1F900457128 /* FoundIdViewController.swift */; };
@@ -730,7 +719,6 @@
 		7CED92112EF2D1F900457128 /* AddDirectCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90902EF2D1F900457128 /* AddDirectCollectionView.swift */; };
 		7CED92122EF2D1F900457128 /* SortTypeBottomSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FFD2EF2D1F900457128 /* SortTypeBottomSheetCell.swift */; };
 		7CED92132EF2D1F900457128 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F082EF2D1F900457128 /* SettingsViewController.swift */; };
-		7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A82EF2D1F900457128 /* LandCollectionViewCell.swift */; };
 		7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90792EF2D1F900457128 /* DiningOperatingTimeFooterView.swift */; };
 		7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE52EF2D1F900457128 /* ReportLostItemViewModel.swift */; };
 		7CED921A2EF2D1F900457128 /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FB82EF2D1F900457128 /* ShopViewController.swift */; };
@@ -1981,18 +1969,6 @@
 		7CED909F2EF2D1F900457128 /* TimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewController.swift; sourceTree = "<group>"; };
 		7CED90A02EF2D1F900457128 /* TimetableText+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimetableText+.swift"; sourceTree = "<group>"; };
 		7CED90A42EF2D1F900457128 /* FacilityInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityInfoViewController.swift; sourceTree = "<group>"; };
-		7CED90A82EF2D1F900457128 /* LandCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandCollectionViewCell.swift; sourceTree = "<group>"; };
-		7CED90A92EF2D1F900457128 /* LandCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandCollectionView.swift; sourceTree = "<group>"; };
-		7CED90AB2EF2D1F900457128 /* LandViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandViewModel.swift; sourceTree = "<group>"; };
-		7CED90AC2EF2D1F900457128 /* LandViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandViewController.swift; sourceTree = "<group>"; };
-		7CED90AE2EF2D1F900457128 /* HouseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseInfoView.swift; sourceTree = "<group>"; };
-		7CED90AF2EF2D1F900457128 /* LandOptionCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandOptionCollectionView.swift; sourceTree = "<group>"; };
-		7CED90B02EF2D1F900457128 /* LandOptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandOptionCollectionViewCell.swift; sourceTree = "<group>"; };
-		7CED90B22EF2D1F900457128 /* LandImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandImageCollectionView.swift; sourceTree = "<group>"; };
-		7CED90B32EF2D1F900457128 /* LandImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandImageCollectionViewCell.swift; sourceTree = "<group>"; };
-		7CED90B52EF2D1F900457128 /* LandOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandOptionView.swift; sourceTree = "<group>"; };
-		7CED90B72EF2D1F900457128 /* LandDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewModel.swift; sourceTree = "<group>"; };
-		7CED90B82EF2D1F900457128 /* LandDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewController.swift; sourceTree = "<group>"; };
 		7CED921B2EF2D25900457128 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		7CED921C2EF2D25900457128 /* DIContainer+Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Home.swift"; sourceTree = "<group>"; };
 		7CED921D2EF2D25900457128 /* DIContainer+LostItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+LostItem.swift"; sourceTree = "<group>"; };
@@ -5196,73 +5172,6 @@
 			path = Facility;
 			sourceTree = "<group>";
 		};
-		7CED90AA2EF2D1F900457128 /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90A82EF2D1F900457128 /* LandCollectionViewCell.swift */,
-				7CED90A92EF2D1F900457128 /* LandCollectionView.swift */,
-			);
-			path = SubViews;
-			sourceTree = "<group>";
-		};
-		7CED90AD2EF2D1F900457128 /* Land */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90AA2EF2D1F900457128 /* SubViews */,
-				7CED90AB2EF2D1F900457128 /* LandViewModel.swift */,
-				7CED90AC2EF2D1F900457128 /* LandViewController.swift */,
-			);
-			path = Land;
-			sourceTree = "<group>";
-		};
-		7CED90B12EF2D1F900457128 /* LandOptionCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90AF2EF2D1F900457128 /* LandOptionCollectionView.swift */,
-				7CED90B02EF2D1F900457128 /* LandOptionCollectionViewCell.swift */,
-			);
-			path = LandOptionCollectionView;
-			sourceTree = "<group>";
-		};
-		7CED90B42EF2D1F900457128 /* LandImageCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90B22EF2D1F900457128 /* LandImageCollectionView.swift */,
-				7CED90B32EF2D1F900457128 /* LandImageCollectionViewCell.swift */,
-			);
-			path = LandImageCollectionView;
-			sourceTree = "<group>";
-		};
-		7CED90B62EF2D1F900457128 /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90AE2EF2D1F900457128 /* HouseInfoView.swift */,
-				7CED90B12EF2D1F900457128 /* LandOptionCollectionView */,
-				7CED90B42EF2D1F900457128 /* LandImageCollectionView */,
-				7CED90B52EF2D1F900457128 /* LandOptionView.swift */,
-			);
-			path = SubViews;
-			sourceTree = "<group>";
-		};
-		7CED90B92EF2D1F900457128 /* LandDetail */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90B62EF2D1F900457128 /* SubViews */,
-				7CED90B72EF2D1F900457128 /* LandDetailViewModel.swift */,
-				7CED90B82EF2D1F900457128 /* LandDetailViewController.swift */,
-			);
-			path = LandDetail;
-			sourceTree = "<group>";
-		};
-		7CED90BA2EF2D1F900457128 /* Land */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90AD2EF2D1F900457128 /* Land */,
-				7CED90B92EF2D1F900457128 /* LandDetail */,
-			);
-			path = Land;
-			sourceTree = "<group>";
-		};
 		7CED90BB2EF2D1F900457128 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -5278,7 +5187,6 @@
 				7C7ECDB53073D67900C7E768 /* Dining */,
 				7CED90A22EF2D1F900457128 /* TimeTable */,
 				7CED90A62EF2D1F900457128 /* Facility */,
-				7CED90BA2EF2D1F900457128 /* Land */,
 				7CC42B082F56AAAD00940CE1 /* CallVan */,
 				7C50A1B53041A25D00897A6F /* Recruit */,
 			);
@@ -7339,7 +7247,6 @@
 				7CF1D58D30695E8A00295ED9 /* RecruitMyPostHostingController.swift in Sources */,
 				7CED90C62EF2D1F900457128 /* TimetableCollectionViewCell.swift in Sources */,
 				7C016556300AA2E10013DD7B /* DepartmentCategory.swift in Sources */,
-				7CED90CA2EF2D1F900457128 /* LandOptionCollectionViewCell.swift in Sources */,
 				7CED90CB2EF2D1F900457128 /* LostItemChatListTableViewModel.swift in Sources */,
 				7CED90CE2EF2D1F900457128 /* ForceModifyUserViewController.swift in Sources */,
 				7CED90CF2EF2D1F900457128 /* ChangeMyProfileViewModel.swift in Sources */,
@@ -7351,7 +7258,6 @@
 				7CDCD0E430560758004204DA /* BasicInfo.swift in Sources */,
 				7CED90D22EF2D1F900457128 /* TagCollectionViewCell.swift in Sources */,
 				7C50A1CC3041E29000897A6F /* RecruitListFilter.swift in Sources */,
-				7CED90D32EF2D1F900457128 /* LandCollectionView.swift in Sources */,
 				7C6403D6300BF12500A9589F /* SearchDepartmentByCategoryUseCase.swift in Sources */,
 				7CED90D52EF2D1F900457128 /* SelectDeptModalViewController.swift in Sources */,
 				7CED90D72EF2D1F900457128 /* RecommendedKeywordCollectionView.swift in Sources */,
@@ -7363,7 +7269,6 @@
 				7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */,
 				7CED90DC2EF2D1F900457128 /* ShopSummaryDeliveryButton.swift in Sources */,
 				7CED90DD2EF2D1F900457128 /* AddDirectCollectionViewCell.swift in Sources */,
-				7CED90DF2EF2D1F900457128 /* LandDetailViewModel.swift in Sources */,
 				7CED90E02EF2D1F900457128 /* ShopSummaryTableViewCell.swift in Sources */,
 				7C50A20930431F9900897A6F /* Array+.swift in Sources */,
 				7CED90E22EF2D1F900457128 /* PointLabel.swift in Sources */,
@@ -7372,7 +7277,6 @@
 				7CED90E42EF2D1F900457128 /* SubstituteTimetableModalViewController.swift in Sources */,
 				7CED90E72EF2D1F900457128 /* ForceUpdateViewController.swift in Sources */,
 				7C86750E30061AA0003CB942 /* CheckHasUnreadNotificationHistoryUseCase.swift in Sources */,
-				7CED90EB2EF2D1F900457128 /* LandViewController.swift in Sources */,
 				7CED90EF2EF2D1F900457128 /* ShopReviewReportViewModel.swift in Sources */,
 				7CED90F02EF2D1F900457128 /* RevokeModalViewController.swift in Sources */,
 				7CED90F12EF2D1F900457128 /* ForceUpdateViewModel.swift in Sources */,
@@ -7380,7 +7284,6 @@
 				7CED90F22EF2D1F900457128 /* ShopSearchViewModel.swift in Sources */,
 				7CED90F42EF2D1F900457128 /* LostItemChatListTableViewController.swift in Sources */,
 				7CED90F72EF2D1F900457128 /* ReviewImageCollectionViewCell.swift in Sources */,
-				7CED90FA2EF2D1F900457128 /* LandDetailViewController.swift in Sources */,
 				7CED90FB2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift in Sources */,
 				7CF77B6930056EC9003642C1 /* NoticeKeywordButton.swift in Sources */,
 				7CED90FD2EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift in Sources */,
@@ -7402,7 +7305,6 @@
 				7CED91092EF2D1F900457128 /* FacilityInfoViewController.swift in Sources */,
 				7CED910A2EF2D1F900457128 /* LeftAlignedFlowLayout.swift in Sources */,
 				7CED910B2EF2D1F900457128 /* AddClassCollectionView.swift in Sources */,
-				7CED910C2EF2D1F900457128 /* LandImageCollectionView.swift in Sources */,
 				7CED910D2EF2D1F900457128 /* RecommendedSearchCollectionView.swift in Sources */,
 				7CED910E2EF2D1F900457128 /* ShopSearchViewController.swift in Sources */,
 				7CED910F2EF2D1F900457128 /* ShopCollectionView.swift in Sources */,
@@ -7415,7 +7317,6 @@
 				7CED91162EF2D1F900457128 /* ShopSortOptionSheetView.swift in Sources */,
 				7CB8EB4530584FC500300E99 /* RecruitProfilePostSecondStepView.swift in Sources */,
 				7CED91172EF2D1F900457128 /* TimetableText+.swift in Sources */,
-				7CED91182EF2D1F900457128 /* LandViewModel.swift in Sources */,
 				7CED911C2EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift in Sources */,
 				7CED911D2EF2D1F900457128 /* NoticeListTableViewFooter.swift in Sources */,
 				7CED911E2EF2D1F900457128 /* ShopReadyView.swift in Sources */,
@@ -7481,7 +7382,6 @@
 				7CED915D2EF2D1F900457128 /* ShopSearchTableView.swift in Sources */,
 				7CED915E2EF2D1F900457128 /* SettingsViewModel.swift in Sources */,
 				7CED91602EF2D1F900457128 /* CategoryCollectionViewCell.swift in Sources */,
-				7CED91632EF2D1F900457128 /* HouseInfoView.swift in Sources */,
 				7CF77B6730056EC1003642C1 /* NoticeKeywordManageButton.swift in Sources */,
 				7CED91642EF2D1F900457128 /* ShopSummaryViewModel.swift in Sources */,
 				7CED91652EF2D1F900457128 /* NoticeListHeaderView.swift in Sources */,
@@ -7493,7 +7393,6 @@
 				7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */,
 				7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */,
 				7CA63A2C2F1AF80F00226F86 /* LostItemListTableViewCell.swift in Sources */,
-				7CED91732EF2D1F900457128 /* LandOptionView.swift in Sources */,
 				7CED91752EF2D1F900457128 /* ShopReviewReportViewController.swift in Sources */,
 				7CED91782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				7C457B2B2FCE1BA80011D338 /* HomeDiningView.swift in Sources */,
@@ -7710,7 +7609,6 @@
 				7CED91CE2EF2D1F900457128 /* NotiViewModel.swift in Sources */,
 				7CACF86530436CFF00AC2828 /* RecruitNotificationListViewController.swift in Sources */,
 				7CED91CF2EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift in Sources */,
-				7CED91D22EF2D1F900457128 /* LandImageCollectionViewCell.swift in Sources */,
 				7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */,
 				7C01656F300B4A2D0013DD7B /* DepartmentView.swift in Sources */,
 				7C50A1C93041E14500897A6F /* RecruitListHeaderView.swift in Sources */,
@@ -7747,7 +7645,6 @@
 				7CED91F82EF2D1F900457128 /* TimetableViewModel.swift in Sources */,
 				7CC42B3E2F59600200940CE1 /* CallVanNotificationDropdownViewController.swift in Sources */,
 				7CDCD0D63055EA5B004204DA /* RecruitProfileActionButton.swift in Sources */,
-				7CED91F92EF2D1F900457128 /* LandOptionCollectionView.swift in Sources */,
 				7CED91FA2EF2D1F900457128 /* DeliveryTipsCollectionViewCell.swift in Sources */,
 				7CED91FE2EF2D1F900457128 /* LostArticleImageCollectionViewCell.swift in Sources */,
 				7CDCD0CD3055D64A004204DA /* RecruitProfileHostingController.swift in Sources */,
@@ -7774,7 +7671,6 @@
 				7C65FDC92FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift in Sources */,
 				7CED92122EF2D1F900457128 /* SortTypeBottomSheetCell.swift in Sources */,
 				7CED92132EF2D1F900457128 /* SettingsViewController.swift in Sources */,
-				7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */,
 				7C0C18952F68A913001781B3 /* FetchCallVanChatUseCase.swift in Sources */,
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
 				7C96B9783088F2680023A4ED /* DiningEmptyView.swift in Sources */,
