@@ -15,7 +15,7 @@ final class DefaultLandRepository: LandRepository {
         self.service = service
     }
     
-    func fetchLandList() -> AnyPublisher<LandDto, ErrorResponse> {
+    func fetchLandList() -> AnyPublisher<LandListDto, ErrorResponse> {
         return service.fetchLandList()
     }
     

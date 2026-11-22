@@ -8,6 +8,6 @@
 import Combine
 
 protocol LandRepository {
-    func fetchLandList() -> AnyPublisher<LandDto, ErrorResponse>
+    func fetchLandList() -> AnyPublisher<LandListDto, ErrorResponse>
     func fetchLandDetail(requestModel: FetchLandDetailRequest) -> AnyPublisher<LandDetailDto, ErrorResponse>
 }

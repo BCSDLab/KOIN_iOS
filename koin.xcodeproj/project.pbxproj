@@ -94,6 +94,8 @@
 		7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */; };
 		7C17EEB02EBF708B008BCA89 /* ShopSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */; };
 		7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */; };
+		7C18782430B307EC007ADB97 /* LandList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18782330B307EC007ADB97 /* LandList.swift */; };
+		7C18783930B3452C007ADB97 /* LandRowDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18783830B3452C007ADB97 /* LandRowDto.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
 		7C333E7C302E285B009D2B89 /* KoinModalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */; };
 		7C333E7E302E28AA009D2B89 /* KoinModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */; };
@@ -736,6 +738,9 @@
 		7CED923B2EF2D26000457128 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED923A2EF2D26000457128 /* Coordinator.swift */; };
 		7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */; };
 		7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */; };
+		7C18785B30B3600000ADB970 /* LandCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785A30B3600000ADB970 /* LandCoordinate.swift */; };
+		7CF09F9730B2EB11000F6CDD /* LandRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9630B2EB11000F6CDD /* LandRow.swift */; };
+		7CF09F9B30B2F67C000F6CDD /* LandDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9A30B2F67C000F6CDD /* LandDetail.swift */; };
 		7CF1D58B30695E7900295ED9 /* RecruitMyPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58A30695E7900295ED9 /* RecruitMyPostViewModel.swift */; };
 		7CF1D58D30695E8A00295ED9 /* RecruitMyPostHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58C30695E8A00295ED9 /* RecruitMyPostHostingController.swift */; };
 		7CF1D58F3069772700295ED9 /* RecruitApplicantRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58E3069772700295ED9 /* RecruitApplicantRow.swift */; };
@@ -1090,7 +1095,7 @@
 		D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0852BA608310081FD36 /* ImageCacher.swift */; };
 		D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0872BA608310081FD36 /* AppDelegate.swift */; };
 		D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0882BA608310081FD36 /* SceneDelegate.swift */; };
-		D27DD0D82BA6089D0081FD36 /* LandDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0D72BA6089D0081FD36 /* LandDto.swift */; };
+		D27DD0D82BA6089D0081FD36 /* LandListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0D72BA6089D0081FD36 /* LandListDto.swift */; };
 		D27DD0E22BA609740081FD36 /* MenuDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0E12BA609740081FD36 /* MenuDto.swift */; };
 		D27DD0E42BA609F30081FD36 /* ShopDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0E32BA609F30081FD36 /* ShopDataDto.swift */; };
 		D27DD0F62BA614400081FD36 /* LandDetailDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0F52BA614400081FD36 /* LandDetailDto.swift */; };
@@ -1117,8 +1122,6 @@
 		D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */; };
 		D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21E42C4F4C3700994554 /* AgreementText.swift */; };
 		D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21EB2C4F609000994554 /* LoginUseCase.swift */; };
-		D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21F02C4FD23600994554 /* LandDetailItem.swift */; };
-		D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21F22C4FD23F00994554 /* LandItem.swift */; };
 		D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21F52C4FD2C700994554 /* FetchLandDetailRequest.swift */; };
 		D29F21F82C5085B900994554 /* RefreshTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21F72C5085B900994554 /* RefreshTokenRequest.swift */; };
 		D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21FB2C508A9C00994554 /* CheckPasswordRequest.swift */; };
@@ -1362,6 +1365,8 @@
 		7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopSearchRequest.swift; sourceTree = "<group>"; };
 		7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchDto.swift; sourceTree = "<group>"; };
 		7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSearchShopUseCase.swift; sourceTree = "<group>"; };
+		7C18782330B307EC007ADB97 /* LandList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandList.swift; sourceTree = "<group>"; };
+		7C18783830B3452C007ADB97 /* LandRowDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRowDto.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalAnimator.swift; sourceTree = "<group>"; };
 		7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalPresentationController.swift; sourceTree = "<group>"; };
@@ -1983,6 +1988,9 @@
 		7CED923A2EF2D26000457128 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionView.swift; sourceTree = "<group>"; };
 		7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		7C18785A30B3600000ADB970 /* LandCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandCoordinate.swift; sourceTree = "<group>"; };
+		7CF09F9630B2EB11000F6CDD /* LandRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRow.swift; sourceTree = "<group>"; };
+		7CF09F9A30B2F67C000F6CDD /* LandDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetail.swift; sourceTree = "<group>"; };
 		7CF1D58A30695E7900295ED9 /* RecruitMyPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostViewModel.swift; sourceTree = "<group>"; };
 		7CF1D58C30695E8A00295ED9 /* RecruitMyPostHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostHostingController.swift; sourceTree = "<group>"; };
 		7CF1D58E3069772700295ED9 /* RecruitApplicantRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplicantRow.swift; sourceTree = "<group>"; };
@@ -2344,7 +2352,7 @@
 		D27DD0852BA608310081FD36 /* ImageCacher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacher.swift; sourceTree = "<group>"; };
 		D27DD0872BA608310081FD36 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D27DD0882BA608310081FD36 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D27DD0D72BA6089D0081FD36 /* LandDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandDto.swift; sourceTree = "<group>"; };
+		D27DD0D72BA6089D0081FD36 /* LandListDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandListDto.swift; sourceTree = "<group>"; };
 		D27DD0E12BA609740081FD36 /* MenuDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDto.swift; sourceTree = "<group>"; };
 		D27DD0E32BA609F30081FD36 /* ShopDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataDto.swift; sourceTree = "<group>"; };
 		D27DD0F52BA614400081FD36 /* LandDetailDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailDto.swift; sourceTree = "<group>"; };
@@ -2371,8 +2379,6 @@
 		D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListRequest.swift; sourceTree = "<group>"; };
 		D29F21E42C4F4C3700994554 /* AgreementText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementText.swift; sourceTree = "<group>"; };
 		D29F21EB2C4F609000994554 /* LoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUseCase.swift; sourceTree = "<group>"; };
-		D29F21F02C4FD23600994554 /* LandDetailItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailItem.swift; sourceTree = "<group>"; };
-		D29F21F22C4FD23F00994554 /* LandItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandItem.swift; sourceTree = "<group>"; };
 		D29F21F52C4FD2C700994554 /* FetchLandDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandDetailRequest.swift; sourceTree = "<group>"; };
 		D29F21F72C5085B900994554 /* RefreshTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenRequest.swift; sourceTree = "<group>"; };
 		D29F21FB2C508A9C00994554 /* CheckPasswordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPasswordRequest.swift; sourceTree = "<group>"; };
@@ -5869,7 +5875,8 @@
 		D23479D82BDB5EEF00FA91BD /* Land */ = {
 			isa = PBXGroup;
 			children = (
-				D27DD0D72BA6089D0081FD36 /* LandDto.swift */,
+				D27DD0D72BA6089D0081FD36 /* LandListDto.swift */,
+				7C18783830B3452C007ADB97 /* LandRowDto.swift */,
 				D27DD0F52BA614400081FD36 /* LandDetailDto.swift */,
 			);
 			path = Land;
@@ -6223,8 +6230,10 @@
 		D29F21EF2C4FD22900994554 /* Land */ = {
 			isa = PBXGroup;
 			children = (
-				D29F21F02C4FD23600994554 /* LandDetailItem.swift */,
-				D29F21F22C4FD23F00994554 /* LandItem.swift */,
+				7C18782330B307EC007ADB97 /* LandList.swift */,
+				7CF09F9630B2EB11000F6CDD /* LandRow.swift */,
+				7CF09F9A30B2F67C000F6CDD /* LandDetail.swift */,
+				7C18785A30B3600000ADB970 /* LandCoordinate.swift */,
 			);
 			path = Land;
 			sourceTree = "<group>";
@@ -6860,6 +6869,7 @@
 				004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */,
 				E5DD3F6BE6C501B7B3BD659C /* RecruitPostRoleView.swift in Sources */,
 				A1E000010000000000000001 /* RecruitPostRoleTableView.swift in Sources */,
+				7C18785B30B3600000ADB970 /* LandCoordinate.swift in Sources */,
 				0E2253358E42231BE436FA27 /* RecruitPostScheduleView.swift in Sources */,
 				1537B6CFD3D7AF52A2E9E944 /* RecruitPostMeetingTypeView.swift in Sources */,
 				C1838F7A4424DEA14DB2D107 /* RecruitPostCategoryView.swift in Sources */,
@@ -7035,6 +7045,7 @@
 				7CF7D0DF30853D8D009AFDCB /* DiningNoti.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
+				7C18783930B3452C007ADB97 /* LandRowDto.swift in Sources */,
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
@@ -7051,7 +7062,6 @@
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				7C58FEA22F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift in Sources */,
 				7C0C18A12F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift in Sources */,
-				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
 				7C58FE902F5FA4D600A2737B /* CallVanDataTableViewCell.swift in Sources */,
 				835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */,
@@ -7069,7 +7079,6 @@
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
 				7C01656B300ABE9E0013DD7B /* DepartmentFooterView.swift in Sources */,
 				7C05D0782FBC29ED00F4D825 /* ShopBenefitViewModel.swift in Sources */,
-				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
 				7C7F56B72FFB9FE000847151 /* NotificationHistoryRecord.swift in Sources */,
 				7C50A1FD3042E9AB00897A6F /* FetchRecruitListUseCase.swift in Sources */,
 				BEEF20000000000000000001 /* RecruitMyPostList.swift in Sources */,
@@ -7169,6 +7178,7 @@
 				7CACF86730436D2600AC2828 /* RecruitNotificationListViewModel.swift in Sources */,
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
 				83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift in Sources */,
+				7CF09F9B30B2F67C000F6CDD /* LandDetail.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
 				7C0C18A32F68FD3D001781B3 /* CallVanSummaryDto.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDto.swift in Sources */,
@@ -7443,6 +7453,7 @@
 				7CED91862EF2D1F900457128 /* ShopReviewViewController.swift in Sources */,
 				7CED91872EF2D1F900457128 /* ReviewListViewController.swift in Sources */,
 				7CED91882EF2D1F900457128 /* ReviewListCollectionViewCell.swift in Sources */,
+				7CF09F9730B2EB11000F6CDD /* LandRow.swift in Sources */,
 				7CED91892EF2D1F900457128 /* ShopSummaryPriceTableView.swift in Sources */,
 				7C372F172F1CD81800149729 /* LostItemDataViewController.swift in Sources */,
 				7CED918A2EF2D1F900457128 /* NoticeDataViewController.swift in Sources */,
@@ -7452,6 +7463,7 @@
 				7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */,
 				7CB11C7C2FB32817004E0C80 /* LostItemKeyword.swift in Sources */,
 				7C58FE862F5F9CDD00A2737B /* CallVanDataViewController.swift in Sources */,
+				7C18782430B307EC007ADB97 /* LandList.swift in Sources */,
 				7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */,
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,
 				7CED91912EF2D1F900457128 /* NoticeTabBarCollectionView.swift in Sources */,
@@ -7929,7 +7941,7 @@
 				D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */,
 				D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */,
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
-				D27DD0D82BA6089D0081FD36 /* LandDto.swift in Sources */,
+				D27DD0D82BA6089D0081FD36 /* LandListDto.swift in Sources */,
 				7C8A94392FD2C45200DEA6F5 /* ShopCountDto.swift in Sources */,
 				7C58FEA02F5FE4C900A2737B /* CallVanReportReasonButton.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
