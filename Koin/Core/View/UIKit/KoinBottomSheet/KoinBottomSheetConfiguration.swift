@@ -19,6 +19,7 @@ struct KoinBottomSheetConfiguration {
     }
 
     struct Behavior {
+        var isDraggable = true
         var dismissOnDrag = true
         var expandToFullScreenOnDrag = false
         var expandToFullScreenOnKeyboard = false
