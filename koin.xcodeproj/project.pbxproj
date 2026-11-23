@@ -115,6 +115,10 @@
 		7C18786530B3600000ADB970 /* LandDetailImageEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */; };
 		7C18786730B3600000ADB970 /* LandDetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786630B3600000ADB970 /* LandDetailInfoView.swift */; };
 		7C18786930B3600000ADB970 /* LandDetailBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */; };
+		7C18786D30B3600000ADB970 /* LandSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786C30B3600000ADB970 /* LandSearchViewController.swift */; };
+		7C18786F30B3600000ADB970 /* LandSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786E30B3600000ADB970 /* LandSearchViewModel.swift */; };
+		7C18787130B3600000ADB970 /* LandSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787030B3600000ADB970 /* LandSearchBarView.swift */; };
+		7C18787330B3600000ADB970 /* LandSearchEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */; };
 		7C18787530B3600000ADB970 /* FetchLandListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787430B3600000ADB970 /* FetchLandListRequest.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
 		7C333E7C302E285B009D2B89 /* KoinModalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */; };
@@ -1410,6 +1414,10 @@
 		7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageEmptyView.swift; sourceTree = "<group>"; };
 		7C18786630B3600000ADB970 /* LandDetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailInfoView.swift; sourceTree = "<group>"; };
 		7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailBottomSheetContentView.swift; sourceTree = "<group>"; };
+		7C18786C30B3600000ADB970 /* LandSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchViewController.swift; sourceTree = "<group>"; };
+		7C18786E30B3600000ADB970 /* LandSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchViewModel.swift; sourceTree = "<group>"; };
+		7C18787030B3600000ADB970 /* LandSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchBarView.swift; sourceTree = "<group>"; };
+		7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchEmptyView.swift; sourceTree = "<group>"; };
 		7C18787430B3600000ADB970 /* FetchLandListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListRequest.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalAnimator.swift; sourceTree = "<group>"; };
@@ -2813,6 +2821,25 @@
 				7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */,
 				7C18786630B3600000ADB970 /* LandDetailInfoView.swift */,
 				7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C18787630B3600000ADB970 /* LandSearch */ = {
+			isa = PBXGroup;
+			children = (
+				7C18787730B3600000ADB970 /* Subviews */,
+				7C18786C30B3600000ADB970 /* LandSearchViewController.swift */,
+				7C18786E30B3600000ADB970 /* LandSearchViewModel.swift */,
+			);
+			path = LandSearch;
+			sourceTree = "<group>";
+		};
+		7C18787730B3600000ADB970 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C18787030B3600000ADB970 /* LandSearchBarView.swift */,
+				7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -5316,6 +5343,7 @@
 			children = (
 				7CF09F8830B2E789000F6CDD /* LandList */,
 				7C18786A30B3600000ADB970 /* LandDetail */,
+				7C18787630B3600000ADB970 /* LandSearch */,
 			);
 			path = Land;
 			sourceTree = "<group>";
@@ -8167,6 +8195,10 @@
 				7C18786530B3600000ADB970 /* LandDetailImageEmptyView.swift in Sources */,
 				7C18786730B3600000ADB970 /* LandDetailInfoView.swift in Sources */,
 				7C18786930B3600000ADB970 /* LandDetailBottomSheetContentView.swift in Sources */,
+				7C18786D30B3600000ADB970 /* LandSearchViewController.swift in Sources */,
+				7C18786F30B3600000ADB970 /* LandSearchViewModel.swift in Sources */,
+				7C18787130B3600000ADB970 /* LandSearchBarView.swift in Sources */,
+				7C18787330B3600000ADB970 /* LandSearchEmptyView.swift in Sources */,
 				7C18787530B3600000ADB970 /* FetchLandListRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
