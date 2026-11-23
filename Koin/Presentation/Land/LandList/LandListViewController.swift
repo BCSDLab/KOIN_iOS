@@ -62,6 +62,7 @@ final class LandListViewController: UIViewController {
     private let navigationBarView = UIView()
     private let navigationTitleLabel = UILabel()
     private let backButton = UIButton(type: .system)
+    private let searchButton = UIButton(type: .system)
 
 
     // MARK: - Initializer
@@ -187,6 +188,19 @@ extension LandListViewController {
 }
 
 extension LandListViewController {
+    private func pushLandSearchViewController() {
+        let landService = DefaultLandService()
+        let landRepository = DefaultLandRepository(service: landService)
+        let fetchLandListUseCase = DefaultFetchLandListUseCase(landRepository: landRepository)
+        let viewModel = LandSearchViewModel(fetchLandListUseCase: fetchLandListUseCase)
+        let viewController = LandSearchViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
+    }
+    
+    @objc private func searchButtonTapped() {
+        pushLandSearchViewController()
+    }
+    
     @objc private func backButtonTapped() {
         navigationController?.popViewController(animated: true)
     }
@@ -214,13 +228,16 @@ extension LandListViewController {
         backButton.tintColor = .appColor(.neutral800)
         backButton.accessibilityLabel = "뒤로가기"
         backButton.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        searchButton.setImage(UIImage.appImage(asset: .landSearch)?.withRenderingMode(.alwaysOriginal), for: .normal)
+        searchButton.accessibilityLabel = "검색"
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
 
     private func setUpLayouts() {
         [mapView, navigationBarView, zoomControlView].forEach {
             view.addSubview($0)
         }
-        [navigationTitleLabel, backButton].forEach {
+        [navigationTitleLabel, backButton, searchButton].forEach {
             navigationBarView.addSubview($0)
         }
     }
@@ -235,6 +252,11 @@ extension LandListViewController {
         }
         backButton.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(8)
+            $0.bottom.equalToSuperview()
+            $0.size.equalTo(44)
+        }
+        searchButton.snp.makeConstraints {
+            $0.trailing.equalToSuperview().offset(-8)
             $0.bottom.equalToSuperview()
             $0.size.equalTo(44)
         }
