@@ -234,6 +234,7 @@ enum EventParameter {
             case roomListRoomPreviewCloseClick = "real_estate__room_list__room_preview__close__click"
             case roomCommonNavigationBackClick = "real_estate__room_common__navigation__back__click"
             case roomCommonNavigationBackSwipe = "real_estate__room_common__navigation__back__swipe"
+            case roomDetailContactCallClick = "real_estate__room_detail__contact__call__click"
         }
 
         enum Department: String, EventLabelType {

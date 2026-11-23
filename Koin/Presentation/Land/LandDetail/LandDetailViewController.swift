@@ -88,6 +88,7 @@ extension LandDetailViewController {
         
         bottomSheetContentView.callTappedPublisher
             .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomDetailContactCallClick, "전화 문의하기"))
                 self?.makePhoneCall()
             }
             .store(in: &subscriptions)
@@ -132,6 +133,15 @@ extension LandDetailViewController {
             return
         }
         UIApplication.shared.open(url)
+    }
+}
+
+extension LandDetailViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.RealEstate.roomCommonNavigationBackSwipe
+            : EventParameter.EventLabel.RealEstate.roomCommonNavigationBackClick
+        inputSubject.send(.logEvent(label, "뒤로가기", parameters: ["source_screen": "room_detail"]))
     }
 }
 
