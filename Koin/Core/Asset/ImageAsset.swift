@@ -195,6 +195,7 @@ public enum ImageAsset: String {
     case landCluster10to12
     case landZoomIn
     case landZoomOut
+    case landSearch
     
     // MARK: - Logo
     case bcsdSymbolLogo
