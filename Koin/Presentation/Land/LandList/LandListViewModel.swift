@@ -45,7 +45,7 @@ extension LandListViewModel {
 
 extension LandListViewModel {
     private func fetchLandList() {
-        fetchLandListUseCase.execute().sink(
+        fetchLandListUseCase.execute(query: nil).sink(
             receiveCompletion: { [weak self] completion in
                 if case .failure(let error) = completion {
                     self?.outputSubject.send(.showToastMessage(error.message))

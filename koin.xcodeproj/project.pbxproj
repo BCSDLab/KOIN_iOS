@@ -115,6 +115,7 @@
 		7C18786530B3600000ADB970 /* LandDetailImageEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */; };
 		7C18786730B3600000ADB970 /* LandDetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786630B3600000ADB970 /* LandDetailInfoView.swift */; };
 		7C18786930B3600000ADB970 /* LandDetailBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */; };
+		7C18787530B3600000ADB970 /* FetchLandListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787430B3600000ADB970 /* FetchLandListRequest.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
 		7C333E7C302E285B009D2B89 /* KoinModalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */; };
 		7C333E7E302E28AA009D2B89 /* KoinModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */; };
@@ -1409,6 +1410,7 @@
 		7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageEmptyView.swift; sourceTree = "<group>"; };
 		7C18786630B3600000ADB970 /* LandDetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailInfoView.swift; sourceTree = "<group>"; };
 		7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailBottomSheetContentView.swift; sourceTree = "<group>"; };
+		7C18787430B3600000ADB970 /* FetchLandListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListRequest.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalAnimator.swift; sourceTree = "<group>"; };
 		7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalPresentationController.swift; sourceTree = "<group>"; };
@@ -6359,6 +6361,7 @@
 			isa = PBXGroup;
 			children = (
 				D29F21F52C4FD2C700994554 /* FetchLandDetailRequest.swift */,
+				7C18787430B3600000ADB970 /* FetchLandListRequest.swift */,
 			);
 			path = Land;
 			sourceTree = "<group>";
@@ -8164,6 +8167,7 @@
 				7C18786530B3600000ADB970 /* LandDetailImageEmptyView.swift in Sources */,
 				7C18786730B3600000ADB970 /* LandDetailInfoView.swift in Sources */,
 				7C18786930B3600000ADB970 /* LandDetailBottomSheetContentView.swift in Sources */,
+				7C18787530B3600000ADB970 /* FetchLandListRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
