@@ -17,9 +17,9 @@ struct LandDetailDto: Decodable {
     let charterFee: String?
     let deposit: String?
     let managementFee: String?
-    let size: String
-    let roomType: String
-    let phone: String
+    let size: String?
+    let roomType: String?
+    let phone: String?
 
     enum CodingKeys: String, CodingKey {
         case id, name, latitude, longitude
@@ -44,13 +44,13 @@ extension LandDetailDto {
                 longitude: longitude
             ),
             imageUrls: imageUrls ?? [],
-            monthlyFee: monthlyFee,
-            charterFee: charterFee,
-            deposit: deposit,
-            managementFee: managementFee,
-            size: size,
-            roomType: roomType,
-            phone: phone
+            monthlyFee: monthlyFee.flatMap { $0.isEmpty ? nil : $0 },
+            charterFee: charterFee.flatMap { $0.isEmpty ? nil : $0 },
+            deposit: deposit.flatMap { $0.isEmpty ? nil : $0 },
+            managementFee: managementFee.flatMap { $0.isEmpty ? nil : $0 },
+            size: size.flatMap { $0.isEmpty ? nil : $0 },
+            roomType: roomType.flatMap { $0.isEmpty ? nil : $0 },
+            phone: phone.flatMap { $0.isEmpty ? nil : $0 }
         )
     }
 }
