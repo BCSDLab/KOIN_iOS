@@ -108,6 +108,13 @@
 		7C18785530B3600000ADB970 /* LandListFocusedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785430B3600000ADB970 /* LandListFocusedView.swift */; };
 		7C18785730B3600000ADB970 /* LandMapZoomControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785630B3600000ADB970 /* LandMapZoomControlView.swift */; };
 		7C18785930B3600000ADB970 /* LandListBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785830B3600000ADB970 /* LandListBadgeView.swift */; };
+		7C18785D30B3600000ADB970 /* LandDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785C30B3600000ADB970 /* LandDetailViewController.swift */; };
+		7C18785F30B3600000ADB970 /* LandDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785E30B3600000ADB970 /* LandDetailViewModel.swift */; };
+		7C18786130B3600000ADB970 /* LandDetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786030B3600000ADB970 /* LandDetailImageView.swift */; };
+		7C18786330B3600000ADB970 /* LandDetailImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786230B3600000ADB970 /* LandDetailImageCollectionViewCell.swift */; };
+		7C18786530B3600000ADB970 /* LandDetailImageEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */; };
+		7C18786730B3600000ADB970 /* LandDetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786630B3600000ADB970 /* LandDetailInfoView.swift */; };
+		7C18786930B3600000ADB970 /* LandDetailBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
 		7C333E7C302E285B009D2B89 /* KoinModalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */; };
 		7C333E7E302E28AA009D2B89 /* KoinModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */; };
@@ -1395,6 +1402,13 @@
 		7C18785430B3600000ADB970 /* LandListFocusedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListFocusedView.swift; sourceTree = "<group>"; };
 		7C18785630B3600000ADB970 /* LandMapZoomControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandMapZoomControlView.swift; sourceTree = "<group>"; };
 		7C18785830B3600000ADB970 /* LandListBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListBadgeView.swift; sourceTree = "<group>"; };
+		7C18785C30B3600000ADB970 /* LandDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewController.swift; sourceTree = "<group>"; };
+		7C18785E30B3600000ADB970 /* LandDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewModel.swift; sourceTree = "<group>"; };
+		7C18786030B3600000ADB970 /* LandDetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageView.swift; sourceTree = "<group>"; };
+		7C18786230B3600000ADB970 /* LandDetailImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageEmptyView.swift; sourceTree = "<group>"; };
+		7C18786630B3600000ADB970 /* LandDetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailInfoView.swift; sourceTree = "<group>"; };
+		7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailBottomSheetContentView.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalAnimator.swift; sourceTree = "<group>"; };
 		7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalPresentationController.swift; sourceTree = "<group>"; };
@@ -2777,6 +2791,28 @@
 				7CF09F9230B2E85B000F6CDD /* LandMarkerKey.swift */,
 			);
 			path = LandMapView;
+			sourceTree = "<group>";
+		};
+		7C18786A30B3600000ADB970 /* LandDetail */ = {
+			isa = PBXGroup;
+			children = (
+				7C18786B30B3600000ADB970 /* Subviews */,
+				7C18785C30B3600000ADB970 /* LandDetailViewController.swift */,
+				7C18785E30B3600000ADB970 /* LandDetailViewModel.swift */,
+			);
+			path = LandDetail;
+			sourceTree = "<group>";
+		};
+		7C18786B30B3600000ADB970 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C18786030B3600000ADB970 /* LandDetailImageView.swift */,
+				7C18786230B3600000ADB970 /* LandDetailImageCollectionViewCell.swift */,
+				7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */,
+				7C18786630B3600000ADB970 /* LandDetailInfoView.swift */,
+				7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 		7C333E7A302E280C009D2B89 /* KoinModalViewController */ = {
@@ -5277,6 +5313,7 @@
 			isa = PBXGroup;
 			children = (
 				7CF09F8830B2E789000F6CDD /* LandList */,
+				7C18786A30B3600000ADB970 /* LandDetail */,
 			);
 			path = Land;
 			sourceTree = "<group>";
@@ -8120,6 +8157,13 @@
 				7C18785530B3600000ADB970 /* LandListFocusedView.swift in Sources */,
 				7C18785730B3600000ADB970 /* LandMapZoomControlView.swift in Sources */,
 				7C18785930B3600000ADB970 /* LandListBadgeView.swift in Sources */,
+				7C18785D30B3600000ADB970 /* LandDetailViewController.swift in Sources */,
+				7C18785F30B3600000ADB970 /* LandDetailViewModel.swift in Sources */,
+				7C18786130B3600000ADB970 /* LandDetailImageView.swift in Sources */,
+				7C18786330B3600000ADB970 /* LandDetailImageCollectionViewCell.swift in Sources */,
+				7C18786530B3600000ADB970 /* LandDetailImageEmptyView.swift in Sources */,
+				7C18786730B3600000ADB970 /* LandDetailInfoView.swift in Sources */,
+				7C18786930B3600000ADB970 /* LandDetailBottomSheetContentView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
