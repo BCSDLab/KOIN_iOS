@@ -39,6 +39,7 @@ final class LandSearchViewController: UIViewController {
         super.viewDidLoad()
         configureView()
         bind()
+        hideKeyboardWhenTappedAround()
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -116,6 +117,7 @@ extension LandSearchViewController {
     private func setUpStyles() {
         view.backgroundColor = .appColor(.neutral0)
         additionalSafeAreaInsets.top = 44
+        view.keyboardLayoutGuide.usesBottomSafeArea = false
         navigationBarView.backgroundColor = .appColor(.neutral0)
         navigationTitleLabel.do {
             $0.text = "복덕방"
@@ -138,7 +140,7 @@ extension LandSearchViewController {
             $0.isHidden = true
         }
         tableView.do {
-            $0.keyboardDismissMode = .onDrag
+            $0.keyboardDismissMode = .interactive
             $0.isHidden = true
         }
         emptyView.isHidden = true
@@ -179,11 +181,13 @@ extension LandSearchViewController {
         }
         tableView.snp.makeConstraints {
             $0.top.equalTo(countLabel.snp.bottom).offset(12)
-            $0.leading.trailing.bottom.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
         }
         emptyView.snp.makeConstraints {
-            $0.top.equalTo(searchBarView.snp.bottom).offset(200)
-            $0.centerX.equalToSuperview()
+            $0.top.equalTo(searchBarView.snp.bottom)
+            $0.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
         }
     }
 }

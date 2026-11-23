@@ -60,7 +60,7 @@ extension LandSearchEmptyView {
 
     private func setUpConstraints() {
         stackView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.center.equalToSuperview()
         }
         imageView.snp.makeConstraints {
             $0.width.equalTo(98)
