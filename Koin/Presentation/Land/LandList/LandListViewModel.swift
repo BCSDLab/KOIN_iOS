@@ -10,6 +10,7 @@ import Combine
 final class LandListViewModel: ViewModelProtocol {
     enum Input {
         case viewDidLoad
+        case logEvent(EventLabelType, Any, parameters: [String: String] = [:])
     }
     enum Output {
         case updateLandList(LandList)
@@ -18,13 +19,18 @@ final class LandListViewModel: ViewModelProtocol {
     
     // MARK: - Properties
     private let fetchLandListUseCase: DefaultFetchLandListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     
     let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
     
     // MARK: - Initializer
-    init(fetchLandListUseCase: DefaultFetchLandListUseCase) {
+    init(
+        fetchLandListUseCase: DefaultFetchLandListUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    ) {
         self.fetchLandListUseCase = fetchLandListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 }
 
@@ -35,6 +41,8 @@ extension LandListViewModel {
             switch input {
             case .viewDidLoad:
                 fetchLandList()
+            case let .logEvent(label, value, parameters):
+                logAnalyticsEventUseCase.execute(label: label, value: value, parameters: parameters)
             }
         }
         .store(in: &subscriptions)

@@ -19,4 +19,12 @@ enum LandListFilter: CaseIterable {
         case .charter: "전세"
         }
     }
+    
+    var logValue: String {
+        switch self {
+        case .all: "전체"
+        case .monthly: "월세"
+        case .charter: "전세"
+        }
+    }
 }

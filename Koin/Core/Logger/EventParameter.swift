@@ -226,6 +226,14 @@ enum EventParameter {
         enum RealEstate: String, EventLabelType {
             case roomDetailPhotoViewSlideClick = "real_estate__room_detail__photo_view__slide__click"
             case roomListRoomDetailEntryClick = "real_estate__room_list__room_detail__entry__click"
+            case roomListRoomDetailButtonEntryClick = "real_estate__room_list__room_detail__button_entry__click"
+            case roomListContractTypeSelect = "real_estate__room_list__contract_type__select"
+            case roomListMapClusterClick = "real_estate__room_list__map_cluster__click"
+            case roomListMapZoomClick = "real_estate__room_list__map__zoom__click"
+            case roomListRoomPreviewEntryClick = "real_estate__room_list__room_preview__entry__click"
+            case roomListRoomPreviewCloseClick = "real_estate__room_list__room_preview__close__click"
+            case roomCommonNavigationBackClick = "real_estate__room_common__navigation__back__click"
+            case roomCommonNavigationBackSwipe = "real_estate__room_common__navigation__back__swipe"
         }
 
         enum Department: String, EventLabelType {

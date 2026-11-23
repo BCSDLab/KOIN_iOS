@@ -211,7 +211,11 @@ extension CategoryHostingController {
         let landService = DefaultLandService()
         let landRepository = DefaultLandRepository(service: landService)
         let fetchLandListUseCase = DefaultFetchLandListUseCase(landRepository: landRepository)
-        let viewModel = LandListViewModel(fetchLandListUseCase: fetchLandListUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LandListViewModel(
+            fetchLandListUseCase: fetchLandListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         return LandListViewController(viewModel: viewModel)
     }
 

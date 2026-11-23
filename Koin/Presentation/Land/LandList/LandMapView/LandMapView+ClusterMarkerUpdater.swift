@@ -6,14 +6,22 @@
 //
 
 import NMapsMap
+import Combine
 
 final class LandMapViewClusterMarkerUpdater: NMCDefaultClusterMarkerUpdater {
     typealias ItemKey = LandMarkerKey
+    
+    let clusterTappedPublisher = PassthroughSubject<Void, Never>()
     
     override func updateClusterMarker(_ info: NMCClusterMarkerInfo, _ marker: NMFMarker) {
         super.updateClusterMarker(info, marker)
         
         marker.captionText = ""
+        let defaultTouchHandler = marker.touchHandler
+        marker.touchHandler = { [weak self] overlay in
+            self?.clusterTappedPublisher.send()
+            return defaultTouchHandler?(overlay) ?? true
+        }
 
         switch info.size {
         case 1:

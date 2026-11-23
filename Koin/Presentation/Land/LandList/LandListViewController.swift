@@ -117,40 +117,72 @@ extension LandListViewController {
         mapView.markerTappedPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] focusedMarkerKey in
-                self?.focusedMarkerKey = focusedMarkerKey
+                guard let self else { return }
+                if focusedMarkerKey != self.focusedMarkerKey,
+                   let focusedRow = landList.rows.first(where: { $0.id == focusedMarkerKey.identifier }) {
+                    inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListRoomPreviewEntryClick, focusedRow.name))
+                }
+                self.focusedMarkerKey = focusedMarkerKey
+            }
+            .store(in: &subscriptions)
+
+        mapView.clusterTappedPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListMapClusterClick, "묶음 마커"))
             }
             .store(in: &subscriptions)
 
         bottomSheetContentView.filterTappedPublisher
             .sink { [weak self] listFilter in
-                self?.listFilter = listFilter
+                guard let self, listFilter != self.listFilter else { return }
+                inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListContractTypeSelect, listFilter.logValue))
+                self.listFilter = listFilter
             }
             .store(in: &subscriptions)
 
         bottomSheetContentView.closeTappedPublisher
             .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListRoomPreviewCloseClick, "닫기"))
                 self?.focusedMarkerKey = nil
             }
             .store(in: &subscriptions)
 
         bottomSheetContentView.rowTappedPublisher
-            .merge(with: bottomSheetContentView.detailTappedPublisher)
             .sink { [weak self] landRow in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListRoomDetailEntryClick, landRow.name))
+                self?.pushLandDetailViewController(landRow: landRow)
+            }
+            .store(in: &subscriptions)
+
+        bottomSheetContentView.detailTappedPublisher
+            .sink { [weak self] landRow in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListRoomDetailButtonEntryClick, landRow.name))
                 self?.pushLandDetailViewController(landRow: landRow)
             }
             .store(in: &subscriptions)
 
         zoomControlView.zoomInTappedPublisher
             .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListMapZoomClick, "확대"))
                 self?.mapView.zoomIn()
             }
             .store(in: &subscriptions)
 
         zoomControlView.zoomOutTappedPublisher
             .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListMapZoomClick, "축소"))
                 self?.mapView.zoomOut()
             }
             .store(in: &subscriptions)
+    }
+}
+
+extension LandListViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.RealEstate.roomCommonNavigationBackSwipe
+            : EventParameter.EventLabel.RealEstate.roomCommonNavigationBackClick
+        inputSubject.send(.logEvent(label, "뒤로가기", parameters: ["source_screen": "room_list"]))
     }
 }
 
