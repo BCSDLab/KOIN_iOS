@@ -12,7 +12,6 @@ import SnapKit
 final class LandListViewController: UIViewController {
 
     // MARK: - Properties
-    private let initialCoordinate = LandCoordinate(latitude: 36.766205, longitude: 127.284638)
     private var landList: LandList = LandList.empty
     private let viewModel: LandListViewModel
     private let inputSubject = PassthroughSubject<LandListViewModel.Input, Never>()
@@ -81,7 +80,6 @@ final class LandListViewController: UIViewController {
         presentLandListBottomSheet()
         bind()
         inputSubject.send(.viewDidLoad)
-        mapView.focus(on: initialCoordinate, animationDuration: 0)
     }
 
     override func viewWillAppear(_ animated: Bool) {

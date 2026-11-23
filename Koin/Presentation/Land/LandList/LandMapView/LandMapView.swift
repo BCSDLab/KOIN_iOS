@@ -13,6 +13,8 @@ import SnapKit
 final class LandMapView: UIView {
     typealias ItemKey = LandMarkerKey
     
+    private static let initialCoordinate = LandCoordinate(latitude: 36.766205, longitude: 127.284638)
+    
     // MARK: - Properties
     var markerTappedPublisher: AnyPublisher<ItemKey, Never> {
         leafMarkerUpdater.markerTappedPublisher.eraseToAnyPublisher()
@@ -39,6 +41,7 @@ final class LandMapView: UIView {
     init() {
         super.init(frame: .zero)
         configureView()
+        focus(on: Self.initialCoordinate, animationDuration: 0)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
