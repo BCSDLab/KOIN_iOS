@@ -34,7 +34,6 @@ final class LandMapView: UIView {
     private let mapView = NMFMapView().then {
         $0.mapType = .basic
         $0.minZoomLevel = 12
-        $0.maxZoomLevel = 20
     }
     
     // MARK: - Initializer
