@@ -8,7 +8,7 @@
 import Combine
 
 protocol FetchLandListUseCase {
-    func execute() -> AnyPublisher<[LandItem], ErrorResponse>
+    func execute(query: String?) -> AnyPublisher<LandList, ErrorResponse>
 }
 
 final class DefaultFetchLandListUseCase: FetchLandListUseCase {
@@ -19,9 +19,9 @@ final class DefaultFetchLandListUseCase: FetchLandListUseCase {
         self.landRepository = landRepository
     }
     
-    func execute() -> AnyPublisher<[LandItem], ErrorResponse> {
-        return landRepository.fetchLandList().map { landDto in
-            landDto.lands?.map { $0.toDomain() } ?? []
+    func execute(query: String?) -> AnyPublisher<LandList, ErrorResponse> {
+        return landRepository.fetchLandList(requestModel: FetchLandListRequest(query: query)).map { landListDto in
+            landListDto.toDomain()
         }.eraseToAnyPublisher()
     }
 }

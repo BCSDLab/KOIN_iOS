@@ -37,6 +37,7 @@ extension KoinBottomSheetController: UIGestureRecognizerDelegate {
     }
 
     func configurePan() {
+        guard configuration.behavior.isDraggable else { return }
         guard isPersistent
             || configuration.behavior.dismissOnDrag
             || configuration.behavior.expandToFullScreenOnDrag else { return }

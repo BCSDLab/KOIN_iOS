@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A83115679000000000000008 /* LostItemListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000009 /* LostItemListEmptyView.swift */; };
 		004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 82F7EBAB20247086024B51CB /* RecruitPostViewController.swift */; };
 		0A6D1C1BA5922E1A28882034 /* BusRouteTagLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 71B13E077479AB081D3DB06C /* BusRouteTagLabel.swift */; };
 		0D3DC4E723268AE45A326D07 /* RecruitChatDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = C398DC463A148F3E7ADB7ADE /* RecruitChatDataDto.swift */; };
@@ -95,6 +94,32 @@
 		7C17EEAE2EBF7031008BCA89 /* FetchShopSearchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */; };
 		7C17EEB02EBF708B008BCA89 /* ShopSearchDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */; };
 		7C17EEB22EBF7175008BCA89 /* FetchSearchShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */; };
+		7C18782430B307EC007ADB97 /* LandList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18782330B307EC007ADB97 /* LandList.swift */; };
+		7C18783130B32AF8007ADB97 /* LandMapView+ClusterMarkerUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18783030B32AF8007ADB97 /* LandMapView+ClusterMarkerUpdater.swift */; };
+		7C18783330B32BAA007ADB97 /* LandMapView+LeafMarkerUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18783230B32BAA007ADB97 /* LandMapView+LeafMarkerUpdater.swift */; };
+		7C18783530B33441007ADB97 /* LandMapView+OverlayImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18783430B33441007ADB97 /* LandMapView+OverlayImage.swift */; };
+		7C18783930B3452C007ADB97 /* LandRowDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18783830B3452C007ADB97 /* LandRowDto.swift */; };
+		7C18783B30B345FB007ADB97 /* LandListBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18783A30B345FB007ADB97 /* LandListBottomSheetContentView.swift */; };
+		7C18783D30B34782007ADB97 /* LandListFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18783C30B34782007ADB97 /* LandListFilter.swift */; };
+		7C18783F30B3479B007ADB97 /* LandListFilterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18783E30B3479B007ADB97 /* LandListFilterView.swift */; };
+		7C18784130B347C9007ADB97 /* LandListFilterButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18784030B347C9007ADB97 /* LandListFilterButton.swift */; };
+		7C18785130B3600000ADB970 /* LandListTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785030B3600000ADB970 /* LandListTableView.swift */; };
+		7C18785330B3600000ADB970 /* LandListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785230B3600000ADB970 /* LandListTableViewCell.swift */; };
+		7C18785530B3600000ADB970 /* LandListFocusedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785430B3600000ADB970 /* LandListFocusedView.swift */; };
+		7C18785730B3600000ADB970 /* LandMapZoomControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785630B3600000ADB970 /* LandMapZoomControlView.swift */; };
+		7C18785930B3600000ADB970 /* LandListBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785830B3600000ADB970 /* LandListBadgeView.swift */; };
+		7C18785D30B3600000ADB970 /* LandDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785C30B3600000ADB970 /* LandDetailViewController.swift */; };
+		7C18785F30B3600000ADB970 /* LandDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785E30B3600000ADB970 /* LandDetailViewModel.swift */; };
+		7C18786130B3600000ADB970 /* LandDetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786030B3600000ADB970 /* LandDetailImageView.swift */; };
+		7C18786330B3600000ADB970 /* LandDetailImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786230B3600000ADB970 /* LandDetailImageCollectionViewCell.swift */; };
+		7C18786530B3600000ADB970 /* LandDetailImageEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */; };
+		7C18786730B3600000ADB970 /* LandDetailInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786630B3600000ADB970 /* LandDetailInfoView.swift */; };
+		7C18786930B3600000ADB970 /* LandDetailBottomSheetContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */; };
+		7C18786D30B3600000ADB970 /* LandSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786C30B3600000ADB970 /* LandSearchViewController.swift */; };
+		7C18786F30B3600000ADB970 /* LandSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786E30B3600000ADB970 /* LandSearchViewModel.swift */; };
+		7C18787130B3600000ADB970 /* LandSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787030B3600000ADB970 /* LandSearchBarView.swift */; };
+		7C18787330B3600000ADB970 /* LandSearchEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */; };
+		7C18787530B3600000ADB970 /* FetchLandListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787430B3600000ADB970 /* FetchLandListRequest.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
 		7C333E7C302E285B009D2B89 /* KoinModalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */; };
 		7C333E7E302E28AA009D2B89 /* KoinModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */; };
@@ -550,32 +575,27 @@
 		7CED90C12EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD32EF2D1F900457128 /* ShopSummaryMenuGroupCollectionView.swift */; };
 		7CED90C32EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCC2EF2D1F900457128 /* ShopSummaryPriceTableViewCell.swift */; };
 		7CED90C62EF2D1F900457128 /* TimetableCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED909A2EF2D1F900457128 /* TimetableCollectionViewCell.swift */; };
-		7CED90CA2EF2D1F900457128 /* LandOptionCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B02EF2D1F900457128 /* LandOptionCollectionViewCell.swift */; };
 		7CED90CB2EF2D1F900457128 /* LostItemChatListTableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EF92EF2D1F900457128 /* LostItemChatListTableViewModel.swift */; };
 		7CED90CE2EF2D1F900457128 /* ForceModifyUserViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8ED42EF2D1F900457128 /* ForceModifyUserViewController.swift */; };
 		7CED90CF2EF2D1F900457128 /* ChangeMyProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F0C2EF2D1F900457128 /* ChangeMyProfileViewModel.swift */; };
 		7CED90D12EF2D1F900457128 /* NoticeSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F572EF2D1F900457128 /* NoticeSearchViewController.swift */; };
 		7CED90D22EF2D1F900457128 /* TagCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90152EF2D1F900457128 /* TagCollectionViewCell.swift */; };
-		7CED90D32EF2D1F900457128 /* LandCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A92EF2D1F900457128 /* LandCollectionView.swift */; };
 		7CED90D52EF2D1F900457128 /* SelectDeptModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908E2EF2D1F900457128 /* SelectDeptModalViewController.swift */; };
 		7CED90D72EF2D1F900457128 /* RecommendedKeywordCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F5A2EF2D1F900457128 /* RecommendedKeywordCollectionView.swift */; };
 		7CED90DA2EF2D1F900457128 /* RecentSearchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F532EF2D1F900457128 /* RecentSearchTableView.swift */; };
 		7CED90DC2EF2D1F900457128 /* ShopSummaryDeliveryButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FC42EF2D1F900457128 /* ShopSummaryDeliveryButton.swift */; };
 		7CED90DD2EF2D1F900457128 /* AddDirectCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90912EF2D1F900457128 /* AddDirectCollectionViewCell.swift */; };
-		7CED90DF2EF2D1F900457128 /* LandDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B72EF2D1F900457128 /* LandDetailViewModel.swift */; };
 		7CED90E02EF2D1F900457128 /* ShopSummaryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCF2EF2D1F900457128 /* ShopSummaryTableViewCell.swift */; };
 		7CED90E22EF2D1F900457128 /* PointLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90892EF2D1F900457128 /* PointLabel.swift */; };
 		7CED90E32EF2D1F900457128 /* FindPhoneIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F2F2EF2D1F900457128 /* FindPhoneIdViewController.swift */; };
 		7CED90E42EF2D1F900457128 /* SubstituteTimetableModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908D2EF2D1F900457128 /* SubstituteTimetableModalViewController.swift */; };
 		7CED90E72EF2D1F900457128 /* ForceUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE02EF2D1F900457128 /* ForceUpdateViewController.swift */; };
-		7CED90EB2EF2D1F900457128 /* LandViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AC2EF2D1F900457128 /* LandViewController.swift */; };
 		7CED90EF2EF2D1F900457128 /* ShopReviewReportViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90212EF2D1F900457128 /* ShopReviewReportViewModel.swift */; };
 		7CED90F02EF2D1F900457128 /* RevokeModalViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F0B2EF2D1F900457128 /* RevokeModalViewController.swift */; };
 		7CED90F12EF2D1F900457128 /* ForceUpdateViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EDF2EF2D1F900457128 /* ForceUpdateViewModel.swift */; };
 		7CED90F22EF2D1F900457128 /* ShopSearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FBF2EF2D1F900457128 /* ShopSearchViewModel.swift */; };
 		7CED90F42EF2D1F900457128 /* LostItemChatListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EFA2EF2D1F900457128 /* LostItemChatListTableViewController.swift */; };
 		7CED90F72EF2D1F900457128 /* ReviewImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90032EF2D1F900457128 /* ReviewImageCollectionViewCell.swift */; };
-		7CED90FA2EF2D1F900457128 /* LandDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B82EF2D1F900457128 /* LandDetailViewController.swift */; };
 		7CED90FB2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F3E2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift */; };
 		7CED90FD2EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90182EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift */; };
 		7CED90FE2EF2D1F900457128 /* SelectTimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908B2EF2D1F900457128 /* SelectTimeView.swift */; };
@@ -590,7 +610,6 @@
 		7CED91092EF2D1F900457128 /* FacilityInfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A42EF2D1F900457128 /* FacilityInfoViewController.swift */; };
 		7CED910A2EF2D1F900457128 /* LeftAlignedFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90132EF2D1F900457128 /* LeftAlignedFlowLayout.swift */; };
 		7CED910B2EF2D1F900457128 /* AddClassCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90952EF2D1F900457128 /* AddClassCollectionView.swift */; };
-		7CED910C2EF2D1F900457128 /* LandImageCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B22EF2D1F900457128 /* LandImageCollectionView.swift */; };
 		7CED910D2EF2D1F900457128 /* RecommendedSearchCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F502EF2D1F900457128 /* RecommendedSearchCollectionView.swift */; };
 		7CED910E2EF2D1F900457128 /* ShopSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FBE2EF2D1F900457128 /* ShopSearchViewController.swift */; };
 		7CED910F2EF2D1F900457128 /* ShopCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EC32EF2D1F900457128 /* ShopCollectionView.swift */; };
@@ -599,7 +618,6 @@
 		7CED91152EF2D1F900457128 /* LoginViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F232EF2D1F900457128 /* LoginViewModel.swift */; };
 		7CED91162EF2D1F900457128 /* ShopSortOptionSheetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FB52EF2D1F900457128 /* ShopSortOptionSheetView.swift */; };
 		7CED91172EF2D1F900457128 /* TimetableText+.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A02EF2D1F900457128 /* TimetableText+.swift */; };
-		7CED91182EF2D1F900457128 /* LandViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AB2EF2D1F900457128 /* LandViewModel.swift */; };
 		7CED911C2EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90772EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift */; };
 		7CED911D2EF2D1F900457128 /* NoticeListTableViewFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F432EF2D1F900457128 /* NoticeListTableViewFooter.swift */; };
 		7CED911E2EF2D1F900457128 /* ShopReadyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FAF2EF2D1F900457128 /* ShopReadyView.swift */; };
@@ -642,7 +660,6 @@
 		7CED915D2EF2D1F900457128 /* ShopSearchTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FBA2EF2D1F900457128 /* ShopSearchTableView.swift */; };
 		7CED915E2EF2D1F900457128 /* SettingsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F072EF2D1F900457128 /* SettingsViewModel.swift */; };
 		7CED91602EF2D1F900457128 /* CategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FAA2EF2D1F900457128 /* CategoryCollectionViewCell.swift */; };
-		7CED91632EF2D1F900457128 /* HouseInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AE2EF2D1F900457128 /* HouseInfoView.swift */; };
 		7CED91642EF2D1F900457128 /* ShopSummaryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FD92EF2D1F900457128 /* ShopSummaryViewModel.swift */; };
 		7CED91652EF2D1F900457128 /* NoticeListHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F452EF2D1F900457128 /* NoticeListHeaderView.swift */; };
 		7CED91662EF2D1F900457128 /* CertificationFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F272EF2D1F900457128 /* CertificationFormViewController.swift */; };
@@ -650,7 +667,6 @@
 		7CED916A2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F5E2EF2D1F900457128 /* MyKeywordCollectionViewCell.swift */; };
 		7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90932EF2D1F900457128 /* AddDirectFooterView.swift */; };
 		7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90122EF2D1F900457128 /* DashedBorderButton.swift */; };
-		7CED91732EF2D1F900457128 /* LandOptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B52EF2D1F900457128 /* LandOptionView.swift */; };
 		7CED91752EF2D1F900457128 /* ShopReviewReportViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90222EF2D1F900457128 /* ShopReviewReportViewController.swift */; };
 		7CED91782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift */; };
 		7CED917A2EF2D1F900457128 /* ShopSummaryTableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FCE2EF2D1F900457128 /* ShopSummaryTableView.swift */; };
@@ -697,7 +713,6 @@
 		7CED91CD2EF2D1F900457128 /* LostItemChatViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F022EF2D1F900457128 /* LostItemChatViewModel.swift */; };
 		7CED91CE2EF2D1F900457128 /* NotiViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F142EF2D1F900457128 /* NotiViewModel.swift */; };
 		7CED91CF2EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F622EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift */; };
-		7CED91D22EF2D1F900457128 /* LandImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90B32EF2D1F900457128 /* LandImageCollectionViewCell.swift */; };
 		7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE82EF2D1F900457128 /* ShopDetailViewModel.swift */; };
 		7CED91D82EF2D1F900457128 /* ClassComponentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED908A2EF2D1F900457128 /* ClassComponentView.swift */; };
 		7CED91DD2EF2D1F900457128 /* ShopDetailTableViewNameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FE02EF2D1F900457128 /* ShopDetailTableViewNameCell.swift */; };
@@ -712,7 +727,6 @@
 		7CED91F42EF2D1F900457128 /* NonReviewListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED900B2EF2D1F900457128 /* NonReviewListView.swift */; };
 		7CED91F52EF2D1F900457128 /* PolicyContentCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F182EF2D1F900457128 /* PolicyContentCollectionViewCell.swift */; };
 		7CED91F82EF2D1F900457128 /* TimetableViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED909E2EF2D1F900457128 /* TimetableViewModel.swift */; };
-		7CED91F92EF2D1F900457128 /* LandOptionCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90AF2EF2D1F900457128 /* LandOptionCollectionView.swift */; };
 		7CED91FA2EF2D1F900457128 /* DeliveryTipsCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FDD2EF2D1F900457128 /* DeliveryTipsCollectionViewCell.swift */; };
 		7CED91FE2EF2D1F900457128 /* LostArticleImageCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE92EF2D1F900457128 /* LostArticleImageCollectionViewCell.swift */; };
 		7CED91FF2EF2D1F900457128 /* FoundIdViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F302EF2D1F900457128 /* FoundIdViewController.swift */; };
@@ -730,7 +744,6 @@
 		7CED92112EF2D1F900457128 /* AddDirectCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90902EF2D1F900457128 /* AddDirectCollectionView.swift */; };
 		7CED92122EF2D1F900457128 /* SortTypeBottomSheetCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FFD2EF2D1F900457128 /* SortTypeBottomSheetCell.swift */; };
 		7CED92132EF2D1F900457128 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8F082EF2D1F900457128 /* SettingsViewController.swift */; };
-		7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90A82EF2D1F900457128 /* LandCollectionViewCell.swift */; };
 		7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED90792EF2D1F900457128 /* DiningOperatingTimeFooterView.swift */; };
 		7CED92192EF2D1F900457128 /* ReportLostItemViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8EE52EF2D1F900457128 /* ReportLostItemViewModel.swift */; };
 		7CED921A2EF2D1F900457128 /* ShopViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED8FB82EF2D1F900457128 /* ShopViewController.swift */; };
@@ -749,6 +762,13 @@
 		7CED923B2EF2D26000457128 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED923A2EF2D26000457128 /* Coordinator.swift */; };
 		7CED92462EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */; };
 		7CED92472EF3DC2800457128 /* OrderCategoryCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */; };
+		7CF09F8A30B2E790000F6CDD /* LandListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F8930B2E790000F6CDD /* LandListViewController.swift */; };
+		7CF09F8E30B2E79B000F6CDD /* LandListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F8D30B2E79B000F6CDD /* LandListViewModel.swift */; };
+		7CF09F9130B2E7D5000F6CDD /* LandMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9030B2E7D5000F6CDD /* LandMapView.swift */; };
+		7CF09F9330B2E85B000F6CDD /* LandMarkerKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9230B2E85B000F6CDD /* LandMarkerKey.swift */; };
+		7C18785B30B3600000ADB970 /* LandCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785A30B3600000ADB970 /* LandCoordinate.swift */; };
+		7CF09F9730B2EB11000F6CDD /* LandRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9630B2EB11000F6CDD /* LandRow.swift */; };
+		7CF09F9B30B2F67C000F6CDD /* LandDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9A30B2F67C000F6CDD /* LandDetail.swift */; };
 		7CF1D58B30695E7900295ED9 /* RecruitMyPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58A30695E7900295ED9 /* RecruitMyPostViewModel.swift */; };
 		7CF1D58D30695E8A00295ED9 /* RecruitMyPostHostingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58C30695E8A00295ED9 /* RecruitMyPostHostingController.swift */; };
 		7CF1D58F3069772700295ED9 /* RecruitApplicantRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58E3069772700295ED9 /* RecruitApplicantRow.swift */; };
@@ -889,6 +909,8 @@
 		A51C00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */; };
 		A5F8FD7A714E689BC4F3321B /* RecruitMyApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 645CEE62E516B130B4E2D784 /* RecruitMyApplication.swift */; };
 		A83115679000000000000001 /* LostItemColorAsset.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000002 /* LostItemColorAsset.swift */; };
+		A83115679000000000000008 /* LostItemListEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000009 /* LostItemListEmptyView.swift */; };
+		A83115679000000000000010 /* ChatListModel+LostItemChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000011 /* ChatListModel+LostItemChat.swift */; };
 		AA20000000000000000001 /* Publisher+.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000001 /* Publisher+.swift */; };
 		AA20000000000000000002 /* DiningFixtures.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000002 /* DiningFixtures.swift */; };
 		AA20000000000000000003 /* SpyDiningRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000003 /* SpyDiningRepository.swift */; };
@@ -906,7 +928,6 @@
 		AA20000000000000000024 /* RegisterFormViewModelStubs.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000024 /* RegisterFormViewModelStubs.swift */; };
 		AA20000000000000000030 /* CertificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000030 /* CertificationInput.swift */; };
 		AA20000000000000000031 /* VerificationSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000031 /* VerificationSession.swift */; };
-		AA200000000000000000F1 /* VerificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F1 /* VerificationInput.swift */; };
 		AA20000000000000000032 /* CertificationInputTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000032 /* CertificationInputTests.swift */; };
 		AA20000000000000000033 /* VerificationSessionTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000033 /* VerificationSessionTests.swift */; };
 		AA20000000000000000034 /* RegisterFormViewModelCertificationTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */; };
@@ -918,6 +939,11 @@
 		AA20000000000000000040 /* EnterFormUseCaseSpies.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000040 /* EnterFormUseCaseSpies.swift */; };
 		AA20000000000000000041 /* EnterFormState.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000041 /* EnterFormState.swift */; };
 		AA20000000000000000042 /* EnterFormStateTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA10000000000000000042 /* EnterFormStateTests.swift */; };
+		AA200000000000000000F1 /* VerificationInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F1 /* VerificationInput.swift */; };
+		AA200000000000000000F2 /* MatchIdPhoneRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F2 /* MatchIdPhoneRequest.swift */; };
+		AA200000000000000000F3 /* MatchIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F3 /* MatchIdEmailRequest.swift */; };
+		AA200000000000000000F4 /* MatchIdPhoneUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */; };
+		AA200000000000000000F5 /* MatchIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F5 /* MatchIdEmailUseCase.swift */; };
 		AB2000000000000000000061 /* MainTimetableFrame.swift in Sources */ = {isa = PBXBuildFile; fileRef = AB1000000000000000000061 /* MainTimetableFrame.swift */; };
 		B0495459FC164809B16A96B6 /* RecruitPostTextViewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54351A8A0C1A4046C3155481 /* RecruitPostTextViewView.swift */; };
 		B438AEE42E756AB600E889C4 /* ShopImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = B438AEE32E756AB600E889C4 /* ShopImage.swift */; };
@@ -1033,10 +1059,6 @@
 		D20AD6FD2E02A49A0067760A /* FindIdSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */; };
 		D20AD6FF2E02A4AB0067760A /* FindIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */; };
 		D20AD7052E0367E00067760A /* ResetPasswordSmsRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */; };
-		AA200000000000000000F5 /* MatchIdEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F5 /* MatchIdEmailUseCase.swift */; };
-		AA200000000000000000F4 /* MatchIdPhoneUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */; };
-		AA200000000000000000F3 /* MatchIdEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F3 /* MatchIdEmailRequest.swift */; };
-		AA200000000000000000F2 /* MatchIdPhoneRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA100000000000000000F2 /* MatchIdPhoneRequest.swift */; };
 		D20AD7072E0367F10067760A /* ResetPasswordEmailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */; };
 		D20AD7092E036BBB0067760A /* ResetPasswordSmsUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */; };
 		D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */; };
@@ -1101,7 +1123,7 @@
 		D27DD0D12BA608310081FD36 /* ImageCacher.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0852BA608310081FD36 /* ImageCacher.swift */; };
 		D27DD0D22BA608310081FD36 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0872BA608310081FD36 /* AppDelegate.swift */; };
 		D27DD0D32BA608310081FD36 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0882BA608310081FD36 /* SceneDelegate.swift */; };
-		D27DD0D82BA6089D0081FD36 /* LandDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0D72BA6089D0081FD36 /* LandDto.swift */; };
+		D27DD0D82BA6089D0081FD36 /* LandListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0D72BA6089D0081FD36 /* LandListDto.swift */; };
 		D27DD0E22BA609740081FD36 /* MenuDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0E12BA609740081FD36 /* MenuDto.swift */; };
 		D27DD0E42BA609F30081FD36 /* ShopDataDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0E32BA609F30081FD36 /* ShopDataDto.swift */; };
 		D27DD0F62BA614400081FD36 /* LandDetailDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D27DD0F52BA614400081FD36 /* LandDetailDto.swift */; };
@@ -1128,8 +1150,6 @@
 		D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */; };
 		D29F21E52C4F4C3700994554 /* AgreementText.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21E42C4F4C3700994554 /* AgreementText.swift */; };
 		D29F21EC2C4F609000994554 /* LoginUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21EB2C4F609000994554 /* LoginUseCase.swift */; };
-		D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21F02C4FD23600994554 /* LandDetailItem.swift */; };
-		D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21F22C4FD23F00994554 /* LandItem.swift */; };
 		D29F21F62C4FD2C700994554 /* FetchLandDetailRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21F52C4FD2C700994554 /* FetchLandDetailRequest.swift */; };
 		D29F21F82C5085B900994554 /* RefreshTokenRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21F72C5085B900994554 /* RefreshTokenRequest.swift */; };
 		D29F21FC2C508A9C00994554 /* CheckPasswordRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = D29F21FB2C508A9C00994554 /* CheckPasswordRequest.swift */; };
@@ -1255,7 +1275,6 @@
 		FE0100000000000000002B /* KoinDropdownViewController+Scroll.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0100000000000000001B /* KoinDropdownViewController+Scroll.swift */; };
 		FE0100000000000000002C /* KoinDropdownViewController+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = FE0100000000000000001C /* KoinDropdownViewController+Layout.swift */; };
 		FE0B6B2358364622BC242C74 /* RecruitDataButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6AB6864692D44B9849E0447 /* RecruitDataButton.swift */; };
-		A83115679000000000000010 /* ChatListModel+LostItemChat.swift in Sources */ = {isa = PBXBuildFile; fileRef = A83115679000000000000011 /* ChatListModel+LostItemChat.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -1290,7 +1309,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		A83115679000000000000009 /* LostItemListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListEmptyView.swift; sourceTree = "<group>"; };
 		0FCD163C2BA80EAA00C23A2F /* KeychainWorker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainWorker.swift; sourceTree = "<group>"; };
 		135CA058C5A41FBC30F6DD2F /* RecruitChatPostRequestDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitChatPostRequestDto.swift; sourceTree = "<group>"; };
 		13EEDE9C4E0CA4F9CF7AB1F8 /* RecruitActivityPeriod.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitActivityPeriod.swift; sourceTree = "<group>"; };
@@ -1375,6 +1393,32 @@
 		7C17EEAD2EBF7031008BCA89 /* FetchShopSearchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopSearchRequest.swift; sourceTree = "<group>"; };
 		7C17EEAF2EBF708B008BCA89 /* ShopSearchDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopSearchDto.swift; sourceTree = "<group>"; };
 		7C17EEB12EBF7175008BCA89 /* FetchSearchShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchSearchShopUseCase.swift; sourceTree = "<group>"; };
+		7C18782330B307EC007ADB97 /* LandList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandList.swift; sourceTree = "<group>"; };
+		7C18783030B32AF8007ADB97 /* LandMapView+ClusterMarkerUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LandMapView+ClusterMarkerUpdater.swift"; sourceTree = "<group>"; };
+		7C18783230B32BAA007ADB97 /* LandMapView+LeafMarkerUpdater.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LandMapView+LeafMarkerUpdater.swift"; sourceTree = "<group>"; };
+		7C18783430B33441007ADB97 /* LandMapView+OverlayImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "LandMapView+OverlayImage.swift"; sourceTree = "<group>"; };
+		7C18783830B3452C007ADB97 /* LandRowDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRowDto.swift; sourceTree = "<group>"; };
+		7C18783A30B345FB007ADB97 /* LandListBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListBottomSheetContentView.swift; sourceTree = "<group>"; };
+		7C18783C30B34782007ADB97 /* LandListFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListFilter.swift; sourceTree = "<group>"; };
+		7C18783E30B3479B007ADB97 /* LandListFilterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListFilterView.swift; sourceTree = "<group>"; };
+		7C18784030B347C9007ADB97 /* LandListFilterButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListFilterButton.swift; sourceTree = "<group>"; };
+		7C18785030B3600000ADB970 /* LandListTableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListTableView.swift; sourceTree = "<group>"; };
+		7C18785230B3600000ADB970 /* LandListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListTableViewCell.swift; sourceTree = "<group>"; };
+		7C18785430B3600000ADB970 /* LandListFocusedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListFocusedView.swift; sourceTree = "<group>"; };
+		7C18785630B3600000ADB970 /* LandMapZoomControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandMapZoomControlView.swift; sourceTree = "<group>"; };
+		7C18785830B3600000ADB970 /* LandListBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListBadgeView.swift; sourceTree = "<group>"; };
+		7C18785C30B3600000ADB970 /* LandDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewController.swift; sourceTree = "<group>"; };
+		7C18785E30B3600000ADB970 /* LandDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewModel.swift; sourceTree = "<group>"; };
+		7C18786030B3600000ADB970 /* LandDetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageView.swift; sourceTree = "<group>"; };
+		7C18786230B3600000ADB970 /* LandDetailImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageCollectionViewCell.swift; sourceTree = "<group>"; };
+		7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageEmptyView.swift; sourceTree = "<group>"; };
+		7C18786630B3600000ADB970 /* LandDetailInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailInfoView.swift; sourceTree = "<group>"; };
+		7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailBottomSheetContentView.swift; sourceTree = "<group>"; };
+		7C18786C30B3600000ADB970 /* LandSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchViewController.swift; sourceTree = "<group>"; };
+		7C18786E30B3600000ADB970 /* LandSearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchViewModel.swift; sourceTree = "<group>"; };
+		7C18787030B3600000ADB970 /* LandSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchBarView.swift; sourceTree = "<group>"; };
+		7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchEmptyView.swift; sourceTree = "<group>"; };
+		7C18787430B3600000ADB970 /* FetchLandListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListRequest.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalAnimator.swift; sourceTree = "<group>"; };
 		7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalPresentationController.swift; sourceTree = "<group>"; };
@@ -1981,18 +2025,6 @@
 		7CED909F2EF2D1F900457128 /* TimetableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TimetableViewController.swift; sourceTree = "<group>"; };
 		7CED90A02EF2D1F900457128 /* TimetableText+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "TimetableText+.swift"; sourceTree = "<group>"; };
 		7CED90A42EF2D1F900457128 /* FacilityInfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacilityInfoViewController.swift; sourceTree = "<group>"; };
-		7CED90A82EF2D1F900457128 /* LandCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandCollectionViewCell.swift; sourceTree = "<group>"; };
-		7CED90A92EF2D1F900457128 /* LandCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandCollectionView.swift; sourceTree = "<group>"; };
-		7CED90AB2EF2D1F900457128 /* LandViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandViewModel.swift; sourceTree = "<group>"; };
-		7CED90AC2EF2D1F900457128 /* LandViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandViewController.swift; sourceTree = "<group>"; };
-		7CED90AE2EF2D1F900457128 /* HouseInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HouseInfoView.swift; sourceTree = "<group>"; };
-		7CED90AF2EF2D1F900457128 /* LandOptionCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandOptionCollectionView.swift; sourceTree = "<group>"; };
-		7CED90B02EF2D1F900457128 /* LandOptionCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandOptionCollectionViewCell.swift; sourceTree = "<group>"; };
-		7CED90B22EF2D1F900457128 /* LandImageCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandImageCollectionView.swift; sourceTree = "<group>"; };
-		7CED90B32EF2D1F900457128 /* LandImageCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandImageCollectionViewCell.swift; sourceTree = "<group>"; };
-		7CED90B52EF2D1F900457128 /* LandOptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandOptionView.swift; sourceTree = "<group>"; };
-		7CED90B72EF2D1F900457128 /* LandDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewModel.swift; sourceTree = "<group>"; };
-		7CED90B82EF2D1F900457128 /* LandDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewController.swift; sourceTree = "<group>"; };
 		7CED921B2EF2D25900457128 /* DIContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DIContainer.swift; sourceTree = "<group>"; };
 		7CED921C2EF2D25900457128 /* DIContainer+Home.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+Home.swift"; sourceTree = "<group>"; };
 		7CED921D2EF2D25900457128 /* DIContainer+LostItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DIContainer+LostItem.swift"; sourceTree = "<group>"; };
@@ -2008,6 +2040,13 @@
 		7CED923A2EF2D26000457128 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		7CED92432EF3DC2800457128 /* OrderCategoryCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionView.swift; sourceTree = "<group>"; };
 		7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderCategoryCollectionViewCell.swift; sourceTree = "<group>"; };
+		7CF09F8930B2E790000F6CDD /* LandListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListViewController.swift; sourceTree = "<group>"; };
+		7CF09F8D30B2E79B000F6CDD /* LandListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListViewModel.swift; sourceTree = "<group>"; };
+		7CF09F9030B2E7D5000F6CDD /* LandMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandMapView.swift; sourceTree = "<group>"; };
+		7CF09F9230B2E85B000F6CDD /* LandMarkerKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandMarkerKey.swift; sourceTree = "<group>"; };
+		7C18785A30B3600000ADB970 /* LandCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandCoordinate.swift; sourceTree = "<group>"; };
+		7CF09F9630B2EB11000F6CDD /* LandRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRow.swift; sourceTree = "<group>"; };
+		7CF09F9A30B2F67C000F6CDD /* LandDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetail.swift; sourceTree = "<group>"; };
 		7CF1D58A30695E7900295ED9 /* RecruitMyPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostViewModel.swift; sourceTree = "<group>"; };
 		7CF1D58C30695E8A00295ED9 /* RecruitMyPostHostingController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostHostingController.swift; sourceTree = "<group>"; };
 		7CF1D58E3069772700295ED9 /* RecruitApplicantRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitApplicantRow.swift; sourceTree = "<group>"; };
@@ -2150,6 +2189,8 @@
 		A51B00000000000000000006 /* RecruitProfilePostActivityEditTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitProfilePostActivityEditTableViewCell.swift; sourceTree = "<group>"; };
 		A644536454EB046B5895D793 /* PickerColumnsDataSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerColumnsDataSource.swift; sourceTree = "<group>"; };
 		A83115679000000000000002 /* LostItemColorAsset.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemColorAsset.swift; sourceTree = "<group>"; };
+		A83115679000000000000009 /* LostItemListEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostItemListEmptyView.swift; sourceTree = "<group>"; };
+		A83115679000000000000011 /* ChatListModel+LostItemChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatListModel+LostItemChat.swift"; sourceTree = "<group>"; };
 		AA10000000000000000001 /* Publisher+.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Publisher+.swift"; sourceTree = "<group>"; };
 		AA10000000000000000002 /* DiningFixtures.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DiningFixtures.swift; sourceTree = "<group>"; };
 		AA10000000000000000003 /* SpyDiningRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpyDiningRepository.swift; sourceTree = "<group>"; };
@@ -2167,7 +2208,6 @@
 		AA10000000000000000024 /* RegisterFormViewModelStubs.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelStubs.swift; sourceTree = "<group>"; };
 		AA10000000000000000030 /* CertificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInput.swift; sourceTree = "<group>"; };
 		AA10000000000000000031 /* VerificationSession.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSession.swift; sourceTree = "<group>"; };
-		AA100000000000000000F1 /* VerificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationInput.swift; sourceTree = "<group>"; };
 		AA10000000000000000032 /* CertificationInputTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificationInputTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000033 /* VerificationSessionTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationSessionTests.swift; sourceTree = "<group>"; };
 		AA10000000000000000034 /* RegisterFormViewModelCertificationTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFormViewModelCertificationTests.swift; sourceTree = "<group>"; };
@@ -2179,6 +2219,11 @@
 		AA10000000000000000040 /* EnterFormUseCaseSpies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormUseCaseSpies.swift; sourceTree = "<group>"; };
 		AA10000000000000000041 /* EnterFormState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormState.swift; sourceTree = "<group>"; };
 		AA10000000000000000042 /* EnterFormStateTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EnterFormStateTests.swift; sourceTree = "<group>"; };
+		AA100000000000000000F1 /* VerificationInput.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationInput.swift; sourceTree = "<group>"; };
+		AA100000000000000000F2 /* MatchIdPhoneRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneRequest.swift; sourceTree = "<group>"; };
+		AA100000000000000000F3 /* MatchIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailRequest.swift; sourceTree = "<group>"; };
+		AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneUseCase.swift; sourceTree = "<group>"; };
+		AA100000000000000000F5 /* MatchIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailUseCase.swift; sourceTree = "<group>"; };
 		AB1000000000000000000061 /* MainTimetableFrame.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTimetableFrame.swift; sourceTree = "<group>"; };
 		B2FBEEB767094CE8B219095B /* RecruitDataTextSectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitDataTextSectionView.swift; sourceTree = "<group>"; };
 		B438AEE32E756AB600E889C4 /* ShopImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopImage.swift; sourceTree = "<group>"; };
@@ -2297,10 +2342,6 @@
 		D20AD6FC2E02A49A0067760A /* FindIdSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD6FE2E02A4AB0067760A /* FindIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FindIdEmailUseCase.swift; sourceTree = "<group>"; };
 		D20AD7042E0367E00067760A /* ResetPasswordSmsRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsRequest.swift; sourceTree = "<group>"; };
-		AA100000000000000000F5 /* MatchIdEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailUseCase.swift; sourceTree = "<group>"; };
-		AA100000000000000000F4 /* MatchIdPhoneUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneUseCase.swift; sourceTree = "<group>"; };
-		AA100000000000000000F3 /* MatchIdEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdEmailRequest.swift; sourceTree = "<group>"; };
-		AA100000000000000000F2 /* MatchIdPhoneRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchIdPhoneRequest.swift; sourceTree = "<group>"; };
 		D20AD7062E0367F10067760A /* ResetPasswordEmailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailRequest.swift; sourceTree = "<group>"; };
 		D20AD7082E036BBB0067760A /* ResetPasswordSmsUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordSmsUseCase.swift; sourceTree = "<group>"; };
 		D20AD70A2E036BC60067760A /* ResetPasswordEmailUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResetPasswordEmailUseCase.swift; sourceTree = "<group>"; };
@@ -2367,7 +2408,7 @@
 		D27DD0852BA608310081FD36 /* ImageCacher.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImageCacher.swift; sourceTree = "<group>"; };
 		D27DD0872BA608310081FD36 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D27DD0882BA608310081FD36 /* SceneDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		D27DD0D72BA6089D0081FD36 /* LandDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandDto.swift; sourceTree = "<group>"; };
+		D27DD0D72BA6089D0081FD36 /* LandListDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LandListDto.swift; sourceTree = "<group>"; };
 		D27DD0E12BA609740081FD36 /* MenuDto.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuDto.swift; sourceTree = "<group>"; };
 		D27DD0E32BA609F30081FD36 /* ShopDataDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopDataDto.swift; sourceTree = "<group>"; };
 		D27DD0F52BA614400081FD36 /* LandDetailDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailDto.swift; sourceTree = "<group>"; };
@@ -2394,8 +2435,6 @@
 		D29F21E12C4F303400994554 /* FetchDiningListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchDiningListRequest.swift; sourceTree = "<group>"; };
 		D29F21E42C4F4C3700994554 /* AgreementText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AgreementText.swift; sourceTree = "<group>"; };
 		D29F21EB2C4F609000994554 /* LoginUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginUseCase.swift; sourceTree = "<group>"; };
-		D29F21F02C4FD23600994554 /* LandDetailItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailItem.swift; sourceTree = "<group>"; };
-		D29F21F22C4FD23F00994554 /* LandItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandItem.swift; sourceTree = "<group>"; };
 		D29F21F52C4FD2C700994554 /* FetchLandDetailRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandDetailRequest.swift; sourceTree = "<group>"; };
 		D29F21F72C5085B900994554 /* RefreshTokenRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshTokenRequest.swift; sourceTree = "<group>"; };
 		D29F21FB2C508A9C00994554 /* CheckPasswordRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckPasswordRequest.swift; sourceTree = "<group>"; };
@@ -2526,7 +2565,6 @@
 		FE0100000000000000001A /* KoinDropdownViewController+Present.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Present.swift"; sourceTree = "<group>"; };
 		FE0100000000000000001B /* KoinDropdownViewController+Scroll.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Scroll.swift"; sourceTree = "<group>"; };
 		FE0100000000000000001C /* KoinDropdownViewController+Layout.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "KoinDropdownViewController+Layout.swift"; sourceTree = "<group>"; };
-		A83115679000000000000011 /* ChatListModel+LostItemChat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ChatListModel+LostItemChat.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -2751,6 +2789,59 @@
 				8354BE512C7A0566009D4D7A /* CoreDataService.swift */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		7C18782B30B32020007ADB97 /* LandMapView */ = {
+			isa = PBXGroup;
+			children = (
+				7CF09F9030B2E7D5000F6CDD /* LandMapView.swift */,
+				7C18783030B32AF8007ADB97 /* LandMapView+ClusterMarkerUpdater.swift */,
+				7C18783230B32BAA007ADB97 /* LandMapView+LeafMarkerUpdater.swift */,
+				7C18783430B33441007ADB97 /* LandMapView+OverlayImage.swift */,
+				7CF09F9230B2E85B000F6CDD /* LandMarkerKey.swift */,
+			);
+			path = LandMapView;
+			sourceTree = "<group>";
+		};
+		7C18786A30B3600000ADB970 /* LandDetail */ = {
+			isa = PBXGroup;
+			children = (
+				7C18786B30B3600000ADB970 /* Subviews */,
+				7C18785C30B3600000ADB970 /* LandDetailViewController.swift */,
+				7C18785E30B3600000ADB970 /* LandDetailViewModel.swift */,
+			);
+			path = LandDetail;
+			sourceTree = "<group>";
+		};
+		7C18786B30B3600000ADB970 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C18786030B3600000ADB970 /* LandDetailImageView.swift */,
+				7C18786230B3600000ADB970 /* LandDetailImageCollectionViewCell.swift */,
+				7C18786430B3600000ADB970 /* LandDetailImageEmptyView.swift */,
+				7C18786630B3600000ADB970 /* LandDetailInfoView.swift */,
+				7C18786830B3600000ADB970 /* LandDetailBottomSheetContentView.swift */,
+			);
+			path = Subviews;
+			sourceTree = "<group>";
+		};
+		7C18787630B3600000ADB970 /* LandSearch */ = {
+			isa = PBXGroup;
+			children = (
+				7C18787730B3600000ADB970 /* Subviews */,
+				7C18786C30B3600000ADB970 /* LandSearchViewController.swift */,
+				7C18786E30B3600000ADB970 /* LandSearchViewModel.swift */,
+			);
+			path = LandSearch;
+			sourceTree = "<group>";
+		};
+		7C18787730B3600000ADB970 /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C18787030B3600000ADB970 /* LandSearchBarView.swift */,
+				7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 		7C333E7A302E280C009D2B89 /* KoinModalViewController */ = {
@@ -5196,73 +5287,6 @@
 			path = Facility;
 			sourceTree = "<group>";
 		};
-		7CED90AA2EF2D1F900457128 /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90A82EF2D1F900457128 /* LandCollectionViewCell.swift */,
-				7CED90A92EF2D1F900457128 /* LandCollectionView.swift */,
-			);
-			path = SubViews;
-			sourceTree = "<group>";
-		};
-		7CED90AD2EF2D1F900457128 /* Land */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90AA2EF2D1F900457128 /* SubViews */,
-				7CED90AB2EF2D1F900457128 /* LandViewModel.swift */,
-				7CED90AC2EF2D1F900457128 /* LandViewController.swift */,
-			);
-			path = Land;
-			sourceTree = "<group>";
-		};
-		7CED90B12EF2D1F900457128 /* LandOptionCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90AF2EF2D1F900457128 /* LandOptionCollectionView.swift */,
-				7CED90B02EF2D1F900457128 /* LandOptionCollectionViewCell.swift */,
-			);
-			path = LandOptionCollectionView;
-			sourceTree = "<group>";
-		};
-		7CED90B42EF2D1F900457128 /* LandImageCollectionView */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90B22EF2D1F900457128 /* LandImageCollectionView.swift */,
-				7CED90B32EF2D1F900457128 /* LandImageCollectionViewCell.swift */,
-			);
-			path = LandImageCollectionView;
-			sourceTree = "<group>";
-		};
-		7CED90B62EF2D1F900457128 /* SubViews */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90AE2EF2D1F900457128 /* HouseInfoView.swift */,
-				7CED90B12EF2D1F900457128 /* LandOptionCollectionView */,
-				7CED90B42EF2D1F900457128 /* LandImageCollectionView */,
-				7CED90B52EF2D1F900457128 /* LandOptionView.swift */,
-			);
-			path = SubViews;
-			sourceTree = "<group>";
-		};
-		7CED90B92EF2D1F900457128 /* LandDetail */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90B62EF2D1F900457128 /* SubViews */,
-				7CED90B72EF2D1F900457128 /* LandDetailViewModel.swift */,
-				7CED90B82EF2D1F900457128 /* LandDetailViewController.swift */,
-			);
-			path = LandDetail;
-			sourceTree = "<group>";
-		};
-		7CED90BA2EF2D1F900457128 /* Land */ = {
-			isa = PBXGroup;
-			children = (
-				7CED90AD2EF2D1F900457128 /* Land */,
-				7CED90B92EF2D1F900457128 /* LandDetail */,
-			);
-			path = Land;
-			sourceTree = "<group>";
-		};
 		7CED90BB2EF2D1F900457128 /* Presentation */ = {
 			isa = PBXGroup;
 			children = (
@@ -5278,9 +5302,9 @@
 				7C7ECDB53073D67900C7E768 /* Dining */,
 				7CED90A22EF2D1F900457128 /* TimeTable */,
 				7CED90A62EF2D1F900457128 /* Facility */,
-				7CED90BA2EF2D1F900457128 /* Land */,
 				7CC42B082F56AAAD00940CE1 /* CallVan */,
 				7C50A1B53041A25D00897A6F /* Recruit */,
+				7CF09F8730B2E77F000F6CDD /* Land */,
 			);
 			path = Presentation;
 			sourceTree = "<group>";
@@ -5312,6 +5336,42 @@
 				7CED92442EF3DC2800457128 /* OrderCategoryCollectionViewCell.swift */,
 			);
 			path = OrderCategoryCollectionView;
+			sourceTree = "<group>";
+		};
+		7CF09F8730B2E77F000F6CDD /* Land */ = {
+			isa = PBXGroup;
+			children = (
+				7CF09F8830B2E789000F6CDD /* LandList */,
+				7C18786A30B3600000ADB970 /* LandDetail */,
+				7C18787630B3600000ADB970 /* LandSearch */,
+			);
+			path = Land;
+			sourceTree = "<group>";
+		};
+		7CF09F8830B2E789000F6CDD /* LandList */ = {
+			isa = PBXGroup;
+			children = (
+				7C18782B30B32020007ADB97 /* LandMapView */,
+				7CF09F8F30B2E79E000F6CDD /* Subviews */,
+				7CF09F8930B2E790000F6CDD /* LandListViewController.swift */,
+				7CF09F8D30B2E79B000F6CDD /* LandListViewModel.swift */,
+			);
+			path = LandList;
+			sourceTree = "<group>";
+		};
+		7CF09F8F30B2E79E000F6CDD /* Subviews */ = {
+			isa = PBXGroup;
+			children = (
+				7C18783A30B345FB007ADB97 /* LandListBottomSheetContentView.swift */,
+				7C18783E30B3479B007ADB97 /* LandListFilterView.swift */,
+				7C18784030B347C9007ADB97 /* LandListFilterButton.swift */,
+				7C18785030B3600000ADB970 /* LandListTableView.swift */,
+				7C18785230B3600000ADB970 /* LandListTableViewCell.swift */,
+				7C18785430B3600000ADB970 /* LandListFocusedView.swift */,
+				7C18785630B3600000ADB970 /* LandMapZoomControlView.swift */,
+				7C18785830B3600000ADB970 /* LandListBadgeView.swift */,
+			);
+			path = Subviews;
 			sourceTree = "<group>";
 		};
 		7CF77B38300254AA003642C1 /* Profile */ = {
@@ -5961,7 +6021,8 @@
 		D23479D82BDB5EEF00FA91BD /* Land */ = {
 			isa = PBXGroup;
 			children = (
-				D27DD0D72BA6089D0081FD36 /* LandDto.swift */,
+				D27DD0D72BA6089D0081FD36 /* LandListDto.swift */,
+				7C18783830B3452C007ADB97 /* LandRowDto.swift */,
 				D27DD0F52BA614400081FD36 /* LandDetailDto.swift */,
 			);
 			path = Land;
@@ -6315,8 +6376,11 @@
 		D29F21EF2C4FD22900994554 /* Land */ = {
 			isa = PBXGroup;
 			children = (
-				D29F21F02C4FD23600994554 /* LandDetailItem.swift */,
-				D29F21F22C4FD23F00994554 /* LandItem.swift */,
+				7C18782330B307EC007ADB97 /* LandList.swift */,
+				7C18783C30B34782007ADB97 /* LandListFilter.swift */,
+				7CF09F9630B2EB11000F6CDD /* LandRow.swift */,
+				7CF09F9A30B2F67C000F6CDD /* LandDetail.swift */,
+				7C18785A30B3600000ADB970 /* LandCoordinate.swift */,
 			);
 			path = Land;
 			sourceTree = "<group>";
@@ -6325,6 +6389,7 @@
 			isa = PBXGroup;
 			children = (
 				D29F21F52C4FD2C700994554 /* FetchLandDetailRequest.swift */,
+				7C18787430B3600000ADB970 /* FetchLandListRequest.swift */,
 			);
 			path = Land;
 			sourceTree = "<group>";
@@ -6949,9 +7014,12 @@
 				A2C120000000000000000005 /* FetchRecruitChatMessagesUseCase.swift in Sources */,
 				A2C120000000000000000007 /* PostRecruitChatMessageUseCase.swift in Sources */,
 				F0F216EDAA69B52CBEC0E606 /* RecruitPostViewModel.swift in Sources */,
+				7CF09F8E30B2E79B000F6CDD /* LandListViewModel.swift in Sources */,
 				004A06CB3468BBA8DCB4CB44 /* RecruitPostViewController.swift in Sources */,
 				E5DD3F6BE6C501B7B3BD659C /* RecruitPostRoleView.swift in Sources */,
 				A1E000010000000000000001 /* RecruitPostRoleTableView.swift in Sources */,
+				7CF09F9330B2E85B000F6CDD /* LandMarkerKey.swift in Sources */,
+				7C18785B30B3600000ADB970 /* LandCoordinate.swift in Sources */,
 				0E2253358E42231BE436FA27 /* RecruitPostScheduleView.swift in Sources */,
 				1537B6CFD3D7AF52A2E9E944 /* RecruitPostMeetingTypeView.swift in Sources */,
 				C1838F7A4424DEA14DB2D107 /* RecruitPostCategoryView.swift in Sources */,
@@ -7127,6 +7195,7 @@
 				7CF7D0DF30853D8D009AFDCB /* DiningNoti.swift in Sources */,
 				83DD0DE62C57406600278ABD /* GetBusFiltersUseCase.swift in Sources */,
 				D22C54732C6A2A73000826DA /* FetchMyReviewUseCase.swift in Sources */,
+				7C18783930B3452C007ADB97 /* LandRowDto.swift in Sources */,
 				D29F21D52C4E1A8300994554 /* RegisterUseCase.swift in Sources */,
 				83B7457D2C9B2EBB005868BD /* IndicatorView.swift in Sources */,
 				D2A513412C59FE860064941A /* ShareDiningMenu.swift in Sources */,
@@ -7143,7 +7212,6 @@
 				D2D422752BB2AB3A00A8AF04 /* PasswordConfirmer.swift in Sources */,
 				7C58FEA22F5FE4E100A2737B /* CallVanReportEvidenceViewController.swift in Sources */,
 				7C0C18A12F68FC89001781B3 /* FetchCallVanSummaryUseCase.swift in Sources */,
-				D29F21F12C4FD23600994554 /* LandDetailItem.swift in Sources */,
 				83DD0DC62C554D3F00278ABD /* BusCourseInfo.swift in Sources */,
 				7C58FE902F5FA4D600A2737B /* CallVanDataTableViewCell.swift in Sources */,
 				835DC1F92C849ECD00488506 /* FetchRecommendedKeywordUseCase.swift in Sources */,
@@ -7161,7 +7229,6 @@
 				D27DD0CD2BA608310081FD36 /* Log.swift in Sources */,
 				7C01656B300ABE9E0013DD7B /* DepartmentFooterView.swift in Sources */,
 				7C05D0782FBC29ED00F4D825 /* ShopBenefitViewModel.swift in Sources */,
-				D29F21F32C4FD23F00994554 /* LandItem.swift in Sources */,
 				7C7F56B72FFB9FE000847151 /* NotificationHistoryRecord.swift in Sources */,
 				7C50A1FD3042E9AB00897A6F /* FetchRecruitListUseCase.swift in Sources */,
 				BEEF20000000000000000001 /* RecruitMyPostList.swift in Sources */,
@@ -7213,6 +7280,7 @@
 				D837FB122E254BD8002BFB9F /* CustomSessionManager.swift in Sources */,
 				D2DCB2922CE5D639005CABEE /* PostCallNotificationUseCase.swift in Sources */,
 				83DD0DCA2C5651D900278ABD /* FetchExpressTimetableUseCase.swift in Sources */,
+				7CF09F9130B2E7D5000F6CDD /* LandMapView.swift in Sources */,
 				D8B4E0042DBFAD1A001FBC89 /* CheckVerificationCodeRequest.swift in Sources */,
 				D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */,
 				7C0C18972F68A91A001781B3 /* PostCallVanChatUseCase.swift in Sources */,
@@ -7261,7 +7329,9 @@
 				7CACF86730436D2600AC2828 /* RecruitNotificationListViewModel.swift in Sources */,
 				D29F21D32C4E17C300994554 /* TimetableAPI.swift in Sources */,
 				83E770FE2D05D76200EB3F84 /* ShuttleBusTimetableDto.swift in Sources */,
+				7CF09F9B30B2F67C000F6CDD /* LandDetail.swift in Sources */,
 				D29F21E22C4F303400994554 /* FetchDiningListRequest.swift in Sources */,
+				7C18783B30B345FB007ADB97 /* LandListBottomSheetContentView.swift in Sources */,
 				7C0C18A32F68FD3D001781B3 /* CallVanSummaryDto.swift in Sources */,
 				D2D4225D2BAAEE0900A8AF04 /* DeptDto.swift in Sources */,
 				D2D380FB2BA73162009AD5A9 /* TokenDto.swift in Sources */,
@@ -7339,7 +7409,6 @@
 				7CF1D58D30695E8A00295ED9 /* RecruitMyPostHostingController.swift in Sources */,
 				7CED90C62EF2D1F900457128 /* TimetableCollectionViewCell.swift in Sources */,
 				7C016556300AA2E10013DD7B /* DepartmentCategory.swift in Sources */,
-				7CED90CA2EF2D1F900457128 /* LandOptionCollectionViewCell.swift in Sources */,
 				7CED90CB2EF2D1F900457128 /* LostItemChatListTableViewModel.swift in Sources */,
 				7CED90CE2EF2D1F900457128 /* ForceModifyUserViewController.swift in Sources */,
 				7CED90CF2EF2D1F900457128 /* ChangeMyProfileViewModel.swift in Sources */,
@@ -7351,7 +7420,6 @@
 				7CDCD0E430560758004204DA /* BasicInfo.swift in Sources */,
 				7CED90D22EF2D1F900457128 /* TagCollectionViewCell.swift in Sources */,
 				7C50A1CC3041E29000897A6F /* RecruitListFilter.swift in Sources */,
-				7CED90D32EF2D1F900457128 /* LandCollectionView.swift in Sources */,
 				7C6403D6300BF12500A9589F /* SearchDepartmentByCategoryUseCase.swift in Sources */,
 				7CED90D52EF2D1F900457128 /* SelectDeptModalViewController.swift in Sources */,
 				7CED90D72EF2D1F900457128 /* RecommendedKeywordCollectionView.swift in Sources */,
@@ -7363,7 +7431,6 @@
 				7C61D35F2F24000C005FAC3A /* LostItemDataButtonsView.swift in Sources */,
 				7CED90DC2EF2D1F900457128 /* ShopSummaryDeliveryButton.swift in Sources */,
 				7CED90DD2EF2D1F900457128 /* AddDirectCollectionViewCell.swift in Sources */,
-				7CED90DF2EF2D1F900457128 /* LandDetailViewModel.swift in Sources */,
 				7CED90E02EF2D1F900457128 /* ShopSummaryTableViewCell.swift in Sources */,
 				7C50A20930431F9900897A6F /* Array+.swift in Sources */,
 				7CED90E22EF2D1F900457128 /* PointLabel.swift in Sources */,
@@ -7372,7 +7439,6 @@
 				7CED90E42EF2D1F900457128 /* SubstituteTimetableModalViewController.swift in Sources */,
 				7CED90E72EF2D1F900457128 /* ForceUpdateViewController.swift in Sources */,
 				7C86750E30061AA0003CB942 /* CheckHasUnreadNotificationHistoryUseCase.swift in Sources */,
-				7CED90EB2EF2D1F900457128 /* LandViewController.swift in Sources */,
 				7CED90EF2EF2D1F900457128 /* ShopReviewReportViewModel.swift in Sources */,
 				7CED90F02EF2D1F900457128 /* RevokeModalViewController.swift in Sources */,
 				7CED90F12EF2D1F900457128 /* ForceUpdateViewModel.swift in Sources */,
@@ -7380,7 +7446,6 @@
 				7CED90F22EF2D1F900457128 /* ShopSearchViewModel.swift in Sources */,
 				7CED90F42EF2D1F900457128 /* LostItemChatListTableViewController.swift in Sources */,
 				7CED90F72EF2D1F900457128 /* ReviewImageCollectionViewCell.swift in Sources */,
-				7CED90FA2EF2D1F900457128 /* LandDetailViewController.swift in Sources */,
 				7CED90FB2EF2D1F900457128 /* NoticeTabBarCollectionViewCell.swift in Sources */,
 				7CF77B6930056EC9003642C1 /* NoticeKeywordButton.swift in Sources */,
 				7CED90FD2EF2D1F900457128 /* ReviewImageUploadCollectionViewCell.swift in Sources */,
@@ -7402,7 +7467,6 @@
 				7CED91092EF2D1F900457128 /* FacilityInfoViewController.swift in Sources */,
 				7CED910A2EF2D1F900457128 /* LeftAlignedFlowLayout.swift in Sources */,
 				7CED910B2EF2D1F900457128 /* AddClassCollectionView.swift in Sources */,
-				7CED910C2EF2D1F900457128 /* LandImageCollectionView.swift in Sources */,
 				7CED910D2EF2D1F900457128 /* RecommendedSearchCollectionView.swift in Sources */,
 				7CED910E2EF2D1F900457128 /* ShopSearchViewController.swift in Sources */,
 				7CED910F2EF2D1F900457128 /* ShopCollectionView.swift in Sources */,
@@ -7415,7 +7479,6 @@
 				7CED91162EF2D1F900457128 /* ShopSortOptionSheetView.swift in Sources */,
 				7CB8EB4530584FC500300E99 /* RecruitProfilePostSecondStepView.swift in Sources */,
 				7CED91172EF2D1F900457128 /* TimetableText+.swift in Sources */,
-				7CED91182EF2D1F900457128 /* LandViewModel.swift in Sources */,
 				7CED911C2EF2D1F900457128 /* DiningOperatingTimeCollectionViewCell.swift in Sources */,
 				7CED911D2EF2D1F900457128 /* NoticeListTableViewFooter.swift in Sources */,
 				7CED911E2EF2D1F900457128 /* ShopReadyView.swift in Sources */,
@@ -7472,6 +7535,7 @@
 				7CED91532EF2D1F900457128 /* LoginViewController.swift in Sources */,
 				7C61D3572F23CD8B005FAC3A /* LostItemStatsDto.swift in Sources */,
 				7CED91552EF2D1F900457128 /* HotNoticeArticlesTableView.swift in Sources */,
+				7C18783530B33441007ADB97 /* LandMapView+OverlayImage.swift in Sources */,
 				7CED91562EF2D1F900457128 /* ScoreView.swift in Sources */,
 				7CED91572EF2D1F900457128 /* CenterFlowLayout.swift in Sources */,
 				7CED91582EF2D1F900457128 /* RegisterCompletionViewController.swift in Sources */,
@@ -7481,7 +7545,6 @@
 				7CED915D2EF2D1F900457128 /* ShopSearchTableView.swift in Sources */,
 				7CED915E2EF2D1F900457128 /* SettingsViewModel.swift in Sources */,
 				7CED91602EF2D1F900457128 /* CategoryCollectionViewCell.swift in Sources */,
-				7CED91632EF2D1F900457128 /* HouseInfoView.swift in Sources */,
 				7CF77B6730056EC1003642C1 /* NoticeKeywordManageButton.swift in Sources */,
 				7CED91642EF2D1F900457128 /* ShopSummaryViewModel.swift in Sources */,
 				7CED91652EF2D1F900457128 /* NoticeListHeaderView.swift in Sources */,
@@ -7493,7 +7556,6 @@
 				7CED916F2EF2D1F900457128 /* AddDirectFooterView.swift in Sources */,
 				7CED91702EF2D1F900457128 /* DashedBorderButton.swift in Sources */,
 				7CA63A2C2F1AF80F00226F86 /* LostItemListTableViewCell.swift in Sources */,
-				7CED91732EF2D1F900457128 /* LandOptionView.swift in Sources */,
 				7CED91752EF2D1F900457128 /* ShopReviewReportViewController.swift in Sources */,
 				7CED91782EF2D1F900457128 /* DiningOperatingTimeHeaderView.swift in Sources */,
 				7C457B2B2FCE1BA80011D338 /* HomeDiningView.swift in Sources */,
@@ -7505,6 +7567,7 @@
 				7C8A000F2FD200000011D338 /* DiningIndicatorChip.swift in Sources */,
 				7C457B2C2FCE1BA80011D338 /* HomeTabbarController.swift in Sources */,
 				7C457B2D2FCE1BA80011D338 /* HomeTabbarViewModel.swift in Sources */,
+				7C18784130B347C9007ADB97 /* LandListFilterButton.swift in Sources */,
 				7C457B2F2FCE1BA80011D338 /* HomeTabBar.swift in Sources */,
 				7C8BFCEB2FD04BA000963679 /* FetchHomeDiningListUseCase.swift in Sources */,
 				7C8BFCEC2FD04BA000963679 /* FetchHeaderUseCase.swift in Sources */,
@@ -7522,6 +7585,7 @@
 				7CDCD0E0305602A2004204DA /* RecruitProfileRequest.swift in Sources */,
 				7C457B3E2FCE1BA80011D338 /* CategoryRow.swift in Sources */,
 				7C457B3F2FCE1BA80011D338 /* CategorySection.swift in Sources */,
+				7C18783D30B34782007ADB97 /* LandListFilter.swift in Sources */,
 				7C50A1CF3041F66700897A6F /* RecruitListEmptyView.swift in Sources */,
 				7C457B402FCE1BA80011D338 /* HomeTabBarButton.swift in Sources */,
 				7C457B422FCE1BA80011D338 /* MobilityView.swift in Sources */,
@@ -7544,6 +7608,7 @@
 				7CED91862EF2D1F900457128 /* ShopReviewViewController.swift in Sources */,
 				7CED91872EF2D1F900457128 /* ReviewListViewController.swift in Sources */,
 				7CED91882EF2D1F900457128 /* ReviewListCollectionViewCell.swift in Sources */,
+				7CF09F9730B2EB11000F6CDD /* LandRow.swift in Sources */,
 				7CED91892EF2D1F900457128 /* ShopSummaryPriceTableView.swift in Sources */,
 				7C372F172F1CD81800149729 /* LostItemDataViewController.swift in Sources */,
 				7CED918A2EF2D1F900457128 /* NoticeDataViewController.swift in Sources */,
@@ -7553,6 +7618,7 @@
 				7CED918D2EF2D1F900457128 /* ScoreChartCollectionViewCell.swift in Sources */,
 				7CB11C7C2FB32817004E0C80 /* LostItemKeyword.swift in Sources */,
 				7C58FE862F5F9CDD00A2737B /* CallVanDataViewController.swift in Sources */,
+				7C18782430B307EC007ADB97 /* LandList.swift in Sources */,
 				7C372F202F1CD90B00149729 /* LostItemDataRecentHeaderView.swift in Sources */,
 				7CED91902EF2D1F900457128 /* StateView.swift in Sources */,
 				7CED91912EF2D1F900457128 /* NoticeTabBarCollectionView.swift in Sources */,
@@ -7710,7 +7776,6 @@
 				7CED91CE2EF2D1F900457128 /* NotiViewModel.swift in Sources */,
 				7CACF86530436CFF00AC2828 /* RecruitNotificationListViewController.swift in Sources */,
 				7CED91CF2EF2D1F900457128 /* ManageNoticeKeywordViewModel.swift in Sources */,
-				7CED91D22EF2D1F900457128 /* LandImageCollectionViewCell.swift in Sources */,
 				7CED91D72EF2D1F900457128 /* ShopDetailViewModel.swift in Sources */,
 				7C01656F300B4A2D0013DD7B /* DepartmentView.swift in Sources */,
 				7C50A1C93041E14500897A6F /* RecruitListHeaderView.swift in Sources */,
@@ -7747,7 +7812,6 @@
 				7CED91F82EF2D1F900457128 /* TimetableViewModel.swift in Sources */,
 				7CC42B3E2F59600200940CE1 /* CallVanNotificationDropdownViewController.swift in Sources */,
 				7CDCD0D63055EA5B004204DA /* RecruitProfileActionButton.swift in Sources */,
-				7CED91F92EF2D1F900457128 /* LandOptionCollectionView.swift in Sources */,
 				7CED91FA2EF2D1F900457128 /* DeliveryTipsCollectionViewCell.swift in Sources */,
 				7CED91FE2EF2D1F900457128 /* LostArticleImageCollectionViewCell.swift in Sources */,
 				7CDCD0CD3055D64A004204DA /* RecruitProfileHostingController.swift in Sources */,
@@ -7774,7 +7838,6 @@
 				7C65FDC92FE69A00007831CE /* AutoScrollableInfiniteCarouselCollectionView.swift in Sources */,
 				7CED92122EF2D1F900457128 /* SortTypeBottomSheetCell.swift in Sources */,
 				7CED92132EF2D1F900457128 /* SettingsViewController.swift in Sources */,
-				7CED92142EF2D1F900457128 /* LandCollectionViewCell.swift in Sources */,
 				7C0C18952F68A913001781B3 /* FetchCallVanChatUseCase.swift in Sources */,
 				7CED92172EF2D1F900457128 /* DiningOperatingTimeFooterView.swift in Sources */,
 				7C96B9783088F2680023A4ED /* DiningEmptyView.swift in Sources */,
@@ -7800,6 +7863,7 @@
 				D2FB23602BFDABBB0098BA2B /* Router.swift in Sources */,
 				D89F8FDB2DF12847000265DC /* StatefulButton.swift in Sources */,
 				D2D462712D63C5ED00C60864 /* LostItemChatRoomItem.swift in Sources */,
+				7C18783130B32AF8007ADB97 /* LandMapView+ClusterMarkerUpdater.swift in Sources */,
 				7CDCD0BB30559234004204DA /* RecruitDataPopUpViewController.swift in Sources */,
 				7C8ADD2D2F20B43F00F85BDE /* UpdateLostItemRequest.swift in Sources */,
 				7C7BD723302B3D8F003C5A15 /* NoticeAISummary.swift in Sources */,
@@ -7840,6 +7904,7 @@
 				A2C130000000000000000001 /* FetchRecruitDirectChatDataUseCase.swift in Sources */,
 				D2CA2DD02C1CAC550036F02C /* ShopData.swift in Sources */,
 				7CB11C0C2FB198A6004E0C80 /* LostItemKeywordCollectionViewKeywordCell.swift in Sources */,
+				7CF09F8A30B2E790000F6CDD /* LandListViewController.swift in Sources */,
 				7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */,
 				833D9C4B2C70D54E00982145 /* SearchArticleRequest.swift in Sources */,
 				7C50A1D33041F8CA00897A6F /* RecruitCategory.swift in Sources */,
@@ -7869,6 +7934,7 @@
 				D19A00013000000000000004 /* NotificationListView.swift in Sources */,
 				D19A00013000000000000006 /* NotificationHistoryItem+.swift in Sources */,
 				D19A10013000000000000002 /* ChatListModel.swift in Sources */,
+				7C18783330B32BAA007ADB97 /* LandMapView+LeafMarkerUpdater.swift in Sources */,
 				D19A10013000000000000004 /* ChatMessageRowModel.swift in Sources */,
 				D19A10013000000000000006 /* ChatListView.swift in Sources */,
 				D19A10013000000000000008 /* ChatInputView.swift in Sources */,
@@ -8033,7 +8099,7 @@
 				D89BAA3D2DCA6483006D3BB7 /* RegisterFormUseCase.swift in Sources */,
 				D2A8F8B52C4A5A870090C7A4 /* UserRepository.swift in Sources */,
 				D2D422772BB2EA3900A8AF04 /* FindPasswordRequest.swift in Sources */,
-				D27DD0D82BA6089D0081FD36 /* LandDto.swift in Sources */,
+				D27DD0D82BA6089D0081FD36 /* LandListDto.swift in Sources */,
 				7C8A94392FD2C45200DEA6F5 /* ShopCountDto.swift in Sources */,
 				7C58FEA02F5FE4C900A2737B /* CallVanReportReasonButton.swift in Sources */,
 				D22C547B2C6A2A9D000826DA /* ReportReviewUseCase.swift in Sources */,
@@ -8116,6 +8182,24 @@
 				763EC1A47E67771FDAB08537 /* KoinPickerDropDownView.swift in Sources */,
 				FBCFB1EF499995884A6F2E83 /* RecruitPostSchedule.swift in Sources */,
 				5FABD176180615A12BEFDC82 /* RecruitActivityPeriod.swift in Sources */,
+				7C18783F30B3479B007ADB97 /* LandListFilterView.swift in Sources */,
+				7C18785130B3600000ADB970 /* LandListTableView.swift in Sources */,
+				7C18785330B3600000ADB970 /* LandListTableViewCell.swift in Sources */,
+				7C18785530B3600000ADB970 /* LandListFocusedView.swift in Sources */,
+				7C18785730B3600000ADB970 /* LandMapZoomControlView.swift in Sources */,
+				7C18785930B3600000ADB970 /* LandListBadgeView.swift in Sources */,
+				7C18785D30B3600000ADB970 /* LandDetailViewController.swift in Sources */,
+				7C18785F30B3600000ADB970 /* LandDetailViewModel.swift in Sources */,
+				7C18786130B3600000ADB970 /* LandDetailImageView.swift in Sources */,
+				7C18786330B3600000ADB970 /* LandDetailImageCollectionViewCell.swift in Sources */,
+				7C18786530B3600000ADB970 /* LandDetailImageEmptyView.swift in Sources */,
+				7C18786730B3600000ADB970 /* LandDetailInfoView.swift in Sources */,
+				7C18786930B3600000ADB970 /* LandDetailBottomSheetContentView.swift in Sources */,
+				7C18786D30B3600000ADB970 /* LandSearchViewController.swift in Sources */,
+				7C18786F30B3600000ADB970 /* LandSearchViewModel.swift in Sources */,
+				7C18787130B3600000ADB970 /* LandSearchBarView.swift in Sources */,
+				7C18787330B3600000ADB970 /* LandSearchEmptyView.swift in Sources */,
+				7C18787530B3600000ADB970 /* FetchLandListRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
