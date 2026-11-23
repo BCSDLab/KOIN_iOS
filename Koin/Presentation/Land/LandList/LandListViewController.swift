@@ -105,7 +105,7 @@ extension LandListViewController {
                     let listFilter = listFilter
                     self.listFilter = listFilter
                     if let medianCoordinate = landList.medianCoordinate {
-                        mapView.focus(on: medianCoordinate)
+                        mapView.focus(on: medianCoordinate, animationDuration: 0)
                     }
                 case let .showToastMessage(message):
                     showToastMessage(message: message)
