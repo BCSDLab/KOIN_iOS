@@ -134,8 +134,8 @@ extension LandListViewController {
 
         bottomSheetContentView.rowTappedPublisher
             .merge(with: bottomSheetContentView.detailTappedPublisher)
-            .sink { _ in
-                // TODO: 상세 화면 연결
+            .sink { [weak self] landRow in
+                self?.pushLandDetailViewController(landRow: landRow)
             }
             .store(in: &subscriptions)
 
@@ -172,6 +172,17 @@ extension LandListViewController {
         mapView.setContentInset(bottom: max(0, mapView.frame.maxY - sheetTop))
         zoomControlBottomConstraint?.update(offset: sheetTop - view.bounds.height - 18)
         view.layoutIfNeeded()
+    }
+}
+
+extension LandListViewController {
+    private func pushLandDetailViewController(landRow: LandRow) {
+        let landService = DefaultLandService()
+        let landRepository = DefaultLandRepository(service: landService)
+        let fetchLandDetailUseCase = DefaultFetchLandDetailUseCase(landRepository: landRepository)
+        let viewModel = LandDetailViewModel(landRow: landRow, fetchLandDetailUseCase: fetchLandDetailUseCase)
+        let viewController = LandDetailViewController(viewModel: viewModel)
+        navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
