@@ -11,13 +11,16 @@ import Combine
 final class LandSearchViewModel: ViewModelProtocol {
     enum Input {
         case searchTextChanged(String)
+        case search(String)
     }
     enum Output {
+        case updateSuggestions(query: String, rows: [LandRow])
         case updateLandList(LandList)
         case showToastMessage(String)
     }
 
     // MARK: - Properties
+    private static let suggestionCount = 3
     private let fetchLandListUseCase: FetchLandListUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
@@ -35,9 +38,27 @@ extension LandSearchViewModel {
                 guard case let .searchTextChanged(text) = input else { return nil }
                 return text.trimmingCharacters(in: .whitespacesAndNewlines)
             }
-            .filter { !$0.isEmpty }
             .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
-            .removeDuplicates()
+            .map { [weak self] query -> AnyPublisher<Output, Never> in
+                guard let self, !query.isEmpty else {
+                    return Just(Output.updateSuggestions(query: query, rows: [])).eraseToAnyPublisher()
+                }
+                return fetchLandList(query: query)
+                    .map { Output.updateSuggestions(query: query, rows: Array($0.rows.prefix(Self.suggestionCount))) }
+                    .eraseToAnyPublisher()
+            }
+            .switchToLatest()
+            .sink { [weak self] output in
+                self?.outputSubject.send(output)
+            }
+            .store(in: &subscriptions)
+
+        input
+            .compactMap { input -> String? in
+                guard case let .search(text) = input else { return nil }
+                return text.trimmingCharacters(in: .whitespacesAndNewlines)
+            }
+            .filter { !$0.isEmpty }
             .map { [weak self] query -> AnyPublisher<LandList, Never> in
                 guard let self else {
                     return Empty().eraseToAnyPublisher()

@@ -24,6 +24,7 @@ final class LandSearchViewController: UIViewController {
     private let countLabel = UILabel()
     private let tableView = LandListTableView()
     private let emptyView = LandSearchEmptyView()
+    private let suggestionView = LandSearchSuggestionView()
 
     // MARK: - Initializer
     init(viewModel: LandSearchViewModel) {
@@ -61,6 +62,8 @@ extension LandSearchViewController {
             .sink { [weak self] output in
                 guard let self else { return }
                 switch output {
+                case let .updateSuggestions(query, rows):
+                    configureSuggestions(query: query, rows: rows)
                 case let .updateLandList(landList):
                     configure(landList: landList)
                 case let .showToastMessage(message):
@@ -75,6 +78,26 @@ extension LandSearchViewController {
             }
             .store(in: &subscriptions)
 
+        searchBarView.searchSubmittedPublisher
+            .sink { [weak self] text in
+                self?.search(text: text)
+            }
+            .store(in: &subscriptions)
+
+        searchBarView.editingEndedPublisher
+            .sink { [weak self] in
+                self?.suggestionView.isHidden = true
+            }
+            .store(in: &subscriptions)
+
+        suggestionView.suggestionTappedPublisher
+            .sink { [weak self] landRow in
+                self?.searchBarView.setText(landRow.name)
+                self?.view.endEditing(true)
+                self?.search(text: landRow.name)
+            }
+            .store(in: &subscriptions)
+
         tableView.rowTappedPublisher
             .sink { [weak self] landRow in
                 self?.pushLandDetailViewController(landRow: landRow)
@@ -84,6 +107,16 @@ extension LandSearchViewController {
 }
 
 extension LandSearchViewController {
+    private func search(text: String) {
+        suggestionView.isHidden = true
+        inputSubject.send(.search(text))
+    }
+
+    private func configureSuggestions(query: String, rows: [LandRow]) {
+        suggestionView.configure(query: query, rows: rows)
+        suggestionView.isHidden = rows.isEmpty || !searchBarView.isEditing
+    }
+
     private func configure(landList: LandList) {
         let isEmpty = landList.rows.isEmpty
         countLabel.text = "\(LandListFilter.all.displayName)(\(landList.rows.count))"
@@ -149,10 +182,11 @@ extension LandSearchViewController {
             $0.isHidden = true
         }
         emptyView.isHidden = true
+        suggestionView.isHidden = true
     }
 
     private func setUpLayouts() {
-        [navigationBarView, searchBarView, countLabel, tableView, emptyView].forEach {
+        [navigationBarView, searchBarView, countLabel, tableView, emptyView, suggestionView].forEach {
             view.addSubview($0)
         }
         [navigationTitleLabel, backButton].forEach {
@@ -193,6 +227,10 @@ extension LandSearchViewController {
             $0.top.equalTo(searchBarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+        }
+        suggestionView.snp.makeConstraints {
+            $0.top.equalTo(searchBarView.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(searchBarView)
         }
     }
 }
