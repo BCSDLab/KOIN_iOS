@@ -24,6 +24,7 @@ final class LandSearchViewController: UIViewController {
     private let countLabel = UILabel()
     private let tableView = LandListTableView()
     private let emptyView = LandSearchEmptyView()
+    private let suggestionView = LandSearchSuggestionView()
 
     // MARK: - Initializer
     init(viewModel: LandSearchViewModel) {
@@ -61,6 +62,8 @@ extension LandSearchViewController {
             .sink { [weak self] output in
                 guard let self else { return }
                 switch output {
+                case let .updateSuggestions(query, rows):
+                    configureSuggestions(query: query, rows: rows)
                 case let .updateLandList(landList):
                     configure(landList: landList)
                 case let .showToastMessage(message):
@@ -71,7 +74,38 @@ extension LandSearchViewController {
 
         searchBarView.textChangedPublisher
             .sink { [weak self] text in
+                self?.suggestionView.isHidden = true
                 self?.inputSubject.send(.searchTextChanged(text))
+            }
+            .store(in: &subscriptions)
+
+        searchBarView.editingBeganPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListSearchInputClick, "검색창"))
+            }
+            .store(in: &subscriptions)
+
+        searchBarView.searchSubmittedPublisher
+            .sink { [weak self] text in
+                if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListSearchSubmit, "검색"))
+                }
+                self?.search(text: text)
+            }
+            .store(in: &subscriptions)
+
+        searchBarView.editingEndedPublisher
+            .sink { [weak self] in
+                self?.suggestionView.isHidden = true
+            }
+            .store(in: &subscriptions)
+
+        suggestionView.suggestionTappedPublisher
+            .sink { [weak self] landRow in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListSearchSuggestionSelectClick, landRow.name))
+                self?.searchBarView.setText(landRow.name)
+                self?.view.endEditing(true)
+                self?.search(text: landRow.name)
             }
             .store(in: &subscriptions)
 
@@ -83,7 +117,27 @@ extension LandSearchViewController {
     }
 }
 
+extension LandSearchViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.RealEstate.roomCommonNavigationBackSwipe
+            : EventParameter.EventLabel.RealEstate.roomCommonNavigationBackClick
+        inputSubject.send(.logEvent(label, "뒤로가기", parameters: ["source_screen": "room_list"]))
+    }
+}
+
 extension LandSearchViewController {
+    private func search(text: String) {
+        suggestionView.isHidden = true
+        inputSubject.send(.search(text))
+    }
+
+    private func configureSuggestions(query: String, rows: [LandRow]) {
+        guard query == searchBarView.text.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
+        suggestionView.configure(query: query, rows: rows)
+        suggestionView.isHidden = rows.isEmpty || !searchBarView.isEditing
+    }
+
     private func configure(landList: LandList) {
         let isEmpty = landList.rows.isEmpty
         countLabel.text = "\(LandListFilter.all.displayName)(\(landList.rows.count))"
@@ -97,7 +151,12 @@ extension LandSearchViewController {
         let landService = DefaultLandService()
         let landRepository = DefaultLandRepository(service: landService)
         let fetchLandDetailUseCase = DefaultFetchLandDetailUseCase(landRepository: landRepository)
-        let viewModel = LandDetailViewModel(landRow: landRow, fetchLandDetailUseCase: fetchLandDetailUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LandDetailViewModel(
+            landRow: landRow,
+            fetchLandDetailUseCase: fetchLandDetailUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = LandDetailViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }
@@ -144,10 +203,11 @@ extension LandSearchViewController {
             $0.isHidden = true
         }
         emptyView.isHidden = true
+        suggestionView.isHidden = true
     }
 
     private func setUpLayouts() {
-        [navigationBarView, searchBarView, countLabel, tableView, emptyView].forEach {
+        [navigationBarView, searchBarView, countLabel, tableView, emptyView, suggestionView].forEach {
             view.addSubview($0)
         }
         [navigationTitleLabel, backButton].forEach {
@@ -188,6 +248,10 @@ extension LandSearchViewController {
             $0.top.equalTo(searchBarView.snp.bottom)
             $0.leading.trailing.equalToSuperview()
             $0.bottom.equalTo(view.keyboardLayoutGuide.snp.top)
+        }
+        suggestionView.snp.makeConstraints {
+            $0.top.equalTo(searchBarView.snp.bottom).offset(8)
+            $0.leading.trailing.equalTo(searchBarView)
         }
     }
 }

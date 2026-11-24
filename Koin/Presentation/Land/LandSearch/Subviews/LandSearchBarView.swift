@@ -13,10 +13,19 @@ final class LandSearchBarView: UIView {
 
     // MARK: - Properties
     let textChangedPublisher = PassthroughSubject<String, Never>()
+    let searchSubmittedPublisher = PassthroughSubject<String, Never>()
+    let editingBeganPublisher = PassthroughSubject<Void, Never>()
+    let editingEndedPublisher = PassthroughSubject<Void, Never>()
+    var isEditing: Bool {
+        textField.isEditing
+    }
+    var text: String {
+        textField.text ?? ""
+    }
 
     // MARK: - UI Components
     private let textField = UITextField()
-    private let searchImageView = UIImageView()
+    private let searchButton = UIButton(type: .system)
 
     // MARK: - Initializer
     init() {
@@ -24,6 +33,9 @@ final class LandSearchBarView: UIView {
         configureView()
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        textField.addTarget(self, action: #selector(textFieldEditingDidBegin), for: .editingDidBegin)
+        textField.addTarget(self, action: #selector(textFieldEditingDidEnd), for: .editingDidEnd)
+        searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -32,14 +44,37 @@ final class LandSearchBarView: UIView {
 
 extension LandSearchBarView: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        submitSearch()
         return true
+    }
+}
+
+extension LandSearchBarView {
+    func setText(_ text: String) {
+        textField.text = text
     }
 }
 
 extension LandSearchBarView {
     @objc private func textFieldEditingChanged() {
         textChangedPublisher.send(textField.text ?? "")
+    }
+
+    @objc private func textFieldEditingDidBegin() {
+        editingBeganPublisher.send()
+    }
+
+    @objc private func textFieldEditingDidEnd() {
+        editingEndedPublisher.send()
+    }
+
+    @objc private func searchButtonTapped() {
+        submitSearch()
+    }
+
+    private func submitSearch() {
+        textField.resignFirstResponder()
+        searchSubmittedPublisher.send(textField.text ?? "")
     }
 }
 
@@ -68,11 +103,14 @@ extension LandSearchBarView {
             $0.returnKeyType = .search
             $0.clearButtonMode = .never
         }
-        searchImageView.image = .appImage(asset: .noticeSearch)
+        searchButton.do {
+            $0.setImage(UIImage.appImage(asset: .noticeSearch)?.withRenderingMode(.alwaysOriginal), for: .normal)
+            $0.accessibilityLabel = "검색"
+        }
     }
 
     private func setUpLayouts() {
-        [textField, searchImageView].forEach {
+        [textField, searchButton].forEach {
             addSubview($0)
         }
     }
@@ -81,9 +119,9 @@ extension LandSearchBarView {
         textField.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.top.bottom.equalToSuperview()
-            $0.trailing.equalTo(searchImageView.snp.leading).offset(-8)
+            $0.trailing.equalTo(searchButton.snp.leading).offset(-8)
         }
-        searchImageView.snp.makeConstraints {
+        searchButton.snp.makeConstraints {
             $0.trailing.equalToSuperview().offset(-20)
             $0.centerY.equalToSuperview()
             $0.size.equalTo(21)

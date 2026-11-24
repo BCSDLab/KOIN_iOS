@@ -19,12 +19,16 @@ final class LandMapView: UIView {
     var markerTappedPublisher: AnyPublisher<ItemKey, Never> {
         leafMarkerUpdater.markerTappedPublisher.eraseToAnyPublisher()
     }
+    var clusterTappedPublisher: AnyPublisher<Void, Never> {
+        clusterMarkerUpdater.clusterTappedPublisher.eraseToAnyPublisher()
+    }
     
     // MARK: - Cluster
     private let leafMarkerUpdater = LandMapViewLeafMarkerUpdater()
+    private let clusterMarkerUpdater = LandMapViewClusterMarkerUpdater()
     private lazy var builder = NMCBuilder<ItemKey>().then {
         $0.leafMarkerUpdater = leafMarkerUpdater
-        $0.clusterMarkerUpdater = LandMapViewClusterMarkerUpdater()
+        $0.clusterMarkerUpdater = clusterMarkerUpdater
     }
     private lazy var clusterer = builder.build().then {
         $0.mapView = mapView

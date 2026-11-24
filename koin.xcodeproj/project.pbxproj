@@ -108,6 +108,7 @@
 		7C18785530B3600000ADB970 /* LandListFocusedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785430B3600000ADB970 /* LandListFocusedView.swift */; };
 		7C18785730B3600000ADB970 /* LandMapZoomControlView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785630B3600000ADB970 /* LandMapZoomControlView.swift */; };
 		7C18785930B3600000ADB970 /* LandListBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785830B3600000ADB970 /* LandListBadgeView.swift */; };
+		7C18785B30B3600000ADB970 /* LandCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785A30B3600000ADB970 /* LandCoordinate.swift */; };
 		7C18785D30B3600000ADB970 /* LandDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785C30B3600000ADB970 /* LandDetailViewController.swift */; };
 		7C18785F30B3600000ADB970 /* LandDetailViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785E30B3600000ADB970 /* LandDetailViewModel.swift */; };
 		7C18786130B3600000ADB970 /* LandDetailImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18786030B3600000ADB970 /* LandDetailImageView.swift */; };
@@ -120,6 +121,7 @@
 		7C18787130B3600000ADB970 /* LandSearchBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787030B3600000ADB970 /* LandSearchBarView.swift */; };
 		7C18787330B3600000ADB970 /* LandSearchEmptyView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */; };
 		7C18787530B3600000ADB970 /* FetchLandListRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18787430B3600000ADB970 /* FetchLandListRequest.swift */; };
+		7C1878A130B3600000ADB970 /* LandSearchSuggestionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C1878A030B3600000ADB970 /* LandSearchSuggestionView.swift */; };
 		7C281CFD2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */; };
 		7C333E7C302E285B009D2B89 /* KoinModalAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */; };
 		7C333E7E302E28AA009D2B89 /* KoinModalPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */; };
@@ -766,7 +768,6 @@
 		7CF09F8E30B2E79B000F6CDD /* LandListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F8D30B2E79B000F6CDD /* LandListViewModel.swift */; };
 		7CF09F9130B2E7D5000F6CDD /* LandMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9030B2E7D5000F6CDD /* LandMapView.swift */; };
 		7CF09F9330B2E85B000F6CDD /* LandMarkerKey.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9230B2E85B000F6CDD /* LandMarkerKey.swift */; };
-		7C18785B30B3600000ADB970 /* LandCoordinate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C18785A30B3600000ADB970 /* LandCoordinate.swift */; };
 		7CF09F9730B2EB11000F6CDD /* LandRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9630B2EB11000F6CDD /* LandRow.swift */; };
 		7CF09F9B30B2F67C000F6CDD /* LandDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF09F9A30B2F67C000F6CDD /* LandDetail.swift */; };
 		7CF1D58B30695E7900295ED9 /* RecruitMyPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7CF1D58A30695E7900295ED9 /* RecruitMyPostViewModel.swift */; };
@@ -1407,6 +1408,7 @@
 		7C18785430B3600000ADB970 /* LandListFocusedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListFocusedView.swift; sourceTree = "<group>"; };
 		7C18785630B3600000ADB970 /* LandMapZoomControlView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandMapZoomControlView.swift; sourceTree = "<group>"; };
 		7C18785830B3600000ADB970 /* LandListBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListBadgeView.swift; sourceTree = "<group>"; };
+		7C18785A30B3600000ADB970 /* LandCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandCoordinate.swift; sourceTree = "<group>"; };
 		7C18785C30B3600000ADB970 /* LandDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewController.swift; sourceTree = "<group>"; };
 		7C18785E30B3600000ADB970 /* LandDetailViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailViewModel.swift; sourceTree = "<group>"; };
 		7C18786030B3600000ADB970 /* LandDetailImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetailImageView.swift; sourceTree = "<group>"; };
@@ -1419,6 +1421,7 @@
 		7C18787030B3600000ADB970 /* LandSearchBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchBarView.swift; sourceTree = "<group>"; };
 		7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchEmptyView.swift; sourceTree = "<group>"; };
 		7C18787430B3600000ADB970 /* FetchLandListRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchLandListRequest.swift; sourceTree = "<group>"; };
+		7C1878A030B3600000ADB970 /* LandSearchSuggestionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandSearchSuggestionView.swift; sourceTree = "<group>"; };
 		7C281CFC2EB3ED4B00BD6B4E /* FetchOrderShopDetailFromShopUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchOrderShopDetailFromShopUseCase.swift; sourceTree = "<group>"; };
 		7C333E7B302E285B009D2B89 /* KoinModalAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalAnimator.swift; sourceTree = "<group>"; };
 		7C333E7D302E28AA009D2B89 /* KoinModalPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinModalPresentationController.swift; sourceTree = "<group>"; };
@@ -2044,7 +2047,6 @@
 		7CF09F8D30B2E79B000F6CDD /* LandListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandListViewModel.swift; sourceTree = "<group>"; };
 		7CF09F9030B2E7D5000F6CDD /* LandMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandMapView.swift; sourceTree = "<group>"; };
 		7CF09F9230B2E85B000F6CDD /* LandMarkerKey.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandMarkerKey.swift; sourceTree = "<group>"; };
-		7C18785A30B3600000ADB970 /* LandCoordinate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandCoordinate.swift; sourceTree = "<group>"; };
 		7CF09F9630B2EB11000F6CDD /* LandRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandRow.swift; sourceTree = "<group>"; };
 		7CF09F9A30B2F67C000F6CDD /* LandDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LandDetail.swift; sourceTree = "<group>"; };
 		7CF1D58A30695E7900295ED9 /* RecruitMyPostViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitMyPostViewModel.swift; sourceTree = "<group>"; };
@@ -2840,6 +2842,7 @@
 			children = (
 				7C18787030B3600000ADB970 /* LandSearchBarView.swift */,
 				7C18787230B3600000ADB970 /* LandSearchEmptyView.swift */,
+				7C1878A030B3600000ADB970 /* LandSearchSuggestionView.swift */,
 			);
 			path = Subviews;
 			sourceTree = "<group>";
@@ -8199,6 +8202,7 @@
 				7C18786F30B3600000ADB970 /* LandSearchViewModel.swift in Sources */,
 				7C18787130B3600000ADB970 /* LandSearchBarView.swift in Sources */,
 				7C18787330B3600000ADB970 /* LandSearchEmptyView.swift in Sources */,
+				7C1878A130B3600000ADB970 /* LandSearchSuggestionView.swift in Sources */,
 				7C18787530B3600000ADB970 /* FetchLandListRequest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
