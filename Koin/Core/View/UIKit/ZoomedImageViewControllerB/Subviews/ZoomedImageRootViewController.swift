@@ -57,10 +57,10 @@ final class ZoomedImageRootViewController: UIViewController {
     }
     
     // MARK: - Configure
-    func configure(urls: [String], initialIndexPath: IndexPath) {
-        zoomedImageCollectionView.configure(urls: urls, initialIndexPath: initialIndexPath)
+    func configure(urls: [String], initialIndex: Int) {
+        zoomedImageCollectionView.configure(urls: urls, initialIndex: initialIndex)
         if shouldShowTitle {
-            title = "\(initialIndexPath.row+1)/\(urls.count)"
+            title = "\(initialIndex + 1)/\(urls.count)"
         }
     }
     

@@ -128,7 +128,7 @@ final class LostItemDataViewController: UIViewController {
             let viewController = ZoomedImageViewControllerB()
             viewController.configure(
                 urls: imageUrls,
-                initialIndexPath: indexPath)
+                selectedIndex: indexPath.row)
             navigationController?.present(viewController, animated: true)
         }.store(in: &subscription)
         

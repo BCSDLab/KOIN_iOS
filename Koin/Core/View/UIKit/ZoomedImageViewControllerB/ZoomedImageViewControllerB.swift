@@ -33,7 +33,8 @@ final class ZoomedImageViewControllerB: UINavigationController {
         configure(urls: [url])
     }
     
-    func configure(urls: [String], initialIndexPath: IndexPath = IndexPath(row: 0, section: 0)) {
-        rootViewController.configure(urls: urls, initialIndexPath: initialIndexPath)
+    func configure(urls: [String], selectedIndex: Int = 0) {
+        let index = urls.indices.contains(selectedIndex) ? selectedIndex : 0
+        rootViewController.configure(urls: urls, initialIndex: index)
     }
 }

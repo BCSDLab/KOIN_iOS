@@ -12,7 +12,7 @@ final class ZoomedImageCollectionView: UICollectionView {
     
     // MARK: - Properties
     private var urls: [String] = []
-    private var initialIndexPath: IndexPath = IndexPath(row: 0, section: 0)
+    private var initialIndex = 0
     let updateTitlePublisher = PassthroughSubject<String, Never>()
     let hideNavigationBarPublisher = PassthroughSubject<Bool, Never>()
     private var isInitialized = false
@@ -34,16 +34,16 @@ final class ZoomedImageCollectionView: UICollectionView {
     }
     
     // MARK: - Configure
-    func configure(urls: [String], initialIndexPath: IndexPath) {
+    func configure(urls: [String], initialIndex: Int) {
         self.urls = urls
-        self.initialIndexPath = initialIndexPath
+        self.initialIndex = initialIndex
         reloadData()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
         if !isInitialized {
-            contentOffset = CGPoint(x: UIScreen.main.bounds.width * CGFloat(initialIndexPath.row), y: 0)
+            contentOffset = CGPoint(x: UIScreen.main.bounds.width * CGFloat(initialIndex), y: 0)
             isInitialized = true
         }
     }

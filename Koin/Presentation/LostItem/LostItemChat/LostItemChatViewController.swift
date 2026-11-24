@@ -84,7 +84,7 @@ final class LostItemChatViewController: UIViewController, PHPickerViewController
             self?.dismissKeyboard()
 
             let zoomedImageViewController = ZoomedImageViewControllerB(shouldShowTitle: false)
-            zoomedImageViewController.configure(urls: [imageUrl], initialIndexPath: IndexPath(row: 0, section: 0))
+            zoomedImageViewController.configure(url: imageUrl)
             self?.present(zoomedImageViewController, animated: true, completion: nil)
         }.store(in: &subscriptions)
     }
