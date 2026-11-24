@@ -5,7 +5,7 @@
 //  Created by 김나훈 on 4/8/24.
 //
 
-import Kingfisher
+import Combine
 import SnapKit
 import UIKit
 
@@ -13,21 +13,15 @@ final class ZoomedImageViewController: UIViewController {
 
     // MARK: - Properties
 
-    private var imageRatioConstraint: Constraint?
+    private var subscriptions: Set<AnyCancellable> = []
     private var initialTouchPoint = CGPoint.zero
+    private let closeButtonSize: CGFloat = 24
+    private let closeButtonSpacing: CGFloat = 8
 
     // MARK: - UI Components
 
-    private let scrollView = UIScrollView().then {
-        $0.minimumZoomScale = 1.0
-        $0.maximumZoomScale = 6.0
+    private let zoomableImageView = ZoomableImageView().then {
         $0.clipsToBounds = false
-        $0.showsVerticalScrollIndicator = false
-        $0.showsHorizontalScrollIndicator = false
-    }
-
-    private let imageView = UIImageView().then {
-        $0.contentMode = .scaleAspectFit
     }
 
     private let closeButton = UIButton().then {
@@ -47,64 +41,73 @@ final class ZoomedImageViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+
     // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        additionalSafeAreaInsets.top = closeButtonSize + closeButtonSpacing
         configureView()
-        updateImageRatio()
-        scrollView.delegate = self
+        bind()
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
         view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panGestureDismiss)))
     }
 
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        guard scrollView.zoomScale == scrollView.minimumZoomScale else { return }
-        imageView.frame = CGRect(origin: .zero, size: scrollView.bounds.size)
-        scrollView.contentSize = scrollView.bounds.size
-    }
-
     func setImage(_ image: UIImage?) {
-        imageView.image = image
-        updateImageRatio()
+        zoomableImageView.setImage(image)
     }
 
     func setImage(url: String) {
-        imageView.kf.setImage(with: URL(string: url), completionHandler: { [weak self] _ in
-            self?.updateImageRatio()
-        })
+        zoomableImageView.setImage(url: url)
     }
 }
 
 extension ZoomedImageViewController {
 
     private func configureView() {
-        view.backgroundColor = .black
-        view.addSubview(scrollView)
-        scrollView.addSubview(imageView)
+        view.backgroundColor = .appColor(.neutral800)
+        view.addSubview(zoomableImageView)
         view.addSubview(closeButton)
 
-        scrollView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.centerY.equalToSuperview()
-            make.top.greaterThanOrEqualTo(view.safeAreaLayoutGuide.snp.top).offset(24)
-            make.bottom.lessThanOrEqualTo(view.safeAreaLayoutGuide.snp.bottom)
+        zoomableImageView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
         }
 
         closeButton.snp.makeConstraints { make in
-            make.width.height.equalTo(24)
-            make.bottom.equalTo(scrollView.snp.top).offset(-8)
-            make.trailing.equalTo(scrollView)
+            make.width.height.equalTo(closeButtonSize)
+            make.trailing.equalTo(zoomableImageView.snp.leading)
+            make.bottom.equalTo(zoomableImageView.snp.top).offset(-closeButtonSpacing)
         }
     }
 
-    private func updateImageRatio() {
-        let size = imageView.image?.size ?? .zero
-        let ratio = size.width > 0 ? size.height / size.width : 1
-        imageRatioConstraint?.deactivate()
-        scrollView.snp.makeConstraints { make in
-            imageRatioConstraint = make.height.equalTo(scrollView.snp.width).multipliedBy(ratio).priority(.high).constraint
+    private func bind() {
+        zoomableImageView.$fittedImageFrame
+            .sink { [weak self] fittedImageFrame in
+                self?.updateCloseButtonPosition(fittedImageFrame)
+            }
+            .store(in: &subscriptions)
+
+        zoomableImageView.$isZoomed
+            .removeDuplicates()
+            .sink { [weak self] isZoomed in
+                UIView.animate(
+                    withDuration: isZoomed ? 0.1 : 0.2,
+                    delay: 0,
+                    options: [.overrideInheritedDuration, .overrideInheritedCurve]
+                ) {
+                    self?.closeButton.alpha = isZoomed ? 0 : 1
+                }
+            }
+            .store(in: &subscriptions)
+    }
+
+    private func updateCloseButtonPosition(_ fittedImageFrame: CGRect) {
+        closeButton.snp.updateConstraints { make in
+            make.trailing.equalTo(zoomableImageView.snp.leading).offset(fittedImageFrame.maxX)
+            make.bottom.equalTo(zoomableImageView.snp.top).offset(fittedImageFrame.minY - closeButtonSpacing)
         }
     }
 
@@ -118,22 +121,11 @@ extension ZoomedImageViewController {
         case .began:
             initialTouchPoint = touchPoint
         case .changed, .ended, .cancelled:
-            guard scrollView.zoomScale == scrollView.minimumZoomScale,
+            guard !zoomableImageView.isZoomed,
                   50 < touchPoint.y - initialTouchPoint.y else { return }
             dismiss(animated: true)
         default:
             return
         }
-    }
-}
-
-extension ZoomedImageViewController: UIScrollViewDelegate {
-
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        imageView
-    }
-
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: true)
     }
 }
