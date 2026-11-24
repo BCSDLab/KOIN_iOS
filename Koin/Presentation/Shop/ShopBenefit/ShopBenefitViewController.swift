@@ -55,7 +55,6 @@ final class ShopBenefitViewController: UIViewController {
             guard let self else { return }
             let zoomedImageViewController = ZoomedImageViewControllerB()
             zoomedImageViewController.configure(urls: imageUrls, selectedIndex: indexPath.row)
-            zoomedImageViewController.modalPresentationStyle = .fullScreen
             present(zoomedImageViewController, animated: true)
         }.store(in: &subscriptions)
 

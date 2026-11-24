@@ -17,7 +17,7 @@ final class ZoomedImageViewControllerB: UINavigationController {
         rootViewController = ZoomedImageRootViewController(shouldShowTitle: shouldShowTitle)
         super.init(rootViewController: rootViewController)
         
-        modalPresentationStyle = .overCurrentContext
+        modalPresentationStyle = .fullScreen
         modalTransitionStyle = .coverVertical
     }
     required init?(coder aDecoder: NSCoder) {
