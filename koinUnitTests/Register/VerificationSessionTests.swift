@@ -12,41 +12,37 @@ import Testing
 @Suite("VerificationTimer - 인증 유효시간")
 struct VerificationTimerTests {
 
+    private let sentAt = Date(timeIntervalSince1970: 1_758_713_295)
+
     @Test(
         "남은 시간을 분초 형식으로 표시한다",
         arguments: [(0, "03:00"), (115, "01:05"), (171, "00:09"), (180, "00:00")]
     )
     func 남은_시간을_분초_형식으로_표시한다(elapsed: Int, expected: String) {
-        var sut = VerificationTimer()
-        (0..<elapsed).forEach { _ in sut.elapseOneSecond() }
+        let sut = VerificationTimer()
 
-        #expect(sut.formattedRemainingTime == expected)
+        #expect(sut.formattedRemainingTime(at: sentAt.addingTimeInterval(TimeInterval(elapsed)), sentAt: sentAt) == expected)
     }
 
-    @Test("재발송하면 유효시간이 처음부터 다시 시작한다")
-    func 재발송하면_유효시간이_처음부터_다시_시작한다() {
-        var sut = VerificationTimer()
-        (0..<100).forEach { _ in sut.elapseOneSecond() }
+    @Test("백그라운드에 다녀와도 발송 시각 기준으로 남은 시간을 계산한다")
+    func 백그라운드에_다녀와도_발송_시각_기준으로_남은_시간을_계산한다() {
+        let sut = VerificationTimer()
 
-        sut.reset()
-
-        #expect(sut.remainingSeconds == VerificationTimer.validitySeconds)
+        #expect(sut.remainingSeconds(at: sentAt.addingTimeInterval(120), sentAt: sentAt) == 60)
     }
 
     @Test("유효시간이 끝나면 만료로 표시한다")
     func 유효시간이_끝나면_만료로_표시한다() {
-        var sut = VerificationTimer()
-        (0..<VerificationTimer.validitySeconds).forEach { _ in sut.elapseOneSecond() }
+        let sut = VerificationTimer()
 
-        #expect(sut.isExpired)
+        #expect(sut.isExpired(at: sentAt.addingTimeInterval(TimeInterval(VerificationTimer.validitySeconds)), sentAt: sentAt))
     }
 
     @Test("만료 직전에는 만료로 표시하지 않는다")
     func 만료_직전에는_만료로_표시하지_않는다() {
-        var sut = VerificationTimer()
-        (0..<(VerificationTimer.validitySeconds - 1)).forEach { _ in sut.elapseOneSecond() }
+        let sut = VerificationTimer()
 
-        #expect(sut.isExpired == false)
+        #expect(sut.isExpired(at: sentAt.addingTimeInterval(TimeInterval(VerificationTimer.validitySeconds) - 0.1), sentAt: sentAt) == false)
     }
 }
 
@@ -73,16 +69,16 @@ struct VerificationSendPolicyTests {
         #expect(sut.canSend(at: sentAt) == false)
     }
 
-    @Test("3초 이내에는 재발송할 수 없다")
-    func 삼초_이내에는_재발송할_수_없다() {
+    @Test("180초 이내에는 재발송할 수 없다")
+    func 백팔십초_이내에는_재발송할_수_없다() {
         var sut = VerificationSendPolicy()
         sut.markSent(at: sentAt)
 
-        #expect(sut.canSend(at: sentAt.addingTimeInterval(2.9)) == false)
+        #expect(sut.canSend(at: sentAt.addingTimeInterval(VerificationSendPolicy.resendCooldown - 0.1)) == false)
     }
 
-    @Test("발송 후 3초가 지나면 재발송할 수 있다")
-    func 발송_후_삼초가_지나면_재발송할_수_있다() {
+    @Test("발송 후 180초가 지나면 재발송할 수 있다")
+    func 발송_후_백팔십초가_지나면_재발송할_수_있다() {
         var sut = VerificationSendPolicy()
         sut.markSent(at: sentAt)
 
@@ -144,15 +140,5 @@ struct CertificationErrorTests {
         #expect(sut == .other)
         #expect(sut.showsLoginEntry == false)
         #expect(sut.blocksResend == false)
-    }
-
-    @Test(
-        "인증번호를 입력한 뒤의 오류는 인증번호 안내로 표시한다",
-        arguments: [("", CertificationErrorTarget.phoneNumber), ("123456", .verificationCode)]
-    )
-    func 인증번호를_입력한_뒤의_오류는_인증번호_안내로_표시한다(
-        verificationCodeText: String, expected: CertificationErrorTarget
-    ) {
-        #expect(CertificationErrorTarget(verificationCodeText: verificationCodeText) == expected)
     }
 }

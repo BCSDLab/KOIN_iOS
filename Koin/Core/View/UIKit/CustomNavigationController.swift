@@ -7,20 +7,36 @@
 
 import UIKit
 
+protocol InteractivePopGestureHandler: AnyObject {
+    func shouldBeginInteractivePopGesture() -> Bool
+}
+
 final class CustomNavigationController: UINavigationController, UIGestureRecognizerDelegate, UINavigationControllerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
+        interactivePopGestureRecognizer?.delegate = self
+        if #available(iOS 26.0, *) {
+            interactiveContentPopGestureRecognizer?.delegate = self
+        }
     }
     
-    func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-        guard let interactivePopGestureRecognizer = self.interactivePopGestureRecognizer else { return }
-        if viewControllers.count > 1 {
-            interactivePopGestureRecognizer.isEnabled = true
-        } else {
-            interactivePopGestureRecognizer.isEnabled = false
+    func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        guard isInteractivePopGesture(gestureRecognizer) else { return true }
+        guard viewControllers.count > 1, transitionCoordinator == nil else { return false }
+        guard !children.contains(where: { $0 is KoinBottomSheetController }) else { return false }
+        return (topViewController as? InteractivePopGestureHandler)?.shouldBeginInteractivePopGesture() ?? true
+    }
+    
+    private func isInteractivePopGesture(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
+        if gestureRecognizer === interactivePopGestureRecognizer {
+            return true
         }
+        if #available(iOS 26.0, *) {
+            return gestureRecognizer === interactiveContentPopGestureRecognizer
+        }
+        return false
     }
     
     func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {

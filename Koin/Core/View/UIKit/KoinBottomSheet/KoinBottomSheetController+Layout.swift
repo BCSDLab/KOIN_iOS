@@ -52,7 +52,7 @@ extension KoinBottomSheetController {
             $0.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
         }
         sheetView.clipsToBounds = true
-        if configuration.showsShadow {
+        if !isModal {
             containerView.layer.shadowColor = UIColor.black.cgColor
             containerView.layer.shadowOpacity = 0.15
             containerView.layer.shadowOffset = CGSize(width: 0, height: -4)

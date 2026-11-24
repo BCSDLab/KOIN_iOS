@@ -111,11 +111,11 @@ final class OutputRecorder {
         input.send(value)
     }
 
-    var httpResultMessages: [String] {
-        outputs.compactMap { if case let .showHttpResult(message, _) = $0 { return message } else { return nil } }
+    var phoneNumberHttpResultMessages: [String] {
+        outputs.compactMap { if case let .showPhoneNumberHttpResult(message, _, _) = $0 { return message } else { return nil } }
     }
 
-    var httpResultColors: [ColorAsset] {
-        outputs.compactMap { if case let .showHttpResult(_, color) = $0 { return color } else { return nil } }
+    var checkVerificationCodeFailureColors: [ColorAsset] {
+        outputs.compactMap { if case let .checkVerificationCodeFailure(_, _, color) = $0 { return color } else { return nil } }
     }
 }

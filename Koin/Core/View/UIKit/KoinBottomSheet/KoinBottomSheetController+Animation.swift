@@ -108,7 +108,7 @@ extension KoinBottomSheetController {
 
     /// transform이 identity인 목표 레이아웃에서 불러야 최종 frame이 나간다.
     func notifyTargetFrame() {
-        guard isActive else { return }
+        guard isActive, view.window != nil else { return }
         configuration.onTargetFrameChange?(sheetView.convert(sheetView.bounds, to: nil))
     }
 
@@ -124,12 +124,14 @@ extension KoinBottomSheetController {
             dimView.alpha = alpha
         case .nonModal:
             dimView.alpha = isFullScreen ? Self.nonModalFullScreenDimAlpha : 0
+        case .persistent:
+            dimView.alpha = 0
         }
     }
 
     /// nonModal을 끌 때 기본 높이에서 fullscreen으로 갈수록 dim을 진하게 한다.
     func applyNonModalDim(forHeight height: CGFloat, baseHeight: CGFloat) {
-        guard !isModal else { return }
+        guard case .nonModal = configuration.style else { return }
         let range = availableHeight - baseHeight
         let progress = range > 0.5 ? (height - baseHeight) / range : (isFullScreen ? 1 : 0)
         dimView.alpha = Self.nonModalFullScreenDimAlpha * min(1, max(0, progress))

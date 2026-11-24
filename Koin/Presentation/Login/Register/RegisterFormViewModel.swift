@@ -29,6 +29,7 @@ final class RegisterFormViewModel: ViewModelProtocol {
         case checkDuplicatedPhoneNumber(String)
         case sendVerificationCode(String)
         case checkVerificationCode(String, String)
+        case cancelCheckVerificationCode
         case checkDuplicatedId(String)
         case getDeptList
         case checkDuplicatedNickname(String)
@@ -39,11 +40,13 @@ final class RegisterFormViewModel: ViewModelProtocol {
     }
     
     enum Output {
-        case showHttpResult(String, ColorAsset)
+        case showPhoneNumberHttpResult(String, ColorAsset, statusCode: Int?)
         case showIdHttpResult(loginId: String, message: String, color: ColorAsset)
         case showNicknameHttpResult(String, ColorAsset)
-        case changeSendVerificationButtonStatus
+        case checkDuplicatedPhoneNumberSuccess
         case sendVerificationCodeSuccess(response: SendVerificationCodeDto)
+        case sendVerificationCodeFailure(String, ColorAsset)
+        case checkVerificationCodeFailure(statusCode: Int?, message: String, color: ColorAsset)
         case correctVerificationCode
         case successCheckDuplicatedId(loginId: String)
         case showDeptDropDownList([String])
@@ -54,7 +57,9 @@ final class RegisterFormViewModel: ViewModelProtocol {
     
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    
+    private var checkDuplicatedPhoneNumberCancellable: AnyCancellable?
+    private var checkVerificationCodeCancellable: AnyCancellable?
+
     private let checkDuplicatedPhoneNumberUseCase: CheckDuplicatedPhoneNumberUseCase
     private let sendVerificationCodeUseCase: SendVerificationCodeUsecase
     private let checkVerificationCodeUseCase: CheckVerificationCodeUsecase
@@ -84,6 +89,8 @@ final class RegisterFormViewModel: ViewModelProtocol {
                 self?.sendVerificationCode(phoneNumber: phoneNumber)
             case let .checkVerificationCode(phoneNumber, verificationCode):
                 self?.checkVerificationCode(phoneNumber: phoneNumber, verificationCode: verificationCode)
+            case .cancelCheckVerificationCode:
+                self?.checkVerificationCodeCancellable?.cancel()
             case let .checkDuplicatedId(loginId):
                 self?.checkDuplicatedId(loginId: loginId)
             case .getDeptList:
@@ -113,14 +120,13 @@ extension RegisterFormViewModel {
     }
 
     private func checkDuplicatedPhoneNumber(phone: String) {
-        checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
+        checkDuplicatedPhoneNumberCancellable = checkDuplicatedPhoneNumberUseCase.execute(phone: phone).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                self?.outputSubject.send(.showHttpResult(error.message, .new600))
+                self?.outputSubject.send(.showPhoneNumberHttpResult(error.message, .new600, statusCode: error.statusCode))
             }
         } receiveValue: { [weak self] (_: Void) in
-            self?.outputSubject.send(.changeSendVerificationButtonStatus)
+            self?.outputSubject.send(.checkDuplicatedPhoneNumberSuccess)
         }
-        .store(in: &subscriptions)
     }
     
     private func sendVerificationCode(phoneNumber: String) {
@@ -128,7 +134,7 @@ extension RegisterFormViewModel {
             .sink { [weak self] completion in
                 guard let self else { return }
                 if case let .failure(error) = completion {
-                    self.outputSubject.send(.showHttpResult(error.message, .sub500))
+                    self.outputSubject.send(.sendVerificationCodeFailure(error.message, .sub500))
                 }
             } receiveValue: { [weak self] response in
                 self?.outputSubject.send(.sendVerificationCodeSuccess(response: response))
@@ -137,22 +143,14 @@ extension RegisterFormViewModel {
     }
     
     private func checkVerificationCode(phoneNumber: String, verificationCode: String) {
-        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: verificationCode).sink { [weak self] completion in
+        checkVerificationCodeCancellable = checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: verificationCode).sink { [weak self] completion in
             if case let .failure(error) = completion {
-                if let code = Int(error.code) {
-                    if code == 400 {
-                        self?.outputSubject.send(.showHttpResult(error.message, .sub500))
-                    } else if code == 404 {
-                        self?.outputSubject.send(.showHttpResult(error.message, .danger700))
-                    }
-                } else {
-                    self?.outputSubject.send(.showHttpResult(error.message, .sub500))
-                }
+                let color: ColorAsset = error.statusCode == 404 ? .danger700 : .sub500
+                self?.outputSubject.send(.checkVerificationCodeFailure(statusCode: error.statusCode, message: error.message, color: color))
             }
         } receiveValue: { [weak self] (_: Void) in
             self?.outputSubject.send(.correctVerificationCode)
         }
-        .store(in: &subscriptions)
     }
     
     private func checkDuplicatedId(loginId: String) {

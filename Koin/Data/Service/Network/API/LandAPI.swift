@@ -9,7 +9,7 @@ import Foundation
 import Alamofire
 
 enum LandAPI {
-    case fetchLandList
+    case fetchLandList(FetchLandListRequest)
     case fetchLandDetail(FetchLandDetailRequest)
 }
 
@@ -36,7 +36,7 @@ extension LandAPI: Router, URLRequestConvertible {
     
     public var parameters: Any? {
         switch self {
-        case .fetchLandList: return nil
+        case .fetchLandList(let request): return try? request.toDictionary()
         case .fetchLandDetail(let request): return try? request.toDictionary()
         }
     }

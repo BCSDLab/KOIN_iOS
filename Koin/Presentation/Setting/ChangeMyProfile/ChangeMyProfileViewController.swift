@@ -18,8 +18,12 @@ final class ChangeMyProfileViewController: UIViewController {
     private let viewModel: ChangeMyProfileViewModel
     private let inputSubject: PassthroughSubject<ChangeMyProfileViewModel.Input, Never> = .init()
     private var subscriptions: Set<AnyCancellable> = []
-    @Published private var remainTime = 180
     private var timer: AnyCancellable?
+    private let verificationTimer = VerificationTimer()
+    private var sendPolicy = VerificationSendPolicy()
+    private var isVerifyingCode = false
+    private var sendRequestedAt: Date?
+    private var rejectedPhoneNumber: String?
     private let userType: UserType
     
     // MARK: - UI Components
@@ -100,6 +104,11 @@ final class ChangeMyProfileViewController: UIViewController {
     private let certNumberCheckButton = StateButton(title: "인증번호 확인").then {
         $0.setState(state: .unusable)
         $0.isHidden = true
+    }
+
+    private let certNumberLoadingIndicator = UIActivityIndicatorView(style: .medium).then {
+        $0.color = .white
+        $0.hidesWhenStopped = true
     }
     
     private let helpLabel = UILabel().then {
@@ -282,29 +291,47 @@ final class ChangeMyProfileViewController: UIViewController {
         
         viewModel.phoneNumberMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
             guard let self = self else { return }
-            phoneStateView.isHidden = false
-            phoneStateView.setState(state: response.1 ? .success : .warning, message: response.0)
-            if response.1 {
-                startTimer()
-                [certNumberTextField, remainTimeLabel, helpLabel, inquryButton, certNumberCheckButton].forEach {
-                    $0.isHidden = false
-                }
-                emailTitleLabel.snp.remakeConstraints { [weak self] make in
-                    guard let self = self else { return }
-                    make.top.equalTo(helpLabel.snp.bottom).offset(32)
-                    make.leading.equalTo(view.snp.leading).offset(24)
-                }
+            let certificationError = CertificationError(message: response.0)
+            if certificationError.blocksResend {
+                sendPolicy.blockByDailyLimit()
             }
+            phoneStateView.isHidden = false
+            phoneStateView.setState(state: certificationError.blocksResend ? .dangerous : .warning, message: response.0)
+            unlockSendVerification()
+        }.store(in: &subscriptions)
+
+        viewModel.checkDuplicatedPhoneNumberFailurePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            guard let self = self else { return }
+            if CertificationError.rejectsPhoneNumber(statusCode: response.0) {
+                rejectedPhoneNumber = phoneTextField.text
+            }
+            phoneStateView.isHidden = false
+            phoneStateView.setState(state: .warning, message: response.1)
+            unlockSendVerification()
+        }.store(in: &subscriptions)
+
+        viewModel.sendVerificationCodeSuccessPublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            self?.handleSendVerificationCodeSuccess(response: response)
         }.store(in: &subscriptions)
         
         viewModel.certNumberMessagePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
-            self?.certNumberStateView.isHidden = false
-            self?.certNumberStateView.setState(state: response.1 ? .success : .warning, message: response.0)
+            guard let self = self, isVerifyingCode else { return }
+            updateVerifyingState(false)
+            certNumberStateView.isHidden = false
+            certNumberStateView.setState(state: response.1 ? .success : .warning, message: response.0)
             if response.1 {
-                self?.timer?.cancel()
-                self?.timer = nil
-                self?.remainTimeLabel.isHidden = true
+                timer?.cancel()
+                timer = nil
+                remainTimeLabel.isHidden = true
+                view.endEditing(true)
+                certNumberTextField.isUserInteractionEnabled = false
+                certNumberCheckButton.setState(state: .unusable)
             }
+        }.store(in: &subscriptions)
+
+        viewModel.checkVerificationCodeFailurePublisher.receive(on: DispatchQueue.main).sink { [weak self] response in
+            guard let self = self, isVerifyingCode else { return }
+            handleCheckVerificationCodeFailure(statusCode: response.0, message: response.1)
         }.store(in: &subscriptions)
         
         viewModel.$isFormValid.receive(on: DispatchQueue.main).dropFirst().sink { [weak self] isValid in
@@ -313,21 +340,6 @@ final class ChangeMyProfileViewController: UIViewController {
                 self?.saveButton.setTitle("저장", for: .normal)
             }
         }.store(in: &subscriptions)
-        
-        $remainTime
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] seconds in
-                print(seconds)
-                guard let self = self else { return }
-                let minutes = seconds / 60
-                let remainingSeconds = seconds % 60
-                remainTimeLabel.text = String(format: "%02d:%02d", minutes, remainingSeconds)
-                remainTimeLabel.isHidden = seconds == 0 || seconds == 180
-                if seconds == 0 {
-                    certNumberStateView.setState(state: .warning, message: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.")
-                    certNumberStateView.isHidden = false
-                }
-            }.store(in: &subscriptions)
         
         let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
         outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
@@ -358,19 +370,103 @@ final class ChangeMyProfileViewController: UIViewController {
         
     }
     private func startTimer() {
-        remainTime = 180
+        guard let sentAt = sendPolicy.lastSentAt else { return }
+
         timer?.cancel()
-        
+        remainTimeLabel.text = verificationTimer.formattedRemainingTime(at: Date(), sentAt: sentAt)
+
         timer = Timer.publish(every: 1, on: .main, in: .common)
             .autoconnect()
-            .sink { [weak self] _ in
+            .sink { [weak self] now in
                 guard let self = self else { return }
-                if self.remainTime > 0 {
-                    self.remainTime -= 1
+                if !self.verificationTimer.isExpired(at: now, sentAt: sentAt) {
+                    self.remainTimeLabel.text = self.verificationTimer.formattedRemainingTime(at: now, sentAt: sentAt)
                 } else {
-                    self.timer?.cancel()
+                    self.endVerificationSession()
+                    self.certNumberStateView.setState(state: .warning, message: "유효시간이 지났습니다. 인증번호를 재발송 해주세요.")
+                    self.certNumberStateView.isHidden = false
                 }
             }
+    }
+
+    private func handleSendVerificationCodeSuccess(response: SendVerificationCodeDto) {
+        sendPolicy.markSent(at: sendRequestedAt ?? Date())
+        startTimer()
+
+        phoneStateView.isHidden = false
+        phoneStateView.setVerificationSentState(remainingCount: response.remainingCount, totalCount: response.totalCount)
+        certNumberStateView.isHidden = true
+        certNumberTextField.text = ""
+        [certNumberTextField, remainTimeLabel, helpLabel, inquryButton, certNumberCheckButton].forEach {
+            $0.isHidden = false
+        }
+        updateVerificationInputState()
+        emailTitleLabel.snp.remakeConstraints { [weak self] make in
+            guard let self = self else { return }
+            make.top.equalTo(helpLabel.snp.bottom).offset(32)
+            make.leading.equalTo(view.snp.leading).offset(24)
+        }
+    }
+
+    private func handleCheckVerificationCodeFailure(statusCode: Int?, message: String) {
+        sendPolicy.recordVerifyFailure(statusCode: statusCode)
+
+        updateVerifyingState(false)
+
+        if !sendPolicy.hasRemainingVerifyAttempts {
+            endVerificationSession()
+        }
+
+        certNumberStateView.isHidden = false
+        certNumberStateView.setState(state: .warning, message: sendPolicy.verifyFailureMessage(statusCode: statusCode, serverMessage: message))
+    }
+
+    private func updateSendButtonState() {
+        let phoneNumber = phoneTextField.text ?? ""
+        let canSend = phoneNumber != viewModel.userData?.phoneNumber
+            && phoneNumber != rejectedPhoneNumber
+            && PhoneNumberInput.isComplete(phoneNumber)
+            && sendPolicy.canSend(at: Date())
+        sendButton.setState(state: canSend ? .usable : .unusable)
+    }
+
+    private func unlockSendVerification() {
+        phoneTextField.isUserInteractionEnabled = true
+        updateSendButtonState()
+    }
+
+    private func updateVerificationInputState() {
+        let canVerify = sendPolicy.canVerify(at: Date())
+
+        if !canVerify {
+            certNumberTextField.resignFirstResponder()
+        }
+        certNumberTextField.isUserInteractionEnabled = canVerify
+        let isReady = canVerify && !isVerifyingCode && VerificationCodeInput.isReadyToConfirm(certNumberTextField.text ?? "")
+        certNumberCheckButton.setState(state: isReady ? .usable : .unusable)
+    }
+
+    private func updateVerifyingState(_ isVerifying: Bool) {
+        isVerifyingCode = isVerifying
+        certNumberCheckButton.setTitle(isVerifying ? nil : "인증번호 확인", for: .normal)
+        if isVerifying {
+            certNumberLoadingIndicator.startAnimating()
+        } else {
+            certNumberLoadingIndicator.stopAnimating()
+        }
+        updateVerificationInputState()
+    }
+
+    private func endVerificationSession() {
+        timer?.cancel()
+        timer = nil
+        remainTimeLabel.text = "00:00"
+        if isVerifyingCode {
+            viewModel.cancelCheckVerificationCode()
+            updateVerifyingState(false)
+        }
+        unlockSendVerification()
+        updateVerificationInputState()
     }
 }
 
@@ -388,7 +484,16 @@ extension ChangeMyProfileViewController {
         }
     }
     @objc private func sendButtonTapped() {
-        viewModel.sendVerificationCode(phoneNumber: phoneTextField.text ?? "")
+        guard let phoneNumber = phoneTextField.text,
+              PhoneNumberInput.isComplete(phoneNumber),
+              sendPolicy.canSend(at: Date()) else { return }
+
+        timer?.cancel()
+        sendRequestedAt = Date()
+        phoneTextField.resignFirstResponder()
+        phoneTextField.isUserInteractionEnabled = false
+        sendButton.setState(state: .unusable)
+        viewModel.checkDuplicatedPhoneNumberAndSendVerificationCode(phoneNumber: phoneNumber)
     }
     
     @objc private func nicknameCheckButtonTapped(_ sender: UIButton) {
@@ -396,10 +501,14 @@ extension ChangeMyProfileViewController {
     }
     
     @objc private func certNumberCheckButtonTapped() {
+        guard !isVerifyingCode else { return }
+
+        updateVerifyingState(true)
         viewModel.checkVerificationCode(phoneNumber: phoneTextField.text ?? "", code: certNumberTextField.text ?? "")
     }
     
     @objc private func phoneNumberTextFieldDidChange(textField: UITextField) {
+        textField.text = PhoneNumberInput.acceptedDigits(from: textField.text ?? "")
         if textField.text == viewModel.userData?.phoneNumber {
             viewModel.phoneNumberSuccess = true
             saveButton.setTitle("저장", for: .normal)
@@ -409,10 +518,7 @@ extension ChangeMyProfileViewController {
         saveButton.setState(state: .unusable)
         saveButton.setTitle("휴대전화 인증을 해주세요.", for: .normal)
         viewModel.phoneNumberSuccess = false
-        if textField.text == "" { sendButton.setState(state: .unusable) }
-        else {
-            sendButton.setState(state: textField.text ?? "" == viewModel.userData?.phoneNumber ?? "" ? .unusable : .usable)
-        }
+        updateSendButtonState()
     }
     
     @objc private func nicknameTextFieldDidChange(textField: UITextField) {
@@ -431,10 +537,8 @@ extension ChangeMyProfileViewController {
         }
     }
     @objc private func certNumberTextFieldDidChange(textField: UITextField) {
-        if textField.text == "" { certNumberCheckButton.setState(state: .unusable) }
-        else {
-            certNumberCheckButton.setState(state: .usable)
-        }
+        textField.text = VerificationCodeInput.acceptedDigits(from: textField.text ?? "")
+        updateVerificationInputState()
     }
     @objc private func studentNumberTextFieldDidChange(textField: UITextField) {
         viewModel.modifyUserData?.studentNumber = textField.text?.isEmpty == true ? nil : textField.text
@@ -517,6 +621,7 @@ extension ChangeMyProfileViewController {
         [primaryInfoLabel, idTitleLabel, idTextField, nameTitleLabel, nameTextField, nicknameTitleLabel, nicknameTextField, phoneTitleLabel, phoneTextField, studentInfoLabel, studentNumberTitleLabel, studentNumberTextField, majorTitleLabel, deptButton, genderTitleLabel, maleButton, femaleButton, nicknameCheckButton , emailTitleLabel, emailTextField, emailTextLabel, sendButton, nicknameStateView, phoneStateView, certNumberStateView, certNumberTextField, remainTimeLabel, certNumberCheckButton, helpLabel, inquryButton].forEach {
             scrollView.addSubview($0)
         }
+        certNumberCheckButton.addSubview(certNumberLoadingIndicator)
     }
     
     private func setUpConstraints() {
@@ -603,6 +708,9 @@ extension ChangeMyProfileViewController {
             $0.trailing.equalTo(view.snp.trailing).offset(-24)
             $0.width.equalTo(85)
             $0.height.equalTo(32)
+        }
+        certNumberLoadingIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
         helpLabel.snp.makeConstraints {
             $0.top.equalTo(certNumberTextField.snp.bottom).offset(5)

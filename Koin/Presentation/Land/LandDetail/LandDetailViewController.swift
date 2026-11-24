@@ -1,395 +1,288 @@
 //
-//  DiningDetailViewController.swift
-//  Koin
+//  LandDetailViewController.swift
+//  koin
 //
-//  Created by 김나훈 on 3/14/24.
+//  Created by 홍기정 on 11/23/26.
 //
 
-import Combine
-import NMapsMap
 import UIKit
+import Combine
+import SnapKit
 
 final class LandDetailViewController: UIViewController {
+
     // MARK: - Properties
-    
     private let viewModel: LandDetailViewModel
-    private let inputSubject: PassthroughSubject<LandDetailViewModel.Input, Never> = .init()
+    private let inputSubject = PassthroughSubject<LandDetailViewModel.Input, Never>()
     private var subscriptions: Set<AnyCancellable> = []
-    
+    private var phone: String?
+
     // MARK: - UI Components
-    
-    private let scrollView = UIScrollView().then { _ in
-    }
-    
-    private let landNameLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardMedium, size: 20)
-        $0.textAlignment = .center
-    }
-    
-    private let infoLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 15)
-        $0.text = "원룸 정보"
-    }
-    
-    private let infoView1 = HouseInfoView(frame: .zero, text: "월세").then { _ in
-    }
-    
-    private let infoView2 = HouseInfoView(frame: .zero, text: "방 종류").then { _ in
-    }
-    
-    private let infoView3 = HouseInfoView(frame: .zero, text: "전세").then { _ in
-    }
-    
-    private let infoView4 = HouseInfoView(frame: .zero, text: "보증금").then { _ in
-    }
-    
-    private let infoView5 = HouseInfoView(frame: .zero, text: "층수").then { _ in
-    }
-    
-    private let infoView6 = HouseInfoView(frame: .zero, text: "관리비").then { _ in
-    }
-    
-    private let infoView7 = HouseInfoView(frame: .zero, text: "방 크기").then { _ in
-    }
-    
-    private let infoView8 = HouseInfoView(frame: .zero, text: "연락처").then { _ in
-    }
-    
-    private let nonImageView = UIImageView().then {
-        $0.image = UIImage.appImage(asset: .nonImage)
-    }
-    
-    private let imageCollectionView = LandImageCollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout().then { $0.scrollDirection = .horizontal }).then {
-        $0.isScrollEnabled = false
-    }
-    
-    private let indexLabel = UILabel().then {
-        $0.layer.cornerRadius = 9
-        $0.layer.masksToBounds = true
-        $0.textAlignment = .center
-        $0.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.5)
-        $0.textColor = UIColor.appColor(.neutral0)
-        $0.font = UIFont.appFont(.pretendardRegular, size: 12)
-    }
-    
-    private let prevButton = UIButton().then {
-        $0.tintColor = UIColor.appColor(.neutral0)
-        $0.setImage(UIImage.appImage(symbol: .chevronLeft), for: .normal)
-    }
-    
-    private let nextButton = UIButton().then {
-        $0.tintColor = UIColor.appColor(.neutral0)
-        $0.setImage(UIImage.appImage(symbol: .chevronRight), for: .normal)
-    }
-    
-    private let landOptionView = LandOptionView().then { _ in
-    }
-    
-    private let stackView1 = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
-    }
-    
-    private let stackView2 = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
-    }
-    
-    private let stackView3 = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
-    }
-    
-    private let stackView4 = UIStackView().then {
-        $0.axis = .horizontal
-        $0.distribution = .fillEqually
-    }
-    
-    private let separateLine1 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
-    }
-    
-    private let separateLine2 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.bus2)
-    }
-    
-    private let separateLine3 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.bus2)
-    }
-    
-    private let separateLine4 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.bus2)
-    }
-    
-    private let separateLine5 = UIView().then {
-        $0.backgroundColor = UIColor.appColor(.primary500)
-    }
-    
-    private let locationGuideLabel = UILabel().then {
-        $0.text = "원룸 위치"
-        $0.font = UIFont.appFont(.pretendardMedium, size: 14)
-    }
-    
-    private let locationLabel = UILabel().then {
-        $0.font = UIFont.appFont(.pretendardRegular, size: 13)
-        $0.textColor = UIColor.appColor(.neutral500)
-    }
-    
-    private let mapView = NMFMapView().then { _ in
-    }
-    
-    // MARK: - Initialization
-    
+    private let scrollView = UIScrollView()
+    private let contentStackView = UIStackView()
+    private let titleStackView = UIStackView()
+    private let badgeStackView = UIStackView()
+    private let monthlyBadge = LandListBadgeView(style: .monthly)
+    private let charterBadge = LandListBadgeView(style: .charter)
+    private let nameLabel = UILabel()
+    private let imageView = LandDetailImageView()
+    private let infoView = LandDetailInfoView()
+    private let locationStackView = UIStackView()
+    private let locationTitleLabel = UILabel()
+    private let mapView = LandMapView()
+    private let bottomSheetContentView = LandDetailBottomSheetContentView()
+    private let navigationBarView = UIView()
+    private let navigationTitleLabel = UILabel()
+    private let backButton = UIButton(type: .system)
+
+    // MARK: - Initializer
     init(viewModel: LandDetailViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
-    
-    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     // MARK: - Life Cycle
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationItem.title = "복덕방"
-        bind()
         configureView()
+        configure(landRow: viewModel.landRow)
+        presentLandDetailBottomSheet()
+        bind()
         inputSubject.send(.viewDidLoad)
-        prevButton.addTarget(self, action: #selector(prevButtonTapped), for: .touchUpInside)
-        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
     }
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        configureNavigationBar(style: .fill)
+        navigationController?.setNavigationBarHidden(true, animated: animated)
     }
     
-    // MARK: - Bind
-    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+}
+
+extension LandDetailViewController {
     private func bind() {
-        let outputSubject = viewModel.transform(with: inputSubject.eraseToAnyPublisher())
-        outputSubject.receive(on: DispatchQueue.main).sink { [weak self] output in
-            switch output {
-            case let .showLandDetail(landDetailItem):
-                self?.showLandDetail(landDetailItem)
+        viewModel.transform(with: inputSubject.eraseToAnyPublisher())
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] output in
+                guard let self else { return }
+                switch output {
+                case let .updateLandDetail(landDetail):
+                    configure(landDetail: landDetail)
+                case let .showToastMessage(message):
+                    showToastMessage(message: message)
+                }
             }
-        }.store(in: &subscriptions)
+            .store(in: &subscriptions)
+
+        imageView.imageTappedPublisher
+            .sink { [weak self] imageUrls, indexPath in
+                self?.presentZoomedImage(imageUrls: imageUrls, indexPath: indexPath)
+            }
+            .store(in: &subscriptions)
         
-        imageCollectionView.indexPublisher
-            .sink { [weak self] text in
-                self?.indexLabel.text = text
+        bottomSheetContentView.callTappedPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomDetailContactCallClick, "전화 문의하기"))
+                self?.makePhoneCall()
             }
             .store(in: &subscriptions)
     }
 }
 
 extension LandDetailViewController {
+    private func configure(landRow: LandRow) {
+        monthlyBadge.isHidden = !landRow.isMonthlyAvailable
+        charterBadge.isHidden = !landRow.isCharterAvailable
+        badgeStackView.isHidden = !landRow.isMonthlyAvailable && !landRow.isCharterAvailable
+        nameLabel.text = landRow.name
+    }
 
-    private func showLocationOnMap(latitude: Double, longitude: Double) {
-        let marker = NMFMarker()
-        marker.position = NMGLatLng(lat: latitude, lng: longitude)
-        marker.mapView = mapView
-        marker.width = 25
-        marker.height = 35
-        let cameraUpdate = NMFCameraUpdate(scrollTo: NMGLatLng(lat: latitude, lng: longitude))
-        let zoomUpdate = NMFCameraUpdate(zoomTo: 16)
-        mapView.moveCamera(cameraUpdate)
-        mapView.moveCamera(zoomUpdate)
+    private func configure(landDetail: LandDetail) {
+        phone = landDetail.phone
+        nameLabel.text = landDetail.name
+        imageView.configure(imageUrls: landDetail.imageUrls)
+        infoView.configure(landDetail: landDetail)
+        bottomSheetContentView.configure(landDetail: landDetail)
+        if let markerKey = LandMarkerKey(id: landDetail.id, coordinate: landDetail.coordinate),
+           let coordinate = landDetail.coordinate {
+            mapView.configure(markerKey)
+            mapView.focus(on: coordinate, animationDuration: 0)
+        }
+    }
+
+    private func presentZoomedImage(imageUrls: [String], indexPath: IndexPath) {
+        let zoomedImageViewController = ZoomedImageViewControllerB()
+        zoomedImageViewController.configure(urls: imageUrls, initialIndexPath: indexPath)
+        present(zoomedImageViewController, animated: true)
     }
     
-    private func showLandDetail(_ item: LandDetailItem) {
-        landNameLabel.text = item.landName
-        let infoViews = [infoView1, infoView2, infoView3, infoView4, infoView5, infoView6, infoView7, infoView8]
-
-        for (index, infoView) in infoViews.enumerated() {
-            if index < item.roomOptionInfo.count {
-                infoView.setText(item.roomOptionInfo[index])
-            }
-        }
-        if !item.imageUrls.isEmpty {
-            imageCollectionView.setImageList(item.imageUrls)
-            nonImageView.isHidden = true
-        }
-        else {
-            [imageCollectionView, prevButton, nextButton, indexLabel].forEach {
-                $0.isHidden = true
-            }
-        }
-        locationLabel.text = item.address
-        
-        landOptionView.configure(item.isOptionExists)
-        
-        showLocationOnMap(latitude: item.latitude, longitude: item.longitude)
+    @objc private func backButtonTapped() {
+        navigationController?.popViewController(animated: true)
     }
     
-    @objc func prevButtonTapped() {
-        if imageCollectionView.scrollToPreviousItem() {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomDetailPhotoViewSlideClick, "이전"))
+    private func makePhoneCall() {
+        guard let phone,
+              let url = URL(string: "tel://" + phone.filter(\.isNumber)),
+              UIApplication.shared.canOpenURL(url) else {
+            return
         }
+        UIApplication.shared.open(url)
     }
+}
 
-    @objc func nextButtonTapped() {
-        if imageCollectionView.scrollToNextItem() {
-            inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomDetailPhotoViewSlideClick, "다음"))
-        }
+extension LandDetailViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.RealEstate.roomCommonNavigationBackSwipe
+            : EventParameter.EventLabel.RealEstate.roomCommonNavigationBackClick
+        inputSubject.send(.logEvent(label, "뒤로가기", parameters: ["source_screen": "room_detail"]))
     }
 }
 
 extension LandDetailViewController {
-    
-    private func setUpLayOuts() {
-        view.addSubview(scrollView)
-        [landNameLabel, infoLabel, stackView1, stackView2, stackView3, stackView4, separateLine1, separateLine2, separateLine3, separateLine4, separateLine5, imageCollectionView, landOptionView, prevButton, nextButton, indexLabel, nonImageView, locationGuideLabel, locationLabel, mapView].forEach {
-            scrollView.addSubview($0)
+    private func presentLandDetailBottomSheet() {
+        var configuration = KoinBottomSheetConfiguration()
+        configuration.style = .persistent
+        configuration.behavior.isDraggable = false
+        configuration.cornerRadius = 16
+        configuration.onTargetFrameChange = { [weak self] sheetFrame in
+            self?.updateScrollViewInset(sheetFrame: sheetFrame)
         }
-        [infoView1, infoView2].forEach {
-            stackView1.addArrangedSubview($0)
-        }
-        [infoView3, infoView4].forEach {
-            stackView2.addArrangedSubview($0)
-        }
-        [infoView5, infoView6].forEach {
-            stackView3.addArrangedSubview($0)
-        }
-        [infoView7, infoView8].forEach {
-            stackView4.addArrangedSubview($0)
-        }
+        presentBottomSheet(bottomSheetContentView, configuration: configuration)
     }
-    
-    private func setUpConstraints() {
-        scrollView.snp.makeConstraints { make in
-            make.top.equalTo(view.safeAreaLayoutGuide.snp.top)
-            make.leading.equalTo(view.snp.leading)
-            make.trailing.equalTo(view.snp.trailing)
-            make.bottom.equalTo(view.snp.bottom)
-        }
-        landNameLabel.snp.makeConstraints { make in
-            make.top.equalTo(scrollView.snp.top).offset(30)
-            make.width.equalTo(view.snp.width)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        infoLabel.snp.makeConstraints { make in
-            make.top.equalTo(landNameLabel.snp.bottom).offset(30)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        stackView1.snp.makeConstraints { make in
-            make.top.equalTo(infoLabel.snp.bottom).offset(30)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.greaterThanOrEqualTo(40)
-            make.centerX.equalTo(scrollView.snp.centerX)
-        }
-        stackView2.snp.makeConstraints { make in
-            make.top.equalTo(stackView1.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.greaterThanOrEqualTo(40)
-            make.centerX.equalTo(scrollView.snp.centerX)
-        }
-        stackView3.snp.makeConstraints { make in
-            make.top.equalTo(stackView2.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.greaterThanOrEqualTo(40)
-            make.centerX.equalTo(scrollView.snp.centerX)
-        }
-        stackView4.snp.makeConstraints { make in
-            make.top.equalTo(stackView3.snp.bottom)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.greaterThanOrEqualTo(40)
-            make.centerX.equalTo(scrollView.snp.centerX)
-        }
-        separateLine1.snp.makeConstraints { make in
-            make.top.equalTo(stackView1.snp.top)
-            make.leading.equalTo(stackView1.snp.leading)
-            make.trailing.equalTo(stackView1.snp.trailing)
-            make.height.equalTo(1)
-        }
-        separateLine2.snp.makeConstraints { make in
-            make.top.equalTo(stackView2.snp.top)
-            make.leading.equalTo(stackView1.snp.leading)
-            make.trailing.equalTo(stackView1.snp.trailing)
-            make.height.equalTo(1)
-        }
-        separateLine3.snp.makeConstraints { make in
-            make.top.equalTo(stackView3.snp.top)
-            make.leading.equalTo(stackView1.snp.leading)
-            make.trailing.equalTo(stackView1.snp.trailing)
-            make.height.equalTo(1)
-        }
-        separateLine4.snp.makeConstraints { make in
-            make.top.equalTo(stackView4.snp.top)
-            make.leading.equalTo(stackView1.snp.leading)
-            make.trailing.equalTo(stackView1.snp.trailing)
-            make.height.equalTo(1)
-        }
-        separateLine5.snp.makeConstraints { make in
-            make.top.equalTo(stackView4.snp.bottom)
-            make.leading.equalTo(stackView1.snp.leading)
-            make.trailing.equalTo(stackView1.snp.trailing)
-            make.height.equalTo(1)
-        }
-        imageCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(stackView4.snp.bottom).offset(15)
-            make.leading.equalTo(view.snp.leading).offset(70)
-            make.trailing.equalTo(view.snp.trailing).offset(-70)
-            make.height.equalTo(160)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        indexLabel.snp.makeConstraints { make in
-            make.centerX.equalTo(imageCollectionView.snp.centerX)
-            make.bottom.equalTo(imageCollectionView.snp.bottom).offset(-10)
-            make.width.equalTo(50)
-            make.height.equalTo(20)
-        }
-        prevButton.snp.makeConstraints { make in
-            make.leading.equalTo(imageCollectionView.snp.leading).offset(10)
-            make.centerY.equalTo(imageCollectionView.snp.centerY)
-            make.width.equalTo(30)
-            make.height.equalTo(50)
-        }
-        nextButton.snp.makeConstraints { make in
-            make.trailing.equalTo(imageCollectionView.snp.trailing).offset(-5)
-            make.centerY.equalTo(imageCollectionView.snp.centerY)
-            make.width.equalTo(30)
-            make.height.equalTo(50)
-        }
-        nonImageView.snp.makeConstraints { make in
-            make.top.equalTo(stackView4.snp.bottom).offset(20)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(200)
-        }
-        landOptionView.snp.makeConstraints { make in
-            make.top.equalTo(nonImageView.snp.bottom).offset(20)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(300)
-        }
-        locationGuideLabel.snp.makeConstraints { make in
-            make.top.equalTo(landOptionView.snp.bottom).offset(20)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        locationLabel.snp.makeConstraints { make in
-            make.top.equalTo(locationGuideLabel.snp.bottom).offset(20)
-            make.centerX.equalTo(view.snp.centerX)
-        }
-        mapView.snp.makeConstraints { make in
-            make.top.equalTo(locationLabel.snp.bottom).offset(30)
-            make.leading.equalTo(view.snp.leading).offset(20)
-            make.trailing.equalTo(view.snp.trailing).offset(-20)
-            make.height.equalTo(200)
-            make.bottom.equalTo(scrollView.contentLayoutGuide.snp.bottom).offset(-30)
-        }
+
+    private func updateScrollViewInset(sheetFrame: CGRect) {
+        let sheetTop = view.convert(sheetFrame, from: nil).minY
+        let bottomInset = max(0, scrollView.frame.maxY - sheetTop) + 36
+        scrollView.contentInset.bottom = bottomInset
+        scrollView.verticalScrollIndicatorInsets.bottom = bottomInset
     }
-    
+}
+
+extension LandDetailViewController {
     private func configureView() {
-        setUpLayOuts()
+        setUpStyles()
+        setUpLayouts()
         setUpConstraints()
-        self.view.backgroundColor = .systemBackground
+    }
+
+    private func setUpStyles() {
+        view.backgroundColor = .appColor(.neutral0)
+        additionalSafeAreaInsets.top = 44
+        navigationBarView.backgroundColor = .appColor(.neutral0)
+        navigationTitleLabel.do {
+            $0.text = "복덕방"
+            $0.font = .appFont(.pretendardMedium, size: 18)
+            $0.textColor = .appColor(.neutral800)
+        }
+        backButton.do {
+            $0.setImage(
+                UIImage.appImage(symbol: .chevronLeft)?
+                    .withConfiguration(UIImage.SymbolConfiguration(pointSize: 17, weight: .semibold, scale: .large)),
+                for: .normal
+            )
+            $0.tintColor = .appColor(.neutral800)
+            $0.accessibilityLabel = "뒤로가기"
+            $0.addTarget(self, action: #selector(backButtonTapped), for: .touchUpInside)
+        }
+        contentStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 12
+            $0.alignment = .center
+        }
+        titleStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 8
+            $0.alignment = .leading
+        }
+        badgeStackView.do {
+            $0.axis = .horizontal
+            $0.spacing = 4
+        }
+        nameLabel.do {
+            $0.font = .appFont(.pretendardMedium, size: 18)
+            $0.textColor = .appColor(.neutral700)
+            $0.numberOfLines = 0
+        }
+        locationStackView.do {
+            $0.axis = .vertical
+            $0.spacing = 16
+        }
+        locationTitleLabel.do {
+            $0.text = "위치 정보"
+            $0.font = .appFont(.pretendardMedium, size: 16)
+            $0.textColor = .appColor(.neutral700)
+        }
+        mapView.isUserInteractionEnabled = false
+    }
+
+    private func setUpLayouts() {
+        [scrollView, navigationBarView].forEach {
+            view.addSubview($0)
+        }
+        [navigationTitleLabel, backButton].forEach {
+            navigationBarView.addSubview($0)
+        }
+        scrollView.addSubview(contentStackView)
+        [monthlyBadge, charterBadge].forEach {
+            badgeStackView.addArrangedSubview($0)
+        }
+        [badgeStackView, nameLabel].forEach {
+            titleStackView.addArrangedSubview($0)
+        }
+        [locationTitleLabel, mapView].forEach {
+            locationStackView.addArrangedSubview($0)
+        }
+        [titleStackView, imageView, infoView, locationStackView].forEach {
+            contentStackView.addArrangedSubview($0)
+        }
+        contentStackView.setCustomSpacing(24, after: imageView)
+        contentStackView.setCustomSpacing(24, after: infoView)
+    }
+
+    private func setUpConstraints() {
+        scrollView.snp.makeConstraints {
+            $0.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+        navigationBarView.snp.makeConstraints {
+            $0.top.leading.trailing.equalToSuperview()
+            $0.bottom.equalTo(view.safeAreaLayoutGuide.snp.top)
+        }
+        backButton.snp.makeConstraints {
+            $0.leading.equalToSuperview().offset(8)
+            $0.bottom.equalToSuperview()
+            $0.size.equalTo(44)
+        }
+        navigationTitleLabel.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.centerY.equalTo(backButton)
+        }
+        contentStackView.snp.makeConstraints {
+            $0.edges.equalTo(scrollView.contentLayoutGuide)
+            $0.width.equalTo(scrollView.frameLayoutGuide)
+        }
+        [titleStackView, infoView, locationStackView].forEach { arrangedView in
+            arrangedView.snp.makeConstraints {
+                $0.width.equalToSuperview().offset(-48)
+            }
+        }
+        imageView.snp.makeConstraints {
+            $0.width.equalToSuperview()
+        }
+        nameLabel.snp.makeConstraints {
+            $0.height.greaterThanOrEqualTo(29)
+        }
+        locationTitleLabel.snp.makeConstraints {
+            $0.height.equalTo(26)
+        }
+        mapView.snp.makeConstraints {
+            $0.height.equalTo(mapView.snp.width).multipliedBy(9.0 / 16.0)
+        }
     }
 }

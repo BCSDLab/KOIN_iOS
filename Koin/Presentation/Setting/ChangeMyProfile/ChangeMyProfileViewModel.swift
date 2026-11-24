@@ -33,6 +33,7 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     private let checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase
     private let userRepository = DefaultUserRepository(service: DefaultUserService())
     private lazy var sendVerificationCodeUseCase = DefaultSendVerificationCodeUseCase(userRepository: userRepository)
+    private lazy var checkDuplicatedPhoneNumberUseCase = DefaultCheckDuplicatedPhoneNumberUseCase(userRepository: userRepository)
     private lazy var checkVerificationCodeUseCase = DefaultCheckVerificationCodeUsecase(userRepository: userRepository)
     private lazy var revokeUseCase = DefaultRevokeUseCase(userRepository: userRepository)
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
@@ -46,6 +47,10 @@ final class ChangeMyProfileViewModel: ViewModelProtocol {
     let nicknameMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let phoneNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
     let certNumberMessagePublisher = PassthroughSubject<(String, Bool), Never>()
+    let sendVerificationCodeSuccessPublisher = PassthroughSubject<SendVerificationCodeDto, Never>()
+    let checkDuplicatedPhoneNumberFailurePublisher = PassthroughSubject<(Int?, String), Never>()
+    let checkVerificationCodeFailurePublisher = PassthroughSubject<(Int?, String), Never>()
+    private var checkVerificationCodeCancellable: AnyCancellable?
     
     init(modifyUseCase: ModifyUseCase, fetchDeptListUseCase: FetchDeptListUseCase, fetchUserDataUseCase: FetchUserDataUseCase, checkDuplicatedNicknameUseCase: CheckDuplicatedNicknameUseCase, logAnalyticsEventUseCase: LogAnalyticsEventUseCase) {
         self.fetchDeptListUseCase = fetchDeptListUseCase
@@ -81,21 +86,31 @@ extension ChangeMyProfileViewModel {
         }.store(in: &subscriptions)
     }
     
+    func checkDuplicatedPhoneNumberAndSendVerificationCode(phoneNumber: String) {
+        checkDuplicatedPhoneNumberUseCase.execute(phone: phoneNumber).sink { [weak self] completion in
+            if case let .failure(error) = completion {
+                self?.checkDuplicatedPhoneNumberFailurePublisher.send((error.statusCode, error.message))
+            }
+        } receiveValue: { [weak self] (_: Void) in
+            self?.sendVerificationCode(phoneNumber: phoneNumber)
+        }.store(in: &subscriptions)
+    }
+
     func sendVerificationCode(phoneNumber: String) {
         sendVerificationCodeUseCase.execute(request: .init(phoneNumber: phoneNumber)).sink { [weak self] completion in
             if case let .failure(error) = completion {
                 self?.phoneNumberMessagePublisher.send((error.message, false))
             }
-        } receiveValue: { [weak self] _ in
-            self?.phoneNumberMessagePublisher.send(("인증번호가 발송되었습니다.", true))
+        } receiveValue: { [weak self] response in
+            self?.sendVerificationCodeSuccessPublisher.send(response)
         }.store(in: &subscriptions)
     }
     
     func checkVerificationCode(phoneNumber: String, code: String) {
-        checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink(
+        checkVerificationCodeCancellable = checkVerificationCodeUseCase.execute(phoneNumber: phoneNumber, verificationCode: code).sink(
             receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
-                    self?.certNumberMessagePublisher.send((error.message, false))
+                    self?.checkVerificationCodeFailurePublisher.send((error.statusCode, error.message))
                 }
             },
             receiveValue: { [weak self] response in
@@ -103,7 +118,11 @@ extension ChangeMyProfileViewModel {
                 self?.modifyUserData?.phoneNumber = phoneNumber
                 self?.phoneNumberSuccess = true
             }
-        ).store(in: &subscriptions)
+        )
+    }
+
+    func cancelCheckVerificationCode() {
+        checkVerificationCodeCancellable?.cancel()
     }
     
     func checkDuplicatedNickname(nickname: String) {

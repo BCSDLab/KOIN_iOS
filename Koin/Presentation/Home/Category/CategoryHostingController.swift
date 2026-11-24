@@ -47,7 +47,7 @@ final class CategoryHostingController: UIHostingController<CategoryView>, Hostin
         case .showChatList:
             navigationController?.pushViewController(makeChatListViewController(), animated: true)
         case .showLand:
-            navigationController?.pushViewController(makeLandViewController(), animated: true)
+            navigationController?.pushViewController(makeLandListViewController(), animated: true)
         case .showBusiness:
             presentBusiness()
         case .showRecruit:
@@ -206,16 +206,19 @@ extension CategoryHostingController {
     private func makeChatListViewController() -> UIViewController {
         return LostItemChatListTableViewController(viewModel: LostItemChatListTableViewModel())
     }
-
-    private func makeLandViewController() -> UIViewController {
+    
+    private func makeLandListViewController() -> UIViewController {
         let landService = DefaultLandService()
         let landRepository = DefaultLandRepository(service: landService)
         let fetchLandListUseCase = DefaultFetchLandListUseCase(landRepository: landRepository)
         let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
-        let viewModel = LandViewModel(fetchLandListUseCase: fetchLandListUseCase, logAnalyticsEventUseCase: logAnalyticsEventUseCase)
-        return LandViewController(viewModel: viewModel)
+        let viewModel = LandListViewModel(
+            fetchLandListUseCase: fetchLandListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
+        return LandListViewController(viewModel: viewModel)
     }
-    
+
     private func makeRecruitListViewController() -> UIViewController {
         let recruitRepository = DefaultRecruitRepository(service: DefaultRecruitService())
         let fetchRecruitListUseCase = DefaultFetchRecruitListUseCase(repository: recruitRepository)

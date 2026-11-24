@@ -31,8 +31,8 @@ struct RegisterFormViewModelCertificationTests {
         #expect(spy.receivedPhoneNumbers == [phoneNumber])
     }
 
-    @Test("중복이 아니면 발송 버튼 활성화를 알린다")
-    func 중복이_아니면_발송_버튼_활성화를_알린다() {
+    @Test("중복이 아니면 중복 확인 성공을 알린다")
+    func 중복이_아니면_중복_확인_성공을_알린다() {
         let spy = SpyCheckDuplicatedPhoneNumberUseCase()
         spy.stubbedResult = .success(())
         let sut = RegisterFormViewModel.makeForCertification(checkDuplicatedPhoneNumberUseCase: spy)
@@ -40,7 +40,7 @@ struct RegisterFormViewModelCertificationTests {
 
         recorder.send(.checkDuplicatedPhoneNumber(phoneNumber))
 
-        #expect(recorder.outputs.contains { if case .changeSendVerificationButtonStatus = $0 { return true } else { return false } })
+        #expect(recorder.outputs.contains { if case .checkDuplicatedPhoneNumberSuccess = $0 { return true } else { return false } })
     }
 
     @Test("중복이면 오류 문구를 그대로 전달한다")
@@ -52,7 +52,7 @@ struct RegisterFormViewModelCertificationTests {
 
         recorder.send(.checkDuplicatedPhoneNumber(phoneNumber))
 
-        #expect(recorder.httpResultMessages == ["이미 존재하는 전화번호입니다."])
+        #expect(recorder.phoneNumberHttpResultMessages == ["이미 존재하는 전화번호입니다."])
     }
 
     // MARK: - 인증번호 발송
@@ -128,7 +128,7 @@ struct RegisterFormViewModelCertificationTests {
 
         recorder.send(.checkVerificationCode(phoneNumber, verificationCode))
 
-        #expect(recorder.httpResultColors == [expected])
+        #expect(recorder.checkVerificationCodeFailureColors == [expected])
     }
 
     // MARK: - 로깅
