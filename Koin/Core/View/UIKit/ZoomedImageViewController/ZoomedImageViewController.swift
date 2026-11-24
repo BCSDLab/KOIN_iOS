@@ -5,6 +5,7 @@
 //  Created by 김나훈 on 4/8/24.
 //
 
+import Kingfisher
 import SnapKit
 import UIKit
 
@@ -65,6 +66,12 @@ final class ZoomedImageViewController: UIViewController {
     func setImage(_ image: UIImage?) {
         imageView.image = image
         updateImageRatio()
+    }
+
+    func setImage(url: String) {
+        imageView.kf.setImage(with: URL(string: url), completionHandler: { [weak self] _ in
+            self?.updateImageRatio()
+        })
     }
 }
 
