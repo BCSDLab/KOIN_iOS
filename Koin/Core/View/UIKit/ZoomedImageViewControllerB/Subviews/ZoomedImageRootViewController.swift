@@ -96,7 +96,8 @@ extension ZoomedImageRootViewController {
         case .began:
             initialTouchPoint = touchPoint
         case .changed, .ended, .cancelled:
-            if 50 < touchPoint.y - initialTouchPoint.y {
+            if !zoomedImageCollectionView.isCurrentImageZoomed,
+               50 < touchPoint.y - initialTouchPoint.y {
                 dismiss(animated: true)
             }
         default:

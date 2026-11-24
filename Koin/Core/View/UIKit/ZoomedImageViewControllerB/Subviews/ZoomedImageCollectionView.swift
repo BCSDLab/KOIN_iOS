@@ -21,7 +21,6 @@ final class ZoomedImageCollectionView: UICollectionView {
     override init(frame: CGRect, collectionViewLayout layout: UICollectionViewLayout) {
         let layout = UICollectionViewFlowLayout().then {
             $0.scrollDirection = .horizontal
-            $0.itemSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
             $0.minimumLineSpacing = 0
             $0.minimumInteritemSpacing = 0
         }
@@ -33,6 +32,10 @@ final class ZoomedImageCollectionView: UICollectionView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    var isCurrentImageZoomed: Bool {
+        visibleCells.contains { ($0 as? ZoomedImageCollectionViewCell)?.isZoomed == true }
+    }
+    
     // MARK: - Configure
     func configure(urls: [String], initialIndex: Int) {
         self.urls = urls
@@ -42,8 +45,8 @@ final class ZoomedImageCollectionView: UICollectionView {
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        if !isInitialized {
-            contentOffset = CGPoint(x: UIScreen.main.bounds.width * CGFloat(initialIndex), y: 0)
+        if !isInitialized, 0 < bounds.width {
+            contentOffset = CGPoint(x: bounds.width * CGFloat(initialIndex), y: 0)
             isInitialized = true
         }
     }
@@ -65,6 +68,14 @@ extension ZoomedImageCollectionView: UICollectionViewDataSource {
 }
 
 extension ZoomedImageCollectionView: UICollectionViewDelegateFlowLayout {
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return collectionView.bounds.size
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        (cell as? ZoomedImageCollectionViewCell)?.resetZoom()
+    }
 
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         let width = self.frame.width
@@ -89,6 +100,6 @@ extension ZoomedImageCollectionView {
         isPagingEnabled = true
         showsHorizontalScrollIndicator = false
         contentInsetAdjustmentBehavior = .never
-        backgroundColor = .black
+        backgroundColor = .appColor(.neutral800)
     }
 }
