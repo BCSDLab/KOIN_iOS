@@ -14,6 +14,7 @@ final class ZoomedImageViewController: UIViewController {
     // MARK: - Properties
 
     private var imageRatioConstraint: Constraint?
+    private var initialTouchPoint = CGPoint.zero
 
     // MARK: - UI Components
 
@@ -54,6 +55,7 @@ final class ZoomedImageViewController: UIViewController {
         updateImageRatio()
         scrollView.delegate = self
         closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panGestureDismiss)))
     }
 
     override func viewDidLayoutSubviews() {
@@ -108,6 +110,20 @@ extension ZoomedImageViewController {
 
     @objc private func closeButtonTapped() {
         dismiss(animated: true)
+    }
+
+    @objc private func panGestureDismiss(_ sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: view.window)
+        switch sender.state {
+        case .began:
+            initialTouchPoint = touchPoint
+        case .changed, .ended, .cancelled:
+            guard scrollView.zoomScale == scrollView.minimumZoomScale,
+                  50 < touchPoint.y - initialTouchPoint.y else { return }
+            dismiss(animated: true)
+        default:
+            return
+        }
     }
 }
 
