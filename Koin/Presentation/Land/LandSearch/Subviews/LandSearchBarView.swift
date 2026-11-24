@@ -14,6 +14,7 @@ final class LandSearchBarView: UIView {
     // MARK: - Properties
     let textChangedPublisher = PassthroughSubject<String, Never>()
     let searchSubmittedPublisher = PassthroughSubject<String, Never>()
+    let editingBeganPublisher = PassthroughSubject<Void, Never>()
     let editingEndedPublisher = PassthroughSubject<Void, Never>()
     var isEditing: Bool {
         textField.isEditing
@@ -29,6 +30,7 @@ final class LandSearchBarView: UIView {
         configureView()
         textField.delegate = self
         textField.addTarget(self, action: #selector(textFieldEditingChanged), for: .editingChanged)
+        textField.addTarget(self, action: #selector(textFieldEditingDidBegin), for: .editingDidBegin)
         textField.addTarget(self, action: #selector(textFieldEditingDidEnd), for: .editingDidEnd)
         searchButton.addTarget(self, action: #selector(searchButtonTapped), for: .touchUpInside)
     }
@@ -53,6 +55,10 @@ extension LandSearchBarView {
 extension LandSearchBarView {
     @objc private func textFieldEditingChanged() {
         textChangedPublisher.send(textField.text ?? "")
+    }
+
+    @objc private func textFieldEditingDidBegin() {
+        editingBeganPublisher.send()
     }
 
     @objc private func textFieldEditingDidEnd() {

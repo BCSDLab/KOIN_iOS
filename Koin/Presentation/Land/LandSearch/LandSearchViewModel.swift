@@ -12,6 +12,7 @@ final class LandSearchViewModel: ViewModelProtocol {
     enum Input {
         case searchTextChanged(String)
         case search(String)
+        case logEvent(EventLabelType, Any, parameters: [String: String] = [:])
     }
     enum Output {
         case updateSuggestions(query: String, rows: [LandRow])
@@ -22,12 +23,17 @@ final class LandSearchViewModel: ViewModelProtocol {
     // MARK: - Properties
     private static let suggestionCount = 3
     private let fetchLandListUseCase: FetchLandListUseCase
+    private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
 
     // MARK: - Initializer
-    init(fetchLandListUseCase: FetchLandListUseCase) {
+    init(
+        fetchLandListUseCase: FetchLandListUseCase,
+        logAnalyticsEventUseCase: LogAnalyticsEventUseCase
+    ) {
         self.fetchLandListUseCase = fetchLandListUseCase
+        self.logAnalyticsEventUseCase = logAnalyticsEventUseCase
     }
 }
 
@@ -68,6 +74,13 @@ extension LandSearchViewModel {
             .switchToLatest()
             .sink { [weak self] landList in
                 self?.outputSubject.send(.updateLandList(landList))
+            }
+            .store(in: &subscriptions)
+
+        input
+            .sink { [weak self] input in
+                guard case let .logEvent(label, value, parameters) = input else { return }
+                self?.logAnalyticsEventUseCase.execute(label: label, value: value, parameters: parameters)
             }
             .store(in: &subscriptions)
 

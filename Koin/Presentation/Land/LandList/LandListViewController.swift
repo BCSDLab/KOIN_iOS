@@ -229,7 +229,11 @@ extension LandListViewController {
         let landService = DefaultLandService()
         let landRepository = DefaultLandRepository(service: landService)
         let fetchLandListUseCase = DefaultFetchLandListUseCase(landRepository: landRepository)
-        let viewModel = LandSearchViewModel(fetchLandListUseCase: fetchLandListUseCase)
+        let logAnalyticsEventUseCase = DefaultLogAnalyticsEventUseCase(repository: GA4AnalyticsRepository(service: GA4AnalyticsService()))
+        let viewModel = LandSearchViewModel(
+            fetchLandListUseCase: fetchLandListUseCase,
+            logAnalyticsEventUseCase: logAnalyticsEventUseCase
+        )
         let viewController = LandSearchViewController(viewModel: viewModel)
         navigationController?.pushViewController(viewController, animated: true)
     }

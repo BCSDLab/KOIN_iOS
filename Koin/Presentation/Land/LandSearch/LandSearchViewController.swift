@@ -78,8 +78,17 @@ extension LandSearchViewController {
             }
             .store(in: &subscriptions)
 
+        searchBarView.editingBeganPublisher
+            .sink { [weak self] in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListSearchInputClick, "검색창"))
+            }
+            .store(in: &subscriptions)
+
         searchBarView.searchSubmittedPublisher
             .sink { [weak self] text in
+                if !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                    self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListSearchSubmit, "검색"))
+                }
                 self?.search(text: text)
             }
             .store(in: &subscriptions)
@@ -92,6 +101,7 @@ extension LandSearchViewController {
 
         suggestionView.suggestionTappedPublisher
             .sink { [weak self] landRow in
+                self?.inputSubject.send(.logEvent(EventParameter.EventLabel.RealEstate.roomListSearchSuggestionSelectClick, landRow.name))
                 self?.searchBarView.setText(landRow.name)
                 self?.view.endEditing(true)
                 self?.search(text: landRow.name)
@@ -103,6 +113,15 @@ extension LandSearchViewController {
                 self?.pushLandDetailViewController(landRow: landRow)
             }
             .store(in: &subscriptions)
+    }
+}
+
+extension LandSearchViewController: PopLoggable {
+    func sendPopLog(category: EventParameter.EventCategory) {
+        let label: EventLabelType = category == .swipe
+            ? EventParameter.EventLabel.RealEstate.roomCommonNavigationBackSwipe
+            : EventParameter.EventLabel.RealEstate.roomCommonNavigationBackClick
+        inputSubject.send(.logEvent(label, "뒤로가기", parameters: ["source_screen": "room_list"]))
     }
 }
 
