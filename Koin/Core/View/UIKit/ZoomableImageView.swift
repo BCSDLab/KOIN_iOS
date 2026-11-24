@@ -60,7 +60,8 @@ final class ZoomableImageView: UIScrollView {
     }
 
     func setImage(url: String) {
-        imageView.kf.setImage(with: URL(string: url), completionHandler: { [weak self] _ in
+        imageView.kf.setImage(with: URL(string: url), completionHandler: { [weak self] result in
+            if case .failure(let error) = result, error.isNotCurrentTask { return }
             self?.resetImageLayout()
         })
     }
