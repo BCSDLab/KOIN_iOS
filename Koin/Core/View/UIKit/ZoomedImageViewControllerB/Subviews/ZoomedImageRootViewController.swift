@@ -72,10 +72,6 @@ final class ZoomedImageRootViewController: UIViewController {
                 self.title = title
             }
         }.store(in: &subscriptions)
-        
-        zoomedImageCollectionView.hideNavigationBarPublisher.sink { [weak self] isHidden in
-            self?.navigationController?.setNavigationBarHidden(isHidden, animated: true)
-        }.store(in: &subscriptions)
     }
 }
 
@@ -88,10 +84,7 @@ extension ZoomedImageRootViewController {
     
     @objc private func panGestureDismiss(_ sender: UIGestureRecognizer) {
         let touchPoint = sender.location(in: view.window)
-        
-        if sender.state == .began {
-            initialTouchPoint = touchPoint
-        }
+
         switch sender.state {
         case .began:
             initialTouchPoint = touchPoint

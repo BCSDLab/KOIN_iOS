@@ -10,7 +10,7 @@ import UIKit
 final class ZoomedImageViewControllerB: UINavigationController {
     
     // MARK: - Properties
-    let rootViewController: ZoomedImageRootViewController
+    private let rootViewController: ZoomedImageRootViewController
     
     // MARK: - Initializer
     init(shouldShowTitle: Bool = true) {
@@ -18,7 +18,6 @@ final class ZoomedImageViewControllerB: UINavigationController {
         super.init(rootViewController: rootViewController)
         
         modalPresentationStyle = .fullScreen
-        modalTransitionStyle = .coverVertical
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

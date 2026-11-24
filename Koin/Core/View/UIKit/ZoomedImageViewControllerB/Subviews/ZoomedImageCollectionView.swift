@@ -14,7 +14,6 @@ final class ZoomedImageCollectionView: UICollectionView {
     private var urls: [String] = []
     private var initialIndex = 0
     let updateTitlePublisher = PassthroughSubject<String, Never>()
-    let hideNavigationBarPublisher = PassthroughSubject<Bool, Never>()
     private var isInitialized = false
     
     // MARK: - Initializer
