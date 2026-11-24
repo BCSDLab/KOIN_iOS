@@ -1235,8 +1235,6 @@
 		E5DD3F6BE6C501B7B3BD659C /* RecruitPostRoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */; };
 		E7EB12C06B3F32702DE1BDDB /* RecruitNotificationListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B18A7091B73080A7AEDDDE /* RecruitNotificationListDto.swift */; };
 		F0F216EDAA69B52CBEC0E606 /* RecruitPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */; };
-		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
-		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 		F7F814BB370C922B6D8AA6EF /* RecruitStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */; };
 		FBCFB1EF499995884A6F2E83 /* RecruitPostSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D65EF9E2B65CAE83F8017DD /* RecruitPostSchedule.swift */; };
 		FC40DDB1CAB3573658F94721 /* StudentAcademicInfoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */; };
@@ -2502,8 +2500,6 @@
 		ED038AB5420C8C565688CF6B /* DefaultRecruitRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultRecruitRepository.swift; sourceTree = "<group>"; };
 		EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitStepView.swift; sourceTree = "<group>"; };
 		F04DE3DD779FBB7BEB86A567 /* PickerAppearanceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerAppearanceDelegate.swift; sourceTree = "<group>"; };
-		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
-		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 		F483F8DD8FCE3104599410C0 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
 		FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StudentAcademicInfoDto.swift; sourceTree = "<group>"; };
@@ -3999,19 +3995,9 @@
 		7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */ = {
 			isa = PBXGroup;
 			children = (
-				7CC42B072F56A7F600940CE1 /* Subviews */,
 				D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */,
 			);
 			path = ZoomedImageViewController;
-			sourceTree = "<group>";
-		};
-		7CC42B072F56A7F600940CE1 /* Subviews */ = {
-			isa = PBXGroup;
-			children = (
-				F1A000010000000000000002 /* ZoomingCollectionView.swift */,
-				F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */,
-			);
-			path = Subviews;
 			sourceTree = "<group>";
 		};
 		7CC42B082F56AAAD00940CE1 /* CallVan */ = {
@@ -7798,8 +7784,6 @@
 				D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */,
 				7C61D3452F220E98005FAC3A /* EditLostItemImagesView.swift in Sources */,
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
-				F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */,
-				F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDto.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */,
