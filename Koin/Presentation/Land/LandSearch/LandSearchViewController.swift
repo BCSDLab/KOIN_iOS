@@ -74,6 +74,7 @@ extension LandSearchViewController {
 
         searchBarView.textChangedPublisher
             .sink { [weak self] text in
+                self?.suggestionView.isHidden = true
                 self?.inputSubject.send(.searchTextChanged(text))
             }
             .store(in: &subscriptions)
@@ -132,6 +133,7 @@ extension LandSearchViewController {
     }
 
     private func configureSuggestions(query: String, rows: [LandRow]) {
+        guard query == searchBarView.text.trimmingCharacters(in: .whitespacesAndNewlines) else { return }
         suggestionView.configure(query: query, rows: rows)
         suggestionView.isHidden = rows.isEmpty || !searchBarView.isEditing
     }

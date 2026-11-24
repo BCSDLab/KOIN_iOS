@@ -19,6 +19,9 @@ final class LandSearchBarView: UIView {
     var isEditing: Bool {
         textField.isEditing
     }
+    var text: String {
+        textField.text ?? ""
+    }
 
     // MARK: - UI Components
     private let textField = UITextField()
