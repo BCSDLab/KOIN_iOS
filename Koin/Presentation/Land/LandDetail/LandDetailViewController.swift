@@ -118,7 +118,7 @@ extension LandDetailViewController {
 
     private func presentZoomedImage(imageUrls: [String], indexPath: IndexPath) {
         let zoomedImageViewController = ZoomedImageViewControllerB()
-        zoomedImageViewController.configure(urls: imageUrls, initialIndexPath: indexPath)
+        zoomedImageViewController.configure(urls: imageUrls, selectedIndex: indexPath.row)
         present(zoomedImageViewController, animated: true)
     }
     

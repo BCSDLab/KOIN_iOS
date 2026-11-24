@@ -10,15 +10,14 @@ import UIKit
 final class ZoomedImageViewControllerB: UINavigationController {
     
     // MARK: - Properties
-    let rootViewController: ZoomedImageRootViewController
+    private let rootViewController: ZoomedImageRootViewController
     
     // MARK: - Initializer
     init(shouldShowTitle: Bool = true) {
         rootViewController = ZoomedImageRootViewController(shouldShowTitle: shouldShowTitle)
         super.init(rootViewController: rootViewController)
         
-        modalPresentationStyle = .overCurrentContext
-        modalTransitionStyle = .coverVertical
+        modalPresentationStyle = .fullScreen
     }
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -33,7 +32,8 @@ final class ZoomedImageViewControllerB: UINavigationController {
         configure(urls: [url])
     }
     
-    func configure(urls: [String], initialIndexPath: IndexPath = IndexPath(row: 0, section: 0)) {
-        rootViewController.configure(urls: urls, initialIndexPath: initialIndexPath)
+    func configure(urls: [String], selectedIndex: Int = 0) {
+        let index = urls.indices.contains(selectedIndex) ? selectedIndex : 0
+        rootViewController.configure(urls: urls, initialIndex: index)
     }
 }

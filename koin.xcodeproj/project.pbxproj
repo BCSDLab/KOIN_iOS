@@ -1098,6 +1098,7 @@
 		D22C54812C6A5957000826DA /* FileUploadResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54802C6A5957000826DA /* FileUploadResponse.swift */; };
 		D22C54832C6A59C4000826DA /* UploadFileUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */; };
 		D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */; };
+		D8C9A09DFDA097189C1CC6DC /* ZoomableImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8E6FC478657F8D64C0A7B0ED /* ZoomableImageView.swift */; };
 		D23944822C3C24A200048F45 /* ReviewsDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944812C3C24A200048F45 /* ReviewsDto.swift */; };
 		D23944842C3C3ABC00048F45 /* ShopReview.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944832C3C3ABC00048F45 /* ShopReview.swift */; };
 		D23944862C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = D23944852C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift */; };
@@ -1261,8 +1262,6 @@
 		E5DD3F6BE6C501B7B3BD659C /* RecruitPostRoleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */; };
 		E7EB12C06B3F32702DE1BDDB /* RecruitNotificationListDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70B18A7091B73080A7AEDDDE /* RecruitNotificationListDto.swift */; };
 		F0F216EDAA69B52CBEC0E606 /* RecruitPostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 288BC1E04044DC3FB48524FC /* RecruitPostViewModel.swift */; };
-		F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000002 /* ZoomingCollectionView.swift */; };
-		F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */; };
 		F7F814BB370C922B6D8AA6EF /* RecruitStepView.swift in Sources */ = {isa = PBXBuildFile; fileRef = EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */; };
 		FBCFB1EF499995884A6F2E83 /* RecruitPostSchedule.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1D65EF9E2B65CAE83F8017DD /* RecruitPostSchedule.swift */; };
 		FC40DDB1CAB3573658F94721 /* StudentAcademicInfoDto.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */; };
@@ -2382,6 +2381,7 @@
 		D22C54802C6A5957000826DA /* FileUploadResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FileUploadResponse.swift; sourceTree = "<group>"; };
 		D22C54822C6A59C4000826DA /* UploadFileUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadFileUseCase.swift; sourceTree = "<group>"; };
 		D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomedImageViewController.swift; sourceTree = "<group>"; };
+		8E6FC478657F8D64C0A7B0ED /* ZoomableImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomableImageView.swift; sourceTree = "<group>"; };
 		D23944812C3C24A200048F45 /* ReviewsDto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewsDto.swift; sourceTree = "<group>"; };
 		D23944832C3C3ABC00048F45 /* ShopReview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopReview.swift; sourceTree = "<group>"; };
 		D23944852C3C3ADB00048F45 /* FetchShopReviewListUseCase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FetchShopReviewListUseCase.swift; sourceTree = "<group>"; };
@@ -2553,8 +2553,6 @@
 		ED038AB5420C8C565688CF6B /* DefaultRecruitRepository.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = DefaultRecruitRepository.swift; sourceTree = "<group>"; };
 		EFEC522ED41CF624AD3CB3A6 /* RecruitStepView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = RecruitStepView.swift; sourceTree = "<group>"; };
 		F04DE3DD779FBB7BEB86A567 /* PickerAppearanceDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickerAppearanceDelegate.swift; sourceTree = "<group>"; };
-		F1A000010000000000000002 /* ZoomingCollectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionView.swift; sourceTree = "<group>"; };
-		F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ZoomingCollectionViewCell.swift; sourceTree = "<group>"; };
 		F483F8DD8FCE3104599410C0 /* KoinPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KoinPickerView.swift; sourceTree = "<group>"; };
 		F670021A95E0AA103E8F7BED /* RecruitPostRoleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecruitPostRoleView.swift; sourceTree = "<group>"; };
 		FA5AA513615BE12CD677F848 /* StudentAcademicInfoDto.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = StudentAcademicInfoDto.swift; sourceTree = "<group>"; };
@@ -3317,6 +3315,7 @@
 				7CED8ED32EF2D1F900457128 /* CancelableImageView.swift */,
 				7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */,
 				7CA0D6172EC744E700E9A282 /* ZoomedImageViewControllerB */,
+				8E6FC478657F8D64C0A7B0ED /* ZoomableImageView.swift */,
 				7C333E7A302E280C009D2B89 /* KoinModalViewController */,
 				D2FB23442BFB6D090098BA2B /* CustomNavigationController.swift */,
 				D27A5D992C6B97D200C4275F /* InsetLabel.swift */,
@@ -4103,19 +4102,9 @@
 		7CC42B062F56A7E900940CE1 /* ZoomedImageViewController */ = {
 			isa = PBXGroup;
 			children = (
-				7CC42B072F56A7F600940CE1 /* Subviews */,
 				D235829E2BC2F5D600D615DD /* ZoomedImageViewController.swift */,
 			);
 			path = ZoomedImageViewController;
-			sourceTree = "<group>";
-		};
-		7CC42B072F56A7F600940CE1 /* Subviews */ = {
-			isa = PBXGroup;
-			children = (
-				F1A000010000000000000002 /* ZoomingCollectionView.swift */,
-				F1A000010000000000000004 /* ZoomingCollectionViewCell.swift */,
-			);
-			path = Subviews;
 			sourceTree = "<group>";
 		};
 		7CC42B082F56AAAD00940CE1 /* CallVan */ = {
@@ -7885,8 +7874,6 @@
 				D2A8F8C02C4BCD470090C7A4 /* ShareMenuListUseCase.swift in Sources */,
 				7C61D3452F220E98005FAC3A /* EditLostItemImagesView.swift in Sources */,
 				D2908D502BBE64B90008F908 /* Removetimetable.swift in Sources */,
-				F1A000010000000000000001 /* ZoomingCollectionView.swift in Sources */,
-				F1A000010000000000000003 /* ZoomingCollectionViewCell.swift in Sources */,
 				D2F13E5D2BD0BA2B00172A9D /* NotiAgreementDto.swift in Sources */,
 				8354BE472C79FCA0009D4D7A /* Model.xcdatamodeld in Sources */,
 				7C372F292F1D6A7F00149729 /* LostItemDataViewModel.swift in Sources */,
@@ -7993,6 +7980,7 @@
 				7C16AA392F3E9FBC0071ABE6 /* ErrorViewController.swift in Sources */,
 				7CF77B6B30056ED4003642C1 /* NoticeKeywordAddButton.swift in Sources */,
 				D235829F2BC2F5D600D615DD /* ZoomedImageViewController.swift in Sources */,
+				D8C9A09DFDA097189C1CC6DC /* ZoomableImageView.swift in Sources */,
 				D249CD262C12DC2C000813F9 /* FetchDiningListUseCase.swift in Sources */,
 				B46B8CC42E76CC6300A8E797 /* FetchShopSummaryUseCase.swift in Sources */,
 				D20AD70B2E036BC60067760A /* ResetPasswordEmailUseCase.swift in Sources */,

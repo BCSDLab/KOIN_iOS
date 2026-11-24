@@ -375,7 +375,7 @@ extension ReviewListViewController {
     
     private func showZoomedImage(_ imageUrls: [String], _ initialIndexpath: IndexPath) {
         let zoomedImageViewController = ZoomedImageViewControllerB()
-        zoomedImageViewController.configure(urls: imageUrls, initialIndexPath: initialIndexpath)
+        zoomedImageViewController.configure(urls: imageUrls, selectedIndex: initialIndexpath.row)
         present(zoomedImageViewController, animated: true)
     }
 }
