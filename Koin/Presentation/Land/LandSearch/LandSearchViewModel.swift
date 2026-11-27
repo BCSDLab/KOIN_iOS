@@ -65,9 +65,9 @@ extension LandSearchViewModel {
     private func changeSuggestionIfPossible(query: String) {
         changeSuggestionTask?.cancel()
         changeSuggestionTask = Task { [weak self] in
-            guard let self else { return }
             do {
                 try await Task.sleep(for: .milliseconds(300))
+                guard let self else { return }
                 
                 let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
                 let output: [LandRow]
@@ -84,7 +84,7 @@ extension LandSearchViewModel {
             } catch {
                 guard !Task.isCancelled else { return }
                 let error = (error as? ErrorResponse) ?? ErrorResponse.unexpectedInternalError
-                outputSubject.send(.showToastMessage(error.message))
+                self?.outputSubject.send(.showToastMessage(error.message))
             }
         }
     }
@@ -100,6 +100,7 @@ extension LandSearchViewModel {
             
             do {
                 let list = try await fetchLandList(query: query)
+                guard !Task.isCancelled else { return }
                 outputSubject.send(.updateLandList(list))
             } catch {
                 guard !Task.isCancelled else { return }
@@ -110,12 +111,15 @@ extension LandSearchViewModel {
     }
     
     private func fetchLandList() {
-        Task {
+        searchTask = Task { [weak self] in
+            guard let self else { return }
+            
             do {
-                let query: String = ""
-                let list = try await fetchLandList(query: query)
+                let list = try await fetchLandList(query: nil)
+                guard !Task.isCancelled else { return }
                 outputSubject.send(.updateLandList(list))
             } catch {
+                guard !Task.isCancelled else { return }
                 let error = (error as? ErrorResponse) ?? ErrorResponse.unexpectedInternalError
                 outputSubject.send(.showToastMessage(error.message))
             }
@@ -124,7 +128,7 @@ extension LandSearchViewModel {
 }
 
 extension LandSearchViewModel {
-    private func fetchLandList(query: String) async throws -> LandList {
+    private func fetchLandList(query: String?) async throws -> LandList {
         do {
             return try await fetchLandListUseCase.execute(query: query).firstValue()
         } catch {
