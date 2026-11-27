@@ -41,7 +41,7 @@ final class LandSearchSuggestionView: UIView {
         buttons.forEach {
             stackView.addArrangedSubview($0)
             $0.snp.makeConstraints {
-                $0.height.equalTo(24)
+                $0.height.equalTo(36)
             }
         }
     }
