@@ -41,6 +41,7 @@ final class LandSearchViewController: UIViewController {
         configureView()
         bind()
         hideKeyboardWhenTappedAround()
+        inputSubject.send(.viewDidLoad)
     }
 
     override func viewWillAppear(_ animated: Bool) {

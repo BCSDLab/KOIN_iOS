@@ -10,6 +10,7 @@ import Combine
 
 final class LandSearchViewModel: ViewModelProtocol {
     enum Input {
+        case viewDidLoad
         case searchTextChanged(String)
         case search(String)
         case logEvent(EventLabelType, Any, parameters: [String: String] = [:])
@@ -44,6 +45,8 @@ extension LandSearchViewModel {
         input.sink { [weak self] input in
             guard let self else { return }
             switch input {
+            case .viewDidLoad:
+                fetchLandList()
             case let .searchTextChanged(query):
                 changeSuggestionIfPossible(query: query)
             case let .search(query):
@@ -100,6 +103,19 @@ extension LandSearchViewModel {
                 outputSubject.send(.updateLandList(list))
             } catch {
                 guard !Task.isCancelled else { return }
+                let error = (error as? ErrorResponse) ?? ErrorResponse.unexpectedInternalError
+                outputSubject.send(.showToastMessage(error.message))
+            }
+        }
+    }
+    
+    private func fetchLandList() {
+        Task {
+            do {
+                let query: String = ""
+                let list = try await fetchLandList(query: query)
+                outputSubject.send(.updateLandList(list))
+            } catch {
                 let error = (error as? ErrorResponse) ?? ErrorResponse.unexpectedInternalError
                 outputSubject.send(.showToastMessage(error.message))
             }
