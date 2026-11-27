@@ -26,6 +26,8 @@ final class LandSearchViewModel: ViewModelProtocol {
     private let logAnalyticsEventUseCase: LogAnalyticsEventUseCase
     private let outputSubject = PassthroughSubject<Output, Never>()
     private var subscriptions: Set<AnyCancellable> = []
+    private var changeSuggestionTask: Task<Void, Never>?
+    private var searchTask: Task<Void, Never>?
 
     // MARK: - Initializer
     init(
@@ -39,62 +41,90 @@ final class LandSearchViewModel: ViewModelProtocol {
 
 extension LandSearchViewModel {
     func transform(with input: AnyPublisher<Input, Never>) -> AnyPublisher<Output, Never> {
-        input
-            .compactMap { input -> String? in
-                guard case let .searchTextChanged(text) = input else { return nil }
-                return text.trimmingCharacters(in: .whitespacesAndNewlines)
+        input.sink { [weak self] input in
+            guard let self else { return }
+            switch input {
+            case let .searchTextChanged(query):
+                changeSuggestionIfPossible(query: query)
+            case let .search(query):
+                search(query: query)
+            case let .logEvent(label, value, parameters):
+                makeLogEvent(label, value, parameters)
             }
-            .debounce(for: .milliseconds(300), scheduler: DispatchQueue.main)
-            .map { [weak self] query -> AnyPublisher<Output, Never> in
-                guard let self, !query.isEmpty else {
-                    return Just(Output.updateSuggestions(query: query, rows: [])).eraseToAnyPublisher()
-                }
-                return fetchLandList(query: query)
-                    .map { Output.updateSuggestions(query: query, rows: Array($0.rows.prefix(Self.suggestionCount))) }
-                    .eraseToAnyPublisher()
-            }
-            .switchToLatest()
-            .sink { [weak self] output in
-                self?.outputSubject.send(output)
-            }
-            .store(in: &subscriptions)
-
-        input
-            .compactMap { input -> String? in
-                guard case let .search(text) = input else { return nil }
-                return text.trimmingCharacters(in: .whitespacesAndNewlines)
-            }
-            .filter { !$0.isEmpty }
-            .map { [weak self] query -> AnyPublisher<LandList, Never> in
-                guard let self else {
-                    return Empty().eraseToAnyPublisher()
-                }
-                return fetchLandList(query: query)
-            }
-            .switchToLatest()
-            .sink { [weak self] landList in
-                self?.outputSubject.send(.updateLandList(landList))
-            }
-            .store(in: &subscriptions)
-
-        input
-            .sink { [weak self] input in
-                guard case let .logEvent(label, value, parameters) = input else { return }
-                self?.logAnalyticsEventUseCase.execute(label: label, value: value, parameters: parameters)
-            }
-            .store(in: &subscriptions)
-
+        }
+        .store(in: &subscriptions)
+        
         return outputSubject.eraseToAnyPublisher()
     }
 }
 
 extension LandSearchViewModel {
-    private func fetchLandList(query: String) -> AnyPublisher<LandList, Never> {
-        fetchLandListUseCase.execute(query: query)
-            .catch { [weak self] error -> Empty<LandList, Never> in
-                self?.outputSubject.send(.showToastMessage(error.message))
-                return Empty()
+    private func changeSuggestionIfPossible(query: String) {
+        changeSuggestionTask?.cancel()
+        changeSuggestionTask = Task { [weak self] in
+            guard let self else { return }
+            do {
+                try await Task.sleep(for: .milliseconds(300))
+                
+                let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+                let output: [LandRow]
+                
+                if query.isEmpty {
+                    output = []
+                } else {
+                    let prefixes = try await fetchLandList(query: query)
+                        .rows
+                        .prefix(Self.suggestionCount)
+                    output = Array(prefixes)
+                }
+                outputSubject.send(.updateSuggestions(query: query, rows: output))
+            } catch {
+                guard !Task.isCancelled else { return }
+                let error = (error as? ErrorResponse) ?? ErrorResponse.unexpectedInternalError
+                outputSubject.send(.showToastMessage(error.message))
             }
-            .eraseToAnyPublisher()
+        }
+    }
+    
+    private func search(query: String) {
+        let query = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !query.isEmpty else {
+            return
+        }
+        searchTask?.cancel()
+        searchTask = Task { [weak self] in
+            guard let self else { return }
+            
+            do {
+                let list = try await fetchLandList(query: query)
+                outputSubject.send(.updateLandList(list))
+            } catch {
+                guard !Task.isCancelled else { return }
+                let error = (error as? ErrorResponse) ?? ErrorResponse.unexpectedInternalError
+                outputSubject.send(.showToastMessage(error.message))
+            }
+        }
+    }
+}
+
+extension LandSearchViewModel {
+    private func fetchLandList(query: String) async throws -> LandList {
+        do {
+            return try await fetchLandListUseCase.execute(query: query).firstValue()
+        } catch {
+            throw error
+        }
+    }
+    
+    private func makeLogEvent(
+        _ label: EventLabelType,
+        _ value: Any,
+        _ parameters: [String: String] = [:]
+    ) {
+        logAnalyticsEventUseCase.execute(
+            label: label,
+            value: value,
+            parameters: parameters
+        )
     }
 }
