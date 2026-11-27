@@ -32,7 +32,7 @@
 		<string>kakaokompassauth</string>
 		<string>kakaolink</string>
 	</array>
-	<key>NMFClientId</key>
+	<key>NMFNcpKeyId</key>
 	<string>$(NMFClientId)</string>
 	<key>UIAppFonts</key>
 	<array>
