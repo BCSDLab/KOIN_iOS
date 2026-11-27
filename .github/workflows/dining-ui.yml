@@ -1,0 +1,135 @@
+name: iOS Dining UI
+
+on:
+  pull_request:
+    branches: [develop]
+    paths:
+      - '.github/workflows/dining-ui.yml'
+      - '.maestro/dining.yaml'
+      - 'Koin/Presentation/Dining/**'
+      - 'Koin/Presentation/Home/Home/SubViews/DiningView/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dining-ui-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  dining:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Prepare Stage configuration
+        env:
+          DEBUG_XCCONFIG: ${{ secrets.DEBUG_XCCONFIG }}
+          GOOGLE_SERVICE_STAGE_PLIST: ${{ secrets.GOOGLE_SERVICE_STAGE_PLIST }}
+        run: |
+          test -n "$DEBUG_XCCONFIG"
+          test -n "$GOOGLE_SERVICE_STAGE_PLIST"
+          mkdir -p Koin/Core/Configuration
+          printf '%s' "$DEBUG_XCCONFIG" | base64 --decode > Koin/Core/Configuration/Debug.xcconfig
+          printf '%s' "$GOOGLE_SERVICE_STAGE_PLIST" | base64 --decode > GoogleService-Info-Stage.plist
+
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+        with:
+          path: SourcePackages
+          key: spm-${{ hashFiles('koin.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/Package.resolved') }}
+
+      - name: Build and install Stage on iPhone Simulator
+        run: |
+          sudo xcode-select -s /Applications/Xcode_26.4.1.app
+          device=$(xcrun simctl list devices available -j | jq -er '[.devices | to_entries | sort_by(.key) | reverse | .[].value[] | select(.name == "iPhone 17 Pro") | .udid][0]')
+          xcrun simctl bootstatus "$device" -b
+          xcodebuild build -project koin.xcodeproj -scheme koin-stage \
+            -configuration Debug -destination "platform=iOS Simulator,id=$device" \
+            -derivedDataPath build/dining-ui -clonedSourcePackagesDirPath SourcePackages \
+            CODE_SIGN_IDENTITY=- CODE_SIGNING_REQUIRED=YES
+          for app in build/dining-ui/Build/Products/Debug-iphonesimulator/*.app; do
+            bundle=$(/usr/libexec/PlistBuddy -c 'Print CFBundleIdentifier' "$app/Info.plist")
+            if [[ "$bundle" == com.bcsdlab.koin.stage ]]; then
+              plutil -lint "$app/GoogleService-Info.plist"
+              # Xcode embeds simulator App Groups from the simulated entitlement payload,
+              # not the host-side ad hoc signature inspected by codesign -d.
+              simulated=build/dining-ui/Build/Intermediates.noindex/koin.build/Debug-iphonesimulator/koin.build/koin.app-Simulated.xcent
+              /usr/libexec/PlistBuddy -c 'Print :com.apple.security.application-groups:0' \
+                "$simulated" | grep -Fxq 'group.com.bcsdlab.koin'
+              executable=$(/usr/libexec/PlistBuddy -c 'Print CFBundleExecutable' "$app/Info.plist")
+              xcrun simctl install "$device" "$app"
+              printf 'DINING_DEVICE=%s\n' "$device" >> "$GITHUB_ENV"
+              printf 'DINING_EXECUTABLE=%s\n' "$executable" >> "$GITHUB_ENV"
+              exit 0
+            fi
+          done
+          echo 'Stage simulator app not found' >&2
+          exit 1
+
+      - name: Verify guest dining entry and meal change
+        env:
+          MAESTRO_VERSION: '2.2.0'
+        run: |
+          export JAVA_HOME=$(/usr/libexec/java_home -v 17)
+          curl -fsSL https://get.maestro.mobile.dev | bash
+          mkdir -p build/dining-ui/evidence
+          cd build/dining-ui/evidence
+          "$HOME/.maestro/bin/maestro" --device "$DINING_DEVICE" test ../../../.maestro/dining.yaml \
+            --format junit --output junit.xml --test-output-dir .
+
+      - name: Diagnose Stage launch after a UI failure
+        if: ${{ failure() && env.DINING_DEVICE != '' }}
+        run: |
+          mkdir -p build/dining-ui/evidence
+          out=build/dining-ui/evidence
+          xcrun simctl terminate "$DINING_DEVICE" com.bcsdlab.koin.stage || true
+          xcrun simctl launch "$DINING_DEVICE" com.bcsdlab.koin.stage > "$out/launch.txt" 2>&1 || true
+          for attempt in {1..12}; do
+            if find "$HOME/Library/Logs/DiagnosticReports" -maxdepth 1 -name "$DINING_EXECUTABLE-*.ips" -print -quit | grep -q .; then
+              break
+            fi
+            sleep 5
+          done
+          xcrun simctl io "$DINING_DEVICE" screenshot "$out/standalone-launch.png" || true
+          python3 - <<'PY' | tee "$out/crash-summary.txt"
+          import json
+          import os
+          from pathlib import Path
+
+          executable = os.environ["DINING_EXECUTABLE"]
+          report_dir = Path.home() / "Library/Logs/DiagnosticReports"
+          for report in sorted(report_dir.glob(f"{executable}-*.ips")):
+              try:
+                  _, body = report.read_text().split("\n", 1)
+                  data = json.loads(body)
+              except (OSError, ValueError):
+                  continue
+              exception = data.get("exception", {})
+              termination = data.get("termination", {})
+              print(report.name, exception.get("type"), exception.get("signal"),
+                    termination.get("namespace"), termination.get("code"))
+              threads = data.get("threads", [])
+              if not threads:
+                  print("No threads recorded in report")
+              thread = next((t for t in threads if t.get("triggered")), None)
+              index = data.get("faultingThread")
+              if thread is None and isinstance(index, int) and 0 <= index < len(threads):
+                  thread = threads[index]
+              images = data.get("usedImages", [])
+              for frame in (thread or {}).get("frames", [])[:20]:
+                  index = frame.get("imageIndex")
+                  image = images[index] if isinstance(index, int) and 0 <= index < len(images) else {}
+                  print(image.get("name"), frame.get("symbol"), frame.get("imageOffset"))
+          PY
+
+      - name: Upload dining UI evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-dining-ui
+          path: build/dining-ui/evidence/
+          retention-days: 7

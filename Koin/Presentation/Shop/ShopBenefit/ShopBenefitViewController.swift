@@ -54,8 +54,7 @@ final class ShopBenefitViewController: UIViewController {
         benefitsTableView.imageTapPublisher.sink { [weak self] (imageUrls, indexPath) in
             guard let self else { return }
             let zoomedImageViewController = ZoomedImageViewControllerB()
-            zoomedImageViewController.configure(urls: imageUrls, initialIndexPath: indexPath)
-            zoomedImageViewController.modalPresentationStyle = .fullScreen
+            zoomedImageViewController.configure(urls: imageUrls, selectedIndex: indexPath.row)
             present(zoomedImageViewController, animated: true)
         }.store(in: &subscriptions)
 

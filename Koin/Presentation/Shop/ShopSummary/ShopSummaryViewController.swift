@@ -294,7 +294,7 @@ extension ShopSummaryViewController {
                 self.inputSubject.send(.logEvent(EventParameter.EventLabel.Shop.shopDetailPhotoViewOpenClick, self.viewModel.shopName))
                 let zoomedViewController = ZoomedImageViewControllerB()
                 zoomedViewController.configure(urls: viewModel.cachedImages.map { return $0.imageUrl },
-                                               initialIndexPath: indexPath)
+                                               selectedIndex: indexPath.row)
                 self.present(zoomedViewController, animated: true)
             }.store(in: &subscriptions)
     }

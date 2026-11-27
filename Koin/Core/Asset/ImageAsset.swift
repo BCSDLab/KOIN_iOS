@@ -188,22 +188,14 @@ public enum ImageAsset: String {
     case write
     
     // MARK: - Land
-    case option1
-    case option2
-    case option3
-    case option4
-    case option5
-    case option6
-    case option7
-    case option8
-    case option9
-    case option10
-    case option11
-    case option12
-    case option13
-    case option14
-    case option15
-    case option16
+    case landMarker
+    case landCluster2to3
+    case landCluster4to6
+    case landCluster7to9
+    case landCluster10to12
+    case landZoomIn
+    case landZoomOut
+    case landSearch
     
     // MARK: - Logo
     case bcsdSymbolLogo

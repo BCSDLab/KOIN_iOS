@@ -57,10 +57,10 @@ final class ZoomedImageRootViewController: UIViewController {
     }
     
     // MARK: - Configure
-    func configure(urls: [String], initialIndexPath: IndexPath) {
-        zoomedImageCollectionView.configure(urls: urls, initialIndexPath: initialIndexPath)
+    func configure(urls: [String], initialIndex: Int) {
+        zoomedImageCollectionView.configure(urls: urls, initialIndex: initialIndex)
         if shouldShowTitle {
-            title = "\(initialIndexPath.row+1)/\(urls.count)"
+            title = "\(initialIndex + 1)/\(urls.count)"
         }
     }
     
@@ -71,10 +71,6 @@ final class ZoomedImageRootViewController: UIViewController {
                self.shouldShowTitle {
                 self.title = title
             }
-        }.store(in: &subscriptions)
-        
-        zoomedImageCollectionView.hideNavigationBarPublisher.sink { [weak self] isHidden in
-            self?.navigationController?.setNavigationBarHidden(isHidden, animated: true)
         }.store(in: &subscriptions)
     }
 }
@@ -88,15 +84,13 @@ extension ZoomedImageRootViewController {
     
     @objc private func panGestureDismiss(_ sender: UIGestureRecognizer) {
         let touchPoint = sender.location(in: view.window)
-        
-        if sender.state == .began {
-            initialTouchPoint = touchPoint
-        }
+
         switch sender.state {
         case .began:
             initialTouchPoint = touchPoint
         case .changed, .ended, .cancelled:
-            if 50 < touchPoint.y - initialTouchPoint.y {
+            if !zoomedImageCollectionView.isCurrentImageZoomed,
+               50 < touchPoint.y - initialTouchPoint.y {
                 dismiss(animated: true)
             }
         default:

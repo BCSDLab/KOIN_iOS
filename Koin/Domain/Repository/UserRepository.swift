@@ -27,6 +27,8 @@ protocol UserRepository {
     func sendVerificationEmail(requestModel: SendVerificationEmailRequest) -> AnyPublisher<Void, ErrorResponse>
     func checkVerificationEmail(requestModel: CheckVerificationEmailRequest) -> AnyPublisher<Void, ErrorResponse>
     func findIdSms(requestModel: FindIdSmsRequest) -> AnyPublisher<FindIdSmsResponse, ErrorResponse>
+    func matchIdPhone(requestModel: MatchIdPhoneRequest) -> AnyPublisher<Void, ErrorResponse>
+    func matchIdEmail(requestModel: MatchIdEmailRequest) -> AnyPublisher<Void, ErrorResponse>
     func findIdEmail(requestModel: FindIdEmailRequest) -> AnyPublisher<FindIdEmailResponse, ErrorResponse>
     func resetPasswordSms(requestModel: ResetPasswordSmsRequest) -> AnyPublisher<Void, ErrorResponse>
     func resetPasswordEmail(requestModel: ResetPasswordEmailRequest) -> AnyPublisher<Void, ErrorResponse>

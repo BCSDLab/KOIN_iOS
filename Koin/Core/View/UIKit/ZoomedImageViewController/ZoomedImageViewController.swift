@@ -6,181 +6,125 @@
 //
 
 import Combine
+import SnapKit
 import UIKit
 
 final class ZoomedImageViewController: UIViewController {
-    
+
     // MARK: - Properties
-    
-    private var cancellables: Set<AnyCancellable> = []
-    private var currentIndex = 0
-    
+
+    private var subscriptions: Set<AnyCancellable> = []
+    private var initialTouchPoint = CGPoint.zero
+    private let closeButtonSize: CGFloat = 24
+    private let closeButtonSpacing: CGFloat = 8
+
     // MARK: - UI Components
-    
-    private let scrollView = UIScrollView().then {
-        $0.minimumZoomScale = 1.0
-        $0.maximumZoomScale = 6.0
-        $0.backgroundColor = .clear
-        $0.showsVerticalScrollIndicator = false
-        $0.showsHorizontalScrollIndicator = false
+
+    private let zoomableImageView = ZoomableImageView().then {
+        $0.clipsToBounds = false
     }
-    
-    private let collectionView = ZoomingCollectionView()
-    
-    private let nextButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "arrow.right")?
-            .withTintColor(UIColor.appColor(.neutral0), renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        button.layer.cornerRadius = 22
-        button.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.5)
-        return button
-    }()
-    
-    private let prevButton: UIButton = {
-        let button = UIButton()
-        let image = UIImage(systemName: "arrow.left")?
-            .withTintColor(UIColor.appColor(.neutral0), renderingMode: .alwaysOriginal)
-        button.setImage(image, for: .normal)
-        button.layer.cornerRadius = 22
-        button.backgroundColor = UIColor.appColor(.neutral800).withAlphaComponent(0.5)
-        return button
-    }()
-    
+
+    private let closeButton = UIButton().then {
+        $0.setImage(UIImage.appImage(asset: .cancel), for: .normal)
+    }
+
     // MARK: - Initialize
-    
+
     init() {
         super.init(nibName: nil, bundle: nil)
         modalPresentationStyle = .fullScreen
-        modalTransitionStyle = .coverVertical
     }
-    
+
     @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        .lightContent
+    }
+
     // MARK: - Life Cycle
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
+        additionalSafeAreaInsets.top = closeButtonSize + closeButtonSpacing
         configureView()
-        setupScrollView()
         bind()
+        closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
+        view.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(panGestureDismiss)))
     }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        
-        if scrollView.zoomScale == scrollView.minimumZoomScale {
-            centerScrollViewContents()
-        }
-    }
-        
+
     func setImage(_ image: UIImage?) {
-        currentIndex = 0
-        collectionView.setImage(image)
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
-        updateButtonVisibility()
-        centerScrollViewContents()
+        zoomableImageView.setImage(image)
     }
-    
-    func setImages(_ images: [UIImage?]) {
-        currentIndex = 0
-        collectionView.setImages(images)
-        scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
-        updateButtonVisibility()
-        centerScrollViewContents()
+
+    func setImage(url: String) {
+        zoomableImageView.setImage(url: url)
     }
 }
 
 extension ZoomedImageViewController {
-    
-    private func configureView() {
-        view.backgroundColor = .black
-        view.addSubview(scrollView)
-        scrollView.addSubview(collectionView)
-        view.addSubview(nextButton)
-        view.addSubview(prevButton)
-        
-        scrollView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
-        
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalTo(scrollView.contentLayoutGuide)
-            make.width.equalTo(scrollView.frameLayoutGuide)
-            make.height.equalTo(scrollView.frameLayoutGuide)
-        }
-        
-        nextButton.snp.makeConstraints { make in
-            make.centerY.equalTo(view.safeAreaLayoutGuide)
-            make.trailing.equalToSuperview()
-            make.width.height.equalTo(44)
-        }
-        
-        prevButton.snp.makeConstraints { make in
-            make.centerY.equalTo(view.safeAreaLayoutGuide)
-            make.leading.equalToSuperview()
-            make.width.height.equalTo(44)
-        }
-    }
-    
-    private func setupScrollView() {
-        scrollView.delegate = self
-        nextButton.addTarget(self, action: #selector(nextButtonTapped), for: .touchUpInside)
-        prevButton.addTarget(self, action: #selector(prevButtonTapped), for: .touchUpInside)
-    }
-    
-    private func bind() {
-        collectionView.closeButtonPublisher
-            .sink { [weak self] in
-                self?.dismiss(animated: true)
-            }
-            .store(in: &cancellables)
-    }
-    
-    private func centerScrollViewContents() {
-        let offsetX = max((scrollView.bounds.width - scrollView.contentSize.width) * 0.5, 0)
-        let offsetY = max((scrollView.bounds.height - scrollView.contentSize.height) * 0.5, 0)
-        scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: offsetY, right: offsetX)
-    }
-    
-    private func updateButtonVisibility() {
-        nextButton.isHidden = currentIndex >= collectionView.imageCount - 1
-        prevButton.isHidden = currentIndex <= 0
-    }
-    
-    @objc private func nextButtonTapped() {
-        if currentIndex < collectionView.imageCount - 1 {
-            currentIndex += 1
-            collectionView.showImage(at: currentIndex, animated: true)
-        }
-        updateButtonVisibility()
-    }
-    
-    @objc private func prevButtonTapped() {
-        if currentIndex > 0 {
-            currentIndex -= 1
-            collectionView.showImage(at: currentIndex, animated: true)
-        }
-        updateButtonVisibility()
-    }
-}
 
-extension ZoomedImageViewController: UIScrollViewDelegate {
-    
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        collectionView
+    private func configureView() {
+        view.backgroundColor = .appColor(.neutral800)
+        view.addSubview(zoomableImageView)
+        view.addSubview(closeButton)
+
+        zoomableImageView.snp.makeConstraints { make in
+            make.edges.equalTo(view.safeAreaLayoutGuide)
+        }
+
+        closeButton.snp.makeConstraints { make in
+            make.width.height.equalTo(closeButtonSize)
+            make.trailing.equalTo(zoomableImageView.snp.leading)
+            make.bottom.equalTo(zoomableImageView.snp.top).offset(-closeButtonSpacing)
+        }
     }
-    
-    func scrollViewDidZoom(_ scrollView: UIScrollView) {
-        centerScrollViewContents()
+
+    private func bind() {
+        zoomableImageView.$fittedImageFrame
+            .sink { [weak self] fittedImageFrame in
+                self?.updateCloseButtonPosition(fittedImageFrame)
+            }
+            .store(in: &subscriptions)
+
+        zoomableImageView.$isZoomed
+            .removeDuplicates()
+            .sink { [weak self] isZoomed in
+                UIView.animate(
+                    withDuration: isZoomed ? 0.1 : 0.2,
+                    delay: 0,
+                    options: [.overrideInheritedDuration, .overrideInheritedCurve]
+                ) {
+                    self?.closeButton.alpha = isZoomed ? 0 : 1
+                }
+            }
+            .store(in: &subscriptions)
     }
-    
-    func scrollViewDidEndZooming(_ scrollView: UIScrollView, with view: UIView?, atScale scale: CGFloat) {
-        UIView.animate(withDuration: 0.3) {
-            scrollView.setZoomScale(scrollView.minimumZoomScale, animated: false)
+
+    private func updateCloseButtonPosition(_ fittedImageFrame: CGRect) {
+        closeButton.snp.updateConstraints { make in
+            make.trailing.equalTo(zoomableImageView.snp.leading).offset(fittedImageFrame.maxX)
+            make.bottom.equalTo(zoomableImageView.snp.top).offset(fittedImageFrame.minY - closeButtonSpacing)
+        }
+    }
+
+    @objc private func closeButtonTapped() {
+        dismiss(animated: true)
+    }
+
+    @objc private func panGestureDismiss(_ sender: UIPanGestureRecognizer) {
+        let touchPoint = sender.location(in: view.window)
+        switch sender.state {
+        case .began:
+            initialTouchPoint = touchPoint
+        case .changed, .ended, .cancelled:
+            guard !zoomableImageView.isZoomed,
+                  50 < touchPoint.y - initialTouchPoint.y else { return }
+            dismiss(animated: true)
+        default:
+            return
         }
     }
 }

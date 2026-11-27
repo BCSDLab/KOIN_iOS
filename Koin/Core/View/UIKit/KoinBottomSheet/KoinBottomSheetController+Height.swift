@@ -8,7 +8,7 @@
 import UIKit
 
 extension KoinBottomSheetController {
-    /// 시트가 올라갈 수 있는 상단 한계. host가 nav·tab이어도 owner 화면의 safe area(내비게이션 바 아래)에서 멈춘다.
+    /// 시트가 올라갈 수 있는 상단 한계. host가 nav여도 owner 화면의 safe area(내비게이션 바 아래)에서 멈춘다.
     var topLimitGuide: UILayoutGuide? {
         guard let host = view.superview else { return nil }
         if let ownerView = owner?.viewIfLoaded, ownerView.isDescendant(of: host) {

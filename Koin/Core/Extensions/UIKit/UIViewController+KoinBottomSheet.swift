@@ -14,14 +14,22 @@ extension UIViewController {
         _ contentView: some KoinBottomSheetContent,
         configuration: KoinBottomSheetConfiguration = .init()
     ) -> KoinBottomSheetController? {
-        guard let window = viewIfLoaded?.window else { return nil }
-        assert(contentView.superview == nil, "Create new content for every KoinBottomSheet presentation")
-        window.endEditing(true)
-
-        // nonModal도 tab·nav에 붙여 fullscreen dim이 내비게이션 바까지 덮게 한다.
-        let host = tabBarController ?? navigationController ?? self
+        let host: UIViewController
         // 닫히는 중인 시트는 애니메이션 동안 붙어 있지만, 활성 시트 조회에서는 빠진다.
-        activeBottomSheets.forEach { $0.dismissForReplacement() }
+        let replacedSheets: [KoinBottomSheetController]
+        if case .persistent = configuration.style {
+            guard isViewLoaded else { return nil }
+            host = self
+            replacedSheets = activeBottomSheets.filter { $0.owner === self }
+        } else {
+            guard viewIfLoaded?.window != nil else { return nil }
+            // nonModal도 nav에 붙여 fullscreen dim이 내비게이션 바까지 덮게 한다.
+            host = navigationController ?? self
+            replacedSheets = activeBottomSheets
+        }
+        assert(contentView.superview == nil, "Create new content for every KoinBottomSheet presentation")
+        view.window?.endEditing(true)
+        replacedSheets.forEach { $0.dismissForReplacement() }
 
         let sheet = KoinBottomSheetController(
             contentViewController: KoinBottomSheetContentViewController(contentView: contentView),
@@ -39,7 +47,7 @@ extension UIViewController {
 
     func dismissBottomSheet() {
         guard viewIfLoaded?.window != nil else { return }
-        let modalHost = tabBarController ?? navigationController ?? self
+        let modalHost = navigationController ?? self
         activeBottomSheets
             .filter { $0.owner === self || $0.parent === modalHost }
             .forEach { $0.dismiss() }
@@ -47,7 +55,7 @@ extension UIViewController {
 
     /// 같은 화면의 시트만 본다: 자신과 modal host의 직속 child.
     private var activeBottomSheets: [KoinBottomSheetController] {
-        let modalHost = tabBarController ?? navigationController ?? self
+        let modalHost = navigationController ?? self
         let candidates = modalHost === self ? children : children + modalHost.children
         return candidates
             .compactMap { $0 as? KoinBottomSheetController }

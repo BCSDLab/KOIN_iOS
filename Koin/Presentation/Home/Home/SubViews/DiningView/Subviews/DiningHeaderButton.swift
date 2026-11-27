@@ -30,6 +30,7 @@ struct DiningHeaderButton: View {
                 .foregroundStyle(Color.ColorSystem.Neutral.gray600)
             }
             .buttonStyle(.plain)
+            .accessibilityIdentifier("home-dining-view-all")
         }
         .padding(.horizontal, 24)
         .frame(maxWidth: .infinity)
